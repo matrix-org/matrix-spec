@@ -54,6 +54,8 @@ doesn't work, as in the following example:
           properties:
             ...
 ```
+This can only be used to define the type of named properties. In particular,
+the current tooling does not support `oneOf` inside `additionalProperties`.
 
 ## OpenAPI 3's "2xx" format for response codes
 
