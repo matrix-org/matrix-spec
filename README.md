@@ -52,7 +52,6 @@ Additionally, the following directories may be of interest:
 * `/data-definitions`: Bits of structured data consumable by Matrix implementations.
 * `/meta`: Documentation relating to the spec's processes that are otherwise untracked (release instructions, etc).
 * `/scripts`: Various scripts for generating the spec and validating its contents.
-* `/proposals`: Matrix Spec Change (MSC) proposals. See <https://spec.matrix.org/unstable/proposals/>.
 
 ## Authoring changes to the spec
 
