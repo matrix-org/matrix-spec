@@ -342,7 +342,7 @@ log in without needing the user's password. This is achieved by including the
 
 {{% added-in v="1.2" %}}
 
-    POST /_matrix/client/%CLIENT_MAJOR_VERSION%/login
+    POST /_matrix/client/v3/login
     Authorization: Bearer YourApplicationServiceTokenHere
 
     Content:
