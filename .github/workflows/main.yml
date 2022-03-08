@@ -41,6 +41,18 @@ jobs:
         run: |
           /env/bin/python scripts/check-event-schema-examples.py
 
+  check-newsfragments:
+    name: "🔎 Check that new newsfragments are valid"
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: scripts/check-newsfragments
+        env:
+          PULL_REQUEST_NUMBER: ${{ github.event.number }}
+        
   calculate-baseurl:
     name: "⚙️ Calculate baseURL for later jobs"
     runs-on: ubuntu-latest
