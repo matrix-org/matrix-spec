@@ -41,6 +41,11 @@ Custom SCSS for the Matrix spec
 }
 
 /* Styles for the sidebar nav */
+.td-sidebar {
+    /* don't attempt to use the sidebar (or things in it) as a scroll anchor. */
+    overflow-anchor: none;
+}
+
 .td-sidebar-nav {
   scroll-behavior: smooth;
   overscroll-behavior: contain;
