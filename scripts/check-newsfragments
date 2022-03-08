@@ -7,7 +7,6 @@ pr="$PULL_REQUEST_NUMBER"
 
 echo -e "+++ \033[32mChecking newsfragments for PR #$pr\033[m"
 
-set -e
 
 failed=0
 matched=0
@@ -28,7 +27,6 @@ find changelogs -regex '.*/[0-9]+\.[^/]+$' | while read f; do
         [[ -n "$pr" && "$basename" == "$pr".* ]] && matched=1
     fi
 done
-
 
 if [[ -n "$pr" && "$matched" -eq 0 ]]; then
     echo -e "\e[31mERROR: Did not find a news fragment with the right number: expected changelogs/*/newsfragments/$pr.*\e[39m" >&2
