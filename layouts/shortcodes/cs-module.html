@@ -9,5 +9,5 @@
 
 {{ $name := .Params.name }}
 
-{{ $page := .Site.GetPage (path.Join .Page.Dir "modules" (printf "%s%s" $name ".md"))}}
+{{ $page := .Site.GetPage (path.Join .Page.File.Dir "modules" (printf "%s%s" $name ".md"))}}
 {{ $page.Content }}
