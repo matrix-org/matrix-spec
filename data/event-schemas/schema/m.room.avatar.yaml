@@ -11,9 +11,8 @@ properties:
         description: Metadata about the image referred to in `url`.
       url:
         description: |-
-          The URL to the image.
-
-          If this isn't set, that means a previous room avatar has been unset.
+          The URL to the image. If this property is not present, the room has no avatar. This can be useful
+          to remove a previous room avatar.
         type: string
     type: object
   state_key:
