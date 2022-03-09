@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+#
+# A script which checks that an appropriate news file has been added on this
+# branch.
+
+pr="$PULL_REQUEST_NUMBER"
+
+echo -e "+++ \033[32mChecking newsfragments for PR #$pr\033[m"
+
+
+failed=0
+matched=0
+
+# assume that anything in the changelogs directory which starts with a number
+# is intended as a newsfile.
+find changelogs -regex '.*/[0-9]+\.[^/]+$' | while read f; do
+    basename=$(basename $f)
+    dirname=$(dirname $f)
+
+    # check that there is nothing that looks like a newsfile outside one of the
+    # expected directories.
+    if [[ "$dirname" != changelogs/*/newsfragments ]]; then
+        echo -e "\e[31mERROR: newsfragment $f appears to be in the wrong directory: should be in changelogs/*/newsfragments\e[39m" >&2
+        failed=1
+    else
+        # see if this newsfile corresponds to the right PR
+        [[ -n "$pr" && "$basename" == "$pr".* ]] && matched=1
+    fi
+done
+
+if [[ -n "$pr" && "$matched" -eq 0 ]]; then
+    echo -e "\e[31mERROR: Did not find a news fragment with the right number: expected changelogs/*/newsfragments/$pr.*\e[39m" >&2
+    failed=1
+fi
+
+exit $failed
