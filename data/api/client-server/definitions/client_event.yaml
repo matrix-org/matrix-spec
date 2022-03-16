@@ -19,7 +19,8 @@ description: |-
 type: object
 allOf:
   - $ref: "client_event_without_room_id.yaml"
-  - properties:
+  - type: object
+    properties:
       room_id:
         description: The ID of the room associated with this event.
         type: string
