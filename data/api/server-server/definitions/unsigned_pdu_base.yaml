@@ -25,10 +25,6 @@ properties:
     type: string
     description: The ID of the user sending the event.
     example: "@someone:matrix.org"
-  origin:
-    type: string
-    description: The `server_name` of the homeserver that created this event.
-    example: "matrix.org"
   origin_server_ts:
     type: integer
     format: int64
