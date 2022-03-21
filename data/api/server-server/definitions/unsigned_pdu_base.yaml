@@ -124,7 +124,6 @@ required:
   - event_id
   - room_id
   - sender
-  - origin
   - origin_server_ts
   - type
   - content
