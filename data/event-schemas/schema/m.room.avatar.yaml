@@ -10,10 +10,10 @@ properties:
           - $ref: core-event-schema/msgtype_infos/image_info.yaml
         description: Metadata about the image referred to in `url`.
       url:
-        description: The URL to the image.
+        description: |-
+          The URL to the image. If this property is not present, the room has no avatar. This can be useful
+          to remove a previous room avatar.
         type: string
-    required:
-      - url
     type: object
   state_key:
     description: A zero-length string.
