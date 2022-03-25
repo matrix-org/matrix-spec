@@ -18,10 +18,10 @@ type: object
 properties:
   flows:
     description: A list of the login flows supported by the server for this API.
-    title: Flow information
     type: array
     items:
       type: object
+      title: Flow information
       properties:
         stages:
           description: |-
