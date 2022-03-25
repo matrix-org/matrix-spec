@@ -49,7 +49,7 @@ paths:
         - in: query
           type: string
           name: from
-          x-changedInMatrixVersion: "1.2"
+          x-changedInMatrixVersion: "1.3"
           description: |-
             The token to start returning events from. This token can be obtained
             from a `prev_batch` or `next_batch` token returned by the `/sync` endpoint,
