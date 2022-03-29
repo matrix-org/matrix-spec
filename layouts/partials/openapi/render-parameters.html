@@ -18,10 +18,10 @@
 
 {{ with $parameters_of_type }}
 
-    {{/* convert parameters into the format that render-object-table expects to see */}}
+    {{/* build a dict mapping from name->parameter, which render-object-table expects */}}
     {{ $param_dict := dict }}
     {{ range $parameter := . }}
-        {{ $param_dict = merge $param_dict (dict $parameter.name (dict "type" $parameter.type "description" $parameter.description "required" $parameter.required "enum" $parameter.enum)  )}}
+        {{ $param_dict = merge $param_dict (dict $parameter.name $parameter )}}
     {{ end }}
 
     {{/* and render the parameters */}}
