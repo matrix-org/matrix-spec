@@ -1,5 +1,5 @@
 [files]
-extend-exclude = ["/themes", "/attic", "/data-definitions", "*.css", "package-lock.json"]
+extend-exclude = ["/themes", "/attic", "/data-definitions", "*.css", "syntax.scss", "package-lock.json"]
 
 [default]
 check-filename = true
