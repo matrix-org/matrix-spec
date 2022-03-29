@@ -21,6 +21,14 @@ Custom SCSS for the Matrix spec
 @import "variables_project";
 @import "variables";
 
+/* Import the CSS classes for the syntax highlighter.
+ *
+ * This is generated with:
+ *
+ *    hugo gen chromastyles --style=tango > assets/scss/syntax.scss
+ */
+@import "syntax.scss";
+
 /* Overrides for the navbar */
 .td-navbar {
   box-shadow: 0px 0px 8px rgba(179, 179, 179, 0.25);
