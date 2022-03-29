@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+swagger: "2.0"
 info:
   title: "Matrix Client-Server Rooms API"
   version: "1.0.0"
@@ -49,6 +49,10 @@ paths:
         - in: query
           type: string
           name: from
+          x-changedInMatrixVersion:
+            1.3: |
+              Previously, this field was required and paginating from the first or
+              last visible event in the room history wasn't supported.
           description: |-
             The token to start returning events from. This token can be obtained
             from a `prev_batch` or `next_batch` token returned by the `/sync` endpoint,
@@ -57,7 +61,11 @@ paths:
             This endpoint can also accept a value returned as a `start` token
             by a previous request to this endpoint, though servers are not
             required to support this. Clients should not rely on the behaviour.
-          required: true
+
+            If it is not provided, the homeserver shall return a list of messages
+            from the first or last (per the value of the `dir` parameter) visible
+            event in the room history for the requesting user.
+          required: false
           x-example: "s345_678_333"
         - in: query
           type: string
@@ -141,23 +149,25 @@ paths:
                   $ref: "definitions/client_event.yaml"
             required: [start, chunk]
           examples:
-            application/json: {
+            application/json:
+              {
                 "start": "t47429-4392820_219380_26003_2265",
                 "end": "t47409-4357353_219380_26003_2265",
-                "chunk": [
-                  {
-                    "room_id": "!636q39766251:example.com",
-                    "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
-                  },
-                  {
-                    "room_id": "!636q39766251:example.com",
-                    "$ref": "../../event-schemas/examples/m.room.name.yaml"
-                  },
-                  {
-                    "room_id": "!636q39766251:example.com",
-                    "$ref": "../../event-schemas/examples/m.room.message$m.video.yaml"
-                  }
-                ]
+                "chunk":
+                  [
+                    {
+                      "room_id": "!636q39766251:example.com",
+                      "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
+                    },
+                    {
+                      "room_id": "!636q39766251:example.com",
+                      "$ref": "../../event-schemas/examples/m.room.name.yaml",
+                    },
+                    {
+                      "room_id": "!636q39766251:example.com",
+                      "$ref": "../../event-schemas/examples/m.room.message$m.video.yaml",
+                    },
+                  ],
               }
         403:
           description: >
