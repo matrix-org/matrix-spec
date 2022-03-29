@@ -88,3 +88,19 @@ rendered_data_collapsed = false
 	url = "https://twitter.com/matrixdotorg"
 	icon = "fab fa-twitter"
   desc = "Matrix on Twitter"
+
+
+# configuration for the hugo development server
+[server]
+
+# set HTTP response headers to match the production site. Compare the Apache config for `spec.matrix.org`.
+[[server.headers]]
+  for = '/**'
+  [server.headers.values]
+    Content-Security-Policy = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    # Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options = "sameorigin"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET"
