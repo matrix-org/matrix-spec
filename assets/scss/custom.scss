@@ -267,10 +267,13 @@ footer {
   margin: 1rem 0 3rem 0;
 
   details {
-
     summary {
       padding: .5rem 0;
       list-style-position: outside;
+
+      p {
+        max-width: 80%;
+      }
     }
   }
 
@@ -311,10 +314,6 @@ footer {
   hr {
     border-bottom: 2px solid $dark;
     margin-bottom: 1.5rem;
-  }
-
-  p {
-    max-width: 80%;
   }
 
   p code, table code {
