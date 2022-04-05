@@ -26,10 +26,10 @@ description: |-
 
   The power level required to invite a user to the room, kick a user from the
   room, ban a user from the room, or redact an event sent by another user, is
-  defined by `invite`, `kick`, `ban`, and `redact`, respectively. Each
-  of these levels defaults to 50 if they are not specified in the
+  defined by `invite`, `kick`, `ban`, and `redact`, respectively.  The levels
+  for `kick`, `ban` and `redact` default to 50 if they are not specified in the
   `m.room.power_levels` event, or if the room contains no `m.room.power_levels`
-  event.
+  event. `invite` defaults to 0 in either case.
 
   **Note:**
 
@@ -60,7 +60,7 @@ properties:
             overridden by the `events` key.  Defaults to 0 if unspecified.
         type: integer
       invite:
-        description: The level required to invite a user. Defaults to 50 if unspecified.
+        description: The level required to invite a user. Defaults to 0 if unspecified.
         type: integer
       kick:
         description: The level required to kick a user. Defaults to 50 if unspecified.

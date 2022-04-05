@@ -1,0 +1,1 @@
+Correct the default value for `invite` where it is not specified in an `m.room.power_levels` event.
