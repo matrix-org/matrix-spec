@@ -7,6 +7,10 @@ on:
       - v*
   pull_request:
   workflow_dispatch:
+  schedule:
+    # Run this workflow every day at 2am. This helps keep the page of
+    # current spec proposals up-to-date.
+    - cron: '0 2 * * *'
 
 jobs:
   validate-openapi:
