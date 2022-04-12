@@ -98,7 +98,7 @@ async function getIssues() {
     return null;
   }
 
-  let pageLink = "https://api.github.com/repos/matrix-org/matrix-doc/issues?state=all&labels=proposal&per_page=100";
+  let pageLink = "https://api.github.com/repos/matrix-org/matrix-spec-proposals/issues?state=all&labels=proposal&per_page=100";
   while (pageLink) {
     const response = await fetch(pageLink);
     const issuesForPage = await response.json();
