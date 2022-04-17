@@ -691,7 +691,7 @@ type-qualifier = segment-nz "/" ; as defined in RFC 3986
 id-without-sigil = string ; as defined in Matrix identifier spec above
 query = query-element *( "&" query-item )
 query-item = action / routing / custom-query-item
-action = "action=" ( "join" / "chat" )
+action = "action=" ( "join" / "chat" / "knock" )
 routing = "via=” authority
 custom-query-item = custom-item-name "=" custom-item-value
 custom-item-name = 1*unreserved ; reverse-DNS name
@@ -745,6 +745,10 @@ this specification are the following:
     form of Canonical DMs should reuse existing DMs instead of creating new ones
     if available. The client should prompt for confirmation prior to creating the
     DM, if the user isn't being redirected to an existing canonical DM.
+  * `action=knock` -  Describes an intent for the client to knock the room described
+    by the URI and thus is only valid on URIs which are referring to a room (it
+    has no meaning and is ignored otherwise). The client should prompt for confirmation
+    prior to knocking the room, if the user isn't already part of the room.
 * `via` - Can be used to denote which servers (`authority` grammar) to attempt to resolve
   the resource through, or take `action` through. An example of using `via` for
   routing Room IDs is described [below](#routing), and is encouraged for use in
