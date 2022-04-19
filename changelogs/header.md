@@ -9,7 +9,7 @@ Variables:
 ## VERSION
 
 <table class="release-info">
-<tr><th>Git commit</th><td><a href="https://github.com/matrix-org/matrix-doc/tree/VERSION">https://github.com/matrix-org/matrix-doc/tree/VERSION</a></td>
+<tr><th>Git commit</th><td><a href="https://github.com/matrix-org/matrix-spec/tree/VERSION">https://github.com/matrix-org/matrix-spec/tree/VERSION</a></td>
 <tr><th>Release date</th><td>DATE</td>
 </table>
 

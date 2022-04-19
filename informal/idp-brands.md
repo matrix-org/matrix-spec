@@ -6,7 +6,7 @@ with the relevant additions (using the existing specification as reference) - an
 required. Once opened, mention your PR in [#sct-office:matrix.org](https://matrix.to/#/#sct-office:matrix.org)
 on Matrix so it doesn't end up lost.
 
-Please also take some time to read the [contributing guidelines](https://github.com/matrix-org/matrix-doc/blob/master/CONTRIBUTING.rst)
+Please also take some time to read the [contributing guidelines](https://github.com/matrix-org/matrix-spec/blob/master/CONTRIBUTING.rst)
 for an overview of PR requirements.
 
 <!--

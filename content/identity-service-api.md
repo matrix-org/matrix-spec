@@ -285,7 +285,7 @@ the client has made an appropriate request to `/hash_details` first.
 ### Security considerations
 
 {{% boxes/note %}}
-[MSC2134](https://github.com/matrix-org/matrix-doc/pull/2134) has much
+[MSC2134](https://github.com/matrix-org/matrix-spec-proposals/pull/2134) has much
 more information about the security considerations made for this section
 of the specification. This section covers the high-level details for why
 the specification is the way it is.

@@ -98,6 +98,6 @@ there are a number of options:
 
 ## Issue tracking
 
-Specification issues are tracked on github at <https://github.com/matrix-org/matrix-doc/issues>.
+Specification issues are tracked on github at <https://github.com/matrix-org/matrix-spec/issues>.
 
 See [meta/github-labels.rst](./meta/github-labels.rst) for information on what the labels mean.

@@ -1,7 +1,7 @@
 [tool.towncrier]
     version = "unused"
     filename = "../rendered.md"
-    issue_format = "[#{issue}](https://github.com/matrix-org/matrix-doc/issues/{issue})"
+    issue_format = "[#{issue}](https://github.com/matrix-org/matrix-spec/issues/{issue})"
     title_format = "### {name}"  # Matches rendered spec, even if awkward
     underlines = "   "  # 3 spaces intentionally to hide RST headings
 

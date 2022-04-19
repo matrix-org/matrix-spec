@@ -16,7 +16,7 @@ for more information on what does and does not need a proposal.
 The proposal process involves some technical writing, having it reviewed
 by everyone, having the proposal being accepted, then actually having
 your ideas implemented as committed changes to the [Specification
-repository](https://github.com/matrix-org/matrix-doc).
+repository](https://github.com/matrix-org/matrix-spec).
 
 Meet the [members of the Core Team](https://matrix.org/foundation), a
 group of individuals tasked with ensuring the spec process is as smooth
@@ -186,7 +186,7 @@ is as follows:
         changes, and give reasoning to back them up. Changes without
         justification will likely be poorly received by the community.
 -   Fork and make a PR to the
-    [matrix-doc](https://github.com/matrix-org/matrix-doc) repository.
+    [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repository.
     The ID of your PR will become the MSC ID for the lifetime of your
     proposal.
     -   The proposal must live in the `proposals/` directory with a
@@ -274,8 +274,8 @@ is as follows:
 The process for handling proposals is shown visually in the following
 diagram. Note that the lifetime of a proposal is tracked through the
 corresponding labels for each stage on the
-[matrix-doc](https://github.com/matrix-org/matrix-doc) issue and pull
-request trackers.
+[matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals)
+pull request trackers.
 
 ```
                            +                          +
@@ -332,17 +332,17 @@ request trackers.
 
 | Name                            | GitHub Label                    | Description                                                                                                                                                                                                                          |
 |---------------------------------|---------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Proposal Drafting and Feedback  | [No label](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+-label%3Aabandoned+-label%3Afinal-comment-period+-label%3Afinished-final-comment-period+-label%3Amerged+-label%3Aobsolete+-label%3Aproposal-postponed+-label%3Aproposed-final-comment-period+-label%3Aproposal-in-review+-label%3Aspec-pr-in-review+-label%3Aspec-pr-missing) | A proposal document which is still work-in-progress but is being shared to incorporate feedback. Please prefix your proposal's title with `[WIP]` to make it easier for reviewers to skim their notifications list. |
-| Proposal In Review              | [proposal-in-review](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aproposal-in-review)                          | A proposal document which is now ready and waiting for review by the Spec Core Team and community                       |
-| Proposed Final Comment Period   | [proposed-final-comment-period](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aproposed-final-comment-period+)   | Currently awaiting signoff of a 75% majority of team members in order to enter the final comment period                 |
-| Final Comment Period            | [final-comment-period](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Afinal-comment-period+)                     | A proposal document which has reached final comment period either for merge, closure or postponement                    |
-| Final Comment Period Complete   | [finished-final-comment-period](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Afinished-final-comment-period+)   | The final comment period has been completed. Waiting for a demonstration implementation                                 |
-| Spec PR Missing                 | [spec-pr-missing](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aspec-pr-missing)                                | The proposal has been agreed, and proven with a demonstration implementation. Waiting for a PR against the Spec         |
-| Spec PR In Review               | [spec-pr-in-review](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aspec-pr-in-review+)                           | The spec PR has been written, and is currently under review                                                             |
-| Spec PR Merged                  | [merged](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Amerged)                                                  | A proposal with a sufficient working implementation and whose Spec PR has been merged!                                  |
-| Postponed                       | [proposal-postponed](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aproposal-postponed+)                         | A proposal that is temporarily blocked or a feature that may not be useful currently but perhaps sometime in the future |
-| Abandoned                       | [abandoned](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aabandoned)                                      | A proposal where the author/shepherd is not responsive                                                                  |
-| Obsolete                        | [obsolete](https://github.com/matrix-org/matrix-doc/issues?q=label%3Aproposal+label%3Aobsolete+)                                             | A proposal which has been made obsolete by another proposal or decision elsewhere.                                      |
+| Proposal Drafting and Feedback  | [No label](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+-label%3Aabandoned+-label%3Afinal-comment-period+-label%3Afinished-final-comment-period+-label%3Amerged+-label%3Aobsolete+-label%3Aproposal-postponed+-label%3Aproposed-final-comment-period+-label%3Aproposal-in-review+-label%3Aspec-pr-in-review+-label%3Aspec-pr-missing) | A proposal document which is still work-in-progress but is being shared to incorporate feedback. Please prefix your proposal's title with `[WIP]` to make it easier for reviewers to skim their notifications list. |
+| Proposal In Review              | [proposal-in-review](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aproposal-in-review)                          | A proposal document which is now ready and waiting for review by the Spec Core Team and community                       |
+| Proposed Final Comment Period   | [proposed-final-comment-period](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aproposed-final-comment-period+)   | Currently awaiting signoff of a 75% majority of team members in order to enter the final comment period                 |
+| Final Comment Period            | [final-comment-period](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Afinal-comment-period+)                     | A proposal document which has reached final comment period either for merge, closure or postponement                    |
+| Final Comment Period Complete   | [finished-final-comment-period](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Afinished-final-comment-period+)   | The final comment period has been completed. Waiting for a demonstration implementation                                 |
+| Spec PR Missing                 | [spec-pr-missing](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aspec-pr-missing)                                | The proposal has been agreed, and proven with a demonstration implementation. Waiting for a PR against the Spec         |
+| Spec PR In Review               | [spec-pr-in-review](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aspec-pr-in-review+)                           | The spec PR has been written, and is currently under review                                                             |
+| Spec PR Merged                  | [merged](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Amerged)                                                  | A proposal with a sufficient working implementation and whose Spec PR has been merged!                                  |
+| Postponed                       | [proposal-postponed](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aproposal-postponed+)                         | A proposal that is temporarily blocked or a feature that may not be useful currently but perhaps sometime in the future |
+| Abandoned                       | [abandoned](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aabandoned)                                      | A proposal where the author/shepherd is not responsive                                                                  |
+| Obsolete                        | [obsolete](https://github.com/matrix-org/matrix-spec-proposals/issues?q=label%3Aproposal+label%3Aobsolete+)                                             | A proposal which has been made obsolete by another proposal or decision elsewhere.                                      |
 
 ## Categories
 
@@ -488,19 +488,19 @@ In summary:
 
 This is a living document generated from the list of proposals on the
 issue and pull request trackers of the
-[matrix-doc](https://github.com/matrix-org/matrix-doc) repo.
+[matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repo.
 
 We use labels and some metadata in MSC PR descriptions to generate this
 page. Labels are assigned by the Spec Core Team whilst triaging the
 proposals based on those which exist in the
-[matrix-doc](https://github.com/matrix-org/matrix-doc) repo already.
+[matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repo already.
 
 It is worth mentioning that a previous version of the MSC process used a
 mixture of GitHub issues and PRs, leading to some MSC numbers deriving
 from GitHub issue IDs instead. A useful feature of GitHub is that it
 does automatically resolve to an issue, if an issue ID is placed in a
 pull URL. This means that
-<https://github.com/matrix-org/matrix-doc/pull/$MSCID> will correctly
+<https://github.com/matrix-org/matrix-spec-proposals/pull/$MSCID> will correctly
 resolve to the desired MSC, whether it started as an issue or a PR.
 
 Other metadata:
