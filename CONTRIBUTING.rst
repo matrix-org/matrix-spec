@@ -1,5 +1,5 @@
-Contributing to matrix-doc
-==========================
+Contributing to matrix-spec
+===========================
 
 Everyone is welcome to contribute to the Matrix specification!
 
@@ -9,13 +9,9 @@ Code style
 ----------
 
 The documentation style is described at
-https://github.com/matrix-org/matrix-doc/blob/master/meta/documentation_style.rst.
+https://github.com/matrix-org/matrix-spec/blob/main/meta/documentation_style.rst.
 
-Python code within the ``matrix-doc`` project should follow the same style as
-synapse, which is documented at
-https://github.com/matrix-org/synapse/tree/master/docs/code_style.md.
-
-Matrix-doc workflows
+Matrix-spec workflows
 --------------------
 
 Specification changes
@@ -27,9 +23,7 @@ server before they can be documented in the specification. This process can take
 some time to complete.
 
 Changes to the protocol (new endpoints, ideas, etc) need to go through the
-`proposals process <https://matrix.org/docs/spec/proposals>`_. Other changes,
-such as fixing bugs, typos, or clarifying existing behaviour do not need a proposal.
-If you're not sure, visit us at `#matrix-spec:matrix.org`_ and ask.
+`proposals process <https://matrix.org/docs/spec/proposals>`_.
 
 Other changes
 ~~~~~~~~~~~~~
@@ -42,12 +36,12 @@ following:
 
 * Addition of features which have been in use in practice for some time, but
   have never made it into the spec (including anything with the `spec-omission
-  <https://github.com/matrix-org/matrix-doc/labels/spec-omission>`_ label).
+  <https://github.com/matrix-org/matrix-spec/labels/spec-omission>`_ label).
 
 * Likewise, corrections to the specification, to fix situations where, in
   practice, servers and clients behave differently to the specification,
   including anything with the `spec-bug
-  <https://github.com/matrix-org/matrix-doc/labels/spec-bug>`_ label.
+  <https://github.com/matrix-org/matrix-spec/labels/spec-bug>`_ label.
 
   (If there is any doubt about whether it is the spec or the implementations
   that need fixing, please discuss it with us first in `#matrix-spec:matrix.org`_.)
@@ -55,7 +49,7 @@ following:
 * Clarifications to the specification which do not change the behaviour of
   Matrix servers or clients in a way which might introduce compatibility
   problems for existing deployments. This includes anything with the
-  `clarification <https://github.com/matrix-org/matrix-doc/labels/clarification>`_
+  `clarification <https://github.com/matrix-org/matrix-spec/labels/clarification>`_
   label.
 
   For example, areas where the specification is unclear do not require a proposal
@@ -81,7 +75,7 @@ Adding to the changelog
 All API specifications require a changelog entry. Adding to the changelog can only
 be done after you've opened your pull request, so be sure to do that first.
 
-The changelog is managed by Towncrier (https://github.com/hawkowl/towncrier) in the
+The changelog is managed by `Towncrier <https://github.com/twisted/towncrier>`_ in the
 form of "news fragments". The news fragments for the client-server API are stored
 under ``changelogs/client_server/newsfragments``.
 
@@ -111,7 +105,7 @@ CSS, etc should not get a news fragment.
 Sign off
 --------
 
-We ask that everybody who contributes to their project signs off their
+We ask that everybody who contributes to this project signs off their
 contributions, as explained below.
 
 We follow a simple 'inbound=outbound' model for contributions: the act of
@@ -121,11 +115,10 @@ license - in our case, this is Apache Software License v2 (see LICENSE).
 
 In order to have a concrete record that your contribution is intentional
 and you agree to license it under the same terms as the project's license, we've adopted the
-same lightweight approach that the Linux Kernel
-(https://www.kernel.org/doc/Documentation/SubmittingPatches), Docker
-(https://github.com/docker/docker/blob/master/CONTRIBUTING.md), and many other
-projects use: the DCO (Developer Certificate of Origin:
-http://developercertificate.org/). This is a simple declaration that you wrote
+same lightweight approach used by the `Linux Kernel <https://www.kernel.org/doc/html/latest/process/submitting-patches.html>`_,
+`Docker <https://github.com/docker/docker/blob/master/CONTRIBUTING.md`_, and many other
+projects: the `Developer Certificate of Origin <http://developercertificate.org/>`_
+(DCO). This is a simple declaration that you wrote
 the contribution or otherwise have the right to contribute it to Matrix::
 
     Developer Certificate of Origin

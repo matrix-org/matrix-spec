@@ -216,7 +216,7 @@ before using the contents verbatim.
 **It is not safe to assume that an event body will have all the expected
 fields of the expected types.**
 
-See [MSC2801](https://github.com/matrix-org/matrix-doc/pull/2801) for more
+See [MSC2801](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2801-untrusted-event-data.md) for more
 detail on why this assumption is unsafe.
 {{% /boxes/warning %}}
 

@@ -1,6 +1,6 @@
 The following labels are used to help categorize issues:
 
-`spec-omission <https://github.com/matrix-org/matrix-doc/labels/spec-omission>`_
+`spec-omission <https://github.com/matrix-org/matrix-spec/labels/spec-omission>`_
 --------------------------------------------------------------------------------
 
 Things which have been implemented but not currently specified. These may range
@@ -16,7 +16,7 @@ Examples:
 * `Unspec'd server_name request param for /join/{roomIdOrAlias}
   <https://github.com/matrix-org/matrix-doc/issues/904>`_
 
-`clarification <https://github.com/matrix-org/matrix-doc/labels/clarification>`_
+`clarification <https://github.com/matrix-org/matrix-spec/labels/clarification>`_
 --------------------------------------------------------------------------------
 
 An area where the spec could do with being more explicit.
@@ -24,12 +24,12 @@ An area where the spec could do with being more explicit.
 Examples:
 
 * `Spec the implicit limit on /syncs
-  <https://github.com/matrix-org/matrix-doc/issues/708>`_
+  <https://github.com/matrix-org/matrix-spec/issues/200>`_
 
 * `Clarify the meaning of the currently_active flags in presence events
   <https://github.com/matrix-org/matrix-doc/issues/686>`_
 
-`spec-bug <https://github.com/matrix-org/matrix-doc/labels/spec-bug>`_
+`spec-bug <https://github.com/matrix-org/matrix-spec/labels/spec-bug>`_
 ----------------------------------------------------------------------
 
 Something which is in the spec, but is wrong.
@@ -46,7 +46,7 @@ Examples:
 * `receipts section still refers to initialSync
   <https://github.com/matrix-org/matrix-doc/issues/695>`_
 
-`improvement <https://github.com/matrix-org/matrix-doc/labels/improvement>`_
+`improvement <https://github.com/matrix-org/matrix-spec/labels/improvement>`_
 ----------------------------------------------------------------------------
 
 A suggestion for a relatively simple improvement to the protocol.
@@ -56,9 +56,9 @@ Examples:
 * `We need a 'remove 3PID' API so that users can remove mappings
   <https://github.com/matrix-org/matrix-doc/issues/620>`_
 * `We should mandate that /publicRooms requires an access_token
-  <https://github.com/matrix-org/matrix-doc/issues/612>`_
+  <https://github.com/matrix-org/matrix-spec/issues/145>`_
 
-`feature <https://github.com/matrix-org/matrix-doc/labels/feature>`_
+`feature <https://github.com/matrix-org/matrix-spec/labels/feature>`_
 --------------------------------------------------------------------
 
 A suggestion for a significant extension to the matrix protocol which
@@ -68,10 +68,10 @@ Examples:
 
 * `Peer-to-peer Matrix <https://github.com/matrix-org/matrix-doc/issues/710>`_
 * `Specify a means for clients to "edit" previous messages
-  <https://github.com/matrix-org/matrix-doc/issues/682>`_
+  <https://github.com/matrix-org/matrix-spec/issues/184>`_
 
 
-`wart <https://github.com/matrix-org/matrix-doc/labels/wart>`_
+`wart <https://github.com/matrix-org/matrix-spec/labels/wart>`_
 --------------------------------------------------------------
 
 A point where the protocol is inconsistent or inelegant, but which isn't really
@@ -79,7 +79,7 @@ causing anybody any problems right now. Might be nice to consider fixing one
 day.
 
 
-`question <https://github.com/matrix-org/matrix-doc/labels/question>`_
+`question <https://github.com/matrix-org/matrix-spec/labels/question>`_
 ----------------------------------------------------------------------
 
 A thought or idea about the protocol which we aren't really sure whether to
@@ -88,4 +88,4 @@ pursue or not.
 Examples:
 
 * `Should we prepend anti-eval code to our json responses?
-  <https://github.com/matrix-org/matrix-doc/issues/908>`_
+  <https://github.com/matrix-org/matrix-spec/issues/244>`_

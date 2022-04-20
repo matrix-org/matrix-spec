@@ -751,7 +751,7 @@ this specification are the following:
   Matrix URIs referring to a room ID. Matrix URIs can additionally use this `via`
   parameter for non-public federation resolution of identifiers (i.e.: listing a
   server which might have information about the given user) while a more comprehensive
-  way is being worked out, such as one proposed by [MSC3020](https://github.com/matrix-org/matrix-doc/pull/3020).
+  way is being worked out, such as one proposed by [MSC3020](https://github.com/matrix-org/matrix-spec-proposals/pull/3020).
 
 Custom query parameters can be specified using the
 [Common Namespaced Identifier format](#common-namespaced-identifier-grammar) and
@@ -772,7 +772,7 @@ Examples of common URIs are:
 * Link to chat with `@alice:example.org`: `matrix:u/alice:example.org?action=chat`
 
 A suggested client implementation algorithm is available in the
-[original MSC](https://github.com/matrix-org/matrix-doc/blob/main/proposals/2312-matrix-uri.md#recommended-implementation).
+[original MSC](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2312-matrix-uri.md#recommended-implementation).
 
 ##### matrix.to navigation
 
@@ -846,7 +846,7 @@ send requests to. This is partially mitigated with the addition of a
 `via` argument on a URI, however the problem of routability is
 still present. Clients should do their best to route Room IDs to where
 they need to go, however they should also be aware of [issue
-\#1579](https://github.com/matrix-org/matrix-doc/issues/1579).
+\#1579](https://github.com/matrix-org/matrix-spec/issues/355).
 
 A room (or room permalink) which isn't using a room alias should supply
 at least one server using `via` in the URI's query string. Multiple servers
