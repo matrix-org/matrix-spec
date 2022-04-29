@@ -31,11 +31,14 @@ the `membership` is `leave` or `ban` and the `sender` does not match the
 might remove someone's ability to do something in the room.
 
 **Unconflicted state map and conflicted state set.**
-The *unconflicted state map* is the state where the value of each key
-exists and is the same in each state *S*<sub>*i*</sub>. The *conflicted
-state set* is the set of all other state events. Note that the
-unconflicted state map only has one event per `(event_type, state_key)`,
-whereas the conflicted state set may have multiple events.
+The key-value pairs across all state maps *S<sub>i</sub>* can be divided into
+two collections. If a given key *K* is present in every *S<sub>i</sub>* with the
+same value *V* in each state map, then the pair (*K*, *V*) belongs to the
+*unconflicted state map*. Otherwise (*K*, *V*) belongs to the
+*conflicted state set*.
+
+Note that the unconflicted state map only has one event per `(event_type, state_key)`,
+whereas the conflicted state set may associate multiple events to the same key.
 
 **Auth difference.**
 The *auth difference* is calculated by first calculating the full auth
