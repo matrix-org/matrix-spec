@@ -40,6 +40,12 @@ same value *V* in each state map, then the pair (*K*, *V*) belongs to the
 Note that the unconflicted state map only has one event per `(event_type, state_key)`,
 whereas the conflicted state set may associate multiple events to the same key.
 
+**Auth chain.**
+The *auth chain* of an event *E* is the set containing all of *E*'s auth events,
+all of *their* authorising events, and so on recursively, stretching back to the
+start of the room. Put differently, these are the events reachable by walking
+the graph induced by an event's auth_events links.
+
 **Auth difference.**
 The *auth difference* is calculated by first calculating the full auth
 chain for each state *S*<sub>*i*</sub>, that is the union of the auth
