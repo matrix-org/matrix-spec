@@ -255,7 +255,7 @@ condition applies throughout the request signing process.
 Step 2 add Authorization header:
 
     GET /target HTTP/1.1
-    Authorization: X-Matrix origin=origin.example.com,key="ed25519:key1",sig="ABCDEF..."
+    Authorization: X-Matrix origin=origin.hs.example.com,key="ed25519:key1",sig="ABCDEF..."
     Content-Type: application/json
 
     <JSON-encoded request body>
