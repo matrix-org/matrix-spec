@@ -2,20 +2,19 @@
 toc_hide: true
 ---
 
-The room state *S*′(*E*) after an event *E* is defined in terms of the
-room state *S*(*E*) before *E*, and depends on whether *E* is a state
+The room state *S′(E)* after an event *E* is defined in terms of the
+room state *S(E)* before *E*, and depends on whether *E* is a state
 event or a message event:
 
--   If *E* is a message event, then *S*′(*E*) = *S*(*E*).
--   If *E* is a state event, then *S*′(*E*) is *S*(*E*), except that its
-    entry corresponding to *E*'s `event_type` and `state_key` is
-    replaced by *E*'s `event_id`.
+-   If *E* is a message event, then *S′(E)* = *S(E)*.
+-   If *E* is a state event, then *S′(E)* is *S(E)*, except that its
+    entry corresponding to the `event_type` and `state_key` of *E* is
+    replaced by the `event_id` of *E*.
 
-The room state *S*(*E*) before *E* is the *resolution* of the set of
-states {*S*′(*E*<sub>1</sub>), *S*′(*E*<sub>2</sub>), …} consisting of
-the states after each of *E*'s `prev_event`s
-{*E*<sub>1</sub>, *E*<sub>2</sub>, …}, where the resolution of a set of
-states is given in the algorithm below.
+The room state *S(E)* before *E* is the *resolution* of the set of
+states {*S′(E*<sub>1</sub>*)*, *S′(E*<sub>2</sub>*)*, …}
+after the `prev_event`s {*E*<sub>1</sub>, *E*<sub>2</sub>, …} of *E*.
+The resolution of a set of states is given in the algorithm below.
 
 #### Definitions
 
