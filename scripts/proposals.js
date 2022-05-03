@@ -30,10 +30,6 @@ const outputDir = path.join(__dirname, "../data/msc");
  */
 const states = [
   {
-    label: "proposal-in-review",
-    title: "Proposal In Review"
-  },
-  {
     label: "proposed-final-comment-period",
     title: "Proposed Final Comment Period"
   },
@@ -188,23 +184,34 @@ function processIssues()  {
     fs.mkdirSync(outputDir);
   }
   const output = [];
-  // make a group of "work in progress" proposals,
-  // which are identified by not having any of the state labels
-  const stateLabels = states.map(s => s.label);
-  const worksInProgress = issues.filter(issue => {
-    const labelsForIssue = issue.labels.map(l => l.name);
-    return intersection(labelsForIssue, stateLabels).length === 0;
-  });
+
+  // make a group of "work in progress" proposals, for those in draft.
   output.push({
     title: "Work In Progress",
     label: "work-in-progress",
-    proposals: worksInProgress.map(issue => getProposalFromIssue(issue))
+    proposals: issues
+      .filter(issue => issue.state == "open" && issue.draft)
+      .map(issue => getProposalFromIssue(issue))
   });
+
+  // now the 'Proposal In Review' section, which are identified by
+  // not having any of the state labels
+  const stateLabels = states.map(s => s.label);
+  const proposalsInReview = issues.filter(issue => {
+    const labelsForIssue = issue.labels.map(l => l.name);
+    return !issue.draft && intersection(labelsForIssue, stateLabels).length === 0;
+  });
+  output.push({
+    title: "Proposal In Review",
+    label: "proposal-in-review",
+    proposals: proposalsInReview.map(issue => getProposalFromIssue(issue))
+  });
+
   // for each defined state
   for (const state of states) {
     // get the set of issues for that state
     const issuesForState = issues.filter(msc => {
-      return msc.labels.some(l => l.name === state.label);
+      return !msc.draft && msc.labels.some(l => l.name === state.label);
     });
     // store it in /data
     output.push({
