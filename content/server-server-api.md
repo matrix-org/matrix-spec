@@ -355,7 +355,9 @@ specification](/rooms).
 Whenever a server receives an event from a remote server, the receiving
 server must ensure that the event:
 
-1.  Is a valid event, otherwise it is dropped.
+1.  Is a valid event, otherwise it is dropped. For an event to be valid, it
+    must contain a `room_id`, and it must comply with the event format of
+    that room version.
 2.  Passes signature checks, otherwise it is dropped.
 3.  Passes hash checks, otherwise it is redacted before being processed
     further.
