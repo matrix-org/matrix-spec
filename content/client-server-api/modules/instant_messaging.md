@@ -12,17 +12,6 @@ room itself such as a room name and topic.
 
 {{% event event="m.room.message" %}}
 
-{{% event event="m.room.message.feedback" %}}
-
-Usage of this event is discouraged for several reasons:
--   The number of feedback events will grow very quickly with the number
-    of users in the room. This event provides no way to "batch"
-    feedback, unlike the [receipts module](#receipts).
--   Pairing feedback to messages gets complicated when paginating as
-    feedback arrives before the message it is acknowledging.
--   There are no guarantees that the client has seen the event ID being
-    acknowledged.
-
 {{% event event="m.room.name" %}}
 
 {{% event event="m.room.topic" %}}
