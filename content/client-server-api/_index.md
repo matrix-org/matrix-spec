@@ -2212,6 +2212,7 @@ that profile.
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
 | [Mentions](#user-room-and-group-mentions)                  | Required  | Required | Required | Optional | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
@@ -2291,6 +2292,7 @@ applications, they are not intended to be fully-fledged communication
 systems.
 
 {{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
 {{% cs-module name="voip_events" %}}
 {{% cs-module name="typing_notifications" %}}
 {{% cs-module name="receipts" %}}
