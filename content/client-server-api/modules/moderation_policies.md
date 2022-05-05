@@ -53,7 +53,7 @@ follows:
 -   Is a `room` rule...
     -   Applied to a user: The user should leave the room and not join
         it
-        ([MSC2270](https://github.com/matrix-org/matrix-doc/pull/2270)-style
+        ([MSC2270](https://github.com/matrix-org/matrix-spec-proposals/pull/2270)-style
         ignore).
     -   Applied to a room: No-op because a room cannot ban itself.
     -   Applied to a server: The server should prevent users from
@@ -120,6 +120,6 @@ Depending on how implementations handle subscriptions, user IDs may be
 linked to policy lists and therefore expose the views of that user. For
 example, a client implementation which joins the user to the policy room
 would expose the user's ID to observers of the policy room. In future,
-[MSC1228](https://github.com/matrix-org/matrix-doc/pulls/1228) and
-[MSC1777](https://github.com/matrix-org/matrix-doc/pulls/1777) (or
+[MSC1228](https://github.com/matrix-org/matrix-spec-proposals/pulls/1228) and
+[MSC1777](https://github.com/matrix-org/matrix-spec-proposals/pulls/1777) (or
 similar) could help solve this concern.
