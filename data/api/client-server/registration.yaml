@@ -1,4 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
+# Copyright 2022 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -127,6 +128,11 @@ paths:
                   returned from this call, therefore preventing an automatic
                   login. Defaults to false.
                 example: false
+              refresh_token:
+                type: boolean
+                description: |-
+                  If true, the client supports refresh tokens.
+                x-addedInMatrixVersion: "1.3"
       responses:
         200:
           description: The account has been registered.
@@ -152,6 +158,27 @@ paths:
                   An access token for the account.
                   This access token can then be used to authorize other requests.
                   Required if the `inhibit_login` option is false.
+              refresh_token:
+                type: string
+                description: |-
+                  A refresh token for the account. This token can be used to
+                  obtain a new access token when it expires by calling the
+                  `/refresh` endpoint.
+
+                  Omitted if the `inhibit_login` option is false.
+                x-addedInMatrixVersion: "1.3"
+              expires_in_ms:
+                type: integer
+                description: |-
+                  The lifetime of the access token, in milliseconds. Once
+                  the access token has expired a new access token can be
+                  obtained by using the provided refresh token. If no
+                  refresh token is provided, the client will need re-log in
+                  to obtain a new access token. If not given, the client can
+                  assume that the access token will not expire.
+
+                  Omitted if the `inhibit_login` option is false.
+                x-addedInMatrixVersion: "1.3"
               home_server:
                 type: string
                 description: |-
