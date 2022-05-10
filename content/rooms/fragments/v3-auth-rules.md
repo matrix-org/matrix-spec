@@ -11,11 +11,11 @@ however.
 
 The types of state events that affect authorization are:
 
--   `m.room.create`
--   `m.room.member`
--   `m.room.join_rules`
--   `m.room.power_levels`
--   `m.room.third_party_invite`
+-   [`m.room.create`](/client-server-api#mroomcreate)
+-   [`m.room.member`](/client-server-api#mroommember)
+-   [`m.room.join_rules`](/client-server-api#mroom)
+-   [`m.room.power_levels`](/client-server-api#mroompower_levels)
+-   [`m.room.third_party_invite`](/client-server-api#mroomthird_party_invite)
 
 {{% boxes/note %}}
 Power levels are inferred from defaults when not explicitly supplied.
