@@ -102,7 +102,7 @@ the tag entirely.
 {{% boxes/note %}}
 A future iteration of the specification will support more powerful and
 extensible message formatting options, such as the proposal
-[MSC1767](https://github.com/matrix-org/matrix-doc/pull/1767).
+[MSC1767](https://github.com/matrix-org/matrix-spec-proposals/pull/1767).
 {{% /boxes/note %}}
 
 {{% msgtypes %}}
