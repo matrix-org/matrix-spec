@@ -114,7 +114,7 @@ paths:
 
             Some example error codes include:
 
-            * `M_INVALID_PARAMETER`: One or more aliases within the `m.room.canonical_alias`
+            * `M_INVALID_PARAM`: One or more aliases within the `m.room.canonical_alias`
               event have invalid syntax.
 
             * `M_BAD_ALIAS`: One or more aliases within the `m.room.canonical_alias` event
