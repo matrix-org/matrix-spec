@@ -1741,6 +1741,16 @@ There are several APIs provided to `GET` events for a room:
 
 ### Sending events to a room
 
+{{% boxes/note %}}
+{{% added-in v="1.3" %}}
+
+Servers might need to post-process some events if they
+[relate to](#forming-relationships-between-events) another event. The event's
+relationship type (`rel_type`) determines any restrictions which might apply,
+such as the user only being able to send one event of a given type in relation
+to another.
+{{% /boxes/note %}}
+
 {{% http-api spec="client-server" api="room_state" %}}
 
 **Examples**
@@ -1830,6 +1840,43 @@ the topic to be removed from the room.
 #### Client behaviour
 
 {{% http-api spec="client-server" api="redaction" %}}
+
+### Forming relationships between events
+
+{{% changed-in v="1.3" %}}
+
+In some cases it is desirable to logically associate one event's contents with
+another event's contents. For example, when replying to a message, editing an
+event, or simply looking to add context for an event's purpose.
+
+Relationships are defined as part of an event's `content`. Any event can relate
+to any other event, however the relationship itself might have restrictions
+depending on its `rel_type`. Those restrictions are described by the relationship
+type in this specification, if any exist.
+
+The relationship is stored under the `m.relates_to` key of `content`, referencing
+the "parent" event. Both the event with `m.relates_to` and the event targeted by
+`m.relates_to` MUST exist in the same room.
+
+{{% boxes/note %}}
+For simplicity, a single type of relationship is permitted on an event at a time.
+A future MSC might change this if a use case arises.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+An event with `m.relates_to` can relate to another event with `m.relates_to`,
+forming a sort of chain of events.
+{{% /boxes/note %}}
+
+`m.relates_to` is described as follows:
+
+{{% definition path="api/client-server/definitions/m.relates_to" %}}
+
+### Relationship types
+
+This specification describes the following relationship types:
+
+* [Rich replies](#rich-replies)
 
 ## Rooms
 
