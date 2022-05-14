@@ -1882,6 +1882,15 @@ TODO: TR,MSC3440: Uncomment for threading support.
 * [Event threading](#threading)
 -->
 
+{{% boxes/note %}}
+This specification does not currently define any relation type which requires
+aggregation or has restrictions, however [namespaced](/appendices#identifier-grammar)
+relationship types might have these restrictions.
+
+Future versions of this specification are expected to require certain behaviours
+or aggregation of related events.
+{{% /boxes/note %}}
+
 ## Rooms
 
 ### Types
