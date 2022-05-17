@@ -51,14 +51,6 @@ An example reply would be:
 Note that the `event_id` of the `m.in_reply_to` object has the same requirements
 as if it were to be under `m.relates_to` directly instead.
 
-<!--
-TODO: TR, MSC3440: Uncomment for threads support
-{{% boxes/note %}}
-Some event relationships, like [threads](#threading), describe what it looks like
-to both form a relationship *and* still reply to another event.
-{{% /boxes/note %}}
--->
-
 #### Fallbacks for rich replies
 
 Some clients may not have support for rich replies and therefore need a

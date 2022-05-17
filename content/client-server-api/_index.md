@@ -1877,10 +1877,6 @@ forming a sort of chain of events.
 This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies)
-<!--
-TODO: TR,MSC3440: Uncomment for threading support.
-* [Event threading](#threading)
--->
 
 {{% boxes/note %}}
 This specification does not currently define any relation type which requires
