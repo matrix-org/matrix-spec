@@ -255,7 +255,7 @@ condition applies throughout the request signing process.
 Step 2 add Authorization header:
 
     GET /target HTTP/1.1
-    Authorization: X-Matrix origin=origin.hs.example.com,key="ed25519:key1",sig="ABCDEF..."
+    Authorization: X-Matrix origin="origin.hs.example.com",destination="destination.hs.example.com",key="ed25519:key1",sig="ABCDEF..."
     Content-Type: application/json
 
     <JSON-encoded request body>
@@ -283,13 +283,49 @@ def authorization_headers(origin_name, origin_signing_key,
 
     for key, sig in signed_json["signatures"][origin_name].items():
         authorization_headers.append(bytes(
-            "X-Matrix origin=%s,key=\"%s\",sig=\"%s\"" % (
-                origin_name, key, sig,
+            "X-Matrix origin=\"%s\",destination=\"%s\",key=\"%s\",sig=\"%s\"" % (
+                origin_name, destination_name, key, sig,
             )
         ))
 
-    return ("Authorization", authorization_headers)
+    return ("Authorization", authorization_headers[0])
 ```
+
+The format of the Authorization header is given in
+[RFC7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
+summary, the header begins with authorization scheme `X-Matrix`, followed by
+one or more spaces, followed by a comma-separated list of parameters written as
+name=value pairs. The names are case insensitive. The values must be enclosed
+in quotes if they contain characters that are not allowed in `token`s, as defined in
+[RFC7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+value is a valid `token`, it may or may not be enclosed in quotes. Quoted
+values may include backslash-escaped characters. When parsing the header, the
+recipient must unescape the characters. That is, a backslash-character pair
+is replaced by the character following the backslash.
+
+For compatibility with older servers, the sender should
+- only include one space after `X-Matrix`,
+- only use lower-case names,
+- avoid using backslashes in parameter values.
+
+For compatibility with older servers, the recipient should allow colons to be
+included in values without requiring the value to be enclosed in quotes.
+
+The authorization parameters to include are:
+
+- `origin`: the server name of the sending server.
+- `destination`: {{< added-in v="1.3" >}} the server name of the receiving
+  sender. For compatibility with older servers, recipients should accept
+  requests without this parameter, but should always send it. If this property
+  is included, but the value does not match the receiving server's name, the
+  receiving server must deny the request with an HTTP status code 401
+  Unauthorized.
+- `key`: the ID, including the algorithm name, of the sending server's key used
+  to sign the request
+- `signature`: the signature of the JSON as calculated in step 1.  The
+  signature must be unpadded.
+
+Unknown parameters are ignored.
 
 ### Response Authentication
 
