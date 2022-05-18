@@ -1888,7 +1888,8 @@ is no plaintext copy).
 
 This specification describes the following relationship types:
 
-* [Rich replies](#rich-replies)
+* [Rich replies](#rich-replies) (**Note**: uses a different relations structure than
+  described here)
 
 {{% boxes/note %}}
 This specification does not currently define any relation type which requires
