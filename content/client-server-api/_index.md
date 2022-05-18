@@ -1868,11 +1868,23 @@ An event with `m.relates_to` can relate to another event with `m.relates_to`,
 forming a sort of chain of events.
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+To allow the server to aggregate and find relations on events, the `m.relates_to`
+key of an event must be included in the plaintext copy of the event. It cannot
+be exclusively recorded in the encrypted payload of an event.
+{{% /boxes/note %}}
+
+{{% boxes/warning %}}
+If an encrypted event contains an `m.relates_to` in its payload, it should be
+ignored and instead favour the plaintext `m.relates_to` copy (including when there
+is no plaintext copy).
+{{% /boxes/warning %}}
+
 `m.relates_to` is described as follows:
 
 {{% definition path="api/client-server/definitions/m.relates_to" %}}
 
-### Relationship types
+#### Relationship types
 
 This specification describes the following relationship types:
 
@@ -1886,6 +1898,138 @@ relationship types might have these restrictions.
 Future versions of this specification are expected to require certain behaviours
 or aggregation of related events.
 {{% /boxes/note %}}
+
+#### Aggregations
+
+{{% added-in v="1.3" %}}
+
+Some relationships are "aggregated" by the server depending on their relationship
+type. This can allow a set of related events to be summarised as a subset of values.
+
+For example, a relationship might define an extra `key` field which, when used with
+the appropriate `rel_type`, would mean that the client receives a total count for
+the number of times that `key` was used in a relationship.
+
+The actual aggregation format depends on the relationship type.
+
+{{% boxes/note %}}
+This specification does not currently describe any relation types which require
+aggregation, however [namespaced](/appendices#identifier-grammar) relationship
+types might have aggregation behaviour.
+{{% /boxes/note %}}
+
+When aggregations are summarised on an event, it is known as a "bundled aggregation"
+or "bundle" for simplicity. The act of doing this is "bundling".
+
+The bundle for an event is found under the `unsigned` field of the event, when that
+event is served to the client through the APIs listed below. The field, `m.relations`,
+is an object with a key of the relationship type and value being the bundle itself.
+
+For example (unimportant fields not included):
+
+```json
+{
+  "event_id": "$my_event",
+  "unsigned": {
+    "m.relations": {
+      "org.example.possible_annotations": [
+        {
+          "key": "👍",
+          "origin_server_ts": 1562763768320,
+          "count": 3
+        },
+        {
+          "key": "👎",
+          "origin_server_ts": 1562763768320,
+          "count": 1
+        }
+      ],
+      "org.example.possible_thread": {
+        "current_server_participated": true,
+        "count": 7,
+        "latest_event": {
+          "event_id": "$another_event",
+          "content": {
+            "body": "Hello world"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Note how the `org.example.possible_annotations` bundle is an array compared to the
+`org.example.possible_thread` bundle where the server is summarising the state of
+the relationship in a single object. Both are valid bundles, and their exact types
+depend on the relationship type.
+
+The endpoints where the server *should* include the `m.relations` unsigned field are:
+
+* [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
+* [`GET /rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
+* [`GET /rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
+* [`GET /rooms/{roomId}/relations`](#get_matrixclientv3roomsroomidrelations)
+* [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
+  of `true`.
+
+{{% boxes/note %}}
+The server is **not** required to return bundles/aggregations on deprecated endpoints
+such as `/initialSync`.
+{{% /boxes/note %}}
+
+While this functionality allows the client to see what was known to the server at the
+time of handling, the client should continue to aggregate locally if it is aware of
+the relationship type's behaviour. For example, a client might increment a `count`
+on a related event's bundle if it saw a new event which referenced that event.
+
+{{% boxes/warning %}}
+The bundle provided by the server only includes events which were known at the time
+the event was *received*. This can mean that in a single `/sync` response an event
+will have a bundle and more events which qualify for that aggregation: in this case,
+the client *should* aggregate the events which are "after" the event in question on
+its own, as the server will not have considered them.
+{{% /boxes/warning %}}
+
+{{% boxes/note %}}
+Events from [ignored users](#ignoring-users) do not appear in the bundle or aggregation.
+Clients will need to de-aggregate the events sent by ignored users to avoid them being
+considered in counts. Similarly, servers must ensure they do not consider events from
+ignored users when preparing a bundle for the client.
+{{% /boxes/note %}}
+
+When an event is redacted, the relations attached to it remain. However, when an event
+which uses a relation is redacted then the relation is broken. Thus, the server needs
+to de-aggregate or disassociate an event from its parent when it is redacted. Clients
+with local aggregation should do the same.
+
+It is suggested that clients perform local echo on aggregations. For instance, aggregating
+the event into a bundle optimistically until the server returns a failure or the client
+gives up on sending the event, at which point the event should be de-aggregated and an
+error or similar shown. The client should be cautious to not aggregate an event twice if
+it has already optimistically aggregated the event. Clients are encouraged to take this
+a step further to additionally track related events which target unsent/pending events,
+likely using the transaction ID as a temporary event ID until a proper event ID is known.
+
+{{% boxes/warning %}}
+Due to history visibility restrictions, related events might not be visible to the user
+if they are in a section of history the user cannot see. This can mean inaccurate bundles
+for events that are "out of range".
+
+Additionally, if the server is missing portions of the room history then it may not be
+able to accurately aggregate the events.
+{{% /boxes/warning %}}
+
+#### API
+
+To retrieve relations for an event from the server, the client can call the following
+endpoint with relevant information. The endpoint does not aggregate the events and is
+instead paginated: clients can perform local aggregation if needed.
+
+This endpoint is particularly useful if the client has lost context on the bundle for
+an event and needs to rebuild/verify it.
+
+{{% http-api spec="client-server" api="relations" %}}
 
 ## Rooms
 
