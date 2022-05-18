@@ -302,11 +302,11 @@ allowed in `token`s, as defined in
 value is a valid `token`, it may or may not be enclosed in quotes. Quoted
 values may include backslash-escaped characters. When parsing the header, the
 recipient must unescape the characters. That is, a backslash-character pair is
-replaced by the character following the backslash.
+replaced by the character that follows the backslash.
 
 For compatibility with older servers, the sender should
 - only include one space after `X-Matrix`,
-- only use lower-case names,
+- only use lower-case names, and
 - avoid using backslashes in parameter values.
 
 For compatibility with older servers, the recipient should allow colons to be
@@ -314,15 +314,17 @@ included in values without requiring the value to be enclosed in quotes.
 
 The authorization parameters to include are:
 
-- `origin`: the server name of the sending server.
+- `origin`: the server name of the sending server. This is the same as the
+  `origin` field from JSON described in step 1.
 - `destination`: {{< added-in v="1.3" >}} the server name of the receiving
-  sender. For compatibility with older servers, recipients should accept
+  sender. This is the same as the `destination` field from the JSON described
+  in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but should always send it. If this property
   is included, but the value does not match the receiving server's name, the
   receiving server must deny the request with an HTTP status code 401
   Unauthorized.
 - `key`: the ID, including the algorithm name, of the sending server's key used
-  to sign the request
+  to sign the request.
 - `signature`: the signature of the JSON as calculated in step 1.
 
 Unknown parameters are ignored.
