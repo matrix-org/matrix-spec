@@ -1,0 +1,1 @@
+Clarify that checks on PDUs should refer to the state _before_ an event.
