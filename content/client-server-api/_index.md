@@ -1972,6 +1972,7 @@ The endpoints where the server *should* include the `m.relations` unsigned field
 * [`GET /rooms/{roomId}/relations`](#get_matrixclientv3roomsroomidrelations)
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
+* [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
 
 {{% boxes/note %}}
 The server is **not** required to return bundles/aggregations on deprecated endpoints
