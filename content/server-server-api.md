@@ -364,7 +364,7 @@ server must ensure that the event:
     further.
 4.  Passes authorization rules based on the event's auth events,
     otherwise it is rejected.
-5.  Passes authorization rules based on the state at the event,
+5.  Passes authorization rules based on the state before the event,
     otherwise it is rejected.
 6.  Passes authorization rules based on the current state of the room,
     otherwise it is "soft failed".
