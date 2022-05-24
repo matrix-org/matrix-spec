@@ -68,17 +68,17 @@ Server names are resolved to an IP address and port to connect to, and
 have various conditions affecting which certificates and `Host` headers
 to send. The process overall is as follows:
 
-1.  If the hostname is an IP literal, then that IP address should be
+1. If the hostname is an IP literal, then that IP address should be
     used, together with the given port number, or 8448 if no port is
     given. The target server must present a valid certificate for the IP
     address. The `Host` header in the request should be set to the
     server name, including the port if the server name included one.
-2.  If the hostname is not an IP literal, and the server name includes
+2. If the hostname is not an IP literal, and the server name includes
     an explicit port, resolve the IP address using AAAA or A records.
     Requests are made to the resolved IP address and given port with a
     `Host` header of the original server name (with port). The target
     server must present a valid certificate for the hostname.
-3.  If the hostname is not an IP literal, a regular HTTPS request is
+3. If the hostname is not an IP literal, a regular HTTPS request is
     made to `https://<hostname>/.well-known/matrix/server`, expecting
     the schema defined later in this section. 30x redirects should be
     followed, however redirection loops should be avoided. Responses
@@ -95,20 +95,20 @@ to send. The process overall is as follows:
     to step 4. If the response is valid, the `m.server` property is
     parsed as `<delegated_hostname>[:<delegated_port>]` and processed as
     follows:
-    -   If `<delegated_hostname>` is an IP literal, then that IP address
+    - If `<delegated_hostname>` is an IP literal, then that IP address
         should be used together with the `<delegated_port>` or 8448 if
         no port is provided. The target server must present a valid TLS
         certificate for the IP address. Requests must be made with a
         `Host` header containing the IP address, including the port if
         one was provided.
-    -   If `<delegated_hostname>` is not an IP literal, and
+    - If `<delegated_hostname>` is not an IP literal, and
         `<delegated_port>` is present, an IP address is discovered by
         looking up an AAAA or A record for `<delegated_hostname>`. The
         resulting IP address is used, alongside the `<delegated_port>`.
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
         present a valid certificate for `<delegated_hostname>`.
-    -   If `<delegated_hostname>` is not an IP literal and no
+    - If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
         `_matrix._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
@@ -116,19 +116,19 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    -   If no SRV record is found, an IP address is resolved using AAAA
+    - If no SRV record is found, an IP address is resolved using AAAA
         or A records. Requests are then made to the resolve IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
-4.  If the `/.well-known` request resulted in an error response, a
+4. If the `/.well-known` request resulted in an error response, a
     server is found by resolving an SRV record for
     `_matrix._tcp.<hostname>`. This may result in a hostname (to be
     resolved using AAAA or A records) and port. Requests are made to the
     resolved IP address and port, using 8448 as a default port, with a
     `Host` header of `<hostname>`. The target server must present a
     valid certificate for `<hostname>`.
-5.  If the `/.well-known` request returned an error response, and the
+5. If the `/.well-known` request returned an error response, and the
     SRV record was not found, an IP address is resolved using AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
@@ -137,6 +137,7 @@ to send. The process overall is as follows:
 {{% boxes/note %}}
 The reasons we require `<hostname>` rather than `<delegated_hostname>` for SRV
 delegation are:
+
   1. DNS is insecure (not all domains have DNSSEC), so the target of the delegation
       must prove that it is a valid delegate for `<hostname>` via TLS.
   2. Consistency with the recommendations in [RFC6125](https://datatracker.ietf.org/doc/html/rfc6125#section-6.2.1)
@@ -356,17 +357,17 @@ specification](/rooms).
 Whenever a server receives an event from a remote server, the receiving
 server must ensure that the event:
 
-1.  Is a valid event, otherwise it is dropped. For an event to be valid, it
+1. Is a valid event, otherwise it is dropped. For an event to be valid, it
     must contain a `room_id`, and it must comply with the event format of
     that [room version](/rooms).
-2.  Passes signature checks, otherwise it is dropped.
-3.  Passes hash checks, otherwise it is redacted before being processed
+2. Passes signature checks, otherwise it is dropped.
+3. Passes hash checks, otherwise it is redacted before being processed
     further.
-4.  Passes authorization rules based on the event's auth events,
+4. Passes authorization rules based on the event's auth events,
     otherwise it is rejected.
-5.  Passes authorization rules based on the state before the event,
+5. Passes authorization rules based on the state before the event,
     otherwise it is rejected.
-6.  Passes authorization rules based on the current state of the room,
+6. Passes authorization rules based on the current state of the room,
     otherwise it is "soft failed".
 
 Further details of these checks, and how to handle failures, are
@@ -394,6 +395,25 @@ unspecified.
 For an `m.room.member` state event, the user given by the `state_key` of
 the event.
 
+**Historical String Power Levels** \
+
+ In order to maintain backwards compatibility with early implementations,
+ power levels can optionally be represented in string format instead of
+ integer format. A homeserver must be prepared to deal with this by parsing
+ the power level from a string. In these cases, the following formatting of the
+ power level string is allowed:
+
+- a single Base10 integer, no float values or decimal points, optionally with leading zeroes;
+- optionally with leading or trailing whitespace characters;
+- optionally prefixed with a single `-` or `+` character before the integer but after leading whitespace padding.
+
+ {{% boxes/warning %}}
+ This behaviour is preserved strictly for backward compatibility only. A
+ homeserver should take reasonable precautions to prevent users from
+ sending new power level events with string values and must never
+ populate the default power levels in a room as string values.
+ {{% /boxes/warning %}}
+
 #### Authorization rules
 
 The rules governing whether an event is authorized depends on a set of
@@ -418,14 +438,14 @@ the following subset of the room state:
 
 - If type is `m.room.member`:
 
-    - The target's current `m.room.member` event, if any.
-    - If `membership` is `join` or `invite`, the current
+  - The target's current `m.room.member` event, if any.
+  - If `membership` is `join` or `invite`, the current
       `m.room.join_rules` event, if any.
-    - If membership is `invite` and `content` contains a
+  - If membership is `invite` and `content` contains a
       `third_party_invite` property, the current
       `m.room.third_party_invite` event with `state_key` matching
       `content.third_party_invite.signed.token`, if any.
-    - If `content.join_authorised_via_users_server` is present,
+  - If `content.join_authorised_via_users_server` is present,
       and the [room version supports restricted rooms](/rooms/#feature-matrix),
       then the `m.room.member` event with `state_key` matching
       `content.join_authorised_via_users_server`.
@@ -1101,22 +1121,22 @@ of `M_FORBIDDEN`.
 
 The following endpoint prefixes MUST be protected:
 
--   `/_matrix/federation/v1/send` (on a per-PDU basis)
--   `/_matrix/federation/v1/make_join`
--   `/_matrix/federation/v1/make_leave`
--   `/_matrix/federation/v1/send_join`
--   `/_matrix/federation/v2/send_join`
--   `/_matrix/federation/v1/send_leave`
--   `/_matrix/federation/v2/send_leave`
--   `/_matrix/federation/v1/invite`
--   `/_matrix/federation/v2/invite`
--   `/_matrix/federation/v1/make_knock`
--   `/_matrix/federation/v1/send_knock`
--   `/_matrix/federation/v1/state`
--   `/_matrix/federation/v1/state_ids`
--   `/_matrix/federation/v1/backfill`
--   `/_matrix/federation/v1/event_auth`
--   `/_matrix/federation/v1/get_missing_events`
+- `/_matrix/federation/v1/send` (on a per-PDU basis)
+- `/_matrix/federation/v1/make_join`
+- `/_matrix/federation/v1/make_leave`
+- `/_matrix/federation/v1/send_join`
+- `/_matrix/federation/v2/send_join`
+- `/_matrix/federation/v1/send_leave`
+- `/_matrix/federation/v2/send_leave`
+- `/_matrix/federation/v1/invite`
+- `/_matrix/federation/v2/invite`
+- `/_matrix/federation/v1/make_knock`
+- `/_matrix/federation/v1/send_knock`
+- `/_matrix/federation/v1/state`
+- `/_matrix/federation/v1/state_ids`
+- `/_matrix/federation/v1/backfill`
+- `/_matrix/federation/v1/event_auth`
+- `/_matrix/federation/v1/get_missing_events`
 
 ## Signing Events
 
@@ -1157,11 +1177,11 @@ redacted copy.
 
 The signatures expected on an event are:
 
--   The `sender`'s server, unless the invite was created as a result of
+- The `sender`'s server, unless the invite was created as a result of
     3rd party invite. The sender must already match the 3rd party
     invite, and the server which actually sends the event may be a
     different server.
--   For room versions 1 and 2, the server which created the `event_id`.
+- For room versions 1 and 2, the server which created the `event_id`.
     Other room versions do not track the `event_id` over federation and
     therefore do not need a signature from those servers.
 
@@ -1183,12 +1203,12 @@ some room versions. See the [room version
 specification](/rooms) for more information. It is
 calculated as follows.
 
-1.  The event is put through the redaction algorithm.
-2.  The `signatures`, `age_ts`, and `unsigned` properties are removed
+1. The event is put through the redaction algorithm.
+2. The `signatures`, `age_ts`, and `unsigned` properties are removed
     from the event, if present.
-3.  The event is converted into [Canonical
+3. The event is converted into [Canonical
     JSON](/appendices#canonical-json).
-4.  A sha256 hash is calculated on the resulting JSON object.
+4. A sha256 hash is calculated on the resulting JSON object.
 
 ### Calculating the content hash for an event
 
