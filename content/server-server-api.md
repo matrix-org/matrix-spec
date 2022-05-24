@@ -395,7 +395,6 @@ For an `m.room.member` state event, the user given by the `state_key` of
 the event.
 
 **Historical String Power Levels** \
-
 In order to maintain backwards compatibility with early implementations,
 power levels can optionally be represented in string format instead of
 integer format. A homeserver must be prepared to deal with this by parsing
