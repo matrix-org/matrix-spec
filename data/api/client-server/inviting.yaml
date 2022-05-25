@@ -80,7 +80,7 @@ paths:
             required: ["user_id"]
       responses:
         200:
-          description: The user has been invited to join the room.
+          description: The user has been invited to join the room, or was already invited to the room.
           examples:
             application/json: {
               }
