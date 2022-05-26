@@ -1348,13 +1348,13 @@ objects described as follows:
 
 | Parameter                         | Type             | Description                                                                                                                           |
 |-----------------------------------|------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| algorithm                         | string           | Required. The encryption algorithm that the session uses. Must be `m.megolm.v1.aes-sha2`.                                             |
-| forwarding_curve25519_key_chain   | [string]         | Required. Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events. |
-| room_id                           | string           | Required. The room where the session is used.                                                                                         |
-| sender_key                        | string           | Required. The Curve25519 key of the device which initiated the session originally.                                                    |
-| sender_claimed_keys               | {string: string} | Required. The Ed25519 key of the device which initiated the session originally.                                                       |
-| session_id                        | string           | Required. The ID of the session.                                                                                                      |
-| session_key                       | string           | Required. The key for the session.                                                                                                    |
+| algorithm                         | string           | **Required.** The encryption algorithm that the session uses. Must be `m.megolm.v1.aes-sha2`.                                             |
+| forwarding_curve25519_key_chain   | [string]         | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events. |
+| room_id                           | string           | **Required.** The room where the session is used.                                                                                         |
+| sender_key                        | string           | **Required.** The Curve25519 key of the device which initiated the session originally.                                                    |
+| sender_claimed_keys               | {string: string} | **Required.** The Ed25519 key of the device which initiated the session originally.                                                       |
+| session_id                        | string           | **Required.** The ID of the session.                                                                                                      |
+| session_key                       | string           | **Required.** The key for the session.                                                                                                    |
 
 This is similar to the format before encryption used for the session
 keys in [Server-side key backups](#server-side-key-backups) but adds the
