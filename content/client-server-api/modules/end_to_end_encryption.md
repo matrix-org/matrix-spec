@@ -1273,7 +1273,7 @@ The `session_data` field in the backups is constructed as follows:
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
 | sender_key                      | string            | **Required.** Unpadded base64-encoded device Curve25519 key.                                                                                                                |
 | sender_claimed_keys             | {string: string}  | **Required.** A map from the algorithm name (`ed25519`) to the corresponding device key of the sending device.                                                              |
-| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
+| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).  |
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
