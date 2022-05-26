@@ -1257,10 +1257,10 @@ the following format:
 
 `AuthData`
 
-| Parameter  | Type       | Description                                                                                      |
-| -----------| -----------|--------------------------------------------------------------------------------------------------|
-| public_key | string     | **Required.** The curve25519 public key used to encrypt the backups, encoded in unpadded base64. |
-| signatures | Signatures | Optional. Signatures of the ``auth_data``, as Signed JSON.                                       |
+| Parameter  | Type       | Description                                                                                                           |
+| -----------| -----------|-----------------------------------------------------------------------------------------------------------------------|
+| public_key | string     | **Required.** The curve25519 public key used to encrypt the backups, encoded in unpadded base64.                      |
+| signatures | Signatures | *Optional.* Signatures of the ``auth_data``. The signature is calculated using the process described at Signing JSON. |
 
 The `session_data` field in the backups is constructed as follows:
 
