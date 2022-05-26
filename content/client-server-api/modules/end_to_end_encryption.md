@@ -1260,7 +1260,7 @@ the following format:
 | Parameter  | Type       | Description                                                                                      |
 | -----------| -----------|--------------------------------------------------------------------------------------------------|
 | public_key | string     | **Required.** The curve25519 public key used to encrypt the backups, encoded in unpadded base64. |
-| signatures | Signatures | Optional. Signatures of the ``auth_data``, as Signed JSON                                        |
+| signatures | Signatures | Optional. Signatures of the ``auth_data``, as Signed JSON.                                       |
 
 The `session_data` field in the backups is constructed as follows:
 
@@ -1269,7 +1269,7 @@ The `session_data` field in the backups is constructed as follows:
 
 | Parameter                       | Type              | Description                                                                                                                                                                 |
 | --------------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| algorithm                       | string            | **Required.** The end-to-end message encryption algorithm that the key is for.  Must be `m.megolm.v1.aes-sha2`.                                                             |
+| algorithm                       | string            | **Required.** The end-to-end message encryption algorithm that the key is for. Must be `m.megolm.v1.aes-sha2`.                                                             |
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
 | sender_key                      | string            | **Required.** Unpadded base64-encoded device Curve25519 key.                                                                                                                |
 | sender_claimed_keys             | {string: string}  | **Required.** A map from the algorithm name (`ed25519`) to the corresponding device key of the sending device.                                                              |
@@ -1346,8 +1346,8 @@ objects described as follows:
 
 `SessionData`
 
-| Parameter                         | Type             | Description                                                                                                                           |
-|-----------------------------------|------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| Parameter                         | Type             | Description                                                                                                                               |
+|-----------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
 | algorithm                         | string           | **Required.** The encryption algorithm that the session uses. Must be `m.megolm.v1.aes-sha2`.                                             |
 | forwarding_curve25519_key_chain   | [string]         | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events. |
 | room_id                           | string           | **Required.** The room where the session is used.                                                                                         |
