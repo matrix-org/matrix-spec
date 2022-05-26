@@ -1498,9 +1498,9 @@ should use the session from which it last received and successfully
 decrypted a message. For these purposes, a session that has not received
 any messages should use its creation time as the time that it last
 received a message. A client may expire old sessions by defining a
-maximum number of olm sessions that it will maintain for each device,
+maximum number of Olm sessions that it will maintain for each device,
 and expiring sessions on a Least Recently Used basis. The maximum number
-of olm sessions maintained per device should be at least 4.
+of Olm sessions maintained per device should be at least 4.
 
 ###### Recovering from undecryptable messages
 
@@ -1698,12 +1698,12 @@ requests](#key-requests), the device from which the key is being
 requested may want to tell the requester that it is purposely not
 sharing the key.
 
-If Alice withholds a megolm session from Bob for some messages in a
+If Alice withholds a Megolm session from Bob for some messages in a
 room, and then later on decides to allow Bob to decrypt later messages,
-she can send Bob the megolm session, ratcheted up to the point at which
+she can send Bob the Megolm session, ratcheted up to the point at which
 she allows Bob to decrypt the messages. If Bob logs into a new device
 and uses key sharing to obtain the decryption keys, the new device will
-be sent the megolm sessions that have been ratcheted up. Bob's old
+be sent the Megolm sessions that have been ratcheted up. Bob's old
 device can include the reason that the session was initially not shared
 by including a `withheld` property in the `m.forwarded_room_key` message
 that is an object with the `code` and `reason` properties from the

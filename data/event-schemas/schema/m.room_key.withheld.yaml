@@ -16,20 +16,20 @@ description: |-
     was not in the room when the original message was sent.
   * `m.unavailable`: sent in reply to a key request if the device that the
     key is requested from does not have the requested key.
-  * `m.no_olm`: an olm session could not be established.
+  * `m.no_olm`: an Olm session could not be established.
 
   In most cases, this event refers to a specific room key. The one exception to
-  this is when the sender is unable to establish an olm session with the
+  this is when the sender is unable to establish an Olm session with the
   recipient. When this happens, multiple sessions will be affected.  In order
   to avoid filling the recipient\'s device mailbox, the sender should only send
   one `m.room_key.withheld` message with no `room_id` nor `session_id`
-  set.  If the sender retries and fails to create an olm session again in the
+  set.  If the sender retries and fails to create an Olm session again in the
   future, it should not send another `m.room_key.withheld` message with a
-  `code` of `m.no_olm`, unless another olm session was previously
+  `code` of `m.no_olm`, unless another Olm session was previously
   established successfully.  In response to receiving an
   `m.room_key.withheld` message with a `code` of `m.no_olm`, the
-  recipient may start an olm session with the sender and send an `m.dummy`
-  message to notify the sender of the new olm session.  The recipient may
+  recipient may start an Olm session with the sender and send an `m.dummy`
+  message to notify the sender of the new Olm session.  The recipient may
   assume that this `m.room_key.withheld` message applies to all encrypted
   room messages sent before it receives the message.
 properties:

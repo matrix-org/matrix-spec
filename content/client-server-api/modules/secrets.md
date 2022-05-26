@@ -279,7 +279,7 @@ To request a secret from other devices, a client sends an
 `m.secret.requests` device event with `action` set to `request` and
 `name` set to the identifier of the secret. A device that wishes to
 share the secret will reply with an `m.secret.send` event, encrypted
-using olm. When the original client obtains the secret, it sends an
+using Olm. When the original client obtains the secret, it sends an
 `m.secret.request` event with `action` set to `request_cancellation` to
 all devices other than the one that it received the secret from. Clients
 should ignore `m.secret.send` events received from devices that it did
@@ -287,7 +287,7 @@ not send an `m.secret.request` event to.
 
 Clients must ensure that they only share secrets with other devices that
 are allowed to see them. For example, clients should only share secrets
-with the user’s own devices that are verified and may prompt the user to
+with the user's own devices that are verified and may prompt the user to
 confirm sharing the secret.
 
 ##### Event definitions

@@ -398,7 +398,7 @@ paths:
         - in: path
           type: string
           name: sessionId
-          description: The ID of the megolm session that the key is for.
+          description: The ID of the Megolm session that the key is for.
           required: true
           x-example: "sessionid"
         - in: body
@@ -470,7 +470,7 @@ paths:
         - in: path
           type: string
           name: sessionId
-          description: The ID of the megolm session whose key is requested.
+          description: The ID of the Megolm session whose key is requested.
           required: true
           x-example: "sessionid"
       responses:
@@ -517,7 +517,7 @@ paths:
         - in: path
           type: string
           name: sessionId
-          description: The ID of the megolm session whose key is to be deleted.
+          description: The ID of the Megolm session whose key is to be deleted.
           required: true
           x-example: "sessionid"
       responses:
