@@ -21,7 +21,8 @@ properties:
         description: The ID of the session that the key is for.
       session_key:
         type: string
-        description: The key to be exchanged.
+        description: The Megolm key to be exchanged, in [session sharing
+          format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).
     required:
       - algorithm
       - room_id
