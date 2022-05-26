@@ -1271,8 +1271,8 @@ The `session_data` field in the backups is constructed as follows:
 | --------------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | algorithm                       | string            | **Required.** The end-to-end message encryption algorithm that the key is for.  Must be `m.megolm.v1.aes-sha2`.                                                             |
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
-| sender_key                      | string            | **Required.** Unpadded base64-encoded device curve25519 key.                                                                                                                |
-| sender_claimed_keys             | {string: string}  | **Required.** A map from algorithm name (`ed25519`) to the identity key for the sending device.                                                                             |
+| sender_key                      | string            | **Required.** Unpadded base64-encoded device Curve25519 key.                                                                                                                |
+| sender_claimed_keys             | {string: string}  | **Required.** A map from the algorithm name (`ed25519`) to the corresponding device key of the sending device.                                                              |
 | session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
@@ -1353,8 +1353,8 @@ objects described as follows:
 | room_id                           | string           | **Required.** The room where the session is used.                                                                                         |
 | sender_key                        | string           | **Required.** The Curve25519 key of the device which initiated the session originally.                                                    |
 | sender_claimed_keys               | {string: string} | **Required.** The Ed25519 key of the device which initiated the session originally.                                                       |
-| session_id                        | string           | **Required.** The ID of the session.                                                                                                      |
-| session_key                       | string           | **Required.** The key for the session.                                                                                                    |
+| session_id                        | string           | **Required.** The Megolm session ID.                                                                                                      |
+| session_key                       | string           | **Required.** The Megolm session key in the [session export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).|
 
 This is similar to the format before encryption used for the session
 keys in [Server-side key backups](#server-side-key-backups) but adds the
