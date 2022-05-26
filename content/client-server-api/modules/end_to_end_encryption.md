@@ -1372,7 +1372,7 @@ Example:
         "room_id": "!Cuyf34gef24t:localhost",
         "sender_key": "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU",
         "sender_claimed_keys": {
-            "ed25519": "<device ed25519 identity key>",
+            "ed25519": "<device ed25519 key>",
         },
         "session_id": "X3lUlvLELLYxeTx4yOVu6UDpasGEVO0Jbu+QFnm0cKQ",
         "session_key": "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
