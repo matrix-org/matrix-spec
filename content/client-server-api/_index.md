@@ -1978,6 +1978,11 @@ Note how the `org.example.possible_annotations` bundle is an array compared to t
 the relationship in a single object. Both are valid bundles, and their exact types
 depend on the `rel_type`.
 
+{{% boxes/warning %}}
+State events do not currently receive the `m.relations` unsigned field. This is not
+necessarily a deliberate design decision, and MSCs which aim to fix this are welcome.
+{{% /boxes/warning %}}
+
 The endpoints where the server *should* include the `m.relations` unsigned field are:
 
 * [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
@@ -1998,12 +2003,11 @@ time of handling, the client should continue to aggregate locally if it is aware
 the relationship type's behaviour. For example, a client might increment a `count`
 on a parent event's bundle if it saw a new child event which referenced that parent.
 
-{{% boxes/warning %}}
-The bundle provided by the server only includes events which were known at the time
-the event was *received*. This can mean that in a single `/sync` response an event
-will have a bundle and more events which qualify for that aggregation: in this case,
-the client *should* aggregate the events which are "after" the event in question on
-its own, as the server will not have considered them.
+The bundle provided by the server only includes child events which were known at the
+time the client would receive the bundle. For example, in a single `/sync` response
+with the parent and multiple child events the child events would have already been
+included on the parent's `m.relations` field. Events received in future syncs would
+need to be aggregated manually by the client.
 {{% /boxes/warning %}}
 
 {{% boxes/note %}}
