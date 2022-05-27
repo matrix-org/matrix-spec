@@ -2008,7 +2008,6 @@ time the client would receive the bundle. For example, in a single `/sync` respo
 with the parent and multiple child events the child events would have already been
 included on the parent's `m.relations` field. Events received in future syncs would
 need to be aggregated manually by the client.
-{{% /boxes/warning %}}
 
 {{% boxes/note %}}
 Events from [ignored users](#ignoring-users) do not appear in the bundle or aggregation
@@ -2043,7 +2042,7 @@ able to accurately aggregate the events.
 #### Relationships API
 
 To retrieve the child events for a parent from the server, the client can call the
-following endpoint with relevant inforamtion. This endpoint does not aggregate the child
+following endpoint with relevant information. This endpoint does not aggregate the child
 events and is instead paginated: clients can perform local aggregation if needed. This
 allows clients to retrieve child events which do not require aggregation but still make
 use of `rel_type`.
