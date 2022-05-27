@@ -1904,8 +1904,8 @@ or aggregation of related events.
 
 {{% added-in v="1.3" %}}
 
-Some relationships are "aggregated" by the server depending on their relationship
-type. This can allow a set of related events to be summarised as a subset of values.
+Some events are "aggregated" by the server depending on their relationships.
+This can allow a set of related events to be summarised.
 
 For example, a relationship might define an extra `key` field which, when used with
 the appropriate `rel_type`, would mean that the client receives a total count for
