@@ -1994,10 +1994,11 @@ its own, as the server will not have considered them.
 {{% /boxes/warning %}}
 
 {{% boxes/note %}}
-Events from [ignored users](#ignoring-users) do not appear in the bundle or aggregation.
-Clients will need to de-aggregate the events sent by ignored users to avoid them being
-considered in counts. Similarly, servers must ensure they do not consider events from
-ignored users when preparing a bundle for the client.
+Events from [ignored users](#ignoring-users) do not appear in the bundle or aggregation
+from the server, however clients might still have events from ignored users cached. Like
+with normal events, clients will need to de-aggregate events sent by ignored users to
+avoid them being considered in counts. Servers must additionally ensure they do not
+consider events from ignored users when preparing a bundle for the client.
 {{% /boxes/note %}}
 
 When an event is redacted, the relations attached to it remain. However, when an event
