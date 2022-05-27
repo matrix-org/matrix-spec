@@ -15,8 +15,8 @@
 type: object
 title: m.relates_to
 description: |-
-  A description of a valid `m.relates_to` definition on an event. This is contained
-  within the event's `content` alongside other fields for that event type.
+  A description of a valid `m.relates_to` definition on a child event. This is contained
+  within the event's `content` alongside other fields for the relevant event type.
 example: {
   # We deliberately "break" the example by including the top-level field so it renders
   # sensibly for readers of the spec.
@@ -35,9 +35,9 @@ properties:
       The relationship type determines how clients should perceive the event, and in what
       context. Some relationship types are processed server-side for "bundling", though not
       all relationships require such behaviour. For example, an `m.thread` relationship type
-      denotes that the event is part of a "thread" of messages and should be rendered as
+      might denote that the event is part of a "thread" of messages and should be rendered as
       such.
   event_id:
     type: string
-    description: The event ID in the same room this event relates to.
+    description: The parent event ID in the same room this event points/relates to.
 required: ['rel_type', 'event_id']

@@ -29,16 +29,19 @@ securityDefinitions:
 paths:
   "/rooms/{roomId}/relations/{eventId}/{relType}/{eventType}":
     get:
-      summary: Get the related events for a given event, with optional filter.
+      summary: Get the cgukd events for a given parent event, with optional filter.
       description: |-
-        Retrieve all of the related events for a given event, optionally filtering
+        Retrieve all of the chikd events for a given parent event, optionally filtering
         down by relationship type and related event type.
 
         Note that while this endpoint indicates `relType` and `eventType` being
         required, they can be individually omitted to retrieve all matching events.
         When omitting the path parameters, a trailing slash must not be included
         (otherwise the search will be for an empty string).
-      operationId: getEventsRelatingToEvent
+
+        When combining the use of `relType` and `eventType`, the server will return
+        child events which match *both* conditions rather than *either*.
+      operationId: getChildEventsForParentEvent
       security:
         - accessToken: []
       parameters:
@@ -59,7 +62,7 @@ paths:
           name: relType
           description: |-
             The [relationship type](/client-server-api/#relationship-types) to search
-            for, if any. Exclude to find all events which relate to the supposed parent
+            for, if any. Exclude to find all child events which point to the supposed parent
             event with any `rel_type`.
           required: true # we can't say false, annoyingly
           x-example: "org.example.my_relation"
@@ -67,8 +70,8 @@ paths:
           type: string
           name: eventType
           description: |-
-            The event type of related events to search for, if any. Exclude to find all
-            events of any type which relate to the supposed parent event.
+            The event type of child events to search for, if any. Exclude to find all
+            child events of any type which point to the supposed parent event.
 
             Note that in encrypted rooms this will typically always be `m.room.encrypted`
             regardless of the event type contained within the encrypted payload.
@@ -114,8 +117,8 @@ paths:
 
         200:
           description: |-
-            The paginated events which relate to the supposed parent. If no events are
-            related to the parent, an empty `chunk` is returned.
+            The paginated child events which point to the supposed parent. If no events are
+            pointing to the parent, an empty `chunk` is returned.
           examples:
             application/json: {
               "chunk": [{
@@ -135,10 +138,10 @@ paths:
             type: object
             properties:
               chunk:
-                title: "RelatedEventsChunk"
+                title: "ChildEventsChunk"
                 type: array
                 description: |-
-                  The events which relate to the parent event, after applicable filters.
+                  The child events which point to the parent event, after applicable filters.
                 items:
                   allOf:
                     - "$ref": "definitions/client_event.yaml"
@@ -153,7 +156,9 @@ paths:
                   An opaque string representing a pagination token. The absence of this token
                   means there are no prior results to fetch, i.e. this is the first batch.
         404:
-          description: The supposed parent event was not found or you do not have permission to read this event.
+          description: |-
+            The supposed parent event was not found or the user does not have permission to read
+            this event (it might be contained in history that is not accessible to the user).
           examples:
             application/json: {
                 "errcode": "M_NOT_FOUND",
