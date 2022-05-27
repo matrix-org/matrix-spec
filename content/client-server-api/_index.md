@@ -2001,10 +2001,11 @@ avoid them being considered in counts. Servers must additionally ensure they do 
 consider events from ignored users when preparing a bundle for the client.
 {{% /boxes/note %}}
 
-When an event is redacted, the relations attached to it remain. However, when an event
-which uses a relation is redacted then the relation is broken. Thus, the server needs
-to de-aggregate or disassociate an event from its parent when it is redacted. Clients
-with local aggregation should do the same.
+When a parent event is redacted, the events which pointed to that parent remain, however
+when an event which points at a parent is redacted then the relationship is broken.
+Therefore, the server needs to de-aggregate or disassociate the event once the relationship
+is lost. Clients with local aggregation or which handle redactions locally should do the
+same.
 
 It is suggested that clients perform local echo on aggregations. For instance, aggregating
 the event into a bundle optimistically until the server returns a failure or the client
