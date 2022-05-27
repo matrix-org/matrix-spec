@@ -53,7 +53,12 @@ paths:
                 allOf:
                   - $ref: definitions/device_keys.yaml
               one_time_keys:
+                # $ref: "definitions/one_time_keys.yaml"
+                # XXX: We can't define an actual object here, so we have to hope
+                # that people will look at the swagger source or can figure it out
+                # from the other endpoints/example.
                 type: object
+                title: OneTimeKeys
                 description: |-
                   One-time public keys for "pre-key" messages.  The names of
                   the properties should be in the format
@@ -61,26 +66,6 @@ paths:
                   by the [key algorithm](/client-server-api/#key-algorithms).
 
                   May be absent if no new one-time keys are required.
-                additionalProperties:
-                  type:
-                    - string
-                    - object
-                    # XXX: We can't define an actual object here, so we have to hope
-                    # that people will look at the swagger source or can figure it out
-                    # from the other endpoints/example.
-                    # - type: object
-                    #   title: KeyObject
-                    #   properties:
-                    #     key:
-                    #       type: string
-                    #       description: The key, encoded using unpadded base64.
-                    #     signatures:
-                    #       type: object
-                    #       description: |-
-                    #         Signature for the device. Mapped from user ID to signature object.
-                    #       additionalProperties:
-                    #         type: string
-                    #   required: ['key', 'signatures']
                 example: {
                   "curve25519:AAAAAQ": "/qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8",
                   "signed_curve25519:AAAAHg": {
@@ -101,8 +86,11 @@ paths:
                   }
                 }
               fallback_keys:
-                type: object
                 x-addedInMatrixVersion: "1.2"
+                # $ref: "definitions/one_time_keys.yaml"
+                # XXX: We can't define an actual object here - see above.
+                type: object
+                title: OneTimeKeys
                 description: |-
                   The public key which should be used if the device's one-time keys
                   are exhausted. The fallback key is not deleted once used, but should
@@ -117,11 +105,6 @@ paths:
                   be included to denote that the key is a fallback key.
 
                   May be absent if a new fallback key is not required.
-                additionalProperties:
-                  type:
-                    - string
-                    - object
-                      # XXX: We can't define an actual object here - see one_time_keys.
                 example: {
                   "curve25519:AAAAAG": "/qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8",
                   "signed_curve25519:AAAAGj": {
@@ -420,25 +403,13 @@ paths:
                 additionalProperties:
                   type: object
                   additionalProperties:
-                    type:
-                      - string
-                      - object
-                      # XXX: We can't define an actual object here, so we have to hope
-                      # that people will look at the swagger source or can figure it out
-                      # from the other endpoints/example.
-                      # - type: object
-                      #   title: KeyObject
-                      #   properties:
-                      #     key:
-                      #       type: string
-                      #       description: The key, encoded using unpadded base64.
-                      #     signatures:
-                      #       type: object
-                      #       description: |-
-                      #         Signature for the device. Mapped from user ID to signature object.
-                      #       additionalProperties:
-                      #         type: string
-                      #   required: ['key', 'signatures']
+                    # $ref: "definitions/one_time_keys.yaml"
+                    # XXX: We can't define an actual object here, so we have to hope
+                    # that people will read the link provided in the description
+                    # and figure it out from the other endpoints/example.
+                    # See also one_time_key parameter for /keys/upload above.
+                    type: object
+                    title: OneTimeKeys
                 example: {
                   "@alice:example.com": {
                     "JLAFKJWSCS": {
