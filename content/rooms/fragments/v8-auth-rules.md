@@ -46,7 +46,7 @@ The rules are as follows:
     1.  If no `state_key` key or `membership` key in `content`, reject.
     2.  If `content` has a `join_authorised_via_users_server`
         key:
-        1.  If the event is not validly signed by the user ID denoted
+        1.  If the event is not validly signed by the homeserver of the user ID denoted
             by the key, reject.
     3.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the
