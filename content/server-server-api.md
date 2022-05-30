@@ -292,13 +292,13 @@ def authorization_headers(origin_name, origin_signing_key,
 ```
 
 The format of the Authorization header is given in
-[RFC7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
+[RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
 summary, the header begins with authorization scheme `X-Matrix`, followed by
 one or more spaces, followed by a comma-separated list of parameters written as
 name=value pairs. The names are case insensitive and order does not matter. The
 values must be enclosed in quotes if they contain characters that are not
 allowed in `token`s, as defined in
-[RFC7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+[RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
 value is a valid `token`, it may or may not be enclosed in quotes. Quoted
 values may include backslash-escaped characters. When parsing the header, the
 recipient must unescape the characters. That is, a backslash-character pair is
@@ -319,7 +319,7 @@ The authorization parameters to include are:
 - `destination`: {{< added-in v="1.3" >}} the server name of the receiving
   sender. This is the same as the `destination` field from the JSON described
   in step 1. For compatibility with older servers, recipients should accept
-  requests without this parameter, but should always send it. If this property
+  requests without this parameter, but MUST always send it. If this property
   is included, but the value does not match the receiving server's name, the
   receiving server must deny the request with an HTTP status code 401
   Unauthorized.
