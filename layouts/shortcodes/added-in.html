@@ -2,7 +2,7 @@
 {{ $this := .Params.this }}
 
 {{ if $this }}
-  <span>**[New in this version]**</span>
+  <span><strong>[New in this version]</strong></span>
 {{ else }}
-  <span>**[Added in `v{{ $ver }}`]**</span>
+  <span><strong>[Added in <code>v{{ $ver }}</code>]</strong></span>
 {{ end }} {{/* Do not leave an empty line at the end of this file otherwise the inline behaviour breaks. */}}
