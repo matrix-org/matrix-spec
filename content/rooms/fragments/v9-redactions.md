@@ -2,9 +2,6 @@
 toc_hide: true
 ---
 
-{{% added-in this=true %}} `m.room.member` now keep `join_authorised_via_users_server`
-in addition to other keys in `content` when being redacted.
-
 {{% boxes/rationale %}}
 Without the `join_authorised_via_users_server` property, redacted join events
 can become invalid when verifying the auth chain of a given event, thus creating
