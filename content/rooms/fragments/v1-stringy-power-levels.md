@@ -13,3 +13,8 @@ power level string is allowed:
 * optionally prefixed with a single `-` or `+` character before the integer
   but after leading whitespace padding (`" +100 "`, `" -100 "`, `"+100"`,
   `"-100"`).
+
+{{% boxes/note %}}
+The integer represented by the string must still be within the `[-2^53, 2^53)`
+range accepted by normal, non-string, power level values.
+{{% /boxes/note %}}
