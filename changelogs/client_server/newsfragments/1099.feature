@@ -1,0 +1,1 @@
+Add support for a new `knock_restricted` join rule in supported room versions, as per [MSC3787](https://github.com/matrix-org/matrix-spec-proposals/pull/3787).
