@@ -44,7 +44,7 @@ whereas the conflicted state set may associate multiple events to the same key.
 
 **Auth chain.**
 The *auth chain* of an event *E* is the set containing all of *E*'s auth events,
-all of *their* authorising events, and so on recursively, stretching back to the
+all of *their* auth events, and so on recursively, stretching back to the
 start of the room. Put differently, these are the events reachable by walking
 the graph induced by an event's `auth_events` links.
 
