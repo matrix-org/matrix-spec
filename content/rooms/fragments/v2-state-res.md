@@ -124,8 +124,8 @@ the auth event is not rejected.
 The *resolution* of a set of states is obtained as follows:
 
 1.  Select all *power events* that appear in the *full conflicted set*. Compute
-    the union of their *auth chains*. Sort the union using the
-    *reverse topological power ordering*.
+    the union of their auth chains, including the power events themselves.
+    Sort the union using the *reverse topological power ordering*.
 2.  Apply the *iterative auth checks algorithm*, starting from the
     *unconflicted state map*, to the list of events from the previous
     step to get a partially resolved state.
