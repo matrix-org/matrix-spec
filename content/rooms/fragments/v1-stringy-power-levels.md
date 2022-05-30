@@ -1,3 +1,7 @@
+---
+toc_hide: true
+---
+
 ##### Power levels accepted as strings
 
 In order to maintain backwards compatibility with early implementations,
