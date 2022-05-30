@@ -394,6 +394,24 @@ unspecified.
 For an `m.room.member` state event, the user given by the `state_key` of
 the event.
 
+**Historical String Power Levels** \
+In order to maintain backwards compatibility with early implementations,
+power levels can optionally be represented in string format instead of
+integer format. A homeserver must be prepared to deal with this by parsing
+the power level from a string. In these cases, the following formatting of the
+power level string is allowed:
+
+- a single Base10 integer, no float values or decimal points, optionally with leading zeroes;
+- optionally with leading or trailing whitespace characters;
+- optionally prefixed with a single `-` or `+` character before the integer but after leading whitespace padding.
+
+{{% boxes/warning %}}
+This behaviour is preserved strictly for backward compatibility only. A
+homeserver should take reasonable precautions to prevent users from
+sending new power level events with string values and must never
+populate the default power levels in a room as string values.
+{{% /boxes/warning %}}
+
 #### Authorization rules
 
 The rules governing whether an event is authorized depends on a set of
