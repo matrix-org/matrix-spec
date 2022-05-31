@@ -300,13 +300,38 @@ An example request would be:
 
 #### Timestamp massaging
 
-Previous drafts of the Application Service API permitted application
-services to alter the timestamp of their sent events by providing a `ts`
-query parameter when sending an event. This API has been excluded from
-the first release due to design concerns, however some servers may still
-support the feature. Please visit [issue
-\#1585](https://github.com/matrix-org/matrix-doc/issues/1585) for more
-information.
+{{% added-in v="1.3" %}}
+
+Application services can alter the timestamp associated with an event, allowing
+the application service to better represent the "real" time an event was sent
+at. While this doesn't affect the server-side ordering of the event, it can allow
+an application service to better represent when an event would have been sent/received
+at, such as in the case of bridges where the remote network might have a slight
+delay and the application service wishes to bridge the proper time onto the message.
+
+When authenticating requests as an application service, the caller can append a `ts`
+query string argument to change the `origin_server_ts` of the resulting event. Attempting
+to set the timestamp to anything other than what is accepted by `origin_server_ts` should
+be rejected by the server as a bad request.
+
+When not present, the server's behaviour is unchanged: the local system time of the server
+will be used to provide a timestamp, representing "now".
+
+The `ts` query string argument is only valid on the following endpoints:
+
+* [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](/client-server-api/#put_matrixclientv3roomsroomidsendeventtypetxnid)
+* [`PUT /rooms/{roomId}/state/{eventType}/{stateKey}`](/client-server-api/#put_matrixclientv3roomsroomidstateeventtypestatekey)
+
+Other endpoints, such as `/kick`, do not support `ts`: instead, callers can use the
+`PUT /state` endpoint to mimic the behaviour of the other APIs.
+
+{{% boxes/warning %}}
+Changing the time of an event does not change the server-side (DAG) ordering for the
+event. The event will still be appended at the tip of the DAG as though the timestamp
+was set to "now". Future MSCs, like [MSC2716](https://github.com/matrix-org/matrix-spec-proposals/pull/2716),
+are expected to provide functionality which can allow DAG order manipulation (for history
+imports and similar behaviour).
+{{% /boxes/warning %}}
 
 #### Server admin style permissions
 

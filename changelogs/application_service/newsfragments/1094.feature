@@ -1,0 +1,1 @@
+Add timestamp massaging as per [MSC3316](https://github.com/matrix-org/matrix-spec-proposals/pull/3316).
