@@ -1624,10 +1624,10 @@ that they can decrypt future messages encrypted using this session. An
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
 
-When a client is updating a session key in its store, the client MUST ensure:
+When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
 
 * that the updated session data comes from a trusted source, where a trusted source
-  could be the signatures on the session or comes from the user's session key backup;
+  could be the signatures on the session or those from the user's session key backup;
   and
 * that the new session key has a lower message index than the existing session key.
 
