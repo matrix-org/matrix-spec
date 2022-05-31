@@ -337,15 +337,15 @@ to prevent the access token being leaked in access/HTTP logs. The query
 string should only be used in cases where the `Authorization` header is
 inaccessible for the client.
 
-{{% changed-in v="1.3" %}} When credentials are required but missing or
-invalid, the HTTP call will return with a status of 401 and the error code,
-`M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` respectively.  Note that an error code
-of `M_UNKNOWN_TOKEN` could mean one of four things:
+When credentials are required but missing or invalid, the HTTP call will
+return with a status of 401 and the error code, `M_MISSING_TOKEN` or
+`M_UNKNOWN_TOKEN` respectively.  Note that an error code of `M_UNKNOWN_TOKEN`
+could mean one of four things:
 
 1. the access token was never valid.
 2. the access token has been logged out.
 3. the access token has been [soft logged out](#soft-logout).
-4. the access token [needs to be refreshed](#refreshing-access-tokens).
+4. {{< added-in v="1.3" >}} the access token [needs to be refreshed](#refreshing-access-tokens).
 
 When a client receives an error code of `M_UNKNOWN_TOKEN`, it should:
 
@@ -377,52 +377,56 @@ invalidate any access and refresh tokens previously assigned to that device.
 
 {{% added-in v="1.3" %}}
 
-Access tokens can expire after a certain amount of time. Any HTTP
-calls that use an expired access token will return with an error code
-`M_UNKNOWN_TOKEN`, preferably with `soft_logout: true`. When a client
-receives this error and it has a refresh token, it should attempt to
-refresh the access token by calling `/refresh`. Clients can also
-refresh their access token at any time, even if it has not yet
-expired. If the token refresh succeeds, it should use the new token
-for future requests, and can re-try previously-failed requests with
-the new token. When an access token is refreshed, a new refresh token
-may be returned; if a new refresh token is given, the old refresh
-token will be invalidated, and the new refresh token should be used
-when the access token needs to be refreshed.
+Access tokens can expire after a certain amount of time. Any HTTP calls that
+use an expired access token will return with an error code `M_UNKNOWN_TOKEN`,
+preferably with `soft_logout: true`. When a client receives this error and it
+has a refresh token, it should attempt to refresh the access token by calling
+[`/refresh`](#post_matrixclientv3refresh). Clients can also refresh their
+access token at any time, even if it has not yet expired. If the token refresh
+succeeds, the client should use the new token for future requests, and can
+re-try previously-failed requests with the new token. When an access token is
+refreshed, a new refresh token may be returned; if a new refresh token is
+given, the old refresh token will be invalidated, and the new refresh token
+should be used when the access token needs to be refreshed.
 
-If the token refresh fails, then the client can treat it as a [soft
-logout](#soft-logout), if the error response included a `soft_logout:
-true` property, and attempt to obtain a new access token by re-logging
-in. If the error response does not include a `soft_logout: true`
-property, the client should consider the user as being logged out.
+The old refresh token remains valid until the new access token or refresh token
+is used, at which point the old refresh token is revoked. This ensures that if
+a client fails to receive or persist the new tokens, it will still be able to
+refresh them.
 
-Handling of clients that do not support refresh tokens is up to the
-homeserver; clients indicate their support for refresh tokens by
-including a `refresh_token: true` property in the request body of the
-`/login` and `/register` endpoints. For example, homeservers may allow
-the use of non-expiring access tokens, or may expire access tokens
-anyways and rely on soft logout behaviour on clients that don't
-support refreshing.
+If the token refresh fails and the error response included a `soft_logout:
+true` property, then the client can treat it as a [soft logout](#soft-logout)
+and attempt to obtain a new access token by re-logging in. If the error
+response does not include a `soft_logout: true` property, the client should
+consider the user as being logged out.
+
+Handling of clients that do not support refresh tokens is up to the homeserver;
+clients indicate their support for refresh tokens by including a
+`refresh_token: true` property in the request body of the
+[`/login`](#post_matrixclientv3login) and
+[`/register`](#post_matrixclientv3register) endpoints. For example, homeservers
+may allow the use of non-expiring access tokens, or may expire access tokens
+anyways and rely on soft logout behaviour on clients that don't support
+refreshing.
 
 ### Soft logout
 
 A client can be in a "soft logout" state if the server requires
-re-authentication before continuing, but does not want to invalidate
-the client's session. That is, any persisted state held by the client,
-such as encryption keys and device information, must not be reused and
-must be discarded, and can be re-used if the client successfully
-re-authenticates.
+re-authentication before continuing, but does not want to invalidate the
+client's session. The server indicates that the client is in a soft logout
+state by including a `soft_logout: true` parameter in an `M_UNKNOWN_TOKEN`
+error response; the `soft_logout` parameter defaults to `false`. If the
+`soft_logout` parameter is omitted or is `false`, this means the server has
+destroyed the session and the client should not reuse it. That is, any
+persisted state held by the client, such as encryption keys and device
+information, must not be reused and must be discarded. If `soft_logout` is
+`true` the client can reuse any persisted state.
 
-The server indicates that the client is in a soft logout state by
-including a `soft_logout: true` parameter in an `M_UNKNOWN_TOKEN`
-error response; the `soft_logout` parameter defaults to `false`.
-
-A client that receives such a response can try to [refresh its access
-token](#refreshing-access-tokens), if it has a refresh token
-available. If it does not have a refresh token available, or
-refreshing fails with `soft_logout: true`, the client can acquire a
-new access token by specifying the device ID it is already using to
-the login API.
+{{% changed-in v="1.3" %}} A client that receives such a response can try to
+[refresh its access token](#refreshing-access-tokens), if it has a refresh
+token available. If it does not have a refresh token available, or refreshing
+fails with `soft_logout: true`, the client can acquire a new access token by
+specifying the device ID it is already using to the login API.
 
 ### User-Interactive Authentication API
 

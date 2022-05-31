@@ -42,6 +42,9 @@ paths:
         not make any assumptions about the old access token still being valid,
         and should use the newly provided access token instead.
 
+        The old refresh token remains valid until the new access token or refresh token
+        is used, at which point the old refresh token is revoked.
+
         Note that this endpoint does not require authentication, since
         authentication is provided via the refresh token.
 
