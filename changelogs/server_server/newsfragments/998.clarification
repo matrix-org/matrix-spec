@@ -1,1 +1,1 @@
-Remove `origin` field from PDUs which exists on many but not all PDUs in practice and doesn't serve an actual purpose.
+Remove largely unused `origin` field from PDUs.

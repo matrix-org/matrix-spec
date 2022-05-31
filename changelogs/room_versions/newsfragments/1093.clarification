@@ -1,1 +1,1 @@
-Auth rules: clarify that the resident server must sign a restricted join event.
+For room versions 8, 9, and 10: clarify which homeserver is required to sign the join event.
