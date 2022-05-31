@@ -1,0 +1,1 @@
+Auth rules: Clarify behaviour around the `m.federate` field in `m.room.create` events.
