@@ -23,8 +23,19 @@ properties:
             description: The room where the key is used.
           sender_key:
             type: string
+            x-changedInMatrixVersion:
+              1.3: |-
+                Previously this field was required, however given it offers no additional
+                security or privacy benefit it has been deprecated. See [`m.megolm.v1.aes-sha2`](#mmegolmv1aes-sha2)
+                for more information.
             description: |-
               The Curve25519 key of the device which initiated the session originally.
+
+              **Deprecated**: This field provides no additional security or privacy benefit
+              and must not be read from. It should still be included on outgoing messages
+              (if the event for which keys are being requested for *also* has a `sender_key`),
+              however must not be used to find the corresponding session. See [`m.megolm.v1.aes-sha2`](#mmegolmv1aes-sha2)
+              for more information.
           session_id:
             type: string
             description: The ID of the session that the key is for.
@@ -32,7 +43,6 @@ properties:
           - algorithm
           - room_id
           - session_id
-          - sender_key
         type: object
         title: RequestedKeyInfo
       action:
