@@ -38,6 +38,10 @@ properties:
       Present if, and only if, this event is a *state* event. The key making
       this piece of state unique in the room. Note that it is often an empty
       string.
+
+      State keys starting with an `@` are reserved for referencing user IDs, such
+      as room members. With the exception of a few events, state events set with a
+      given user's ID as the state key MUST only be set by that user.
     type: string
     example: '@user:example.org'
   sender:

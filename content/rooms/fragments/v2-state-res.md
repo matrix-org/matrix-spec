@@ -2,20 +2,19 @@
 toc_hide: true
 ---
 
-The room state *S*′(*E*) after an event *E* is defined in terms of the
-room state *S*(*E*) before *E*, and depends on whether *E* is a state
+The room state *S′(E)* after an event *E* is defined in terms of the
+room state *S(E)* before *E*, and depends on whether *E* is a state
 event or a message event:
 
--   If *E* is a message event, then *S*′(*E*) = *S*(*E*).
--   If *E* is a state event, then *S*′(*E*) is *S*(*E*), except that its
-    entry corresponding to *E*'s `event_type` and `state_key` is
-    replaced by *E*'s `event_id`.
+-   If *E* is a message event, then *S′(E)* = *S(E)*.
+-   If *E* is a state event, then *S′(E)* is *S(E)*, except that its
+    entry corresponding to the `event_type` and `state_key` of *E* is
+    replaced by the `event_id` of *E*.
 
-The room state *S*(*E*) before *E* is the *resolution* of the set of
-states {*S*′(*E*<sub>1</sub>), *S*′(*E*<sub>2</sub>), …} consisting of
-the states after each of *E*'s `prev_event`s
-{*E*<sub>1</sub>, *E*<sub>2</sub>, …}, where the resolution of a set of
-states is given in the algorithm below.
+The room state *S(E)* before *E* is the *resolution* of the set of
+states {*S′(E*<sub>1</sub>*)*, *S′(E*<sub>2</sub>*)*, …}
+after the `prev_event`s {*E*<sub>1</sub>, *E*<sub>2</sub>, …} of *E*.
+The resolution of a set of states is given in the algorithm below.
 
 #### Definitions
 
@@ -31,11 +30,22 @@ the `membership` is `leave` or `ban` and the `sender` does not match the
 might remove someone's ability to do something in the room.
 
 **Unconflicted state map and conflicted state set.**
-The *unconflicted state map* is the state where the value of each key
-exists and is the same in each state *S*<sub>*i*</sub>. The *conflicted
-state set* is the set of all other state events. Note that the
-unconflicted state map only has one event per `(event_type, state_key)`,
-whereas the conflicted state set may have multiple events.
+The keys of the state maps *S<sub>i</sub>* are 2-tuples of strings of the form
+*K* = `(event_type, state_key)`. The values *V* are state events.
+The key-value pairs (*K*, *V*) across all state maps *S<sub>i</sub>* can be 
+divided into two collections.
+If a given key *K* is present in every *S<sub>i</sub>* with the same value *V* 
+in each state map, then the pair (*K*, *V*) belongs to the *unconflicted state map*.
+Otherwise (*K*, *V*) belongs to the *conflicted state set*.
+
+Note that the unconflicted state map only has one event for each key *K*,
+whereas the conflicted state set may associate multiple events to the same key.
+
+**Auth chain.**
+The *auth chain* of an event *E* is the set containing all of *E*'s auth events,
+all of *their* auth events, and so on recursively, stretching back to the
+start of the room. Put differently, these are the events reachable by walking
+the graph induced by an event's `auth_events` links.
 
 **Auth difference.**
 The *auth difference* is calculated by first calculating the full auth
@@ -112,9 +122,9 @@ the auth event is not rejected.
 
 The *resolution* of a set of states is obtained as follows:
 
-1.  Take all *power events* and any events in their auth chains,
-    recursively, that appear in the *full conflicted set* and order them
-    by the *reverse topological power ordering*.
+1.  Select all *power events* that appear in the *full conflicted set*. Compute
+    the union of their auth chains, including the power events themselves.
+    Sort the union using the *reverse topological power ordering*.
 2.  Apply the *iterative auth checks algorithm*, starting from the
     *unconflicted state map*, to the list of events from the previous
     step to get a partially resolved state.

@@ -12,11 +12,11 @@ of receipt, they are authorized at a later stage: see the
 
 The types of state events that affect authorization are:
 
--   `m.room.create`
--   `m.room.member`
--   `m.room.join_rules`
--   `m.room.power_levels`
--   `m.room.third_party_invite`
+-   [`m.room.create`](/client-server-api#mroomcreate)
+-   [`m.room.member`](/client-server-api#mroommember)
+-   [`m.room.join_rules`](/client-server-api#mroom)
+-   [`m.room.power_levels`](/client-server-api#mroompower_levels)
+-   [`m.room.third_party_invite`](/client-server-api#mroomthird_party_invite)
 
 {{% boxes/note %}}
 Power levels are inferred from defaults when not explicitly supplied.
@@ -46,7 +46,7 @@ The rules are as follows:
     1.  If no `state_key` key or `membership` key in `content`, reject.
     2.  If `content` has a `join_authorised_via_users_server`
         key:
-        1.  If the event is not validly signed by the user ID denoted
+        1.  If the event is not validly signed by the homeserver of the user ID denoted
             by the key, reject.
     3.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the

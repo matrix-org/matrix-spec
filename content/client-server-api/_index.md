@@ -1107,8 +1107,8 @@ as follows:
 }
 ```
 
-As with [token-based]() interactive login, the `token` must encode the
-user ID. In the case that the token is not valid, the homeserver must
+The `token` must encode the user ID, since there is no other identifying
+data in the request. In the case that the token is not valid, the homeserver must
 respond with `403 Forbidden` and an error code of `M_FORBIDDEN`.
 
 If the homeserver advertises `m.login.sso` as a viable flow, and the
