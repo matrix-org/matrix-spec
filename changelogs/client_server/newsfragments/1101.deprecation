@@ -1,0 +1,1 @@
+Deprecate the `sender_key` and `device_id` on `m.megolm.v1.aes-sha2` events, and the `sender_key` on `m.room_key_request` to-device messages, as per [MSC3700](https://github.com/matrix-org/matrix-spec-proposals/pull/3700).
