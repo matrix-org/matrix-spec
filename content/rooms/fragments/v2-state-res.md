@@ -90,11 +90,13 @@ event in its `auth_events`.
 The *mainline of P*<sub>0</sub> is the list of events
     [*P*<sub>n</sub> , ... , *P*<sub>1</sub>, *P*<sub>0</sub>].
 
-Given another event *e*, the *closest mainline event to*
-*e* is the first event encountered in the mainline when iteratively
-descending through the `m.room.power_levels` events in the `auth_events`
-starting at *e*. If no mainline event is encountered when iteratively
-descending through the `m.room.power_levels` events, then the closest
+Given another event *e* = *e<sub>0</sub>* we can compute a similar list of
+`m.room.power_level` events
+    [*e*<sub>0</sub>, *e*<sub>1</sub>, ...],
+where *e<sub>*j* + 1</sub>* is the `m.room.power_levels` event in the
+`auth_events` of *e<sub>j</sub>*. The *closest mainline event to e*
+is the first event *e<sub>j</sub>* which belongs to the mainline of *P*.
+If no event *e<sub>j</sub>* belongs to the mainline of *P*, then the closest
 mainline event to *e* can be considered to be a dummy event that is
 before any other event in the mainline of *P* for the purposes of
 condition 1 below.
