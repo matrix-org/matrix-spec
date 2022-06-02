@@ -6,10 +6,10 @@ type: module
 
 {{% changed-in v="1.3" %}}
 
-More common on [`m.room.message`](#mroommessage) events, rich replies are a
+Rich replies are a
 special kind of [relationship](#forming-relationships-between-events) which
 effectively quotes the referenced event for the client to render/process how
-it wishes.
+it wishes. They are normally used with [`m.room.message`](#mroommessage) events.
 
 {{% boxes/note %}}
 Until v1.3 of the spec, rich replies were limited to `m.room.message` events
@@ -25,12 +25,12 @@ When possible, events SHOULD include a [fallback representation](#fallbacks-for-
 to allow clients which do not render rich replies to still see something which
 appears to be a quoted reply.
 
-Though rich replies are forming a relationship to another event, they do not
+Though rich replies form a relationship to another event, they do not
 use `rel_type` to create this relationship. Instead, a subkey named `m.in_reply_to`
-is used to describe the reply's relationship, leaving the other keys of
+is used to describe the reply's relationship, leaving the other properties of
 `m.relates_to` to describe the primary relationship of the event. This means
 that if an event is simply in reply to another event, without further relationship,
-the `rel_type` and `event_id` keys of `m.relates_to` become *optional*.
+the `rel_type` and `event_id` properties of `m.relates_to` become *optional*.
 
 An example reply would be:
 

@@ -15,7 +15,7 @@
 type: object
 title: m.relates_to
 description: |-
-  A description of a valid `m.relates_to` definition on a child event. This is contained
+  Describes the relationship of an event to its parent. This is contained
   within the event's `content` alongside other fields for the relevant event type.
 example: {
   # We deliberately "break" the example by including the top-level field so it renders
@@ -39,5 +39,5 @@ properties:
       such.
   event_id:
     type: string
-    description: The parent event ID in the same room this event points/relates to.
+    description: The event ID of the event that this event relates to.
 required: ['rel_type', 'event_id']

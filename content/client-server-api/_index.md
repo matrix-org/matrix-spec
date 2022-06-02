@@ -1846,18 +1846,18 @@ the topic to be removed from the room.
 {{% changed-in v="1.3" %}}
 
 In some cases it is desirable to logically associate one event's contents with
-another event's contents. For example, when replying to a message, editing an
+another event's contents — for example, when replying to a message, editing an
 event, or simply looking to add context for an event's purpose.
 
 Events are related to each other in a parent/child structure, where any event can
 become a parent by simply having a child event point at it. Parent events do not
 define their children, instead relying on the children to describe their parent.
 
-The relationship between a child and it's parent event is described in the child
+The relationship between a child and its parent event is described in the child
 event's `content` as `m.relates_to` (defined below). A child event can point at
 any other event, including another child event, to build the relationship so long
 as both events are in the same room, however additional restrictions might be imposed
-by the `rel_type` itself.
+by the type of the relationship (the `rel_type`).
 
 {{% boxes/note %}}
 Child events can point at other child events, forming a chain of events. These chains
@@ -1882,7 +1882,7 @@ child and parent events being in different rooms or the relationship missing fie
 required by the schema below. The events would appear independent of each other or
 optionally with an error message (if rendered/handled by the client exclusively).
 
-`m.relates_to` is described as follows:
+`m.relates_to` is defined as follows:
 
 {{% definition path="api/client-server/definitions/m.relates_to" %}}
 
@@ -1915,7 +1915,7 @@ or aggregation of related events.
 
 {{% added-in v="1.3" %}}
 
-Some child events can be "aggregated" or "bundled" by the server, depending on their
+Some child events can be "aggregated" by the server, depending on their
 `rel_type`. This can allow a set of child events to be summarised to the client without
 the client needing the child events themselves.
 
@@ -1927,12 +1927,12 @@ The actual aggregation format depends on the `rel_type`.
 
 {{% boxes/note %}}
 This specification does not currently describe any `rel_type` which require
-aggregation, however [namespaced](/appendices#identifier-grammar) relationship
-types might have aggregation behaviour.
+aggregation. This functionality forms a framework for future extensions.
 {{% /boxes/note %}}
 
-When aggregations are summarised on an event, it is known as a "bundled aggregation"
-or "bundle" for simplicity. The act of doing this is "bundling".
+Aggregations are sometimes automatically included by a server alongside the parent
+event. This This is known as a "bundled aggregation" or "bundle" for simplicity. The
+act of doing this is "bundling".
 
 When an event is served to the client through the APIs listed below, a `m.relations` field
 is included under `unsigned` if the event has child events which point at it. The `m.relations`
@@ -1979,11 +1979,11 @@ the relationship in a single object. Both are valid bundles, and their exact typ
 depend on the `rel_type`.
 
 {{% boxes/warning %}}
-State events do not currently receive the `m.relations` unsigned field. This is not
+State events do not currently receive bundled aggregations. This is not
 necessarily a deliberate design decision, and MSCs which aim to fix this are welcome.
 {{% /boxes/warning %}}
 
-The endpoints where the server *should* include the `m.relations` unsigned field are:
+The endpoints where the server *should* include bundled aggregations are:
 
 * [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
 * [`GET /rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
@@ -1994,7 +1994,7 @@ The endpoints where the server *should* include the `m.relations` unsigned field
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
 
 {{% boxes/note %}}
-The server is **not** required to return bundles/aggregations on deprecated endpoints
+The server is **not** required to return bundled aggregations on deprecated endpoints
 such as `/initialSync`.
 {{% /boxes/note %}}
 
@@ -2010,7 +2010,7 @@ included on the parent's `m.relations` field. Events received in future syncs wo
 need to be aggregated manually by the client.
 
 {{% boxes/note %}}
-Events from [ignored users](#ignoring-users) do not appear in the bundle or aggregation
+Events from [ignored users](#ignoring-users) do not appear in the aggregation
 from the server, however clients might still have events from ignored users cached. Like
 with normal events, clients will need to de-aggregate child events sent by ignored users to
 avoid them being considered in counts. Servers must additionally ensure they do not
@@ -2022,7 +2022,7 @@ when a child event is redacted then the relationship is broken. Therefore, the s
 to de-aggregate or disassociate the event once the relationship is lost. Clients with local
 aggregation or which handle redactions locally should do the same.
 
-It is suggested that clients perform local echo on aggregations. For instance, aggregating
+It is suggested that clients perform local echo on aggregations — for instance, aggregating
 a new child event into a bundle optimistically until the server returns a failure or the client
 gives up on sending the event, at which point the event should be de-aggregated and an
 error or similar shown. The client should be cautious to not aggregate an event twice if
@@ -2032,7 +2032,7 @@ likely using the transaction ID as a temporary event ID until a proper event ID 
 
 {{% boxes/warning %}}
 Due to history visibility restrictions, child events might not be visible to the user
-if they are in a section of history the user cannot see. This can mean inaccurate bundles
+if they are in a section of history the user cannot see. This can mean inaccurate aggregations
 for events that are "out of range".
 
 Additionally, if the server is missing portions of the room history then it may not be
@@ -2047,7 +2047,7 @@ events and is instead paginated: clients can perform local aggregation if needed
 allows clients to retrieve child events which do not require aggregation but still make
 use of `rel_type`.
 
-This endpoint is particularly useful if the client has lost context on the bundle for
+This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
 
 {{% boxes/note %}}

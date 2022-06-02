@@ -41,20 +41,20 @@ paths:
 
         When combining the use of `relType` and `eventType`, the server will return
         child events which match *both* conditions rather than *either*.
-      operationId: getChildEventsForParentEvent
+      operationId: getRelatingEvents
       security:
         - accessToken: []
       parameters:
         - in: path
           type: string
           name: roomId
-          description: The ID of the room the supposed parent event is in.
+          description: The ID of the room containing the parent event.
           required: true
           x-example: "!636q39766251:matrix.org"
         - in: path
           type: string
           name: eventId
-          description: The supposed parent event ID.
+          description: The ID of the parent event whose child events are to be returned.
           required: true
           x-example: "$asfDuShaf7Gafaw"
         - in: path
@@ -157,7 +157,7 @@ paths:
                   means there are no prior results to fetch, i.e. this is the first batch.
         404:
           description: |-
-            The supposed parent event was not found or the user does not have permission to read
+            The parent event was not found or the user does not have permission to read
             this event (it might be contained in history that is not accessible to the user).
           examples:
             application/json: {
