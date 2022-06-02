@@ -391,8 +391,8 @@ should be used when the access token needs to be refreshed.
 
 The old refresh token remains valid until the new access token or refresh token
 is used, at which point the old refresh token is revoked. This ensures that if
-a client fails to receive or persist the new tokens, it will still be able to
-refresh them.
+a client fails to receive or persist the new tokens, it will be able to repeat
+the refresh operation.
 
 If the token refresh fails and the error response included a `soft_logout:
 true` property, then the client can treat it as a [soft logout](#soft-logout)

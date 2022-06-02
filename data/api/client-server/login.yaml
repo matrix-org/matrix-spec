@@ -184,7 +184,7 @@ paths:
                   The lifetime of the access token, in milliseconds. Once
                   the access token has expired a new access token can be
                   obtained by using the provided refresh token. If no
-                  refresh token is provided, the client will need re-log in
+                  refresh token is provided, the client will need to re-log in
                   to obtain a new access token. If not given, the client can
                   assume that the access token will not expire.
                 x-addedInMatrixVersion: "1.3"

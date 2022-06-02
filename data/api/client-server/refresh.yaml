@@ -45,8 +45,8 @@ paths:
         The old refresh token remains valid until the new access token or refresh token
         is used, at which point the old refresh token is revoked.
 
-        Note that this endpoint does not require authentication, since
-        authentication is provided via the refresh token.
+        Note that this endpoint does not require authentication via an
+        access token. Authentication is provided via the refresh token.
 
         Application Service identity assertion is disabled for this endpoint.
       operationId: refresh
