@@ -142,7 +142,8 @@ paths:
                 type: array
                 required: true
                 description: |-
-                  The child events which point to the parent event, after applicable filters.
+                  The child events of the requested event. If a `relType` or `eventType` was
+                  supplied on the URL, the events returned will match those details.
                 items:
                   allOf:
                     - "$ref": "definitions/client_event.yaml"
