@@ -140,7 +140,6 @@ paths:
               chunk:
                 title: "ChildEventsChunk"
                 type: array
-                required: true
                 description: |-
                   The child events of the requested event. If a `relType` or `eventType` was
                   supplied on the URL, the events returned will match those details.
@@ -157,6 +156,7 @@ paths:
                 description: |-
                   An opaque string representing a pagination token. The absence of this token
                   means there are no prior results to fetch, i.e. this is the first batch.
+            required: ['chunk']
         404:
           description: |-
             The parent event was not found or the user does not have permission to read
