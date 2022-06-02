@@ -140,6 +140,7 @@ paths:
               chunk:
                 title: "ChildEventsChunk"
                 type: array
+                required: true
                 description: |-
                   The child events which point to the parent event, after applicable filters.
                 items:
