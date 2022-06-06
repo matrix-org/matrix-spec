@@ -91,7 +91,7 @@ The *mainline of P*<sub>0</sub> is the list of events
     [*P*<sub>n</sub> , ... , *P*<sub>1</sub>, *P*<sub>0</sub>].
 
 Given another event *e* = *e<sub>0</sub>* we can compute a similar list of
-`m.room.power_level` events
+`m.room.power_levels` events
     [*e*<sub>0</sub>, *e*<sub>1</sub>, ...],
 where *e<sub>*j* + 1</sub>* is the `m.room.power_levels` event in the
 `auth_events` of *e<sub>j</sub>*. The *closest mainline event to e*
