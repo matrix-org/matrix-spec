@@ -88,28 +88,35 @@ Starting with *i* = 0, repeatedly fetch *P*<sub>*i*+1</sub>, the
 Increment *i* and repeat until *P<sub>i</sub>* has no `m.room.power_levels`
 event in its `auth_events`.
 The *mainline of P*<sub>0</sub> is the list of events
-    [*P*<sub>n</sub> , ... , *P*<sub>1</sub>, *P*<sub>0</sub>].
+    [*P*<sub>n</sub> , ... , *P*<sub>1</sub>, *P*<sub>0</sub>],
+ordered from oldest to newest.
 
-Given another event *e* = *e<sub>0</sub>* we can compute a similar list of
-`m.room.power_levels` events
-    [*e*<sub>0</sub>, *e*<sub>1</sub>, ...],
+Let *e* = *e<sub>0</sub>* be another event (possibly another
+`m.room.power_levels` event). We can compute a similar list of events
+    [*e*<sub>1</sub>, ..., *e<sub>m</sub>*],
 where *e<sub>*j* + 1</sub>* is the `m.room.power_levels` event in the
-`auth_events` of *e<sub>j</sub>*. The *closest mainline event to e*
-is the first event *e<sub>j</sub>* which belongs to the mainline of *P*.
-If no event *e<sub>j</sub>* belongs to the mainline of *P*, then the closest
-mainline event to *e* can be considered to be a dummy event that is
-before any other event in the mainline of *P* for the purposes of
-condition 1 below.
+`auth_events` of *e<sub>j</sub>*, and where *e<sub>m</sub>* has no
+`m.room.power_levels` event in its `auth_events`. (Note that this second list
+may be empty, because *e* may not cite an `m.room.power_levels` event in its
+`auth_events` at all.)
+
+Now compare these two lists as follows.
+* Find the smallest index *j* ≥1 for which *e<sub>j</sub>* belongs to the
+   mainline of *P*.
+* If *j* exists, then *e<sub>j</sub>* = *P<sub>i</sub>* for some unique index
+  *i* ≥ 0. Otherwise set *i* = ∞, where ∞ is a sentinel value greater
+  than any integer.
+* In both cases, the *position of e in the mainline of P* is *i*.
 
 The *mainline ordering based on* *P* of a set of events is the ordering,
 from smallest to largest, using the following comparison relation on
 events: for events *x* and *y*, *x* &lt; *y* if
 
-1.  the closest mainline event to *x* appears *before* the closest
-    mainline event to *y*; or
-2.  the closest mainline events are the same, but *x*'s
+1.  the position of *x* in *P*'s mainline is **greater** than
+    the position of *y* in *P*'s mainline.
+2.  the positions of the events are the same, but *x*'s
     `origin_server_ts` is *less* than *y*'s `origin_server_ts`; or
-3.  the closest mainline events are the same and the events have the
+3.  the positions of the events are the same and the events have the
     same `origin_server_ts`, but *x*'s `event_id` is *less* than *y*'s
     `event_id`.
 
