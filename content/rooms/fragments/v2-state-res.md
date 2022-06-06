@@ -95,13 +95,13 @@ Let *e* = *e<sub>0</sub>* be another event (possibly another
 `m.room.power_levels` event). We can compute a similar list of events
     [*e*<sub>1</sub>, ..., *e<sub>m</sub>*],
 where *e<sub>*j* + 1</sub>* is the `m.room.power_levels` event in the
-`auth_events` of *e<sub>j</sub>*, and where *e<sub>m</sub>* has no
+`auth_events` of *e<sub>j</sub>* and where *e<sub>m</sub>* has no
 `m.room.power_levels` event in its `auth_events`. (Note that this second list
 may be empty, because *e* may not cite an `m.room.power_levels` event in its
 `auth_events` at all.)
 
 Now compare these two lists as follows.
-* Find the smallest index *j* ≥1 for which *e<sub>j</sub>* belongs to the
+* Find the smallest index *j* ≥ 1 for which *e<sub>j</sub>* belongs to the
    mainline of *P*.
 * If *j* exists, then *e<sub>j</sub>* = *P<sub>i</sub>* for some unique index
   *i* ≥ 0. Otherwise set *i* = ∞, where ∞ is a sentinel value greater
@@ -112,8 +112,8 @@ The *mainline ordering based on* *P* of a set of events is the ordering,
 from smallest to largest, using the following comparison relation on
 events: for events *x* and *y*, *x* &lt; *y* if
 
-1.  the position of *x* in *P*'s mainline is **greater** than
-    the position of *y* in *P*'s mainline.
+1.  the position of *x* in the mainline of *P* is **greater** than
+    the position of *y* in the mainline of *P*.
 2.  the positions of the events are the same, but *x*'s
     `origin_server_ts` is *less* than *y*'s `origin_server_ts`; or
 3.  the positions of the events are the same and the events have the
