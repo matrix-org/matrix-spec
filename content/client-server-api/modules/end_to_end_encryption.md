@@ -1531,6 +1531,15 @@ For example, Megolm sessions that were sent using the old session would
 have been lost. The client can attempt to retrieve the lost sessions
 through `m.room_key_request` messages.
 
+{{% boxes/note %}}
+Clients should send key requests for unknown sessions to all devices for
+the user which used the session rather than just the `device_id` or
+`sender_key` denoted on the event.
+
+This is due to a deprecation of the fields. See
+[`m.megolm.v1.aes-sha2`](#mmegolmv1aes-sha2) for more information.
+{{% /boxes/note %}}
+
 ##### `m.megolm.v1.aes-sha2`
 
 {{% changed-in v="1.3" %}}
