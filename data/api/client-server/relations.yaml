@@ -27,7 +27,7 @@ produces:
 securityDefinitions:
   $ref: definitions/security.yaml
 paths:
-  "/rooms/{roomId}/relations/{eventId}/{relType}/{eventType}":
+  "/rooms/{roomId}/relations/{eventId}":
     get:
       summary: Get the child events for a given parent event.
       description: |-
@@ -55,25 +55,275 @@ paths:
           description: The ID of the parent event whose child events are to be returned.
           required: true
           x-example: "$asfDuShaf7Gafaw"
+        - in: query
+          type: string
+          name: from
+          description: |-
+            The pagination token to start returning results from. If not supplied, results
+            start at the earliest topological event known to the server.
+
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
+            `start`/`end` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
+            or `next_batch`/`prev_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+          required: false
+          x-example: "page2_token"
+        - in: query
+          type: string
+          name: to
+          description: |-
+            The pagination token to stop returning results at. If not supplied, results
+            continue up to `limit` or until there are no more events.
+
+            Like `from`, this can be a previous token from a prior call to this endpoint
+            or from `/messages` or `/sync`.
+          required: false
+          x-example: "page3_token"
+        - in: query
+          type: integer
+          name: limit
+          description: |-
+            The maximum number of results to return in a single `chunk`. The server can
+            and should apply a maximum value to this parameter to avoid large responses.
+
+            Similarly, the server should apply a default value when not supplied.
+          required: false
+          x-example: 20
+      responses:
+        # note: this endpoint deliberately does not support rate limiting, therefore a
+        # 429 error response is not included.
+
+        200:
+          description: |-
+            The paginated child events which point to the parent. If no events are
+            pointing to the parent or the pagination yields no results, an empty `chunk`
+            is returned.
+          examples:
+            application/json: {
+              "chunk": [{
+                "room_id": "!636q39766251:matrix.org",
+                "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
+                "content": {
+                  "m.relates_to": {
+                    "rel_type": "org.example.my_relation",
+                    "event_id": "$asfDuShaf7Gafaw"
+                  }
+                }
+              }],
+              "next_batch": "page2_token",
+              "prev_batch": "page1_token"
+            }
+          schema:
+            type: object
+            properties:
+              chunk:
+                title: "ChildEventsChunk"
+                type: array
+                description: |-
+                  The child events of the requested event. If a `relType` or `eventType` was
+                  supplied on the URL, the events returned will match those details.
+                items:
+                  allOf:
+                    - "$ref": "definitions/client_event.yaml"
+              next_batch:
+                type: string
+                description: |-
+                  An opaque string representing a pagination token. The absence of this token
+                  means there are no more results to fetch and the client should stop paginating.
+              prev_batch:
+                type: string
+                description: |-
+                  An opaque string representing a pagination token. The absence of this token
+                  means there are no prior results to fetch, i.e. this is the first batch/page.
+            required: ['chunk']
+        404:
+          description: |-
+            The parent event was not found or the user does not have permission to read
+            this event (it might be contained in history that is not accessible to the user).
+          examples:
+            application/json: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Event not found."
+              }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+      tags:
+        - Event relationships
+  # The same as above, with added `/{relType}`
+  "/rooms/{roomId}/relations/{eventId}/{relType}":
+    get:
+      summary: Get the child events for a given parent event, with a given `relType`.
+      description: |-
+        Retrieve all of the child events for a given parent event which relate to the parent
+        using the given `relType`.
+
+        Note that when paginating the `from` token must be *before* the `to` token, if
+        supplied. This means it's only possible to paginate "forwards" through events.
+        An example of an *invalid* call would be a `from` token from page 2 of the results,
+        and a `to` token from page 1: the server can't go backwards with this information.
+        The caller can use a `from` token from page 1 and a `to` token from page 2 to
+        paginate forwards over the same range, however.
+      operationId: getRelatingEventsWithRelType
+      security:
+        - accessToken: []
+      parameters:
+        - in: path
+          type: string
+          name: roomId
+          description: The ID of the room containing the parent event.
+          required: true
+          x-example: "!636q39766251:matrix.org"
+        - in: path
+          type: string
+          name: eventId
+          description: The ID of the parent event whose child events are to be returned.
+          required: true
+          x-example: "$asfDuShaf7Gafaw"
         - in: path
           type: string
           name: relType
           description: |-
-            The [relationship type](/client-server-api/#relationship-types) to search
-            for, if any. Exclude to find all child events which point to the supposed parent
-            event with any `rel_type`.
-          required: true # we can't say false, annoyingly
+            The [relationship type](/client-server-api/#relationship-types) to search for.
+          required: true
+          x-example: "org.example.my_relation"
+        - in: query
+          type: string
+          name: from
+          description: |-
+            The pagination token to start returning results from. If not supplied, results
+            start at the earliest topological event known to the server.
+
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
+            `start`/`end` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
+            or `next_batch`/`prev_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+          required: false
+          x-example: "page2_token"
+        - in: query
+          type: string
+          name: to
+          description: |-
+            The pagination token to stop returning results at. If not supplied, results
+            continue up to `limit` or until there are no more events.
+
+            Like `from`, this can be a previous token from a prior call to this endpoint
+            or from `/messages` or `/sync`.
+          required: false
+          x-example: "page3_token"
+        - in: query
+          type: integer
+          name: limit
+          description: |-
+            The maximum number of results to return in a single `chunk`. The server can
+            and should apply a maximum value to this parameter to avoid large responses.
+
+            Similarly, the server should apply a default value when not supplied.
+          required: false
+          x-example: 20
+      responses:
+        # note: this endpoint deliberately does not support rate limiting, therefore a
+        # 429 error response is not included.
+
+        200:
+          description: |-
+            The paginated child events which point to the parent. If no events are
+            pointing to the parent or the pagination yields no results, an empty `chunk`
+            is returned.
+          examples:
+            application/json: {
+              "chunk": [{
+                "room_id": "!636q39766251:matrix.org",
+                "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
+                "content": {
+                  "m.relates_to": {
+                    "rel_type": "org.example.my_relation",
+                    "event_id": "$asfDuShaf7Gafaw"
+                  }
+                }
+              }],
+              "next_batch": "page2_token",
+              "prev_batch": "page1_token"
+            }
+          schema:
+            type: object
+            properties:
+              chunk:
+                title: "ChildEventsChunk"
+                type: array
+                description: |-
+                  The child events of the requested event. If a `relType` or `eventType` was
+                  supplied on the URL, the events returned will match those details.
+                items:
+                  allOf:
+                    - "$ref": "definitions/client_event.yaml"
+              next_batch:
+                type: string
+                description: |-
+                  An opaque string representing a pagination token. The absence of this token
+                  means there are no more results to fetch and the client should stop paginating.
+              prev_batch:
+                type: string
+                description: |-
+                  An opaque string representing a pagination token. The absence of this token
+                  means there are no prior results to fetch, i.e. this is the first batch/page.
+            required: ['chunk']
+        404:
+          description: |-
+            The parent event was not found or the user does not have permission to read
+            this event (it might be contained in history that is not accessible to the user).
+          examples:
+            application/json: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Event not found."
+              }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+      tags:
+        - Event relationships
+  # The same as above, with added `/{eventType}`
+  "/rooms/{roomId}/relations/{eventId}/{relType}/{eventType}":
+    get:
+      summary: Get the child events for a given parent event, with a given `relType` and `eventType`.
+      description: |-
+        Retrieve all of the child events for a given parent event which relate to the parent
+        using the given `relType` and have the given `eventType`.
+
+        Note that when paginating the `from` token must be *before* the `to` token, if
+        supplied. This means it's only possible to paginate "forwards" through events.
+        An example of an *invalid* call would be a `from` token from page 2 of the results,
+        and a `to` token from page 1: the server can't go backwards with this information.
+        The caller can use a `from` token from page 1 and a `to` token from page 2 to
+        paginate forwards over the same range, however.
+      operationId: getRelatingEventsWithRelTypeAndEventType
+      security:
+        - accessToken: []
+      parameters:
+        - in: path
+          type: string
+          name: roomId
+          description: The ID of the room containing the parent event.
+          required: true
+          x-example: "!636q39766251:matrix.org"
+        - in: path
+          type: string
+          name: eventId
+          description: The ID of the parent event whose child events are to be returned.
+          required: true
+          x-example: "$asfDuShaf7Gafaw"
+        - in: path
+          type: string
+          name: relType
+          description: |-
+            The [relationship type](/client-server-api/#relationship-types) to search for.
+          required: true
           x-example: "org.example.my_relation"
         - in: path
           type: string
           name: eventType
           description: |-
-            The event type of child events to search for, if any. Exclude to find all
-            child events of any type which point to the supposed parent event.
+            The event type of child events to search for.
 
             Note that in encrypted rooms this will typically always be `m.room.encrypted`
             regardless of the event type contained within the encrypted payload.
-          required: true # we can't say false, annoyingly
+          required: true
           x-example: "m.room.message"
         - in: query
           type: string
@@ -168,3 +418,4 @@ paths:
             "$ref": "definitions/errors/error.yaml"
       tags:
         - Event relationships
+

@@ -1980,7 +1980,9 @@ The endpoints where the server *should* include bundled aggregations are:
 * [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
 * [`GET /rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
 * [`GET /rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
-* [`GET /rooms/{roomId}/relations`](#get_matrixclientv3roomsroomidrelations)
+* [`GET /rooms/{roomId}/relations/{eventId}`](#get_matrixclientv1roomsroomidrelationseventid)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}`](#get_matrixclientv1roomsroomidrelationseventidreltype)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}/{eventType}`](#get_matrixclientv1roomsroomidrelationseventidreltypeeventtype)
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
