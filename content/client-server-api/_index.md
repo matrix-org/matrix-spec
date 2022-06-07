@@ -1877,10 +1877,21 @@ is no plaintext copy). This is to ensure the client's behaviour matches the serv
 capability to handle relationships.
 {{% /boxes/warning %}}
 
-Improperly formed or structured relationships are simply ignored. For example, the
-child and parent events being in different rooms or the relationship missing fields
-required by the schema below. The events would appear independent of each other or
-optionally with an error message (if rendered/handled by the client exclusively).
+Relationships which don't match the schema, or which break the rules of a relationship,
+are simply ignored. Such an example might be the parent and child being in different
+rooms or the relationship missing properties required by the schema below. The events
+would appear independent of each other or optionally with an error message (if
+rendered/handled by the client exclusively).
+
+{{% boxes/note %}}
+While this specification describes an `m.relates_to` object containing a `rel_type`, there
+is not currently any relationship type which uses this structure. Replies, described below,
+form their relationship outside of the `rel_type` as a legacy type of relationship. Future
+versions of the specification might change replies to better match the relationship structures.
+
+Custom `rel_type`s can, and should, still use the schema described above for relevant
+behaviour.
+{{% /boxes/note %}}
 
 `m.relates_to` is defined as follows:
 
@@ -1888,28 +1899,9 @@ optionally with an error message (if rendered/handled by the client exclusively)
 
 #### Relationship types
 
-{{% boxes/note %}}
-While this specification describes an `m.relates_to` object containing a `rel_type`, there
-is not currently any relationship type which uses this structure. Replies, described below,
-form their relationship outside of the `rel_type` in order to allow other, future, relationship
-types to make use of replies in addition to their normal behaviour.
-
-Custom `rel_type`s can, and should, still use the schema described above for relevant
-behaviour.
-{{% /boxes/note %}}
-
 This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
-
-{{% boxes/note %}}
-This specification does not currently define any relation type which requires
-aggregation or has restrictions, however [namespaced](/appendices#identifier-grammar)
-relationship types might have these restrictions.
-
-Future versions of this specification are expected to require certain behaviours
-or aggregation of related events.
-{{% /boxes/note %}}
 
 #### Aggregations
 
@@ -1934,10 +1926,10 @@ Aggregations are sometimes automatically included by a server alongside the pare
 event. This This is known as a "bundled aggregation" or "bundle" for simplicity. The
 act of doing this is "bundling".
 
-When an event is served to the client through the APIs listed below, a `m.relations` field
-is included under `unsigned` if the event has child events which point at it. The `m.relations`
-field is an object keyed by `rel_type` and value being the type-specific format for that
-`rel_type`, also known as the bundle.
+When an event is served to the client through the APIs listed below, a `m.relations` property
+is included under `unsigned` if the event has child events which can be aggregated and point
+at it. The `m.relations` property is an object keyed by `rel_type` and value being the type-specific
+aggregated format for that `rel_type`, also known as the bundle.
 
 For example (unimportant fields not included):
 
@@ -1975,8 +1967,8 @@ For example (unimportant fields not included):
 
 Note how the `org.example.possible_annotations` bundle is an array compared to the
 `org.example.possible_thread` bundle where the server is summarising the state of
-the relationship in a single object. Both are valid bundles, and their exact types
-depend on the `rel_type`.
+the relationship in a single object. Both are valid ways to aggregate, and their
+exact types depend on the `rel_type`.
 
 {{% boxes/warning %}}
 State events do not currently receive bundled aggregations. This is not
@@ -2042,10 +2034,14 @@ able to accurately aggregate the events.
 #### Relationships API
 
 To retrieve the child events for a parent from the server, the client can call the
-following endpoint with relevant information. This endpoint does not aggregate the child
-events and is instead paginated: clients can perform local aggregation if needed. This
-allows clients to retrieve child events which do not require aggregation but still make
-use of `rel_type`.
+following endpoint. The events returned might require local aggregation by the client,
+however if those same events have bundles of their own then they should be present. A
+hypothetical example would be retrieving all responses to a thread, and those responses
+might have emoji reactions made against them: the client will need to construct the
+thread itself, but the events in the thread should have a reactions bundle on them.
+
+The lack of aggregation behaviour allows clients to retrieve child events which don't
+require aggregation, but do make use of a `rel_type`.
 
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
