@@ -29,18 +29,16 @@ securityDefinitions:
 paths:
   "/rooms/{roomId}/relations/{eventId}/{relType}/{eventType}":
     get:
-      summary: Get the child events for a given parent event, with optional filter.
+      summary: Get the child events for a given parent event.
       description: |-
-        Retrieve all of the child events for a given parent event, optionally filtering
-        down by relationship type and related event type.
+        Retrieve all of the child events for a given parent event.
 
-        Note that while this endpoint indicates `relType` and `eventType` being
-        required, they can be individually omitted to retrieve all matching events.
-        When omitting the path parameters, a trailing slash must not be included
-        (otherwise the search will be for an empty string).
-
-        When combining the use of `relType` and `eventType`, the server will return
-        child events which match *both* conditions rather than *either*.
+        Note that when paginating the `from` token must be *before* the `to` token, if
+        supplied. This means it's only possible to paginate "forwards" through events.
+        An example of an *invalid* call would be a `from` token from page 2 of the results,
+        and a `to` token from page 1: the server can't go backwards with this information.
+        The caller can use a `from` token from page 1 and a `to` token from page 2 to
+        paginate forwards over the same range, however.
       operationId: getRelatingEvents
       security:
         - accessToken: []
@@ -84,10 +82,9 @@ paths:
             The pagination token to start returning results from. If not supplied, results
             start at the earliest topological event known to the server.
 
-            Can be a `next_batch` or `prev_batch` token from a previous call, or an equivalent
-            token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
-            or [`/sync`](/client-server-api/#get_matrixclientv3sync) to limit results to the
-            events returned by that section of timeline.
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
+            `start`/`end` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
+            or `next_batch`/`prev_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
           required: false
           x-example: "page2_token"
         - in: query
@@ -98,7 +95,7 @@ paths:
             continue up to `limit` or until there are no more events.
 
             Like `from`, this can be a previous token from a prior call to this endpoint
-            or from `/messages` or `/sync` to limit to a section of timeline.
+            or from `/messages` or `/sync`.
           required: false
           x-example: "page3_token"
         - in: query
@@ -117,8 +114,9 @@ paths:
 
         200:
           description: |-
-            The paginated child events which point to the supposed parent. If no events are
-            pointing to the parent, an empty `chunk` is returned.
+            The paginated child events which point to the parent. If no events are
+            pointing to the parent or the pagination yields no results, an empty `chunk`
+            is returned.
           examples:
             application/json: {
               "chunk": [{
@@ -155,7 +153,7 @@ paths:
                 type: string
                 description: |-
                   An opaque string representing a pagination token. The absence of this token
-                  means there are no prior results to fetch, i.e. this is the first batch.
+                  means there are no prior results to fetch, i.e. this is the first batch/page.
             required: ['chunk']
         404:
           description: |-
