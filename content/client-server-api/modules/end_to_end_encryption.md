@@ -1626,9 +1626,7 @@ messages.
 
 When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
 
-* that the updated session data comes from a trusted source, where a trusted source
-  could be the signatures on the session or those from the user's session key backup;
-  and
+* that the updated session data comes from a trusted source.
 * that the new session key has a lower message index than the existing session key.
 
 #### Protocol definitions
