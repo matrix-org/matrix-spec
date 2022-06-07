@@ -71,7 +71,7 @@ This is where the reply goes
 The `formatted_body`, if present and using an associated `format` of
 `org.matrix.custom.html`, should use the following template:
 
-```
+```html
 <mx-reply>
   <blockquote>
     <a href="https://matrix.to/#/!somewhere:example.org/$event:example.org">In reply to</a>
@@ -114,7 +114,7 @@ Using the prefix sequence, the first line of the related event's `body`
 should be prefixed with the user's ID, followed by each line being
 prefixed with the fallback prefix sequence. For example:
 
-```
+```text
 > <@alice:example.org> This is the first line
 > This is the second line
 
@@ -129,7 +129,7 @@ Similar to the fallback for `m.text`, each line gets prefixed with the
 fallback prefix sequence. However an asterisk should be inserted before
 the user's ID, like so:
 
-```
+```text
 > * <@alice:example.org> feels like today is going to be a great day
 
 This is the reply
@@ -138,7 +138,7 @@ This is the reply
 The `formatted_body` has a subtle difference for the template where the
 asterisk is also inserted ahead of the user's ID:
 
-```
+```html
 <mx-reply>
   <blockquote>
     <a href="https://matrix.to/#/!somewhere:example.org/$event:example.org">In reply to</a>
@@ -160,12 +160,12 @@ filename alone may not be descriptive, the related event's `body` should
 be considered to be `"sent a file."` such that the output looks similar
 to the following:
 
-```
+```text
 > <@alice:example.org> sent a file.
 
 This is the reply
 ```
-```
+```html
 <mx-reply>
   <blockquote>
     <a href="https://matrix.to/#/!somewhere:example.org/$event:example.org">In reply to</a>
