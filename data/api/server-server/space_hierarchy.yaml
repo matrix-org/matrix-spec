@@ -158,7 +158,7 @@ paths:
                                   format: int64
                                   description: The `origin_server_ts` for the event.
                               required: [origin_server_ts]
-                    required: [room_type, allowed_room_ids, children_state]
+                    required: [children_state]
               children:
                 type: array
                 description: |-
