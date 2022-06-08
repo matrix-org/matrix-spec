@@ -2026,8 +2026,10 @@ likely using the transaction ID as a temporary event ID until a proper event ID 
 
 {{% boxes/warning %}}
 Due to history visibility restrictions, child events might not be visible to the user
-if they are in a section of history the user cannot see. This can mean inaccurate aggregations
-for events that are "out of range".
+if they are in a section of history the user cannot see. This means any bundles which would
+normally include those events will be lacking them and the client will not be able to
+locally aggregate the events either — relating events of importance (such as votes) should
+take into consideration history visibility.
 
 Additionally, if the server is missing portions of the room history then it may not be
 able to accurately aggregate the events.
