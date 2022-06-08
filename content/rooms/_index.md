@@ -36,10 +36,11 @@ Alternatively, consider flipping the column/row organization to be features
 up top and versions on the left.
 -->
 
-| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
-|-------------------|---|---|---|---|---|---|---|---|---|
-| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ |
-| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ |
+| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|-------------------|---|---|---|---|---|---|---|---|---|----|
+| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ |
+| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ |
+| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ |
 
 ## Complete list of room versions
 
@@ -73,6 +74,8 @@ The available room versions are:
     of another room to join without invite.
 -   [Version 9](/rooms/v9) - **Stable**. Builds on v8 to fix issues when
     redacting some membership events.
+-   [Version 10](/rooms/v10) - **Stable**. Enforces integer-only power levels
+    and adds `knock_restricted` join rule.
 
 ## Room version grammar
 

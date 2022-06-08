@@ -2026,6 +2026,13 @@ room listed in the join rules. If the server cannot verify membership for any
 of the listed rooms then you can only join with an invite. Note that this rule
 is only expected to work in room versions [which support it](/rooms/#feature-matrix).
 
+{{% added-in v="1.3" %}} `knock_restricted`
+This room can be joined as though it was `restricted` *or* `knock`. If you
+interact with the room using knocking, the `knock` rule takes effect whereas
+trying to join the room without an invite applies the `restricted` join rule.
+Note that this rule is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+
 The allowable state transitions of membership are:
 
 ![membership-flow-diagram](/diagrams/membership.png)
@@ -2041,6 +2048,15 @@ The allowable state transitions of membership are:
 ##### Knocking on rooms
 
 {{% added-in v="1.1" %}}
+{{% changed-in v="1.3" %}}
+
+{{% boxes/note %}}
+As of `v1.3`, it is possible to knock on a [restricted room](#restricted-rooms)
+if the room supports and is using the `knock_restricted` join rule.
+
+Note that `knock_restricted` is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+{{% /boxes/note %}}
 
 <!--
 This section is here because it's most similar to being invited/joining a
@@ -2078,6 +2094,15 @@ server chose to auto-accept.
 ##### Restricted rooms
 
 {{% added-in v="1.2" %}}
+{{% changed-in v="1.3" %}}
+
+{{% boxes/note %}}
+As of `v1.3`, it is possible to [knock](#knocking-on-rooms) on a restricted
+room if the room supports and is using the `knock_restricted` join rule.
+
+Note that `knock_restricted` is only expected to work in room versions
+[which support it](/rooms/#feature-matrix).
+{{% /boxes/note %}}
 
 Restricted rooms are rooms with a `join_rule` of `restricted`. These rooms
 are accompanied by "allow conditions" as described in the
