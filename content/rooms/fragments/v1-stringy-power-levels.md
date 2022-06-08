@@ -41,8 +41,3 @@ When the value is representative of an integer, they must be the following forma
   `"-100"`).
 * optionally with any number of leading or trailing whitespace characters (`" 100 "`,
   `" 00100 "`, `" +100 "`, `" -100 "`);
-
-{{% boxes/note %}}
-The integer represented by the string must still be within the `[-(2**53)+1, (2**53)-1]`
-range accepted by normal, non-string, power level values.
-{{% /boxes/note %}}
