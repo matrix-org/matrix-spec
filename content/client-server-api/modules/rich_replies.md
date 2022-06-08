@@ -62,7 +62,7 @@ replies, and MUST strip the fallback before rendering the reply. The
 specific fallback text is different for each `msgtype`, however the
 general format for the `body` is:
 
-```
+```text
 > <@alice:example.org> This is the original body
 
 This is where the reply goes

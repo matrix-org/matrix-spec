@@ -1878,10 +1878,10 @@ capability to handle relationships.
 {{% /boxes/warning %}}
 
 Relationships which don't match the schema, or which break the rules of a relationship,
-are simply ignored. Such an example might be the parent and child being in different
-rooms or the relationship missing properties required by the schema below. The events
-would appear independent of each other or optionally with an error message (if
-rendered/handled by the client exclusively).
+are simply ignored. An example might be the parent and child being in different
+rooms, or the relationship missing properties required by the schema below. Clients
+handling such invalid relationships should show the events independently of each
+other, optionally with an error message.
 
 {{% boxes/note %}}
 While this specification describes an `m.relates_to` object containing a `rel_type`, there
@@ -1918,12 +1918,12 @@ of times that `key` was used by child events.
 The actual aggregation format depends on the `rel_type`.
 
 {{% boxes/note %}}
-This specification does not currently describe any `rel_type` which require
+This specification does not currently describe any `rel_type`s which require
 aggregation. This functionality forms a framework for future extensions.
 {{% /boxes/note %}}
 
 Aggregations are sometimes automatically included by a server alongside the parent
-event. This This is known as a "bundled aggregation" or "bundle" for simplicity. The
+event. This is known as a "bundled aggregation" or "bundle" for simplicity. The
 act of doing this is "bundling".
 
 When an event is served to the client through the APIs listed below, a `m.relations` property
@@ -2034,6 +2034,8 @@ able to accurately aggregate the events.
 {{% /boxes/warning %}}
 
 #### Relationships API
+
+{{% added-in v="1.3" %}}
 
 To retrieve the child events for a parent from the server, the client can call the
 following endpoint. The events returned might require local aggregation by the client,
