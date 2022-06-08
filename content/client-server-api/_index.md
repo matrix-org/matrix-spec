@@ -2036,14 +2036,7 @@ able to accurately aggregate the events.
 #### Relationships API
 
 To retrieve the child events for a parent from the server, the client can call the
-following endpoint. The events returned might require local aggregation by the client,
-however if those same events have bundles of their own then they should be present. A
-hypothetical example would be retrieving all responses to a thread, and those responses
-might have emoji reactions made against them: the client will need to construct the
-thread itself, but the events in the thread should have a reactions bundle on them.
-
-The lack of aggregation behaviour allows clients to retrieve child events which don't
-require aggregation, but do make use of a `rel_type`.
+following endpoint.
 
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
