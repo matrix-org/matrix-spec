@@ -94,9 +94,10 @@ ordered from oldest to newest.
 Let *e* = *e<sub>0</sub>* be another event (possibly another
 `m.room.power_levels` event). We can compute a similar list of events
     [*e*<sub>1</sub>, ..., *e<sub>m</sub>*],
-where *e<sub>*j*+1</sub>* is the `m.room.power_levels` event in the
+where *e*<sub>*j*+1</sub> is the `m.room.power_levels` event in the
 `auth_events` of *e<sub>j</sub>* and where *e<sub>m</sub>* has no
-`m.room.power_levels` event in its `auth_events`. (Note that this second list
+`m.room.power_levels` event in its `auth_events`. (Note that the event we
+started with, *e<sub>0</sub>*, is not included in this list. Also note that it
 may be empty, because *e* may not cite an `m.room.power_levels` event in its
 `auth_events` at all.)
 
