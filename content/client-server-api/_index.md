@@ -1798,6 +1798,16 @@ There are several APIs provided to `GET` events for a room:
 
 ### Sending events to a room
 
+{{% boxes/note %}}
+{{% added-in v="1.3" %}}
+
+Servers might need to post-process some events if they
+[relate to](#forming-relationships-between-events) another event. The event's
+relationship type (`rel_type`) determines any restrictions which might apply,
+such as the user only being able to send one event of a given type in relation
+to another.
+{{% /boxes/note %}}
+
 {{% http-api spec="client-server" api="room_state" %}}
 
 **Examples**
@@ -1887,6 +1897,216 @@ the topic to be removed from the room.
 #### Client behaviour
 
 {{% http-api spec="client-server" api="redaction" %}}
+
+### Forming relationships between events
+
+{{% changed-in v="1.3" %}}
+
+In some cases it is desirable to logically associate one event's contents with
+another event's contents — for example, when replying to a message, editing an
+event, or simply looking to add context for an event's purpose.
+
+Events are related to each other in a parent/child structure, where any event can
+become a parent by simply having a child event point at it. Parent events do not
+define their children, instead relying on the children to describe their parent.
+
+The relationship between a child and its parent event is described in the child
+event's `content` as `m.relates_to` (defined below). A child event can point at
+any other event, including another child event, to build the relationship so long
+as both events are in the same room, however additional restrictions might be imposed
+by the type of the relationship (the `rel_type`).
+
+{{% boxes/note %}}
+Child events can point at other child events, forming a chain of events. These chains
+can naturally take the shape of a tree if two independent children point at a single
+parent event, for example.
+{{% /boxes/note %}}
+
+To allow the server to aggregate and find child events for a parent, the `m.relates_to`
+key of an event MUST be included in the plaintext copy of the event. It cannot be
+exclusively recorded in the encrypted payload as the server cannot decrypt the event
+for processing.
+
+{{% boxes/warning %}}
+If an encrypted event contains an `m.relates_to` in its payload, it should be
+ignored and instead favour the plaintext `m.relates_to` copy (including when there
+is no plaintext copy). This is to ensure the client's behaviour matches the server's
+capability to handle relationships.
+{{% /boxes/warning %}}
+
+Relationships which don't match the schema, or which break the rules of a relationship,
+are simply ignored. An example might be the parent and child being in different
+rooms, or the relationship missing properties required by the schema below. Clients
+handling such invalid relationships should show the events independently of each
+other, optionally with an error message.
+
+{{% boxes/note %}}
+While this specification describes an `m.relates_to` object containing a `rel_type`, there
+is not currently any relationship type which uses this structure. Replies, described below,
+form their relationship outside of the `rel_type` as a legacy type of relationship. Future
+versions of the specification might change replies to better match the relationship structures.
+
+Custom `rel_type`s can, and should, still use the schema described above for relevant
+behaviour.
+{{% /boxes/note %}}
+
+`m.relates_to` is defined as follows:
+
+{{% definition path="api/client-server/definitions/m.relates_to" %}}
+
+#### Relationship types
+
+This specification describes the following relationship types:
+
+* [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
+
+#### Aggregations
+
+{{% added-in v="1.3" %}}
+
+Some child events can be "aggregated" by the server, depending on their
+`rel_type`. This can allow a set of child events to be summarised to the client without
+the client needing the child events themselves.
+
+An example of this might be that a `rel_type` requires an extra `key` field which, when
+appropriately specified, would mean that the client receives a total count for the number
+of times that `key` was used by child events.
+
+The actual aggregation format depends on the `rel_type`.
+
+{{% boxes/note %}}
+This specification does not currently describe any `rel_type`s which require
+aggregation. This functionality forms a framework for future extensions.
+{{% /boxes/note %}}
+
+Aggregations are sometimes automatically included by a server alongside the parent
+event. This is known as a "bundled aggregation" or "bundle" for simplicity. The
+act of doing this is "bundling".
+
+When an event is served to the client through the APIs listed below, a `m.relations` property
+is included under `unsigned` if the event has child events which can be aggregated and point
+at it. The `m.relations` property is an object keyed by `rel_type` and value being the type-specific
+aggregated format for that `rel_type`, also known as the bundle.
+
+For example (unimportant fields not included):
+
+```json
+{
+  "event_id": "$my_event",
+  "unsigned": {
+    "m.relations": {
+      "org.example.possible_annotations": [
+        {
+          "key": "👍",
+          "origin_server_ts": 1562763768320,
+          "count": 3
+        },
+        {
+          "key": "👎",
+          "origin_server_ts": 1562763768320,
+          "count": 1
+        }
+      ],
+      "org.example.possible_thread": {
+        "current_server_participated": true,
+        "count": 7,
+        "latest_event": {
+          "event_id": "$another_event",
+          "content": {
+            "body": "Hello world"
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Note how the `org.example.possible_annotations` bundle is an array compared to the
+`org.example.possible_thread` bundle where the server is summarising the state of
+the relationship in a single object. Both are valid ways to aggregate, and their
+exact types depend on the `rel_type`.
+
+{{% boxes/warning %}}
+State events do not currently receive bundled aggregations. This is not
+necessarily a deliberate design decision, and MSCs which aim to fix this are welcome.
+{{% /boxes/warning %}}
+
+The endpoints where the server *should* include bundled aggregations are:
+
+* [`GET /rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
+* [`GET /rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
+* [`GET /rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
+* [`GET /rooms/{roomId}/relations/{eventId}`](#get_matrixclientv1roomsroomidrelationseventid)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}`](#get_matrixclientv1roomsroomidrelationseventidreltype)
+* [`GET /rooms/{roomId}/relations/{eventId}/{relType}/{eventType}`](#get_matrixclientv1roomsroomidrelationseventidreltypeeventtype)
+* [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
+  of `true`.
+* [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
+
+{{% boxes/note %}}
+The server is **not** required to return bundled aggregations on deprecated endpoints
+such as `/initialSync`.
+{{% /boxes/note %}}
+
+While this functionality allows the client to see what was known to the server at the
+time of handling, the client should continue to aggregate locally if it is aware of
+the relationship type's behaviour. For example, a client might increment a `count`
+on a parent event's bundle if it saw a new child event which referenced that parent.
+
+The bundle provided by the server only includes child events which were known at the
+time the client would receive the bundle. For example, in a single `/sync` response
+with the parent and multiple child events the child events would have already been
+included on the parent's `m.relations` field. Events received in future syncs would
+need to be aggregated manually by the client.
+
+{{% boxes/note %}}
+Events from [ignored users](#ignoring-users) do not appear in the aggregation
+from the server, however clients might still have events from ignored users cached. Like
+with normal events, clients will need to de-aggregate child events sent by ignored users to
+avoid them being considered in counts. Servers must additionally ensure they do not
+consider child events from ignored users when preparing a bundle for the client.
+{{% /boxes/note %}}
+
+When a parent event is redacted, the child events which pointed to that parent remain, however
+when a child event is redacted then the relationship is broken. Therefore, the server needs
+to de-aggregate or disassociate the event once the relationship is lost. Clients with local
+aggregation or which handle redactions locally should do the same.
+
+It is suggested that clients perform local echo on aggregations — for instance, aggregating
+a new child event into a bundle optimistically until the server returns a failure or the client
+gives up on sending the event, at which point the event should be de-aggregated and an
+error or similar shown. The client should be cautious to not aggregate an event twice if
+it has already optimistically aggregated the event. Clients are encouraged to take this
+a step further to additionally track child events which target unsent/pending events,
+likely using the transaction ID as a temporary event ID until a proper event ID is known.
+
+{{% boxes/warning %}}
+Due to history visibility restrictions, child events might not be visible to the user
+if they are in a section of history the user cannot see. This means any bundles which would
+normally include those events will be lacking them and the client will not be able to
+locally aggregate the events either — relating events of importance (such as votes) should
+take into consideration history visibility.
+
+Additionally, if the server is missing portions of the room history then it may not be
+able to accurately aggregate the events.
+{{% /boxes/warning %}}
+
+#### Relationships API
+
+{{% added-in v="1.3" %}}
+
+To retrieve the child events for a parent from the server, the client can call the
+following endpoint.
+
+This endpoint is particularly useful if the client has lost context on the aggregation for
+a parent event and needs to rebuild/verify it.
+
+{{% boxes/note %}}
+Because replies do not use `rel_type`, they will not be accessible via this API.
+{{% /boxes/note %}}
+
+{{% http-api spec="client-server" api="relations" %}}
 
 ## Rooms
 
@@ -2294,6 +2514,7 @@ that profile.
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
 | [Mentions](#user-room-and-group-mentions)                  | Required  | Required | Required | Optional | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
@@ -2373,6 +2594,7 @@ applications, they are not intended to be fully-fledged communication
 systems.
 
 {{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
 {{% cs-module name="voip_events" %}}
 {{% cs-module name="typing_notifications" %}}
 {{% cs-module name="receipts" %}}

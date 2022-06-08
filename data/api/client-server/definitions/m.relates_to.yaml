@@ -1,0 +1,43 @@
+# Copyright 2022 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+type: object
+title: m.relates_to
+description: |-
+  Describes the relationship of an event to its parent. This is contained
+  within the event's `content` alongside other fields for the relevant event type.
+example: {
+  # We deliberately "break" the example by including the top-level field so it renders
+  # sensibly for readers of the spec.
+  "m.relates_to": {
+    "rel_type": "org.example.relationship",
+    "event_id": "$an_event"
+  }
+}
+properties:
+  rel_type:
+    type: string
+    description: |-
+      The namespaced relationship type. Values must use the
+      [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+
+      The relationship type determines how clients should perceive the event, and in what
+      context. Some relationship types are processed server-side for "bundling", though not
+      all relationships require such behaviour. For example, an `m.thread` relationship type
+      might denote that the event is part of a "thread" of messages and should be rendered as
+      such.
+  event_id:
+    type: string
+    description: The event ID of the event that this event relates to.
+required: ['rel_type', 'event_id']
