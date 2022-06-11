@@ -127,6 +127,7 @@ paths:
                   allOf:
                     - $ref: "definitions/public_rooms_chunk.yaml"
                     - type: object
+                      title: ChildRoomsChunk
                       properties:
                         room_type:
                           type: string
@@ -143,6 +144,7 @@ paths:
                             allOf:
                               - $ref: "../../event-schemas/schema/core-event-schema/stripped_state.yaml"
                               - type: object
+                                title: StrippedChildStateEvent
                                 properties:
                                   origin_server_ts:
                                     type: number
