@@ -165,7 +165,7 @@ paths:
                   obtain a new access token when it expires by calling the
                   `/refresh` endpoint.
 
-                  Omitted if the `inhibit_login` option is false.
+                  Omitted if the `inhibit_login` option is true.
                 x-addedInMatrixVersion: "1.3"
               expires_in_ms:
                 type: integer
@@ -177,7 +177,7 @@ paths:
                   to obtain a new access token. If not given, the client can
                   assume that the access token will not expire.
 
-                  Omitted if the `inhibit_login` option is false.
+                  Omitted if the `inhibit_login` option is true.
                 x-addedInMatrixVersion: "1.3"
               home_server:
                 type: string
