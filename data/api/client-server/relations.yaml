@@ -286,7 +286,7 @@ paths:
       summary: Get the child events for a given parent event, with a given `relType` and `eventType`.
       description: |-
         Retrieve all of the child events for a given parent event which relate to the parent
-        using the given `relType` and have the given `eventType`.
+        using the given `relType` and having the given `eventType`.
 
         Note that when paginating the `from` token should be "after" the `to` token in
         terms of topological ordering, because it is only possible to paginate "backwards"
