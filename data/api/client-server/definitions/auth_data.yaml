@@ -28,7 +28,6 @@ properties:
     type: string
 additionalProperties:
   description: Keys dependent on the login type
-  type: object
 example:
   type: "example.type.foo"
   session: "xxxxx"
