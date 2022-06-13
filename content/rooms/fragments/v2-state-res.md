@@ -52,12 +52,12 @@ event *E* in *S*.
 **Auth difference.**
 The *auth difference* is calculated by first calculating the full auth
 chain for each state *S*<sub>*i*</sub>, and then discarding the events
-belonging to each full auth chain. In symbols: if *C*(*S*) is the full auth
+belonging to each full auth chain. In symbols: if *F*(*S*) is the full auth
 chain of a collection of events *S*, the auth difference is
-    ∪<sub>*i*</sub> *C*(*S<sub>i*</sub>) - ∩<sub>*i*</sub> *C*(*S<sub>i</sub>*).
+    ∪<sub>*i*</sub> *F*(*S<sub>i*</sub>) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
 This can be [computed more efficiently](https://github.com/matrix-org/matrix-spec/issues/1118) as
-    *C*(*F*) - ∩<sub>*i*</sub> *C*(*S<sub>i* - *F*) ,
-where *F* is the full conflicted set.
+    *F*(*C*) - ∩<sub>*i*</sub> *F*(*S<sub>i* - *C*) ,
+where *C* is the conflicted state set.
 
 **Full conflicted set.**
 The *full conflicted set* is the union of the conflicted state set and
