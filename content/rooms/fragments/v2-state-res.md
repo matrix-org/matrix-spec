@@ -36,10 +36,10 @@ The key-value pairs (*K*, *V*) across all state maps *S<sub>i</sub>* can be
 divided into two collections.
 If a given key *K* is present in every *S<sub>i</sub>* with the same value *V* 
 in each state map, then the pair (*K*, *V*) belongs to the *unconflicted state map*.
-Otherwise (*K*, *V*) belongs to the *conflicted state set*.
+Otherwise, *V* belongs to the *conflicted state set*.
 
 Note that the unconflicted state map only has one event for each key *K*,
-whereas the conflicted state set may associate multiple events to the same key.
+whereas the conflicted state set may contain multiple events with the same key.
 
 **Auth chain.**
 The *auth chain* of an event *E* is the set containing all of *E*'s auth events,
