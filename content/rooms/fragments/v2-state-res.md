@@ -115,7 +115,7 @@ events: for events *x* and *y*, *x* &lt; *y* if
 
 1.  the mainline position of *x* is **greater** than
     the mainline position of *y* (i.e. the auth chain of 
-   *x* is based on an earlier event in the mainline than *y*); or
+    *x* is based on an earlier event in the mainline than *y*); or
 2.  the mainline positions of the events are the same, but *x*'s
     `origin_server_ts` is *less* than *y*'s `origin_server_ts`; or
 3.  the mainline positions of the events are the same and the events have the
