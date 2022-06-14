@@ -45,7 +45,9 @@ whereas the conflicted state set may associate multiple events to the same key.
 The *auth chain* of an event *E* is the set containing all of *E*'s auth events,
 all of *their* auth events, and so on recursively, stretching back to the
 start of the room. Put differently, these are the events reachable by walking
-the graph induced by an event's `auth_events` links. If *S* is a collection of
+the graph induced by an event's `auth_events` links.
+
+If *S* is a collection of
 events, the *full auth chain of S* is the union of the auth chains of every
 event *E* in *S*.
 
@@ -55,7 +57,8 @@ chain for each state *S*<sub>*i*</sub>, and then discarding the events
 belonging to each full auth chain. In symbols: if *F*(*S*) is the full auth
 chain of a collection of events *S*, the auth difference is
     ∪<sub>*i*</sub> *F*(*S<sub>i*</sub>) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
-This can be [computed more efficiently](https://github.com/matrix-org/matrix-spec/issues/1118) as
+
+This can be computed more efficiently as
     *F*(*C*) - ∩<sub>*i*</sub> *F*(*S<sub>i* - *C*) ,
 where *C* is the conflicted state set.
 
