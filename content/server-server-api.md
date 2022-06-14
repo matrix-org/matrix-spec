@@ -432,6 +432,16 @@ unspecified.
 For an `m.room.member` state event, the user given by the `state_key` of
 the event.
 
+{{% boxes/warning %}}
+Some [room versions](/rooms) accept power level values to be represented as
+strings rather than integers. This is strictly for backwards compatibility.
+A homeserver should take reasonable precautions to prevent users from sending
+new power level events with string values (eg: by rejecting the API request),
+and must never populate the default power levels in a room as string values.
+
+See the [room version specification](/rooms) for more information.
+{{% /boxes/warning %}}
+
 #### Authorization rules
 
 The rules governing whether an event is authorized depends on a set of

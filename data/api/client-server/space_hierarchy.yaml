@@ -58,7 +58,7 @@ paths:
             contents.
           x-example: true
         - in: query
-          type: number
+          type: integer
           name: limit
           description: |-
             Optional limit for the maximum number of rooms to include per response. Must be an integer
@@ -67,7 +67,7 @@ paths:
             Servers should apply a default value, and impose a maximum value to avoid resource exhaustion.
           x-example: 20
         - in: query
-          type: number
+          type: integer
           name: max_depth
           description: |-
             Optional limit for how far to go into the space. Must be a non-negative integer.
@@ -149,7 +149,7 @@ paths:
                                     format: int64
                                     description: The `origin_server_ts` for the event.
                                 required: [origin_server_ts]
-                      required: [room_type, children_state]
+                      required: [children_state]
               next_batch:
                 type: string
                 description: |-

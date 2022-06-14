@@ -1,1 +1,1 @@
-Adjust the OpenAPI specification so that the type `Flow information` is explicitly defined when the CS spec is rendered.
+Adjust the OpenAPI specification so that the type `Flow information` is explicitly defined when the client-server API is rendered.

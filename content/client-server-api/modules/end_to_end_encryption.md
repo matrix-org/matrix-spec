@@ -1531,7 +1531,18 @@ For example, Megolm sessions that were sent using the old session would
 have been lost. The client can attempt to retrieve the lost sessions
 through `m.room_key_request` messages.
 
+{{% boxes/note %}}
+Clients should send key requests for unknown sessions to all devices for
+the user which used the session rather than just the `device_id` or
+`sender_key` denoted on the event.
+
+This is due to a deprecation of the fields. See
+[`m.megolm.v1.aes-sha2`](#mmegolmv1aes-sha2) for more information.
+{{% /boxes/note %}}
+
 ##### `m.megolm.v1.aes-sha2`
+
+{{% changed-in v="1.3" %}}
 
 The name `m.megolm.v1.aes-sha2` corresponds to version 1 of the Megolm
 ratchet, as defined by the [Megolm
@@ -1580,10 +1591,36 @@ ratchet index that they have already decrypted. Care should be taken in
 order to avoid false positives, as a client may decrypt the same event
 twice as part of its normal processing.
 
-As with Olm events, clients must confirm that the `sender_key` belongs
-to the user who sent the message. The same reasoning applies, but the
-sender ed25519 key has to be inferred from the `keys.ed25519` property
-of the event which established the Megolm session.
+Similar to Olm events, clients should confirm that the user who sent the
+message corresponds to the user the message was expected to come from.
+For room events, this means ensuring the event's `sender`, `room_id`, and
+the recorded `session_id` match a trusted session (eg: the `session_id`
+is already known and validated to the client).
+
+{{% boxes/note %}}
+As of `v1.3`, the `sender_key` and `device_id` keys are **deprecated**. They
+SHOULD continue to be sent, however they MUST NOT be used to verify the
+message's source.
+
+Clients MUST NOT store or lookup sessions using the `sender_key` or `device_id`.
+
+In a future version of the specification the keys can be removed completely,
+including for sending new messages.
+{{% /boxes/note %}}
+
+{{% boxes/rationale %}}
+Removing the fields (eventually) improves privacy and security by masking the
+device which sent the encrypted message as well as reducing the client's
+dependence on untrusted data: a malicious server (or similar attacker) could
+change these values, and other devices/users can simply lie about them too.
+
+We can remove the fields, particularly the `sender_key`, because the `session_id`
+is already globally unique, therefore making storage and lookup possible without
+the need for added context from the `sender_key` or `device_id`.
+
+Removing the dependence on the fields gives a privacy gain while also increasing
+the security of messages transmitted over Matrix.
+{{% /boxes/rationale %}}
 
 In order to enable end-to-end encryption in a room, clients can send an
 `m.room.encryption` state event specifying `m.megolm.v1.aes-sha2` as its
@@ -1595,6 +1632,11 @@ that they can decrypt future messages encrypted using this session. An
 `m.room_key` event is used to do this. Clients must also handle
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
+
+When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
+
+* that the updated session data comes from a trusted source.
+* that the new session key has a lower message index than the existing session key.
 
 #### Protocol definitions
 

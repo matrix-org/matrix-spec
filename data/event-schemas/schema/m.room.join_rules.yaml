@@ -12,6 +12,10 @@ description: |
   * `restricted` - anyone able to satisfy at least one of the allow conditions is
     able to join the room without prior action. Otherwise, an invite is required.
     Only available in rooms [which support the join rule](/rooms/#feature-matrix).
+  * `knock_restricted` - a user can request an invite using the same functions offered
+    by the `knock` join rule, or can attempt to join having satisfied an allow condition
+    per the `restricted` join rule. Only available in rooms
+    [which support the join rule](/rooms/#feature-matrix).
   * `private` - reserved without implementation. No significant meaning.
 properties:
   content:
