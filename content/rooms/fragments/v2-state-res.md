@@ -88,8 +88,8 @@ Starting with *i* = 0, repeatedly fetch *P*<sub>*i*+1</sub>, the
 Increment *i* and repeat until *P<sub>i</sub>* has no `m.room.power_levels`
 event in its `auth_events`.
 The *mainline of P*<sub>0</sub> is the list of events
-    [*P*<sub>n</sub> , ... , *P*<sub>1</sub>, *P*<sub>0</sub>],
-ordered from oldest to newest.
+    [*P*<sub>0</sub> , *P*<sub>1</sub>, ... , *P<sub>n</sub>*],
+fetched in this way.
 
 Let *e* = *e<sub>0</sub>* be another event (possibly another
 `m.room.power_levels` event). We can compute a similar list of events
