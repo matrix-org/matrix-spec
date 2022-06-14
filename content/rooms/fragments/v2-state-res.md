@@ -109,7 +109,7 @@ Now compare these two lists as follows.
   than any integer.
 * In both cases, the *mainline position* of *e* is *i*.
 
-The *mainline ordering based on* *P* of a set of events is the ordering,
+Given mainline positions calculated from *P*, the *mainline ordering based on* *P* of a set of events is the ordering,
 from smallest to largest, using the following comparison relation on
 events: for events *x* and *y*, *x* &lt; *y* if
 
