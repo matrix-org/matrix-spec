@@ -113,11 +113,12 @@ The *mainline ordering based on* *P* of a set of events is the ordering,
 from smallest to largest, using the following comparison relation on
 events: for events *x* and *y*, *x* &lt; *y* if
 
-1.  the position of *x* in the mainline of *P* is **greater** than
-    the position of *y* in the mainline of *P*; or
-2.  the positions of the events are the same, but *x*'s
+1.  the mainline position of *x* is **greater** than
+    the mainline position of *y* in the mainline of *P* (i.e. the auth chain of 
+*x* is based on an earlier event in the mainline than *y*); or
+2.  the mainline positions of the events are the same, but *x*'s
     `origin_server_ts` is *less* than *y*'s `origin_server_ts`; or
-3.  the positions of the events are the same and the events have the
+3.  the mainline positions of the events are the same and the events have the
     same `origin_server_ts`, but *x*'s `event_id` is *less* than *y*'s
     `event_id`.
 
