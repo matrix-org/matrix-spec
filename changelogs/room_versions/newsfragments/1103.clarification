@@ -1,1 +1,1 @@
-Auth rules: Clarify behaviour around the `m.federate` field in `m.room.create` events.
+For all room versions: Add `m.federate` to the authorization rules, as originally intended.
