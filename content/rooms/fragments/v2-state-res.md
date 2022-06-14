@@ -52,9 +52,9 @@ events, the *full auth chain of S* is the union of the auth chains of every
 event *E* in *S*.
 
 **Auth difference.**
-The *auth difference* is calculated by first calculating the full auth
-chain for each state *S*<sub>*i*</sub>, and then discarding the events
-belonging to each full auth chain. In symbols: if *F*(*S*) is the full auth
+For each state *S<sub>i</sub>*, compute its full auth chain.
+The *auth difference* is the set of events which belong to some, but not all,
+of these full auth chains. In symbols: if *F*(*S*) is the full auth
 chain of a collection of events *S*, the auth difference is
     ∪<sub>*i*</sub> *F*(*S<sub>i</sub>*) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
 
