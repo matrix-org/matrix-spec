@@ -107,7 +107,7 @@ Now compare these two lists as follows.
 * If such a *j* exists, then *e<sub>j</sub>* = *P<sub>i</sub>* for some unique
   index *i* ≥ 0. Otherwise set *i* = ∞, where ∞ is a sentinel value greater
   than any integer.
-* In both cases, the *position of e in the mainline of P* is *i*.
+* In both cases, the *mainline position* of *e* is *i*.
 
 The *mainline ordering based on* *P* of a set of events is the ordering,
 from smallest to largest, using the following comparison relation on
