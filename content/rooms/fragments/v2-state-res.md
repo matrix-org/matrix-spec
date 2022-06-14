@@ -56,10 +56,10 @@ The *auth difference* is calculated by first calculating the full auth
 chain for each state *S*<sub>*i*</sub>, and then discarding the events
 belonging to each full auth chain. In symbols: if *F*(*S*) is the full auth
 chain of a collection of events *S*, the auth difference is
-    ∪<sub>*i*</sub> *F*(*S<sub>i*</sub>) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
+    ∪<sub>*i*</sub> *F*(*S<sub>i</sub>*) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
 
 This can be computed more efficiently as
-    *F*(*C*) - ∩<sub>*i*</sub> *F*(*S<sub>i* - *C*) ,
+    *F*(*C*) - ∩<sub>*i*</sub> *F*(*S*<sub>*i* - *C*</sub>) ,
 where *C* is the conflicted state set.
 
 **Full conflicted set.**
