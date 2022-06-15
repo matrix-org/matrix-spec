@@ -184,6 +184,7 @@ paths:
                           description: The `pushkey` given when the pusher was created.
                         pushkey_ts:
                           type: integer
+                          format: int64
                           description: |-
                             The unix timestamp (in seconds) when the
                             pushkey was last updated.

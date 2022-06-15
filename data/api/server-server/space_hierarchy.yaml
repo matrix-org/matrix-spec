@@ -154,7 +154,7 @@ paths:
                             - type: object
                               properties:
                                 origin_server_ts:
-                                  type: number
+                                  type: integer
                                   format: int64
                                   description: The `origin_server_ts` for the event.
                               required: [origin_server_ts]

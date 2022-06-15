@@ -126,6 +126,7 @@ paths:
                       description: The ID of the room in which the event was posted.
                     ts:
                       type: integer
+                      format: int64
                       description: |-
                         The unix timestamp at which the event notification was sent,
                         in milliseconds.

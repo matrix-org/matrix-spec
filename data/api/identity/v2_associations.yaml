@@ -68,6 +68,7 @@ paths:
                 description: The address of the 3pid being looked up.
               validated_at:
                 type: integer
+                format: int64
                 description: |-
                   Timestamp, in milliseconds, indicating the time that the 3pid
                   was validated.
@@ -174,12 +175,15 @@ paths:
                 description: The Matrix user ID associated with the 3pid.
               not_before:
                 type: integer
+                format: int64
                 description: A unix timestamp before which the association is not known to be valid.
               not_after:
                 type: integer
+                format: int64
                 description: A unix timestamp after which the association is not known to be valid.
               ts:
                 type: integer
+                format: int64
                 description: The unix timestamp at which the association was verified.
               signatures:
                 type: object
