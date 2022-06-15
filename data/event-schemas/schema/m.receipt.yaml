@@ -27,7 +27,8 @@
                                     "x-pattern": "$USER_ID",
                                     "properties": {
                                         "ts": {
-                                            "type": "number",
+                                            "type": "integer",
+                                            "format": "int64",
                                             "description": "The timestamp the receipt was sent at."
                                         }
                                     }
