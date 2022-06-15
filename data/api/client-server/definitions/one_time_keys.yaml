@@ -1,0 +1,24 @@
+---
+title: OneTimeKeys
+type: object
+description: |-
+  One-time public keys.  The names of the properties should be in the format
+  `<algorithm>:<key_id>`. The format of the key is determined
+  by the [key algorithm](/client-server-api/#key-algorithms).
+additionalProperties:
+  oneOf:
+    - type: string
+    - type: object
+      properties:
+        key:
+          type: string
+          description: The key, encoded using unpadded base64.
+        signatures:
+          type: object
+          description: |-
+            Signature for the device. Mapped from user ID to signature object,
+            containing mapping from _key signing identifier_ to the signature
+            (see also: https://spec.matrix.org/v1.2/appendices/#signing-json)
+          additionalProperties:
+            type: object
+      required: ['key', 'signatures']
