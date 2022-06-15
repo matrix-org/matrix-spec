@@ -52,6 +52,9 @@ current_version_url = "https://spec.matrix.org/latest"
 #major = "1"
 #minor = "2"
 #release_date = "February 02, 2022"
+# Released versions to show in the version dropdown. Th template will also include a "historical" entry,
+# and (if the status above is "stable") an "unstable" entry.
+history = [ "unstable", "v1.2", "v1.1", "historical" ]
 
 # User interface configuration
 [params.ui]
