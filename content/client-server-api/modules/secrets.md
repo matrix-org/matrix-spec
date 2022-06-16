@@ -276,7 +276,7 @@ Example:
 #### Sharing
 
 To request a secret from other devices, a client sends an
-`m.secret.requests` device event with `action` set to `request` and
+`m.secret.request` device event with `action` set to `request` and
 `name` set to the identifier of the secret. A device that wishes to
 share the secret will reply with an `m.secret.send` event, encrypted
 using olm. When the original client obtains the secret, it sends an
