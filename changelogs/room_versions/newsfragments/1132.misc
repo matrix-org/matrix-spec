@@ -1,1 +1,0 @@
-Revert #1119. The stylistic changes were correct, but the sentence `This can be computed more efficiently as...` was incorrect.
