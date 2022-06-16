@@ -47,20 +47,13 @@ all of *their* auth events, and so on recursively, stretching back to the
 start of the room. Put differently, these are the events reachable by walking
 the graph induced by an event's `auth_events` links.
 
-If *S* is a collection of
-events, the *full auth chain of S* is the union of the auth chains of every
-event *E* in *S*.
-
 **Auth difference.**
-For each state *S<sub>i</sub>*, compute its full auth chain.
-The *auth difference* is the set of events which belong to some, but not all,
-of these full auth chains. In symbols: if *F*(*S*) is the full auth
-chain of a collection of events *S*, the auth difference is
-    ∪<sub>*i*</sub> *F*(*S<sub>i</sub>*) - ∩<sub>*i*</sub> *F*(*S<sub>i</sub>*).
-
-This can be computed more efficiently as
-    *F*(*C*) - ∩<sub>*i*</sub> *F*(*S*<sub>*i* - *C*</sub>) ,
-where *C* is the conflicted state set.
+The *auth difference* is calculated by first calculating the full auth
+chain for each state *S*<sub>*i*</sub>, that is the union of the auth
+chains for each event in *S*<sub>*i*</sub>, and then taking every event
+that doesn't appear in every auth chain. If *C*<sub>*i*</sub> is the
+full auth chain of *S*<sub>*i*</sub>, then the auth difference is
+ ∪ *C*<sub>*i*</sub> −  ∩ *C*<sub>*i*</sub>.
 
 **Full conflicted set.**
 The *full conflicted set* is the union of the conflicted state set and
