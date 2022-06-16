@@ -8,9 +8,10 @@
 
 {{ $cover := .HasShortcode "blocks/cover" }}
 <nav class="js-navbar-scroll navbar navbar-expand navbar-light {{ if $cover}} td-navbar-cover {{ end }}flex-column flex-md-row td-navbar">
-        <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
-		<span class="navbar-logo">{{ with resources.Get "icons/logo.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}</span><span class="font-weight-bold">specification</span><span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
-	</a>
+	<span class="navbar-brand">
+		<a href="{{ .Site.Home.RelPermalink }}">
+			<span class="navbar-logo">{{ with resources.Get "icons/logo.svg" }}{{ ( . | minify).Content | safeHTML }}{{ end }}</span><span class="font-weight-bold">specification</span></a><span class="navbar-version"> &mdash; {{ partial "version-selector" . }}</span>
+	</span>
 	<div class="td-navbar-nav-scroll ml-md-auto" id="main_navbar">
 		<ul class="navbar-nav mt-2 mt-lg-0">
 
@@ -39,17 +40,38 @@
 </nav>
 
 
-{{ define "partials/version-string" }}
-    {{ $ret := "unstable version"}}
+{{ define "partials/version-selector" }}
+	{{ $version := .Site.Params.version }}
+	{{ $current := partial "current-version-short" . }}
+	<noscript>{{ partial "current-version-long" . }}</noscript>
+	<select id="version-selector">
+	{{ range $version.history }}
+		{{ if eq . $current }}
+		<option selected>{{ . }}</option>
+		{{ else }}
+		<option>{{ . }}</option>
+		{{ end }}
+	{{ end }}
+	</select>
+{{ end }}
 
-    {{ $status := .Site.Params.version.status }}
 
-    {{ if ne $status "unstable"}}
-        {{ $path := path.Join "changelogs" }}
+{{ define "partials/current-version-long" }}
+	{{ if eq .Site.Params.version.status "unstable" }}
+		unstable version
+    {{ else }}
+        version {{ partial "current-version-short" . }}
+	{{ end }}
+{{ end }}
 
-        {{/* produces a string similar to "version v1.5" */}}
-        {{ $ret = delimit (slice "version v" .Site.Params.version.major "." .Site.Params.version.minor) "" }}
-    {{ end }}
+
+{{ define "partials/current-version-short" }}
+    {{ $ret := "unstable"}}
+
+    {{ if ne .Site.Params.version.status "unstable"}}
+		{{/* produces a string similar to "version v1.5" */}}
+		{{ $ret = delimit (slice "v" .Site.Params.version.major "." .Site.Params.version.minor) "" }}
+	{{ end }}
 
     {{ return $ret }}
 {{ end }}
