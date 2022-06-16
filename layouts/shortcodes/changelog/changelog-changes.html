@@ -79,12 +79,7 @@
 <li>{{.name | safeHTML}}
 <p><ul>
         {{ range $changes_of_type }}
-<!-- TODO: TravisR: Remove after v1.3 release and just use matrix-spec links -->
-{{ if gt .ticket 3000 }}
-<li><a href="https://github.com/matrix-org/matrix-doc/issues/{{.ticket}}"><strong>{{ .ticket }}: </strong></a>{{ .description | markdownify }}</li>
-{{ else }}
 <li><a href="https://github.com/matrix-org/matrix-spec/issues/{{.ticket}}"><strong>{{ .ticket }}: </strong></a>{{ .description | markdownify }}</li>
-{{ end }}
         {{ end }}
 </ul></p>
 </li>
