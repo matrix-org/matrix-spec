@@ -1,1 +1,0 @@
-Clarify that state keys starting with `@` are in fact reserved. Regressed from [#3658](https://github.com/matrix-org/matrix-spec-proposals/pull/3658).

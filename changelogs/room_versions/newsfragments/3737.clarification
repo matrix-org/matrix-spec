@@ -1,1 +1,0 @@
-For room versions 7, 8, 9, and 10: fix join membership authorization rules when `join_rule` is `knock`.

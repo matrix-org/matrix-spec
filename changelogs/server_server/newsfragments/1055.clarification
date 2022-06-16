@@ -1,1 +1,0 @@
-Clarify that `valid_until_ts` is in milliseconds, like other timestamps used in Matrix.

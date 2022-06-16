@@ -1,1 +1,0 @@
-Clarify that the url field in `m.room.avatar` events is not required.

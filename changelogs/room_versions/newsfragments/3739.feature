@@ -1,1 +1,0 @@
-Update the default room version to 9 as per [MSC3589](https://github.com/matrix-org/matrix-spec-proposals/pull/3589).
