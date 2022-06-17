@@ -1,0 +1,1 @@
+For room versions 1 through 10, clarify that events with rejected `auth_events` must be rejected.
