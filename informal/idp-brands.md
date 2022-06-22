@@ -29,7 +29,7 @@ and instead refer to the brands individually.
 
 **Identifier**: `apple`
 
-Suitable for "Sign in with Apple": see https://developer.apple.com/design/human-interface-guidelines/sign-in-with-apple/overview/buttons/.
+Suitable for "Sign in with Apple": see https://appleid.apple.com/signinwithapple/button.
 
 
 ### Facebook
