@@ -74,14 +74,20 @@ paths:
         400:
           description: |-
             The request body is not a JSON object.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
             data.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         405:
           description: |-
             This `type` of account data is controlled by the server; it cannot be
             modified by clients.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
     get:
@@ -121,9 +127,13 @@ paths:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         404:
           description: |-
             No account data has been provided for this user with the given `type`.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
@@ -180,14 +190,20 @@ paths:
         400:
           description: |-
             The request body is not a JSON object.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
             data.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         405:
           description: |-
             This `type` of account data is controlled by the server; it cannot be
             modified by clients.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
     get:
@@ -234,9 +250,13 @@ paths:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
         404:
           description: |-
             No account data has been provided for this user and this room with the 
             given `type`.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
