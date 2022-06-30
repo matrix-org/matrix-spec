@@ -214,7 +214,8 @@ paths:
             type: object
         400:
           description: |-
-            The request body is not a JSON object.
+            The request body is not a JSON object, or the given `roomID` is not a valid
+            room ID.
           examples:
             application/json: {
               "errcode": "M_BAD_JSON",
@@ -286,6 +287,14 @@ paths:
             type: object
             example: {
               "custom_account_data_key": "custom_config_value"}
+        400:
+          description: |-
+            The given `roomID` is not a valid room ID.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "@notaroomid:example.org is not a valid room ID."
+            }
         403:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
