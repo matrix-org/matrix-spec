@@ -10,7 +10,9 @@ and can persist across installations on a particular device. Users may
 only view the account data for their own account.
 
 The account data may be either global or scoped to a particular room.
-There is no inheritance mechanism here: a given `type` of data missing from a room's account data does not fall back to the global account data with the same `type`.
+There is no inheritance mechanism here: a given `type` of data missing
+from a room's account data does not fall back to the global account
+data with the same `type`.
 
 #### Events
 
