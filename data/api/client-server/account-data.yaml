@@ -71,6 +71,9 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: |-
+            The request body is not a JSON object.
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
@@ -174,6 +177,9 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: |-
+            The request body is not a JSON object.
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
