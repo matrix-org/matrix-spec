@@ -71,6 +71,10 @@ paths:
             application/json: {}
           schema:
             type: object
+        403:
+          description: |-
+            The access token provided is not authorized to modify this user's account 
+            data.
       tags:
         - User data
     get:
@@ -106,6 +110,10 @@ paths:
             type: object
             example: {
               "custom_account_data_key": "custom_config_value"}
+        403:
+          description: |-
+            The access token provided is not authorized to retrieve this user's account 
+            data.
       tags:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
@@ -159,6 +167,10 @@ paths:
             application/json: {}
           schema:
             type: object
+        403:
+          description: |-
+            The access token provided is not authorized to modify this user's account 
+            data.
       tags:
         - User data
     get:
@@ -201,5 +213,9 @@ paths:
             type: object
             example: {
               "custom_account_data_key": "custom_config_value"}
+        403:
+          description: |-
+            The access token provided is not authorized to retrieve this user's account 
+            data.
       tags:
         - User data
