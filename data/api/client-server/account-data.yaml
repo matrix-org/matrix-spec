@@ -118,7 +118,7 @@ paths:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
     put:
-      summary: Set some account_data for the user.
+      summary: Set some account_data for the user that is specific to a room.
       description: |-
         Set some account_data for the client on a given room. This config is only
         visible to the user that set the account_data. The config will be synced to
@@ -174,7 +174,7 @@ paths:
       tags:
         - User data
     get:
-      summary: Get some account_data for the user.
+      summary: Get some account_data for the user that is specific to a room.
       description: |-
         Get some account_data for the client on a given room. This config is only
         visible to the user that set the account_data.
