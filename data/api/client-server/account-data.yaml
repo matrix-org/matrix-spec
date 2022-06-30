@@ -75,6 +75,10 @@ paths:
           description: |-
             The access token provided is not authorized to modify this user's account 
             data.
+        405:
+          description: |-
+            This `type` of account data is controlled by the server; it cannot be
+            modified by clients.
       tags:
         - User data
     get:
@@ -174,6 +178,10 @@ paths:
           description: |-
             The access token provided is not authorized to modify this user's account 
             data.
+        405:
+          description: |-
+            This `type` of account data is controlled by the server; it cannot be
+            modified by clients.
       tags:
         - User data
     get:
