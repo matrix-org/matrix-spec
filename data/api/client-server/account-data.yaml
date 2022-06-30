@@ -114,6 +114,9 @@ paths:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data.
+        404:
+          description: |-
+            No account data has been provided for this user with the given `type`.
       tags:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
@@ -217,5 +220,9 @@ paths:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data.
+        404:
+          description: |-
+            No account data has been provided for this user and this room with the 
+            given `type`.
       tags:
         - User data
