@@ -1220,7 +1220,7 @@ replace it with the new key based on the key metadata as follows:
     keep the key that has `is_verified` set to `true`;
 -   if they have the same values for `is_verified`, then it will keep
     the key with a lower `first_message_index`;
--   and finally, is `is_verified` and `first_message_index` are equal,
+-   and finally, if `is_verified` and `first_message_index` are equal,
     then it will keep the key with a lower `forwarded_count`.
 
 ###### Recovery key
