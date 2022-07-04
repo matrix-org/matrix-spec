@@ -1,0 +1,1 @@
+Use the `additionalProperties` field from the OpenAPI schemas to indicate that some JSON objects permit additional arbitrary key-value pairs.
