@@ -88,5 +88,5 @@
   but with (for example) different examples will be considered different.
 */}}
 {{ define "partials/clean-object" }}
-    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum) }}
+    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "additionalProperties" .additionalProperties) }}
 {{ end }}

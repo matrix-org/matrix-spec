@@ -14,6 +14,7 @@
 {{ $caption := .caption }}
 {{ $properties := .properties}}
 {{ $required := .required}}
+{{ $additionalProperties := .additionalProperties }}
 
 {{ if $properties }}
 
@@ -93,6 +94,29 @@
 
     {{ end }}
 
+   {{/* NB: the OpenAPI spec says "Consistent with JSON Schema, additionalProperties
+         defaults to true." Our schemas tend to omit additionalProperties; I think we
+         effectively assume it defaults to false. Therefore: we only output regarding
+         additionalProperties if it is explicitly set (i.e. is non-nil). */}}
+   {{ if (ne $additionalProperties nil )}}
+  <tr class="row-additional-properties">
+   <td colspan="3">
+        {{ if (and (reflect.IsMap $additionalProperties)) -}}
+            {{ if (index $additionalProperties "description") -}}
+May have additional properties: {{ $additionalProperties.description }}
+            {{ end }}
+        {{/* TODO: should we handle the case where additional properties are permitted,
+                    but must follow an explicit schema? */}}
+        {{ else if $additionalProperties -}}
+May have additional properties.
+        {{ else if (not $additionalProperties) -}}
+        {{/* At present we don't have any schema with additionalProperties: false.
+        But if we ever do, let's support it. */}}
+May **not** have additional properties.
+        {{ end }}
+   </td>
+  </tr>
+    {{ end }}
 </table>
 
 {{ end }}
