@@ -37,14 +37,14 @@ The rules are as follows:
         performed on receipt of a
         PDU](server-server-api/#checks-performed-on-receipt-of-a-pdu), reject.
     4. If there is no `m.room.create` event among the entries, reject.
-    5. If the `m.room.create` event content has the field `m.federate` set to `false`
-       and the `sender` domain of the event does not match the `sender` domain of
-       the create event, reject.
-3.  If type is `m.room.aliases`:
+3. If the `content` of the `m.room.create` event in the room state has the
+   property `m.federate` set to `false`, and the `sender` domain of the event
+   does not match the `sender` domain of the create event, reject.
+4.  If type is `m.room.aliases`:
     1.  If event has no `state_key`, reject.
     2.  If sender's domain doesn't matches `state_key`, reject.
     3.  Otherwise, allow.
-4.  If type is `m.room.member`:
+5.  If type is `m.room.member`:
     1.  If no `state_key` key or `membership` key in `content`, reject.
     2.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the
@@ -101,15 +101,15 @@ The rules are as follows:
             than the `sender`'s power level, allow.
         3.  Otherwise, reject.
     6.  Otherwise, the membership is unknown. Reject.
-5.  If the `sender`'s current membership state is not `join`, reject.
-6.  If type is `m.room.third_party_invite`:
+6.  If the `sender`'s current membership state is not `join`, reject.
+7.  If type is `m.room.third_party_invite`:
     1.  Allow if and only if `sender`'s current power level is greater
         than or equal to the *invite level*.
-7.  If the event type's *required power level* is greater than the
+8.  If the event type's *required power level* is greater than the
     `sender`'s power level, reject.
-8. If the event has a `state_key` that starts with an `@` and does not
+9. If the event has a `state_key` that starts with an `@` and does not
     match the `sender`, reject.
-9. If type is `m.room.power_levels`:
+10. If type is `m.room.power_levels`:
     1.  If `users` key in `content` is not a dictionary with keys that
         are valid user IDs with values that are integers (or a string
         that is an integer), reject.
@@ -133,14 +133,14 @@ The rules are as follows:
         1.  If the current value is equal to the `sender`'s current
             power level, reject.
     6.  Otherwise, allow.
-10. If type is `m.room.redaction`:
+11. If type is `m.room.redaction`:
     1.  If the `sender`'s power level is greater than or equal to the
         *redact level*, allow.
     2.  If the domain of the `event_id` of the event being redacted is
         the same as the domain of the `event_id` of the
         `m.room.redaction`, allow.
     3.  Otherwise, reject.
-11. Otherwise, allow.
+12. Otherwise, allow.
 
 {{% boxes/note %}}
 Some consequences of these rules:
