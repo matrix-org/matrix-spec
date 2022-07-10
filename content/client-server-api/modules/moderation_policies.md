@@ -91,7 +91,7 @@ included in the ban list.
 #### Events
 
 The `entity` described by the state events can contain `*` and `?` to
-match zero or more and one or more characters respectively. Note that
+match zero or more characters and exactly one character respectively. Note that
 rules against rooms can describe a room ID or room alias - the
 subscriber is responsible for resolving the alias to a room ID if
 desired.
