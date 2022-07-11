@@ -15,7 +15,7 @@ properties:
   entity:
     description: |-
       The entity affected by this rule. Glob characters `*` and `?` can be used
-      to match zero or more and one or more characters respectively.
+      to match zero or more characters or exactly one character respectively.
     type: string
   recommendation:
     description: The suggested action to take. Currently only `m.ban` is specified.
