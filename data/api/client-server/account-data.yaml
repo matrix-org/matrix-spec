@@ -73,7 +73,7 @@ paths:
             type: object
         400:
           description: |-
-            The request body is not a JSON object.
+            The request body is not a JSON object. Errcode: `M_BAD_JSON`.
           examples:
             application/json: {
               "errcode": "M_BAD_JSON",
@@ -84,7 +84,7 @@ paths:
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
-            data.
+            data. Errcode: `M_FORBIDDEN`.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN",
@@ -100,7 +100,7 @@ paths:
             }
           description: |-
             This `type` of account data is controlled by the server; it cannot be
-            modified by clients.
+            modified by clients. Errcode: `M_BAD_JSON`.
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
       tags:
@@ -141,7 +141,7 @@ paths:
         403:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
-            data.
+            data. Errcode: `M_FORBIDDEN`.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN",
@@ -152,6 +152,7 @@ paths:
         404:
           description: |-
             No account data has been provided for this user with the given `type`.
+            Errcode: `M_NOT_FOUND`.
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
@@ -214,8 +215,8 @@ paths:
             type: object
         400:
           description: |-
-            The request body is not a JSON object, or the given `roomID` is not a valid
-            room ID.
+            The request body is not a JSON object (errcode `M_BAD_JSON`), or the
+            given `roomID` is not a valid room ID (errcode `M_INVALID_PARAM`).
           examples:
             application/json: {
               "errcode": "M_BAD_JSON",
@@ -226,7 +227,7 @@ paths:
         403:
           description: |-
             The access token provided is not authorized to modify this user's account 
-            data.
+            data. Errcode: `M_FORBIDDEN`.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN",
@@ -237,7 +238,7 @@ paths:
         405:
           description: |-
             This `type` of account data is controlled by the server; it cannot be
-            modified by clients.
+            modified by clients. Errcode: `M_BAD_JSON`.
           examples:
             application/json: {
               "errcode": "M_BAD_JSON",
@@ -289,7 +290,7 @@ paths:
               "custom_account_data_key": "custom_config_value"}
         400:
           description: |-
-            The given `roomID` is not a valid room ID.
+            The given `roomID` is not a valid room ID. Errcode: `M_INVALID_PARAM`.
           examples:
             application/json: {
               "errcode": "M_INVALID_PARAM",
@@ -298,7 +299,7 @@ paths:
         403:
           description: |-
             The access token provided is not authorized to retrieve this user's account 
-            data.
+            data. Errcode: `M_FORBIDDEN`.
           examples:
             application/json: {
               "errcode": "M_FORBIDDEN",
@@ -309,7 +310,7 @@ paths:
         404:
           description: |-
             No account data has been provided for this user and this room with the 
-            given `type`.
+            given `type`. Errcode: `M_NOT_FOUND`.
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
