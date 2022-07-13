@@ -73,10 +73,10 @@ paths:
             type: object
         400:
           description: |-
-            The request body is not a JSON object. Errcode: `M_BAD_JSON`.
+            The request body is not a JSON object. Errcode: `M_NOT_JSON`.
           examples:
             application/json: {
-              "errcode": "M_BAD_JSON",
+              "errcode": "M_NOT_JSON",
               "error": "Content must be a JSON object."
             }
           schema:
@@ -215,11 +215,11 @@ paths:
             type: object
         400:
           description: |-
-            The request body is not a JSON object (errcode `M_BAD_JSON`), or the
+            The request body is not a JSON object (errcode `M_NOT_JSON`), or the
             given `roomID` is not a valid room ID (errcode `M_INVALID_PARAM`).
           examples:
             application/json: {
-              "errcode": "M_BAD_JSON",
+              "errcode": "M_NOT_JSON",
               "error": "Content must be a JSON object."
             }
           schema:
