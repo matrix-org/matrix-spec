@@ -86,6 +86,7 @@ paths:
       tags:
         - End-to-end encryption
     get:
+      x-addedInMatrixVersion: "1.1"
       summary: Get information about the latest backup version.
       description: |-
         Get information about the latest backup version.
@@ -241,6 +242,7 @@ paths:
       tags:
         - End-to-end encryption
     put:
+      x-addedInMatrixVersion: "1.1"
       summary: Update information about an existing backup.
       description: |-
         Update information about an existing backup.  Only `auth_data` can be modified.
@@ -330,6 +332,7 @@ paths:
       tags:
         - End-to-end encryption
     delete:
+      x-addedInMatrixVersion: "1.1"
       summary: Delete an existing key backup.
       description: |-
         Delete an existing key backup. Both the information about the backup,
@@ -375,6 +378,7 @@ paths:
         - End-to-end encryption
   "/room_keys/keys/{roomId}/{sessionId}":
     put:
+      x-addedInMatrixVersion: "1.1"
       summary: Store a key in the backup.
       description: |-
         Store a key in the backup.
@@ -447,6 +451,7 @@ paths:
       tags:
         - End-to-end encryption
     get:
+      x-addedInMatrixVersion: "1.1"
       summary: Retrieve a key from the backup.
       description: |-
         Retrieve a key from the backup.
@@ -494,6 +499,7 @@ paths:
       tags:
         - End-to-end encryption
     delete:
+      x-addedInMatrixVersion: "1.1"
       summary: Delete a key from the backup.
       description: |-
         Delete a key from the backup.
@@ -558,6 +564,7 @@ paths:
         - End-to-end encryption
   "/room_keys/keys/{roomId}":
     put:
+      x-addedInMatrixVersion: "1.1"
       summary: Store several keys in the backup for a given room.
       description: |-
         Store several keys in the backup for a given room.
@@ -634,6 +641,7 @@ paths:
       tags:
         - End-to-end encryption
     get:
+      x-addedInMatrixVersion: "1.1"
       summary: Retrieve the keys from the backup for a given room.
       description: |-
         Retrieve the keys from the backup for a given room.
@@ -679,6 +687,7 @@ paths:
       tags:
         - End-to-end encryption
     delete:
+      x-addedInMatrixVersion: "1.1"
       summary: Delete the keys from the backup for a given room.
       description: |-
         Delete the keys from the backup for a given room.
@@ -834,6 +843,7 @@ paths:
       tags:
         - End-to-end encryption
     get:
+      x-addedInMatrixVersion: "1.1"
       summary: Retrieve the keys from the backup.
       description: |-
         Retrieve the keys from the backup.
@@ -897,6 +907,7 @@ paths:
       tags:
         - End-to-end encryption
     delete:
+      x-addedInMatrixVersion: "1.1"
       summary: Delete the keys from the backup.
       description: |-
         Delete the keys from the backup.
