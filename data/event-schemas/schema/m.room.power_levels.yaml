@@ -58,8 +58,8 @@ properties:
         type: object
       events_default:
         description: |-
-          The default level required to send message events. Can be
-          overridden by the `events` key.  Defaults to 0 if unspecified.
+            The default level required to send message events. Can be
+            overridden by the `events` key.  Defaults to 0 if unspecified.
         type: integer
       invite:
         description: The level required to invite a user. Defaults to 0 if unspecified.
@@ -72,8 +72,8 @@ properties:
         type: integer
       state_default:
         description: |-
-          The default level required to send state events. Can be overridden
-          by the `events` key. Defaults to 50 if unspecified.
+            The default level required to send state events. Can be overridden
+            by the `events` key. Defaults to 50 if unspecified.
         type: integer
       users:
         additionalProperties:
@@ -83,9 +83,9 @@ properties:
         type: object
       users_default:
         description: |-
-          The default power level for every user in the room, unless their
-          `user_id` is mentioned in the `users` key. Defaults to 0 if
-          unspecified.
+            The default power level for every user in the room, unless their
+            `user_id` is mentioned in the `users` key. Defaults to 0 if
+            unspecified.
         type: integer
       notifications:
         properties:
@@ -95,14 +95,14 @@ properties:
         additionalProperties:
           type: integer
         description: |-
-          The power level requirements for specific notification types.
-          This is a mapping from `key` to power level for that notifications key.
+            The power level requirements for specific notification types.
+            This is a mapping from `key` to power level for that notifications key.
         title: Notifications
         type: object
     type: object
   state_key:
     description: A zero-length string.
-    pattern: "^$"
+    pattern: '^$'
     type: string
   type:
     enum:
