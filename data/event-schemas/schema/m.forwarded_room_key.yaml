@@ -22,10 +22,11 @@ properties:
           The Curve25519 key of the device which initiated the session originally.
       session_id:
         type: string
-        description: The ID of the session that the key is for.
+        description: The ID of the Megolm session that the key is for.
       session_key:
         type: string
-        description: The key to be exchanged.
+        description: The Megolm key to be exchanged, in [session export
+          format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).
       sender_claimed_ed25519_key:
         type: string
         description: |-

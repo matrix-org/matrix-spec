@@ -1257,10 +1257,10 @@ the following format:
 
 `AuthData`
 
-| Parameter  | Type       | Description                                                                                      |
-| -----------| -----------|--------------------------------------------------------------------------------------------------|
-| public_key | string     | **Required.** The curve25519 public key used to encrypt the backups, encoded in unpadded base64. |
-| signatures | Signatures | Optional. Signatures of the ``auth_data``, as Signed JSON                                        |
+| Parameter  | Type       | Description                                                                                                           |
+| -----------| -----------|---------------------------------------------------------------------------------------------------------------------- |
+| public_key | string     | **Required.** The curve25519 public key used to encrypt the backups, encoded in unpadded base64.                      |
+| signatures | Signatures | *Optional.* Signatures of the ``auth_data``. The signature is calculated using the process described at Signing JSON. |
 
 The `session_data` field in the backups is constructed as follows:
 
@@ -1269,11 +1269,11 @@ The `session_data` field in the backups is constructed as follows:
 
 | Parameter                       | Type              | Description                                                                                                                                                                 |
 | --------------------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| algorithm                       | string            | **Required.** The end-to-end message encryption algorithm that the key is for.  Must be `m.megolm.v1.aes-sha2`.                                                             |
+| algorithm                       | string            | **Required.** The end-to-end message encryption algorithm that the key is for. Must be `m.megolm.v1.aes-sha2`.                                                             |
 | forwarding_curve25519_key_chain | [string]          | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.                                   |
-| sender_key                      | string            | **Required.** Unpadded base64-encoded device curve25519 key.                                                                                                                |
-| sender_claimed_keys             | {string: string}  | **Required.** A map from algorithm name (`ed25519`) to the identity key for the sending device.                                                                             |
-| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session-sharing format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-sharing-format).  |
+| sender_key                      | string            | **Required.** Unpadded base64-encoded device Curve25519 key.                                                                                                                |
+| sender_claimed_keys             | {string: string}  | **Required.** A map from the algorithm name (`ed25519`) to the corresponding device key of the sending device.                                                              |
+| session_key                     | string            | **Required.** Unpadded base64-encoded session key in [session export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).  |
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1346,15 +1346,15 @@ objects described as follows:
 
 `SessionData`
 
-| Parameter                         | Type             | Description                                                                                                                           |
-|-----------------------------------|------------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| algorithm                         | string           | Required. The encryption algorithm that the session uses. Must be `m.megolm.v1.aes-sha2`.                                             |
-| forwarding_curve25519_key_chain   | [string]         | Required. Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events. |
-| room_id                           | string           | Required. The room where the session is used.                                                                                         |
-| sender_key                        | string           | Required. The Curve25519 key of the device which initiated the session originally.                                                    |
-| sender_claimed_keys               | {string: string} | Required. The Ed25519 key of the device which initiated the session originally.                                                       |
-| session_id                        | string           | Required. The ID of the session.                                                                                                      |
-| session_key                       | string           | Required. The key for the session.                                                                                                    |
+| Parameter                         | Type             | Description                                                                                                                               |
+|-----------------------------------|------------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| algorithm                         | string           | **Required.** The encryption algorithm that the session uses. Must be `m.megolm.v1.aes-sha2`.                                             |
+| forwarding_curve25519_key_chain   | [string]         | **Required.** Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events. |
+| room_id                           | string           | **Required.** The room where the session is used.                                                                                         |
+| sender_key                        | string           | **Required.** The Curve25519 key of the device which initiated the session originally.                                                    |
+| sender_claimed_keys               | {string: string} | **Required.** The Ed25519 key of the device which initiated the session originally.                                                       |
+| session_id                        | string           | **Required.** The Megolm session ID.                                                                                                      |
+| session_key                       | string           | **Required.** The Megolm session key in the [session export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).|
 
 This is similar to the format before encryption used for the session
 keys in [Server-side key backups](#server-side-key-backups) but adds the
@@ -1372,7 +1372,7 @@ Example:
         "room_id": "!Cuyf34gef24t:localhost",
         "sender_key": "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU",
         "sender_claimed_keys": {
-            "ed25519": "<device ed25519 identity key>",
+            "ed25519": "<device ed25519 key>",
         },
         "session_id": "X3lUlvLELLYxeTx4yOVu6UDpasGEVO0Jbu+QFnm0cKQ",
         "session_key": "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
@@ -1498,9 +1498,9 @@ should use the session from which it last received and successfully
 decrypted a message. For these purposes, a session that has not received
 any messages should use its creation time as the time that it last
 received a message. A client may expire old sessions by defining a
-maximum number of olm sessions that it will maintain for each device,
+maximum number of Olm sessions that it will maintain for each device,
 and expiring sessions on a Least Recently Used basis. The maximum number
-of olm sessions maintained per device should be at least 4.
+of Olm sessions maintained per device should be at least 4.
 
 ###### Recovering from undecryptable messages
 
@@ -1740,12 +1740,12 @@ requests](#key-requests), the device from which the key is being
 requested may want to tell the requester that it is purposely not
 sharing the key.
 
-If Alice withholds a megolm session from Bob for some messages in a
+If Alice withholds a Megolm session from Bob for some messages in a
 room, and then later on decides to allow Bob to decrypt later messages,
-she can send Bob the megolm session, ratcheted up to the point at which
+she can send Bob the Megolm session, ratcheted up to the point at which
 she allows Bob to decrypt the messages. If Bob logs into a new device
 and uses key sharing to obtain the decryption keys, the new device will
-be sent the megolm sessions that have been ratcheted up. Bob's old
+be sent the Megolm sessions that have been ratcheted up. Bob's old
 device can include the reason that the session was initially not shared
 by including a `withheld` property in the `m.forwarded_room_key` message
 that is an object with the `code` and `reason` properties from the
