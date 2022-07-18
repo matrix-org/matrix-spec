@@ -5,6 +5,8 @@ description: |-
   This event specifies the minimum level a user must have in order to perform a
   certain action. It also specifies the levels of each user in the room.
 
+  The allowed range of power levels is specified by the [Canonical JSON specification](https://spec.matrix.org/v1.3/appendices/#canonical-json).
+
   If a `user_id` is in the `users` list, then that `user_id` has the
   associated power level. Otherwise they have the default level
   `users_default`. If `users_default` is not supplied, it is assumed to be
