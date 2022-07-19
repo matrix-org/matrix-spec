@@ -4,6 +4,8 @@
 
   * `title`: optional caption for the table
 
+  * `anchor`: optional HTML element id for the table
+
   * `properties`: dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
@@ -19,7 +21,7 @@
 
 {{ if $properties }}
 
-<table class>
+<table{{ if .anchor }} id="{{ .anchor }}"{{ end }}>
  {{ with $title }}
  <caption>{{ . }}</caption>
  {{ end }}
