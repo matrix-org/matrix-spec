@@ -53,7 +53,7 @@
 
 <h2>Content</h2>
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" $event_data.properties.content }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event_data.properties.content) }}
 
 {{ range $additional_types }}
     {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}

@@ -38,7 +38,7 @@
         {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body_parameter.schema "path" $path) }}
         {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
-        {{ $additional_types := partial "json-schema/resolve-additional-types" $schema }}
+        {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema) }}
         {{ $additional_types = uniq $additional_types }}
         {{ range $additional_types }}
             {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}

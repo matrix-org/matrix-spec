@@ -35,7 +35,7 @@
 
 {{ $event = merge $event (dict "title" "") }}
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" $event }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event) }}
 {{ range $additional_types }}
     {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}
 {{end}}

@@ -45,7 +45,7 @@
 
 </summary>
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" $definition }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $definition) }}
 {{ $additional_types = uniq $additional_types }}
 
 {{ range $additional_types }}
