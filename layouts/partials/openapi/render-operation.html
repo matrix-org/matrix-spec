@@ -22,13 +22,14 @@
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
 {{ $path := .path }}
+{{ $anchor := anchorize $endpoint }}
 
 <section class="rendered-data http-api {{ $method }}">
 
 <details {{ if not site.Params.ui.rendered_data_collapsed }}open{{ end }}>
 <summary>
 
-  <h1 id="{{ lower $method }}{{ anchorize $endpoint }}">
+  <h1 id="{{ lower $method }}{{ $anchor }}">
    <span class="http-api-method {{ $method }}">{{ $method }}</span>
    <span class="endpoint{{ if $operation_data.deprecated }} deprecated-inline{{ end }}">{{ $endpoint }}</span>
   </h1>
@@ -63,9 +64,9 @@
 </table>
 
 <hr/>
-{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "path" $path) }}
+{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "path" $path "anchor_base" $anchor ) }}
 <hr/>
-{{ partial "openapi/render-responses" (dict "responses"  $operation_data.responses  "path" $path) }}
+{{ partial "openapi/render-responses" (dict "responses"  $operation_data.responses  "path" $path "anchor_base" $anchor ) }}
 
 </details>
 
