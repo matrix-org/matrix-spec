@@ -56,7 +56,7 @@
 {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event_data.properties.content) }}
 
 {{ range $additional_types }}
-    {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}
+    {{ partial "openapi/render-object-table" . }}
 {{end}}
 
 <h2>Examples</h2>

@@ -2,23 +2,25 @@
 
   Render a table listing the properties of an object, given:
 
-  * `caption`: optional caption for the table
+  * `title`: optional caption for the table
+
   * `properties`: dictionary of the properties to list, each given as:
-  `property_name` : `property_data`
+    `property_name` : `property_data`
+
   * `required`: array containing the names of required properties.
-  In some cases (such as response body specifications) this isn't used, and
-  instead properties have a `required` boolean attribute. We support this too.
+    In some cases (such as response body specifications) this isn't used, and
+    instead properties have a `required` boolean attribute. We support this too.
 
 */}}
 
-{{ $caption := .caption }}
+{{ $title := .title }}
 {{ $properties := .properties}}
 {{ $required := .required}}
 
 {{ if $properties }}
 
 <table class>
- {{ with $caption }}
+ {{ with $title }}
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
