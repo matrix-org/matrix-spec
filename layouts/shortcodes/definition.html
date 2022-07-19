@@ -18,6 +18,10 @@
 {{/* The definition is referenced by the .path parameter */}}
 {{ $definition := index .Site.Data $pieces }}
 
+{{ if not $definition }}
+  {{ errorf "site data %s not found" $path }}
+{{ end }}
+
 {{/* The base path, which we use to resolve $ref, omits the last component */}}
 {{ $pieces = first (sub (len $pieces) 1) $pieces}}
 {{ $path = delimit $pieces "/" }}
