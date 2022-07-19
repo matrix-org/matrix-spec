@@ -4,6 +4,7 @@
 
   * `parameters`: OpenAPI/Swagger data specifying the parameters
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
+  * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
   This template renders:
   * the "simple parameters" (header, path, query parameters)
@@ -14,6 +15,7 @@
 
 {{ $parameters := .parameters }}
 {{ $path := .path }}
+{{ $anchor_base := .anchor_base }}
 
 <h2>Request</h2>
 
@@ -38,10 +40,10 @@
         {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body_parameter.schema "path" $path) }}
         {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
-        {{ $additional_types := partial "json-schema/resolve-additional-types" $schema }}
+        {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
         {{ $additional_types = uniq $additional_types }}
         {{ range $additional_types }}
-            {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}
+            {{ partial "openapi/render-object-table" . }}
         {{ end }}
 
 <h3>Request body example</h3>
