@@ -7,6 +7,9 @@
   Given a schema object, this template finds all nested objects under that
   schema.
 
+  Assumes that "resolve-refs" and "resolve-allof" has already been called on the
+  input schema.
+
   It "cleans" each object by copying only the parts of the objects that
   the renderer needs, and adds the result to an array, `additional_objects`.
 
@@ -16,7 +19,7 @@
 
 */}}
 
-{{ $this_object := partial "json-schema/resolve-allof" . }}
+{{ $this_object := . }}
 {{ $additional_objects := slice }}
 
 {{ if eq $this_object.type "object" }}
@@ -71,7 +74,11 @@
 {{ define "partials/get-additional-objects" }}
     {{ $additional_objects := .additional_objects }}
 
+    /* although we expect resolve-allof to be called on the input, resolve-allof does not recurse into
+     * nested objects, so we have to call it again.
+     */
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
+
     {{ $more_objects := partial "json-schema/resolve-additional-types" $this_object }}
     {{/*
       As far as I know we don't have something like Array.concat(), so add them one at a time
