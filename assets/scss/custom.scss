@@ -323,12 +323,15 @@ footer {
   table {
     table-layout: fixed;
     width: 100%;
+    margin: 1.7rem 0;
+    border-bottom: 2px solid $gray-200;
 
     caption {
       caption-side: top;
       color: $dark;
       font-size: 1rem;
       font-weight: $font-weight-bold;
+      border-top: 2px solid $gray-200;
     }
 
     th, td, caption {
