@@ -103,7 +103,7 @@
    <td colspan="3">
         {{ if (and (reflect.IsMap $additionalProperties)) -}}
             {{ if (index $additionalProperties "description") -}}
-Notes on additional properties: {{ $additionalProperties.description }}
+<em>Notes on additional properties:</em> {{ $additionalProperties.description }}
             {{ end }}
             {{/* TODO: should we handle the case where additional properties are
                        permitted, but must follow an explicit schema? */}}
