@@ -2,24 +2,28 @@
 
   Render a table listing the properties of an object, given:
 
-  * `caption`: optional caption for the table
+  * `title`: optional caption for the table
+
+  * `anchor`: optional HTML element id for the table
+
   * `properties`: dictionary of the properties to list, each given as:
-  `property_name` : `property_data`
+    `property_name` : `property_data`
+
   * `required`: array containing the names of required properties.
-  In some cases (such as response body specifications) this isn't used, and
-  instead properties have a `required` boolean attribute. We support this too.
+    In some cases (such as response body specifications) this isn't used, and
+    instead properties have a `required` boolean attribute. We support this too.
 
 */}}
 
-{{ $caption := .caption }}
+{{ $title := .title }}
 {{ $properties := .properties}}
 {{ $required := .required}}
 {{ $additionalProperties := .additionalProperties }}
 
 {{ if $properties }}
 
-<table class>
- {{ with $caption }}
+<table{{ if .anchor }} id="{{ .anchor }}"{{ end }}>
+ {{ with $title }}
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
@@ -108,7 +112,7 @@
             {{/* TODO: should we handle the case where additional properties are
                        permitted, but must follow an explicit schema? */}}
         {{ else if (not $additionalProperties) -}}
-             {{ errorf "Unexpected additionalProperties=false for %s" $caption }}
+             {{ errorf "Unexpected additionalProperties=false for %s" $title }}
 May **not** have additional properties.
         {{ end }}
    </td>

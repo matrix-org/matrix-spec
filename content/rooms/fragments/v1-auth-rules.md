@@ -26,22 +26,25 @@ The rules are as follows:
         version, reject.
     4.  If `content` has no `creator` field, reject.
     5.  Otherwise, allow.
-2.  Reject if event has `auth_events` that:
-    1.  have duplicate entries for a given `type` and `state_key` pair
-    2.  have entries whose `type` and `state_key` don't match those
+2.  Considering the event's `auth_events`:
+    1.  If there are duplicate entries for a given `type` and `state_key` pair,
+        reject.
+    2.  If there are entries whose `type` and `state_key` don't match those
         specified by the [auth events
         selection](/server-server-api#auth-events-selection)
-        algorithm described in the server specification.
-3.  If event does not have a `m.room.create` in its `auth_events`,
-    reject.
-4.  If the create event content has the field `m.federate` set to `false`
-    and the sender domain of the event does not match the sender domain of
-    the create event, reject.
-5.  If type is `m.room.aliases`:
+        algorithm described in the server specification, reject.
+    3.  If there are entries which were themselves rejected under the [checks
+        performed on receipt of a
+        PDU](server-server-api/#checks-performed-on-receipt-of-a-pdu), reject.
+    4. If there is no `m.room.create` event among the entries, reject.
+3. If the `content` of the `m.room.create` event in the room state has the
+   property `m.federate` set to `false`, and the `sender` domain of the event
+   does not match the `sender` domain of the create event, reject.
+4.  If type is `m.room.aliases`:
     1.  If event has no `state_key`, reject.
     2.  If sender's domain doesn't matches `state_key`, reject.
     3.  Otherwise, allow.
-6.  If type is `m.room.member`:
+5.  If type is `m.room.member`:
     1.  If no `state_key` key or `membership` key in `content`, reject.
     2.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the
@@ -98,15 +101,15 @@ The rules are as follows:
             than the `sender`'s power level, allow.
         3.  Otherwise, reject.
     6.  Otherwise, the membership is unknown. Reject.
-7.  If the `sender`'s current membership state is not `join`, reject.
-8.  If type is `m.room.third_party_invite`:
+6.  If the `sender`'s current membership state is not `join`, reject.
+7.  If type is `m.room.third_party_invite`:
     1.  Allow if and only if `sender`'s current power level is greater
         than or equal to the *invite level*.
-9.  If the event type's *required power level* is greater than the
+8.  If the event type's *required power level* is greater than the
     `sender`'s power level, reject.
-10. If the event has a `state_key` that starts with an `@` and does not
+9. If the event has a `state_key` that starts with an `@` and does not
     match the `sender`, reject.
-11. If type is `m.room.power_levels`:
+10. If type is `m.room.power_levels`:
     1.  If `users` key in `content` is not a dictionary with keys that
         are valid user IDs with values that are integers (or a string
         that is an integer), reject.
@@ -130,14 +133,14 @@ The rules are as follows:
         1.  If the current value is equal to the `sender`'s current
             power level, reject.
     6.  Otherwise, allow.
-12. If type is `m.room.redaction`:
+11. If type is `m.room.redaction`:
     1.  If the `sender`'s power level is greater than or equal to the
         *redact level*, allow.
     2.  If the domain of the `event_id` of the event being redacted is
         the same as the domain of the `event_id` of the
         `m.room.redaction`, allow.
     3.  Otherwise, reject.
-13. Otherwise, allow.
+12. Otherwise, allow.
 
 {{% boxes/note %}}
 Some consequences of these rules:

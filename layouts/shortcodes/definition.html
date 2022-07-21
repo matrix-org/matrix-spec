@@ -18,6 +18,10 @@
 {{/* The definition is referenced by the .path parameter */}}
 {{ $definition := index .Site.Data $pieces }}
 
+{{ if not $definition }}
+  {{ errorf "site data %s not found" $path }}
+{{ end }}
+
 {{/* The base path, which we use to resolve $ref, omits the last component */}}
 {{ $pieces = first (sub (len $pieces) 1) $pieces}}
 {{ $path = delimit $pieces "/" }}
@@ -45,11 +49,11 @@
 
 </summary>
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" $definition }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $definition) }}
 {{ $additional_types = uniq $additional_types }}
 
 {{ range $additional_types }}
-    {{ partial "openapi/render-object-table" (dict "caption" .title "properties" .properties "required" .required) }}
+    {{ partial "openapi/render-object-table" . }}
 {{end}}
 
 <h2>Examples</h2>

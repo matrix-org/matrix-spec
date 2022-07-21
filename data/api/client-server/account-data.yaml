@@ -71,6 +71,39 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: |-
+            The request body is not a JSON object. Errcode: `M_BAD_JSON`
+            or `M_NOT_JSON`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_JSON",
+              "error": "Content must be a JSON object."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        403:
+          description: |-
+            The access token provided is not authorized to modify this user's account 
+            data. Errcode: `M_FORBIDDEN`.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot add account data for other users."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        405:
+          examples:
+            application/json: {
+              "errcode": "M_BAD_JSON",
+              "error": "Cannot set m.fully_read through this API."
+            }
+          description: |-
+            This `type` of account data is controlled by the server; it cannot be
+            modified by clients. Errcode: `M_BAD_JSON`.
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
     get:
@@ -106,11 +139,33 @@ paths:
             type: object
             example: {
               "custom_account_data_key": "custom_config_value"}
+        403:
+          description: |-
+            The access token provided is not authorized to retrieve this user's account 
+            data. Errcode: `M_FORBIDDEN`.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot add account data for other users."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        404:
+          description: |-
+            No account data has been provided for this user with the given `type`.
+            Errcode: `M_NOT_FOUND`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_FOUND",
+              "error": "Room account data not found."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
     put:
-      summary: Set some account_data for the user.
+      summary: Set some account_data for the user that is specific to a room.
       description: |-
         Set some account_data for the client on a given room. This config is only
         visible to the user that set the account_data. The config will be synced to
@@ -159,10 +214,44 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: |-
+            The request body is not a JSON object (errcode `M_BAD_JSON` or
+            `M_NOT_JSON`), or the given `roomID` is not a valid room ID
+            (errcode `M_INVALID_PARAM`).
+          examples:
+            application/json: {
+              "errcode": "M_NOT_JSON",
+              "error": "Content must be a JSON object."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        403:
+          description: |-
+            The access token provided is not authorized to modify this user's account 
+            data. Errcode: `M_FORBIDDEN`.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot add account data for other users."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        405:
+          description: |-
+            This `type` of account data is controlled by the server; it cannot be
+            modified by clients. Errcode: `M_BAD_JSON`.
+          examples:
+            application/json: {
+              "errcode": "M_BAD_JSON",
+              "error": "Cannot set m.fully_read through this API."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
     get:
-      summary: Get some account_data for the user.
+      summary: Get some account_data for the user that is specific to a room.
       description: |-
         Get some account_data for the client on a given room. This config is only
         visible to the user that set the account_data.
@@ -201,5 +290,35 @@ paths:
             type: object
             example: {
               "custom_account_data_key": "custom_config_value"}
+        400:
+          description: |-
+            The given `roomID` is not a valid room ID. Errcode: `M_INVALID_PARAM`.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "@notaroomid:example.org is not a valid room ID."
+            }
+        403:
+          description: |-
+            The access token provided is not authorized to retrieve this user's account 
+            data. Errcode: `M_FORBIDDEN`.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot add account data for other users."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
+        404:
+          description: |-
+            No account data has been provided for this user and this room with the 
+            given `type`. Errcode: `M_NOT_FOUND`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_FOUND",
+              "error": "Room account data not found."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - User data
