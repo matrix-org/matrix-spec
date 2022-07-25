@@ -101,7 +101,7 @@ An unknown error has occurred.
 
 The following error codes are specific to certain endpoints.
 
-<!-- TODO: move them to the endpoints that return them -->.
+<!-- TODO: move them to the endpoints that return them -->
 
 `M_UNRECOGNIZED`
 The server did not understand the request.
