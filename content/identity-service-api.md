@@ -38,8 +38,20 @@ Appendix.
 
 The mandatory baseline for identity server communication in Matrix is
 exchanging JSON objects over HTTP APIs. HTTPS is required for
-communication, and all API calls use a Content-Type of
-`application/json`. In addition, strings MUST be encoded as UTF-8.
+communication.
+
+All `POST` and `PUT` endpoints, with the exception of [`POST
+/_matrix/identity/v2/account/logout`](#post_matrixidentityv2accountlogout),
+require the client to supply a request body containing a (potentially empty)
+JSON object. Clients are *not* required to supply a `Content-Type` header.
+
+Similarly, all endpoints require the server to return a JSON object.  Servers
+should include a `Content-Type` header of `application/json` for all JSON
+responses.
+
+All JSON data, in requests or responses, must be encoded using UTF-8.
+
+### Standard error response
 
 Any errors which occur at the Matrix API level MUST return a "standard
 error response". This is a JSON object which looks like:
@@ -103,8 +115,6 @@ the third party identifier.
 `M_UNKNOWN`
 An unknown error has occurred.
 
-{{% http-api spec="identity" api="versions" %}}
-
 ## Privacy
 
 Identity is a privacy-sensitive issue. While the identity server exists
@@ -130,6 +140,10 @@ recommended CORS headers to be returned by servers on all requests are:
     Access-Control-Allow-Origin: *
     Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
     Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization
+
+## API Version check
+
+{{% http-api spec="identity" api="versions" %}}
 
 ## Authentication
 

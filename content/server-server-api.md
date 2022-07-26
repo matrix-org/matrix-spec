@@ -47,13 +47,41 @@ an HTTPS PUT request.
 
 ## API standards
 
-The mandatory baseline for client-server communication in Matrix is
-exchanging JSON objects over HTTP APIs. More efficient optional
-transports will in future be supported as optional extensions - e.g. a
-packed binary encoding over stream-cipher encrypted TCP socket for
-low-bandwidth/low-roundtrip mobile usage. For the default HTTP
-transport, all API calls use a Content-Type of `application/json`. In
-addition, all strings MUST be encoded as UTF-8.
+The mandatory baseline for server-server communication in Matrix is
+exchanging JSON objects over HTTPS APIs. More efficient transports may be
+specified in future as optional extensions.
+
+All `POST` and `PUT` endpoints require the requesting server to supply a
+request body containing a (potentially empty) JSON object. Requesting servers
+are *not* required to supply a `Content-Type` header.
+
+Similarly, all endpoints in this specification require the destination server
+to return a JSON object.  Servers should include a `Content-Type` header of
+`application/json` for all JSON responses.
+
+All JSON data, in requests or responses, must be encoded using UTF-8.
+
+### TLS
+
+Server-server communication must take place over HTTPS.
+
+The destination server must provide a TLS certificate signed by a known
+Certificate Authority.
+
+Requesting servers are ultimately responsible for determining the trusted Certificate
+Authorities, however are strongly encouraged to rely on the operating system's
+judgement. Servers can offer administrators a means to override the trusted
+authorities list.  Servers can additionally skip the certificate validation for
+a given whitelist of domains or netmasks for the purposes of testing or in
+networks where verification is done elsewhere, such as with `.onion`
+addresses.
+
+Servers should respect SNI when making requests where possible: a SNI should be
+sent for the certificate which is expected, unless that certificate is expected
+to be an IP address in which case SNI is not supported and should not be sent.
+
+Servers are encouraged to make use of the [Certificate
+Transparency](https://www.certificate-transparency.org/) project.
 
 ## Server discovery
 
@@ -142,22 +170,6 @@ delegation are:
   2. Consistency with the recommendations in [RFC6125](https://datatracker.ietf.org/doc/html/rfc6125#section-6.2.1)
      and other applications using SRV records such [XMPP](https://datatracker.ietf.org/doc/html/rfc6120#section-13.7.2.1).
 {{% /boxes/note %}}
-
-The TLS certificate provided by the target server must be signed by a
-known Certificate Authority. Servers are ultimately responsible for
-determining the trusted Certificate Authorities, however are strongly
-encouraged to rely on the operating system's judgement. Servers can
-offer administrators a means to override the trusted authorities list.
-Servers can additionally skip the certificate validation for a given
-whitelist of domains or netmasks for the purposes of testing or in
-networks where verification is done elsewhere, such as with `.onion`
-addresses. Servers should respect SNI when making requests where
-possible: a SNI should be sent for the certificate which is expected,
-unless that certificate is expected to be an IP address in which case
-SNI is not supported and should not be sent.
-
-Servers are encouraged to make use of the [Certificate
-Transparency](https://www.certificate-transparency.org/) project.
 
 {{% http-api spec="server-server" api="wellknown" %}}
 

@@ -13,20 +13,32 @@ clients which maintain a full local persistent copy of server state.
 ## API Standards
 
 The mandatory baseline for client-server communication in Matrix is
-exchanging JSON objects over HTTP APIs. HTTPS is recommended for
-communication, although HTTP may be supported as a fallback to support
-basic HTTP clients. More efficient optional transports will in future be
-supported as optional extensions - e.g. a packed binary encoding over
-stream-cipher encrypted TCP socket for low-bandwidth/low-roundtrip
-mobile usage. For the default HTTP transport, all API calls use a
-Content-Type of `application/json`. In addition, all strings MUST be
-encoded as UTF-8.
+exchanging JSON objects over HTTP APIs. More efficient transports may be
+specified in future as optional extensions.
+
+HTTPS is recommended for communication. The use of plain HTTP is not
+recommended outside test environments.
 
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
+All `POST` and `PUT` endpoints, with the exception of
+[`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload), require the
+client to supply a request body containing a (potentially empty) JSON object.
+Clients are *not* required to supply a `Content-Type` header.
+
+Similarly, all endpoints require the server to return a JSON object,
+with the exception of 200 responses to
+[`GET /_matrix/media/v3/download/{serverName}/{mediaId}`](#get_matrixmediav3downloadservernamemediaid)
+and [`GET /_matrix/media/v3/thumbnail/{serverName}/{mediaId}`](#get_matrixmediav3thumbnailservernamemediaid).
+Servers should include a `Content-Type` header of `application/json` for all JSON responses.
+
+All JSON data, in requests or responses, must be encoded using UTF-8.
+
 See also [Conventions for Matrix APIs](/appendices#conventions-for-matrix-apis)
-in the Appendices for conventions which all Matrix APIs are expected to follow.
+in the Appendices for conventions which all Matrix APIs are expected to follow,
+and [Web Browser Clients](#web-browser-clients) below for additional
+requirements for server responses.
 
 ### Standard error response
 
@@ -196,6 +208,8 @@ only read state (e.g.: `/sync`, get account data, etc).
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
 
+### Transaction identifiers
+
 The client-server API typically uses `HTTP PUT` to submit requests with
 a client-generated transaction identifier. This means that these
 requests are idempotent. The scope of a transaction identifier is a
@@ -207,8 +221,6 @@ integer is recommended).
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
 request is strongly recommended.
-
-{{% http-api spec="client-server" api="versions" %}}
 
 ## Web Browser Clients
 
@@ -307,6 +319,8 @@ specify parameter values. The flow for this method is as follows:
         `base_url` value, then `FAIL_PROMPT`.
 
 {{% http-api spec="client-server" api="wellknown" %}}
+
+{{% http-api spec="client-server" api="versions" %}}
 
 ## Client Authentication
 
