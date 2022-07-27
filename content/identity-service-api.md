@@ -40,7 +40,7 @@ The mandatory baseline for identity server communication in Matrix is
 exchanging JSON objects over HTTP APIs. HTTPS is required for
 communication.
 
-All `POST` and `PUT` endpoints, with the exception of [`POST
+All `POST` and `PUT` endpoints, with the exception (for historical reasons) of [`POST
 /_matrix/identity/v2/account/logout`](#post_matrixidentityv2accountlogout),
 require the client to supply a request body containing a (potentially empty)
 JSON object. Clients are *not* required to supply a `Content-Type` header.
