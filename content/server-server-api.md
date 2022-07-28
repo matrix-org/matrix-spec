@@ -53,10 +53,11 @@ specified in future as optional extensions.
 
 All `POST` and `PUT` endpoints require the requesting server to supply a
 request body containing a (potentially empty) JSON object. Requesting servers
-are *not* required to supply a `Content-Type` header.
+should supply a `Content-Type` header of `application/json` for all requests
+with JSON bodies, but this is not required.
 
 Similarly, all endpoints in this specification require the destination server
-to return a JSON object.  Servers should include a `Content-Type` header of
+to return a JSON object.  Servers must include a `Content-Type` header of
 `application/json` for all JSON responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.

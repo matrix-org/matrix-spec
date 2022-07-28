@@ -43,10 +43,11 @@ communication.
 All `POST` and `PUT` endpoints, with the exception (for historical reasons) of [`POST
 /_matrix/identity/v2/account/logout`](#post_matrixidentityv2accountlogout),
 require the client to supply a request body containing a (potentially empty)
-JSON object. Clients are *not* required to supply a `Content-Type` header.
+JSON object. Clients should supply a `Content-Type` header of `application/json`
+for all requests with JSON bodies, but this is not required.
 
 Similarly, all endpoints require the server to return a JSON object.  Servers
-should include a `Content-Type` header of `application/json` for all JSON
+must include a `Content-Type` header of `application/json` for all JSON
 responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.
