@@ -25,7 +25,8 @@ Authentication](#client-authentication) for details).
 All `POST` and `PUT` endpoints, with the exception of
 [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload), require the
 client to supply a request body containing a (potentially empty) JSON object.
-Clients are *not* required to supply a `Content-Type` header.
+Clients should supply a `Content-Type` header of `application/json` for all requests with JSON bodies,
+but this is not required.
 
 Similarly, all endpoints require the server to return a JSON object,
 with the exception of 200 responses to
