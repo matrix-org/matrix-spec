@@ -32,7 +32,7 @@ Similarly, all endpoints require the server to return a JSON object,
 with the exception of 200 responses to
 [`GET /_matrix/media/v3/download/{serverName}/{mediaId}`](#get_matrixmediav3downloadservernamemediaid)
 and [`GET /_matrix/media/v3/thumbnail/{serverName}/{mediaId}`](#get_matrixmediav3thumbnailservernamemediaid).
-Servers msut include a `Content-Type` header of `application/json` for all JSON responses.
+Servers must include a `Content-Type` header of `application/json` for all JSON responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.
 
