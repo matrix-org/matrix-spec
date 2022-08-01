@@ -29,6 +29,12 @@ Custom SCSS for the Matrix spec
  */
 @import "syntax.scss";
 
+/* Workaround for https://github.com/google/docsy/issues/1116:
+ * fix scroll-anchoring */
+.td-outer {
+    height: auto;
+}
+
 /* Overrides for the navbar */
 .td-navbar {
   box-shadow: 0px 0px 8px rgba(179, 179, 179, 0.25);
