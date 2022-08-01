@@ -18,6 +18,7 @@
 {{ $title := .title }}
 {{ $properties := .properties}}
 {{ $required := .required}}
+{{ $additionalProperties := .additionalProperties }}
 
 {{ if $properties }}
 
@@ -97,6 +98,26 @@
 
     {{ end }}
 
+ {{/* Additional properties should either be an OpenAPI schema object, or a
+       boolean. If it's the former, look for a `description` and render it as a note.
+       If it's `true`, do nothing. If it's `false`, raise a build-time error:
+       "Everything is extensible in Matrix unless otherwise noted". */}}
+   {{ if (ne $additionalProperties nil )}}
+  <tr class="row-additional-properties">
+   <td colspan="3">
+        {{ if (and (reflect.IsMap $additionalProperties)) -}}
+            {{ if (index $additionalProperties "description") -}}
+<em>Notes on additional properties:</em> {{ $additionalProperties.description }}
+            {{ end }}
+            {{/* TODO: should we handle the case where additional properties are
+                       permitted, but must follow an explicit schema? */}}
+        {{ else if (not $additionalProperties) -}}
+             {{ errorf "Unexpected additionalProperties=false for %s" $title }}
+May **not** have additional properties.
+        {{ end }}
+   </td>
+  </tr>
+    {{ end }}
 </table>
 
 {{ end }}

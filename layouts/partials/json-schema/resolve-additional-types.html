@@ -101,5 +101,5 @@
   but with (for example) different examples will be considered different.
 */}}
 {{ define "partials/clean-object" }}
-    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "anchor" .anchor) }}
+    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "anchor" .anchor "additionalProperties" .additionalProperties) }}
 {{ end }}
