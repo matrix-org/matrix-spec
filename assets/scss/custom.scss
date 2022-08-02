@@ -343,16 +343,12 @@ footer {
     }
 
     &.object-table, &.response-table {
-        caption, tr {
+        caption, tbody tr {
             background-color: $table-row-default;
         }
 
-        tr:nth-child(even) {
+        tbody tr:nth-child(even) {
             background-color: $table-row-alternate;
-        }
-
-        th {
-            background-color: $white;
         }
     }
 
