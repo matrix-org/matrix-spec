@@ -165,16 +165,10 @@ footer {
 
 }
 
-/* Adjust heading anchors for site header */
-.td-content {
-  &> h2,
-  &> h3,
-  &> h4,
-  &> h5,
-  &> h6,
-  .rendered-data h1 {
-    scroll-margin-top: 5rem;
-  }
+/* Adjust the scroll margin for everything in the main content, so that
+ * it doesn't disappear behind the header bar */
+.td-content * {
+  scroll-margin-top: 5.5rem;
 }
 
 /* Styles for the table of contents */
