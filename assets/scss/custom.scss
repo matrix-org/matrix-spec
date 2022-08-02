@@ -270,7 +270,9 @@ footer {
 
 /* Styles for sections that are rendered from data, such as HTTP APIs and event schemas */
 .rendered-data {
-  margin: 1rem 0 3rem 0;
+  background-color: $secondary-lightest-background;
+  padding: 1rem;
+  margin: 1rem 0;
 
   details {
     summary {
