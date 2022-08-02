@@ -342,16 +342,18 @@ footer {
       padding: 1rem;
     }
 
-    th {
-      background-color: $white;
-    }
+    &.object-table, &.response-table {
+        caption, tr {
+            background-color: $table-row-default;
+        }
 
-    caption, tr {
-      background-color: $table-row-default;
-    }
+        tr:nth-child(even) {
+            background-color: $table-row-alternate;
+        }
 
-    tr:nth-child(even) {
-      background-color: $table-row-alternate;
+        th {
+            background-color: $white;
+        }
     }
 
     &.basic-info, &.basic-info th, &.basic-info td {
