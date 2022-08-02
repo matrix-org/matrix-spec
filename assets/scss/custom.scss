@@ -313,10 +313,6 @@ footer {
     margin: 1.5rem 0 .75rem 0;
   }
 
-  h2 + table, h3 + table, h3 + div.highlight {
-    margin-top: 0;
-  }
-
   hr {
     border-bottom: 2px solid $dark;
     margin-bottom: 1.5rem;
@@ -329,6 +325,11 @@ footer {
   table {
     table-layout: fixed;
     width: 100%;
+
+    // add some space between two tables when they are right next to each other
+    & + table {
+        margin-top: 4rem;
+    }
 
     caption {
       caption-side: top;
