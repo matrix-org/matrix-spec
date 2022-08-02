@@ -76,18 +76,6 @@ joining or peeking the room. Joining or peeking is not required,
 however: an implementation could poll for updates or use a different
 technique for receiving updates to the policy's rules.
 
-#### Sharing
-
-In addition to sharing a direct reference to the room which contains the
-policy's rules, plain http or https URLs can be used to share links to
-the list. When the URL is approached with a `Accept: application/json`
-header or has `.json` appended to the end of the URL, it should return a
-JSON object containing a `room_uri` property which references the room.
-Currently this would be a `matrix.to` URI, however in future it could be
-a Matrix-schemed URI instead. When not approached with the intent of
-JSON, the service could return a user-friendly page describing what is
-included in the ban list.
-
 #### Events
 
 The `entity` described by the state events can contain `*` and `?` to
