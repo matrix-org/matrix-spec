@@ -38,6 +38,7 @@
 {{ partial "render-api-changes" (dict "title" "Push Gateway API" "id" "push-gateway-api" "path" (path.Join $path "push_gateway")) }}
 {{ partial "render-api-changes" (dict "title" "Room Versions" "id" "room-versions" "path" (path.Join $path "room_versions")) }}
 {{ partial "render-api-changes" (dict "title" "Appendices" "id" "appendices" "path" (path.Join $path "appendices")) }}
+{{ partial "render-api-changes" (dict "title" "Internal Changes/Tooling" "id" "internal" "path" (path.Join $path "internal")) }}
 
 {{ define "partials/render-api-changes" }}
 <h3 id="{{.id}}">{{ .title }}</h3>
