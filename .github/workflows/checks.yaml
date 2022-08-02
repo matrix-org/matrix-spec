@@ -1,0 +1,18 @@
+# workflow steps that ought to pass on a PR, but shouldn't block a preview.
+
+name: "Checks"
+on:
+  pull_request:
+ 
+jobs:
+  check-newsfragments:
+    name: "🔎 Check that new newsfragments are valid"
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: scripts/check-newsfragments
+        env:
+          PULL_REQUEST_NUMBER: ${{ github.event.number }}
