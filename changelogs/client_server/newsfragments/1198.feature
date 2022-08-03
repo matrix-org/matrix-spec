@@ -1,0 +1,1 @@
+Copy a room's `type` when upgrading it, as per [MSC3818](https://github.com/matrix-org/matrix-spec-proposals/pull/3818).
