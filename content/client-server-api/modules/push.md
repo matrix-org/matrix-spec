@@ -522,6 +522,8 @@ Definition:
 
 **`.m.rule.room.server_acl`**
 
+{{% added-in v="1.4" %}}
+
 Suppresses notifications for [`m.room.server_acl`](#mroomserver_acl) events.
 
 Definition:
