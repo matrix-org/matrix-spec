@@ -520,6 +520,33 @@ Definition:
 }
 ```
 
+**`.m.rule.room.server_acl`**
+
+Suppresses notifications for [`m.room.server_acl`](#mroomserver_acl) events.
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.room.server_acl",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_match",
+            "key": "type",
+            "pattern": "m.room.server_acl"
+        },
+        {
+            "kind": "event_match",
+            "key": "state_key",
+            "pattern": ""
+        }
+    ],
+    "actions": []
+}
+```
+
 **`.m.rule.roomnotif`**
 
 Matches any message whose content is unencrypted and contains the text
