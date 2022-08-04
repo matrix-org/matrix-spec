@@ -62,7 +62,8 @@ example: {
       "room_id": "!ol19s:bleecker.street",
       "topic": "Tasty tasty cheese",
       "world_readable": true,
-      "join_rule": "public"
+      "join_rule": "public",
+      "room_type": "m.space"
     }
   ],
   "next_batch": "p190q",

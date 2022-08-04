@@ -110,8 +110,18 @@ paths:
                     generic_search_term:
                       type: string
                       description: |-
-                        A string to search for in the room metadata, e.g. name,
-                        topic, canonical alias etc. (Optional).
+                        An optional string to search for in the room metadata, e.g. name,
+                        topic, canonical alias, etc.
+                    room_types:
+                      type: array
+                      x-addedInMatrixVersion: "1.4"
+                      items:
+                        type: string
+                      description: |-
+                        An optional list of [room types](/client-server-api/#types) to search
+                        for. To include rooms without a room type, specify `null` within this
+                        list. When not specified, all applicable rooms (regardless of type)
+                        are returned.
               include_all_networks:
                 type: boolean
                 description: |-
@@ -127,7 +137,8 @@ paths:
             example: {
               "limit": 10,
               "filter": {
-                "generic_search_term": "foo"
+                "generic_search_term": "foo",
+                "room_types": [null, "m.space"]
               },
               "include_all_networks": false,
               "third_party_instance_id": "irc"
@@ -185,7 +196,8 @@ paths:
                   "room_id": "!ol19s:bleecker.street",
                   "topic": "Tasty tasty cheese",
                   "world_readable": true,
-                  "join_rule": "public"
+                  "join_rule": "public",
+                  "room_type": "m.space"
                 }
               ],
               "next_batch": "p190q",

@@ -129,6 +129,7 @@ paths:
                     - type: object
                       title: ChildRoomsChunk
                       properties:
+                        # Override x-addedInMatrixVersion for room_type (this endpoint had it first)
                         room_type:
                           type: string
                           description: |-
