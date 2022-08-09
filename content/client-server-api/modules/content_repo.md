@@ -19,11 +19,13 @@ When serving content, the server SHOULD provide a
 `Content-Security-Policy` header. The recommended policy is
 `sandbox; default-src 'none'; script-src 'none'; plugin-types application/pdf; style-src 'unsafe-inline'; object-src 'self';`.
 
-{{% added-in v="1.4" %}}
-
-The server SHOULD additionally provide `Cross-Origin-Resource-Policy: cross-origin`
+{{% boxes/added-in-paragraph %}}
+{{< added-in v="1.4" >}} The server SHOULD additionally provide `Cross-Origin-Resource-Policy: cross-origin`
 when serving content to allow (web) clients access to APIs which interact
 with the media repository, such as `SharedArrayBuffer`.
+
+{{< added-in v="1.4" >}} Second paragraph
+{{% /boxes/added-in-paragraph %}}
 
 #### Matrix Content (MXC) URIs
 

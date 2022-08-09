@@ -1,0 +1,22 @@
+{{/*
+
+    "Temporary" shortcode for rendering paragraphs which want/need inline added-in tags. It is
+    assumed that your content is described as follows:
+
+    {{% boxes/added-in-paragraph %}}
+    {{< added-in v="1.4" >}} Your text here
+
+    {{< added-in v="1.4" >}} Your other text here
+    {{% /boxes/added-in-paragraph %}}
+
+    The assumption is that at a later date this added-in-paragraph shortcode can be removed, making
+    the angle bracket-defined added-in shortcodes *just work*.
+
+    It is important that each new "content" paragraph (the bit after added-in) is preceeded with
+    and added-in, otherwise you might find your text being weirdly merged.
+
+    This exists while the added-in shortcode cannot be inline in the client-server spec.
+    See https://github.com/matrix-org/matrix-spec/issues/1204
+
+*/}}
+{{ partial "alert" (dict "type" "added-in-paragraph" "content" .Inner) }}
