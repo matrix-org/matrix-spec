@@ -1974,6 +1974,7 @@ behaviour.
 This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
+* [References](#reference-relations)
 
 #### Aggregations
 
@@ -2643,3 +2644,4 @@ systems.
 {{% cs-module name="server_notices" %}}
 {{% cs-module name="moderation_policies" %}}
 {{% cs-module name="spaces" %}}
+{{< cs-module name="reference_relations" >}}
