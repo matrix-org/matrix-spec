@@ -165,16 +165,10 @@ footer {
 
 }
 
-/* Adjust heading anchors for site header */
-.td-content {
-  &> h2,
-  &> h3,
-  &> h4,
-  &> h5,
-  &> h6,
-  .rendered-data h1 {
-    scroll-margin-top: 5rem;
-  }
+/* Adjust the scroll margin for everything in the main content, so that
+ * it doesn't disappear behind the header bar */
+.td-content * {
+  scroll-margin-top: 5.5rem;
 }
 
 /* Styles for the table of contents */
@@ -270,13 +264,13 @@ footer {
 
 /* Styles for sections that are rendered from data, such as HTTP APIs and event schemas */
 .rendered-data {
-  margin: 1rem 0 3rem 0;
+  background-color: $secondary-lightest-background;
+  padding: 1rem;
+  margin: 1rem 0;
 
   details {
     summary {
       padding: .5rem 0;
-      list-style-position: outside;
-
       p {
         max-width: 80%;
       }
@@ -342,22 +336,30 @@ footer {
       padding: 1rem;
     }
 
-    th {
-      background-color: $white;
-    }
+    &.object-table, &.response-table {
+        border: 1px $table-border-color solid;
 
-    caption, tr {
-      background-color: $table-row-default;
-    }
+        caption {
+            // the caption is outside the table's border box,
+            // so we have to give it its own border.
+            border: 1px $table-border-color solid;
 
-    tr:nth-child(even) {
-      background-color: $table-row-alternate;
+            // ... but avoid double border between caption and table
+            border-bottom: 0;
+        }
+
+        caption, tbody tr {
+            background-color: $table-row-default;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: $table-row-alternate;
+        }
     }
 
     &.basic-info, &.basic-info th, &.basic-info td {
       table-layout: fixed;
       margin: 1rem 0 .5rem 0;
-      background-color: $white;
     }
 
     &.basic-info th {

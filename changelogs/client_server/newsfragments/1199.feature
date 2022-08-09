@@ -1,0 +1,1 @@
+Add `room_types` filter and `room_type` response to `/publicRooms`, as per [MSC3827](https://github.com/matrix-org/matrix-spec-proposals/pull/3827).

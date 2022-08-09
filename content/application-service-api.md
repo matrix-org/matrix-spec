@@ -127,11 +127,27 @@ this.
 
 #### Authorization
 
-Homeservers MUST include a query parameter named `access_token`
-containing the `hs_token` from the application service's registration
-when making requests to the application service. Application services
-MUST verify the provided `access_token` matches their known `hs_token`,
-failing the request with an `M_FORBIDDEN` error if it does not match.
+{{% changed-in v="1.4" %}}
+
+Homeservers MUST include an `Authorization` header, containing the `hs_token`
+from the application service's registration, when making requests to the
+application service. Application services MUST verify that the provided
+`Bearer` token matches their known `hs_token`, failing the request with
+an `M_FORBIDDEN` error if it does not match.
+
+The format of the `Authorization` header is similar to the [Client-Server API](/client-server-api/#client-authentication):
+`Bearer TheHSTokenGoesHere`.
+
+{{% boxes/note %}}
+In previous versions of this specification, an `access_token` query
+parameter was used instead. Servers should only send this query parameter
+if supporting legacy versions of the specification.
+
+If sending the `query_string`, it is encouraged to send it alongside
+the `Authorization` header for maximum compatibility.
+
+Application services should ensure both match if both are provided.
+{{% /boxes/note %}}
 
 #### Legacy routes
 

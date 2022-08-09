@@ -57,6 +57,11 @@ properties:
       The room's join rule. When not present, the room is assumed to
       be `public`.
     example: "public"
+  room_type:
+    type: string
+    x-addedInMatrixVersion: "1.4"
+    description: |-
+      The `type` of room (from [`m.room.create`](/client-server-api/#mroomcreate)), if any.
 required:
   - room_id
   - num_joined_members

@@ -30,6 +30,9 @@ $note: $secondary;
 $note-background: $secondary-background;
 $warning-background: #FFE0E0;
 
+// colours for definition tables.
+// the border colour matches that used for "highlight" divs
+$table-border-color: rgba(black, .125);
 $table-row-alternate: $secondary-lightest-background;
 $table-row-default: $secondary-lighter-background;
 
