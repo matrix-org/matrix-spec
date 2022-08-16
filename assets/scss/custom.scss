@@ -260,6 +260,29 @@ footer {
     border-left-width: 5px;
     background: $warning-background;
   }
+
+  // XXX: See the added-in-paragraph.html shortcode for more information on these styles.
+  &.added-in-paragraph {
+    // Remove the padding and margin to remove the box look
+    margin: 0 !important; // !important on both to override table-related rules
+    padding: 0 !important;
+
+    // Make pairs of "added-in" and content inline to each other. We do pairs so authors can
+    // describe two paragraphs with added-in prefixes within a single box, reducing DOM
+    // complexity. Each paragraph is expected to be prefixed with an added-in, however.
+    //
+    // XXX: We assume the added-in and text will be rendered as paragraph elements.
+    > p {
+      display: inline;
+    }
+    > p:nth-child(2n) { // "even" rule to target just the content paragraphs
+      // Force a paragraph break after the content (insert a couple <br /> tags)
+      &::after {
+        content: '\A\A';
+        white-space: pre;
+      }
+    }
+  }
 }
 
 /* Styles for sections that are rendered from data, such as HTTP APIs and event schemas */
