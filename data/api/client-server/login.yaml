@@ -210,6 +210,7 @@ paths:
                   form as the one returned from .well-known autodiscovery.
                 allOf:
                   - "$ref": "definitions/wellknown/full.yaml"
+            required: ["access_token", "device_id", "user_id"]
         400:
           description: |-
             Part of the request was invalid. For example, the login type may not be recognised.
