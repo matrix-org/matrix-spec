@@ -1938,14 +1938,14 @@ parent event, for example.
 {{% /boxes/note %}}
 
 To allow the server to aggregate and find child events for a parent, the `m.relates_to`
-key of an event MUST be included in the plaintext copy of the event. It cannot be
+key of an event MUST be included in the cleartext (unencrypted) part of the event. It cannot be
 exclusively recorded in the encrypted payload as the server cannot decrypt the event
 for processing.
 
 {{% boxes/warning %}}
 If an encrypted event contains an `m.relates_to` in its payload, it should be
-ignored and instead favour the plaintext `m.relates_to` copy (including when there
-is no plaintext copy). This is to ensure the client's behaviour matches the server's
+ignored and instead favour the cleartext `m.relates_to` copy (including when there
+is no cleartext copy). This is to ensure the client's behaviour matches the server's
 capability to handle relationships.
 {{% /boxes/warning %}}
 
@@ -1954,16 +1954,6 @@ are simply ignored. An example might be the parent and child being in different
 rooms, or the relationship missing properties required by the schema below. Clients
 handling such invalid relationships should show the events independently of each
 other, optionally with an error message.
-
-{{% boxes/note %}}
-While this specification describes an `m.relates_to` object containing a `rel_type`, there
-is not currently any relationship type which uses this structure. Replies, described below,
-form their relationship outside of the `rel_type` as a legacy type of relationship. Future
-versions of the specification might change replies to better match the relationship structures.
-
-Custom `rel_type`s can, and should, still use the schema described above for relevant
-behaviour.
-{{% /boxes/note %}}
 
 `m.relates_to` is defined as follows:
 
@@ -1974,6 +1964,7 @@ behaviour.
 This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
+* [Event replacements](#event-replacements).
 
 #### Aggregations
 
@@ -2643,3 +2634,4 @@ systems.
 {{% cs-module name="server_notices" %}}
 {{% cs-module name="moderation_policies" %}}
 {{% cs-module name="spaces" %}}
+{{< cs-module name="event_replacements" >}}

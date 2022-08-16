@@ -1,0 +1,319 @@
+---
+type: module
+---
+
+### Event replacements
+
+{{% added-in v="1.4" %}}
+
+Event replacements, or "message edit events", are events that use an [event
+relationship](http://localhost:1313/client-server-api/#forming-relationships-between-events)
+with a `rel_type` of `m.replace`, which indicates that the original event is
+intended to be replaced.
+
+An example of a message edit event might look like this:
+
+```json
+{
+    "type": "m.room.message",
+    "content": {
+        "body": "* Hello! My name is bar",
+        "msgtype": "m.text",
+        "m.new_content": {
+            "body": "Hello! My name is bar",
+            "msgtype": "m.text"
+        },
+        "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": "$some_event_id"
+        }
+    },
+    // ... other fields required by events
+}
+```
+
+The `content` of the replacement must contain a `m.new_content` property which
+defines the replacement `content`. The normal `content` properties (`body`,
+`msgtype` etc.) provide a fallback for clients which do not understand
+replacement events.
+
+`m.new_content` can include any properties that would normally be found in
+an event's content property, such as `formatted_body` (see [`m.room.message`
+`msgtypes`](#mroommessage-msgtypes)).
+
+#### Validity of message edit events
+
+There are a number of requirements on message edit events, which must be satisfied for the replacement to be considered valid:
+
+ * As with all event relationships, the original event and replacement event
+   must have the same `room_id` (i.e. it is not possible to send an event in
+   one room and then an edited version in a different room).
+
+ * The original event and replacement event must have the same `sender`
+   (i.e. you cannot edit someone else's messages).
+
+ * The replacement and original events must have the same `type` (i.e. editing
+   an event cannot change its type).
+
+ * Neither the replacement nor original events may have a `state_key` property
+   (i.e. it is not possible to edit a state event).
+
+ * The original event must not, itself, have a `rel_type` of `m.replace`
+   (i.e. you cannot edit an edit — though you can send multiple edits for a
+   single original event).
+
+ * The replacement event (once decrypted, if appropriate) must have an
+   `m.new_content` property.
+
+If any of these criteria are not satisfied, implementations should ignore the
+replacement event (the content of the original should not be replaced, and the
+edit should not be included in the server-side aggregation).
+
+Note that the [`msgtype`](#mroommessage-msgtypes) property of replacement
+`m.room.message` events need *not* be the same as in the original event. For
+example, it is legitimate to replace an `m.text` event with an `m.emote`.
+
+#### Editing encrypted events
+
+If the original event was [encrypted](#end-to-end-encryption), the replacement
+should be too. In that case, `m.new_content` is placed in the content of the
+encrypted payload. As with all event relationships, the `m.relates_to` property
+must be sent in the unencrypted (cleartext) part of the event.
+
+For example, a replacement for an encrypted event might look like this:
+
+For example, an encrypted replacement event might look like this:
+
+```json
+{
+    "type": "m.room.encrypted",
+    "content": {
+        "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": "$some_event_id"
+        },
+        "algorithm": "m.megolm.v1.aes-sha2",
+        "sender_key": "<sender_curve25519_key>",
+        "device_id": "<sender_device_id>",
+        "session_id": "<outbound_group_session_id>",
+        "ciphertext": "<encrypted_payload_base_64>"
+    }
+    // ...
+}
+```
+
+... and, once decrypted, the payload might look like this:
+
+```json
+{
+    "type": "m.room.<event_type>",
+    "room_id": "!some_room_id",
+    "content": {
+        "body": "* Hello! My name is bar",
+        "msgtype": "m.text",
+        "m.new_content": {
+            "body": "Hello! My name is bar",
+            "msgtype": "m.text"
+        }
+    }
+}
+```
+
+Note that:
+
+ * There is no `m.relates_to` property in the encrypted payload. (Any such property would be ignored.)
+ * There is no `m.new_content` property in the cleartext content of the `m.room.encrypted` event. (Again, any such property would be ignored.)
+
+The payload of an encrypted replacement event must be encrypted as normal, including ratcheting any [Megolm](#mmegolmv1aes-sha2) session as normal. The original Megolm ratchet entry should **not** be re-used.
+
+
+#### Applying `m.new_content`
+
+When applying a replacement, the `content` of the original event is replaced
+entirely by the `m.new_content` from the replacement event, with the exception
+of `m.relates_to`, which is left *unchanged*. (Any `m.relates_to` property
+within `m.new_content` should be ignored.)
+
+For example, given a pair of events:
+
+```json
+{
+    "event_id": "$original_event",
+    "type": "m.room.message",
+    "content": {
+        "body": "I really like cake",
+        "msgtype": "m.text",
+        "formatted_body": "I really like cake",
+    }
+}
+```
+
+```json
+{
+    "event_id": "$edit_event",
+    "type": "m.room.message",
+    "content": {
+        "body": "* I really like *chocolate* cake",
+        "msgtype": "m.text",
+        "m.new_content": {
+            "body": "I really like *chocolate* cake",
+            "msgtype": "m.text",
+            "com.example.extension_property": "chocolate"
+        },
+        "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": "$original_event_id"
+        }
+    }
+}
+```
+
+... then the end result is an event as shown below:
+
+```json
+{
+    "event_id": "$original_event",
+    "type": "m.room.message",
+    "content": {
+        "body": "I really like *chocolate* cake",
+        "msgtype": "m.text",
+        "com.example.extension_property": "chocolate"
+    }
+}
+```
+
+Note that `formatted_body` is now absent, because it was absent in the
+replacement event.
+
+#### Server behaviour
+
+##### Server-side aggregation of `m.replace` relationships
+
+Note that there can be multiple events with an `m.replace` relationship to a
+given event (for example, if an event is edited multiple times). These should
+be [aggregated](#aggregations) by the homeserver.
+
+The aggregation format of `m.replace` relationships gives the `event_id`,
+`origin_server_ts`, and `sender` of the **most recent** replacement event. The
+most recent event is determined by comparing `origin_server_ts`; if two or more
+replacement events have identical `origin_server_ts`, the event with the
+lexicographically largest `event_id` is treated as more recent.
+
+This aggregation is bundled into the `unsigned/m.relations` property of any
+event that is the target of an `m.replace` relationship. For example:
+
+```json
+{
+  "event_id": "$original_event_id",
+  // ...
+  "unsigned": {
+    "m.relations": {
+      "m.replace": {
+        "event_id": "$latest_edit_event_id",
+        "origin_server_ts": 1649772304313,
+        "sender": "@editing_user:localhost"
+      }
+    }
+  }
+}
+```
+
+If the original event is
+[redacted](http://localhost:1313/client-server-api/#redactions), any
+`m.replace` relationship should **not** be bundled with it (whether or not any
+subsequent replacements are themselves redacted). Note that this behaviour is
+specific to the `m.replace` relationship. See also [redactions of edited
+events](#redactions-of-edited-events) below.
+
+#### Server-side replacement of content
+
+Whenever an `m.replace` is to be bundled with an event as above, the server
+should also modify the content of the original event according to the
+`m.new_content` of the most recent replacement event (determined as above).
+
+An exception applies to [`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid),
+which should return the unmodified event (though the relationship should still
+be bundled, as described above).
+
+#### Client behaviour
+
+Clients can often ignore `m.replace` events, since any events the server
+returns via the C-S API will be updated by the server to account for subsequent
+edits.
+
+However, clients should apply the replacement themselves when the server is
+unable to do so. This happens in the following situations:
+
+ * The client has already received and stored the original event before the
+   message edit event arrives.
+
+ * The original event (and hence its replacement) are encrypted.
+
+Client authors are reminded to take note of the requirements for [Validity of
+message edit events](#validity-of-message-edit-events), and to ignore any
+invalid edit events that may be received.
+
+##### Permalinks
+
+When creating [links](/appendices/#uris) to events (also known as permalinks),
+clients build links which reference the event that the creator of the permalink
+is viewing at that point (which might be a message edit event).
+
+The client viewing the permalink should resolve this reference to the original
+event, and then display the most recent version of that event.
+
+#### Redactions of edited events
+
+When an event using a `rel_type` of `m.replace` is [redacted](#redactions), it
+removes that edit revision. This has little effect if there were subsequent
+edits. However, if it was the most recent edit, the event is in effect
+reverted to its content before the redacted edit.
+
+Redacting the *original* message in effect removes the message, including all
+subsequent edits, from the visible timeline. In this situation, homeservers
+will return an empty `content` for the original event as with any other
+redacted event, and as
+[above](#server-side-aggregation-of-mreplace-relationships) the replacement
+events will not be bundled with the original event.
+
+#### Edits of replies
+
+Some particular constraints apply to events which replace a
+[reply](#rich-replies). In particular:
+
+ * In contrast to the original reply, there should be no `m.in_reply_to`
+   property in the the `m.relates_to` object, since it would be redundant (see
+   [Applying `m.new_content`](/#applying-mnew_content) above, which notes that
+   the original event's `m.relates_to` is preserved), as well as being contrary
+   to the spirit of the event relationships mechanism which expects only one
+   "parent" per event.
+
+ * `m.new_content` should **not** contain any [reply
+   fallback](https://spec.matrix.org/v1.3/client-server-api/#fallbacks-for-rich-replies),
+   since it is assumed that any client which can handle edits can also display
+   replies natively. However, the `content` of the replacement event should provide
+   fallback content for clients which support neither rich replies nor edits.
+
+An example of an edit to a reply is as follows:
+
+```json
+{
+  "type": "m.room.message",
+  "content": {
+    "body": "> <@alice:example.org> question\n\n* reply",
+    "msgtype": "m.text",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "<mx-reply><blockquote><a href=\"https://matrix.to/#/!somewhere:example.org/$event:example.org\">In reply to</a> <a href=\"https://matrix.to/#/@alice:example.org\">@alice:example.org</a><br />question</blockquote></mx-reply>* reply",
+    "m.new_content": {
+      "body": "reply",
+      "msgtype": "m.text",
+      "format": "org.matrix.custom.html",
+      "formatted_body": "reply"
+    },
+    "m.relates_to": {
+      "rel_type": "m.replace",
+      "event_id": "$original_reply_event"
+    }
+  }
+}
+```
