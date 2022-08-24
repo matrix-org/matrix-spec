@@ -12,7 +12,7 @@ implied meaning behind the reference, and is usually context-dependent. Such an
 example is the [key verification framework](#key-verification-framework) which uses
 reference relations to associate distinct events with a specific verification attempt.
 
-When bundled, a reference relations appear as an object with a `chunk` field to
+The aggregation format of `m.reference` relations consists of a single `chunk` property to
 indicate all the events which `m.reference` the event (the parent). Currently,
 only a single `event_id` field is present on the events in the `chunk`.
 
@@ -24,7 +24,7 @@ messages.
 
 An example `m.reference` would be:
 
-```json5
+```json
 {
   "content": {
     "m.relates_to": {
@@ -39,7 +39,7 @@ An example `m.reference` would be:
 
 The [bundle](#aggregations) under `m.relations` would appear similar to the following:
 
-```json5
+```json
 {
   "m.reference": {
     "chunk": [
