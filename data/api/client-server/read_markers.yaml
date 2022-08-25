@@ -75,7 +75,6 @@ paths:
                   equivalent to calling `/receipt/m.read.private/$elsewhere:example.org`
                   and is provided here to save that extra call.
                 example: "$elsewhere:example.org"
-            required: []
       responses:
         200:
           description: |-
