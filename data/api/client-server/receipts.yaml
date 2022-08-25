@@ -49,7 +49,10 @@ paths:
           description: The type of receipt to send.
           required: true
           x-example: "m.read"
-          enum: ["m.read"]
+          x-changedInMatrixVersion:
+            1.4: |
+              Allow `m.read.private` receipts.
+          enum: ["m.read", "m.read.private"]
         - in: path
           type: string
           name: eventId

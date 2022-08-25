@@ -1,6 +1,9 @@
 type: object
 title: Receipt Event
 description: Informs the client of new receipts.
+x-changedInMatrixVersion:
+    1.4: |
+        Added `m.read.private` receipts to the event's `content`.
 allOf:
     - $ref: "core-event-schema/event.yaml"
 properties:
@@ -23,7 +26,7 @@ properties:
                             A collection of users who have sent `m.read` receipts for
                             this event.
                         patternProperties:
-                            "^@":
+                            "^@": &receiptUserMap
                                 type: object
                                 title: Receipt
                                 description: |-
@@ -35,8 +38,17 @@ properties:
                                         type: integer
                                         format: int64
                                         description: The timestamp the receipt was sent at.
+                    "m.read.private":
+                        type: object
+                        title: Own User
+                        description: |-
+                            Similar to `m.read`, the users who have sent `m.read.private`
+                            receipts for this event. Due to the nature of private read
+                            receipts, this should only ever have the current user's ID.
+                        patternProperties:
+                            "^@": *receiptUserMap
         additionalProperties: false
     type:
         type: string
-        enum: ["m.receipt"]
+        enum: ["m.receipt", "m.receipt.private"]
 required: ["type", "content"]
