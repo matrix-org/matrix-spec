@@ -47,13 +47,19 @@ paths:
         - in: path
           type: string
           name: receiptType
-          description: The type of receipt to send.
+          description: |-
+            The type of receipt to send. This can also be `m.fully_read` as an
+            alternative to [`/read_makers`](/client-server-api/#post_matrixclientv3roomsroomidread_markers).
+
+            Note that `m.fully_read` does not appear under `m.receipt`: this endpoint
+            effectively calls `/read_markers` internally when presented with a receipt
+            type of `m.fully_read`.
           required: true
           x-example: "m.read"
           x-changedInMatrixVersion:
             1.4: |
-              Allow `m.read.private` receipts.
-          enum: ["m.read", "m.read.private"]
+              Allow `m.read.private` receipts and `m.fully_read` markers to be set.
+          enum: ["m.read", "m.read.private", "m.fully_read"]
         - in: path
           type: string
           name: eventId
