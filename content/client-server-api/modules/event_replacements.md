@@ -41,9 +41,9 @@ replacement events.
 an event's content property, such as `formatted_body` (see [`m.room.message`
 `msgtypes`](#mroommessage-msgtypes)).
 
-#### Validity of message edit events
+#### Validity of replacement events
 
-There are a number of requirements on message edit events, which must be satisfied for the replacement to be considered valid:
+There are a number of requirements on replacement events, which must be satisfied for the replacement to be considered valid:
 
  * As with all event relationships, the original event and replacement event
    must have the same `room_id` (i.e. you cannot send an event in
