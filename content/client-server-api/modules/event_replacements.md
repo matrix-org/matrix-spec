@@ -134,10 +134,14 @@ ratchet entry should **not** be re-used.
 When applying a replacement, the `content` of the original event is treated as
 being overwritten entirely by `m.new_content`, with the exception of `m.relates_to`,
 which is left *unchanged*. Any `m.relates_to` property within `m.new_content`
-is ignored. (Note that server implementations must not *actually* overwrite
+is ignored.
+
+{{% boxes/note %}}
+Note that server implementations must not *actually* overwrite
 the original event's `content`: instead the server presents it as being overwritten
 when it is served over the client-server API. See [Server-side replacement of content](#server-side-replacement-of-content)
-below.)
+below.
+{{% /boxes/note %}}
 
 For example, given a pair of events:
 
