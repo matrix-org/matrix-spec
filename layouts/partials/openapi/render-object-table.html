@@ -73,7 +73,7 @@
         */}}
         {{ if reflect.IsMap $property.additionalProperties }}
             {{ if $property.additionalProperties.title }}
-                {{ $type = delimit (slice "{ string: " $property.additionalProperties.title "}" ) "" }}
+                {{ $type = delimit (slice "{string: " $property.additionalProperties.title "}" ) "" }}
             {{ end }}
         {{ end }}
 
