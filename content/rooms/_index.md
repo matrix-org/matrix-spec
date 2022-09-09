@@ -85,7 +85,7 @@ authorization would cause older servers to potentially end up in a
 split-brain situation due to not understanding the new rules.
 
 A room version is defined as a string of characters which MUST NOT
-exceed 32 codepoints in length. Room versions MUST NOT be empty and
+exceed 32 bytes in length. Room versions MUST NOT be empty and
 SHOULD contain only the characters `a-z`, `0-9`, `.`, and `-`.
 
 Room versions are not intended to be parsed and should be treated as

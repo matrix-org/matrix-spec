@@ -22,7 +22,7 @@ properties:
           compared against other children's `order`, if present.
 
           Must consist of ASCII characters within the range `\x20` (space) and `\x7E` (`~`),
-          inclusive. Must not exceed 50 characters.
+          inclusive. Must not exceed 50 bytes.
 
           `order` values with the wrong type, or otherwise invalid contents, are to be treated
           as though the `order` key was not provided.

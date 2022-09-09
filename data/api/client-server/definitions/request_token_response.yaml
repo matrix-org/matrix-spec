@@ -19,7 +19,7 @@ properties:
     description: |-
       The session ID. Session IDs are opaque strings that must consist entirely
       of the characters `[0-9a-zA-Z.=_-]`. Their length must not exceed 255
-      characters and they must not be empty.
+      bytes and they must not be empty.
     example: "123abc"
   submit_url:
     type: string

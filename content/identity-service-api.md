@@ -375,7 +375,7 @@ be inappropriate to expect a user to copy a long passphrase including
 punctuation from an SMS message into a client.)
 
 Whatever format the identity server uses, the validation token must
-consist of at most 255 Unicode codepoints. Clients must pass the token
+consist of at most 255 UTF-8 bytes. Clients must pass the token
 through without modification.
 
 ### Email associations
