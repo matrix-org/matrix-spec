@@ -10,7 +10,7 @@ This module adds in support for receipts. These receipts are a form of
 acknowledgement of an event. This module defines the `m.read` receipt
 for indicating that the user has read up to a given event, and `m.read.private`
 to achieve the same purpose without any other user being aware. Primarily,
-`m.read.private` is meant to clear [notifications](#receiving-notifications)
+`m.read.private` is intended to clear [notifications](#receiving-notifications)
 without advertising read-up-to status to others.
 
 Sending a receipt for each event can result in sending large amounts of
@@ -67,7 +67,7 @@ following HTTP APIs.
 
 {{% added-in v="1.4" %}}
 
-Some users would like to clear their [notification counts](#receiving-notifications),
+Some users would like to mark a room as read, clearing their [notification counts](#receiving-notifications),
 but not give away the fact that they've read a particular message yet. To
 achieve this, clients can send `m.read.private` receipts instead of `m.read`
 to do exactly that: clear notifications and not broadcast the receipt to

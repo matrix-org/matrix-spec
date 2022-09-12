@@ -112,7 +112,7 @@ be marked as read. Note that users can send both an `m.read` and
 
 If the user has both `m.read` and `m.read.private` set in the room then
 the receipt which is more recent/ahead must be used to determine where
-the user has read up to. For example, given an ordered set of events A,
+the user has read up to. For example, given an oldest-first set of events A,
 B, C, and D the `m.read` receipt could be at event C and `m.read.private`
 at event A - the user is considered to have read up to event C. If the
 `m.read.private` receipt is then updated to point to B or C, the user's
