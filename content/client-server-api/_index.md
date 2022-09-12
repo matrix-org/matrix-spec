@@ -213,11 +213,18 @@ See the [Server Notices](#server-notices) module for more information.
 
 The client-server API typically uses `HTTP PUT` to submit requests with
 a client-generated transaction identifier. This means that these
-requests are idempotent. The scope of a transaction identifier is a
-particular access token. It **only** serves to identify new requests
+requests are idempotent. It **only** serves to identify new requests
 from retransmits. After the request has finished, the `{txnId}` value
 should be changed (how is not specified; a monotonically increasing
 integer is recommended).
+
+The scope of a transaction ID is a "client session", where that session
+is identified by a particular access token. When [refreshing](#refreshing-access-tokens)
+an access token, the transaction ID's scope is retained. This means that
+if a client with token `A` uses `TXN1` as their transaction ID, refreshes
+the token to `B`, and uses `TXN1` again it'll be assumed to be a duplicate
+request and ignored. If the client logs out and back in between the `A` and
+`B` tokens, `TXN1` could be used once for each.
 
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
