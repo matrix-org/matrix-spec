@@ -1203,9 +1203,8 @@ forwarded to the login endpoint during the login process. For example:
 #### Notes on password management
 
 {{% boxes/warning %}}
-Clients SHOULD enforce that the password provided is suitably complex.
-The password SHOULD include a lower-case letter, an upper-case letter, a
-number and a symbol and be at a minimum 8 characters in length. Servers
+Clients SHOULD enforce that the password provided is suitably strong.
+The password SHOULD be at a minimum 8 characters in length. Servers
 MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 {{% /boxes/warning %}}
 
