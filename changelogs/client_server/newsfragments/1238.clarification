@@ -1,1 +1,1 @@
-Update description of the 200 response for the `/profile/{userId}` endpoint to correctly describe that it returns more than just an avatar url.
+Fix various typos throughout the specification.
