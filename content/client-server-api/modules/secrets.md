@@ -30,7 +30,7 @@ clients can access, depending on what keys are given to them.
 ##### Key storage
 
 Each key has an ID, and the description of the key is stored in the
-user's account\_data using the event type
+user's account data using the event type
 `m.secret_storage.key.[key ID]`. The contents of the account data for
 the key will include an `algorithm` property, which indicates the
 encryption algorithm used, as well as a `name` property, which is a
@@ -51,7 +51,7 @@ Other properties depend on the encryption algorithm, and are described
 below.
 
 A key can be marked as the "default" key by setting the user's
-account\_data with event type `m.secret_storage.default_key` to an
+account data with event type `m.secret_storage.default_key` to an
 object that has the ID of the key as its `key` property. The default key
 will be used to encrypt all secrets that the user would expect to be
 available on all their clients. Unless the user specifies otherwise,
@@ -71,8 +71,8 @@ default key.
 
 ##### Secret storage
 
-Encrypted data is stored in the user's account\_data using the event
-type defined by the feature that uses the data. The account\_data will
+Encrypted data is stored in the user's account data using the event
+type defined by the feature that uses the data. The account data will
 have an `encrypted` property that is a map from key ID to an object. The
 algorithm from the `m.secret_storage.key.[key ID]` data for the given
 key defines how the other properties are interpreted, though it's
