@@ -158,7 +158,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
-              "error": "Room account data not found."
+              "error": "Account data not found."
             }
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
