@@ -780,7 +780,7 @@ per-device using the APIs below.
 ##### Push Rules: Events
 
 When a user changes their push rules a `m.push_rules` event is sent to
-all clients in the `account_data` section of their next `/sync` request.
+all clients in the `account_data` section of their next [`/sync`](#get_matrixclientv3sync) request.
 The content of the event is the current push rules for the user.
 
 {{% event event="m.push_rules" %}}

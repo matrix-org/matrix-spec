@@ -29,11 +29,12 @@ securityDefinitions:
 paths:
   "/user/{userId}/account_data/{type}":
     put:
-      summary: Set some account_data for the user.
+      summary: Set some account data for the user.
       description: |-
-        Set some account_data for the client. This config is only visible to the user
-        that set the account_data. The config will be synced to clients in the
-        top-level `account_data`.
+        Set some account data for the client. This config is only visible to the user
+        that set the account data. The config will be available to clients through the
+        top-level `account_data` field in the homeserver response to
+        [/sync](#get_matrixclientv3sync).
       operationId: setAccountData
       security:
         - accessToken: []
@@ -43,7 +44,7 @@ paths:
           name: userId
           required: true
           description: |-
-            The ID of the user to set account_data for. The access token must be
+            The ID of the user to set account data for. The access token must be
             authorized to make requests for this user ID.
           x-example: "@alice:example.com"
         - in: path
@@ -51,14 +52,14 @@ paths:
           name: type
           required: true
           description: |-
-            The event type of the account_data to set. Custom types should be
+            The event type of the account data to set. Custom types should be
             namespaced to avoid clashes.
           x-example: "org.example.custom.config"
         - in: body
           name: content
           required: true
           description: |-
-            The content of the account_data
+            The content of the account data.
           schema:
             type: object
             example: {
@@ -66,7 +67,7 @@ paths:
       responses:
         200:
           description:
-            The account_data was successfully added.
+            The account data was successfully added.
           examples:
             application/json: {}
           schema:
@@ -107,10 +108,10 @@ paths:
       tags:
         - User data
     get:
-      summary: Get some account_data for the user.
+      summary: Get some account data for the user.
       description: |-
-        Get some account_data for the client. This config is only visible to the user
-        that set the account_data.
+        Get some account data for the client. This config is only visible to the user
+        that set the account data.
       operationId: getAccountData
       security:
         - accessToken: []
@@ -120,7 +121,7 @@ paths:
           name: userId
           required: true
           description: |-
-            The ID of the user to get account_data for. The access token must be
+            The ID of the user to get account data for. The access token must be
             authorized to make requests for this user ID.
           x-example: "@alice:example.com"
         - in: path
@@ -128,7 +129,7 @@ paths:
           name: type
           required: true
           description: |-
-            The event type of the account_data to get. Custom types should be
+            The event type of the account data to get. Custom types should be
             namespaced to avoid clashes.
           x-example: "org.example.custom.config"
       responses:
@@ -157,7 +158,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
-              "error": "Room account data not found."
+              "error": "Account data not found."
             }
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
@@ -165,11 +166,11 @@ paths:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
     put:
-      summary: Set some account_data for the user that is specific to a room.
+      summary: Set some account data for the user that is specific to a room.
       description: |-
-        Set some account_data for the client on a given room. This config is only
-        visible to the user that set the account_data. The config will be synced to
-        clients in the per-room `account_data`.
+        Set some account data for the client on a given room. This config is only
+        visible to the user that set the account data. The config will be delivered to
+        clients in the per-room entries via [/sync](#get_matrixclientv3sync).
       operationId: setAccountDataPerRoom
       security:
         - accessToken: []
@@ -179,7 +180,7 @@ paths:
           name: userId
           required: true
           description: |-
-            The ID of the user to set account_data for. The access token must be
+            The ID of the user to set account data for. The access token must be
             authorized to make requests for this user ID.
           x-example: "@alice:example.com"
         - in: path
@@ -187,21 +188,21 @@ paths:
           name: roomId
           required: true
           description: |-
-            The ID of the room to set account_data on.
+            The ID of the room to set account data on.
           x-example: "!726s6s6q:example.com"
         - in: path
           type: string
           name: type
           required: true
           description: |-
-            The event type of the account_data to set. Custom types should be
+            The event type of the account data to set. Custom types should be
             namespaced to avoid clashes.
           x-example: "org.example.custom.room.config"
         - in: body
           name: content
           required: true
           description: |-
-            The content of the account_data
+            The content of the account data.
           schema:
             type: object
             example: {
@@ -209,7 +210,7 @@ paths:
       responses:
         200:
           description:
-            The account_data was successfully added.
+            The account data was successfully added.
           examples:
             application/json: {}
           schema:
@@ -251,10 +252,10 @@ paths:
       tags:
         - User data
     get:
-      summary: Get some account_data for the user that is specific to a room.
+      summary: Get some account data for the user that is specific to a room.
       description: |-
-        Get some account_data for the client on a given room. This config is only
-        visible to the user that set the account_data.
+        Get some account data for the client on a given room. This config is only
+        visible to the user that set the account data.
       operationId: getAccountDataPerRoom
       security:
         - accessToken: []
@@ -264,7 +265,7 @@ paths:
           name: userId
           required: true
           description: |-
-            The ID of the user to set account_data for. The access token must be
+            The ID of the user to get account data for. The access token must be
             authorized to make requests for this user ID.
           x-example: "@alice:example.com"
         - in: path
@@ -272,14 +273,14 @@ paths:
           name: roomId
           required: true
           description: |-
-            The ID of the room to get account_data for.
+            The ID of the room to get account data for.
           x-example: "!726s6s6q:example.com"
         - in: path
           type: string
           name: type
           required: true
           description: |-
-            The event type of the account_data to get. Custom types should be
+            The event type of the account data to get. Custom types should be
             namespaced to avoid clashes.
           x-example: "org.example.custom.room.config"
       responses:
