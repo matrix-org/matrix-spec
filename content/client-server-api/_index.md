@@ -2057,6 +2057,7 @@ The endpoints where the server *should* include bundled aggregations are:
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
+* {{< added-in v="1.4" >}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
 
 {{% boxes/note %}}
 The server is **not** required to return bundled aggregations on deprecated endpoints

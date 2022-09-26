@@ -192,16 +192,10 @@ It does not include events sent by [ignored users](#ignoring-users).
 1. The `sender` of the event receiving the bundle (they sent the thread root).
 2. The `sender` of an event which references the thread root with a `rel_type` of `m.thread`.
 
-#### Client behaviour
+#### Querying threads in a room
 
-Client-specific behaviours are described throughout this module and are not repeated here.
+Clients looking to get all the events in a thread can use
+[`GET /relations/{threadRootId}/m.thread`](#get_matrixclientv1roomsroomidrelationseventidreltype),
+however getting all threads in a room is done through a dedicated API:
 
-Clients might wish to read up on the following endpoints to achieve thread-specific functionality,
-however:
-* [`GET /relations`](#get_matrixclientv1roomsroomidrelationseventidreltype) using the thread root
-  ID to retrieve all events in a thread.
-* ***DEVNOTE***: Normally we'd talk about `related_by_rel_types` and `related_by_senders` filters here,
-  but because MSC3856 literally replaces them we just don't bother speccing them at this point. At the
-  time you're reading this, the commit is targeting MSC3440 specifically and doesn't want to bleed too
-  much into the other MSCs, for reasons of clarity. Then again, here I am leaving a long comment explaining
-  why we aren't including a relatively short MSC in this commit. You're welcome.
+{{% http-api spec="client-server" api="threads_list" %}}
