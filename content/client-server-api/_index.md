@@ -213,11 +213,18 @@ See the [Server Notices](#server-notices) module for more information.
 
 The client-server API typically uses `HTTP PUT` to submit requests with
 a client-generated transaction identifier. This means that these
-requests are idempotent. The scope of a transaction identifier is a
-particular access token. It **only** serves to identify new requests
+requests are idempotent. It **only** serves to identify new requests
 from retransmits. After the request has finished, the `{txnId}` value
 should be changed (how is not specified; a monotonically increasing
 integer is recommended).
+
+The scope of a transaction ID is a "client session", where that session
+is identified by a particular access token. When [refreshing](#refreshing-access-tokens)
+an access token, the transaction ID's scope is retained. This means that
+if a client with token `A` uses `TXN1` as their transaction ID, refreshes
+the token to `B`, and uses `TXN1` again it'll be assumed to be a duplicate
+request and ignored. If the client logs out and back in between the `A` and
+`B` tokens, `TXN1` could be used once for each.
 
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
@@ -1955,16 +1962,6 @@ rooms, or the relationship missing properties required by the schema below. Clie
 handling such invalid relationships should show the events independently of each
 other, optionally with an error message.
 
-{{% boxes/note %}}
-While this specification describes an `m.relates_to` object containing a `rel_type`, there
-is not currently any relationship type which uses this structure. Replies, described below,
-form their relationship outside of the `rel_type` as a legacy type of relationship. Future
-versions of the specification might change replies to better match the relationship structures.
-
-Custom `rel_type`s can, and should, still use the schema described above for relevant
-behaviour.
-{{% /boxes/note %}}
-
 `m.relates_to` is defined as follows:
 
 {{% definition path="api/client-server/definitions/m.relates_to" %}}
@@ -1974,6 +1971,7 @@ behaviour.
 This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
+* [Event replacements](#event-replacements).
 * [References](#reference-relations)
 
 #### Aggregations
@@ -2644,4 +2642,5 @@ systems.
 {{< cs-module name="server_notices" >}}
 {{< cs-module name="moderation_policies" >}}
 {{< cs-module name="spaces" >}}
+{{< cs-module name="event_replacements" >}}
 {{< cs-module name="reference_relations" >}}

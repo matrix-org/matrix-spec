@@ -7,6 +7,11 @@
         "@rikj:jki.re": {
           "ts": 1436451550453
         }
+      },
+      "m.read.private": {
+        "@self:example.org": {
+          "ts": 1661384801651
+        }
       }
     }
   }

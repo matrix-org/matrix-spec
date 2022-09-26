@@ -195,7 +195,7 @@ paths:
           x-example: "@alice:example.com"
       responses:
         200:
-          description: The avatar URL for this user.
+          description: The profile information for this user.
           examples:
             application/json: {
                 "avatar_url": "mxc://matrix.org/SDGdghriugerRg",

@@ -31,12 +31,16 @@ The client cannot update fully read markers by directly modifying the
 `m.fully_read` account data event. Instead, the client must make use of
 the read markers API to change the values.
 
+{{< changed-in v="1.4" >}} `m.read.private` receipts can now be sent from
+`/read_markers`.
+
 The read markers API can additionally update the user's read receipt
-(`m.read`) location in the same operation as setting the fully read
-marker location. This is because read receipts and read markers are
-commonly updated at the same time, and therefore the client might wish
-to save an extra HTTP call. Providing an `m.read` location performs the
-same task as a request to `/receipt/m.read/$event:example.org`.
+(`m.read` or `m.read.private`) location in the same operation as setting
+the fully read marker location. This is because read receipts and read
+markers are commonly updated at the same time, and therefore the client
+might wish to save an extra HTTP call. Providing `m.read` and/or
+`m.read.private` performs the same task as a request to
+[`/receipt/{receiptType}/{eventId}`](#post_matrixclientv3roomsroomidreceiptreceipttypeeventid).
 
 {{% http-api spec="client-server" api="read_markers" %}}
 
@@ -44,8 +48,9 @@ same task as a request to `/receipt/m.read/$event:example.org`.
 
 The server MUST prevent clients from setting `m.fully_read` directly in
 room account data. The server must additionally ensure that it treats
-the presence of `m.read` in the `/read_markers` request the same as how
-it would for a request to `/receipt/m.read/$event:example.org`.
+the presence of `m.read` and `m.read.private` in the `/read_markers`
+request the same as how it would for a request to
+[`/receipt/{receiptType}/{eventId}`](#post_matrixclientv3roomsroomidreceiptreceipttypeeventid).
 
 Upon updating the `m.fully_read` event due to a request to
 `/read_markers`, the server MUST send the updated account data event

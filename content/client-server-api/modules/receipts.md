@@ -4,10 +4,14 @@ type: module
 
 ### Receipts
 
+{{< changed-in v="1.4" >}} Added private read receipts.
+
 This module adds in support for receipts. These receipts are a form of
-acknowledgement of an event. This module defines a single
-acknowledgement: `m.read` which indicates that the user has read up to a
-given event.
+acknowledgement of an event. This module defines the `m.read` receipt
+for indicating that the user has read up to a given event, and `m.read.private`
+to achieve the same purpose without any other user being aware. Primarily,
+`m.read.private` is intended to clear [notifications](#receiving-notifications)
+without advertising read-up-to status to others.
 
 Sending a receipt for each event can result in sending large amounts of
 traffic to a homeserver. To prevent this from becoming a problem,
@@ -59,12 +63,36 @@ following HTTP APIs.
 
 {{% http-api spec="client-server" api="receipts" %}}
 
+##### Private read receipts
+
+{{% added-in v="1.4" %}}
+
+Some users would like to mark a room as read, clearing their [notification counts](#receiving-notifications),
+but not give away the fact that they've read a particular message yet. To
+achieve this, clients can send `m.read.private` receipts instead of `m.read`
+to do exactly that: clear notifications and not broadcast the receipt to
+other users.
+
+Servers MUST NOT send the `m.read.private` receipt to any other user than the
+one which originally sent it.
+
+Between `m.read` and `m.read.private`, the receipt which is more "ahead" or
+"recent" is used when determining the highest read-up-to mark. See the
+[notifications](#receiving-notifications) section for more information on
+how this affects notification counts.
+
+If a client sends an `m.read` receipt which is "behind" the `m.read.private`
+receipt, other users will see that change happen but the sending user will
+not have their notification counts rewound to that point in time. While
+uncommon, it is considered valid to have an `m.read` (public) receipt lag
+several messages behind the `m.read.private` receipt, for example.
+
 #### Server behaviour
 
 For efficiency, receipts SHOULD be batched into one event per room
 before delivering them to clients.
 
-Receipts are sent across federation as EDUs with type `m.receipt`. The
+Some receipts are sent across federation as EDUs with type `m.receipt`. The
 format of the EDUs are:
 
 ```
@@ -80,7 +108,8 @@ format of the EDUs are:
 ```
 
 These are always sent as deltas to previously sent receipts. Currently
-only a single `<receipt_type>` should be used: `m.read`.
+only a single `<receipt_type>` should be used: `m.read`. `m.read.private`
+MUST NOT appear in this federated `m.receipt` EDU.
 
 #### Security considerations
 
