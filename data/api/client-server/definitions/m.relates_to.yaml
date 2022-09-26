@@ -34,8 +34,8 @@ properties:
 
       The relationship type determines how clients should perceive the event, and in what
       context. Some relationship types are processed server-side for "bundling", though not
-      all relationships require such behaviour. For example, an `m.thread` relationship type
-      might denote that the event is part of a "thread" of messages and should be rendered as
+      all relationships require such behaviour. For example, an [`m.thread` relationship type](/client-server-api/#threading)
+      denotes that the event is part of a "thread" of messages and should be rendered as
       such.
   event_id:
     type: string
