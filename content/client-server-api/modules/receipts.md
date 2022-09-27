@@ -22,33 +22,68 @@ that the user had read all events *up to* the referenced event. See the
 [Receiving notifications](#receiving-notifications) section for more
 information on how read receipts affect notification counts.
 
+{{< added-in v="1.4" >}} Read receipts exist in three major forms:
+* Unthreaded: Denotes a read-up-to receipt regardless of threads. This is how
+  pre-threading read receipts worked.
+* Threaded, main timeline: Denotes a read-up-to receipt for events not in a
+  particular thread. Identified by the thread ID `main`.
+* Threaded, in a thread: Denotes a read-up-to receipt within a particular
+  thread. Identified by the event ID of the thread root.
+
+Threaded read receipts are discussed in further detail [below](#threaded-read-receipts).
+
 #### Events
 
-Each `user_id`, `receipt_type` pair must be associated with only a
-single `event_id`.
+{{< changed-in v="1.4" >}} Each `user_id`, `receipt_type`, and categorisation
+(unthreaded, or `thread_id`) tuple must be associated with only a single
+`event_id`.
 
 {{% event event="m.receipt" %}}
 
 #### Client behaviour
 
+{{< changed-in v="1.4" >}} Altered to support threaded read receipts.
+
 In `/sync`, receipts are listed under the `ephemeral` array of events
 for a given room. New receipts that come down the event streams are
 deltas which update existing mappings. Clients should replace older
-receipt acknowledgements based on `user_id` and `receipt_type` pairs.
+receipt acknowledgements based on `user_id`, `receipt_type`, and the
+`thread_id` (if present).
 For example:
 
     Client receives m.receipt:
       user = @alice:example.com
       receipt_type = m.read
       event_id = $aaa:example.com
+      thread_id = undefined
 
     Client receives another m.receipt:
       user = @alice:example.com
       receipt_type = m.read
       event_id = $bbb:example.com
+      thread_id = main
 
-    The client should replace the older acknowledgement for $aaa:example.com with
-    this one for $bbb:example.com
+    The client does not replace any acknowledgements, yet.
+
+    Client receives yet another m.receipt:
+      user = @alice:example.com
+      receipt_type = m.read
+      event_id = $ccc:example.com
+      thread_id = undefined
+
+    The client replaces the older acknowledgement for $aaa:example.com
+    with this new one for $ccc:example.com, but does not replace the
+    acknowledgement for $bbb:example.com because it belongs to a thread.
+
+    Client receives yet another m.receipt:
+      user = @alice:example.com
+      receipt_type = m.read
+      event_id = $ddd:example.com
+      thread_id = main
+
+    Now the client replaces the older $bbb:example.com acknowledgement with
+    this new $ddd:example.com acknowledgement. The client does NOT replace the
+    older acknowledgement for $ccc:example.com as it is unthreaded.
 
 Clients should send read receipts when there is some certainty that the
 event in question has been **displayed** to the user. Simply receiving
@@ -87,6 +122,84 @@ not have their notification counts rewound to that point in time. While
 uncommon, it is considered valid to have an `m.read` (public) receipt lag
 several messages behind the `m.read.private` receipt, for example.
 
+##### Threaded read receipts
+
+{{% added-in v="1.4" %}}
+
+If a client does not use [threading](#threading), then they will simply only
+send "unthreaded" read receipts which affect the whole room regardless of threads.
+
+Threading introduces a concept of multiple conversations being held in the same
+room and thus deserve their own read receipts and notification counts. An event
+is considered to be "in a thread" if it has either a `rel_type` of `m.thread` or
+has child events with a `rel_type` of `m.thread` (in which case it'd be the
+thread root). Events not in a thread but still in the room are considered to be
+part of the "main timeline", or a special thread with an ID of `main`.
+
+A threaded read receipt is simply one which has a `thread_id` on it, targeting
+either a thread root's event ID or `main` for the main timeline.
+
+The following is an example DAG for a room, with dotted lines showing event
+relationships and solid lines showing topological ordering.
+
+![threaded-dag](/diagrams/threaded-dag.png)
+
+{{% boxes/note %}}
+`m.reaction` relationships are not currently specified, but are shown here for
+their conceptual place in a threaded DAG. They are currently proposed as
+[MSC2677](https://github.com/matrix-org/matrix-spec-proposals/pull/2677).
+{{% /boxes/note %}}
+
+This DAG can be represented as 3 threaded timelines, with `A` and `B` being thread
+roots:
+
+![threaded-dag-threads](/diagrams/threaded-dag-threads.png)
+
+With this, we can demonstrate that:
+* A threaded read receipt on `I` would mark `A`, `B`, and `I` as read.
+* A threaded read receipt on `E` would mark `C` and `E` as read.
+* An unthreaded read receipt on `D` would mark `A`, `B`, `C`, and `D` as read.
+
+Note that marking `A` as read with a threaded read receipt would not mean
+that `C`, `E`, `G`, or `H` get marked as read: Thread A's timeline would need
+its own threaded read receipt at `H` to accomplish that.
+
+The read receipts for the above 3 examples would be:
+
+```json
+{
+  "$I": {
+    "m.read": {
+      "@user:example.org": {
+        "ts": 1661384801651,
+        "thread_id": "main" // because `I` is not in a thread, but is a threaded receipt
+      }
+    }
+  },
+  "$E": {
+    "m.read": {
+      "@user:example.org": {
+        "ts": 1661384801651,
+        "thread_id": "$A" // because `E` is in Thread `A`
+      }
+    }
+  },
+  "$D": {
+    "m.read": {
+      "@user:example.org": {
+        "ts": 1661384801651
+        // no `thread_id` because the receipt is *unthreaded*
+      }
+    }
+  }
+}
+```
+
+Conditions on sending read receipts, such as using private read receipts, only
+sending once an event is display, not being able to move backwards in time, etc
+still apply to threaded and unthreaded read receipts. For example, a client might
+send a private read receipt for a threaded event when the user expands that thread.
+
 #### Server behaviour
 
 For efficiency, receipts SHOULD be batched into one event per room
@@ -99,7 +212,7 @@ format of the EDUs are:
 {
     <room_id>: {
         <receipt_type>: {
-            <user_id>: { <content> }
+            <user_id>: { <content (ts & thread_id, currently)> }
         },
         ...
     },

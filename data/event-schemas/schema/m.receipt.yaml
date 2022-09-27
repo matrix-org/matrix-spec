@@ -38,6 +38,13 @@ properties:
                                         type: integer
                                         format: int64
                                         description: The timestamp the receipt was sent at.
+                                    thread_id:
+                                        type: string
+                                        description: |-
+                                            The root thread event's ID (or `main`) for which
+                                            thread this receipt is intended to be under. If
+                                            not specified, the read receipt is *unthreaded*
+                                            (default).
                     "m.read.private":
                         type: object
                         title: Own User
