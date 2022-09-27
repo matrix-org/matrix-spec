@@ -63,7 +63,7 @@ paths:
             The pagination token to start returning results from. If not supplied, results
             start at the most recent topological event known to the server.
 
-            Can be a `next_batch` token from a previous call, or a returned
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
             `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
             or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
           required: false
@@ -89,6 +89,16 @@ paths:
             Similarly, the server should apply a default value when not supplied.
           required: false
           x-example: 20
+        - in: query
+          type: string
+          enum: ["b", "f"]
+          name: dir
+          x-addedInMatrixVersion: "1.4"
+          description: |-
+            Optional (default `b`) direction to return events from. If this is set to `f`, events
+            will be returned in chronological order starting at `from`. If it
+            is set to `b`, events will be returned in *reverse* chronological
+            order, again starting at `from`.
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -193,7 +203,7 @@ paths:
             The pagination token to start returning results from. If not supplied, results
             start at the most recent topological event known to the server.
 
-            Can be a `next_batch` token from a previous call, or a returned
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
             `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
             or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
           required: false
@@ -219,6 +229,16 @@ paths:
             Similarly, the server should apply a default value when not supplied.
           required: false
           x-example: 20
+        - in: query
+          type: string
+          enum: ["b", "f"]
+          name: dir
+          x-addedInMatrixVersion: "1.4"
+          description: |-
+            Optional (default `b`) direction to return events from. If this is set to `f`, events
+            will be returned in chronological order starting at `from`. If it
+            is set to `b`, events will be returned in *reverse* chronological
+            order, again starting at `from`.
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -335,7 +355,7 @@ paths:
             The pagination token to start returning results from. If not supplied, results
             start at the most recent topological event known to the server.
 
-            Can be a `next_batch` token from a previous call, or a returned
+            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
             `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
             or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
           required: false
@@ -361,6 +381,16 @@ paths:
             Similarly, the server should apply a default value when not supplied.
           required: false
           x-example: 20
+        - in: query
+          type: string
+          enum: ["b", "f"]
+          name: dir
+          x-addedInMatrixVersion: "1.4"
+          description: |-
+            Optional (default `b`) direction to return events from. If this is set to `f`, events
+            will be returned in chronological order starting at `from`. If it
+            is set to `b`, events will be returned in *reverse* chronological
+            order, again starting at `from`.
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
