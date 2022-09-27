@@ -40,6 +40,7 @@ properties:
                                         description: The timestamp the receipt was sent at.
                                     thread_id:
                                         type: string
+                                        x-addedInMatrixVersion: "1.4"
                                         description: |-
                                             The root thread event's ID (or `main`) for which
                                             thread this receipt is intended to be under. If

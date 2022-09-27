@@ -93,6 +93,12 @@ room that the event was sent to or dismissing a notification in order
 for the event to count as "read". Clients SHOULD NOT send read receipts
 for events sent by their own user.
 
+Similar to the rules for sending receipts, threaded receipts should appear
+in the context of the thread. If a thread is rendered behind a disclosure,
+the client hasn't yet shown the event (or any applicable read receipts)
+to the user. Once they expand the thread though, a threaded read receipt
+would be sent and per-thread receipts from other users shown.
+
 A client can update the markers for its user by interacting with the
 following HTTP APIs.
 
@@ -129,15 +135,21 @@ several messages behind the `m.read.private` receipt, for example.
 If a client does not use [threading](#threading), then they will simply only
 send "unthreaded" read receipts which affect the whole room regardless of threads.
 
-Threading introduces a concept of multiple conversations being held in the same
-room and thus deserve their own read receipts and notification counts. An event
-is considered to be "in a thread" if it has either a `rel_type` of `m.thread` or
-has child events with a `rel_type` of `m.thread` (in which case it'd be the
-thread root). Events not in a thread but still in the room are considered to be
-part of the "main timeline", or a special thread with an ID of `main`.
-
 A threaded read receipt is simply one which has a `thread_id` on it, targeting
 either a thread root's event ID or `main` for the main timeline.
+
+Threading introduces a concept of multiple conversations being held in the same
+room and thus deserve their own read receipts and notification counts. An event is
+considered to be "in a thread" if it meets any of the following criteria:
+* It has a `rel_type` of `m.thread`.
+* It has child events with a `rel_type` of `m.thread` (in which case it'd be the
+  thread root).
+* Following the event relationships, it has a parent event which qualifies for
+  one of the above. Implementations should not recurse infinitely, though: a
+  maximum of 3 hops is recommended to cover indirect relationships.
+
+Events not in a thread but still in the room are considered to be part of the
+"main timeline", or a special thread with an ID of `main`.
 
 The following is an example DAG for a room, with dotted lines showing event
 relationships and solid lines showing topological ordering.
@@ -195,10 +207,9 @@ The read receipts for the above 3 examples would be:
 }
 ```
 
-Conditions on sending read receipts, such as using private read receipts, only
-sending once an event is display, not being able to move backwards in time, etc
-still apply to threaded and unthreaded read receipts. For example, a client might
-send a private read receipt for a threaded event when the user expands that thread.
+Conditions on sending read receipts apply similarly to threaded and unthreaded read
+receipts. For example, a client might send a private read receipt for a threaded
+event when the user expands that thread.
 
 #### Server behaviour
 
