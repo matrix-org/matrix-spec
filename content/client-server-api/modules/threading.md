@@ -6,7 +6,7 @@ type: module
 
 {{% added-in v="1.4" %}}
 
-Threads allow users to visually branch their conversations in a room. Typically most used
+Threads allow users to visually branch their conversations in a room. Typically mostly used
 when a room is discussing multiple topics, threads provide more organisation of communication
 that traditional [rich replies](#rich-replies) can't always offer.
 
@@ -142,7 +142,7 @@ A specific error code is not currently available for this case: servers should u
 alongside the HTTP 400 status code.
 {{% /boxes/note %}}
 
-##### Server-side aggreagtion of `m.thread` relationships
+##### Server-side aggregation of `m.thread` relationships
 
 Given threads always reference the thread root, an event can have multiple "child" events which
 then form the thread itself. These events should be [aggregated](#aggregations) by the server.
