@@ -1,4 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
+# Copyright 2022 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +17,12 @@ allOf:
 - type: object
   title: RoomEventFilter
   properties:
+    unread_thread_notifications:
+      type: boolean
+      description: |-
+        If `true`, enables per-[thread](/client-server-api/#threading) notification
+        counts. Only applies to the `/sync` endpoint. Defaults to `false`.
+      x-addedInMatrixVersion: "1.4"
     lazy_load_members:
       type: boolean
       description: |-

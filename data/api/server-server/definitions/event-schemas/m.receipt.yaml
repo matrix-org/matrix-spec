@@ -65,6 +65,15 @@ allOf:
                         A POSIX timestamp in milliseconds for when the user read
                         the event specified in the read receipt.
                       example: 1533358089009
+                    thread_id:
+                        type: string
+                        x-addedInMatrixVersion: "1.4"
+                        description: |-
+                            The root thread event's ID (or `main`) for which
+                            thread this receipt is intended to be under. If
+                            not specified, the read receipt is *unthreaded*
+                            (default).
+                        example: "$threadroot"
                   required: ['ts']
               required: ['event_ids', 'data']
           required: ['m.read']

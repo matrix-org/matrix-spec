@@ -107,8 +107,10 @@ determined by the push rules which apply to an event.
 
 When the user updates their read receipt (either by using the API or by
 sending an event), notifications prior to and including that event MUST
-be marked as read. Note that users can send both an `m.read` and
-`m.read.private` receipt, both of which are capable of clearing notifications.
+be marked as read. Which specific events are affected can vary depending
+on whether a [threaded read receipt](#threaded-read-receipts) was used.
+Note that users can send both an `m.read` and `m.read.private` receipt,
+both of which are capable of clearing notifications.
 
 If the user has both `m.read` and `m.read.private` set in the room then
 the receipt which is more recent/ahead must be used to determine where
@@ -120,6 +122,17 @@ notification state doesn't change (the `m.read` receipt is still more
 ahead), however if the `m.read.private` receipt were to be updated to
 event D then the user has read up to D (the `m.read` receipt is now
 behind the `m.read.private` receipt).
+
+{{< added-in v="1.4" >}} When handling threaded read receipts, the server
+is to partition the notification count to each thread (with the main timeline
+being its own thread). To determine if an event is part of a thread the
+server follows the [event relationship](#forming-relationships-between-events)
+until it finds a thread root (as specified by the [threading module](#threading)),
+however it is not recommended that the server traverse infinitely. Instead,
+implementations are encouraged to do a maximum of 3 hops to find a thread
+before deciding that the event does not belong to a thread. This is primarily
+to ensure that future events, like `m.reaction`, are correctly considered
+"part of" a given thread.
 
 ##### Push Rules
 
