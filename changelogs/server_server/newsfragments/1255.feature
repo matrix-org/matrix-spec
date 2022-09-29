@@ -1,1 +1,0 @@
-Add per-thread notifications and read receipts, as per [MSC3771](https://github.com/matrix-org/matrix-spec-proposals/pull/3771) and [MSC3773](https://github.com/matrix-org/matrix-spec-proposals/pull/3773).

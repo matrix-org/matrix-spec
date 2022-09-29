@@ -1,1 +1,0 @@
-Clarify that the "device_id", "user_id" and "access_token" fields are required in the response body of `POST /_matrix/client/v3/login`.

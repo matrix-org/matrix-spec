@@ -1,1 +1,0 @@
-Describe return codes for account data endpoints, and clarify that per-room data does not inherit from the global data.

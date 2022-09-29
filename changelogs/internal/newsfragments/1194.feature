@@ -1,1 +1,0 @@
-Add internal changes changelog section.
