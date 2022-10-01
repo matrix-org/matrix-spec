@@ -74,8 +74,18 @@ paths:
           required: true
           schema:
             type: object
+            properties:
+              thread_id:
+                type: string
+                x-addedInMatrixVersion: "1.4"
+                description: |-
+                    The root thread event's ID (or `main`) for which
+                    thread this receipt is intended to be under. If
+                    not specified, the read receipt is *unthreaded*
+                    (default).
             example: {
-              }
+              "thread_id": "main"
+            }
       responses:
         200:
           description: The receipt was sent.
@@ -88,5 +98,17 @@ paths:
           description: This request was rate-limited.
           schema:
             "$ref": "definitions/errors/rate_limited.yaml"
+        400:
+          description: |-
+            The `thread_id is not a string, or is empty, or it is provided for
+            a receipt of type `m.fully_read`, or the `event_id` is not related
+            to the `thread_id`.
+          schema:
+            $ref: "definitions/errors/error.yaml"
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "thread_id field must be a non-empty string"
+            }
       tags:
         - Room participation
