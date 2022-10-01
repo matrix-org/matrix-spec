@@ -47,8 +47,9 @@ Not all attributes on those tags should be permitted as they may be
 avenues for other disruption attempts, such as adding `onclick` handlers
 or excessively large text. Clients should only permit the attributes
 listed for the tags below. Where `data-mx-bg-color` and `data-mx-color`
-are listed, clients should translate the value (a 6-character hex color
-code) to the appropriate CSS/attributes for the tag.
+are listed, clients should translate the value (a `#` character followed
+by a 6-character hex color code) to the appropriate CSS/attributes for
+the tag.
 
 `font`
 `data-mx-bg-color`, `data-mx-color`, `color`
