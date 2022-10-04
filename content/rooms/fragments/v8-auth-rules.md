@@ -2,7 +2,7 @@
 toc_hide: true
 ---
 
-Events must be signed by the server denoted by the `sender` key.
+Events must be signed by the server denoted by the `sender` property.
 
 `m.room.redaction` events are not explicitly part of the auth rules.
 They are still subject to the minimum power level rules, but should always
@@ -32,7 +32,7 @@ The rules are as follows:
         `sender`, reject.
     3.  If `content.room_version` is present and is not a recognised
         version, reject.
-    4.  If `content` has no `creator` field, reject.
+    4.  If `content` has no `creator` property, reject.
     5.  Otherwise, allow.
 2.  Considering the event's `auth_events`:
     1.  If there are duplicate entries for a given `type` and `state_key` pair,
@@ -51,8 +51,7 @@ The rules are as follows:
 4.  If type is `m.room.member`:
     1.  If there is no `state_key` property, or no `membership` property in
         `content`, reject.
-    2.  If `content` has a `join_authorised_via_users_server`
-        key:
+    2.  If `content` has a `join_authorised_via_users_server` property:
         1.  If the event is not validly signed by the homeserver of the user ID denoted
             by the key, reject.
     3.  If `membership` is `join`:
@@ -71,11 +70,11 @@ The rules are as follows:
         6.  If the `join_rule` is `public`, allow.
         7.  Otherwise, reject.
     4.  If `membership` is `invite`:
-        1.  If `content` has `third_party_invite` key:
+        1.  If `content` has a `third_party_invite` property:
             1.  If *target user* is banned, reject.
             2.  If `content.third_party_invite` does not have a `signed`
-                key, reject.
-            3.  If `signed` does not have `mxid` and `token` keys,
+                property, reject.
+            3.  If `signed` does not have `mxid` and `token` properties,
                 reject.
             4.  If `mxid` does not match `state_key`, reject.
             5.  If there is no `m.room.third_party_invite` event in the
@@ -86,8 +85,8 @@ The rules are as follows:
             7.  If any signature in `signed` matches any public key in
                 the `m.room.third_party_invite` event, allow. The public
                 keys are in `content` of `m.room.third_party_invite` as:
-                1.  A single public key in the `public_key` field.
-                2.  A list of public keys in the `public_keys` field.
+                1.  A single public key in the `public_key` property.
+                2.  A list of public keys in the `public_keys` property.
             8.  Otherwise, reject.
         2.  If the `sender`'s current membership state is not `join`,
             reject.
