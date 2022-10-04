@@ -1622,7 +1622,7 @@ specified). The client is expected to use [`/keys/query`](/client-server-api/#po
 sync, as documented in [Tracking the device list for a
 user](#tracking-the-device-list-for-a-user).
 
-It also adds a `one_time_keys_count` property. Note the spelling
+It also adds a `device_one_time_keys_count` property. Note the spelling
 difference with the `one_time_key_counts` property in the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) response.
 
