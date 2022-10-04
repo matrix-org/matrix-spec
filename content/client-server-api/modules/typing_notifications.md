@@ -6,8 +6,8 @@ type: module
 
 Users may wish to be informed when another user is typing in a room.
 This can be achieved using typing notifications. These are ephemeral
-events scoped to a `room_id`. This means they do not form part of the
-[Event Graph](index.html#event-graphs) but still have a `room_id` key.
+events scoped to a room, but they do not form part of the
+[Event Graph](index.html#event-graphs).
 
 #### Events
 
