@@ -1988,11 +1988,6 @@ of times that `key` was used by child events.
 
 The actual aggregation format depends on the `rel_type`.
 
-{{% boxes/note %}}
-This specification does not currently describe any `rel_type`s which require
-aggregation. This functionality forms a framework for future extensions.
-{{% /boxes/note %}}
-
 Aggregations are sometimes automatically included by a server alongside the parent
 event. This is known as a "bundled aggregation" or "bundle" for simplicity. The
 act of doing this is "bundling".
