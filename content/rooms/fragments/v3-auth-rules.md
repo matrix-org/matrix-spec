@@ -52,7 +52,8 @@ The complete list of rules, as of room version 3, is as follows:
     2.  If sender's domain doesn't matches `state_key`, reject.
     3.  Otherwise, allow.
 5.  If type is `m.room.member`:
-    1.  If no `state_key` key or `membership` key in `content`, reject.
+    1.  If there is no `state_key` property, or no `membership` property in
+        `content`, reject.
     2.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the
             `state_key` is the creator, allow.
