@@ -16,9 +16,10 @@
 {{ $msgtypes := (slice "m.room.message$m.text" "m.room.message$m.emote" "m.room.message$m.notice" "m.room.message$m.image" "m.room.message$m.file") }}
 
 {{/*
-  It excludes `m.room.message$m.server_notice`
+  It excludes `m.room.message$m.server_notice` and `m.room.message$m.key.verification.request`
+  since they are in their own modules.
 */}}
-{{ $excluded := slice "m.room.message$m.server_notice" }}
+{{ $excluded := slice "m.room.message$m.server_notice" "m.room.message$m.key.verification.request" }}
 
 {{/*
   It then adds any other events that start with `m.room.message`.

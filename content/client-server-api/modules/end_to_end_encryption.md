@@ -434,11 +434,14 @@ shared by the other messages of that session.
 
 In general, verification operates as follows:
 
-- Alice requests a key verification with Bob by sending an
-  `m.key.verification.request` event. This event indicates the verification
-  methods that Alice's client supports. (Note that "Alice" and "Bob" may in
-  fact be the same user, in the case where a user is verifying their own
-  devices.)
+- Alice requests a key verification with Bob by sending an key verification
+  request event.  If the verification is being requested in a room, this will
+  be an event with type `m.room.message` and `msgtype`
+  `m.key.verification.request`; if the verification is being requested using
+  to-device messaging, this will be an event with type
+  `m.key.verification.request`.  This event indicates the verification methods
+  that Alice's client supports. (Note that "Alice" and "Bob" may in fact be the
+  same user, in the case where a user is verifying their own devices.)
 - Bob's client prompts Bob to accept the key verification. When Bob accepts
   the verification, Bob's client sends an `m.key.verification.ready` event.
   This event indicates the verification methods, corresponding to the
@@ -561,6 +564,8 @@ properties to the verification messages. Event types for methods defined
 in this specification must be under the `m.key.verification` namespace
 and any other event types must be namespaced according to the Java
 package naming convention.
+
+{{% event event="m.room.message$m.key.verification.request" %}}
 
 {{% event event="m.key.verification.request" %}}
 
