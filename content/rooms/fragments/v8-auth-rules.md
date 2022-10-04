@@ -51,7 +51,8 @@ The rules are as follows:
 4.  If type is `m.room.member`:
     1.  If there is no `state_key` property, or no `membership` property in
         `content`, reject.
-    2.  If `content` has a `join_authorised_via_users_server` property:
+    2.  {{< added-in this=true >}}
+        If `content` has a `join_authorised_via_users_server` property:
         1.  If the event is not validly signed by the homeserver of the user ID denoted
             by the key, reject.
     3.  If `membership` is `join`:
@@ -61,7 +62,8 @@ The rules are as follows:
         3.  If the `sender` is banned, reject.
         4.  If the `join_rule` is `invite` or `knock` then allow if
             membership state is `invite` or `join`.
-        5.  If the `join_rule` is `restricted`:
+        5.  {{< added-in this=true >}}
+            If the `join_rule` is `restricted`:
             1.  If membership state is `join` or `invite`, allow.
             2.  If the `join_authorised_via_users_server` key in `content`
                 is not a user with sufficient permission to invite other
