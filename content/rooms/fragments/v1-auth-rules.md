@@ -110,7 +110,7 @@ The rules are as follows:
 9. If the event has a `state_key` that starts with an `@` and does not
     match the `sender`, reject.
 10. If type is `m.room.power_levels`:
-    1.  If the `users` property in `content` is not a dictionary with keys that
+    1.  If the `users` property in `content` is not an object with keys that
         are valid user IDs with values that are integers (or a string
         that is an integer), reject.
     2.  If there is no previous `m.room.power_levels` event in the room,
