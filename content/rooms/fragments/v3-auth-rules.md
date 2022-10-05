@@ -2,11 +2,11 @@
 toc_hide: true
 ---
 
-{{% added-in this=true %}} In room versions 1 and 2, events need a
+{{< added-in this=true >}} In room versions 1 and 2, events need a
 signature from the domain of the `event_id` in order to be considered
 valid. This room version does not include an `event_id` over federation
 in the same respect, so does not need a signature from that server.
-The event must still be signed by the server denoted by the `sender`,
+The event must still be signed by the server denoted by the `sender` property,
 however.
 
 The types of state events that affect authorization are:
@@ -26,12 +26,12 @@ the default power level for users in the room.
 The complete list of rules, as of room version 3, is as follows:
 
 1.  If type is `m.room.create`:
-    1.  If it has any previous events, reject.
+    1.  If it has any `prev_events`, reject.
     2.  If the domain of the `room_id` does not match the domain of the
         `sender`, reject.
     3.  If `content.room_version` is present and is not a recognised
         version, reject.
-    4.  If `content` has no `creator` field, reject.
+    4.  If `content` has no `creator` property, reject.
     5.  Otherwise, allow.
 2.  Considering the event's `auth_events`:
     1.  If there are duplicate entries for a given `type` and `state_key` pair,
@@ -52,7 +52,8 @@ The complete list of rules, as of room version 3, is as follows:
     2.  If sender's domain doesn't matches `state_key`, reject.
     3.  Otherwise, allow.
 5.  If type is `m.room.member`:
-    1.  If no `state_key` key or `membership` key in `content`, reject.
+    1.  If there is no `state_key` property, or no `membership` property in
+        `content`, reject.
     2.  If `membership` is `join`:
         1.  If the only previous event is an `m.room.create` and the
             `state_key` is the creator, allow.
@@ -63,11 +64,11 @@ The complete list of rules, as of room version 3, is as follows:
         5.  If the `join_rule` is `public`, allow.
         6.  Otherwise, reject.
     3.  If `membership` is `invite`:
-        1.  If `content` has `third_party_invite` key:
+        1.  If `content` has a `third_party_invite` property:
             1.  If *target user* is banned, reject.
             2.  If `content.third_party_invite` does not have a `signed`
-                key, reject.
-            3.  If `signed` does not have `mxid` and `token` keys,
+                property, reject.
+            3.  If `signed` does not have `mxid` and `token` properties,
                 reject.
             4.  If `mxid` does not match `state_key`, reject.
             5.  If there is no `m.room.third_party_invite` event in the
@@ -78,8 +79,8 @@ The complete list of rules, as of room version 3, is as follows:
             7.  If any signature in `signed` matches any public key in
                 the `m.room.third_party_invite` event, allow. The public
                 keys are in `content` of `m.room.third_party_invite` as:
-                1.  A single public key in the `public_key` field.
-                2.  A list of public keys in the `public_keys` field.
+                1.  A single public key in the `public_key` property.
+                2.  A list of public keys in the `public_keys` property.
             8.  Otherwise, reject.
         2.  If the `sender`'s current membership state is not `join`,
             reject.
