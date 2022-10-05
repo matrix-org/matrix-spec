@@ -18,10 +18,6 @@ description: |-
 
   The `third_party_invite` property will be set if this invite is an `invite` event and is the successor of an `m.room.third_party_invite` event, and absent otherwise.
 
-  This event may also include an `invite_room_state` key inside the event's `unsigned` data.
-  If present, this contains an array of [stripped state events](/client-server-api/#stripped-state)
-  to assist the receiver in identifying the room.
-
   The user for which a membership applies is represented by the `state_key`. Under some conditions,
   the `sender` and `state_key` may not match - this may be interpreted as the `sender` affecting
   the membership state of the `state_key` user.
@@ -136,28 +132,5 @@ properties:
     allOf:
       - $ref: "core-event-schema/unsigned_prop.yaml"
       - type: object
-        properties:
-          invite_room_state:
-            description: |-
-              A subset of the state of the room at the time of the invite, if `membership` is `invite`.
-              Note that this state is informational, and SHOULD NOT be trusted; once the client has
-              joined the room, it SHOULD fetch the live state from the server and discard the
-              invite_room_state. Also, clients must not rely on any particular state being present here;
-              they SHOULD behave properly (with possibly a degraded but not a broken experience) in
-              the absence of any particular events here. If they are set on the room, at least the
-              state for `m.room.avatar`, `m.room.canonical_alias`, `m.room.join_rules`, and `m.room.name`
-              SHOULD be included.
-            items:
-              $ref: "core-event-schema/stripped_state.yaml"
-            type: array
-          knock_room_state:
-            description: |-
-              A subset of the state of the room at the time of the knock, if `membership` is `knock`.
-              This has the same restrictions as `invite_room_state`. If they are set on the room, at least
-              the state for `m.room.avatar`, `m.room.canonical_alias`, `m.room.join_rules`, `m.room.name`,
-              and `m.room.encryption` SHOULD be included.
-            items:
-              $ref: "core-event-schema/stripped_state.yaml"
-            type: array
 title: The current membership state of a user in the room.
 type: object
