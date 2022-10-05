@@ -128,11 +128,6 @@ paths:
                 "origin": "example.org",
                 "origin_server_ts": 1549041175876,
                 "sender": "@someone:example.org",
-                "unsigned": {
-                  "invite_room_state": {
-                    "$ref": "../../event-schemas/examples/invite_room_state.json"
-                  }
-                },
                 "content": {
                     "membership": "invite"
                 },
