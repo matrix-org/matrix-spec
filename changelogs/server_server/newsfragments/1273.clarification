@@ -1,0 +1,1 @@
+Remove superfluous `unsigned.invite_room_state` dictionary in the [`PUT /_matrix/federation/v2/invite/{roomId}/{eventId}`](https://spec.matrix.org/v1.4/server-server-api/#put_matrixfederationv2inviteroomideventid) response example.

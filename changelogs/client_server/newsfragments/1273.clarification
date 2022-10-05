@@ -1,0 +1,1 @@
+Remove references to `unsigned.{invite_room_state,knock_room_state}` in `m.room.member` events. Clients should use [`invite_state`](https://spec.matrix.org/v1.4/client-server-api/#_matrixclientv3sync_invitestate) to retrieve stripped state events from rooms they've been invited to or knocked on.
