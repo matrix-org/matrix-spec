@@ -1,0 +1,1 @@
+Remove `origin` field from transactions which was redundant and not enforced to be present by Synapse.

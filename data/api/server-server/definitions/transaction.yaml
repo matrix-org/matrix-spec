@@ -17,11 +17,6 @@ description: Transaction
 example:
   $ref: "../examples/transaction.json"
 properties:
-  origin:
-    type: string
-    description: |-
-      The `server_name` of the homeserver sending this transaction.
-    example: "example.org"
   origin_server_ts:
     type: integer
     format: int64
@@ -44,4 +39,4 @@ properties:
       properties: {}
       example:
         $ref: "../examples/minimal_pdu.json"
-required: ['origin', 'origin_server_ts', 'pdus']
+required: ['origin_server_ts', 'pdus']
