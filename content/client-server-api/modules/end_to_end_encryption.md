@@ -434,7 +434,7 @@ shared by the other messages of that session.
 
 In general, verification operates as follows:
 
-- Alice requests a key verification with Bob by sending an key verification
+- Alice requests a key verification with Bob by sending a key verification
   request event.  If the verification is being requested in a room, this will
   be an event with type `m.room.message` and `msgtype`
   `m.key.verification.request`; if the verification is being requested using
