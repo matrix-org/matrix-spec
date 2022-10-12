@@ -35,7 +35,7 @@ maximum. New connections are being refused by the server. What defines
 "active" is left as an implementation detail, however servers are
 encouraged to treat syncing users as "active".
 
-{{% event event="m.room.message$m.server_notice" %}}
+{{% event event="m.room.message$m.server_notice" title="`m.room.message` with `msgtype: m.server_notice`" %}}
 
 #### Client behaviour
 

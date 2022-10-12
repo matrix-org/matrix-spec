@@ -736,7 +736,7 @@ following error codes are used in addition to those already specified:
 -   `m.mismatched_commitment`: The hash commitment did not match.
 -   `m.mismatched_sas`: The SAS did not match.
 
-{{% event event="m.key.verification.start$m.sas.v1" %}}
+{{% event event="m.key.verification.start$m.sas.v1" title="`m.key.verification.start` with `method: m.sas.v1`" %}}
 
 {{% event event="m.key.verification.accept" %}}
 
@@ -1145,7 +1145,7 @@ base64).
 
 ###### Verification messages specific to QR codes
 
-{{% event event="m.key.verification.start$m.reciprocate.v1" %}}
+{{% event event="m.key.verification.start$m.reciprocate.v1" title="`m.key.verification.start` with `method: m.reciprocate.v1`" %}}
 
 #### Sharing keys between devices
 
