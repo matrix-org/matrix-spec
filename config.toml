@@ -49,9 +49,9 @@ status = "unstable"
 current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec. CI will set these values here automatically when a release git tag (i.e `v1.5`) is created.
-#major = "1"
-#minor = "3"
-#release_date = "June 16, 2022"
+# major = "1"
+# minor = "4"
+# release_date = "September 29, 2022"
 
 # User interface configuration
 [params.ui]

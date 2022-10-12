@@ -1972,6 +1972,7 @@ This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
 * [Event replacements](#event-replacements).
+* [Threads](#threading).
 * [References](#reference-relations)
 
 #### Aggregations
@@ -1987,11 +1988,6 @@ appropriately specified, would mean that the client receives a total count for t
 of times that `key` was used by child events.
 
 The actual aggregation format depends on the `rel_type`.
-
-{{% boxes/note %}}
-This specification does not currently describe any `rel_type`s which require
-aggregation. This functionality forms a framework for future extensions.
-{{% /boxes/note %}}
 
 Aggregations are sometimes automatically included by a server alongside the parent
 event. This is known as a "bundled aggregation" or "bundle" for simplicity. The
@@ -2057,6 +2053,7 @@ The endpoints where the server *should* include bundled aggregations are:
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
+* {{< added-in v="1.4" >}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
 
 {{% boxes/note %}}
 The server is **not** required to return bundled aggregations on deprecated endpoints
@@ -2643,4 +2640,5 @@ systems.
 {{< cs-module name="moderation_policies" >}}
 {{< cs-module name="spaces" >}}
 {{< cs-module name="event_replacements" >}}
+{{< cs-module name="threading" >}}
 {{< cs-module name="reference_relations" >}}

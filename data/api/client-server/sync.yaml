@@ -239,17 +239,50 @@ paths:
                             Counts of unread notifications for this room. See the
                             [Receiving notifications](/client-server-api/#receiving-notifications) section
                             for more information on how these are calculated.
+
+                            If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
+                            these counts will only be for the main timeline rather than all events in the room.
+                            See the [threading module](#threading) for more information.
+                          x-changedInMatrixVersion:
+                            1.4: |
+                              Updated to reflect behaviour of having `unread_thread_notifications` as `true` in
+                              the `RoomEventFilter` for `/sync`.
                           properties:
                             highlight_count:
                                 title: Highlighted notification count
                                 type: integer
                                 description: The number of unread notifications
-                                             for this room with the highlight flag set
+                                             for this room with the highlight flag set.
                             notification_count:
                                 title: Total notification count
                                 type: integer
                                 description: The total number of unread notifications
-                                             for this room
+                                             for this room.
+                        unread_thread_notifications:
+                          title: Unread Thread Notification Counts
+                          type: object
+                          description: |-
+                            If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
+                            the notification counts for each [thread](#threading) in this room. The object is
+                            keyed by thread root ID, with values matching `unread_notifications`.
+
+                            If a thread does not have any notifications it can be omitted from this object. If
+                            no threads have notification counts, this whole object can be omitted.
+                          x-addedInMatrixVersion: "1.4"
+                          additionalProperties:
+                            title: ThreadNotificationCounts
+                            type: object
+                            properties:
+                              highlight_count:
+                                title: ThreadedHighlightNotificationCount
+                                type: integer
+                                description: |-
+                                  The number of unread notifications for this *thread* with the highlight flag set.
+                              notification_count:
+                                title: ThreadedTotalNotificationCount
+                                type: integer
+                                description: |-
+                                  The total number of unread notifications for this *thread*.
                   invite:
                     title: Invited Rooms
                     type: object
@@ -424,6 +457,16 @@ paths:
                             }
                           }
                         ]
+                      },
+                      "unread_notifications": {
+                        "highlight_count": 1,
+                        "notification_count": 5
+                      },
+                      "unread_thread_notifications": {
+                        "$threadroot": {
+                          "highlight_count": 3,
+                          "notification_count": 6
+                        }
                       }
                     }
                   },

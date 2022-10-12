@@ -21,5 +21,6 @@
 {{ $content := $page.Content }}
 {{ if not $withVersioning }}
     {{ $content = (replace $content "[New in this version]" "") }}
+    {{ $content = (replace $content "[Changed in this version]" "") }}
 {{ end }}
 {{ $content | safeHTML }}
