@@ -565,7 +565,7 @@ in this specification must be under the `m.key.verification` namespace
 and any other event types must be namespaced according to the Java
 package naming convention.
 
-{{% event event="m.room.message$m.key.verification.request" %}}
+{{% event event="m.room.message$m.key.verification.request" title="`m.room.message` with `msgtype: m.key.verification.request`" %}}
 
 {{% event event="m.key.verification.request" %}}
 
