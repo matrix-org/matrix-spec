@@ -37,7 +37,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias to set.
+          description: |
+            The room alias to set. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
         - in: body
@@ -95,7 +97,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias.
+          description: |
+            The room alias. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
       responses:
@@ -164,7 +168,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias to remove.
+          description: |
+            The room alias to remove. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
       responses:
