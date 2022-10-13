@@ -61,6 +61,15 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         409:
           description: A room alias with that name already exists.
           examples:
@@ -113,6 +122,15 @@ paths:
                   "another.com"
                 ]
               }
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         404:
           description: There is no mapped room ID for this room alias.
           examples:
@@ -220,6 +238,15 @@ paths:
                 items:
                   type: string
             required: ['aliases']
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         403:
           description: The user is not permitted to retrieve the list of local aliases for the room.
           examples:
