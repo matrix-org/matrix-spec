@@ -403,7 +403,7 @@ Access tokens can expire after a certain amount of time. Any HTTP calls that
 use an expired access token will return with an error code `M_UNKNOWN_TOKEN`,
 preferably with `soft_logout: true`. When a client receives this error and it
 has a refresh token, it should attempt to refresh the access token by calling
-[`/refresh`](#post_matrixclientv3refresh). Clients can also refresh their
+[`/refresh`](#post_matrixclientv1refresh). Clients can also refresh their
 access token at any time, even if it has not yet expired. If the token refresh
 succeeds, the client should use the new token for future requests, and can
 re-try previously-failed requests with the new token. When an access token is
