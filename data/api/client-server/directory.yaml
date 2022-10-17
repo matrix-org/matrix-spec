@@ -37,7 +37,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias to set.
+          description: |
+            The room alias to set. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
         - in: body
@@ -61,6 +63,15 @@ paths:
             application/json: {}
           schema:
             type: object
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         409:
           description: A room alias with that name already exists.
           examples:
@@ -86,7 +97,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias.
+          description: |
+            The room alias. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
       responses:
@@ -113,6 +126,15 @@ paths:
                   "another.com"
                 ]
               }
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         404:
           description: There is no mapped room ID for this room alias.
           examples:
@@ -146,7 +168,9 @@ paths:
         - in: path
           type: string
           name: roomAlias
-          description: The room alias to remove.
+          description: |
+            The room alias to remove. Its format is defined
+            [in the appendices](/appendices/#room-aliases).
           required: true
           x-example: "#monkeys:matrix.org"
       responses:
@@ -220,6 +244,15 @@ paths:
                 items:
                   type: string
             required: ['aliases']
+        400:
+          description: The given `roomAlias` is not a valid room alias.
+          examples:
+            application/json: {
+              "errcode": "M_INVALID_PARAM",
+              "error": "Room alias invalid"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         403:
           description: The user is not permitted to retrieve the list of local aliases for the room.
           examples:
