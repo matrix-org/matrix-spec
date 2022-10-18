@@ -1521,7 +1521,7 @@ any given point in time:
 
 ### Types of room events
 
-Room events are split into three categories:
+Room events are split into two categories:
 
 * **State events**: These are events which update the metadata state of the room (e.g. room
 topic, room membership etc). State is keyed by a tuple of event `type`
@@ -1531,12 +1531,6 @@ overwritten.
 * **Message events**: These are events which describe transient "once-off" activity in a room:
 typically communication such as sending an instant message or setting up
 a VoIP call.
-
-* **Ephemeral events**: These are events which are not persisted in the room's
-timeline. In this version of the spec, these are [typing
-notification](#typing-notifications) and [read receipt](#receipts) events. Note
-that, unlike state events and message events, there is currently no way of
-defining custom ephemeral events.
 
 This specification outlines several events, all with the event type
 prefix `m.`. (See [Room Events](#room-events) for the m. event
@@ -1565,9 +1559,7 @@ in [room version 1](/rooms/v1#event-format) and [room version
 
 However, it is unusual that a Matrix client would encounter this event
 format. Instead, homeservers are responsible for converting events into the
-format shown below so that they can be easily parsed by clients. Note that the
-format below only applies to state and message events; ephemeral events will
-only have the `type` and `content` properties.
+format shown below so that they can be easily parsed by clients.
 
 {{% boxes/warning %}}
 Event bodies are considered untrusted data. This means that any application using
