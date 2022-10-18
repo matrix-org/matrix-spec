@@ -317,9 +317,13 @@ Example:
 
 ###### `m.secret.send`
 
-Sent by a client to share a secret with another device, in response to
-an `m.secret.request` event. It must be encrypted as an
-`m.room.encrypted` event, then sent as a to-device event.
+Sent by a client to share a secret with another device, in response to an
+`m.secret.request` event. It must be encrypted as an `m.room.encrypted` event
+using [Olm](#molmv1curve25519-aes-sha2), then sent as a to-device event.
+
+The `request_id` must match the ID previously given in an `m.secret.request`
+event, and this event must come from a device that the `m.secret.request` event
+was originally sent to.  
 
 | Parameter   | Type   | Description                                                  |
 |-------------|--------|--------------------------------------------------------------|

@@ -987,6 +987,17 @@ If a user's client sees that any other user has changed their master
 key, that client must notify the user about the change before allowing
 communication between the users to continue.
 
+Since device IDs and cross-signing keys occupy the same namespace, clients must
+ensure that they use the correct keys when verifying. While servers must not
+allow devices to have the same IDs as cross-signing keys, a malicious server
+could construct such a situation, so clients must not rely on the server being
+well-behaved and should take precautions against this. For example, clients
+should refer to keys using the public keys rather than only by the device
+ID. Clients should also fix the keys that are being verified, and ensure that
+they do not change in the course of verification. Clients may also display a
+warning and refuse to verify a user when it detects that the user has a device
+with the same ID as a cross-signing key.
+
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
 the user's master key and possibly by re-verifying devices or users.
@@ -1587,7 +1598,11 @@ that they can decrypt future messages encrypted using this session. An
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
 
-When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
+When a client receives a Megolm session, the client MUST ensure that the
+session was received via a channel that ensures authenticity of the messages.
+Practically speaking, this means that Megolm sessions must be received via Olm.
+
+When a client is updating a Megolm session in its store, the client MUST ensure:
 
 * that the updated session data comes from a trusted source.
 * that the new session key has a lower message index than the existing session key.
