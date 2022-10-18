@@ -1973,6 +1973,7 @@ This specification describes the following relationship types:
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
 * [Event replacements](#event-replacements).
 * [Threads](#threading).
+* [References](#reference-relations)
 
 #### Aggregations
 
@@ -2640,3 +2641,4 @@ systems.
 {{< cs-module name="spaces" >}}
 {{< cs-module name="event_replacements" >}}
 {{< cs-module name="threading" >}}
+{{< cs-module name="reference_relations" >}}
