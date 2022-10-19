@@ -139,6 +139,8 @@ paths:
         This endpoint allows the creation, modification and deletion of [pushers](/client-server-api/#push-notifications)
         for this user ID. The behaviour of this endpoint varies depending on the
         values in the JSON body.
+        
+        For deletion, send a request with`kind:null`, also including `app_id` and `pushkey` of the pusher you want to remove. 
       operationId: postPusher
       security:
         - accessToken: []
