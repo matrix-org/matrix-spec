@@ -340,6 +340,7 @@ footer {
   }
 
   table {
+    display: table;
     table-layout: fixed;
     width: 100%;
 
@@ -462,10 +463,4 @@ Make padding symmetrical (this selector is used in the default styles to apply p
   background-position: left 1rem center;
   background-repeat: no-repeat;
   padding-left: 100px;
-}
-
-/* Full-width tables */
-.td-content > table {
-  width: 100%;
-  display: table;
 }
