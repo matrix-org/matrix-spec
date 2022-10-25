@@ -41,7 +41,7 @@ properties:
           - description: |-
               A list of namespaces defining the user IDs that the application
               service is interested in. Events will be sent to the AS if a
-              user matching one of the namespaces is the target of the event,
+              local user matching one of the namespaces is the target of the event,
               or is a joined member of the room where the event occurred.
       rooms:
         allOf:

@@ -80,6 +80,16 @@ namespaces:
   rooms: []
 ```
 
+{{% boxes/note %}}
+Application services can only register interest in *local* users (i.e., users
+whose IDs end with the `server_name` of the local homeserver). Events affecting
+users on other homeservers are not sent to an application service, even if the
+user happens to match the one of the `users` namespaces (unless, of course, the
+event affects a room that the application service is interested in for another
+room - for example, because there is another user in the room that the
+application service is interested in).
+{{% /boxes/note %}}
+
 {{% boxes/warning %}}
 If the homeserver in question has multiple application services, each
 `as_token` and `id` MUST be unique per application service as these are
