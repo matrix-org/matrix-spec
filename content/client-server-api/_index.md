@@ -1945,14 +1945,14 @@ parent event, for example.
 {{% /boxes/note %}}
 
 To allow the server to aggregate and find child events for a parent, the `m.relates_to`
-key of an event MUST be included in the plaintext copy of the event. It cannot be
+key of an event MUST be included in the cleartext portion of the event. It cannot be
 exclusively recorded in the encrypted payload as the server cannot decrypt the event
 for processing.
 
 {{% boxes/warning %}}
 If an encrypted event contains an `m.relates_to` in its payload, it should be
-ignored and instead favour the plaintext `m.relates_to` copy (including when there
-is no plaintext copy). This is to ensure the client's behaviour matches the server's
+ignored and instead favour the cleartext `m.relates_to` copy (including when there
+is no cleartext copy). This is to ensure the client's behaviour matches the server's
 capability to handle relationships.
 {{% /boxes/warning %}}
 

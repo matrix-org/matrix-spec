@@ -327,11 +327,12 @@ If a reason were to be supplied, it would look like:
 }
 ```
 
-When sending a spoiler, clients SHOULD provide the plain text fallback in the `body`
+When sending a spoiler, clients SHOULD provide the spoilered text fallback in the `body`
 as shown above (including the reason). The fallback SHOULD omit the spoiler text verbatim
 since `body` might show up in text-only clients or in notifications. To prevent spoilers
-showing up in such situations, clients are strongly encouraged to first upload the plaintext
-to the media repository then reference the MXC URI in a markdown-style link, as shown above.
+showing up in such situations, clients are strongly encouraged to first upload the spoilered
+text to the media repository then reference the MXC URI in a markdown-style link, as shown
+above.
 
 Clients SHOULD render spoilers differently with some sort of disclosure. For example, the
 client could blur the actual text and ask the user to click on it for it to be revealed.
