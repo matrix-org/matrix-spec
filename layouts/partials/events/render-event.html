@@ -22,7 +22,7 @@
 <summary>
 
   <h1 id="{{ anchorize $event_name }}">
-   {{ with .title }}{{ $.title | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
+   {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
   </h1>
 
   <hr/>
@@ -74,10 +74,16 @@
     */}}
     {{ if $desired_example_name }}
         {{ if eq $example_name $desired_example_name }}
-            {{ partial "events/example" (dict "example" $example)}}
+            {{ partial "events/example" $example }}
         {{ end }}
+    {{/*
+      If `$desired_example_name` is not given, we will include any
+      example that is equal to the event name. Normally, this would
+      be handled by the case below, but that case does not work if
+      the event name includes a "$".
+    */}}
     {{ else if eq $event_name $example_name }}
-        {{ partial "events/example" (dict "example" $example)}}
+        {{ partial "events/example" $example }}
     {{/*
       If `$desired_example_name` is not given, we will include any
       examples whose first part (before "$") matches the event name
@@ -87,7 +93,7 @@
         {{ $pieces := split $example_name "$" }}
         {{ $example_base_name := index $pieces 0 }}
         {{ if eq $event_name $example_base_name }}
-             {{ partial "events/example" (dict "example" $example)}}
+             {{ partial "events/example" $example }}
         {{ end }}
     {{ end }}
 {{ end }}
