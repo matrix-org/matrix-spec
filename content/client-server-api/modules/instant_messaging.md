@@ -328,8 +328,8 @@ If a reason were to be supplied, it would look like:
 ```
 
 When sending a spoiler, clients SHOULD provide the fallback in the `body` as shown above
-(including the reason). The fallback SHOULD omit the spoiler text verbatim since `body`
-might show up in text-only clients or in notifications. To prevent spoilers showing up in
+(including the reason). The fallback SHOULD NOT include the text containing spoilers since
+`body` might show up in text-only clients or in notifications. To prevent spoilers showing up in
 such situations, clients are strongly encouraged to first upload the text containing spoilers
 to the media repository, then reference the MXC URI in a markdown-style link, as shown above.
 
