@@ -280,7 +280,7 @@ request.
 
 #### `none`
 
-This algorithm performs plaintext lookups on the identity server.
+This algorithm performs cleartext lookups on the identity server.
 Typically this algorithm should not be used due to the security concerns
 of unhashed identifiers, however some scenarios (such as LDAP-backed
 identity servers) prevent the use of hashed identifiers. Identity
