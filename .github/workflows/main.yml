@@ -115,8 +115,6 @@ jobs:
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
       - name: "⚙️ npm"
         run: |
           npm i
@@ -161,8 +159,6 @@ jobs:
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
       - name: "⚙️ npm"
         run: |
           npm i
