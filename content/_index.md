@@ -31,8 +31,7 @@ Additionally, this introduction page contains the key baseline
 information required to understand the specific APIs, including the
 section the [overall architecture](#architecture).
 
-The [Matrix API
-Viewer](https://matrix.org/docs/api/) is useful for
+The [Matrix API Viewer](https://matrix.org/docs/api/) is useful for
 browsing the Client-Server API.
 
 ## Introduction to the Matrix APIs
