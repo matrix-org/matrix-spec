@@ -89,7 +89,8 @@ of course, the event affects a room that the application service is interested i
 for another room - for example, because there is another user in the room that the
 application service is interested in).
 
-For the `rooms` and `aliases` namespaces, all events in a matching room will be sent to the application service.
+For the `rooms` and `aliases` namespaces, all events in a matching room will be
+sent to the application service.
 {{% /boxes/note %}}
 
 {{% boxes/warning %}}
