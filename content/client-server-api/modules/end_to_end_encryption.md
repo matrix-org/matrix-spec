@@ -510,6 +510,15 @@ could also send that message. As well, the order of the
             |                 |                                   |               |
 ```
 
+In contrast with the case of using to-devices messages, when using in-room
+messages, Alice only sends one request event (an event with type
+`m.room.message` with `msgtype: m.key.verification.request`, rather than an
+event with type `m.key.verification.request`), to the room. In addition, Alice
+does not send an `m.key.verification.cancel` event to tell Bob's other devices
+that the request as already been accepted; instead, when Bob's other devices
+see his `m.key.verification.ready` event, they will know that the request has
+already been accepted, and that they should ignore the request.
+
 When using in-room messages and the room has encryption enabled, clients should
 ensure that encryption does not hinder the verification. For example, if the
 verification messages are encrypted, clients must ensure that all the

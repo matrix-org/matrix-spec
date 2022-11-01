@@ -292,49 +292,6 @@ confirm sharing the secret.
 
 ##### Event definitions
 
-###### `m.secret.request`
+{{% event event="m.secret.request" %}}
 
-Sent by a client to request a secret from another device or to cancel a
-previous request. It is sent as an unencrypted to-device event.
-
-| Parameter             | Type   | Description                                                                            |
-|-----------------------|--------|----------------------------------------------------------------------------------------|
-| name                  | string | Required if ``action`` is ``request``. The name of the secret that is being requested. |
-| action                | enum   | **Required.** One of ["request", "request_cancellation"].                              |
-| requesting_device_id  | string | **Required.** The ID of the device requesting the secret.                              |
-| request_id            | string | **Required.** A random string uniquely identifying (with respect to the requester and the target) the target for a secret. If the secret is requested from multiple devices at the same time, the same ID may be used for every target. The same ID is also used in order to cancel a previous request.                                                  |
-
-Example:
-
-```json
-{
-  "name": "org.example.some.secret",
-  "action": "request",
-  "requesting_device_id": "ABCDEFG",
-  "request_id": "randomly_generated_id_9573"
-}
-```
-
-###### `m.secret.send`
-
-Sent by a client to share a secret with another device, in response to an
-`m.secret.request` event. It must be encrypted as an `m.room.encrypted` event
-using [Olm](#molmv1curve25519-aes-sha2), then sent as a to-device event.
-
-The `request_id` must match the ID previously given in an `m.secret.request`
-event, and this event must come from a device that the `m.secret.request` event
-was originally sent to.  
-
-| Parameter   | Type   | Description                                                  |
-|-------------|--------|--------------------------------------------------------------|
-| request_id  | string | **Required.** The ID of the request that this a response to. |
-|  secret     | string | **Required.** The contents of the secret.                    |
-
-Example:
-
-```json
-{
-  "request_id": "randomly_generated_id_9573",
-  "secret": "ThisIsASecretDon'tTellAnyone"
-}
-```
+{{% event event="m.secret.send" %}}
