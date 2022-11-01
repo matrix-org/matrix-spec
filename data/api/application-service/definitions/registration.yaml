@@ -48,15 +48,15 @@ properties:
           - $ref: namespace_list.yaml
           - description: |-
               A list of namespaces defining the room IDs that the application
-              service is interested in. Events will be sent to the AS if they
-              take place in a room with an ID matching one of the namespaces.
+              service is interested in. All events sent in a room with an ID
+              which matches one of the namespaces will be sent to the AS.
       aliases:
         allOf:
           - $ref: namespace_list.yaml
           - description: |-
               A list of namespaces defining the room aliases that the application
-              service is interested in. Events will be sent to the AS if they
-              take place in a room with an alias matching one of the namespaces.
+              service is interested in. All events sent in a room with an alias
+              which matches one of the namespaces will be sent to the AS.
   rate_limited:
     type: boolean
     description: Whether requests from masqueraded users are rate-limited. The sender is excluded.
