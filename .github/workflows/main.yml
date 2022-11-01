@@ -121,12 +121,6 @@ jobs:
         run: |
           npm i
           npm run get-proposals
-      - name: "⚙️ npm — docsy"
-        # Install dependencies according to https://github.com/google/docsy/#prerequisites
-        run: |
-          cd themes/docsy
-          npm i
-          npm i --save-dev autoprefixer postcss-cli postcss
       - name: "⚙️ hugo"
         run: hugo --baseURL "${{ needs.calculate-baseurl.outputs.baseURL }}" -d "spec"
 
