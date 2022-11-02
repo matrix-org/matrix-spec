@@ -434,19 +434,22 @@ shared by the other messages of that session.
 
 In general, verification operates as follows:
 
-- Alice requests a key verification with Bob by sending an
-  `m.key.verification.request` event. This event indicates the verification
-  methods that Alice's client supports. (Note that "Alice" and "Bob" may in
-  fact be the same user, in the case where a user is verifying their own
-  devices.)
+- Alice requests a key verification with Bob by sending a key verification
+  request event.  If the verification is being requested in a room, this will
+  be an event with type [`m.room.message` and `msgtype:
+  m.key.verification.request`](#mroommessagemkeyverificationrequest); if the verification is being requested using
+  to-device messaging, this will be an event with type
+  [`m.key.verification.request`](#mkeyverificationrequest).  This event indicates the verification methods
+  that Alice's client supports. (Note that "Alice" and "Bob" may in fact be the
+  same user, in the case where a user is verifying their own devices.)
 - Bob's client prompts Bob to accept the key verification. When Bob accepts
-  the verification, Bob's client sends an `m.key.verification.ready` event.
+  the verification, Bob's client sends an [`m.key.verification.ready`](#mkeyverificationready) event.
   This event indicates the verification methods, corresponding to the
   verification methods supported by Alice's client, that Bob's client supports.
 - Alice's or Bob's devices allow their users to select one of the verification
   methods supported by both devices to use for verification. When Alice or Bob
   selects a verification method, their device begins the verification by
-  sending an `m.key.verification.start` event, indicating the selected
+  sending an [`m.key.verification.start`](#mkeyverificationstart) event, indicating the selected
   verification method. Note that if there is only one verification method in
   common between the devices then the receiver's device (Bob) can auto-select
   it.
@@ -454,11 +457,11 @@ In general, verification operates as follows:
   verification method. This could involve their clients exchanging messages,
   Alice and Bob exchanging information out-of-band, and/or Alice and Bob
   interacting with their devices.
-- Alice's and Bob's clients send `m.key.verification.done` events to indicate
+- Alice's and Bob's clients send [`m.key.verification.done`](#mkeyverificationdone) events to indicate
   that the verification was successful.
 
 Verifications can be cancelled by either device at any time by sending an
-`m.key.verification.cancel` event with a `code` field that indicates the reason
+[`m.key.verification.cancel`](#mkeyverificationcancel) event with a `code` field that indicates the reason
 it was cancelled.
 
 When using to-device messages, Alice may not know which of Bob's devices to
@@ -561,6 +564,8 @@ properties to the verification messages. Event types for methods defined
 in this specification must be under the `m.key.verification` namespace
 and any other event types must be namespaced according to the Java
 package naming convention.
+
+{{% event event="m.room.message$m.key.verification.request" title="`m.room.message` with `msgtype: m.key.verification.request`" %}}
 
 {{% event event="m.key.verification.request" %}}
 

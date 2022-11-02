@@ -29,8 +29,8 @@ optional keys, as outlined below. If a client cannot display the given
 instead.
 
 Some message types support HTML in the event content that clients should
-prefer to display if available. Currently `m.text`, `m.emote`, and
-`m.notice` support an additional `format` parameter of
+prefer to display if available. Currently `m.text`, `m.emote`, `m.notice`,
+and `m.key.verification.request` support an additional `format` parameter of
 `org.matrix.custom.html`. When this field is present, a `formatted_body`
 with the HTML must be provided. The plain text version of the HTML
 should be provided in the `body`.
