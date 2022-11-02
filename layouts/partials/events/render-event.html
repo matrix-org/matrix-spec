@@ -2,11 +2,13 @@
 
   Renders a single event, given:
 
-    * `event_name`: the name we want to display for the event
+    * `event_name`: the name to use for the event
     * `event_data`: the event specification
     * `desired_example_name` (optional): the exact name of the examples to render.
     If `desired_example_name` is omitted we render all examples
     whose names start with the `event_name`.
+    * `title` (optional): the title to display.  May contain markdown.  Defaults to
+    `event_name` wrapped in a <code> element.
 
 */}}
 
@@ -20,7 +22,7 @@
 <summary>
 
   <h1 id="{{ anchorize $event_name }}">
-   <code>{{ $event_name }}</code>
+   {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
   </h1>
 
   <hr/>
@@ -72,11 +74,16 @@
     */}}
     {{ if $desired_example_name }}
         {{ if eq $example_name $desired_example_name }}
-            {{ $example_content := partial "json-schema/resolve-refs" (dict "schema" $example "path" "event-schemas/examples") }}
-```json
-{{ jsonify (dict "indent" "  ") $example_content }}
-```
+            {{ partial "events/example" $example }}
         {{ end }}
+    {{/*
+      If `$desired_example_name` is not given, we will include any
+      example that is equal to the event name. Normally, this would
+      be handled by the case below, but that case does not work if
+      the event name includes a "$".
+    */}}
+    {{ else if eq $event_name $example_name }}
+        {{ partial "events/example" $example }}
     {{/*
       If `$desired_example_name` is not given, we will include any
       examples whose first part (before "$") matches the event name
@@ -86,14 +93,7 @@
         {{ $pieces := split $example_name "$" }}
         {{ $example_base_name := index $pieces 0 }}
         {{ if eq $event_name $example_base_name }}
-            {{ $example_content := partial "json-schema/resolve-refs" (dict "schema" $example "path" "event-schemas/examples") }}
-            {{ $example_json := jsonify (dict "indent" "  ") $example_content }}
-            {{ $example_json = replace $example_json "\\u003c" "<" }}
-            {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
-
-```json
-{{ $example_json }}
-```
+             {{ partial "events/example" $example }}
         {{ end }}
     {{ end }}
 {{ end }}

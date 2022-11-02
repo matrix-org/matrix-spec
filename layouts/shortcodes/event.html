@@ -2,10 +2,23 @@
 
   This template is used to render an event.
 
-  It expects to be passed an `event` parameter, which is the name of a schema file under
-  "data/event-schemas/schema". The file extension is omitted. For example:
+  It takes the following parameters:
 
-      {{% event event="m.accepted_terms" %}}
+    * `event` (required): the name of a schema file under "data/event-schemas/schema".
+      The file extension is omitted. For example:
+
+        {{% event event="m.accepted_terms" %}}
+
+    * `desired_example_name` (optional): the name of the example file to use under
+      "data/event-schemas/examples", without the file extension.  If omitted
+      defaults to the example file with the same name as the `event` parameter, and
+      (if the name does not contain a "$"), all examples that begin with the name
+      given by the `event` parameter followed by a "$".  For example, if the
+      `event` parameter is "m.foo", then by default it will include the "m.foo"
+      example along with any examples starting with "m.foo$".
+
+    * `title` (optional): the title to use for the event.  Defaults to the name
+      given in the `event` parameter.
 
   This template replaces the old {{*_event}} template.
 
@@ -17,4 +30,4 @@
 {{ $event_data = partial "json-schema/resolve-refs" (dict "schema" $event_data "path" $path) }}
 {{ $event_data := partial "json-schema/resolve-allof" $event_data }}
 
-{{ partial "events/render-event" (dict "event_name" .Params.event "event_data" $event_data)}}
+{{ partial "events/render-event" (dict "event_name" .Params.event "event_data" $event_data "desired_example_name" .Params.desired_example_name "title" .Params.title)}}

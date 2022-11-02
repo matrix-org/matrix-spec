@@ -10,7 +10,7 @@ room itself such as a room name and topic.
 
 #### Events
 
-{{% event event="m.room.message" %}}
+{{% event event="m.room.message" desired_example_name="m.room.message$m.text" %}}
 
 {{% event event="m.room.name" %}}
 
