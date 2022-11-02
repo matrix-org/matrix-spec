@@ -1,6 +1,3 @@
----
-type: module
----
 
 ### SSO client login/authentication
 

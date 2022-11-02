@@ -1,7 +1,4 @@
----
-type: module
 weight: 340
----
 
 ### Spaces
 

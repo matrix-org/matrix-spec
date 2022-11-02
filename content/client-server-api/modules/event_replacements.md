@@ -1,6 +1,3 @@
----
-type: module
----
 
 ### Event replacements
 
