@@ -24,6 +24,6 @@
             {{ $content = (replace $content "[New in this version]" "") }}
             {{ $content = (replace $content "[Changed in this version]" "") }}
         {{ end }}
-        {{ $content | safeHTML }}
+{{ $content | safeHTML }}
     {{ end }}
 {{ end }}
