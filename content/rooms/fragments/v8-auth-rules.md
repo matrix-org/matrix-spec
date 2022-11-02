@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 Events must be signed by the server denoted by the `sender` property.
 

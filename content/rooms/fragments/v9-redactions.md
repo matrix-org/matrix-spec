@@ -1,5 +1,4 @@
 ---
-toc_hide: true
 ---
 
 {{% added-in this=true %}} `m.room.member` events now keep `join_authorised_via_users_server`

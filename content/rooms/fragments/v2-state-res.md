@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 The room state *S′(E)* after an event *E* is defined in terms of the
 room state *S(E)* before *E*, and depends on whether *E* is a state
