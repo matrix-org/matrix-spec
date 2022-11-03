@@ -139,6 +139,11 @@ paths:
         This endpoint allows the creation, modification and deletion of [pushers](/client-server-api/#push-notifications)
         for this user ID. The behaviour of this endpoint varies depending on the
         values in the JSON body.
+
+        If `kind` is not `null`, the pusher with this `app_id` and `pushkey`
+        for this user is updated, or it is created if it doesn't exist. If
+        `kind` is `null`, the pusher with this `app_id` and `pushkey` for this
+        user is deleted.
       operationId: postPusher
       security:
         - accessToken: []
@@ -194,13 +199,13 @@ paths:
               app_display_name:
                 type: string
                 description: |-
-                  A string that will allow the user to identify what application
-                  owns this pusher.
+                  Required if `kind` is not `null`. A string that will allow the
+                  user to identify what application owns this pusher.
               device_display_name:
                 type: string
                 description: |-
-                  A string that will allow the user to identify what device owns
-                  this pusher.
+                  Required if `kind` is not `null`. A string that will allow the
+                  user to identify what device owns this pusher.
               profile_tag:
                 type: string
                 description: |-
@@ -209,14 +214,15 @@ paths:
               lang:
                 type: string
                 description: |-
-                  The preferred language for receiving notifications (e.g. 'en'
-                  or 'en-US').
+                  Required if `kind` is not `null`. The preferred language for
+                  receiving notifications (e.g. 'en' or 'en-US').
               data:
                 type: object
                 description: |-
-                  A dictionary of information for the pusher implementation
-                  itself. If `kind` is `http`, this should contain `url`
-                  which is the URL to use to send notifications to.
+                  Required if `kind` is not `null`. A dictionary of information
+                  for the pusher implementation itself. If `kind` is `http`,
+                  this should contain `url` which is the URL to use to send
+                  notifications to.
                 title: PusherData
                 properties:
                   url:
@@ -243,8 +249,7 @@ paths:
                   different user IDs. Otherwise, the homeserver must remove any
                   other pushers with the same App ID and pushkey for different
                   users. The default is `false`.
-            required: ['kind', 'app_id', 'app_display_name',
-                'device_display_name', 'pushkey', 'lang', 'data']
+            required: ['kind', 'app_id', 'pushkey']
       responses:
         200:
           description: The pusher was set.
