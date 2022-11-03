@@ -821,7 +821,7 @@ specific sound (with a rule\_id of `SSByZWFsbHkgbGlrZSBjYWtl`):
     curl -X PUT -H "Content-Type: application/json" "https://example.com/_matrix/client/v3/pushrules/global/content/SSByZWFsbHkgbGlrZSBjYWtl?access_token=123456" -d \
     '{
        "pattern": "cake",
-       "actions" : ["notify", {"set_sound":"cakealarm.wav"}]
+       "actions" : ["notify", {"set_tweak":"sound", "value":"cakealarm.wav"}]
      }'
 
 To add a rule suppressing notifications for messages starting with
@@ -845,7 +845,7 @@ than the room, sender and content rules):
        ],
        "actions" : [
          "notify",
-         {"set_sound":"beeroclock.wav"}
+         {"set_tweak":"sound", "value":"beeroclock.wav"}
        ]
      }'
 
