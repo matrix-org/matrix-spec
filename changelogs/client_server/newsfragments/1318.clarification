@@ -1,1 +1,1 @@
-Fix various typos throughout the specification.
+Replace `set_sound` push rule action by `set_tweak`.
