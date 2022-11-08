@@ -36,7 +36,8 @@ $table-border-color: rgba(black, .125);
 $table-row-alternate: $secondary-lightest-background;
 $table-row-default: $secondary-lighter-background;
 
-/* Disable loading any fonts from Google Fonts. */
+/* Configure docsy to use the default system fonts instead of Google Fonts.
+ * See https://www.docsy.dev/docs/adding-content/lookandfeel/#fonts */
 $td-enable-google-fonts: false;
 
 /*
