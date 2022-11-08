@@ -27,7 +27,7 @@ properties:
           `order` values with the wrong type, or otherwise invalid contents, are to be treated
           as though the `order` key was not provided.
 
-          See [Ordering](/client-server-api/#ordering-1) for information on how the ordering works.
+          See [Ordering of children within a space](/client-server-api/#ordering-of-children-within-a-space) for information on how the ordering works.
       suggested:
         type: boolean
         description: |-

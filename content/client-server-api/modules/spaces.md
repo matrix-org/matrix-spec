@@ -99,7 +99,7 @@ relevant state event, such as through redaction or otherwise clearing the `conte
 
 {{% event event="m.space.child" %}}
 
-###### Ordering
+###### Ordering of children within a space
 
 When the client is displaying the children of a space, the children should be ordered
 using the algorithm below. In some cases, like a traditional left side room list, the

@@ -383,7 +383,7 @@ paths:
                 type: object
                 description: |-
                   Information on end-to-end device updates, as specified in
-                  [End-to-end encryption](/client-server-api/#extensions-to-sync-1).
+                  [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
               device_one_time_keys_count:
                 title: One-time keys count
                 type: object
@@ -391,7 +391,7 @@ paths:
                   type: integer
                 description: |-
                   Information on end-to-end encryption keys, as specified
-                  in [End-to-end encryption](/client-server-api/#extensions-to-sync-1).
+                  in [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
             required:
               - next_batch
           examples:
