@@ -37,14 +37,8 @@ registration for suspicious regex strings.
 {{% /boxes/note %}}
 
 Application services register "namespaces" of user IDs, room aliases and
-room IDs. These namespaces are represented as regular expressions. An
-application service is said to be "interested" in a given event if one
-of the IDs in the event match the regular expression provided by the
-application service, such as the room having an alias or ID in the
-relevant namespaces. Similarly, the application service is said to be
-interested in a given event if one of the application service's
-namespaced users is the target of the event, or is a joined member of
-the room where the event occurred.
+room IDs. An application service is said to be "interested" in a given event
+if it matches any of the namespaces.
 
 An application service can also state whether they should be the only
 ones who can manage a specified namespace. This is referred to as an
@@ -53,28 +47,12 @@ application services from creating/deleting entities in that namespace.
 Typically, exclusive namespaces are used when the rooms represent real
 rooms on another service (e.g. IRC). Non-exclusive namespaces are used
 when the application service is merely augmenting the room itself (e.g.
-providing logging or searching facilities). Namespaces are represented
-by POSIX extended regular expressions and look like:
+providing logging or searching facilities).
 
-    users:
-      - exclusive: true
-        regex: "@_irc_bridge_.*"
+The registration is represented by a series of key-value pairs, which
+is normally encoded as an object in a YAML file. It has the following structure:
 
-Application services may define the following namespaces (with none
-being explicitly required):
-
-| Name     | Description                                                |
-|----------|------------------------------------------------------------|
-| users    | Events which are sent from certain users.                  |
-| aliases  | Events which are sent in rooms with certain room aliases.  |
-| rooms    | Events which are sent in rooms with certain room IDs.      |
-
-Each individual namespace MUST declare the following fields:
-
-| Name       | Description                                                                                                                        |
-|------------|------------------------------------------------------------------------------------------------------------------------------------|
-| exclusive  | **Required** A true or false value stating whether this application service has exclusive access to events within this namespace.  |
-| regex      | **Required** A regular expression defining which values this namespace includes.                                                   |
+{{% definition path="api/application-service/definitions/registration" %}}
 
 Exclusive user and alias namespaces should begin with an underscore
 after the sigil to avoid collisions with other users on the homeserver.
@@ -83,38 +61,37 @@ they represent in the reserved namespace. For example, `@_irc_.*` would
 be a good namespace to register for an application service which deals
 with IRC.
 
-The registration is represented by a series of key-value pairs, which
-this specification will present as YAML. See below for the possible
-options along with their explanation:
-
-
-| Name              | Description                                                                                                                                   |
-|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| id                | **Required** A unique, user-defined ID of the application service which will never change.                                                    |
-| url               | **Required** The URL for the application service. May include a path after the domain name. Optionally set to null if no traffic is required. |
-| as_token          | **Required** A unique token for application services to use to authenticate requests to Homeservers.                                          |
-| hs_token          | **Required** A unique token for Homeservers to use to authenticate requests to application services.                                          |
-| sender_localpart  | **Required** The localpart of the user associated with the application service.                                                               |
-| namespaces        | **Required** A list of `users`, `aliases` and `rooms` namespaces that the application service controls.                                       |
-| rate_limited      | Whether requests from masqueraded users are rate-limited. The sender is excluded.                                                             |
-| protocols         | The external protocols which the application service provides (e.g. IRC).                                                                     |
-
 An example registration file for an IRC-bridging application service is
 below:
 
-    id: "IRC Bridge"
-    url: "http://127.0.0.1:1234"
-    as_token: "30c05ae90a248a4188e620216fa72e349803310ec83e2a77b34fe90be6081f46"
-    hs_token: "312df522183efd404ec1cd22d2ffa4bbc76a8c1ccf541dd692eef281356bb74e"
-    sender_localpart: "_irc_bot" # Will result in @_irc_bot:example.org
-    namespaces:
-      users:
-        - exclusive: true
-          regex: "@_irc_bridge_.*"
-      aliases:
-        - exclusive: false
-          regex: "#_irc_bridge_.*"
-      rooms: []
+```yaml
+id: "IRC Bridge"
+url: "http://127.0.0.1:1234"
+as_token: "30c05ae90a248a4188e620216fa72e349803310ec83e2a77b34fe90be6081f46"
+hs_token: "312df522183efd404ec1cd22d2ffa4bbc76a8c1ccf541dd692eef281356bb74e"
+sender_localpart: "_irc_bot" # Will result in @_irc_bot:example.org
+namespaces:
+  users:
+    - exclusive: true
+      regex: "@_irc_bridge_.*"
+  aliases:
+    - exclusive: false
+      regex: "#_irc_bridge_.*"
+  rooms: []
+```
+
+{{% boxes/note %}}
+For the `users` namespace, application services can only register interest in
+*local* users (i.e., users whose IDs end with the `server_name` of the local
+homeserver). Events affecting users on other homeservers are not sent to an application
+service, even if the user happens to match the one of the `users` namespaces (unless,
+of course, the event affects a room that the application service is interested in
+for another room - for example, because there is another user in the room that the
+application service is interested in).
+
+For the `rooms` and `aliases` namespaces, all events in a matching room will be
+sent to the application service.
+{{% /boxes/note %}}
 
 {{% boxes/warning %}}
 If the homeserver in question has multiple application services, each
