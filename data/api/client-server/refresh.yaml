@@ -61,6 +61,8 @@ paths:
               refresh_token:
                 type: string
                 description: The refresh token
+            required:
+              - refresh_token
       responses:
         200:
           description: A new access token and refresh token were generated.
