@@ -103,7 +103,7 @@ paths:
                   hashed or formatted will lead to no matches.
 
                   Note that addresses are case sensitive: review the
-                  [3PID Types](/appendices#pid-types) to verify the intended case an
+                  [3PID Types](/appendices#3pid-types) to verify the intended case an
                   identifier should be prior to submission/hashing.
                 example: [
                   "4kenr7N9drpCJ4AfalmlGQVsOn3o2RHjkADUpXJWZUc",

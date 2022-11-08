@@ -256,8 +256,8 @@ unable to do so. This happens in the following situations:
  * The original event (and hence its replacement) are encrypted.
 
 Client authors are reminded to take note of the requirements for [Validity of
-message edit events](#validity-of-message-edit-events), and to ignore any
-invalid edit events that are received.
+replacement events](#validity-of-replacement-events), and to ignore any
+invalid replacement events that are received.
 
 ##### Permalinks
 

@@ -36,7 +36,7 @@ paths:
         the space-room's children the requesting server could feasibly peek/join are returned. The
         requesting server is responsible for filtering the results further down for the user's request.
 
-        Only [`m.space.child`](#mspacechild) state events of the room are considered. Invalid child
+        Only [`m.space.child`](/client-server-api/#mspacechild) state events of the room are considered. Invalid child
         rooms and parent events are not covered by this endpoint.
 
         Responses to this endpoint should be cached for a period of time.
@@ -55,7 +55,7 @@ paths:
           name: suggested_only
           description: |-
             Optional (default `false`) flag to indicate whether or not the server should only consider
-            suggested rooms. Suggested rooms are annotated in their [`m.space.child`](#mspacechild) event
+            suggested rooms. Suggested rooms are annotated in their [`m.space.child`](/client-server-api/#mspacechild) event
             contents.
           x-example: true
       responses:
