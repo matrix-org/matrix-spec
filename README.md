@@ -65,7 +65,8 @@ place after an MSC has been accepted, not as part of a proposal itself.
    Alternatively, use the Docker image at
    https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
    to process the SCSS.)
-2. Run `npm i` to install the dependencies. Note that this will require NodeJS to be installed.
+2. Run `npm i` to install the dependencies and fetch the docsy git submodule.
+   Note that this will require NodeJS to be installed.
 3. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
    page and is not required.
 4. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
