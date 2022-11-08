@@ -340,6 +340,16 @@ footer {
   }
 
   table {
+    /* Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
+     * tables with a "display" property of "block".
+     *
+     * However, for "table-layout: fixed" to be effective, an element must have a
+     * "display" property of "table".
+     *
+     * Thus, we override the "display" property here. This may no longer be necessary once
+     * Docsy updates to Bootstrap v5+: https://github.com/google/docsy/issues/470.
+     * For more details, see
+     * https://github.com/matrix-org/matrix-spec/pull/1295/files#r1010759688 */
     display: table;
     table-layout: fixed;
     width: 100%;
