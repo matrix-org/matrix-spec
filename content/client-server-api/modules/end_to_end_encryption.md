@@ -180,7 +180,7 @@ process:
     the resulting list of devices in persistent storage, and clears the
     'outdated' flag.
 3.  During its normal processing of responses to [`/sync`](/client-server-api/#get_matrixclientv3sync), Alice's client
-    inspects the `changed` property of the [`device_lists`](/client-server-api/#extensions-to-sync-1) field. If it
+    inspects the `changed` property of the [`device_lists`](#e2e-extensions-to-sync) field. If it
     is tracking the device lists of any of the listed users, then it
     marks the device lists for those users outdated, and initiates
     another request to [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for them.
@@ -1614,7 +1614,7 @@ When a client is updating a Megolm session (room key) in its store, the client M
 
 {{% http-api spec="client-server" api="keys" %}}
 
-##### Extensions to /sync
+##### <a name="e2e-extensions-to-sync"> Extensions to /sync
 
 This module adds an optional `device_lists` property to the [`/sync`](/client-server-api/#get_matrixclientv3sync)  response,
 as specified below. The server need only populate this property for an
