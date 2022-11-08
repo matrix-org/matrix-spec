@@ -4,7 +4,8 @@ allOf:
 
 description: |-
   This event type is used when sending encrypted events. It can be used either
-  within a room (in which case it will have all of the [Room Event fields](/client-server-api/#room-event-fields)), or
+  within a room (in which case it will have all of the normal properties in
+  [Room events](/client-server-api/#room-event-format)), or
   as a [to-device](/client-server-api/#send-to-device-messaging) event.
 
 properties:

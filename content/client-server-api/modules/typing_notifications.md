@@ -4,7 +4,7 @@
 Users may wish to be informed when another user is typing in a room.
 This can be achieved using typing notifications. These are ephemeral
 events, so they do not form part of the
-[Event Graph](index.html#event-graphs). Typing notifications are scoped
+[Event Graph](/#event-graphs). Typing notifications are scoped
 to a room.
 
 #### Events

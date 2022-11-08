@@ -31,7 +31,7 @@ not necessarily provide evidence that they have validated associations,
 but claim to have done so. Establishing the trustworthiness of an
 individual identity server is left as an exercise for the client.
 
-3PID types are described in [3PID Types](/appendices#pid-types)
+3PID types are described in [3PID Types](/appendices#3pid-types)
 Appendix.
 
 ## API standards

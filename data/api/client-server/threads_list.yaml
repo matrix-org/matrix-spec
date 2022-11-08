@@ -51,7 +51,7 @@ paths:
           description: |-
             Optional (default `all`) flag to denote which thread roots are of interest to the caller.
             When `all`, all thread roots found in the room are returned. When `participated`, only
-            thread roots for threads the user has [participated in](/client-server-api/#server-side-aggreagtion-of-mthread-relationships)
+            thread roots for threads the user has [participated in](/client-server-api/#server-side-aggregation-of-mthread-relationships)
             will be returned.
           x-example: "all"
         - in: query

@@ -2527,7 +2527,7 @@ that profile.
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
 | [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
-| [Mentions](#user-room-and-group-mentions)                  | Required  | Required | Required | Optional | Optional |
+| [Mentions](#user-and-room-mentions)                        | Required  | Required | Required | Optional | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
 | [Push Notifications](#push-notifications)                  | Optional  | Required | Optional | Optional | Optional |
 | [Receipts](#receipts)                                      | Required  | Required | Required | Required | Optional |
