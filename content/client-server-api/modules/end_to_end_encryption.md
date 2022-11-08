@@ -1,6 +1,3 @@
----
-type: module
----
 
 ### End-to-End Encryption
 

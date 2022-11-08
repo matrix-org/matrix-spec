@@ -1,6 +1,3 @@
----
-type: module
----
 
 ### Third Party Networks
 

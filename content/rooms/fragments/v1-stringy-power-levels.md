@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 ##### `m.room.power_levels` events accept values as strings
 

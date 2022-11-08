@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 Upon receipt of a redaction event, the server must strip off any keys
 not in the following list:

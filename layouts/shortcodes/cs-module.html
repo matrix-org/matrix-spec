@@ -9,5 +9,8 @@
 
 {{ $name := .Params.name }}
 
-{{ $page := .Site.GetPage (path.Join .Page.File.Dir "modules" (printf "%s%s" $name ".md"))}}
-{{ $page.Content }}
+{{ with .Site.GetPage "client-server-api/modules" }}
+    {{ with .Resources.GetMatch (printf "%s%s" $name ".md") }}
+{{ .Content }}
+    {{ end }}
+{{ end }}

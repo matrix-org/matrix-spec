@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 Events sent into rooms of this version can have formats which are different
 from their normal schema. Those cases are documented here.

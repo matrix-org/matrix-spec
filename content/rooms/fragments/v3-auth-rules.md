@@ -1,7 +1,5 @@
 ---
-toc_hide: true
 ---
-
 {{< added-in this=true >}} In room versions 1 and 2, events need a
 signature from the domain of the `event_id` in order to be considered
 valid. This room version does not include an `event_id` over federation

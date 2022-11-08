@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 Events in rooms of this version have the following structure:
 

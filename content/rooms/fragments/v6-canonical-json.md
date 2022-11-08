@@ -1,6 +1,3 @@
----
-toc_hide: true
----
 
 Servers MUST strictly enforce the JSON format specified in the
 [appendices](/appendices#canonical-json). This translates to a
