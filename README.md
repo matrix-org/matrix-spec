@@ -90,11 +90,9 @@ For building the swagger definitions, create a python3 virtualenv and activate i
 and finally `python ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
 there are a number of options:
 
-* It can be uploaded from your filesystem to an online editor/viewer such as [on the swagger website](http://editor.swagger.io/).
-* You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation via an
-  online viewer; for example, at <http://petstore.swagger.io/?url=http://localhost:8000/api-docs.json>.
-* You can host the swagger UI yourself. See <https://github.com/swagger-api/swagger-ui#how-to-run> for advice on how to
-  do so.
+* You can open `./scripts/swagger-preview.html`in your browser, and then open the file by clicking on `Local JSON File`.
+* You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation by
+  opening `./scripts/swagger-preview.html` in your browser.
 
 ## Issue tracking
 
