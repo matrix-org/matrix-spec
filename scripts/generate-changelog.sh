@@ -29,7 +29,7 @@ towncrier --name "Client-Server API" --dir "./client_server" --config "./pyproje
     # to sort the changelogs at build time.
     cat <<EOF
 ---
-date: $(date +%s)
+date: $(date -Iseconds)
 ---
 EOF
     if [ "$VERSION" = "vUNSTABLE" ]; then
