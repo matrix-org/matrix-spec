@@ -551,7 +551,8 @@ then the device IDs should be compared instead.  If the two
 method, then the verification should be cancelled with a `code` of
 `m.unexpected_message`.
 
-An `m.key.verification.start` message can also be sent independently of any
+When verifying using to-device messages, an `m.key.verification.start`
+message can also be sent independently of any
 request, specifying the verification method to use. This behaviour is
 deprecated, and new clients should not begin verifications in this way.
 However, clients should handle such verifications started by other clients.
