@@ -1,0 +1,10 @@
+{{/*
+   This template is used to render all of the changelog sections under
+   "content/changelogs"
+*/}}
+
+{{ with .Page.Resources.Match "*.md" }}
+{{ range ((sort . "Name" "desc")) }}
+{{ .Content }}
+{{ end }}
+{{ end }}

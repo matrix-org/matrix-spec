@@ -8,11 +8,7 @@ weight: 1000
 
 {{% changelog/changelog-changes %}}
 
-<!-- DO NOT REMOVE OR CHANGE - Release script puts next release here -->
-{{% changelog/changelog-rendered p="changelogs/v1.4.md" %}}
-{{% changelog/changelog-rendered p="changelogs/v1.3.md" %}}
-{{% changelog/changelog-rendered p="changelogs/v1.2.md" %}}
-{{% changelog/changelog-rendered p="changelogs/v1.1.md" %}}
+{{% changelog/changelogs %}}
 
 <h2 id="historical-versions" class="no-numbers">Historical versions</h2>
 

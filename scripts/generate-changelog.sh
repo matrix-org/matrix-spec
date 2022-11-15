@@ -4,8 +4,6 @@
 
 set -e
 
-MAGIC_STRING="<!-- DO NOT REMOVE OR CHANGE - Release script puts next release here -->"
-
 cd changelogs
 
 # Pre-cleanup just in case it wasn't done on the last run
@@ -31,8 +29,7 @@ cat rendered.header.md rendered.md > rendered.final.md
 sed -i "s/[ ]*$//" rendered.final.md
 
 # Put the changelog in place
-mv rendered.final.md ../layouts/partials/changelogs/$1.md
-sed -i "s/$MAGIC_STRING/$MAGIC_STRING\n{{% changelog\\/changelog-rendered p=\"changelogs\\/$1.md\" %}}/" ../content/changelog.md
+mv rendered.final.md ../content/changelogs/$1.md
 
 # Cleanup
 rm -v rendered.*
