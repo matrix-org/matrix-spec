@@ -99,10 +99,32 @@ jobs:
           name: openapi-artifact
           path: openapi.tar.gz
 
+  generate-changelog:
+    name: "📢 Run towncrier for changelog"
+    # skip for builds of git tags
+    if: "!startsWith(github.ref, 'refs/tags/')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v4
+      - name: "➕ Install towncrier"
+        run: "pip install 'towncrier'"
+      - name: "Generate changelog"
+        run: ./scripts/generate-changelog.sh vUNSTABLE
+      - name: "📤 Artifact upload"
+        uses: actions/upload-artifact@v2
+        with:
+          name: changelog-artifact
+          path: content/changelog/vUNSTABLE.md
+
   build-spec:
     name: "📖 Build the spec"
     runs-on: ubuntu-latest
-    needs: [calculate-baseurl, build-openapi]
+    needs: [calculate-baseurl, build-openapi, generate-changelog]
+    # run even if generate-changelog was skipped
+    if: ${{ always() }}
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v2
@@ -119,9 +141,14 @@ jobs:
         run: |
           npm i
           npm run get-proposals
+      - name: "📥 Download generated changelog"
+        if: "needs.generate-changelog.result == 'success'"
+        uses: actions/download-artifact@v3
+        with:
+          name: changelog-artifact
+          path: content/changelog
       - name: "⚙️ hugo"
         run: hugo --baseURL "${{ needs.calculate-baseurl.outputs.baseURL }}" -d "spec"
-
       # We manually unpack the spec OpenAPI definition JSON to the website tree
       # to make it available to the world in a canonical place:
       # https://spec.matrix.org/latest/client-server-api/api.json

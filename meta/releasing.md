@@ -37,21 +37,21 @@ release.
    release_date = "October 01, 2021"
    ```
 3. Commit the changes.
-4. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
-5. Push the release branch and the tag.
-6. GitHub Actions will run its build steps. Wait until these are successful. If fixes
-   need to be made to repair the pipeline or spec build, delete and re-tag the release.
-7. Check out and fast-forward `main` to the release branch.
-8. Generate the changelog. This is done *after* the tagging to ensure the rendered
-   changelog makes sense.
+4. Generate the changelog.
    1. Activate your python virtual environment.
    2. Run `./scripts/generate-changelog.sh v1.2 "October 01, 2021"` (using the correct
       version number and same `release_date` format from the hugo config).
    3. Commit the result.
+5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
+6. Push the release branch and the tag.
+7. GitHub Actions will run its build steps. Wait until these are successful. If fixes
+   need to be made to repair the pipeline or spec build, delete and re-tag the release.
+   You may need to fix up the changelog file by hand in this case.
+8. Check out and fast-forward `main` to the release branch.
 9. Create a new release on GitHub from the newly created tag.
    * The title should be just "v1.2" (for example).
    * The description should be a copy/paste of the changelog. The generated changelog
-     will be at `content/partials/changelogs/v1.2.md` - copy/paste verbatim.
+     will be at `content/changelog/v1.2.md` - copy/paste verbatim.
    * Upload the artifacts of the GitHub Actions build for the release to the GitHub
      release as artifacts themselves. This should be the tarball that will be deployed
      to spec.matrix.org.
