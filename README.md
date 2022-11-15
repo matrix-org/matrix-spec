@@ -90,7 +90,7 @@ For building the swagger definitions, create a python3 virtualenv and activate i
 and finally `python ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
 there are a number of options:
 
-* You can open `./scripts/swagger-preview.html`in your browser, and then open the file by clicking on `Local JSON File`.
+* You can open `./scripts/swagger-preview.html` in your browser, and then open the file by clicking on `Local JSON File`.
 * You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation by
   opening `./scripts/swagger-preview.html` in your browser.
 
