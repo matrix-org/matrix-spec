@@ -123,6 +123,8 @@ jobs:
     name: "📖 Build the spec"
     runs-on: ubuntu-latest
     needs: [calculate-baseurl, build-openapi, generate-changelog]
+    # run even if generate-changelog was skipped
+    if: ${{ always() }}
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v2
