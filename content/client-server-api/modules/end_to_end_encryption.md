@@ -996,16 +996,23 @@ If a user's client sees that any other user has changed their master
 key, that client must notify the user about the change before allowing
 communication between the users to continue.
 
-Since device IDs and cross-signing keys occupy the same namespace, clients must
-ensure that they use the correct keys when verifying. While servers must not
-allow devices to have the same IDs as cross-signing keys, a malicious server
-could construct such a situation, so clients must not rely on the server being
-well-behaved and should take precautions against this. For example, clients
-should refer to keys using the public keys rather than only by the device
-ID. Clients should also fix the keys that are being verified, and ensure that
-they do not change in the course of verification. Clients may also display a
-warning and refuse to verify a user when it detects that the user has a device
-with the same ID as a cross-signing key.
+Since device key IDs (`ed25519:DEVICE_ID`) and cross-signing key IDs
+(`ed25519:PUBLIC_KEY`) occupy the same namespace, clients must ensure that they
+use the correct keys when verifying.
+
+While servers MUST not allow devices to have the same IDs as cross-signing
+keys, a malicious server could construct such a situation, so clients must not
+rely on the server being well-behaved and should take the following precautions
+against this.
+
+1. Clients MUST refer to keys by their public keys during the verification
+   process, rather than only by the key ID.
+2. Clients MUST fix the keys that are being verified at the beginning of the
+   verification process, and ensure that they do not change in the course of
+   verification.
+3. Clients SHOULD also display a warning and MAY refuse to verify a user when
+   it detects that the user has a device with the same ID as a cross-signing
+   key.
 
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
