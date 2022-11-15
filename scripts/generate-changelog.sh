@@ -25,10 +25,15 @@ towncrier --name "Client-Server API" --dir "./client_server" --config "./pyproje
 
 {
     # Prepare the header
-    if [ "$VERSION" = "vUNSTABLE" ]; then
-        cat <<EOF
-## Changes since last release
+    # We include the generation date in the front matter so that we can use it
+    # to sort the changelogs at build time.
+    cat <<EOF
+---
+date: $(date +%s)
+---
 EOF
+    if [ "$VERSION" = "vUNSTABLE" ]; then
+        echo "## Changes since last release"
     else
         sed -e "s/VERSION/$1/g" -e "s/DATE/$2/g" header.md
     fi

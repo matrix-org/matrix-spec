@@ -4,7 +4,7 @@
 */}}
 
 {{ with .Page.Resources.Match "*.md" }}
-{{ range ((sort . "Name" "desc")) }}
+{{ range ((sort . "Params.date" "desc")) }}
 {{ .Content }}
 {{ end }}
 {{ end }}
