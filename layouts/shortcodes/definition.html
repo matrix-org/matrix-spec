@@ -30,7 +30,7 @@
 {{ $definition = partial "json-schema/resolve-refs" (dict "schema" $definition "path" $path) }}
 {{ $definition = partial "json-schema/resolve-allof" $definition }}
 
-<section class="rendered-data definition" id="{{ anchorize $definition.title }}">
+<section class="rendered-data definition" id="definition-{{ anchorize $definition.title }}">
 
 <details {{ if not $compact }}open{{ end }}>
 <summary>
