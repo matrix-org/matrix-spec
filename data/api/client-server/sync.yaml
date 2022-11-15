@@ -444,7 +444,8 @@ paths:
                       },
                       "ephemeral": {
                         "events": [
-                          {"$ref": "../../event-schemas/examples/m.typing.yaml"}
+                          {"$ref": "../../event-schemas/examples/m.typing.yaml"},
+                          {"$ref": "../../event-schemas/examples/m.receipt.yaml"}
                         ]
                       },
                       "account_data": {
