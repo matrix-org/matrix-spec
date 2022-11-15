@@ -6,8 +6,6 @@ weight: 1000
 
 {{% changelog/changelog-description %}}
 
-{{% changelog/changelog-changes %}}
-
 {{% changelog/changelogs %}}
 
 <h2 id="historical-versions" class="no-numbers">Historical versions</h2>

@@ -1,13 +1,17 @@
 # /bin/bash
 
-# Usage: ./generate.sh v1.2 "April 01, 2021"
+# Usage: ./scripts/generate-changelog.sh v1.2 "April 01, 2021"
+# or: ./scripts/generate-changelog.sh vUNSTABLE
 
 set -e
 
-cd changelogs
+VERSION="$1"
+DATE="$2"
+
+cd `dirname $0`/../changelogs
 
 # Pre-cleanup just in case it wasn't done on the last run
-rm -f rendered.*
+rm -f rendered.md
 
 # Reversed order so that room versions ends up on the bottom
 towncrier --name "Internal Changes/Tooling" --dir "./internal" --config "./pyproject.toml" --yes
@@ -19,17 +23,19 @@ towncrier --name "Application Service API" --dir "./application_service" --confi
 towncrier --name "Server-Server API" --dir "./server_server" --config "./pyproject.toml" --yes
 towncrier --name "Client-Server API" --dir "./client_server" --config "./pyproject.toml" --yes
 
-# Prepare the header
-cp header.md rendered.header.md
-sed -i "s/VERSION/$1/g" rendered.header.md
-sed -i "s/DATE/$2/g" rendered.header.md
-cat rendered.header.md rendered.md > rendered.final.md
+{
+    # Prepare the header
+    if [ "$VERSION" = "vUNSTABLE" ]; then
+        cat <<EOF
+## Changes since last release
+EOF
+    else
+        sed -e "s/VERSION/$1/g" -e "s/DATE/$2/g" header.md
+    fi
 
-# Remove trailing whitespace (such as our intentionally blank RST headings)
-sed -i "s/[ ]*$//" rendered.final.md
-
-# Put the changelog in place
-mv rendered.final.md ../content/changelogs/$1.md
+    # Remove trailing whitespace (such as our intentionally blank RST headings)
+    sed -e "s/[ ]*$//" rendered.md
+} > ../content/changelog/$VERSION.md
 
 # Cleanup
-rm -v rendered.*
+rm -v rendered.md
