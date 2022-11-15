@@ -145,7 +145,7 @@ jobs:
   htmlcheck:
     name: "🔎 Validate generated HTML"
     runs-on: ubuntu-latest
-    needs: [build-spec]
+    needs: [calculate-baseurl, build-spec]
     steps:
       - name: "📥 Source checkout"
         uses: actions/checkout@v2
@@ -156,8 +156,14 @@ jobs:
           name: spec-artifact
 
       - name: "📝 Unpack the spec"
+        # we have to unpack it into the right path given the baseurl, so that the
+        # links are correct.
+        # eg if baseurl is `/unstable`, we want to put the site in `spec/unstable`.
         run: |
-          tar -xvzf spec.tar.gz
+          mkdir -p "spec${baseURL}"
+          tar -C "spec${baseURL}" --strip-components=1 -xvzf spec.tar.gz
+        env:
+          baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
 
       - name: "Run htmltest"
         uses: wjdp/htmltest-action@master
