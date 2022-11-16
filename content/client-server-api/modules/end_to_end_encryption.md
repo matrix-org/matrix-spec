@@ -1010,13 +1010,8 @@ against this.
 2. Clients MUST fix the keys that are being verified at the beginning of the
    verification process, and ensure that they do not change in the course of
    verification.
-3. Clients SHOULD also display a warning and MAY refuse to verify a user when
-   it detects that the user has a device with the same ID as a cross-signing
-   key.
-4. If a client does not detect when a device has the same ID as a cross-signing
-   key, it MUST check key IDs being verified in a consistent order: it must
-   check if the key ID matches a cross-signing key first, and if not, treat it
-   as a device ID.
+3. Clients SHOULD also display a warning and MUST refuse to verify a user when
+   they detect that the user has a device with the same ID as a cross-signing key.
 
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
