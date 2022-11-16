@@ -10,7 +10,10 @@ enableRobotsTXT = true
 # Hugo allows theme composition (and inheritance). The precedence is from left to right.
 theme = ["docsy"]
 
-disableKinds = ["taxonomy", "taxonomyTerm"]
+# We disable RSS, because (a) it's useless, (b) Hugo seems to generate broken
+# links to it when used with a --baseURL (for example, https://spec.matrix.org/v1.4/
+# contains `<link rel="alternate" type="application/rss&#43;xml" href="/v1.4/v1.4/index.xml">`).
+disableKinds = ["taxonomy", "taxonomyTerm", "RSS"]
 
 [languages]
 [languages.en]
