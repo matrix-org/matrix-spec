@@ -1203,8 +1203,9 @@ withheld](#reporting-that-decryption-keys-are-withheld).
 
 {{% boxes/note %}}
 Key sharing can be a big attack vector, thus it must be done very
-carefully. A reasonable strategy is for a user's client to only send
-keys requested by the verified devices of the same user.
+carefully. Clients should only send keys requested by the verified devices
+of the same user, and should only request and accept forwarded keys from
+verified devices of the same user.
 {{% /boxes/note %}}
 
 ##### Server-side key backups
@@ -1234,9 +1235,15 @@ can be deleted using [DELETE /\_matrix/client/v3/room\_keys/keys](#delete_matrix
 one of its variants.
 
 Clients must only store keys in backups after they have ensured that the
-`auth_data` is trusted, either by checking the signatures on it, or by
-deriving the public key from a private key that it obtained from a
-trusted source.
+`auth_data` is trusted. This can be done either by:
+
+- checking that it is signed by the user's [master cross-signing
+  key](#cross-signing) or by a verified device belonging to the same user, or
+- by deriving the public key from a private key that it obtained from a trusted
+  source. Trusted sources for the private key include the user entering the
+  key, retrieving the key stored in [secret storage](#secret-storage), or
+  obtaining the key via [secret sharing](#sharing) from a verified device
+  belonging to the same user.
 
 When a client uploads a key for a session that the server already has a
 key for, the server will choose to either keep the existing key or
@@ -1619,7 +1626,9 @@ the messages.
 
 When a client is updating a Megolm session in its store, the client MUST ensure:
 
-* that the updated session data comes from a trusted source.
+* that the updated session data comes from a trusted source, such as via a
+  `m.forwarded_room_key` event from a verified device belonging to the same
+  user, or from a `m.room_key` event.
 * that the new session key has a lower message index than the existing session key.
 
 #### Protocol definitions
