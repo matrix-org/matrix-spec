@@ -1013,6 +1013,10 @@ against this.
 3. Clients SHOULD also display a warning and MAY refuse to verify a user when
    it detects that the user has a device with the same ID as a cross-signing
    key.
+4. If a client does not detect when a device has the same ID as a cross-signing
+   key, it MUST check key IDs being verified in a consistent order: it must
+   check if the key ID matches a cross-signing key first, and if not, treat it
+   as a device ID.
 
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
@@ -1615,8 +1619,8 @@ that they can decrypt future messages encrypted using this session. An
 messages.
 
 When a client receives a Megolm session, the client MUST ensure that the
-session was received via a channel that ensures authenticity of the messages.
-Practically speaking, this means that Megolm sessions must be received via Olm.
+session was received via an Olm channel, in order to ensure the authenticity of
+the messages.
 
 When a client is updating a Megolm session in its store, the client MUST ensure:
 
