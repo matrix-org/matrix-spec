@@ -189,7 +189,7 @@ actions are defined:
 This causes each matching event to generate a notification.
 
 `dont_notify`
-This prevents each matching event from generating a notification
+This prevents each matching event from generating a notification.
 
 `coalesce`
 This enables notifications for matching events but activates homeserver
@@ -227,7 +227,7 @@ light on a mobile device.
 Actions that have no parameters are represented as a string. Otherwise,
 they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
-`{ "set_tweak": "sound", "value": "default" }`
+`{ "set_tweak": "sound", "value": "default" }`.
 
 ###### Conditions
 
