@@ -144,27 +144,27 @@ the value of `kind`.
 
 The different `kind`s of rule, in the order that they are checked, are:
 
-Override Rules `override`
-The highest priority rules are user-configured overrides.
+1.  **Override Rules (`override`).**
+    The highest priority rules are user-configured overrides.
 
-Content-specific Rules `content`
-These configure behaviour for (unencrypted) messages that match certain
-patterns. Content rules take one parameter: `pattern`, that gives the
-glob pattern to match against. This is treated in the same way as
-`pattern` for `event_match`.
+1.  **Content-specific Rules (`content`).**
+    These configure behaviour for (unencrypted) messages that match certain
+    patterns. Content rules take one parameter: `pattern`, that gives the
+    glob pattern to match against. This is treated in the same way as
+    `pattern` for `event_match`.
 
-Room-specific Rules `room`
-These rules change the behaviour of all messages for a given room. The
-`rule_id` of a room rule is always the ID of the room that it affects.
+1.  **Room-specific Rules (`room`).**
+    These rules change the behaviour of all messages for a given room. The
+    `rule_id` of a room rule is always the ID of the room that it affects.
 
-Sender-specific rules `sender`
-These rules configure notification behaviour for messages from a
-specific Matrix user ID. The `rule_id` of Sender rules is always the
-Matrix user ID of the user whose messages they'd apply to.
+1.  **Sender-specific rules (`sender`).**
+    These rules configure notification behaviour for messages from a
+    specific Matrix user ID. The `rule_id` of Sender rules is always the
+    Matrix user ID of the user whose messages they'd apply to.
 
-Underride rules `underride`
-These are identical to `override` rules, but have a lower priority than
-`content`, `room` and `sender` rules.
+1.  **Underride rules (`underride`).**
+    These are identical to `override` rules, but have a lower priority than
+    `content`, `room` and `sender` rules.
 
 Rules with the same `kind` can specify an ordering priority. This
 determines which rule is selected in the event of multiple matches. For
