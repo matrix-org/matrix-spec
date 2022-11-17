@@ -144,16 +144,16 @@ the value of `kind`.
 
 The different `kind`s of rule, in the order that they are checked, are:
 
-1.  **Override Rules (`override`).**
+1.  **Override rules (`override`).**
     The highest priority rules are user-configured overrides.
 
-1.  **Content-specific Rules (`content`).**
+1.  **Content-specific rules (`content`).**
     These configure behaviour for (unencrypted) messages that match certain
     patterns. Content rules take one parameter: `pattern`, that gives the
     glob pattern to match against. This is treated in the same way as
     `pattern` for `event_match`.
 
-1.  **Room-specific Rules (`room`).**
+1.  **Room-specific rules (`room`).**
     These rules change the behaviour of all messages for a given room. The
     `rule_id` of a room rule is always the ID of the room that it affects.
 
