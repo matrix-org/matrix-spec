@@ -1,1 +1,0 @@
-Clarify that application services can only register an interest in local users, as per [MSC3905](https://github.com/matrix-org/matrix-spec-proposals/issues/3905).

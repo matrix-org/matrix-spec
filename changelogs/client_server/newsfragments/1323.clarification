@@ -1,1 +1,0 @@
-Require request field `refresh_token` at endpoint `POST /_matrix/client/v3/refresh`.
