@@ -186,43 +186,51 @@ how a notification is delivered for a matching event. The following
 actions are defined:
 
 `notify`
-This causes each matching event to generate a notification.
+
+:   This causes each matching event to generate a notification.
 
 `dont_notify`
-This prevents each matching event from generating a notification.
+
+:   This prevents each matching event from generating a notification.
 
 `coalesce`
-This enables notifications for matching events but activates homeserver
-specific behaviour to intelligently coalesce multiple events into a
-single notification. Not all homeservers may support this. Those that do
-not support it should treat it as the `notify` action.
+
+:   This enables notifications for matching events but activates homeserver
+    specific behaviour to intelligently coalesce multiple events into a
+    single notification. Not all homeservers may support this. Those that do
+    not support it should treat it as the `notify` action.
 
 `set_tweak`
-Sets an entry in the `tweaks` dictionary key that is sent in the
-notification request to the Push Gateway. This takes the form of a
-dictionary with a `set_tweak` key whose value is the name of the tweak
-to set. It may also have a `value` key which is the value to which it
-should be set.
 
-The following tweaks are defined:
+:   Sets an entry in the `tweaks` dictionary key that is sent in the
+    notification request to the Push Gateway. This takes the form of a
+    dictionary with a `set_tweak` key whose value is the name of the tweak
+    to set. It may also have a `value` key which is the value to which it
+    should be set.
 
-* `sound`: A string representing the sound to be played when this notification
-arrives. A value of `default` means to play a default sound. A device
-may choose to alert the user by some other means if appropriate, eg.
-vibration.
+    The following tweaks are defined:
 
-* `highlight`: A boolean representing whether or not this message should be highlighted
-in the UI. This will normally take the form of presenting the message in
-a different colour and/or style. The UI might also be adjusted to draw
-particular attention to the room in which the event occurred. If a
-`highlight` tweak is given with no value, its value is defined to be
-`true`. If no highlight tweak is given at all then the value of
-`highlight` is defined to be false.
+    `sound`
 
-Tweaks are passed transparently through the homeserver so client
-applications and Push Gateways may agree on additional tweaks. For
-example, a tweak may be added to specify how to flash the notification
-light on a mobile device.
+    :   A string representing the sound to be played when this notification
+        arrives. A value of `default` means to play a default sound. A device
+        may choose to alert the user by some other means if appropriate, eg.
+        vibration.
+
+    `highlight`
+
+    :   A boolean representing whether or not this message should be highlighted
+        in the UI. This will normally take the form of presenting the message in
+        a different colour and/or style. The UI might also be adjusted to draw
+        particular attention to the room in which the event occurred. If a
+        `highlight` tweak is given with no value, its value is defined to be
+        `true`. If no highlight tweak is given at all then the value of
+        `highlight` is defined to be false.
+
+    Tweaks are passed transparently through the homeserver so client
+    applications and Push Gateways may agree on additional tweaks. For
+    example, a tweak may be added to specify how to flash the notification
+    light on a mobile device.
 
 Actions that have no parameters are represented as a string. Otherwise,
 they are represented as a dictionary with a key equal to their name and
