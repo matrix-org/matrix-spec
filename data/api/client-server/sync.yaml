@@ -219,9 +219,11 @@ paths:
                           title: Ephemeral
                           type: object
                           description: |-
-                            The ephemeral events in the room that aren't
-                            recorded in the timeline or state of the room.
-                            e.g. typing.
+                            The new ephemeral events in the room (events that
+                            aren't recorded in the timeline or state of the
+                            room). In this version of the spec, these are
+                            [typing notification](#typing-notifications) and
+                            [read receipt](#receipts) events.
                           allOf:
                             - $ref: "definitions/event_batch.yaml"
                         account_data:

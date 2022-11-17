@@ -62,8 +62,9 @@ properties:
       ephemeral:
         allOf:
         - $ref: room_event_filter.yaml
-        description: The events that aren't recorded in the room history, e.g. typing
-          and receipts, to include for rooms.
+        description: The ephemeral events to include for rooms. These are the
+          events that appear in the `ephemeral` property in the `/sync`
+          response.
       include_leave:
         description: Include rooms that the user has left in the sync, default false
         type: boolean
