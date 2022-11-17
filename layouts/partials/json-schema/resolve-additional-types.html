@@ -3,6 +3,8 @@
   Finds and returns all nested objects, given a dict containing:
    * `schema`: a JSON schema object
    * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
+   * `name`: optionally, a name to use for this object in error/warning messages. If left unset,
+      the object's `title` property is used (if present).
 
   This template finds all nested objects inside `schema`.
 
@@ -23,6 +25,7 @@
 {{ $this_object := .schema }}
 {{ $anchor_base := .anchor_base }}
 {{ $additional_objects := slice }}
+{{ $name := .name | default $this_object.title | default "<untitled object>" }}
 
 {{ if eq $this_object.type "object" }}
     {{/* give this object an anchor, if it has a name */}}
@@ -43,7 +46,12 @@
             {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object.additionalProperties) }}
 
             {{ range $key, $property := $this_object.additionalProperties.properties }}
-                {{ $additional_objects = partial "get-additional-objects" (dict "this_object" $property "additional_objects" $additional_objects "anchor_base" $anchor_base) }}
+                {{ $additional_objects = partial "get-additional-objects" (dict
+                    "this_object" $property
+                    "additional_objects" $additional_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.%s" $name $key)
+                ) }}
             {{ end }}
 
         {{ end }}
@@ -53,7 +61,12 @@
       Add any nested objects referenced in this object's `properties`
     */}}
     {{ range $key, $property := $this_object.properties}}
-        {{ $additional_objects = partial "get-additional-objects" (dict "this_object" $property "additional_objects" $additional_objects "anchor_base" $anchor_base) }}
+        {{ $additional_objects = partial "get-additional-objects" (dict
+            "this_object" $property
+            "additional_objects" $additional_objects
+            "anchor_base" $anchor_base
+            "name" (printf "%s.%s" $name $key)
+        ) }}
     {{ end }}
 
 {{ end }}
@@ -63,11 +76,23 @@
       Add any nested objects referenced in this object's `items`
     */}}
     {{ if reflect.IsSlice $this_object.items}}
-        {{ range $this_object.items }}
-            {{ $additional_objects = partial "get-additional-objects" (dict "this_object" . "additional_objects" $additional_objects "anchor_base" $anchor_base) }}
+        {{ range $idx, $item := $this_object.items }}
+            {{ $additional_objects = partial "get-additional-objects" (dict
+                "this_object" $item
+                "additional_objects" $additional_objects
+                "anchor_base" $anchor_base
+                "name" (printf "%s.items[%d]" $name $idx)
+            ) }}
         {{ end }}
+    {{ else if reflect.IsMap $this_object.items}}
+        {{ $additional_objects = partial "get-additional-objects" (dict
+             "this_object" $this_object.items
+             "additional_objects" $additional_objects
+             "anchor_base" $anchor_base
+             "name" (printf "%s.items" $name)
+        ) }}
     {{ else }}
-        {{ $additional_objects = partial "get-additional-objects" (dict "this_object" $this_object.items "additional_objects" $additional_objects "anchor_base" $anchor_base) }}
+        {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
     {{ end }}
 {{ end }}
 
@@ -78,14 +103,21 @@
   This actually makes the recursive call and adds the returned objects to the array
 */}}
 {{ define "partials/get-additional-objects" }}
+    {{/* .name is the name of the object for logging purposes */}}
+    {{ $name := .name }}
+
     {{ $additional_objects := .additional_objects }}
+
+    {{ if not (reflect.IsMap .this_object) }}
+      {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
+    {{ end }}
 
     /* although we expect resolve-allof to be called on the input, resolve-allof does not recurse into
      * nested objects, so we have to call it again.
      */
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
 
-    {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base) }}
+    {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
     {{/*
       As far as I know we don't have something like Array.concat(), so add them one at a time
     */}}
