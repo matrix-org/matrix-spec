@@ -188,11 +188,11 @@ draft](https://github.com/matrix-org/matrix-doc/blob/51faf8ed2e4a63d4cfd6d231836
 {{% /boxes/note %}}
 
 Each homeserver publishes its public keys under
-`/_matrix/key/v2/server/{keyId}`. Homeservers query for keys by either
-getting `/_matrix/key/v2/server/{keyId}` directly or by querying an
+`/_matrix/key/v2/server`. Homeservers query for keys by either
+getting `/_matrix/key/v2/server` directly or by querying an
 intermediate notary server using a
-`/_matrix/key/v2/query/{serverName}/{keyId}` API. Intermediate notary
-servers query the `/_matrix/key/v2/server/{keyId}` API on behalf of
+`/_matrix/key/v2/query/{serverName}` API. Intermediate notary
+servers query the `/_matrix/key/v2/server` API on behalf of
 another server and sign the response with their own key. A server may
 query multiple notary servers to ensure that they all report the same
 public keys.
@@ -219,7 +219,7 @@ homeserver and for signing events. It contains a list of
 Servers may query another server's keys through a notary server. The
 notary server may be another homeserver. The notary server will retrieve
 keys from the queried servers through use of the
-`/_matrix/key/v2/server/{keyId}` API. The notary server will
+`/_matrix/key/v2/server` API. The notary server will
 additionally sign the response from the queried server before returning
 the results.
 
