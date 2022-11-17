@@ -2556,6 +2556,9 @@ that profile.
 | [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation policies](#moderation-policy-lists)            | Optional  | Optional | Optional | Optional | Optional |
 | [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
