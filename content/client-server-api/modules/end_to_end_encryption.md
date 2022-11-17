@@ -510,6 +510,15 @@ could also send that message. As well, the order of the
             |                 |                                   |               |
 ```
 
+In contrast with the case of using to-devices messages, when using in-room
+messages, Alice only sends one request event (an event with type
+`m.room.message` with `msgtype: m.key.verification.request`, rather than an
+event with type `m.key.verification.request`), to the room. In addition, Alice
+does not send an `m.key.verification.cancel` event to tell Bob's other devices
+that the request as already been accepted; instead, when Bob's other devices
+see his `m.key.verification.ready` event, they will know that the request has
+already been accepted, and that they should ignore the request.
+
 When using in-room messages and the room has encryption enabled, clients should
 ensure that encryption does not hinder the verification. For example, if the
 verification messages are encrypted, clients must ensure that all the
@@ -990,6 +999,23 @@ If a user's client sees that any other user has changed their master
 key, that client must notify the user about the change before allowing
 communication between the users to continue.
 
+Since device key IDs (`ed25519:DEVICE_ID`) and cross-signing key IDs
+(`ed25519:PUBLIC_KEY`) occupy the same namespace, clients must ensure that they
+use the correct keys when verifying.
+
+While servers MUST not allow devices to have the same IDs as cross-signing
+keys, a malicious server could construct such a situation, so clients must not
+rely on the server being well-behaved and should take the following precautions
+against this.
+
+1. Clients MUST refer to keys by their public keys during the verification
+   process, rather than only by the key ID.
+2. Clients MUST fix the keys that are being verified at the beginning of the
+   verification process, and ensure that they do not change in the course of
+   verification.
+3. Clients SHOULD also display a warning and MUST refuse to verify a user when
+   they detect that the user has a device with the same ID as a cross-signing key.
+
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
 the user's master key and possibly by re-verifying devices or users.
@@ -1180,8 +1206,9 @@ withheld](#reporting-that-decryption-keys-are-withheld).
 
 {{% boxes/note %}}
 Key sharing can be a big attack vector, thus it must be done very
-carefully. A reasonable strategy is for a user's client to only send
-keys requested by the verified devices of the same user.
+carefully. Clients should only send keys requested by the verified devices
+of the same user, and should only request and accept forwarded keys from
+verified devices of the same user.
 {{% /boxes/note %}}
 
 ##### Server-side key backups
@@ -1211,9 +1238,15 @@ can be deleted using [DELETE /\_matrix/client/v3/room\_keys/keys](#delete_matrix
 one of its variants.
 
 Clients must only store keys in backups after they have ensured that the
-`auth_data` is trusted, either by checking the signatures on it, or by
-deriving the public key from a private key that it obtained from a
-trusted source.
+`auth_data` is trusted. This can be done either by:
+
+- checking that it is signed by the user's [master cross-signing
+  key](#cross-signing) or by a verified device belonging to the same user, or
+- by deriving the public key from a private key that it obtained from a trusted
+  source. Trusted sources for the private key include the user entering the
+  key, retrieving the key stored in [secret storage](#secret-storage), or
+  obtaining the key via [secret sharing](#sharing) from a verified device
+  belonging to the same user.
 
 When a client uploads a key for a session that the server already has a
 key for, the server will choose to either keep the existing key or
@@ -1590,9 +1623,15 @@ that they can decrypt future messages encrypted using this session. An
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
 
-When a client is updating a Megolm session (room key) in its store, the client MUST ensure:
+When a client receives a Megolm session, the client MUST ensure that the
+session was received via an Olm channel, in order to ensure the authenticity of
+the messages.
 
-* that the updated session data comes from a trusted source.
+When a client is updating a Megolm session in its store, the client MUST ensure:
+
+* that the updated session data comes from a trusted source, such as via a
+  `m.forwarded_room_key` event from a verified device belonging to the same
+  user, or from a `m.room_key` event.
 * that the new session key has a lower message index than the existing session key.
 
 #### Protocol definitions
