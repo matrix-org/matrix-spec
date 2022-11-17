@@ -164,6 +164,14 @@ each is as follows:
 Homeservers should periodically try again for the newer endpoints
 because the application service may have been updated.
 
+#### Unknown routes
+
+If a request for an unsupported (or unknown) endpoint is received than the server
+must respond with 404 `M_UNRECOGNIZED` error.
+
+Similarly, a 405 `M_UNREOCGNIZED` error is used to denote an unsupported method
+to a known endpoint.
+
 #### Pushing events
 
 The application service API provides a transaction API for sending a

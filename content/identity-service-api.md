@@ -108,6 +108,11 @@ attempting to verify ownership of a given third party address.
 The request contained an unrecognised value, such as an unknown token or
 medium.
 
+This is also used as the response if a server did not understand the request,
+this is expected to be returned with an 404 HTTP status code if the endpoint is
+not implemented or an 405 HTTP status code if the endpoint is implemented, but
+the incorrect HTTP method is used.
+
 `M_THREEPID_IN_USE`
 The third party identifier is already in use by another user. Typically
 this error will have an additional `mxid` property to indicate who owns
