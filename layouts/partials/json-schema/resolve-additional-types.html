@@ -3,7 +3,8 @@
   Finds and returns all nested objects, given a dict containing:
    * `schema`: a JSON schema object
    * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
-   * `name`: optionally, a name to use for this object in error/warning messages.
+   * `name`: optionally, a name to use for this object in error/warning messages. If left unset,
+      the object's `title` property is used (if present).
 
   This template finds all nested objects inside `schema`.
 
@@ -91,7 +92,7 @@
              "name" (printf "%s.items" $name)
         ) }}
     {{ else }}
-        {{ errorf "%s is defined as as an 'array' but lacks a valid 'items'" $name }}
+        {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
     {{ end }}
 {{ end }}
 
