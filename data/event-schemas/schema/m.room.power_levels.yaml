@@ -42,6 +42,9 @@ description: |-
   `m.room.power_levels` event as soon as it is created. See also the
   documentation of the `/createRoom` API.
 
+  Note: the allowed range for power level values is `[-(2**53)+1, (2**53)-1]`,
+  as required by the [Canonical JSON specification](/appendices/#canonical-json).
+
 properties:
   content:
     properties:
