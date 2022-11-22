@@ -474,3 +474,31 @@ Make padding symmetrical (this selector is used in the default styles to apply p
   background-repeat: no-repeat;
   padding-left: 100px;
 }
+
+/* Adjust the styling of definition lists. */
+
+/* Add a little spacing between the term and its definition. */
+dt {
+   margin-bottom: 0.15rem;
+}
+
+/* _reboot.scss deliberately sets margin-left to 0. Undo this. */
+dd {
+  margin-left: 2rem;
+}
+
+/* docsy's _code.scss does only styles <code> elements matching
+ * .td-content { p code, li > code, table code }.
+ * Copy those styles here to apply to code <elements> in definition terms too. */
+
+.td-content {
+  dt code {
+    color: inherit;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    word-break: normal;
+    background-color: rgba($black, 0.05);
+    border-radius: 0.25rem;  // was $border-radius, but that var isn't accessible here.
+  }
+}
