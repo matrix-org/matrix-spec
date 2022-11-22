@@ -98,7 +98,7 @@
 
     {{ end }}
 
- {{/* Additional properties should either be an OpenAPI schema object, or a
+ {{/* additionalProperties should either be an OpenAPI schema object, or a
        boolean. If it's the former, look for a `description` and render it as a note.
        If it's `true`, do nothing. If it's `false`, raise a build-time error:
        "Everything is extensible in Matrix unless otherwise noted". */}}
