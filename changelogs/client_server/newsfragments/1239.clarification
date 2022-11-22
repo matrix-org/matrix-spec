@@ -1,1 +1,1 @@
-Clarified that /context always returns 'event' even if limit is zero. Contributed by @sumnerevans at @beeper.
+Clarify that `/context` always returns `event` even if `limit` is zero. Contributed by @sumnerevans at @beeper.
