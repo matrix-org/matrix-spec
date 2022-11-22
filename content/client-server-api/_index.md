@@ -107,6 +107,11 @@ No resource was found for this request.
 Too many requests have been sent in a short period of time. Wait a while
 then try again.
 
+`M_UNRECOGNIZED`
+The server did not understand the request. This is expected to be returned with
+a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
+code if the endpoint is implemented, but the incorrect HTTP method is used.
+
 `M_UNKNOWN`
 An unknown error has occurred.
 
@@ -115,9 +120,6 @@ An unknown error has occurred.
 The following error codes are specific to certain endpoints.
 
 <!-- TODO: move them to the endpoints that return them -->
-
-`M_UNRECOGNIZED`
-The server did not understand the request.
 
 `M_UNAUTHORIZED`
 The request was not correctly authorized. Usually due to login failures.

@@ -84,6 +84,14 @@ to be an IP address in which case SNI is not supported and should not be sent.
 Servers are encouraged to make use of the [Certificate
 Transparency](https://www.certificate-transparency.org/) project.
 
+### Unsupported endpoints
+
+If a request for an unsupported (or unknown) endpoint is received then the server
+must respond with a 404 `M_UNRECOGNIZED` error.
+
+Similarly, a 405 `M_UNRECOGNIZED` error is used to denote an unsupported method
+to a known endpoint.
+
 ## Server discovery
 
 ### Resolving server names
