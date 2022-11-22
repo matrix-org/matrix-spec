@@ -108,7 +108,7 @@ Too many requests have been sent in a short period of time. Wait a while
 then try again.
 
 `M_UNRECOGNIZED`
-The server did not understand the request, this is expected to be returned with
+The server did not understand the request. This is expected to be returned with
 an 404 HTTP status code if the endpoint is not implemented or an 405 HTTP status
 code if the endpoint is implemented, but the incorrect HTTP method is used.
 
