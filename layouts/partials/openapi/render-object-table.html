@@ -13,6 +13,15 @@
     In some cases (such as response body specifications) this isn't used, and
     instead properties have a `required` boolean attribute. We support this too.
 
+  * `additionalProperties`: one of
+
+    - `false` (no additional properties are permitted);
+    - `true` (additional properties pairs are permitted, with no constraints);
+    - an OpenAPI schema object [1] (additional properties are permitted, but 
+      with constraints on `property_data`); or
+    - `nil` (not specified in schema, use `true` as a default value).
+
+  [1]: https://swagger.io/specification/#schema-object
 */}}
 
 {{ $title := .title }}
