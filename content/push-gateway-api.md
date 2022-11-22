@@ -42,7 +42,7 @@ notification provider (e.g. APNS, GCM).
 ### Unsupported endpoints
 
 If a request for an unsupported (or unknown) endpoint is received then the server
-must respond with 404 `M_UNRECOGNIZED` error.
+must respond with a 404 `M_UNRECOGNIZED` error.
 
 Similarly, a 405 `M_UNRECOGNIZED` error is used to denote an unsupported method
 to a known endpoint.
