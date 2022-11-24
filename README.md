@@ -1,6 +1,6 @@
 # Matrix Specification
 
-This repository contains the Matrix Specification, rendered at [spec.matrix.org](http://spec.matrix.org/).
+This repository contains the Matrix Specification. The current release version is rendered at https://spec.matrix.org, while the latest available build of the `main` branch is at https://spec.matrix.org/unstable.
 
 Developers looking to use Matrix should join [#matrix-dev:matrix.org](https://matrix.to/#/#matrix-dev:matrix.org)
 on Matrix for help.
