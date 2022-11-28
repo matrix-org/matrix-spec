@@ -1,7 +1,7 @@
 
 ### Reference relations
 
-{{% added-in v="1.4" %}}
+{{% added-in v="1.5" %}}
 
 Generically referencing another event can be done with a `rel_type` of `m.reference`
 as a form of [relationship](#forming-relationships-between-events). There is no
