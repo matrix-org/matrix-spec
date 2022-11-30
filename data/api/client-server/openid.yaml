@@ -47,7 +47,7 @@ paths:
           type: string
           name: userId
           description: |-
-            The user to request and OpenID token for. Should be the user who
+            The user to request an OpenID token for. Should be the user who
             is authenticated for the request.
           required: true
           x-example: "@alice:example.com"
