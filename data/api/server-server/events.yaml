@@ -157,3 +157,79 @@ paths:
           description: A transaction containing a single PDU which is the event requested.
           schema:
             $ref: "definitions/single_pdu_transaction.yaml"
+  "/timestamp_to_event/{roomId}":
+    get:
+      summary: Get the closest event ID to the given timestamp
+      x-addedInMatrixVersion: "1.6"
+      description: |-
+        Get the ID of the event closest to the given timestamp, in the
+        direction specified by the `dir` parameter.
+
+        This is primarily used when handling the corresponding
+        [client-server endpoint](/client-server-api/#get_matrixclientv1roomsroomidtimestamp_to_event)
+        when the server does not have all of the room history, and does not
+        have an event suitably close to the requested timestamp.
+
+        The heuristics for deciding when to ask another homeserver for a closer
+        event if your homeserver doesn't have something close, are left up to
+        the homeserver implementation, although the heuristics will probably be
+        based on whether the closest event is a forward/backward extremity
+        indicating it's next to a gap of events which are potentially closer.
+
+        A good heuristic for which servers to try first is to sort by servers
+        that have been in the room the longest because they're most likely to
+        have anything we ask about.
+
+        After the local homeserver receives the response, it should determine,
+        using the `origin_server_ts` property, whether the returned event is
+        closer to the requested timestamp than the closest event that it could
+        find locally.  If so, it should try to backfill this event via the
+        [`/event/{event_id}`](#get_matrixfederationv1eventeventid) endpoint so
+        that it is available to for a client to query.
+      operationId: getEventByTimestamp
+      security:
+        - accessToken: []
+      parameters:
+        - in: path
+          type: string
+          name: roomId
+          description: The ID of the room to search
+          required: true
+          x-example: "!636q39766251:matrix.org"
+        - in: query
+          type: integer
+          name: ts
+          description: |-
+            The timestamp to search for, as given in milliseconds
+            since the Unix epoch.
+          required: true
+          x-example: 1432684800000
+        - in: query
+          type: string
+          enum: [f, b]
+          name: dir
+          description: |-
+            The direction in which to search.  `f` for forwards, `b` for backwards.
+          required: true
+          x-example: f
+      responses:
+        200:
+          description: |-
+            An event was found matching the search parameters.
+          schema:
+            type: object
+            properties:
+              event_id:
+                type: string
+                description: |-
+                  The ID of the event found
+                required: true
+              origin_server_ts:
+                type: integer
+                description: |-
+                  The event's timestamp, in milliseconds since the Unix epoch.
+          examples:
+            application/json: {
+                "event_id": "$143273582443PhrSn:example.org",
+                "origin_server_ts": 1432735824653
+              }

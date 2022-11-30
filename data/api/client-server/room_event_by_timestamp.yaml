@@ -1,0 +1,108 @@
+# Copyright 2022 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+swagger: '2.0'
+info:
+  title: "Matrix Client-Server Rooms by date API"
+  version: "1.0.0"
+host: localhost:8008
+schemes:
+  - https
+  - http
+basePath: /_matrix/client/v1
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  $ref: definitions/security.yaml
+paths:
+  "/rooms/{roomId}/timestamp_to_event":
+    get:
+      x-addedInMatrixVersion: "1.6"
+      summary: Get the closest event ID to the given timestamp
+      description: |-
+        Get the ID of the event closest to the given timestamp, in the
+        direction specified by the `dir` parameter.
+
+        If the server does not have all of the room history and does not have
+        an event suitably close to the requested timestamp, it can use the
+        corresponding [federation endpoint](/server-server-api/#get_matrixfederationv1timestamp_to_eventroomid)
+        to ask other servers for a suitable event.
+
+        After calling this endpoint, clients can call
+        [`/rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
+        to obtain a pagination token to retrieve the events around the returned event.
+      operationId: getEventByTimestamp
+      security:
+        - accessToken: []
+      parameters:
+        - in: path
+          type: string
+          name: roomId
+          description: The ID of the room to search
+          required: true
+          x-example: "!636q39766251:matrix.org"
+        - in: query
+          type: integer
+          name: ts
+          description: |-
+            The timestamp to search for, as given in milliseconds
+            since the Unix epoch.
+          required: true
+          x-example: 1432684800000
+        - in: query
+          type: string
+          enum: [f, b]
+          name: dir
+          description: |-
+            The direction in which to search.  `f` for forwards, `b` for backwards.
+          required: true
+          x-example: f
+      responses:
+        200:
+          description: |-
+            An event was found matching the search parameters.
+          schema:
+            type: object
+            properties:
+              event_id:
+                type: string
+                description: |-
+                  The ID of the event found
+                required: true
+              origin_server_ts:
+                type: integer
+                description: |-
+                  The event's timestamp, in milliseconds since the Unix epoch.
+          examples:
+            application/json: {
+                "event_id": "$143273582443PhrSn:example.org",
+                "origin_server_ts": 1432735824653
+              }
+        404:
+          description: |-
+            No event was found.
+          examples:
+            application/json: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Unable to find event from 1432684800000 in forward direction"
+              }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
+      tags:
+        - Room participation

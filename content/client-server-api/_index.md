@@ -1816,6 +1816,8 @@ There are several APIs provided to `GET` events for a room:
 
 {{% http-api spec="client-server" api="message_pagination" %}}
 
+{{% http-api spec="client-server" api="room_event_by_timestamp" %}}
+
 {{% http-api spec="client-server" api="room_initial_sync" %}}
 
 ### Sending events to a room
