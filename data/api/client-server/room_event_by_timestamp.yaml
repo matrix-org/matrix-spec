@@ -13,7 +13,7 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Matrix Client-Server Rooms by date API"
+  title: "Matrix Client-Server events in room by date API"
   version: "1.0.0"
 host: localhost:8008
 schemes:
@@ -57,7 +57,7 @@ paths:
           type: integer
           name: ts
           description: |-
-            The timestamp to search for, as given in milliseconds
+            The timestamp to search from, as given in milliseconds
             since the Unix epoch.
           required: true
           x-example: 1432684800000
@@ -84,6 +84,9 @@ paths:
                 type: integer
                 description: |-
                   The event's timestamp, in milliseconds since the Unix epoch.
+                  This makes it easy to do a quick comparison to see if the
+                  `event_id` fetched is too far out of range to be useful for your
+                  use case.
             required: ['event_id', 'origin_server_ts']
           examples:
             application/json: {

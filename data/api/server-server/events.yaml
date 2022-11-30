@@ -200,7 +200,7 @@ paths:
           type: integer
           name: ts
           description: |-
-            The timestamp to search for, as given in milliseconds
+            The timestamp to search from, as given in milliseconds
             since the Unix epoch.
           required: true
           x-example: 1432684800000
