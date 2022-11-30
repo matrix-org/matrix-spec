@@ -80,11 +80,11 @@ paths:
                 type: string
                 description: |-
                   The ID of the event found
-                required: true
               origin_server_ts:
                 type: integer
                 description: |-
                   The event's timestamp, in milliseconds since the Unix epoch.
+            required: ['event_id', 'origin_server_ts']
           examples:
             application/json: {
                 "event_id": "$143273582443PhrSn:example.org",

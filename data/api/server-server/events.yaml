@@ -1,4 +1,4 @@
-# Copyright 2018 New Vector Ltd
+# Copyright 2018-2020 New Vector Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -223,11 +223,11 @@ paths:
                 type: string
                 description: |-
                   The ID of the event found
-                required: true
               origin_server_ts:
                 type: integer
                 description: |-
                   The event's timestamp, in milliseconds since the Unix epoch.
+            required: ['event_id', 'origin_server_ts']
           examples:
             application/json: {
                 "event_id": "$143273582443PhrSn:example.org",
