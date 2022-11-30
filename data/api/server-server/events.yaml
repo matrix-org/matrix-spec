@@ -233,3 +233,13 @@ paths:
                 "event_id": "$143273582443PhrSn:example.org",
                 "origin_server_ts": 1432735824653
               }
+        404:
+          description: |-
+            No event was found.
+          examples:
+            application/json: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Unable to find event from 1432684800000 in forward direction"
+              }
+          schema:
+            "$ref": "../client-server/definitions/errors/error.yaml"
