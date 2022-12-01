@@ -49,7 +49,7 @@ paths:
           name: filename
           description: The name of the file being uploaded
         - in: body
-          name: "<content>"
+          name: "content"
           description: The content to be uploaded.
           required: true
           x-example: "<bytes>" # so the spec shows "<bytes>" without quotes.
