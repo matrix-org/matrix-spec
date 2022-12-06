@@ -440,19 +440,21 @@ them.
 Required Power Level
 
 : A given event type has an associated *required power level*. This is given by
-  the current `m.room.power_levels` event. The event type is either listed
-  explicitly in the `events` section or given by either `state_default` or
-  `events_default` depending on if the event is a state event or not.
+  the current [`m.room.power_levels`](/client-server-api/#mroompower_levels)
+  event. The event type is either listed explicitly in the `events` section or
+  given by either `state_default` or `events_default` depending on if the event
+  is a state event or not.
 
 Invite Level, Kick Level, Ban Level, Redact Level
 
 : The levels given by the `invite`, `kick`, `ban`, and `redact` properties in
-  the current `m.room.power_levels` state. Each defaults to 50 if unspecified.
+  the current [`m.room.power_levels`](/client-server-api/#mroompower_levels)
+  state. Each defaults to 50 if unspecified.
 
 Target User
 
-: For an `m.room.member` state event, the user given by the `state_key` of the
-  event.
+: For an [`m.room.member`](/client-server-api/#mroommember) state event, the
+  user given by the `state_key` of the event.
 
 {{% boxes/warning %}}
 Some [room versions](/rooms) accept power level values to be represented as
