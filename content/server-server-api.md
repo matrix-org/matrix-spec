@@ -449,7 +449,8 @@ Invite Level, Kick Level, Ban Level, Redact Level
 
 : The levels given by the `invite`, `kick`, `ban`, and `redact` properties in
   the current [`m.room.power_levels`](/client-server-api/#mroompower_levels)
-  state. Each defaults to 50 if unspecified.
+  state. The invite level defaults to 0 if unspecified. The kick level, ban level
+  and redact level each default to 50 if unspecified.
 
 Target User
 
