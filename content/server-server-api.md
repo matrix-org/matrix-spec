@@ -110,11 +110,14 @@ to send. The process overall is as follows:
     given. The target server must present a valid certificate for the IP
     address. The `Host` header in the request should be set to the
     server name, including the port if the server name included one.
-2.  If the hostname is not an IP literal, and the server name includes
-    an explicit port, resolve the IP address using AAAA or A records.
+    
+2.  If the hostname is not an IP literal, and the server name includes an
+    explicit port, resolve the hostname to an IP address using CNAME, AAAA or A
+    records.
     Requests are made to the resolved IP address and given port with a
     `Host` header of the original server name (with port). The target
     server must present a valid certificate for the hostname.
+
 3.  If the hostname is not an IP literal, a regular HTTPS request is
     made to `https://<hostname>/.well-known/matrix/server`, expecting
     the schema defined later in this section. 30x redirects should be
@@ -140,7 +143,7 @@ to send. The process overall is as follows:
         one was provided.
     -   If `<delegated_hostname>` is not an IP literal, and
         `<delegated_port>` is present, an IP address is discovered by
-        looking up an AAAA or A record for `<delegated_hostname>`. The
+        looking up CNAME, AAAA or A records for `<delegated_hostname>`.  The
         resulting IP address is used, alongside the `<delegated_port>`.
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
@@ -153,11 +156,12 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    -   If no SRV record is found, an IP address is resolved using AAAA
+    -   If no SRV record is found, an IP address is resolved using CNAME, AAAA
         or A records. Requests are then made to the resolve IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
+
 4.  If the `/.well-known` request resulted in an error response, a
     server is found by resolving an SRV record for
     `_matrix._tcp.<hostname>`. This may result in a hostname (to be
@@ -165,8 +169,9 @@ to send. The process overall is as follows:
     resolved IP address and port, using 8448 as a default port, with a
     `Host` header of `<hostname>`. The target server must present a
     valid certificate for `<hostname>`.
+
 5.  If the `/.well-known` request returned an error response, and the
-    SRV record was not found, an IP address is resolved using AAAA and A
+    SRV record was not found, an IP address is resolved using CNAME, AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
     server must present a valid certificate for `<hostname>`.
@@ -178,6 +183,13 @@ delegation are:
       must prove that it is a valid delegate for `<hostname>` via TLS.
   2. Consistency with the recommendations in [RFC6125](https://datatracker.ietf.org/doc/html/rfc6125#section-6.2.1)
      and other applications using SRV records such [XMPP](https://datatracker.ietf.org/doc/html/rfc6120#section-13.7.2.1).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Note that the target of a SRV record may *not* be a CNAME, as
+mandated by [RFC2782](https://www.rfc-editor.org/rfc/rfc2782.html):
+
+> the name MUST NOT be an alias (in the sense of RFC 1034 or RFC 2181)
 {{% /boxes/note %}}
 
 {{% http-api spec="server-server" api="wellknown" %}}
