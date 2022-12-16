@@ -51,6 +51,9 @@ keys.
 
 ##### Key algorithms
 
+Different key algorithms are used for different purposes.  Each key algorithm
+is identified by a name and is represented in a specific way.
+
 The name `ed25519` corresponds to the
 [Ed25519](http://ed25519.cr.yp.to/) signature algorithm. The key is a
 32-byte Ed25519 public key, encoded using [unpadded Base64](/appendices/#unpadded-base64). Example:
@@ -64,9 +67,9 @@ Example:
 
     "JGLn/yafz74HB2AbPLYJWIVGnKAtqECOBf11yyXac2Y"
 
-The name `signed_curve25519` also corresponds to the Curve25519
-algorithm, but a key using this algorithm is represented by an object
-with the following properties:
+The name `signed_curve25519` also corresponds to the Curve25519 ECDH algorithm,
+but the key is signed so that it can be authenticated. A key using this
+algorithm is represented by an object with the following properties:
 
 `KeyObject`
 
@@ -88,23 +91,55 @@ Example:
 }
 ```
 
+`ed25519` and `curve25519` keys are used for [device keys](#device-keys).
+Additionally, `ed25519` keys are used for [cross-signing keys](#cross-signing).
+
+`signed_curve25519` keys are used for [one-time and fallback keys](#one-time-and-fallback-keys).
+
 ##### Device keys
 
 Each device should have one Ed25519 signing key. This key should be
 generated on the device from a cryptographically secure source, and the
 private part of the key should never be exported from the device. This
-key is used as the fingerprint for a device by other clients.
+key is used as the fingerprint for a device by other clients, and signs the
+device's other keys.
 
 A device will generally need to generate a number of additional keys.
 Details of these will vary depending on the messaging algorithm in use.
 
-Algorithms generally require device identity keys as well as signing
-keys. Some algorithms also require one-time keys to improve their
-secrecy and deniability. These keys are used once during session
-establishment, and are then thrown away.
+For Olm version 1, each device also requires a single Curve25519 identity
+key.
 
-For Olm version 1, each device requires a single Curve25519 identity
-key, and a number of signed Curve25519 one-time keys.
+##### One-time and fallback keys
+
+In addition to the device keys, which are long-lived, some encryption
+algorithms require that devices may also have a number of one-time keys, which
+are only used once and discarded after use. For Olm version 1, devices use
+`signed_curve25519` one-time keys, signed by the device's Ed25519 key.
+
+Devices will generate one-time keys and upload them to the server; these will
+later be [claimed](#post_matrixclientv3keysclaim) by other users. Servers must
+ensure that each one-time key is only claimed once: a homeserver should discard
+the one time key once it has been given to another user.
+
+{{% added-in v="1.2" %}} Fallback keys are similar to one-time keys, but are
+not consumed once used. If a fallback key has been uploaded, it will be
+returned by the server when the device has run out of one-time keys and a user
+tries to claim a key. Fallback keys should be replaced with new fallback keys
+as soon as possible after they have been used.
+
+{{% boxes/warning %}}
+Fallback keys are used to prevent one-time key exhaustion when devices
+are offline/unable to upload additional keys, though sessions started using
+fallback keys could be vulnerable to replay attacks.
+{{% /boxes/warning %}}
+
+Devices will be informed, [via
+`/sync`](#a-namee2e-extensions-to-sync-extensions-to-sync), about the number of
+one-time keys remaining that can be claimed, as well as whether the fallback
+keys have been used. The device can thus ensure that, while it is online, there
+is a sufficient supply of one-time keys available, and that the fallback keys
+get replaced if they have been used.
 
 ##### Uploading keys
 
@@ -115,11 +150,8 @@ signed by that key, as described in [Signing
 JSON](/appendices/#signing-json).
 
 One-time and fallback keys are also uploaded to the homeserver using the
-[`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API.
-
-{{% added-in v="1.2" %}} Fallback keys are similar to one-time keys, but
-are not consumed once used. They are only used when the device has run out
-of one-time keys, and can be replaced by a new fallback key.
+[`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API. New
+one-time and fallback keys are uploaded as needed.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
@@ -128,12 +160,6 @@ homeserver will never be used, so the device that generates the key will
 never know that it can discard the key. Therefore a device could end up
 trying to store too many private keys. A device that is trying to store
 too many private keys may discard keys starting with the oldest.
-
-{{% boxes/warning %}}
-Fallback keys are used to prevent one-time key exhaustion when devices
-are offline/unable to upload additional keys, though sessions started using
-fallback keys could be vulnerable to replay attacks.
-{{% /boxes/warning %}}
 
 {{% boxes/warning %}}
 Clients should not store the private half of fallback keys indefinitely
@@ -352,21 +378,6 @@ Example:
   }
 }
 ```
-
-##### Claiming one-time keys
-
-A client wanting to set up a session with another device can claim a
-one-time key for that device. This is done by making a request to the
-[`/keys/claim`](/client-server-api/#post_matrixclientv3keysclaim) API.
-
-A homeserver should rate-limit the number of one-time keys that a given
-user or remote server can claim. A homeserver should discard the public
-part of a one time key once it has given that key to another user.
-
-{{% added-in v="1.2" %}} If the device has run out of one-time keys which
-can be claimed, the homeserver will return the fallback key (if one was
-uploaded). Fallback keys are not deleted once used and should be replaced
-by the device when they are able to upload more one-time keys.
 
 #### Device verification
 
