@@ -43,6 +43,18 @@ paths:
         After calling this endpoint, clients can call
         [`/rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
         to obtain a pagination token to retrieve the events around the returned event.
+
+        The event returned by this endpoint could be an event that the client
+        cannot render, and so may need to paginate in order to locate an event
+        that it can display, which may end up being outside of the client's
+        suitable range.  Clients can employ different strategies to display
+        something reasonable to the user.  For example, the client could try
+        paginating in one direction for a while, while looking at the
+        timestamps of the events that it is paginating through, and if it
+        exceeds a certain difference from the target timestamp, it can try
+        paginating in the opposite direction.  The client could also simply
+        paginate in one direction and inform the user that the closest event
+        found in that direction is outside of the expected range.
       operationId: getEventByTimestamp
       security:
         - accessToken: []
