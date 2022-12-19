@@ -1145,6 +1145,12 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
+{{% http-api spec="client-server" api="login" %}}
+
+{{% http-api spec="client-server" api="refresh" %}}
+
+{{% http-api spec="client-server" api="logout" %}}
+
 #### Appservice Login
 
 {{% added-in v="1.2" %}}
@@ -1181,12 +1187,6 @@ respond with an errcode of `M_FORBIDDEN`.
 If the access token does correspond to an appservice, but the user id does
 not lie within its namespace then the homeserver will respond with an
 errcode of `M_EXCLUSIVE`.
-
-{{% http-api spec="client-server" api="login" %}}
-
-{{% http-api spec="client-server" api="refresh" %}}
-
-{{% http-api spec="client-server" api="logout" %}}
 
 #### Login Fallback
 
