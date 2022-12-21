@@ -75,6 +75,11 @@ paths:
                 allOf:
                 - $ref: "definitions/auth_data.yaml"
             example: {
+              "auth": {
+                "type": "example.type.foo",
+                "session": "xxxxx",
+                "example_credential": "verypoorsharedsecret"
+              },
               "master_key": {
                 "user_id": "@alice:example.com",
                 "usage": ["master"],
