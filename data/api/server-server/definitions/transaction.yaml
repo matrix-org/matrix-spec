@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# note that this defintion excludes `edus`, which are typically included in
+# note that this definition excludes `edus`, which are typically included in
 # a transaction; this is so that it can be referenced in single_pdu_transaction.
 
 type: object
