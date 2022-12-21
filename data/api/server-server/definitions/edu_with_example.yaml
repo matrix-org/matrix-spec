@@ -1,4 +1,4 @@
-# Copyright 2018 New Vector Ltd
+# Copyright 2022 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-type: object
-title: Ephemeral Data Unit
-description: An ephemeral data unit.
-properties:
-  edu_type:
-    type: string
-    description: The type of ephemeral message.
-    example: "m.presence"
-  content:
-    type: object
-    description: The content of the ephemeral message.
-required: ['edu_type', 'content']
+# this file exists, separately to edu.yaml, so that the individual EDU
+# type definitions can inherit from edu.yaml without inheriting the example.
+
+allOf:
+  - $ref: edu.yaml
+  - example:
+      $ref: "../examples/edu.json"

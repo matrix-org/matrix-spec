@@ -669,7 +669,7 @@ EDUs, by comparison to PDUs, do not have an ID, a room ID, or a list of
 "previous" IDs. They are intended to be non-persistent data such as user
 presence, typing notifications, etc.
 
-{{% definition path="api/server-server/definitions/edu" %}}
+{{% definition path="api/server-server/definitions/edu_with_example" %}}
 
 ## Room State Resolution
 
