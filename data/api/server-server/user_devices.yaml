@@ -88,7 +88,6 @@ paths:
                   The user\'s master cross-signing key.
                 allOf:
                   - $ref: ../client-server/definitions/cross_signing_key.yaml
-                  # FIXME: why isn't the doc generator picking up this example?
                   - example: {
                       "user_id": "@alice:example.com",
                       "usage": ["master"],
@@ -102,7 +101,6 @@ paths:
                   The user\'s self-signing key.
                 allOf:
                   - $ref: ../client-server/definitions/cross_signing_key.yaml
-                  # FIXME: why isn't the doc generator picking up this example?
                   - example: {
                       "user_id": "@alice:example.com",
                       "usage": ["self_signing"],

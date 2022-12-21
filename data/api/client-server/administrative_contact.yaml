@@ -210,14 +210,12 @@ paths:
               client_secret:
                 type: string
                 description: The client secret used in the session with the homeserver.
+                example: "d0nt-T3ll"
               sid:
                 type: string
                 description: The session identifier given by the homeserver.
+                example: "abc123987"
             required: ["client_secret",  "sid"]
-            example: {
-              "sid": "abc123987",
-              "client_secret": "d0nt-T3ll"
-            }
       responses:
         200:
           description: The addition was successful.
