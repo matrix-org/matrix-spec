@@ -25,7 +25,7 @@ consumes:
 produces:
   - application/json
 paths:
-  "/query/{serverName}/{keyId}":
+  "/query/{serverName}":
     get:
       summary: Query for another server's keys
       description: |-
@@ -39,17 +39,6 @@ paths:
           description: The server's DNS name to query
           required: true
           x-example: matrix.org
-        - in: path
-          name: keyId
-          type: string
-          description: |-
-            **Deprecated**. Servers should not use this parameter and instead
-            opt to return all keys, not just the requested one. The key ID to
-            look up.
-
-            When excluded, the trailing slash on this endpoint is optional.
-          required: false
-          x-example: "ed25519:abc123"
         - in: query
           name: minimum_valid_until_ts
           type: integer

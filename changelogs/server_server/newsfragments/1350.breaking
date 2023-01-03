@@ -1,0 +1,1 @@
+Remove `keyId` from the server `/keys` endpoints, as per [MSC3938](https://github.com/matrix-org/matrix-spec-proposals/pull/3938).

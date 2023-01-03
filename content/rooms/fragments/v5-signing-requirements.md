@@ -3,7 +3,7 @@ When validating event signatures, servers MUST enforce the
 `valid_until_ts` property from a key request is at least as large as the
 `origin_server_ts` for the event being validated. Servers missing a copy
 of the signing key MUST try to obtain one via the [GET
-/\_matrix/key/v2/server](/server-server-api#get_matrixkeyv2serverkeyid)
+/\_matrix/key/v2/server](/server-server-api#get_matrixkeyv2server)
 or [POST
 /\_matrix/key/v2/query](/server-server-api#post_matrixkeyv2query)
 APIs. When using the `/query` endpoint, servers MUST set the
