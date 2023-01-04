@@ -65,6 +65,14 @@ paths:
           description: The event ID for the join event.
           required: true
           x-example: "$abc123:example.org"
+        - in: query
+          name: omit_members
+          type: boolean
+          description: |-
+            If `true`, indicates that that calling server can accept a reduced
+            response, in which membership events are omitted from `state` and
+            redundant events are omitted from `auth_chain`.
+          x-addedInMatrixVersion: "1.6"
         - in: body
           name: body
           type: object
@@ -186,11 +194,80 @@ paths:
           description: |-
             The join event has been accepted into the room.
           schema:
-            $ref: "./definitions/send_join_response.yaml"
+            type: object
+            properties:
+              origin:
+                type: string
+                description: The resident server's DNS name.
+              members_omitted:
+                type: boolean
+                description: "`true` if `m.room.member` events have been omitted from `state`."
+                x-addedInMatrixVersion: "1.6"
+              auth_chain:
+                type: array
+                description: |-
+                  All events in the auth chain for the new join event, as well
+                  as those in the auth chains for any events returned in
+                  `state`.
+
+                  If the `omit_members` query parameter was set to `true`, then
+                  any events that are returned in `state` may be omitted from
+                  `auth_chain`, whether or not membership events are omitted
+                  from `state`.
+
+                  Note that events have a different format depending on the room version - check the
+                  [room version specification](/rooms) for precise event formats.
+                items:
+                  type: object
+                  title: PDU
+                  schema:
+                    type: object
+                    properties: {}
+                x-changedInMatrixVersion:
+                  "1.6": |-
+                    reworded to include only consider state events returned in
+                    `state`, and to allow elision of redundant events.
+              state:
+                type: array
+                description: |-
+                  The resolved current room state prior to the join event.
+
+                  If the request had `omit_members` set to `true`, events of
+                  type `m.room.member` may be omitted from the response to
+                  reduce the size of the response. If this is done,
+                  `members_omitted` must be set to `true`.
+                items:
+                  type: object
+                  title: PDU
+                  schema:
+                    type: object
+                    properties: {}
+                x-changedInMatrixVersion:
+                  "1.6": |-
+                    permit omission of membership events.
+              event:
+                type: object
+                title: SignedMembershipEvent
+                x-addedInMatrixVersion: "1.2"
+                description: |-
+                  Required if the room version [supports restricted join rules](/rooms/#feature-matrix). The signed
+                  copy of the membership event sent to other servers by the resident server, including the resident
+                  server's signature.
+              servers_in_room:
+                type: array
+                description: |-
+                  **Required** if `members_omitted` is true.
+
+                  A list of the servers active in the room (ie, those with joined members) before the join.
+                items:
+                  type: string
+            required: ["auth_chain", "state", "origin"]
           examples:
             application/json: {
               "origin": "matrix.org",
               "auth_chain": [{"$ref": "examples/minimal_pdu.json"}],
               "state": [{"$ref": "examples/minimal_pdu.json"}],
-              "event": {"$ref": "examples/pdu_v4_join_membership.json"}
+              "event": {"$ref": "examples/pdu_v4_join_membership.json"},
+              "members_omitted": true,
+              "servers_in_room": ["matrix.org", "example.com"]
             }
