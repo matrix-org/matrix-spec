@@ -1,1 +1,1 @@
-Update the default room version to 10 as per [MSC3904](https://github.com/matrix-org/matrix-spec-proposals/pull/3904).
+Update the default room version to 10, as per [MSC3904](https://github.com/matrix-org/matrix-spec-proposals/pull/3904).
