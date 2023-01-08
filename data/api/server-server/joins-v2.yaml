@@ -255,6 +255,7 @@ paths:
                   server's signature.
               servers_in_room:
                 type: array
+                x-addedInMatrixVersion: "1.6"
                 description: |-
                   **Required** if `members_omitted` is true.
 
