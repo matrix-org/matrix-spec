@@ -66,11 +66,7 @@ paths:
                       List of ephemeral messages. May be omitted if there are no ephemeral
                       messages to be sent. Must not include more than 100 EDUs.
                     items:
-                      $ref: "definitions/edu.yaml"
-          example: {
-            "$ref": "examples/transaction.json",
-            "edus": [{"$ref": "examples/edu.json"}]
-          }
+                      $ref: "definitions/edu_with_example.yaml"
       responses:
         200:
           description: |-

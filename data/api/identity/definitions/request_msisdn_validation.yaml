@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: object
-example: {
-  "client_secret": "monkeys_are_GREAT",
-  "country": "GB",
-  "phone_number": "07700900001",
-  "send_attempt": 1
-}
 properties:
   client_secret:
     type: string

@@ -110,11 +110,14 @@ to send. The process overall is as follows:
     given. The target server must present a valid certificate for the IP
     address. The `Host` header in the request should be set to the
     server name, including the port if the server name included one.
-2.  If the hostname is not an IP literal, and the server name includes
-    an explicit port, resolve the IP address using AAAA or A records.
+    
+2.  If the hostname is not an IP literal, and the server name includes an
+    explicit port, resolve the hostname to an IP address using CNAME, AAAA or A
+    records.
     Requests are made to the resolved IP address and given port with a
     `Host` header of the original server name (with port). The target
     server must present a valid certificate for the hostname.
+
 3.  If the hostname is not an IP literal, a regular HTTPS request is
     made to `https://<hostname>/.well-known/matrix/server`, expecting
     the schema defined later in this section. 30x redirects should be
@@ -140,7 +143,7 @@ to send. The process overall is as follows:
         one was provided.
     -   If `<delegated_hostname>` is not an IP literal, and
         `<delegated_port>` is present, an IP address is discovered by
-        looking up an AAAA or A record for `<delegated_hostname>`. The
+        looking up CNAME, AAAA or A records for `<delegated_hostname>`.  The
         resulting IP address is used, alongside the `<delegated_port>`.
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
@@ -153,11 +156,12 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    -   If no SRV record is found, an IP address is resolved using AAAA
+    -   If no SRV record is found, an IP address is resolved using CNAME, AAAA
         or A records. Requests are then made to the resolve IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
+
 4.  If the `/.well-known` request resulted in an error response, a
     server is found by resolving an SRV record for
     `_matrix._tcp.<hostname>`. This may result in a hostname (to be
@@ -165,8 +169,9 @@ to send. The process overall is as follows:
     resolved IP address and port, using 8448 as a default port, with a
     `Host` header of `<hostname>`. The target server must present a
     valid certificate for `<hostname>`.
+
 5.  If the `/.well-known` request returned an error response, and the
-    SRV record was not found, an IP address is resolved using AAAA and A
+    SRV record was not found, an IP address is resolved using CNAME, AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
     server must present a valid certificate for `<hostname>`.
@@ -178,6 +183,13 @@ delegation are:
       must prove that it is a valid delegate for `<hostname>` via TLS.
   2. Consistency with the recommendations in [RFC6125](https://datatracker.ietf.org/doc/html/rfc6125#section-6.2.1)
      and other applications using SRV records such [XMPP](https://datatracker.ietf.org/doc/html/rfc6120#section-13.7.2.1).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Note that the target of a SRV record may *not* be a CNAME, as
+mandated by [RFC2782](https://www.rfc-editor.org/rfc/rfc2782.html):
+
+> the name MUST NOT be an alias (in the sense of RFC 1034 or RFC 2181)
 {{% /boxes/note %}}
 
 {{% http-api spec="server-server" api="wellknown" %}}
@@ -196,11 +208,11 @@ draft](https://github.com/matrix-org/matrix-doc/blob/51faf8ed2e4a63d4cfd6d231836
 {{% /boxes/note %}}
 
 Each homeserver publishes its public keys under
-`/_matrix/key/v2/server/{keyId}`. Homeservers query for keys by either
-getting `/_matrix/key/v2/server/{keyId}` directly or by querying an
+`/_matrix/key/v2/server`. Homeservers query for keys by either
+getting `/_matrix/key/v2/server` directly or by querying an
 intermediate notary server using a
-`/_matrix/key/v2/query/{serverName}/{keyId}` API. Intermediate notary
-servers query the `/_matrix/key/v2/server/{keyId}` API on behalf of
+`/_matrix/key/v2/query/{serverName}` API. Intermediate notary
+servers query the `/_matrix/key/v2/server` API on behalf of
 another server and sign the response with their own key. A server may
 query multiple notary servers to ensure that they all report the same
 public keys.
@@ -227,7 +239,7 @@ homeserver and for signing events. It contains a list of
 Servers may query another server's keys through a notary server. The
 notary server may be another homeserver. The notary server will retrieve
 keys from the queried servers through use of the
-`/_matrix/key/v2/server/{keyId}` API. The notary server will
+`/_matrix/key/v2/server` API. The notary server will
 additionally sign the response from the queried server before returning
 the results.
 
@@ -437,21 +449,25 @@ them.
 
 #### Definitions
 
-**Required Power Level** \
-A given event type has an associated *required power level*. This is
-given by the current `m.room.power_levels` event. The event type is
-either listed explicitly in the `events` section or given by either
-`state_default` or `events_default` depending on if the event is a state
-event or not.
+Required Power Level
 
-**Invite Level, Kick Level, Ban Level, Redact Level** \
-The levels given by the `invite`, `kick`, `ban`, and `redact` properties
-in the current `m.room.power_levels` state. Each defaults to 50 if
-unspecified.
+: A given event type has an associated *required power level*. This is given by
+  the current [`m.room.power_levels`](/client-server-api/#mroompower_levels)
+  event. The event type is either listed explicitly in the `events` section or
+  given by either `state_default` or `events_default` depending on if the event
+  is a state event or not.
 
-**Target User** \
-For an `m.room.member` state event, the user given by the `state_key` of
-the event.
+Invite Level, Kick Level, Ban Level, Redact Level
+
+: The levels given by the `invite`, `kick`, `ban`, and `redact` properties in
+  the current [`m.room.power_levels`](/client-server-api/#mroompower_levels)
+  state. The invite level defaults to 0 if unspecified. The kick level, ban level
+  and redact level each default to 50 if unspecified.
+
+Target User
+
+: For an [`m.room.member`](/client-server-api/#mroommember) state event, the
+  user given by the `state_key` of the event.
 
 {{% boxes/warning %}}
 Some [room versions](/rooms) accept power level values to be represented as
@@ -653,7 +669,7 @@ EDUs, by comparison to PDUs, do not have an ID, a room ID, or a list of
 "previous" IDs. They are intended to be non-persistent data such as user
 presence, typing notifications, etc.
 
-{{% definition path="api/server-server/definitions/edu" %}}
+{{% definition path="api/server-server/definitions/edu_with_example" %}}
 
 ## Room State Resolution
 

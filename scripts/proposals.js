@@ -100,7 +100,7 @@ async function getIssues() {
     const issuesForPage = await response.json();
     issues = issues.concat(issuesForPage);
     const linkHeader = response.headers.get("link");
-    pageLink = getNextLink(linkHeader);
+    pageLink = !!linkHeader ? getNextLink(linkHeader) : null;
   }
 }
 
