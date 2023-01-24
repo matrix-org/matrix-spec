@@ -671,10 +671,7 @@ The process between Alice and Bob verifying each other would be:
 15. Assuming they match, Alice and Bob's devices calculate the HMAC of
     their own device keys and a comma-separated sorted list of the key
     IDs that they wish the other user to verify, using SHA-256 as the
-    hash function. HMAC is defined in [RFC
-    2104](https://tools.ietf.org/html/rfc2104). The key for the HMAC is
-    different for each item and is calculated by generating 32 bytes
-    (256 bits) using [the key verification HKDF](#hkdf-calculation).
+    hash function. The HMAC calculation is defined [below](#mac-calculation).
 16. Alice's device sends Bob's device an `m.key.verification.mac`
     message containing the MAC of Alice's device keys and the MAC of her
     key IDs to be verified. Bob's device does the same for Bob's device
@@ -802,7 +799,7 @@ be avoided whenever possible: if both parties support `hkdf-hmac-sha256.v2`,
 then `hkdf-hmac-sha256` MUST not be used.
 {{% /boxes/note %}}
 
-###### SAS calculation
+###### SAS HKDF calculation
 
 In all of the SAS methods, HKDF is as defined in [RFC
 5869](https://tools.ietf.org/html/rfc5869) and uses the previously
@@ -852,7 +849,7 @@ attack as well as more uniform data to work with.
 
 ###### SAS method: `decimal`
 
-Generate 5 bytes using [HKDF](#hkdf-calculation) then take sequences of 13 bits
+Generate 5 bytes using [HKDF](#sas-hkdf-calculation) then take sequences of 13 bits
 to convert to decimal numbers (resulting in 3 numbers between 0 and 8191
 inclusive each). Add 1000 to each calculated number.
 
@@ -870,7 +867,7 @@ separator, such as dashes, or with the numbers on individual lines.
 
 ###### SAS method: `emoji`
 
-Generate 6 bytes using [HKDF](#hkdf-calculation) then split the first 42 bits
+Generate 6 bytes using [HKDF](#sas-hkdf-calculation) then split the first 42 bits
 into 7 groups of 6 bits, similar to how one would base64 encode
 something. Convert each group of 6 bits to a number and use the
 following table to get the corresponding emoji:
