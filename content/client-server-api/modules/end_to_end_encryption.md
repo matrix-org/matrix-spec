@@ -767,7 +767,42 @@ following error codes are used in addition to those already specified:
 
 {{% event event="m.key.verification.mac" %}}
 
-###### HKDF calculation
+###### MAC calculation
+
+For verification of each party's device keys, a MAC is calculated individually
+for each the keys that are to be verified. As well, a MAC is calculated for a
+list of the keys IDs. The MAC used is HMAC as defined in [RFC
+2104](https://tools.ietf.org/html/rfc2104), using SHA-256 as the hash function.
+The HMAC key is calculated using HKDF as defined in [RFC
+5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
+function. The shared secret is supplied as the input keying material. No salt
+is used, and in the info parameter is the concatenation of:
+
+-   The string `MATRIX_KEY_VERIFICATION_MAC`.
+-   The Matrix ID of the user whose key is being MAC-ed.
+-   The Device ID of the device sending the MAC.
+-   The Matrix ID of the other user.
+-   The Device ID of the device receiving the MAC.
+-   The `transaction_id` being used.
+-   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
+    item being MAC-ed is the list of key IDs.
+
+If the key list is being MACed, the list is sorted lexicographically and
+comma-separated with no extra whitespace added. In this way, the recipient can
+reconstruct the list from the names in the `mac` property of the
+`m.key.verification.mac` message and ensure that no keys were added or removed.
+
+{{% boxes/note %}}
+The MAC method `hkdf-hmac-sha256` used an incorrect base64 encoding, due to a
+bug in the original implementation in libolm.  To remedy this,
+`hkdf-hmac-sha256.v2` was introduced, which calculates the MAC in the same way,
+but uses a correct base64 encoding. `hkdf-hmac-sha256` is deprecated and will
+be removed in a future version of the spec. Use of `hkdf-hmac-sha256` should
+be avoided whenever possible: if both parties support `hkdf-hmac-sha256.v2`,
+then `hkdf-hmac-sha256` MUST not be used.
+{{% /boxes/note %}}
+
+###### SAS calculation
 
 In all of the SAS methods, HKDF is as defined in [RFC
 5869](https://tools.ietf.org/html/rfc5869) and uses the previously
@@ -814,20 +849,6 @@ method.
 HKDF is used over the plain shared secret as it results in a harder
 attack as well as more uniform data to work with.
 {{% /boxes/rationale %}}
-
-For verification of each party's device keys, HKDF is as defined in RFC
-5869 and uses SHA-256 as the hash function. The shared secret is
-supplied as the input keying material. No salt is used, and in the info
-parameter is the concatenation of:
-
--   The string `MATRIX_KEY_VERIFICATION_MAC`.
--   The Matrix ID of the user whose key is being MAC-ed.
--   The Device ID of the device sending the MAC.
--   The Matrix ID of the other user.
--   The Device ID of the device receiving the MAC.
--   The `transaction_id` being used.
--   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
-    item being MAC-ed is the list of key IDs.
 
 ###### SAS method: `decimal`
 
