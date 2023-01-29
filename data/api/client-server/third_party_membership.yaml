@@ -105,8 +105,9 @@ paths:
                   and this specification version.
               medium:
                 type: string
-                # TODO: Link to Identity Service spec when it eixsts
-                description: The kind of address being passed in the address field, for example `email`.
+                description: |-
+                  The kind of address being passed in the address field, for example
+                  `email` (see [the list of recognised values](/appendices/#3pid-types)).
               address:
                 type: string
                 description: The invitee's third party identifier.
