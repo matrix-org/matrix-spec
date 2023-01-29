@@ -51,34 +51,39 @@ such as Apple's APNS or Google's GCM. This happens as follows:
 Definitions for terms used in this section are below:
 
 Push Provider
-A push provider is a service managed by the device vendor which can send
-notifications directly to the device. Google Cloud Messaging (GCM) and
-Apple Push Notification Service (APNS) are two examples of push
-providers.
+
+:   A push provider is a service managed by the device vendor which can send
+    notifications directly to the device. Google Cloud Messaging (GCM) and
+    Apple Push Notification Service (APNS) are two examples of push
+    providers.
 
 Push Gateway
-A push gateway is a server that receives HTTP event notifications from
-homeservers and passes them on to a different protocol such as APNS for
-iOS devices or GCM for Android devices. Clients inform the homeserver
-which Push Gateway to send notifications to when it sets up a Pusher.
+
+:   A push gateway is a server that receives HTTP event notifications from
+    homeservers and passes them on to a different protocol such as APNS for
+    iOS devices or GCM for Android devices. Clients inform the homeserver
+    which Push Gateway to send notifications to when it sets up a Pusher.
 
 Pusher
-A pusher is a worker on the homeserver that manages the sending of HTTP
-notifications for a user. A user can have multiple pushers: one per
-device.
+
+:   A pusher is a worker on the homeserver that manages the sending of HTTP
+    notifications for a user. A user can have multiple pushers: one per
+    device.
 
 Push Rule
-A push rule is a single rule that states under what *conditions* an
-event should be passed onto a push gateway and *how* the notification
-should be presented. These rules are stored on the user's homeserver.
-They are manually configured by the user, who can create and view them
-via the Client/Server API.
+
+:   A push rule is a single rule that states under what *conditions* an
+    event should be passed onto a push gateway and *how* the notification
+    should be presented. These rules are stored on the user's homeserver.
+    They are manually configured by the user, who can create and view them
+    via the Client/Server API.
 
 Push Ruleset
-A push ruleset *scopes a set of rules according to some criteria*. For
-example, some rules may only be applied for messages from a particular
-sender, a particular room, or by default. The push ruleset contains the
-entire set of scopes and rules.
+
+:   A push ruleset *scopes a set of rules according to some criteria*. For
+    example, some rules may only be applied for messages from a particular
+    sender, a particular room, or by default. The push ruleset contains the
+    entire set of scopes and rules.
 
 #### Client behaviour
 
@@ -864,7 +869,7 @@ than the room, sender and content rules):
 ##### Recommendations for APNS
 
 The exact format for sending APNS notifications is flexible and up to
-the client app and its' push gateway to agree on. As APNS requires that
+the client app and its push gateway to agree on. As APNS requires that
 the sender has a private key owned by the app developer, each app must
 have its own push gateway. It is recommended that:
 
