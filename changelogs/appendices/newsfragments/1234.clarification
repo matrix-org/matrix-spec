@@ -1,0 +1,1 @@
+Clarify that size limits are supposed to be in bytes. Contributed by Nico. Fixes [#1001](https://github.com/matrix-org/matrix-spec/issues/1001).

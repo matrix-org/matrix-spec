@@ -135,7 +135,7 @@ paths:
                 description: |
                   The generated token. Must be a string consisting of the
                   characters `[0-9a-zA-Z.=_-]`. Its length must not exceed
-                  255 characters and it must not be empty.
+                  255 bytes and it must not be empty.
               public_keys:
                 type: array
                 description: |

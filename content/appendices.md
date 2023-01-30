@@ -9,7 +9,7 @@ type: docs
 *Unpadded* Base64 refers to 'standard' Base64 encoding as defined in
 [RFC 4648](https://tools.ietf.org/html/rfc4648), without "=" padding.
 Specifically, where RFC 4648 requires that encoded data be padded to a
-multiple of four characters using `=` characters, unpadded Base64 omits
+multiple of four bytes using `=` characters, unpadded Base64 omits
 this padding.
 
 For reference, RFC 4648 uses the following alphabet for Base 64:
@@ -398,7 +398,7 @@ identifiers.
 
 The grammar is defined as follows:
 
- * An identifier must be at least one character and at most 255 characters
+ * An identifier must be at least one character and at most 255 bytes
    in length.
  * Identifiers must start with one of the characters `[a-z]`, and be entirely
    composed of the characters `[a-z]`, `[0-9]`, `-`, `_` and `.`.
@@ -483,7 +483,7 @@ Server names must be treated case-sensitively: in other words,
 Some recommendations for a choice of server name follow:
 
 -   The length of the complete server name should not exceed 230
-    characters.
+    bytes.
 -   Server names should not use upper-case characters.
 
 ### Common Identifier Format
@@ -535,7 +535,7 @@ The `domain` of a user ID is the [server name](#server-name) of the
 homeserver which allocated the account.
 
 The length of a user ID, including the `@` sigil and the domain, MUST
-NOT exceed 255 characters.
+NOT exceed 255 bytes.
 
 The complete grammar for a legal user ID is:
 
