@@ -32,8 +32,7 @@ paths:
       x-addedInMatrixVersion: "1.4"
       summary: Retrieve a list of threads in a room, with optional filters.
       description: |-
-        Paginates over the thread roots in a room, ordered by the `latest_event` of each thread root
-        in its bundle.
+        Paginates over the thread roots in a room.
       operationId: getThreadRoots
       security:
         - accessToken: []
@@ -85,8 +84,8 @@ paths:
               chunk:
                 type: array
                 description: |-
-                  The thread roots, ordered by the `latest_event` in each event's aggregation bundle. All events
-                  returned include bundled [aggregations](/client-server-api/#aggregations).
+                  The thread roots, ordered by the `latest_event` in each event's aggregated children. All events
+                  returned include bundled [aggregations](/client-server-api/#aggregations-of-child-events).
 
                   If the thread root event was sent by an [ignored user](/client-server-api/#ignoring-users), the
                   event is returned redacted to the caller. This is to simulate the same behaviour of a client doing

@@ -11,12 +11,14 @@ Clients SHOULD render threads differently to regular messages or replies in the 
 as by providing some context to what is going on in the thread but keeping the full conversation
 history behind a disclosure.
 
-Threads are established using a `rel_type` of `m.thread` and reference the *thread root* (the
-first event in a thread). It is not possible to create a thread from an event with a `rel_type`,
-which includes not being able to nest threads. All conversation in a thread reference the thread
-root instead of the most recent message, unlike rich reply chains.
+Threads are established using a `rel_type` of `m.thread` and reference the
+*thread root* (the first event in a thread). It is not possible to create a
+thread from an event which itself is the child of an event relationship (i.e.,
+one with an `m.relates_to` property). It is therefore also not possible to nest
+threads. All events in a thread reference the thread root instead of the
+most recent message, unlike rich reply chains.
 
-As a worked example, the following represents a thread and how it'd be formed:
+As a worked example, the following represents a thread and how it would be formed:
 
 ```json
 {
@@ -128,11 +130,11 @@ clients is used to create a reply within a thread: clients should render the eve
 
 ##### Validation of `m.thread` relationships
 
-Servers SHOULD reject client requests which attempt to start a thread off an event with a
-`rel_type`. If the client attempts to target an event which already has an `m.thread`,
-`m.reference`, or any other `rel_type` then it should receive a HTTP 400 error response
-with appropriate error message, as per the [standard error response](#standard-error-response)
-structure.
+Servers SHOULD reject client requests which attempt to start a thread off an
+event with an `m.relates_to` property. If the client attempts to target an event which itself
+has an `m.relates_to` property, then it should receive a HTTP 400 error
+response with appropriate error message, as per the [standard error
+response](#standard-error-response) structure.
 
 {{% boxes/note %}}
 A specific error code is not currently available for this case: servers should use `M_UNKNOWN`
@@ -141,12 +143,16 @@ alongside the HTTP 400 status code.
 
 ##### Server-side aggregation of `m.thread` relationships
 
-Given threads always reference the thread root, an event can have multiple "child" events which
-then form the thread itself. These events should be [aggregated](#aggregations) by the server.
+Given threads always reference the thread root, an event can have multiple
+"child" events which then form the thread itself. These events should be
+[aggregated](#aggregations-of-child-events) by the server.
 
 The aggregation for threads includes some information about the user's participation in the thread,
 the approximate number of events in the thread (as known to the server), and the most recent event
-in the thread (topologically). This is then bundled into the event as `m.thread`:
+in the thread (topologically).
+
+As with any other aggregation of child events, the `m.thread` aggregation is
+included under the `m.relations` property in `unsigned` for the thread root. For example:
 
 ```json
 {
@@ -165,6 +171,11 @@ in the thread (topologically). This is then bundled into the event as `m.thread`
           "content": {
             "msgtype": "m.text",
             "body": "Woo! Threads!"
+          },
+          "unsigned": {
+            "m.relations": {
+              // ...
+            }
           }
         },
         "count": 7,
@@ -178,15 +189,17 @@ in the thread (topologically). This is then bundled into the event as `m.thread`
 `latest_event` is the most recent event (topologically to the server) in the thread sent by an
 un-[ignored user](#ignoring-users).
 
-Note that any bundled aggregations on `latest_event` should also be present. The server should be
-careful to avoid loops, though loops are not currently possible due to `m.thread` not being possible
-to target an event with a `rel_type` already.
+Note that, as in the example above, child events of the `latest_event` should
+themselves be aggregated and included under `m.relations` for that event. The
+server should be careful to avoid loops, though loops are not currently
+possible due to `m.thread` not being permitted to target an event with an
+`m.relates_to` property.
 
 `count` is simply the number of events using `m.thread` as a `rel_type` pointing to the target event.
 It does not include events sent by [ignored users](#ignoring-users).
 
 `current_user_participated` is `true` when the authenticated user is either:
-1. The `sender` of the event receiving the bundle (they sent the thread root).
+1. The `sender` of the thread root event.
 2. The `sender` of an event which references the thread root with a `rel_type` of `m.thread`.
 
 #### Querying threads in a room
