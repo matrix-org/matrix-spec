@@ -81,7 +81,7 @@ paths:
             response](/client-server-api/#get_matrixclientv3sync). The resident
             server should include these members' membership events in the
             response `state` field, and include the auth chains for these
-            membership events it the response `auth_chain` field.
+            membership events in the response `auth_chain` field.
           x-addedInMatrixVersion: "1.6"
         - in: body
           name: body
