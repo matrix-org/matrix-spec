@@ -72,6 +72,16 @@ paths:
             If `true`, indicates that that calling server can accept a reduced
             response, in which membership events are omitted from `state` and
             redundant events are omitted from `auth_chain`.
+
+            If the room to be joined has no `m.room.name` nor
+            `m.room.canonical_alias` events in its current state, the resident
+            server should determine the room members who would be included in
+            the `m.heroes` property of the room summary as defined in the
+            [Client-Server /sync
+            response](/client-server-api/#get_matrixclientv3sync). The resident
+            server should include these members' membership events in the
+            response `state` field, and include the auth chains for these
+            membership events in the response `auth_chain` field.
           x-addedInMatrixVersion: "1.6"
         - in: body
           name: body
