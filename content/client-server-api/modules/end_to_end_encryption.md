@@ -668,17 +668,20 @@ The process between Alice and Bob verifying each other would be:
     the users to select a method.
 14. Alice and Bob compare the strings shown by their devices, and tell
     their devices if they match or not.
-15. Assuming they match, Alice and Bob's devices calculate the HMAC of
-    their own device keys and a comma-separated sorted list of the key
-    IDs that they wish the other user to verify, using SHA-256 as the
-    hash function. The HMAC calculation is defined [below](#mac-calculation).
+15. Assuming they match, Alice and Bob's devices each calculate Message
+    Authentication Codes (MACs) for:
+    * the keys that they wish to verify (usually their device ed25519 key and
+      their master cross-signing key)
+    * the list of key IDs that they wish the other user to verify.
+
+    The MAC calculation is defined [below](#mac-calculation).
 16. Alice's device sends Bob's device an `m.key.verification.mac`
     message containing the MAC of Alice's device keys and the MAC of her
     key IDs to be verified. Bob's device does the same for Bob's device
     keys and key IDs concurrently with Alice.
 17. When the other device receives the `m.key.verification.mac` message,
-    the device calculates the HMAC of its copies of the other device's
-    keys given in the message, as well as the HMAC of the
+    the device calculates the MAC of its copies of the other device's
+    keys given in the message, as well as the MAC of the
     comma-separated, sorted, list of key IDs in the message. The device
     compares these with the HMAC values given in the message, and if
     everything matches then the device keys are verified.
@@ -766,11 +769,15 @@ following error codes are used in addition to those already specified:
 
 ###### MAC calculation
 
-For verification of each party's device keys, a MAC is calculated individually
-for each the keys that are to be verified. As well, a MAC is calculated for a
-list of the keys IDs. The MAC used is HMAC as defined in [RFC
-2104](https://tools.ietf.org/html/rfc2104), using SHA-256 as the hash function.
-The HMAC key is calculated using HKDF as defined in [RFC
+During the verification process, Message Authentication Codes (MACs) are calculated
+for keys and lists of key IDs.
+
+The method used to calculate these MACs depends upon the value of the
+`message_authentication_code` property in the [`m.key.verification.accept`](#mkeyverificationaccept)
+message. All current implementations should use the `hkdf-hmac-sha256.v2` method which is
+defined as follows:
+
+The MAC used is HMAC as defined in [RFC
 5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
 function. The shared secret is supplied as the input keying material. No salt
 is used, and in the info parameter is the concatenation of:
@@ -785,9 +792,14 @@ is used, and in the info parameter is the concatenation of:
     item being MAC-ed is the list of key IDs.
 
 If the key list is being MACed, the list is sorted lexicographically and
-comma-separated with no extra whitespace added. In this way, the recipient can
+comma-separated with no extra whitespace added, with each key written in the
+form `{algorithm}:{keyId}`. For example, the key list could look like:
+`ed25519:Cross+Signing+Key,ed25519:DEVICEID`. In this way, the recipient can
 reconstruct the list from the names in the `mac` property of the
 `m.key.verification.mac` message and ensure that no keys were added or removed.
+
+The MAC values are base64-encoded and sent in a
+[`m.key.verification.mac`](#mkeyverificationmac) message.
 
 {{% boxes/note %}}
 The MAC method `hkdf-hmac-sha256` used an incorrect base64 encoding, due to a
