@@ -791,6 +791,10 @@ is used, and in the info parameter is the concatenation of:
 -   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
     item being MAC-ed is the list of key IDs.
 
+If a key is being MACed, the MAC is performed on the public key as encoded
+according to the [key algorithm](#key-algorithms).  For example, for `ed25519`
+keys, it is the unpadded base64-encoded key.
+
 If the key list is being MACed, the list is sorted lexicographically and
 comma-separated with no extra whitespace added, with each key written in the
 form `{algorithm}:{keyId}`. For example, the key list could look like:
