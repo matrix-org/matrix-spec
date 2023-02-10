@@ -524,6 +524,38 @@ Definition:
 }
 ```
 
+**`.m.rule.roomnotif`**
+
+Matches any message whose content is unencrypted and contains the text
+`@room`, signifying the whole room should be notified of the event.
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.roomnotif",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_match",
+            "key": "content.body",
+            "pattern": "@room"
+        },
+        {
+            "kind": "sender_notification_permission",
+            "key": "room"
+        }
+    ],
+    "actions": [
+        "notify",
+        {
+            "set_tweak": "highlight"
+        }
+    ]
+}
+```
+
 **<a name="mruletombstone"></a>`.m.rule.tombstone`**
 
 Matches any state event whose type is `m.room.tombstone`. This is
@@ -584,38 +616,6 @@ Definition:
         }
     ],
     "actions": []
-}
-```
-
-**`.m.rule.roomnotif`**
-
-Matches any message whose content is unencrypted and contains the text
-`@room`, signifying the whole room should be notified of the event.
-
-Definition:
-
-```json
-{
-    "rule_id": ".m.rule.roomnotif",
-    "default": true,
-    "enabled": true,
-    "conditions": [
-        {
-            "kind": "event_match",
-            "key": "content.body",
-            "pattern": "@room"
-        },
-        {
-            "kind": "sender_notification_permission",
-            "key": "room"
-        }
-    ],
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "highlight"
-        }
-    ]
 }
 ```
 
