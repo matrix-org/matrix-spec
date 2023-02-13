@@ -1584,7 +1584,7 @@ potential joiner identify the room. It consists of a limited set of state events
 that are themselves simplified to reduce the amount of data required.
 
 Stripped state events can only have the `sender`, `type`, `state_key` and
-`content` keys present.
+`content` properties present.
 
 Stripped state typically appears in invites, knocks, and in other places where a
 user *could* join the room under the conditions available (such as a
