@@ -1579,15 +1579,18 @@ detail on why this assumption is unsafe.
 
 ### Stripped state
 
-Stripped state events are simplified state events to help a potential
-joiner identify the room. These state events can only have the `sender`,
-`type`, `state_key` and `content` keys present.
+Stripped state is a simplified view of the state of a room intended to help a
+potential joiner identify the room. It consists of a limited set of state events
+that are themselves simplified to reduce the amount of data required.
 
-These stripped state events typically appear on invites, knocks, and in
-other places where a user *could* join the room under the conditions
-available (such as a [`restricted` room](#restricted-rooms)).
+Stripped state events can only have the `sender`, `type`, `state_key` and
+`content` properties present.
 
-Clients should only use stripped state events so long as they don't have
+Stripped state typically appears in invites, knocks, and in other places where a
+user *could* join the room under the conditions available (such as a
+[`restricted` room](#restricted-rooms)).
+
+Clients should only use stripped state events when they don't have
 access to the proper state of the room. Once the state of the room is
 available, all stripped state should be discarded. In cases where the
 client has an archived state of the room (such as after being kicked)
@@ -1595,8 +1598,8 @@ and the client is receiving stripped state for the room, such as from an
 invite or knock, then the stripped state should take precedence until
 fresh state can be acquired from a join.
 
-The following state events should be represented as stripped state when
-possible:
+Stripped state should contain some or all of the following state events, which
+should be represented as stripped state events when possible:
 
 * [`m.room.create`](#mroomcreate)
 * [`m.room.name`](#mroomname)
