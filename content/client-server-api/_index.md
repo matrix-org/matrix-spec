@@ -739,7 +739,7 @@ submit:
 ```
 
 Alternatively reply using a 3PID bound to the user's account on the
-homeserver using the `/account/3pid`\_ API rather than giving the `user`
+homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API rather than giving the `user`
 explicitly as follows:
 
 ```json
@@ -1047,7 +1047,7 @@ ID.
 
 A client can identify a user using a 3PID associated with the user's
 account on the homeserver, where the 3PID was previously associated
-using the `/account/3pid`\_ API. See the [3PID
+using the [`/account/3pid`](#get_matrixclientv3account3pid) API. See the [3PID
 Types](/appendices#3pid-types) Appendix for a list of Third-party
 ID media.
 
@@ -1067,7 +1067,7 @@ ID media.
 
 A client can identify a user using a phone number associated with the
 user's account, where the phone number was previously associated using
-the `/account/3pid`\_ API. The phone number can be passed in as entered
+the [`/account/3pid`](#get_matrixclientv3account3pid) API. The phone number can be passed in as entered
 by the user; the homeserver will be responsible for canonicalising it.
 If the client wishes to canonicalise the phone number, then it can use
 the `m.id.thirdparty` identifier type with a `medium` of `msisdn`
@@ -1108,7 +1108,7 @@ request as follows:
 ```
 
 Alternatively, a client can use a 3PID bound to the user's account on
-the homeserver using the `/account/3pid`\_ API rather than giving the
+the homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API rather than giving the
 `user` explicitly, as follows:
 
 ```json
