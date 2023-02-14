@@ -1,1 +1,0 @@
-Fix `POST _matrix/federation/v1/user/keys/claim` response schema.

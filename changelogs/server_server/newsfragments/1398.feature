@@ -1,1 +1,0 @@
-Extend `/_matrix/federation/v2/send_join` to allow omitting membership events, per [MSC3706](https://github.com/matrix-org/matrix-doc/pull/3706).
