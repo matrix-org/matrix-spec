@@ -350,7 +350,7 @@ The authorization parameters to include are:
 - `origin`: the server name of the sending server. This is the same as the
   `origin` field from JSON described in step 1.
 - `destination`: {{< added-in v="1.3" >}} the server name of the receiving
-  sender. This is the same as the `destination` field from the JSON described
+  server. This is the same as the `destination` field from the JSON described
   in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but MUST always send it. If this property
   is included, but the value does not match the receiving server's name, the
