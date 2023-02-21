@@ -156,7 +156,7 @@ The different `kind`s of rule, in the order that they are checked, are:
     These configure behaviour for (unencrypted) messages that match certain
     patterns. Content rules take one parameter: `pattern`, that gives the
     glob pattern to match against. This is treated in the same way as
-    `pattern` for `event_match`.
+    `pattern` for `event_match` against a `key` of `content.body`.
 
 1.  **Room-specific rules (`room`).**
     These rules change the behaviour of all messages for a given room. The
