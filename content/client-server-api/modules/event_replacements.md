@@ -133,13 +133,6 @@ being overwritten entirely by `m.new_content`, with the exception of `m.relates_
 which is left *unchanged*. Any `m.relates_to` property within `m.new_content`
 is ignored.
 
-{{% boxes/note %}}
-Note that server implementations must not *actually* overwrite
-the original event's `content`: instead the server presents it as being overwritten
-when it is served over the client-server API. See [Server-side replacement of content](#server-side-replacement-of-content)
-below.
-{{% /boxes/note %}}
-
 For example, given a pair of events:
 
 ```json
@@ -199,10 +192,11 @@ Note that there can be multiple events with an `m.replace` relationship to a
 given event (for example, if an event is edited multiple times). These should
 be [aggregated](#aggregations) by the homeserver.
 
-The aggregation format of `m.replace` relationships gives the `event_id`,
-`origin_server_ts`, and `sender` of the **most recent** replacement event. The
-most recent event is determined by comparing `origin_server_ts`; if two or more
-replacement events have identical `origin_server_ts`, the event with the
+The aggregation format of `m.replace` relationships gives the **most recent**
+replacement event, formatted as normal for the client-server API (see [Room Event Format](#room-event-format)).
+
+The most recent event is determined by comparing `origin_server_ts`; if two or
+more replacement events have identical `origin_server_ts`, the event with the
 lexicographically largest `event_id` is treated as more recent.
 
 This aggregation is bundled under the `unsigned` property as `m.relations` for any
@@ -211,16 +205,35 @@ event that is the target of an `m.replace` relationship. For example:
 ```json
 {
   "event_id": "$original_event_id",
-  // irrelevant fields not shown
+  "type": "m.room.message",
+  "content": {
+    "body": "I really like cake",
+    "msgtype": "m.text",
+    "formatted_body": "I really like cake"
+  },
   "unsigned": {
     "m.relations": {
       "m.replace": {
         "event_id": "$latest_edit_event_id",
         "origin_server_ts": 1649772304313,
         "sender": "@editing_user:localhost"
+        "type": "m.room.message",
+        "content": {
+          "body": "* I really like *chocolate* cake",
+          "msgtype": "m.text",
+          "m.new_content": {
+            "body": "I really like *chocolate* cake",
+            "msgtype": "m.text"
+          },
+          "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": "$original_event_id"
+          }
+        }
       }
     }
   }
+  // irrelevant fields not shown
 }
 ```
 
@@ -231,15 +244,14 @@ subsequent replacements are themselves redacted). Note that this behaviour is
 specific to the `m.replace` relationship. See also [redactions of edited
 events](#redactions-of-edited-events) below.
 
-##### Server-side replacement of content
+{{< changed-in v="1.7" >}} In previous versions of the specification, only the
+`event_id`, `origin_server_ts`, and `sender` of the replacement event were included
+in the aggregation. v1.7 extends the aggregation to the full event.
 
-Whenever an `m.replace` is to be bundled with an event as above, the server
-should also modify the content of the original event according to the
-`m.new_content` of the most recent replacement event (determined as above).
-
-An exception applies to [`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid),
-which should return the unmodified event (though the relationship should still
-be bundled, as described above).
+{{< changed-in v="1.7" >}} In previous versions of the specification, servers
+were expected to replace the content of the original event with that of the
+replacement event. However that behaviour made reliable client-side
+implementation difficult, and servers should no longer make this replacement.
 
 #### Client behaviour
 
