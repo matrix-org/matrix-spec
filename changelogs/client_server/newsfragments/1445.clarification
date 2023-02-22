@@ -1,0 +1,1 @@
+Added note indicating the need of authentication when require_auth_for_profile_requests is true for profile information api.
