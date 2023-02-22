@@ -107,10 +107,10 @@ paths:
                 description: The fully qualified user ID or just local part of the user ID, to log in.  Deprecated in favour of `identifier`.
               medium:
                 type: string
-                description: When logging in using a third party identifier, the medium of the identifier. Must be 'email'.  Deprecated in favour of `identifier`.
+                description: When logging in using a third-party identifier, the medium of the identifier. Must be 'email'.  Deprecated in favour of `identifier`.
               address:
                 type: string
-                description: Third party identifier for the user.  Deprecated in favour of `identifier`.
+                description: Third-party identifier for the user.  Deprecated in favour of `identifier`.
               password:
                 type: string
                 description: |-

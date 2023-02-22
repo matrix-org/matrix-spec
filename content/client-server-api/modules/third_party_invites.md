@@ -1,12 +1,12 @@
 
-### Third party invites
+### Third-party invites
 
 This module adds in support for inviting new members to a room where
-their Matrix user ID is not known, instead addressing them by a third
-party identifier such as an email address. There are two flows here; one
-if a Matrix user ID is known for the third party identifier, and one if
+their Matrix user ID is not known, instead addressing them by a third-party
+identifier such as an email address. There are two flows here; one
+if a Matrix user ID is known for the third-party identifier, and one if
 not. Either way, the client calls `/invite` with the details of the
-third party identifier.
+third-party identifier.
 
 The homeserver asks the identity server whether a Matrix user ID is
 known for that identifier:
@@ -22,7 +22,7 @@ When the invitee's homeserver receives the notification of the binding,
 it should insert an `m.room.member` event into the room's graph for that
 user, with `content.membership` = `invite`, as well as a
 `content.third_party_invite` property which contains proof that the
-invitee does indeed own that third party identifier. See the
+invitee does indeed own that third-party identifier. See the
 [m.room.member](#mroommember) schema for more information.
 
 #### Events
@@ -31,14 +31,14 @@ invitee does indeed own that third party identifier. See the
 
 #### Client behaviour
 
-A client asks a server to invite a user by their third party identifier.
+A client asks a server to invite a user by their third-party identifier.
 
 {{% http-api spec="client-server" api="third_party_membership" %}}
 
 #### Server behaviour
 
 Upon receipt of an `/invite`, the server is expected to look up the
-third party identifier with the provided identity server. If the lookup
+third-party identifier with the provided identity server. If the lookup
 yields a result for a Matrix User ID then the normal invite process can
 be initiated. This process ends up looking like this:
 
@@ -104,12 +104,12 @@ looking like this:
 All homeservers MUST verify the signature in the event's
 `content.third_party_invite.signed` object.
 
-The third party user will then need to verify their identity, which
+The third-party user will then need to verify their identity, which
 results in a call from the identity server to the homeserver that bound
-the third party identifier to a user. The homeserver then exchanges the
+the third-party identifier to a user. The homeserver then exchanges the
 `m.room.third_party_invite` event in the room for a complete
 `m.room.member` event for `membership: invite` for the user that has
-bound the third party identifier.
+bound the third-party identifier.
 
 If a homeserver is joining a room for the first time because of an
 `m.room.third_party_invite`, the server which is already participating
@@ -123,7 +123,7 @@ view of the room. They may, however, indicate to their clients that a
 member's membership is questionable.
 
 For example, given H1, H2, and H3 as homeservers, UserA as a user of H1,
-and an identity server IS, the full sequence for a third party invite
+and an identity server IS, the full sequence for a third-party invite
 would look like the following. This diagram assumes H1 and H2 are
 residents of the room while H3 is attempting to join.
 
@@ -144,7 +144,7 @@ residents of the room while H3 is attempting to join.
         |              |                     | POST /store-invite                             |                 |                            |
         |              |                     |---------------------------------------------------------------------------------------------->|
         |              |                     |                                                |                 |                            |
-        |              |                     |                                                |      Token, keys, etc for third party invite |
+        |              |                     |                                                |      Token, keys, etc for third-party invite |
         |              |                     |<----------------------------------------------------------------------------------------------|
         |              |                     |                                                |                 |                            |
         |              |                     | (Federation) Emit m.room.third_party_invite    |                 |                            |
@@ -214,13 +214,13 @@ still be performed, so the attack surface here is minimized.
 There are a number of privacy and trust implications to this module.
 
 It is important for user privacy that leaking the mapping between a
-matrix user ID and a third party identifier is hard. In particular,
-being able to look up all third party identifiers from a matrix user ID
-(and accordingly, being able to link each third party identifier) should
-be avoided wherever possible. To this end, the third party identifier is
+matrix user ID and a third-party identifier is hard. In particular,
+being able to look up all third-party identifiers from a matrix user ID
+(and accordingly, being able to link each third-party identifier) should
+be avoided wherever possible. To this end, the third-party identifier is
 not put in any event, rather an opaque display name provided by the
 identity server is put into the events. Clients should not remember or
-display third party identifiers from invites, other than for the use of
+display third-party identifiers from invites, other than for the use of
 the inviter themself.
 
 Homeservers are not required to trust any particular identity server(s).

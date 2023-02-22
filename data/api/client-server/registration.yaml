@@ -272,7 +272,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
@@ -324,7 +324,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
@@ -443,18 +443,18 @@ paths:
             $ref: "definitions/request_token_response.yaml"
         403:
           description: |-
-            The homeserver does not allow the third party identifier as a
+            The homeserver does not allow the third-party identifier as a
             contact option.
           schema:
             $ref: "definitions/errors/error.yaml"
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
-            The referenced third party identifier is not recognised by the
+            The referenced third-party identifier is not recognised by the
             homeserver, or the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
             can be returned if the server does not trust/support the identity server
             provided in the request.
@@ -500,18 +500,18 @@ paths:
             $ref: "definitions/request_token_response.yaml"
         403:
           description: |-
-            The homeserver does not allow the third party identifier as a
+            The homeserver does not allow the third-party identifier as a
             contact option.
           schema:
             $ref: "definitions/errors/error.yaml"
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
-            The referenced third party identifier is not recognised by the
+            The referenced third-party identifier is not recognised by the
             homeserver, or the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
             can be returned if the server does not trust/support the identity server
             provided in the request.

@@ -13,7 +13,7 @@
 # limitations under the License.
 swagger: '2.0'
 info:
-  title: "Matrix Client-Server Third Party Lookup API"
+  title: "Matrix Client-Server Third-party Lookup API"
   version: "1.0.0"
 host: localhost:8008
 schemes:
@@ -43,12 +43,12 @@ paths:
           schema:
             $ref: ../application-service/definitions/protocol_metadata.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup
   "/thirdparty/protocol/{protocol}":
     get:
       summary: Retrieve metadata about a specific protocol that the homeserver supports.
       description: |-
-        Fetches the metadata from the homeserver about a particular third party protocol.
+        Fetches the metadata from the homeserver about a particular third-party protocol.
       operationId: getProtocolMetadata
       security:
         - accessToken: []
@@ -74,16 +74,16 @@ paths:
           schema:
             $ref: definitions/errors/error.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup
   "/thirdparty/location/{protocol}":
     get:
-      summary: Retrieve Matrix-side portals rooms leading to a third party location.
+      summary: Retrieve Matrix-side portals rooms leading to a third-party location.
       description: |-
         Requesting this endpoint with a valid protocol name results in a list
         of successful mapping results in a JSON array. Each result contains
         objects to represent the Matrix room or rooms that represent a portal
-        to this third party network. Each has the Matrix room alias string,
-        an identifier for the particular third party network protocol, and an
+        to this third-party network. Each has the Matrix room alias string,
+        an identifier for the particular third-party network protocol, and an
         object containing the network-specific fields that comprise this
         identifier. It should attempt to canonicalise the identifier as much
         as reasonably possible given the network type.
@@ -94,14 +94,14 @@ paths:
         - in: path
           name: protocol
           type: string
-          description: The protocol used to communicate to the third party network.
+          description: The protocol used to communicate to the third-party network.
           required: true
           x-example: irc
         - in: query
           name: searchFields
           type: string
           description: |-
-            One or more custom fields to help identify the third party
+            One or more custom fields to help identify the third-party
             location.
       responses:
         200:
@@ -117,12 +117,12 @@ paths:
           schema:
             $ref: definitions/errors/error.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup
   "/thirdparty/user/{protocol}":
     get:
-      summary: Retrieve the Matrix User ID of a corresponding third party user.
+      summary: Retrieve the Matrix User ID of a corresponding third-party user.
       description: |-
-        Retrieve a Matrix User ID linked to a user on the third party service, given
+        Retrieve a Matrix User ID linked to a user on the third-party service, given
         a set of user parameters.
       operationId: queryUserByProtocol
       security:
@@ -154,12 +154,12 @@ paths:
           schema:
             $ref: definitions/errors/error.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup
   "/thirdparty/location":
     get:
-      summary: Reverse-lookup third party locations given a Matrix room alias.
+      summary: Reverse-lookup third-party locations given a Matrix room alias.
       description: |-
-        Retrieve an array of third party network locations from a Matrix room
+        Retrieve an array of third-party network locations from a Matrix room
         alias.
       operationId: queryLocationByAlias
       security:
@@ -174,7 +174,7 @@ paths:
       responses:
         200:
           description: |-
-            All found third party locations.
+            All found third-party locations.
           schema:
             $ref: ../application-service/definitions/location_batch.yaml
         404:
@@ -186,12 +186,12 @@ paths:
           schema:
             $ref: definitions/errors/error.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup
   "/thirdparty/user":
     get:
-      summary: Reverse-lookup third party users given a Matrix User ID.
+      summary: Reverse-lookup third-party users given a Matrix User ID.
       description: |-
-        Retrieve an array of third party users from a Matrix User ID.
+        Retrieve an array of third-party users from a Matrix User ID.
       operationId: queryUserByID
       security:
         - accessToken: []
@@ -205,7 +205,7 @@ paths:
       responses:
         200:
           description: |-
-            An array of third party users.
+            An array of third-party users.
           schema:
             $ref: ../application-service/definitions/user_batch.yaml
         404:
@@ -217,4 +217,4 @@ paths:
           schema:
             $ref: definitions/errors/error.yaml
       tags:
-        - Third Party Lookup
+        - Third-party Lookup

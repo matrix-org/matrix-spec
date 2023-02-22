@@ -1,9 +1,9 @@
 ======================
-Third Party Identities
+Third-party Identities
 ======================
 
-A description of how email addresses, mobile phone numbers and other third
-party identifiers can be used to authenticate and discover users in Matrix.
+A description of how email addresses, mobile phone numbers and other third-party
+identifiers can be used to authenticate and discover users in Matrix.
 
 
 Overview
@@ -15,16 +15,16 @@ and phone numbers for contacts in their address book. They want to communicate
 with those contacts in Matrix without manually exchanging a Matrix User ID with 
 them.
 
-Third Party IDs
+Third-party IDs
 ---------------
 
 [[TODO(markjh): Describe the format of a 3PID]]
 
 
-Third Party ID Associations
+Third-party ID Associations
 ---------------------------
 
-An Associaton is a binding between a Matrix User ID and a Third Party ID (3PID).
+An Associaton is a binding between a Matrix User ID and a Third-party ID (3PID).
 Each 3PID can be associated with one Matrix User ID at a time.
 
 [[TODO(markjh): JSON format of the association.]]

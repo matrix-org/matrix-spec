@@ -892,7 +892,7 @@ unique servers based on the following criteria:
 
 ## 3PID Types
 
-Third Party Identifiers (3PIDs) represent identifiers on other
+Third-party Identifiers (3PIDs) represent identifiers on other
 namespaces that might be associated with a particular person. They
 comprise a tuple of `medium` which is a string that identifies the
 namespace in which the identifier exists, and an `address`: a string

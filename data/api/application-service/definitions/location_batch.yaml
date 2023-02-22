@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: array
-description: List of matched third party locations.
+description: List of matched third-party locations.
 items:
   $ref: location.yaml

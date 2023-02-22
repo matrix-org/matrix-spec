@@ -17,11 +17,11 @@ properties:
     type: string
     example: "#freenode_#matrix:matrix.org"
   protocol:
-    description: The protocol ID that the third party location is a part of.
+    description: The protocol ID that the third-party location is a part of.
     type: string
     example: "irc"
   fields:
-    description: Information used to identify this third party location.
+    description: Information used to identify this third-party location.
     type: object
     example: {
       "network": "freenode",

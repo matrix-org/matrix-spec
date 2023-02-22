@@ -232,18 +232,18 @@ mappings.
 
 {{% http-api spec="application-service" api="query_room" %}}
 
-#### Third party networks
+#### Third-party networks
 
 Application services may declare which protocols they support via their
 registration configuration for the homeserver. These networks are
-generally for third party services such as IRC that the application
+generally for third-party services such as IRC that the application
 service is managing. Application services may populate a Matrix room
 directory for their registered protocols, as defined in the
 Client-Server API Extensions.
 
-Each protocol may have several "locations" (also known as "third party
+Each protocol may have several "locations" (also known as "third-party
 locations" or "3PLs"). A location within a protocol is a place in the
-third party network, such as an IRC channel. Users of the third party
+third-party network, such as an IRC channel. Users of the third-party
 network may also be represented by the application service.
 
 Locations and users can be searched by fields defined by the application
@@ -399,13 +399,13 @@ the user implied by `sender_localpart`.
 #### Application service room directories
 
 Application services can maintain their own room directories for their
-defined third party protocols. These room directories may be accessed by
+defined third-party protocols. These room directories may be accessed by
 clients through additional parameters on the `/publicRooms`
 client-server endpoint.
 
 {{% http-api spec="client-server" api="appservice_room_directory" %}}
 
-### Referencing messages from a third party network
+### Referencing messages from a third-party network
 
 Application services should include an `external_url` in the `content`
 of events it emits to indicate where the message came from. This

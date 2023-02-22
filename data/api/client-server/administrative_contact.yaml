@@ -30,12 +30,12 @@ securityDefinitions:
 paths:
   "/account/3pid":
     get:
-      summary: Gets a list of a user's third party identifiers.
+      summary: Gets a list of a user's third-party identifiers.
       description: |-
-        Gets a list of the third party identifiers that the homeserver has
+        Gets a list of the third-party identifiers that the homeserver has
         associated with the user's account.
 
-        This is *not* the same as the list of third party identifiers bound to
+        This is *not* the same as the list of third-party identifiers bound to
         the user's Matrix ID in identity servers.
 
         Identifiers in this list may be used by the homeserver as, for example,
@@ -64,15 +64,15 @@ paths:
                 type: array
                 items:
                   type: object
-                  title: Third party identifier
+                  title: Third-party identifier
                   properties:
                     medium:
                       type: string
-                      description: The medium of the third party identifier.
+                      description: The medium of the third-party identifier.
                       enum: ["email", "msisdn"]
                     address:
                       type: string
-                      description: The third party identifier address.
+                      description: The third-party identifier address.
                     validated_at:
                       type: integer
                       format: int64
@@ -84,7 +84,7 @@ paths:
                       format: int64
                       description:
                         The timestamp, in milliseconds, when the homeserver
-                        associated the third party identifier with the user.
+                        associated the third-party identifier with the user.
                   required: ['medium', 'address', 'validated_at', 'added_at']
       tags:
         - Account management
@@ -115,7 +115,7 @@ paths:
               three_pid_creds:
                 title: "ThreePidCredentials"
                 type: object
-                description: The third party credentials to associate with the account.
+                description: The third-party credentials to associate with the account.
                 properties:
                   client_secret:
                     type: string
@@ -174,7 +174,7 @@ paths:
           examples:
             application/json: {
                 "errcode": "M_THREEPID_AUTH_FAILED",
-                "error": "The third party credentials could not be verified by the identity server."
+                "error": "The third-party credentials could not be verified by the identity server."
               }
           schema:
             "$ref": "definitions/errors/error.yaml"
@@ -290,9 +290,9 @@ paths:
         - Account management
   "/account/3pid/delete":
     post:
-      summary: Deletes a third party identifier from the user's account
+      summary: Deletes a third-party identifier from the user's account
       description: |-
-        Removes a third party identifier from the user's account. This might not
+        Removes a third-party identifier from the user's account. This might not
         cause an unbind of the identifier from the identity server.
 
         Unlike other endpoints, this endpoint does not take an `id_access_token`
@@ -318,18 +318,18 @@ paths:
                 example: "example.org"
               medium:
                 type: string
-                description: The medium of the third party identifier being removed.
+                description: The medium of the third-party identifier being removed.
                 enum: ["email", "msisdn"]
                 example: "email"
               address:
                 type: string
-                description: The third party address being removed.
+                description: The third-party address being removed.
                 example: "example@example.org"
             required: ['medium', 'address']
       responses:
         200:
           description: |-
-            The homeserver has disassociated the third party identifier from the
+            The homeserver has disassociated the third-party identifier from the
             user.
           schema:
             type: object
@@ -355,9 +355,9 @@ paths:
         - Account management
   "/account/3pid/unbind":
     post:
-      summary: Removes a user's third party identifier from an identity server.
+      summary: Removes a user's third-party identifier from an identity server.
       description: |-
-        Removes a user's third party identifier from the provided identity server
+        Removes a user's third-party identifier from the provided identity server
         without removing it from the homeserver.
 
         Unlike other endpoints, this endpoint does not take an `id_access_token`
@@ -383,18 +383,18 @@ paths:
                 example: "example.org"
               medium:
                 type: string
-                description: The medium of the third party identifier being removed.
+                description: The medium of the third-party identifier being removed.
                 enum: ["email", "msisdn"]
                 example: "email"
               address:
                 type: string
-                description: The third party address being removed.
+                description: The third-party address being removed.
                 example: "example@example.org"
             required: ['medium', 'address']
       responses:
         200:
           description: |-
-            The identity server has disassociated the third party identifier from the
+            The identity server has disassociated the third-party identifier from the
             user.
           schema:
             type: object
@@ -446,18 +446,18 @@ paths:
             $ref: "definitions/request_token_response.yaml"
         403:
           description: |-
-            The homeserver does not allow the third party identifier as a
+            The homeserver does not allow the third-party identifier as a
             contact option.
           schema:
             $ref: "definitions/errors/error.yaml"
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
-            The third party identifier is already in use on the homeserver, or
+            The third-party identifier is already in use on the homeserver, or
             the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
             can be returned if the server does not trust/support the identity server
             provided in the request.
@@ -466,7 +466,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_THREEPID_IN_USE",
-              "error": "Third party identifier already in use"
+              "error": "Third-party identifier already in use"
             }
       tags:
         - Account management
@@ -496,18 +496,18 @@ paths:
             $ref: "definitions/request_token_response.yaml"
         403:
           description: |-
-            The homeserver does not allow the third party identifier as a
+            The homeserver does not allow the third-party identifier as a
             contact option.
           schema:
             $ref: "definitions/errors/error.yaml"
           examples:
             application/json: {
               "errcode": "M_THREEPID_DENIED",
-              "error": "Third party identifier is not allowed"
+              "error": "Third-party identifier is not allowed"
             }
         400:
           description: |-
-            The third party identifier is already in use on the homeserver, or
+            The third-party identifier is already in use on the homeserver, or
             the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
             can be returned if the server does not trust/support the identity server
             provided in the request.
@@ -516,7 +516,7 @@ paths:
           examples:
             application/json: {
               "errcode": "M_THREEPID_IN_USE",
-              "error": "Third party identifier already in use"
+              "error": "Third-party identifier already in use"
             }
       tags:
         - Account management

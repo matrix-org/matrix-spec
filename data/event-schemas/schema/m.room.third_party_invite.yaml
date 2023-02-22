@@ -7,7 +7,7 @@ properties:
   content:
     properties:
       display_name:
-        description: "A user-readable string which represents the user who has been invited. This should not contain the user's third party ID, as otherwise when the invite is accepted it would leak the association between the matrix ID and the third party ID."
+        description: "A user-readable string which represents the user who has been invited. This should not contain the user's third-party ID, as otherwise when the invite is accepted it would leak the association between the matrix ID and the third-party ID."
         type: string
       key_validity_url:
         description: "A URL which can be fetched, with querystring public_key=public_key, to validate whether the key has been revoked. The URL must return a JSON object containing a boolean property named 'valid'."
@@ -42,5 +42,5 @@ properties:
     enum:
       - m.room.third_party_invite
     type: string
-title: 'An invitation to a room issued to a third party identifier, rather than a matrix user ID.'
+title: 'An invitation to a room issued to a third-party identifier, rather than a matrix user ID.'
 type: object

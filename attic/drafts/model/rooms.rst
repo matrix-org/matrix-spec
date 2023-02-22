@@ -246,7 +246,7 @@ anyway.
 In this arrangement there is now a room with both users may join but neither has
 the power to invite any others. Both users now have the confidence that (at
 least within the messaging system itself) their messages remain private and
-cannot later be provably leaked to a third party. They can freely set the topic
+cannot later be provably leaked to a third-party. They can freely set the topic
 or name if they choose and add or edit any other state of the room. The update
 powerlevel of each of these fixed properties should be 1, to lock out the users
 from being able to alter them.

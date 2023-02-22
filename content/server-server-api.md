@@ -938,9 +938,9 @@ the event to other servers in the room.
 ## Third-party invites
 
 {{% boxes/note %}}
-More information about third party invites is available in the
+More information about third-party invites is available in the
 [Client-Server API](/client-server-api) under
-the Third Party Invites module.
+the Third-party Invites module.
 {{% /boxes/note %}}
 
 When a user wants to invite another user in a room but doesn't know the
@@ -1076,7 +1076,7 @@ more specific queries that can be made.
 
 ## OpenID
 
-Third party services can exchange an access token previously generated
+Third-party services can exchange an access token previously generated
 by the <span class="title-ref">Client-Server API</span> for information
 about a user. This can help verify that a user is who they say they are
 without granting full access to the user's account.

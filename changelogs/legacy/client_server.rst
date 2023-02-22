@@ -211,7 +211,7 @@ Backwards Compatible Changes
 - Add a common standard for user, room, and group mentions in messages. (`#1547 <https://github.com/matrix-org/matrix-doc/issues/1547>`_)
 - Add server ACLs as an option for controlling federation in a room. (`#1550 <https://github.com/matrix-org/matrix-doc/issues/1550>`_)
 - Add new push rules for encrypted events and ``@room`` notifications. (`#1551 <https://github.com/matrix-org/matrix-doc/issues/1551>`_)
-- Add third party network room directories, as provided by application services. (`#1554 <https://github.com/matrix-org/matrix-doc/issues/1554>`_)
+- Add third-party network room directories, as provided by application services. (`#1554 <https://github.com/matrix-org/matrix-doc/issues/1554>`_)
 - Document the ``validated_at`` and ``added_at`` fields on ``GET /acount/3pid``. (`#1567 <https://github.com/matrix-org/matrix-doc/issues/1567>`_)
 - Add an ``inhibit_login`` registration option. (`#1589 <https://github.com/matrix-org/matrix-doc/issues/1589>`_)
 - Recommend that servers set a Content Security Policy for the content repository. (`#1600 <https://github.com/matrix-org/matrix-doc/issues/1600>`_)
@@ -554,7 +554,7 @@ Since the draft stage, the following major changes have been made:
   - Push notification
   - History visibility
   - Search
-  - Invites based on third party identifiers
+  - Invites based on third-party identifiers
   - Room tagging
   - Guest access
   - Client config

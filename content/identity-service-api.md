@@ -98,11 +98,11 @@ There was an error sending an email. Typically seen when attempting to
 verify ownership of a given email address.
 
 `M_INVALID_ADDRESS`
-The provided third party address was not valid.
+The provided third-party address was not valid.
 
 `M_SEND_ERROR`
 There was an error sending a notification. Typically seen when
-attempting to verify ownership of a given third party address.
+attempting to verify ownership of a given third-party address.
 
 `M_UNRECOGNIZED`
 The request contained an unrecognised value, such as an unknown token or
@@ -114,9 +114,9 @@ not implemented or a 405 HTTP status code if the endpoint is implemented, but
 the incorrect HTTP method is used.
 
 `M_THREEPID_IN_USE`
-The third party identifier is already in use by another user. Typically
+The third-party identifier is already in use by another user. Typically
 this error will have an additional `mxid` property to indicate who owns
-the third party identifier.
+the third-party identifier.
 
 `M_UNKNOWN`
 An unknown error has occurred.
@@ -369,7 +369,7 @@ To start a session, the client makes a request to the appropriate
 token to the user, and the user provides the token to the client. The
 client then provides the token to the appropriate `/submitToken`
 endpoint, completing the session. At this point, the client should
-`/bind` the third party identifier or leave it for another entity to
+`/bind` the third-party identifier or leave it for another entity to
 bind.
 
 ### Format of a validation token
