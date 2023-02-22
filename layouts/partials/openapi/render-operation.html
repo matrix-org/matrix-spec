@@ -33,6 +33,7 @@
    <span class="http-api-method {{ $method }}">{{ $method }}</span>
    <span class="endpoint{{ if $operation_data.deprecated }} deprecated-inline{{ end }}">{{ $endpoint }}</span>
   </h1>
+</summary>
 
   <hr/>
 
@@ -49,7 +50,6 @@
 
 <p>{{ $operation_data.description | markdownify }}</p>
 
-</summary>
 
 <table class="basic-info">
   <tr>

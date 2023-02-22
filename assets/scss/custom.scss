@@ -288,15 +288,19 @@ footer {
 /* Styles for sections that are rendered from data, such as HTTP APIs and event schemas */
 .rendered-data {
   background-color: $secondary-lightest-background;
-  padding: 1rem;
-  margin: 1rem 0;
+  padding: 0.85rem;
+  margin: 0.85rem 0;
 
   details {
     summary {
-      padding: .5rem 0;
-      p {
-        max-width: 80%;
+      h1 {
+        margin: 0;
+        /* Ensure the disclosure control is vertically centred with the header text. */
+        vertical-align: middle;
       }
+    }
+    p {
+      max-width: 80%;
     }
   }
 
