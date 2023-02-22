@@ -185,6 +185,8 @@ paths:
         to fetch the user's own profile information or other users; either
         locally or on remote homeservers. This API may return keys which are not
         limited to `displayname` or `avatar_url`.
+
+        _Please note that access token is required if require_auth_for_profile_requests is true [in configuration](https://matrix-org.github.io/synapse/latest/usage/configuration/config_documentation.html#require_auth_for_profile_requests)._
       operationId: getUserProfile
       parameters:
         - in: path
@@ -211,6 +213,15 @@ paths:
               displayname:
                 type: string
                 description: The user's display name if they have set one, otherwise not present.
+        401:
+          description: The access token is not provided or is invalid.
+          examples:
+            application/json: {
+              "errcode": "M_MISSING_TOKEN",
+              "error": "Missing access token"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
         403:
           x-addedInMatrixVersion: "1.2"
           description: The server is unwilling to disclose whether the user exists and/or has profile information.
