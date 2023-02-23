@@ -214,19 +214,36 @@ See the [Server Notices](#server-notices) module for more information.
 ### Transaction identifiers
 
 The client-server API typically uses `HTTP PUT` to submit requests with
-a client-generated transaction identifier. This means that these
-requests are idempotent. It **only** serves to identify new requests
-from retransmits. After the request has finished, the `{txnId}` value
-should be changed (how is not specified; a monotonically increasing
-integer is recommended).
+a client-generated transaction identifier in the HTTP path.
 
-The scope of a transaction ID is a "client session", where that session
-is identified by a particular access token. When [refreshing](#refreshing-access-tokens)
-an access token, the transaction ID's scope is retained. This means that
-if a client with token `A` uses `TXN1` as their transaction ID, refreshes
-the token to `B`, and uses `TXN1` again it'll be assumed to be a duplicate
-request and ignored. If the client logs out and back in between the `A` and
-`B` tokens, `TXN1` could be used once for each.
+The purpose of the transaction ID is to allow the homeserver to distinguish a
+new request from a retransmission of a previous request so that it can make
+the request idempotent.
+
+The transaction ID should **only** be used for this purpose.
+
+From the client perspective, after the request has finished, the `{txnId}`
+value should be changed by for the next request (how is not specified; a
+monotonically increasing integer is recommended).
+
+The homeserver should identify a request as a retransmission if the
+transaction ID is the same as a previous request, and the path of the
+HTTP request is the same.
+
+Where a retransmission has been identified, the homeserver should return
+the same HTTP response code and content as the original request.
+For example, `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`
+would return a `200 OK` with the `event_id` of the original request in
+the response body.
+
+As well as the HTTP path, the scope of a transaction ID is a "client
+session", where that session is identified by a particular access token.
+When [refreshing](#refreshing-access-tokens) an access token, the
+transaction ID's scope is retained. This means that if a client with
+token `A` uses `TXN1` as their transaction ID, refreshes the token to
+`B`, and uses `TXN1` again it'll be assumed to be a duplicate request
+and ignored. If the client logs out and back in between the `A` and `B`
+tokens, `TXN1` could be used once for each.
 
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
