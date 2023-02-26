@@ -1,0 +1,1 @@
+Remove overriden references to `examples/minimal_pdu.json` and add the missing `room_id` field.
