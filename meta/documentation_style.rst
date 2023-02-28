@@ -44,33 +44,39 @@ Stylistic notes
 General
 ~~~~~~~
 
-Try to write clearly and unambiguously. Remember that many readers will not
-have English as their first language.
+* Try to write clearly and unambiguously. Remember that many readers will not
+  have English as their first language.
 
-Prefer British English (colour, -ise) to American English.
+* Prefer British English (colour, -ise) to American English.
 
-The word "homeserver" is spelt thus (rather than "home server", "Homeserver",
-or (argh) "Home Server"). However, an identity server is two words.
+* The word "homeserver" is spelt thus (rather than "home server", "Homeserver",
+  or (argh) "Home Server"). However, an identity server is two words.
 
-An "identity server" (spelt thus) implements the Identity Service API (also spelt
-thus). However, "Application Services" (spelt thus) implement the Application Service
-API. Application Services should not be called "appservices" in documentation.
+* An "identity server" (spelt thus) implements the Identity Service API (also spelt
+  thus). However, "Application Services" (spelt thus) implement the Application Service
+  API. Application Services should not be called "appservices" in documentation.
 
-.. Rationale: "homeserver" distinguishes from a "home server" which is a server
-   you have at home. "identity server" is clear, whereas "identityserver" is
-   horrible.
+  .. Rationale: "homeserver" distinguishes from a "home server" which is a server
+     you have at home. "identity server" is clear, whereas "identityserver" is
+     horrible.
 
-Lists should:
+* Lists should:
 
-* Be introduced with a colon.
-* Be used where they provide clarity.
-* Contain entries which start with a capital and end with a full stop.
+  * Be introduced with a colon.
+  * Be used where they provide clarity.
+  * Contain entries which start with a capital and end with a full stop.
 
-When talking about properties in JSON objects, prefer the word "property" to "field",
-"member", or various other alternatives. For example: "this property will be set to
-X if ...". Also avoid the term "key" unless you are specifically talking about the
-*name* of a property - and be mindful of the scope for confusion with cryptographic
-keys.
+* When talking about properties in JSON objects, prefer the word "property" to "field",
+  "member", or various other alternatives. For example: "this property will be set to
+  X if ...". Also avoid the term "key" unless you are specifically talking about the
+  *name* of a property - and be mindful of the scope for confusion with cryptographic
+  keys.
+
+* "i.e." (*id est*) is an abbreviation and hence is written with two full
+  stops. Prefer full sentences where possible without loss of clarity.
+
+* Prefer "for example" over "e.g.". If you *must* use "e.g.", remember it too
+  is an abbreviation (*exempli gratia*).
 
 Changes between spec versions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
