@@ -89,7 +89,7 @@ paths:
           example: {
             "room_version": "2",
             "event": {
-              "$ref": "examples/minimal_pdu.json",
+              "room_id": "!somewhere:example.org",
               "type": "m.room.member",
               "state_key": "@joe:elsewhere.com",
               "origin": "example.org",
@@ -122,7 +122,7 @@ paths:
           examples:
             application/json: {
               "event":  {
-                "$ref": "examples/minimal_pdu.json",
+                "room_id": "!somewhere:example.org",
                 "type": "m.room.member",
                 "state_key": "@someone:example.org",
                 "origin": "example.org",

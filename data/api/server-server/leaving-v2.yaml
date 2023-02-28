@@ -117,7 +117,7 @@ paths:
               - depth
               - content
           example: {
-            "$ref": "examples/minimal_pdu.json",
+            "room_id": "!somewhere:example.org",
             "type": "m.room.member",
             "state_key": "@someone:example.org",
             "origin": "example.org",

@@ -1,0 +1,1 @@
+Fix invalid OpenAPI specifications caused by overridden references to `examples/minimal_pdu.json`.
