@@ -188,12 +188,14 @@ replacement event.
 
 ##### Server-side aggregation of `m.replace` relationships
 
+{{< changed-in v="1.7" >}}
+
 Note that there can be multiple events with an `m.replace` relationship to a
 given event (for example, if an event is edited multiple times). These should
 be [aggregated](#aggregations) by the homeserver.
 
 The aggregation format of `m.replace` relationships gives the **most recent**
-replacement event, formatted as normal for the client-server API (see [Room Event Format](#room-event-format)).
+replacement event, formatted as normal (see [Room Event Format](#room-event-format)).
 
 The most recent event is determined by comparing `origin_server_ts`; if two or
 more replacement events have identical `origin_server_ts`, the event with the
@@ -237,21 +239,23 @@ event that is the target of an `m.replace` relationship. For example:
 }
 ```
 
-If the original event is
-[redacted](#redactions), any
+If the original event is [redacted](#redactions), any
 `m.replace` relationship should **not** be bundled with it (whether or not any
 subsequent replacements are themselves redacted). Note that this behaviour is
 specific to the `m.replace` relationship. See also [redactions of edited
 events](#redactions-of-edited-events) below.
 
-{{< changed-in v="1.7" >}} In previous versions of the specification, only the
-`event_id`, `origin_server_ts`, and `sender` of the replacement event were included
-in the aggregation. v1.7 extends the aggregation to the full event.
+**Note:** the `content` of the original event is left intact. In particular servers
+should **not** replace the content with that of the replacement event.
 
-{{< changed-in v="1.7" >}} In previous versions of the specification, servers
-were expected to replace the content of the original event with that of the
-replacement event. However that behaviour made reliable client-side
-implementation difficult, and servers should no longer make this replacement.
+{{ boxes/rationale }}
+In previous versions of the specification, servers were expected to replace the
+content of an edited event whenever it was served to clients (with the
+exception of the
+[`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
+endpoint).  However, that behaviour made reliable client-side implementation
+difficult, and servers should no longer make this replacement.
+{{ /boxes/rationale }}
 
 #### Client behaviour
 
