@@ -69,8 +69,7 @@ paths:
                 description: |-
                     The custom capabilities the server supports, using the
                     Java package naming convention.
-                additionalProperties:
-                  type: object
+                additionalProperties: true
                 properties:
                   "m.change_password":
                     type: object
