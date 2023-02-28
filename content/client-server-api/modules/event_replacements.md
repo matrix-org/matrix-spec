@@ -259,17 +259,9 @@ difficult, and servers should no longer make this replacement.
 
 #### Client behaviour
 
-Clients can often ignore `m.replace` events, because any events returned
-by the server to the client will be updated by the server to account for
-subsequent edits.
-
-However, clients should apply the replacement themselves when the server is
-unable to do so. This happens in the following situations:
-
- * The client has already received and stored the original event before the
-   message edit event arrives.
-
- * The original event (and hence its replacement) are encrypted.
+Since the server will not replace the content of any edited events, clients
+should take note of any replacement events they receive, and apply the
+replacement whenever possible and appropriate.
 
 Client authors are reminded to take note of the requirements for [Validity of
 replacement events](#validity-of-replacement-events), and to ignore any
