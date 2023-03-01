@@ -30,9 +30,12 @@ paths:
   "/rooms/{roomId}/threads":
     get:
       x-addedInMatrixVersion: "1.4"
-      summary: Retrieve a list of threads in a room, with optional filters.
+      summary: Fetches a list of the threads in a room.
       description: |-
-        Paginates over the thread roots in a room.
+        This API is used to paginate through the list of the thread roots in a given room. 
+        
+        Optionally, the returned list may be filtered according to whether the requesting
+        user has participated in the thread.
       operationId: getThreadRoots
       security:
         - accessToken: []
