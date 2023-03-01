@@ -1,0 +1,1 @@
+Wrap $ref in allOf where other attributes are present, to improve OpenAPI compliance.
