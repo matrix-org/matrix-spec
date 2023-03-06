@@ -264,17 +264,12 @@ This is a glob pattern match on a field of the event. Parameters:
 -   `key`: The dot-separated path of the property of the event to match, e.g.
     `content.body`.
 
--   `pattern`: The glob-style pattern to match against.
+-   `pattern`: The [glob-style pattern](/appendices#glob-style-matching) to match against.
 
 The match is performed case-insensitively, and must match the entire value of
 the event field given by `key` (though see below regarding `content.body`). The
 exact meaning of "case insensitive" is defined by the implementation of the
 homeserver.
-
-Within `pattern`:
-
-  * The character `*` matches zero or more characters.
-  * `?` matches exactly one character.
 
 If the property specified by `key` is completely absent from the event, or does
 not have a string value, then the condition will not match, even if `pattern`

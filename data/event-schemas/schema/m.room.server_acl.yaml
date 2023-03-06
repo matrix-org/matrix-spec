@@ -7,8 +7,8 @@ description: |-
   server ACL. Servers that do not uphold the ACLs MUST be added to the denied hosts
   list in order for the ACLs to remain effective.
 
-  The `allow` and `deny` lists are lists of globs supporting `?` and `*`
-  as wildcards. When comparing against the server ACLs, the suspect server's port
+  The `allow` and `deny` lists are lists of [glob-style patterns](/appendices#glob-style-matching).
+  When comparing against the server ACLs, the suspect server's port
   number must not be considered. Therefore `evil.com`, `evil.com:8448`, and
   `evil.com:1234` would all match rules that apply to `evil.com`, for example.
 
@@ -61,8 +61,7 @@ properties:
         type: array
         description: |-
           The server names to allow in the room, excluding any port information.
-          Wildcards may be used to cover a wider range of hosts, where `*`
-          matches zero or more characters and `?` matches exactly one character.
+          Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
 
           **This defaults to an empty list when not provided, effectively disallowing
           every server.**
@@ -72,8 +71,7 @@ properties:
         type: array
         description: |-
           The server names to disallow in the room, excluding any port information.
-          Wildcards may be used to cover a wider range of hosts, where `*`
-          matches zero or more characters and `?` matches exactly one character.
+          Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
 
           This defaults to an empty list when not provided.
         items:
