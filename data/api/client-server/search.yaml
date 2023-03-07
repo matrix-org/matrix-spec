@@ -204,7 +204,8 @@ paths:
                               type: object
                               title: Event
                               description: The event that matched.
-                              "$ref": "definitions/client_event.yaml"
+                              allOf:
+                                - "$ref": "definitions/client_event.yaml"
                             context:
                               type: object
                               title: Event Context
@@ -270,7 +271,6 @@ paths:
                           type: array
                           title: Room State
                           items:
-                            type: object
                             "$ref": "definitions/client_event.yaml"
                       groups:
                         type: object
