@@ -833,6 +833,13 @@ Servers MUST include the number of unread notifications in a client's
 `/sync` stream, and MUST update it as it changes. Notifications are
 determined by the push rules which apply to an event.
 
+For encrypted events, the homeserver has limited access to the event content
+and properly processing push rules falls on the client. Clients should process
+push rules for each incoming event *after decrypting* them. This may result in
+needing to modify the number of unread notifications received from the homeserver.
+
+##### Marking notifications as read
+
 When the user updates their read receipt (either by using the API or by
 sending an event), notifications prior to and including that event MUST
 be marked as read. Which specific events are affected can vary depending
@@ -863,6 +870,15 @@ to ensure that future events, like `m.reaction`, are correctly considered
 "part of" a given thread.
 
 #### Server behaviour
+
+When receiving a new event homeservers process push rules for all other local
+users in the room, this may result in:
+
+* Generating a new number of unread notifications for the user;
+* Making a request to the configured push gateway.
+
+The updated notification count from a new event MUST appear in the same `/sync`
+response as the event itself.
 
 #### Push Gateway behaviour
 
