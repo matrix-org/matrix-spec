@@ -102,8 +102,8 @@ The different `kind`s of rule, in the order that they are checked, are:
     The highest priority rules are user-configured overrides.
 
 1.  **Content-specific rules (`content`).**
-    These configure behaviour for (unencrypted) messages that match certain
-    patterns. Content rules take one parameter: `pattern`, that gives the
+    These configure behaviour for messages that match certain patterns. Content
+    rules take one parameter: `pattern`, that gives the
     [glob-style pattern](/appendices#glob-style-matching) to match against.
     The match is performed case-insensitively, and must match any substring of
     the `content.body` property which starts and ends at a word boundary. A word
@@ -295,10 +295,10 @@ For an example of this, see the default rule
 
 **`contains_display_name`**
 
-This matches unencrypted messages where `content.body` contains the
-owner's display name in that room. This is a separate rule because
-display names may change and as such it would be hard to maintain a rule
-that matched the user's display name. This condition has no parameters.
+This matches messages where `content.body` contains the owner's display name in
+that room. This is a separate rule because display names may change and as such
+it would be hard to maintain a rule that matched the user's display name. This
+condition has no parameters.
 
 **`room_member_count`**
 
@@ -444,8 +444,8 @@ Definition:
 
 **`.m.rule.contains_display_name`**
 
-Matches any message whose content is unencrypted and contains the user's
-current display name in the room in which it was sent.
+Matches any message whose content is contains the user's current display name
+in the room in which it was sent.
 
 Definition:
 
@@ -474,8 +474,9 @@ Definition:
 
 **`.m.rule.roomnotif`**
 
-Matches any message whose content is unencrypted and contains the text
-`@room`, signifying the whole room should be notified of the event.
+Matches any message from a sender with the proper power level whose content
+contains the text `@room`, signifying the whole room should be notified of
+the event.
 
 Definition:
 
@@ -571,8 +572,8 @@ Definition:
 
 **`.m.rule.contains_user_name`**
 
-Matches any message whose content is unencrypted and contains the local
-part of the user's Matrix ID, separated by word boundaries.
+Matches any message whose content is contains the local part of the user's
+Matrix ID, separated by word boundaries.
 
 Definition (as a `content` rule):
 
