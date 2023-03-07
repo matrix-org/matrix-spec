@@ -85,58 +85,7 @@ Push Ruleset
     sender, a particular room, or by default. The push ruleset contains the
     entire set of scopes and rules.
 
-#### Client behaviour
-
-Clients MUST configure a Pusher before they will receive push
-notifications. There is a single API endpoint for this, as described
-below.
-
-{{% http-api spec="client-server" api="pusher" %}}
-
-##### Listing Notifications
-
-A client can retrieve a list of events that it has been notified about.
-This may be useful so that users can see a summary of what important
-messages they have received.
-
-{{% http-api spec="client-server" api="notifications" %}}
-
-##### Receiving notifications
-
-Servers MUST include the number of unread notifications in a client's
-`/sync` stream, and MUST update it as it changes. Notifications are
-determined by the push rules which apply to an event.
-
-When the user updates their read receipt (either by using the API or by
-sending an event), notifications prior to and including that event MUST
-be marked as read. Which specific events are affected can vary depending
-on whether a [threaded read receipt](#threaded-read-receipts) was used.
-Note that users can send both an `m.read` and `m.read.private` receipt,
-both of which are capable of clearing notifications.
-
-If the user has both `m.read` and `m.read.private` set in the room then
-the receipt which is more recent/ahead must be used to determine where
-the user has read up to. For example, given an oldest-first set of events A,
-B, C, and D the `m.read` receipt could be at event C and `m.read.private`
-at event A - the user is considered to have read up to event C. If the
-`m.read.private` receipt is then updated to point to B or C, the user's
-notification state doesn't change (the `m.read` receipt is still more
-ahead), however if the `m.read.private` receipt were to be updated to
-event D then the user has read up to D (the `m.read` receipt is now
-behind the `m.read.private` receipt).
-
-{{< added-in v="1.4" >}} When handling threaded read receipts, the server
-is to partition the notification count to each thread (with the main timeline
-being its own thread). To determine if an event is part of a thread the
-server follows the [event relationship](#forming-relationships-between-events)
-until it finds a thread root (as specified by the [threading module](#threading)),
-however it is not recommended that the server traverse infinitely. Instead,
-implementations are encouraged to do a maximum of 3 hops to find a thread
-before deciding that the event does not belong to a thread. This is primarily
-to ensure that future events, like `m.reaction`, are correctly considered
-"part of" a given thread.
-
-##### Push Rules
+#### Push Rules
 
 A push rule is a single rule that states under what *conditions* an
 event should be passed onto a push gateway and *how* the notification
@@ -188,7 +137,7 @@ rules match an event, the homeserver MUST NOT notify the Push Gateway
 for that event. Homeservers MUST NOT notify the Push Gateway for events
 that the user has sent themselves.
 
-###### Actions
+##### Actions
 
 All rules have an associated list of `actions`. An action affects if and
 how a notification is delivered for a matching event. The following
@@ -246,7 +195,7 @@ they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
 `{ "set_tweak": "sound", "value": "default" }`.
 
-###### Conditions
+##### Conditions
 
 `override` and `underride` rules MAY have a list of 'conditions'. All
 conditions must hold true for an event in order for the rule to match. A
@@ -375,7 +324,7 @@ Parameters:
     to look up the power level required to send a notification type from
     the `notifications` object in the power level event content.
 
-##### Predefined Rules
+#### Predefined Rules
 
 Homeservers can specify "server-default rules". They operate at a lower
 priority than "user-defined rules", except for the `.m.rule.master` rule
@@ -384,7 +333,7 @@ for all server-default rules MUST start with a dot (".") to identify
 them as "server-default". The following server-default rules are
 specified:
 
-###### Default Override Rules
+##### Default Override Rules
 
 **`.m.rule.master`**
 
@@ -618,7 +567,7 @@ Definition:
 }
 ```
 
-###### Default Content Rules
+##### Default Content Rules
 
 **`.m.rule.contains_user_name`**
 
@@ -646,7 +595,7 @@ Definition (as a `content` rule):
 }
 ```
 
-###### Default Underride Rules
+##### Default Underride Rules
 
 **`.m.rule.call`**
 
@@ -795,14 +744,14 @@ Definition:
 }
 ```
 
-##### Push Rules: API
+#### Push Rules: API
 
 Clients can retrieve, add, modify and remove push rules globally or
 per-device using the APIs below.
 
 {{% http-api spec="client-server" api="pushrules" %}}
 
-##### Push Rules: Events
+#### Push Rules: Events
 
 When a user changes their push rules a `m.push_rules` event is sent to
 all clients in the `account_data` section of their next [`/sync`](#get_matrixclientv3sync) request.
@@ -810,7 +759,7 @@ The content of the event is the current push rules for the user.
 
 {{% event event="m.push_rules" %}}
 
-###### Examples
+##### Examples
 
 To create a rule that suppresses notifications for the room with ID
 `!dj234r78wl45Gh4D:matrix.org`:
@@ -860,6 +809,58 @@ than the room, sender and content rules):
          {"set_tweak":"sound", "value":"beeroclock.wav"}
        ]
      }'
+
+
+#### Client behaviour
+
+Clients MUST configure a Pusher before they will receive push
+notifications. There is a single API endpoint for this, as described
+below.
+
+{{% http-api spec="client-server" api="pusher" %}}
+
+##### Listing Notifications
+
+A client can retrieve a list of events that it has been notified about.
+This may be useful so that users can see a summary of what important
+messages they have received.
+
+{{% http-api spec="client-server" api="notifications" %}}
+
+##### Receiving notifications
+
+Servers MUST include the number of unread notifications in a client's
+`/sync` stream, and MUST update it as it changes. Notifications are
+determined by the push rules which apply to an event.
+
+When the user updates their read receipt (either by using the API or by
+sending an event), notifications prior to and including that event MUST
+be marked as read. Which specific events are affected can vary depending
+on whether a [threaded read receipt](#threaded-read-receipts) was used.
+Note that users can send both an `m.read` and `m.read.private` receipt,
+both of which are capable of clearing notifications.
+
+If the user has both `m.read` and `m.read.private` set in the room then
+the receipt which is more recent/ahead must be used to determine where
+the user has read up to. For example, given an oldest-first set of events A,
+B, C, and D the `m.read` receipt could be at event C and `m.read.private`
+at event A - the user is considered to have read up to event C. If the
+`m.read.private` receipt is then updated to point to B or C, the user's
+notification state doesn't change (the `m.read` receipt is still more
+ahead), however if the `m.read.private` receipt were to be updated to
+event D then the user has read up to D (the `m.read` receipt is now
+behind the `m.read.private` receipt).
+
+{{< added-in v="1.4" >}} When handling threaded read receipts, the server
+is to partition the notification count to each thread (with the main timeline
+being its own thread). To determine if an event is part of a thread the
+server follows the [event relationship](#forming-relationships-between-events)
+until it finds a thread root (as specified by the [threading module](#threading)),
+however it is not recommended that the server traverse infinitely. Instead,
+implementations are encouraged to do a maximum of 3 hops to find a thread
+before deciding that the event does not belong to a thread. This is primarily
+to ensure that future events, like `m.reaction`, are correctly considered
+"part of" a given thread.
 
 #### Server behaviour
 
