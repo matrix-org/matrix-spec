@@ -936,7 +936,7 @@ E.164 numbering plan. Note that MSISDNs do not include a leading '+'.
 
 ## Glob-style matching
 
-It is useful to match strings via globbing in some situations, globbing in Matrix
+It is useful to match strings via globbing in some situations. Globbing in Matrix
 uses the following rules:
 
 * The character `*` matches zero or more characters.
