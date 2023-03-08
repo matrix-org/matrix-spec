@@ -1115,7 +1115,7 @@ the homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API r
 {
   "type": "m.login.password",
   "identifier": {
-    "medium": "<The medium of the third-party-identifier>",
+    "medium": "<The medium of the third-party identifier>",
     "address": "<The canonicalised third-party address of the user>"
   },
   "password": "<password>"
