@@ -15,15 +15,15 @@
 # TODO: Change userid to user_id as a breaking change
 properties:
   userid:
-    description: A Matrix User ID represting a third party user.
+    description: A Matrix User ID represting a third-party user.
     type: string
     example: "@_gitter_jim:matrix.org"
   protocol:
-    description: The protocol ID that the third party location is a part of.
+    description: The protocol ID that the third-party location is a part of.
     type: string
     example: "gitter"
   fields:
-    description: Information used to identify this third party location.
+    description: Information used to identify this third-party location.
     type: object
     example: {
       "user": "jim"

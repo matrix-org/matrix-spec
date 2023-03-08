@@ -16,28 +16,28 @@ type: object
 properties:
   user_fields:
     description: |-
-      Fields which may be used to identify a third party user. These should be
+      Fields which may be used to identify a third-party user. These should be
       ordered to suggest the way that entities may be grouped, where higher
       groupings are ordered first. For example, the name of a network should be
       searched before the nickname of a user.
     type: array
     items:
       type: string
-      description: Field used to identify a third party user.
+      description: Field used to identify a third-party user.
     example: ["network", "nickname"]
   location_fields:
     description: |-
-      Fields which may be used to identify a third party location. These should be
+      Fields which may be used to identify a third-party location. These should be
       ordered to suggest the way that entities may be grouped, where higher
       groupings are ordered first. For example, the name of a network should be
       searched before the name of a channel.
     type: array
     items:
       type: string
-      description: Field used to identify a third party location.
+      description: Field used to identify a third-party location.
     example: ["network", "channel"]
   icon:
-    description: A content URI representing an icon for the third party protocol.
+    description: A content URI representing an icon for the third-party protocol.
     type: string
     example: "mxc://example.org/aBcDeFgH"
   field_types:

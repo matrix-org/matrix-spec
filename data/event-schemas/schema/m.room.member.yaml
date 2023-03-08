@@ -88,7 +88,7 @@ properties:
       third_party_invite:
         properties:
           display_name:
-            description: A name which can be displayed to represent the user instead of their third party identifier
+            description: A name which can be displayed to represent the user instead of their third-party identifier
             type: string
           signed:
             description: 'A block of content which has been signed, which servers can use to verify the event. Clients should ignore this.'

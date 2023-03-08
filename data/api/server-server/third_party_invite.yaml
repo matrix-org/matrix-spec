@@ -14,7 +14,7 @@
 
 swagger: '2.0'
 info:
-  title: "Matrix Federation Third Party Invites API"
+  title: "Matrix Federation Third-party Invites API"
   version: "1.0.0"
 host: localhost:8448
 schemes:
@@ -29,7 +29,7 @@ securityDefinitions:
 paths:
   "/exchange_third_party_invite/{roomId}":
     put:
-      summary: Request a server to auth a third party invite event
+      summary: Request a server to auth a third-party invite event
       description: |-
         The receiving server will verify the partial `m.room.member` event
         given in the request body. If valid, the receiving server will issue
@@ -42,7 +42,7 @@ paths:
         - in: path
           name: roomId
           type: string
-          description: The room ID to exchange a third party invite in
+          description: The room ID to exchange a third-party invite in
           required: true
           x-example: "!abc123:matrix.org"
         - in: body
@@ -84,14 +84,14 @@ paths:
                     example: invite
                   third_party_invite:
                     type: object
-                    description: The third party invite
-                    title: Third Party Invite
+                    description: The third-party invite
+                    title: Third-party Invite
                     properties:
                       display_name:
                         type: string
                         description: |-
                           A name which can be displayed to represent the user instead of their
-                          third party identifier.
+                          third-party identifier.
                         example: "alice"
                       signed:
                         type: object
@@ -203,11 +203,11 @@ paths:
   "/3pid/onbind":
     put:
       summary: |-
-        Notifies the server that a third party identifier has been bound to one
+        Notifies the server that a third-party identifier has been bound to one
         of its users.
       description: |-
         Used by identity servers to notify the homeserver that one of its users
-        has bound a third party identifier successfully, including any pending
+        has bound a third-party identifier successfully, including any pending
         room invites the identity server has been made aware of.
       operationId: onBindThirdPartyIdentifier
       parameters:
@@ -221,36 +221,36 @@ paths:
               medium:
                 type: string
                 description: |-
-                  The type of third party identifier. Currently only "email" is
+                  The type of third-party identifier. Currently only "email" is
                   a possible value.
                 example: "email"
               address:
                 type: string
                 description: |-
-                  The third party identifier itself. For example, an email address.
+                  The third-party identifier itself. For example, an email address.
                 example: "alice@example.com"
               mxid:
                 type: string
-                description: The user that is now bound to the third party identifier.
+                description: The user that is now bound to the third-party identifier.
                 example: "@alice:matrix.org"
               invites:
                 type: array
                 description: |-
-                  A list of pending invites that the third party identifier has received.
+                  A list of pending invites that the third-party identifier has received.
                 items:
                   type: object
-                  title: Third Party Invite
+                  title: Third-party Invite
                   properties:
                     medium:
                       type: string
                       description: |-
-                        The type of third party invite issues. Currently only
+                        The type of third-party invite issues. Currently only
                         "email" is used.
                       example: "email"
                     address:
                       type: string
                       description: |-
-                        The third party identifier that received the invite.
+                        The third-party identifier that received the invite.
                       example: "alice@example.com"
                     mxid:
                       type: string
@@ -276,7 +276,7 @@ paths:
                         mxid:
                           type: string
                           description: |-
-                            The user ID that has been bound to the third party
+                            The user ID that has been bound to the third-party
                             identifier.
                           example: "@alice:matrix.org"
                         token:

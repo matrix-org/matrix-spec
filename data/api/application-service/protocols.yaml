@@ -32,7 +32,7 @@ paths:
       summary: Retrieve metadata about a specific protocol that the application service supports.
       description: |-
         This API is called by the homeserver when it wants to present clients
-        with specific information about the various third party networks that
+        with specific information about the various third-party networks that
         an application service supports.
       operationId: getProtocolMetadata
       security:
@@ -78,10 +78,10 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/user/{protocol}":
     get:
-      summary: Retrieve the Matrix User ID of a corresponding third party user.
+      summary: Retrieve the Matrix User ID of a corresponding third-party user.
       description: |-
         This API is called by the homeserver in order to retrieve a Matrix
-        User ID linked to a user on the third party network, given a set of
+        User ID linked to a user on the third-party network, given a set of
         user parameters.
       operationId: queryUserByProtocol
       security:
@@ -133,9 +133,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/location/{protocol}":
     get:
-      summary: Retrieve Matrix-side portal rooms leading to a third party location.
+      summary: Retrieve Matrix-side portal rooms leading to a third-party location.
       description: |-
-        Retrieve a list of Matrix portal rooms that lead to the matched third party location.
+        Retrieve a list of Matrix portal rooms that lead to the matched third-party location.
       operationId: queryLocationByProtocol
       security:
         - homeserverAccessToken: []
@@ -151,7 +151,7 @@ paths:
           type: string
           description: |-
             One or more custom fields that are passed to the application
-            service to help identify the third party location.
+            service to help identify the third-party location.
       responses:
         200:
           description: At least one portal room was found.
@@ -186,9 +186,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/location":
     get:
-      summary: Reverse-lookup third party locations given a Matrix room alias.
+      summary: Reverse-lookup third-party locations given a Matrix room alias.
       description: |-
-        Retrieve an array of third party network locations from a Matrix room
+        Retrieve an array of third-party network locations from a Matrix room
         alias.
       operationId: queryLocationByAlias
       security:
@@ -201,7 +201,7 @@ paths:
       responses:
         200:
           description: |-
-            All found third party locations.
+            All found third-party locations.
           schema:
             $ref: definitions/location_batch.yaml
         401:
@@ -233,9 +233,9 @@ paths:
             $ref: ../client-server/definitions/errors/error.yaml
   "/thirdparty/user":
     get:
-      summary: Reverse-lookup third party users given a Matrix User ID.
+      summary: Reverse-lookup third-party users given a Matrix User ID.
       description: |-
-        Retrieve an array of third party users from a Matrix User ID.
+        Retrieve an array of third-party users from a Matrix User ID.
       operationId: queryUserByID
       security:
         - homeserverAccessToken: []
@@ -247,7 +247,7 @@ paths:
       responses:
         200:
           description: |-
-            An array of third party users.
+            An array of third-party users.
           schema:
             $ref: definitions/user_batch.yaml
         401:

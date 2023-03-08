@@ -150,15 +150,15 @@ Sent when a threepid given to an API cannot be used because no record
 matching the threepid was found.
 
 `M_THREEPID_AUTH_FAILED`
-Authentication could not be performed on the third party identifier.
+Authentication could not be performed on the third-party identifier.
 
 `M_THREEPID_DENIED`
-The server does not permit this third party identifier. This may happen
+The server does not permit this third-party identifier. This may happen
 if the server only permits, for example, email addresses from a
 particular domain.
 
 `M_SERVER_NOT_TRUSTED`
-The client's request used a third party server, e.g. identity server,
+The client's request used a third-party server, e.g. identity server,
 that this server does not trust.
 
 `M_UNSUPPORTED_ROOM_VERSION`
@@ -764,8 +764,8 @@ explicitly as follows:
   "type": "m.login.password",
   "identifier": {
     "type": "m.id.thirdparty",
-    "medium": "<The medium of the third party identifier.>",
-    "address": "<The third party address of the user>"
+    "medium": "<The medium of the third-party identifier.>",
+    "address": "<The third-party address of the user>"
   },
   "password": "<password>",
   "session": "<session ID>"
@@ -1071,8 +1071,8 @@ ID media.
 ```json
 "identifier": {
   "type": "m.id.thirdparty",
-  "medium": "<The medium of the third party identifier>",
-  "address": "<The canonicalised third party address of the user>"
+  "medium": "<The medium of the third-party identifier>",
+  "address": "<The canonicalised third-party address of the user>"
 }
 ```
 
@@ -1132,8 +1132,8 @@ the homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API r
 {
   "type": "m.login.password",
   "identifier": {
-    "medium": "<The medium of the third party identifier>",
-    "address": "<The canonicalised third party address of the user>"
+    "medium": "<The medium of the third-party identifier>",
+    "address": "<The canonicalised third-party address of the user>"
   },
   "password": "<password>"
 }
@@ -1258,7 +1258,7 @@ can be added and bound at the same time, depending on context.
 #### Notes on identity servers
 
 Identity servers in Matrix store bindings (relationships) between a
-user's third party identifier, typically email or phone number, and
+user's third-party identifier, typically email or phone number, and
 their user ID. Once a user has chosen an identity server, that identity
 server should be used by all clients.
 
@@ -2566,7 +2566,7 @@ that profile.
 | [Room Upgrades](#room-upgrades)                            | Required  | Required | Required | Required | Optional |
 | [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Third Party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |

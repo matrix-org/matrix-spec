@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: object
-title: Third Party Signed
+title: Third-party Signed
 description: |-
   A signature of an `m.third_party_invite` token to prove that this user
-  owns a third party identity which has been invited to the room.
+  owns a third-party identity which has been invited to the room.
 properties:
   sender:
     type: string
