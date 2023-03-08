@@ -75,8 +75,8 @@ technique for receiving updates to the policy's rules.
 
 #### Events
 
-The `entity` described by the state events can contain `*` and `?` to
-match zero or more characters and exactly one character respectively. Note that
+The `entity` described by the state events is interpreted as a
+[glob-style pattern](/appendices#glob-style-matching). Note that
 rules against rooms can describe a room ID or room alias - the
 subscriber is responsible for resolving the alias to a room ID if
 desired.

@@ -155,8 +155,12 @@ The different `kind`s of rule, in the order that they are checked, are:
 1.  **Content-specific rules (`content`).**
     These configure behaviour for (unencrypted) messages that match certain
     patterns. Content rules take one parameter: `pattern`, that gives the
-    glob pattern to match against. This is treated in the same way as
-    `pattern` for `event_match`.
+    [glob-style pattern](/appendices#glob-style-matching) to match against.
+    The match is performed case-insensitively, and must match any substring of
+    the `content.body` property which starts and ends at a word boundary. A word
+    boundary is defined as the start or end of the value, or any character not
+    in the sets `[A-Z]`, `[a-z]`, `[0-9]` or `_`.The exact meaning of
+    "case insensitive" is defined by the implementation of the homeserver.
 
 1.  **Room-specific rules (`room`).**
     These rules change the behaviour of all messages for a given room. The
@@ -264,17 +268,12 @@ This is a glob pattern match on a field of the event. Parameters:
 -   `key`: The dot-separated path of the property of the event to match, e.g.
     `content.body`.
 
--   `pattern`: The glob-style pattern to match against.
+-   `pattern`: The [glob-style pattern](/appendices#glob-style-matching) to match against.
 
 The match is performed case-insensitively, and must match the entire value of
 the event field given by `key` (though see below regarding `content.body`). The
 exact meaning of "case insensitive" is defined by the implementation of the
 homeserver.
-
-Within `pattern`:
-
-  * The character `*` matches zero or more characters.
-  * `?` matches exactly one character.
 
 If the property specified by `key` is completely absent from the event, or does
 not have a string value, then the condition will not match, even if `pattern`

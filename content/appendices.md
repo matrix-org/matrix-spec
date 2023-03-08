@@ -934,6 +934,14 @@ The `address` is the telephone number represented as a MSISDN (Mobile
 Station International Subscriber Directory Number) as defined by the
 E.164 numbering plan. Note that MSISDNs do not include a leading '+'.
 
+## Glob-style matching
+
+It is useful to match strings via globbing in some situations. Globbing in Matrix
+uses the following rules:
+
+* The character `*` matches zero or more characters.
+* `?` matches exactly one character.
+
 ## Security Threat Model
 
 ### Denial of Service
