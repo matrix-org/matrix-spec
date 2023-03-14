@@ -951,10 +951,12 @@ event's `content`.
 To handle ambiguity when a property name contains a dot, any literal dot or
 backslash found in a property name should be escaped with a backslash. E.g. a
 property `m.relates_to` in the `content` would be expressed as
-`content.m\.relates_to`.
+`content.m\.relates_to`. Similarly, a `content` property named `m\foo` would be
+expressed as `content.m\\foo`.
 
-It is recommended that implementations do not redundantly escape characters, as
-other escape sequences are reserved for future use.
+Other escape sequences are left as-is, e.g. a `\x` would be treated as a literal
+backslash followed by 'x'. It is recommended that implementations do not redundantly
+escape characters, as other escape sequences are reserved for future use.
 
 ## Security Threat Model
 
