@@ -212,7 +212,7 @@ The following conditions are defined:
 
 **`event_match`**
 
-This is a glob pattern match on a field of the event. Parameters:
+This is a glob pattern match on a property of the event. Parameters:
 
 -   `key`: The dot-separated path of the property of the event to match, e.g.
     `content.body`.
@@ -220,7 +220,7 @@ This is a glob pattern match on a field of the event. Parameters:
 -   `pattern`: The [glob-style pattern](/appendices#glob-style-matching) to match against.
 
 The match is performed case-insensitively, and must match the entire value of
-the event field given by `key` (though see below regarding `content.body`). The
+the event property given by `key` (though see below regarding `content.body`). The
 exact meaning of "case insensitive" is defined by the implementation of the
 homeserver.
 
@@ -267,7 +267,7 @@ following event will match:
 ```json
 {
   "content": {
-    "body": "An example event.",
+    "body": "An example event."
   },
   "event_id": "$143273976499sgjks:example.org",
   "room_id": "!636q39766251:example.com",
@@ -292,6 +292,50 @@ for `state_key`.
 For an example of this, see the default rule
 [`.m.rule.tombstone`](#mruletombstone) below.
 {{% /boxes/warning %}}
+
+**`event_property_is`**
+
+This is an exact value match on a property of the event. Parameters:
+
+-   `key`: The dot-separated path of the property of the event to match, e.g.
+    `content.body`.
+
+-   `value`: The value to match against.
+
+The match is performed exactly and only supports strings, integers, booleans, and
+`null`.
+
+If the property specified by `key` is completely absent from the event, or does
+not have a string, integer, boolean, or `null` value, then the condition will not
+match.
+
+{{% boxes/note %}}
+For example, if `key` is `content.m.federate`, and `value` is `true`, then
+the following event will match:
+
+```json
+{
+  "content": {
+    "creator": "@example:example.org",
+    "m.federate": true,
+    "predecessor": {
+      "event_id": "$something:example.org",
+      "room_id": "!oldroom:example.org"
+    },
+    "room_version": "1"
+  },
+  "event_id": "$143273582443PhrSn:example.org",
+  "room_id": "!636q39766251:example.com",
+  "sender": "@example:example.org",
+  "state_key": "",
+  "type": "m.room.create"
+}
+```
+
+The following `m.federate` values will NOT match:
+ * `"true"` (note the string value)
+ * `1` (do not cast types)
+{{% /boxes/note %}}
 
 **`contains_display_name`**
 
