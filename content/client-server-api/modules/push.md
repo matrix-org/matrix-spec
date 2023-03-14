@@ -296,7 +296,7 @@ For an example of this, see the default rule
 **`contains_display_name`**
 
 This matches messages where `content.body` contains the owner's display name in
-that room. This is a separate rule because display names may change and as such
+that room. This is a separate condition because display names may change and as such
 it would be hard to maintain a rule that matched the user's display name. This
 condition has no parameters.
 
@@ -872,10 +872,10 @@ to ensure that future events, like `m.reaction`, are correctly considered
 
 #### Server behaviour
 
-When receiving a new event homeservers process push rules for all other local
-users in the room, this may result in:
+When receiving a new event homeservers process push rules for each of the local
+users in the room (excluding the sender). This may result in:
 
-* Generating a new number of unread notifications for the user;
+* Generating a new number of unread notifications for the user.
 * Making a request to the configured push gateway.
 
 The updated notification count from a new event MUST appear in the same `/sync`
