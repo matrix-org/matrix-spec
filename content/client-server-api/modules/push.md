@@ -302,7 +302,8 @@ This is an exact value match on a property of the event. Parameters:
 
 -   `value`: The value to match against.
 
-The match is performed exactly and only supports strings, integers, booleans, and
+The match is performed exactly and only supports non-compound [canonical JSON](/appendices#canonical-json)
+values: strings, integers in the range of `[-(2**53)+1, (2**53)-1]`, booleans, and
 `null`.
 
 If the property specified by `key` is completely absent from the event, or does
@@ -346,7 +347,8 @@ This matches if an array property of an event exactly contains a value. Paramete
 
 -   `value`: The value to match against.
 
-The array values are matched exactly and only supports strings, integers, booleans,
+The array values are matched exactly and only supports non-compound [canonical JSON](/appendices#canonical-json)
+values: strings, integers in the range of `[-(2**53)+1, (2**53)-1]`, booleans,
 and `null`. Array values not of those types are ignored.
 
 If the property specified by `key` is completely absent from the event, or is not
