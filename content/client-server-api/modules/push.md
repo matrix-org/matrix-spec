@@ -310,7 +310,7 @@ not have a string, integer, boolean, or `null` value, then the condition will no
 match.
 
 {{% boxes/note %}}
-For example, if `key` is `content.m.federate`, and `value` is `true`, then
+For example, if `key` is `content.m\.federate`, and `value` is `true`, then
 the following event will match:
 
 ```json
