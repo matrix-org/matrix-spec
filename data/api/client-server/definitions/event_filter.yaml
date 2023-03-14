@@ -14,7 +14,7 @@
 title: EventFilter
 properties:
   limit:
-    description: The maximum number of events to return.
+    description: The maximum number of events to return. If not specified defaults to 10.
     type: integer
   not_senders:
     description: A list of sender IDs to exclude. If this list is absent then no senders
