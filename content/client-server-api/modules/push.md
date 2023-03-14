@@ -214,8 +214,8 @@ The following conditions are defined:
 
 This is a glob pattern match on a property of the event. Parameters:
 
--   `key`: The dot-separated path of the property of the event to match, e.g.
-    `content.body`.
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated property paths)
+    of the event to match, e.g. `content.body`.
 
 -   `pattern`: The [glob-style pattern](/appendices#glob-style-matching) to match against.
 
@@ -297,8 +297,8 @@ For an example of this, see the default rule
 
 This is an exact value match on a property of the event. Parameters:
 
--   `key`: The dot-separated path of the property of the event to match, e.g.
-    `content.body`.
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated property paths)
+    of the event to match, e.g. `content.body`.
 
 -   `value`: The value to match against.
 
@@ -341,8 +341,8 @@ The following `m.federate` values will NOT match:
 
 This matches if an array property of an event exactly contains a value. Parameters:
 
--   `key`: The dot-separated path of the property of the event to match, e.g.
-    `content.body`.
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated property paths)
+    of the event to match, e.g. `content.body`.
 
 -   `value`: The value to match against.
 

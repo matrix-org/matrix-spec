@@ -942,6 +942,20 @@ uses the following rules:
 * The character `*` matches zero or more characters.
 * `?` matches exactly one character.
 
+## Dot-separated property paths
+
+It is useful to express the "path" to an event property by concatenating property
+names with dots, e.g. `content.body` would represent the a `body` property in the
+event's `content`.
+
+To handle ambiguity when a property name contains a dot, any literal dot or
+backslash found in a property name should be escaped with a backslash. E.g. a
+property `m.relates_to` in the `content` would be expressed as
+`content.m\.relates_to`.
+
+It is recommended that implementations do not redundantly escape characters, as
+other escape sequences are reserve for future use.
+
 ## Security Threat Model
 
 ### Denial of Service
