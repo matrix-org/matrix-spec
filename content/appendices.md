@@ -945,7 +945,7 @@ uses the following rules:
 ## Dot-separated property paths
 
 It is useful to express the "path" to an event property by concatenating property
-names with dots, e.g. `content.body` would represent the a `body` property in the
+names with dots, e.g. `content.body` would represent a `body` property in the
 event's `content`.
 
 To handle ambiguity when a property name contains a dot, any literal dot or
@@ -954,7 +954,7 @@ property `m.relates_to` in the `content` would be expressed as
 `content.m\.relates_to`.
 
 It is recommended that implementations do not redundantly escape characters, as
-other escape sequences are reserve for future use.
+other escape sequences are reserved for future use.
 
 ## Security Threat Model
 
