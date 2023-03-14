@@ -444,7 +444,7 @@ Definition:
 
 **`.m.rule.contains_display_name`**
 
-Matches any message whose content is contains the user's current display name
+Matches any message whose content contains the user's current display name
 in the room in which it was sent.
 
 Definition:
@@ -572,7 +572,7 @@ Definition:
 
 **`.m.rule.contains_user_name`**
 
-Matches any message whose content is contains the local part of the user's
+Matches any message whose content contains the local part of the user's
 Matrix ID, separated by word boundaries.
 
 Definition (as a `content` rule):
