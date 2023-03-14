@@ -249,7 +249,7 @@ Other `topic` values which will match are:
 
  * `"LUNCH"` (case-insensitive; `*` may match zero characters)
 
-The following `membership` values will NOT match:
+The following `topic` values will NOT match:
  * `" lunch"` (note leading space)
  * `"lunc"` (`?` must match a character)
  * `null` (not a string)
