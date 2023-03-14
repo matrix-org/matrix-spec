@@ -18,7 +18,7 @@ signatures in HTTP Authorization headers at the HTTP layer.
 There are three main kinds of communication that occur between
 homeservers:
 
-Persisted Data Units (PDUs):
+Persistent Data Units (PDUs):
 These events are broadcast from one homeserver to any others that have
 joined the same room (identified by Room ID). They are persisted in
 long-term storage and record the history of messages and state for a
