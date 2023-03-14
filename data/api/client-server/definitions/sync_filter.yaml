@@ -16,7 +16,7 @@ title: Filter
 properties:
   event_fields:
     description: List of event fields to include. If this list is absent then all
-      fields are included. The entries are [dot-separated paths for each property](/appendices#dot-separated property paths)
+      fields are included. The entries are [dot-separated paths for each property](/appendices#dot-separated-property-paths)
       to include. So ['content.body'] will include the 'body' field of the 'content' object.
       A server may include more fields than were requested.
     items:
