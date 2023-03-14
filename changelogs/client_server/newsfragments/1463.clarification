@@ -1,0 +1,1 @@
+Clarify that servers should enforce a default `limit` on a filter if one is not specified.
