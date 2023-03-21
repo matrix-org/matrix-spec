@@ -372,7 +372,7 @@ servers that are in the room that can be used to join via.
 Users in Matrix are identified via their Matrix user ID. However,
 existing 3rd party ID namespaces can also be used in order to identify
 Matrix users. A Matrix "Identity" describes both the user ID and any
-other existing IDs from third party namespaces *linked* to their
+other existing IDs from third-party namespaces *linked* to their
 account. Matrix users can *link* third-party IDs (3PIDs) such as email
 addresses, social network accounts and phone numbers to their user ID.
 Linking 3PIDs creates a mapping from a 3PID to a user ID. This mapping

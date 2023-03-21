@@ -83,7 +83,11 @@ object.
 
 ### Canonical JSON
 
-We define the canonical JSON encoding for a value to be the shortest
+To ensure that all implementations use the same JSON encoding we define
+"Canonical JSON". This should not be confused with other uses of
+"Canonical JSON" outside of the specification.
+
+We define this encoding for a value to be the shortest
 UTF-8 JSON encoding with dictionary keys lexicographically sorted by
 Unicode codepoint. Numbers in the JSON must be integers in the range
 `[-(2**53)+1, (2**53)-1]`.
@@ -892,7 +896,7 @@ unique servers based on the following criteria:
 
 ## 3PID Types
 
-Third Party Identifiers (3PIDs) represent identifiers on other
+Third-party Identifiers (3PIDs) represent identifiers on other
 namespaces that might be associated with a particular person. They
 comprise a tuple of `medium` which is a string that identifies the
 namespace in which the identifier exists, and an `address`: a string
@@ -933,6 +937,14 @@ Represents telephone numbers on the public switched telephone network.
 The `address` is the telephone number represented as a MSISDN (Mobile
 Station International Subscriber Directory Number) as defined by the
 E.164 numbering plan. Note that MSISDNs do not include a leading '+'.
+
+## Glob-style matching
+
+It is useful to match strings via globbing in some situations. Globbing in Matrix
+uses the following rules:
+
+* The character `*` matches zero or more characters.
+* `?` matches exactly one character.
 
 ## Security Threat Model
 

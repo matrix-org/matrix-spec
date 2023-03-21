@@ -76,7 +76,8 @@ paths:
                     keys:
                       type: object
                       description: Identity keys for the device.
-                      $ref: "../client-server/definitions/device_keys.yaml"
+                      allOf:
+                        - $ref: "../client-server/definitions/device_keys.yaml"
                     device_display_name:
                       type: string
                       description: Optional display name for the device.

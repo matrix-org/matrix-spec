@@ -133,13 +133,6 @@ being overwritten entirely by `m.new_content`, with the exception of `m.relates_
 which is left *unchanged*. Any `m.relates_to` property within `m.new_content`
 is ignored.
 
-{{% boxes/note %}}
-Note that server implementations must not *actually* overwrite
-the original event's `content`: instead the server presents it as being overwritten
-when it is served over the client-server API. See [Server-side replacement of content](#server-side-replacement-of-content)
-below.
-{{% /boxes/note %}}
-
 For example, given a pair of events:
 
 ```json
@@ -195,14 +188,17 @@ replacement event.
 
 ##### Server-side aggregation of `m.replace` relationships
 
+{{< changed-in v="1.7" >}}
+
 Note that there can be multiple events with an `m.replace` relationship to a
 given event (for example, if an event is edited multiple times). These should
 be [aggregated](#aggregations-of-child-events) by the homeserver.
 
-The aggregation format of `m.replace` relationships gives the `event_id`,
-`origin_server_ts`, and `sender` of the **most recent** replacement event. The
-most recent event is determined by comparing `origin_server_ts`; if two or more
-replacement events have identical `origin_server_ts`, the event with the
+The aggregation format of `m.replace` relationships gives the **most recent**
+replacement event, formatted [as normal](#room-event-format).
+
+The most recent event is determined by comparing `origin_server_ts`; if two or
+more replacement events have identical `origin_server_ts`, the event with the
 lexicographically largest `event_id` is treated as more recent.
 
 As with any other aggregation of child events, the `m.replace` aggregation is
@@ -212,49 +208,61 @@ the target of an `m.replace` relationship. For example:
 ```json
 {
   "event_id": "$original_event_id",
-  // irrelevant fields not shown
+  "type": "m.room.message",
+  "content": {
+    "body": "I really like cake",
+    "msgtype": "m.text",
+    "formatted_body": "I really like cake"
+  },
   "unsigned": {
     "m.relations": {
       "m.replace": {
         "event_id": "$latest_edit_event_id",
         "origin_server_ts": 1649772304313,
         "sender": "@editing_user:localhost"
+        "type": "m.room.message",
+        "content": {
+          "body": "* I really like *chocolate* cake",
+          "msgtype": "m.text",
+          "m.new_content": {
+            "body": "I really like *chocolate* cake",
+            "msgtype": "m.text"
+          },
+          "m.relates_to": {
+            "rel_type": "m.replace",
+            "event_id": "$original_event_id"
+          }
+        }
       }
     }
   }
+  // irrelevant fields not shown
 }
 ```
 
-However, if the original event is [redacted](#redactions), any replacement
-events are *not* aggregated and `m.replace` is omitted from the aggregation
-returned under `m.relations` (whether or not any subsequent replacements are
-themselves redacted). Note that this behaviour is specific to the `m.replace`
-relationship. See also [redactions of edited
+If the original event is [redacted](#redactions), any
+`m.replace` relationship should **not** be bundled with it (whether or not any
+subsequent replacements are themselves redacted). Note that this behaviour is
+specific to the `m.replace` relationship. See also [redactions of edited
 events](#redactions-of-edited-events) below.
 
-##### Server-side replacement of content
+**Note:** the `content` of the original event is left intact. In particular servers
+should **not** replace the content with that of the replacement event.
 
-Whenever an `m.replace` is to be bundled with its parent event as above, the server
-should also modify the content of the original event according to the
-`m.new_content` of the most recent replacement event (determined as above).
-
-An exception applies to [`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid),
-which should return the unmodified event (though the replacement event should still
-be included under `m.relations`, as described above).
+{{ boxes/rationale }}
+In previous versions of the specification, servers were expected to replace the
+content of an edited event whenever it was served to clients (with the
+exception of the
+[`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
+endpoint).  However, that behaviour made reliable client-side implementation
+difficult, and servers should no longer make this replacement.
+{{ /boxes/rationale }}
 
 #### Client behaviour
 
-Clients can often ignore `m.replace` events, because any events returned
-by the server to the client will be updated by the server to account for
-subsequent edits.
-
-However, clients should apply the replacement themselves when the server is
-unable to do so. This happens in the following situations:
-
- * The client has already received and stored the original event before the
-   message edit event arrives.
-
- * The original event (and hence its replacement) are encrypted.
+Since the server will not replace the content of any edited events, clients
+should take note of any replacement events they receive, and apply the
+replacement whenever possible and appropriate.
 
 Client authors are reminded to take note of the requirements for [Validity of
 replacement events](#validity-of-replacement-events), and to ignore any

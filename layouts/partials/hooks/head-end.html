@@ -6,6 +6,16 @@
 
 */}}
 
+{{/*
+ Load the Inter font.
+
+ We load it from a local copy, which is downloaded from
+ Google Fonts manually via a script:
+ https://github.com/matrix-org/matrix-spec/tree/main/static/css/fonts
+*/}}
+<link rel="preload" href="{{ "/css/fonts/Inter.css" | relURL }}" as="style">
+<link rel="stylesheet" href="{{ "/css/fonts/Inter.css" | relURL }}">
+
 {{ $scss := "scss/custom.scss"}}
 {{ if .Site.IsServer }}
 {{/* Note the missing postCSS. This makes it snappier to develop in Chrome, but makes it look sub-optimal in other browsers. */}}

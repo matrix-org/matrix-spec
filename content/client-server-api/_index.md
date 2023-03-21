@@ -150,15 +150,15 @@ Sent when a threepid given to an API cannot be used because no record
 matching the threepid was found.
 
 `M_THREEPID_AUTH_FAILED`
-Authentication could not be performed on the third party identifier.
+Authentication could not be performed on the third-party identifier.
 
 `M_THREEPID_DENIED`
-The server does not permit this third party identifier. This may happen
+The server does not permit this third-party identifier. This may happen
 if the server only permits, for example, email addresses from a
 particular domain.
 
 `M_SERVER_NOT_TRUSTED`
-The client's request used a third party server, e.g. identity server,
+The client's request used a third-party server, e.g. identity server,
 that this server does not trust.
 
 `M_UNSUPPORTED_ROOM_VERSION`
@@ -214,19 +214,36 @@ See the [Server Notices](#server-notices) module for more information.
 ### Transaction identifiers
 
 The client-server API typically uses `HTTP PUT` to submit requests with
-a client-generated transaction identifier. This means that these
-requests are idempotent. It **only** serves to identify new requests
-from retransmits. After the request has finished, the `{txnId}` value
-should be changed (how is not specified; a monotonically increasing
-integer is recommended).
+a client-generated transaction identifier in the HTTP path.
 
-The scope of a transaction ID is a "client session", where that session
-is identified by a particular access token. When [refreshing](#refreshing-access-tokens)
-an access token, the transaction ID's scope is retained. This means that
-if a client with token `A` uses `TXN1` as their transaction ID, refreshes
-the token to `B`, and uses `TXN1` again it'll be assumed to be a duplicate
-request and ignored. If the client logs out and back in between the `A` and
-`B` tokens, `TXN1` could be used once for each.
+The purpose of the transaction ID is to allow the homeserver to distinguish a
+new request from a retransmission of a previous request so that it can make
+the request idempotent.
+
+The transaction ID should **only** be used for this purpose.
+
+From the client perspective, after the request has finished, the `{txnId}`
+value should be changed by for the next request (how is not specified; a
+monotonically increasing integer is recommended).
+
+The homeserver should identify a request as a retransmission if the
+transaction ID is the same as a previous request, and the path of the
+HTTP request is the same.
+
+Where a retransmission has been identified, the homeserver should return
+the same HTTP response code and content as the original request.
+For example, `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`
+would return a `200 OK` with the `event_id` of the original request in
+the response body.
+
+As well as the HTTP path, the scope of a transaction ID is a "client
+session", where that session is identified by a particular access token.
+When [refreshing](#refreshing-access-tokens) an access token, the
+transaction ID's scope is retained. This means that if a client with
+token `A` uses `TXN1` as their transaction ID, refreshes the token to
+`B`, and uses `TXN1` again it'll be assumed to be a duplicate request
+and ignored. If the client logs out and back in between the `A` and `B`
+tokens, `TXN1` could be used once for each.
 
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
@@ -739,7 +756,7 @@ submit:
 ```
 
 Alternatively reply using a 3PID bound to the user's account on the
-homeserver using the `/account/3pid`\_ API rather than giving the `user`
+homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API rather than giving the `user`
 explicitly as follows:
 
 ```json
@@ -747,8 +764,8 @@ explicitly as follows:
   "type": "m.login.password",
   "identifier": {
     "type": "m.id.thirdparty",
-    "medium": "<The medium of the third party identifier.>",
-    "address": "<The third party address of the user>"
+    "medium": "<The medium of the third-party identifier.>",
+    "address": "<The third-party address of the user>"
   },
   "password": "<password>",
   "session": "<session ID>"
@@ -1047,15 +1064,15 @@ ID.
 
 A client can identify a user using a 3PID associated with the user's
 account on the homeserver, where the 3PID was previously associated
-using the `/account/3pid`\_ API. See the [3PID
+using the [`/account/3pid`](#get_matrixclientv3account3pid) API. See the [3PID
 Types](/appendices#3pid-types) Appendix for a list of Third-party
 ID media.
 
 ```json
 "identifier": {
   "type": "m.id.thirdparty",
-  "medium": "<The medium of the third party identifier>",
-  "address": "<The canonicalised third party address of the user>"
+  "medium": "<The medium of the third-party identifier>",
+  "address": "<The canonicalised third-party address of the user>"
 }
 ```
 
@@ -1067,7 +1084,7 @@ ID media.
 
 A client can identify a user using a phone number associated with the
 user's account, where the phone number was previously associated using
-the `/account/3pid`\_ API. The phone number can be passed in as entered
+the [`/account/3pid`](#get_matrixclientv3account3pid) API. The phone number can be passed in as entered
 by the user; the homeserver will be responsible for canonicalising it.
 If the client wishes to canonicalise the phone number, then it can use
 the `m.id.thirdparty` identifier type with a `medium` of `msisdn`
@@ -1108,15 +1125,15 @@ request as follows:
 ```
 
 Alternatively, a client can use a 3PID bound to the user's account on
-the homeserver using the `/account/3pid`\_ API rather than giving the
+the homeserver using the [`/account/3pid`](#get_matrixclientv3account3pid) API rather than giving the
 `user` explicitly, as follows:
 
 ```json
 {
   "type": "m.login.password",
   "identifier": {
-    "medium": "<The medium of the third party identifier>",
-    "address": "<The canonicalised third party address of the user>"
+    "medium": "<The medium of the third-party identifier>",
+    "address": "<The canonicalised third-party address of the user>"
   },
   "password": "<password>"
 }
@@ -1241,7 +1258,7 @@ can be added and bound at the same time, depending on context.
 #### Notes on identity servers
 
 Identity servers in Matrix store bindings (relationships) between a
-user's third party identifier, typically email or phone number, and
+user's third-party identifier, typically email or phone number, and
 their user ID. Once a user has chosen an identity server, that identity
 server should be used by all clients.
 
@@ -1579,15 +1596,18 @@ detail on why this assumption is unsafe.
 
 ### Stripped state
 
-Stripped state events are simplified state events to help a potential
-joiner identify the room. These state events can only have the `sender`,
-`type`, `state_key` and `content` keys present.
+Stripped state is a simplified view of the state of a room intended to help a
+potential joiner identify the room. It consists of a limited set of state events
+that are themselves simplified to reduce the amount of data required.
 
-These stripped state events typically appear on invites, knocks, and in
-other places where a user *could* join the room under the conditions
-available (such as a [`restricted` room](#restricted-rooms)).
+Stripped state events can only have the `sender`, `type`, `state_key` and
+`content` properties present.
 
-Clients should only use stripped state events so long as they don't have
+Stripped state typically appears in invites, knocks, and in other places where a
+user *could* join the room under the conditions available (such as a
+[`restricted` room](#restricted-rooms)).
+
+Clients should only use stripped state events when they don't have
 access to the proper state of the room. Once the state of the room is
 available, all stripped state should be discarded. In cases where the
 client has an archived state of the room (such as after being kicked)
@@ -1595,8 +1615,8 @@ and the client is receiving stripped state for the room, such as from an
 invite or knock, then the stripped state should take precedence until
 fresh state can be acquired from a join.
 
-The following state events should be represented as stripped state when
-possible:
+Stripped state should contain some or all of the following state events, which
+should be represented as stripped state events when possible:
 
 * [`m.room.create`](#mroomcreate)
 * [`m.room.name`](#mroomname)
@@ -2544,7 +2564,7 @@ that profile.
 | [Room Upgrades](#room-upgrades)                            | Required  | Required | Required | Required | Optional |
 | [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Third Party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |

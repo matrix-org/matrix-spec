@@ -36,7 +36,7 @@ paths:
         *Note that there are two forms of this API, which are documented separately.
         This version of the API requires that the inviter knows the Matrix
         identifier of the invitee. The other is documented in the
-        [third party invites](/client-server-api/#third-party-invites) section.*
+        [third-party invites](/client-server-api/#third-party-invites) section.*
 
         This API invites a user to participate in a particular room.
         They do not start participating in the room until they actually join the

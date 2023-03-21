@@ -76,7 +76,7 @@ Clients which understand how to work with threads should simply do so, however c
 might not be aware of threads (due to age or scope) might not be able to helpfully represent
 the conversation history to its users.
 
-To work around this, events sent by clients which understand threads include [rich reply](#rich-replies)
+To work around this, events sent by clients which understand threads SHOULD include [rich reply](#rich-replies)
 metadata to attempt to form a reply chain representation of the conversation. This representation
 is not ideal for heavily threaded rooms, but allows for users to have context as to what is
 being discussed with respect to other messages in the room.

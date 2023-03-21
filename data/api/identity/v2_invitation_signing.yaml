@@ -74,7 +74,8 @@ paths:
               signatures:
                 type: object
                 description: The signature of the mxid, sender, and token.
-                $ref: "../../schemas/server-signatures.yaml"
+                allOf:
+                  - $ref: "../../schemas/server-signatures.yaml"
               token:
                 type: string
                 description: The token for the invitation.

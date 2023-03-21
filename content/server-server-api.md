@@ -18,7 +18,7 @@ signatures in HTTP Authorization headers at the HTTP layer.
 There are three main kinds of communication that occur between
 homeservers:
 
-Persisted Data Units (PDUs):
+Persistent Data Units (PDUs):
 These events are broadcast from one homeserver to any others that have
 joined the same room (identified by Room ID). They are persisted in
 long-term storage and record the history of messages and state for a
@@ -350,7 +350,7 @@ The authorization parameters to include are:
 - `origin`: the server name of the sending server. This is the same as the
   `origin` field from JSON described in step 1.
 - `destination`: {{< added-in v="1.3" >}} the server name of the receiving
-  sender. This is the same as the `destination` field from the JSON described
+  server. This is the same as the `destination` field from the JSON described
   in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but MUST always send it. If this property
   is included, but the value does not match the receiving server's name, the
@@ -877,7 +877,8 @@ on the resulting `m.room.member` event.
 If the joining server fails all conditions then a 403 `M_FORBIDDEN` error
 is used by the resident server.
 
-## <a name="knocking-rooms"> Knocking upon a room
+<a name="knocking-rooms">
+## Knocking upon a room
 
 Rooms can permit knocking through the join rules, and if permitted this
 gives users a way to request to join (be invited) to the room. Users who
@@ -937,9 +938,9 @@ the event to other servers in the room.
 ## Third-party invites
 
 {{% boxes/note %}}
-More information about third party invites is available in the
+More information about third-party invites is available in the
 [Client-Server API](/client-server-api) under
-the Third Party Invites module.
+the Third-party Invites module.
 {{% /boxes/note %}}
 
 When a user wants to invite another user in a room but doesn't know the
@@ -1075,7 +1076,7 @@ more specific queries that can be made.
 
 ## OpenID
 
-Third party services can exchange an access token previously generated
+Third-party services can exchange an access token previously generated
 by the <span class="title-ref">Client-Server API</span> for information
 about a user. This can help verify that a user is who they say they are
 without granting full access to the user's account.

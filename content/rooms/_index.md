@@ -86,7 +86,7 @@ split-brain situation due to not understanding the new rules.
 
 A room version is defined as a string of characters which MUST NOT
 exceed 32 codepoints in length. Room versions MUST NOT be empty and
-SHOULD contain only the characters `a-z`, `0-9`, `.`, and `-`.
+MUST contain only the characters `a-z`, `0-9`, `.`, and `-`.
 
 Room versions are not intended to be parsed and should be treated as
 opaque identifiers. Room versions consisting only of the characters

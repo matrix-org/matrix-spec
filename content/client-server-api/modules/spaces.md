@@ -1,5 +1,3 @@
-weight: 340
-
 ### Spaces
 
 {{% added-in v="1.2" %}}

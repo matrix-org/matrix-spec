@@ -38,8 +38,7 @@ properties:
   conditions:
     type: array
     items:
-      allOf:
-      - $ref: push_condition.yaml
+      $ref: push_condition.yaml
     description: |-
       The conditions that must hold true for an event in order for a rule to be
       applied to an event. A rule with no conditions always matches. Only
@@ -47,8 +46,8 @@ properties:
   pattern:
     type: string
     description: |-
-      The glob-style pattern to match against.  Only applicable to `content`
-      rules.
+      The [glob-style pattern](/appendices#glob-style-matching) to match against.
+      Only applicable to `content` rules.
 required:
   - actions
   - default

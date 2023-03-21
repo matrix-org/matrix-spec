@@ -668,22 +668,22 @@ The process between Alice and Bob verifying each other would be:
     the users to select a method.
 14. Alice and Bob compare the strings shown by their devices, and tell
     their devices if they match or not.
-15. Assuming they match, Alice and Bob's devices calculate the HMAC of
-    their own device keys and a comma-separated sorted list of the key
-    IDs that they wish the other user to verify, using SHA-256 as the
-    hash function. HMAC is defined in [RFC
-    2104](https://tools.ietf.org/html/rfc2104). The key for the HMAC is
-    different for each item and is calculated by generating 32 bytes
-    (256 bits) using [the key verification HKDF](#hkdf-calculation).
+15. Assuming they match, Alice and Bob's devices each calculate Message
+    Authentication Codes (MACs) for:
+    * Each of the keys that they wish the other user to verify (usually their 
+      device ed25519 key and their master cross-signing key).
+    * The complete list of key IDs that they wish the other user to verify.
+
+    The MAC calculation is defined [below](#mac-calculation).
 16. Alice's device sends Bob's device an `m.key.verification.mac`
     message containing the MAC of Alice's device keys and the MAC of her
     key IDs to be verified. Bob's device does the same for Bob's device
     keys and key IDs concurrently with Alice.
 17. When the other device receives the `m.key.verification.mac` message,
-    the device calculates the HMAC of its copies of the other device's
-    keys given in the message, as well as the HMAC of the
+    the device calculates the MACs of its copies of the other device's
+    keys given in the message, as well as the MAC of the
     comma-separated, sorted, list of key IDs in the message. The device
-    compares these with the HMAC values given in the message, and if
+    compares these with the MAC values given in the message, and if
     everything matches then the device keys are verified.
 18. Alice and Bob's devices send `m.key.verification.done` messages to complete
     the verification.
@@ -767,7 +767,55 @@ following error codes are used in addition to those already specified:
 
 {{% event event="m.key.verification.mac" %}}
 
-###### HKDF calculation
+###### MAC calculation
+
+During the verification process, Message Authentication Codes (MACs) are calculated
+for keys and lists of key IDs.
+
+The method used to calculate these MACs depends upon the value of the
+`message_authentication_code` property in the [`m.key.verification.accept`](#mkeyverificationaccept)
+message. All current implementations should use the `hkdf-hmac-sha256.v2` method which is
+defined as follows:
+
+The MAC used is HMAC as defined in [RFC
+5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
+function. The shared secret is supplied as the input keying material. No salt
+is used, and in the info parameter is the concatenation of:
+
+-   The string `MATRIX_KEY_VERIFICATION_MAC`.
+-   The Matrix ID of the user whose key is being MAC-ed.
+-   The Device ID of the device sending the MAC.
+-   The Matrix ID of the other user.
+-   The Device ID of the device receiving the MAC.
+-   The `transaction_id` being used.
+-   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
+    item being MAC-ed is the list of key IDs.
+
+If a key is being MACed, the MAC is performed on the public key as encoded
+according to the [key algorithm](#key-algorithms).  For example, for `ed25519`
+keys, it is the unpadded base64-encoded key.
+
+If the key list is being MACed, the list is sorted lexicographically and
+comma-separated with no extra whitespace added, with each key written in the
+form `{algorithm}:{keyId}`. For example, the key list could look like:
+`ed25519:Cross+Signing+Key,ed25519:DEVICEID`. In this way, the recipient can
+reconstruct the list from the names in the `mac` property of the
+`m.key.verification.mac` message and ensure that no keys were added or removed.
+
+The MAC values are base64-encoded and sent in a
+[`m.key.verification.mac`](#mkeyverificationmac) message.
+
+{{% boxes/note %}}
+The MAC method `hkdf-hmac-sha256` used an incorrect base64 encoding, due to a
+bug in the original implementation in libolm.  To remedy this,
+`hkdf-hmac-sha256.v2` was introduced, which calculates the MAC in the same way,
+but uses a correct base64 encoding. `hkdf-hmac-sha256` is deprecated and will
+be removed in a future version of the spec. Use of `hkdf-hmac-sha256` should
+be avoided whenever possible: if both parties support `hkdf-hmac-sha256.v2`,
+then `hkdf-hmac-sha256` MUST not be used.
+{{% /boxes/note %}}
+
+###### SAS HKDF calculation
 
 In all of the SAS methods, HKDF is as defined in [RFC
 5869](https://tools.ietf.org/html/rfc5869) and uses the previously
@@ -815,23 +863,9 @@ HKDF is used over the plain shared secret as it results in a harder
 attack as well as more uniform data to work with.
 {{% /boxes/rationale %}}
 
-For verification of each party's device keys, HKDF is as defined in RFC
-5869 and uses SHA-256 as the hash function. The shared secret is
-supplied as the input keying material. No salt is used, and in the info
-parameter is the concatenation of:
-
--   The string `MATRIX_KEY_VERIFICATION_MAC`.
--   The Matrix ID of the user whose key is being MAC-ed.
--   The Device ID of the device sending the MAC.
--   The Matrix ID of the other user.
--   The Device ID of the device receiving the MAC.
--   The `transaction_id` being used.
--   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
-    item being MAC-ed is the list of key IDs.
-
 ###### SAS method: `decimal`
 
-Generate 5 bytes using [HKDF](#hkdf-calculation) then take sequences of 13 bits
+Generate 5 bytes using [HKDF](#sas-hkdf-calculation) then take sequences of 13 bits
 to convert to decimal numbers (resulting in 3 numbers between 0 and 8191
 inclusive each). Add 1000 to each calculated number.
 
@@ -849,7 +883,7 @@ separator, such as dashes, or with the numbers on individual lines.
 
 ###### SAS method: `emoji`
 
-Generate 6 bytes using [HKDF](#hkdf-calculation) then split the first 42 bits
+Generate 6 bytes using [HKDF](#sas-hkdf-calculation) then split the first 42 bits
 into 7 groups of 6 bits, similar to how one would base64 encode
 something. Convert each group of 6 bits to a number and use the
 following table to get the corresponding emoji:

@@ -37,8 +37,8 @@ allOf:
             description: The user ID whose cross-signing keys have changed.
             example: "@alice:example.com"
           master_key:
-            type: object
-            $ref: ../../../client-server/definitions/cross_signing_key.yaml
+            allOf:
+              - $ref: ../../../client-server/definitions/cross_signing_key.yaml
             example: {
               "user_id": "@alice:example.com",
               "usage": ["master"],
@@ -47,8 +47,8 @@ allOf:
               }
             }
           self_signing_key:
-            type: object
-            $ref: ../../../client-server/definitions/cross_signing_key.yaml
+            allOf:
+              - $ref: ../../../client-server/definitions/cross_signing_key.yaml
             example: {
               "user_id": "@alice:example.com",
               "usage": ["self_signing"],

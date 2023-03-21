@@ -48,27 +48,14 @@ are listed, clients should translate the value (a `#` character followed
 by a 6-character hex color code) to the appropriate CSS/attributes for
 the tag.
 
-`font`
-`data-mx-bg-color`, `data-mx-color`, `color`
-
-`span`
-`data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see
-[spoiler messages](#spoiler-messages))
-
-`a`
-`name`, `target`, `href` (provided the value is not relative and has a
-scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`)
-
-`img`
-`width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix
-Content (MXC) URI](#matrix-content-mxc-uris))
-
-`ol`
-`start`
-
-`code`
-`class` (only classes which start with `language-` for syntax
-highlighting)
+| Tag    | Permitted Attributes                                                                                                                       |
+|--------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| `font` | `data-mx-bg-color`, `data-mx-color`, `color`                                                                                               |
+| `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
+| `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
+| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (MXC) URI](#matrix-content-mxc-uris))                           |
+| `ol`   | `start`                                                                                                                                    |
+| `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
 
 Additionally, web clients should ensure that *all* `a` tags get a
 `rel="noopener"` to prevent the target page from referencing the

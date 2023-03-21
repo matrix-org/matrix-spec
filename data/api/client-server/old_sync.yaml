@@ -221,7 +221,8 @@ paths:
                         type: object
                         title: "InviteEvent"
                         description: "The invite event if `membership` is `invite`"
-                        $ref: "definitions/client_event.yaml"
+                        allOf:
+                          - $ref: "definitions/client_event.yaml"
                     messages:
                       type: object
                       title: PaginationChunk

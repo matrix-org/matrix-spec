@@ -85,7 +85,7 @@ paths:
                         example:
                           $ref: "../../event-schemas/examples/invite_room_state.json"
           example: {
-            "$ref": "examples/minimal_pdu.json",
+            "room_id": "!somewhere:example.org",
             "type": "m.room.member",
             "state_key": "@joe:elsewhere.com",
             "origin": "example.org",
@@ -126,7 +126,7 @@ paths:
               200,
               {
                 "event":  {
-                  "$ref": "examples/minimal_pdu.json",
+                  "room_id": "!somewhere:example.org",
                   "type": "m.room.member",
                   "state_key": "@someone:example.org",
                   "origin": "example.org",
