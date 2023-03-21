@@ -192,7 +192,7 @@ replacement event.
 
 Note that there can be multiple events with an `m.replace` relationship to a
 given event (for example, if an event is edited multiple times). These should
-be [aggregated](#aggregations) by the homeserver.
+be [aggregated](#aggregations-of-child-events) by the homeserver.
 
 The aggregation format of `m.replace` relationships gives the **most recent**
 replacement event, formatted [as normal](#room-event-format).
@@ -201,8 +201,9 @@ The most recent event is determined by comparing `origin_server_ts`; if two or
 more replacement events have identical `origin_server_ts`, the event with the
 lexicographically largest `event_id` is treated as more recent.
 
-This aggregation is bundled under the `unsigned` property as `m.relations` for any
-event that is the target of an `m.replace` relationship. For example:
+As with any other aggregation of child events, the `m.replace` aggregation is
+included under the `m.relations` property in `unsigned` for any event that is
+the target of an `m.replace` relationship. For example:
 
 ```json
 {
@@ -288,8 +289,9 @@ subsequent edits, from the visible timeline. In this situation, homeservers
 will return an empty `content` for the original event as with any other
 redacted event, and as
 [above](#server-side-aggregation-of-mreplace-relationships) the replacement
-events will not be bundled with the original event. Note that the subsequent edits are
-not actually redacted themselves: they simply serve no purpose within the visible timeline.
+events will not be included in the aggregation bundled with the original
+event. Note that the subsequent edits are not actually redacted themselves:
+they simply serve no purpose within the visible timeline.
 
 #### Edits of replies
 

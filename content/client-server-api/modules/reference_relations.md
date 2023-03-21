@@ -19,11 +19,12 @@ messages.
 
 ##### Server-side aggregation of `m.reference`
 
-The aggregation format of `m.reference` relations consists of a single `chunk` property,
-which lists all the events which `m.reference` the event (the parent). Currently,
-only a single `event_id` field is present on the events in the `chunk`.
+The [aggregation](#aggregations-of-child-events) format of `m.reference`
+relations consists of a single `chunk` property, which lists all the events
+which `m.reference` the event (the parent). Currently, only a single `event_id`
+field is present on the events in the `chunk`.
 
-An example `m.reference` would be:
+For example, given an event with the following `m.reference` relationship:
 
 ```json
 {
@@ -38,7 +39,7 @@ An example `m.reference` would be:
 }
 ```
 
-The [bundle](#aggregations) under `m.relations` would appear similar to the following:
+The aggregation would appear similar to the following:
 
 ```json
 {
