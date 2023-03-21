@@ -83,7 +83,11 @@ object.
 
 ### Canonical JSON
 
-We define the canonical JSON encoding for a value to be the shortest
+To ensure that all implementations use the same JSON encoding we define
+"Canonical JSON". This should not be confused with other uses of
+"Canonical JSON" outside of the specification.
+
+We define this encoding for a value to be the shortest
 UTF-8 JSON encoding with dictionary keys lexicographically sorted by
 Unicode codepoint. Numbers in the JSON must be integers in the range
 `[-(2**53)+1, (2**53)-1]`.
