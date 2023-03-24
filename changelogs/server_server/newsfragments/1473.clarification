@@ -1,0 +1,1 @@
+* Remove leftover `{key_id}` from `/_matrix/key/v2/server/`

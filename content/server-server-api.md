@@ -227,7 +227,7 @@ keys returned by a given notary server by querying other servers.
 #### Publishing Keys
 
 Homeservers publish their signing keys in a JSON object at
-`/_matrix/key/v2/server/{key_id}`. The response contains a list of
+`/_matrix/key/v2/server`. The response contains a list of
 `verify_keys` that are valid for signing federation requests made by the
 homeserver and for signing events. It contains a list of
 `old_verify_keys` which are only valid for signing events.
