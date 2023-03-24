@@ -50,8 +50,8 @@ paths:
         The server SHOULD register an account with a User ID based on the
         `username` provided, if any. Note that the grammar of Matrix User ID
         localparts is restricted, so the server MUST either map the provided
-        `username` onto a `user_id` in a logical manner, or reject
-        `username`s which do not comply to the grammar, with
+        `username` onto a `user_id` in a logical manner, or reject any
+        `username` which does not comply to the grammar with
         `M_INVALID_USERNAME`.
 
         Matrix clients MUST NOT assume that localpart of the registered
