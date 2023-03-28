@@ -37,13 +37,21 @@ jobs:
   check-examples:
     name: "🔎 Check Event schema examples"
     runs-on: ubuntu-latest
-    container: uhoreg/matrix-doc-build
     steps:
       - name: "📥 Source checkout"
         uses: actions/checkout@v2
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
       - name: "🔎 Run validator"
         run: |
-          /env/bin/python scripts/check-event-schema-examples.py
+          python scripts/check-event-schema-examples.py
         
   calculate-baseurl:
     name: "⚙️ Calculate baseURL for later jobs"
@@ -70,15 +78,21 @@ jobs:
   build-openapi:
     name: "🐍 Build OpenAPI definitions"
     runs-on: ubuntu-latest
-    container: "python:3.9"
     needs: [calculate-baseurl]
     steps:
       - name: "📥 Source checkout"
         uses: actions/checkout@v2
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
       - name: "📦 Asset creation"
         run: |
-          python3 -m venv env && . env/bin/activate
-          pip install -r scripts/requirements.txt
           # The output path matches the final deployment path at spec.matrix.org
           scripts/dump-swagger.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
