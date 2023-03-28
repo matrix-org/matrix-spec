@@ -539,6 +539,31 @@ Definition:
 }
 ```
 
+**<a name="mrulereaction"></a>`.m.rule.reaction`**
+
+{{% added-in v="1.7" %}}
+
+Matches any event whose type is `m.room.reaction`. This suppresses notifications for [`m.reaction`](#mreaction) events.
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.reaction",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_match",
+            "key": "type",
+            "pattern": "m.reaction"
+        }
+    ],
+    "actions": []
+}
+```
+
+
 **`.m.rule.room.server_acl`**
 
 {{% added-in v="1.4" %}}
