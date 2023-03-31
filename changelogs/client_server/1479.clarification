@@ -1,0 +1,1 @@
+Remove outdated text saying that `state_default` is 0 if there is no `m.room.power_levels` event in a room.
