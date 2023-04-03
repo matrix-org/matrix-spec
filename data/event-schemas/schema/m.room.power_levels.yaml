@@ -74,9 +74,11 @@ properties:
         type: object
       users_default:
         description: |-
-            The default power level for every user in the room, unless their
-            `user_id` is mentioned in the `users` key. Defaults to 0 if
+            The power level for users in the room whose `user_id` is not mentioned in the `users` key. Defaults to 0 if
             unspecified.
+
+            **Note**: When there is no `m.room.power_levels` event in the room, the room creator has
+            a power level of 100, and all other users have a power level of 0.     
         type: integer
       notifications:
         properties:
