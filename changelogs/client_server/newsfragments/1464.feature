@@ -1,0 +1,1 @@
+Add new push rule conditions: `event_property_is` and `event_property_contains` from [MSC3758](https://github.com/matrix-org/matrix-spec-proposals/pull/3758) and [MSC3966](https://github.com/matrix-org/matrix-spec-proposals/pull/3966).

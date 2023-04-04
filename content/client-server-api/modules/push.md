@@ -212,15 +212,15 @@ The following conditions are defined:
 
 **`event_match`**
 
-This is a glob pattern match on a field of the event. Parameters:
+This is a glob pattern match on a property of the event. Parameters:
 
--   `key`: The dot-separated path of the property of the event to match, e.g.
-    `content.body`.
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated-property-paths)
+    of the event to match, e.g. `content.body`.
 
 -   `pattern`: The [glob-style pattern](/appendices#glob-style-matching) to match against.
 
 The match is performed case-insensitively, and must match the entire value of
-the event field given by `key` (though see below regarding `content.body`). The
+the event property given by `key` (though see below regarding `content.body`). The
 exact meaning of "case insensitive" is defined by the implementation of the
 homeserver.
 
@@ -267,7 +267,7 @@ following event will match:
 ```json
 {
   "content": {
-    "body": "An example event.",
+    "body": "An example event."
   },
   "event_id": "$143273976499sgjks:example.org",
   "room_id": "!636q39766251:example.com",
@@ -292,6 +292,96 @@ for `state_key`.
 For an example of this, see the default rule
 [`.m.rule.tombstone`](#mruletombstone) below.
 {{% /boxes/warning %}}
+
+**`event_property_is`**
+
+This is an exact value match on a property of the event. Parameters:
+
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated-property-paths)
+    of the event to match, e.g. `content.body`.
+
+-   `value`: The value to match against.
+
+The match is performed exactly and only supports non-compound [canonical JSON](/appendices#canonical-json)
+values: strings, integers in the range of `[-(2**53)+1, (2**53)-1]`, booleans, and
+`null`.
+
+If the property specified by `key` is completely absent from the event, or does
+not have a string, integer, boolean, or `null` value, then the condition will not
+match.
+
+{{% boxes/note %}}
+For example, if `key` is `content.m\.federate`, and `value` is `true`, then
+the following event will match:
+
+```json
+{
+  "content": {
+    "creator": "@example:example.org",
+    "m.federate": true,
+    "predecessor": {
+      "event_id": "$something:example.org",
+      "room_id": "!oldroom:example.org"
+    },
+    "room_version": "1"
+  },
+  "event_id": "$143273582443PhrSn:example.org",
+  "room_id": "!636q39766251:example.com",
+  "sender": "@example:example.org",
+  "state_key": "",
+  "type": "m.room.create"
+}
+```
+
+The following `m.federate` values will NOT match:
+ * `"true"` (note the string value)
+ * `1` (do not cast types)
+{{% /boxes/note %}}
+
+**`event_property_contains`**
+
+This matches if an array property of an event exactly contains a value. Parameters:
+
+-   `key`: The [dot-separated path of the property](/appendices#dot-separated-property-paths)
+    of the event to match, e.g. `content.body`.
+
+-   `value`: The value to match against.
+
+The array values are matched exactly and only supports non-compound [canonical JSON](/appendices#canonical-json)
+values: strings, integers in the range of `[-(2**53)+1, (2**53)-1]`, booleans,
+and `null`. Array values not of those types are ignored.
+
+If the property specified by `key` is completely absent from the event, or is not
+an array, then the condition will not match.
+
+{{% boxes/note %}}
+For example, if `key` is `content.alt_aliases`, and `value` is `"#myroom:example.com"`,
+then the following event will match:
+
+```json
+{
+  "content": {
+    "alias": "#somewhere:localhost",
+    "alt_aliases": [
+      "#somewhere:example.org",
+      "#myroom:example.com"
+    ]
+  },
+  "event_id": "$143273582443PhrSn:example.org",
+  "origin_server_ts": 1432735824653,
+  "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+  "sender": "@example:example.org",
+  "state_key": "",
+  "type": "m.room.canonical_alias",
+  "unsigned": {
+    "age": 1234
+  }
+}
+```
+
+The following `alt_aliases` values will NOT match:
+ * `":example.com"` (partial values do not match)
+{{% /boxes/note %}}
 
 **`contains_display_name`**
 
