@@ -43,12 +43,15 @@
     */}}
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+            {{ $more_objects = partial "get-additional-objects" (dict
                 "this_object" $this_object.additionalProperties
-                "additional_objects" $additional_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.additional" $name)
             ) }}
+            {{/* appending an empty slice messes up the types and confuses go, so only do the append if $more_objects is non-empty */}}
+            {{ if $more_objects }}
+                {{ $additional_objects = $additional_objects | append $more_objects }}
+            {{ end }}
         {{ end }}
     {{ end }}
 
@@ -56,12 +59,14 @@
       Add any nested objects referenced in this object's `properties`
     */}}
     {{ range $key, $property := $this_object.properties}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
+        {{ $more_objects := partial "get-additional-objects" (dict
             "this_object" $property
-            "additional_objects" $additional_objects
             "anchor_base" $anchor_base
             "name" (printf "%s.%s" $name $key)
         ) }}
+        {{ if $more_objects }}
+            {{ $additional_objects = $additional_objects | append $more_objects }}
+        {{ end }}
     {{ end }}
 
 {{ end }}
@@ -72,20 +77,24 @@
     */}}
     {{ if reflect.IsSlice $this_object.items}}
         {{ range $idx, $item := $this_object.items }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+            {{ $more_objects := partial "get-additional-objects" (dict
                 "this_object" $item
-                "additional_objects" $additional_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.items[%d]" $name $idx)
             ) }}
+            {{ if $more_objects }}
+                {{ $additional_objects = $additional_objects | append $more_objects }}
+            {{ end }}
         {{ end }}
     {{ else if reflect.IsMap $this_object.items}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
+        {{ $more_objects := partial "get-additional-objects" (dict
              "this_object" $this_object.items
-             "additional_objects" $additional_objects
              "anchor_base" $anchor_base
              "name" (printf "%s.items" $name)
         ) }}
+        {{ if $more_objects }}
+            {{ $additional_objects = $additional_objects | append $more_objects }}
+        {{ end }}
     {{ else }}
         {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
     {{ end }}
@@ -95,13 +104,11 @@
 
 
 {{/*
-  This actually makes the recursive call and adds the returned objects to the array
+  This actually makes the recursive call, and returns the new objects
 */}}
 {{ define "partials/get-additional-objects" }}
     {{/* .name is the name of the object for logging purposes */}}
     {{ $name := .name }}
-
-    {{ $additional_objects := .additional_objects }}
 
     {{ if not (reflect.IsMap .this_object) }}
       {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
@@ -113,11 +120,7 @@
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
 
     {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
-    {{/* appending an empty slice messes up the types and confuses go, so only do the append if $more_objects is non-empty */}}
-    {{ if $more_objects }}
-      {{ $additional_objects = $additional_objects | append $more_objects }}
-    {{ end }}
-    {{ return $additional_objects }}
+    {{ return $more_objects }}
 {{ end }}
 
 {{/*
