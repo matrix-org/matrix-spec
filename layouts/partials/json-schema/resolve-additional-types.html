@@ -113,11 +113,9 @@
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
 
     {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
-    {{/*
-      As far as I know we don't have something like Array.concat(), so add them one at a time
-    */}}
-    {{ range $more_objects }}
-        {{ $additional_objects = $additional_objects | append . }}
+    {{/* appending an empty slice messes up the types and confuses go, so only do the append if $more_objects is non-empty */}}
+    {{ if $more_objects }}
+      {{ $additional_objects = $additional_objects | append $more_objects }}
     {{ end }}
     {{ return $additional_objects }}
 {{ end }}
