@@ -18,11 +18,10 @@ description: |-
   `events_default` for Message Events and `state_default` for State
   Events.
 
-  If there is no `state_default` in the `m.room.power_levels` event, the
-  `state_default` is 50. If there is no `events_default` in the
-  `m.room.power_levels` event, the `events_default` is 0. If the room
-  contains no `m.room.power_levels` event, *both* the `state_default` and
-  `events_default` are 0.
+  If there is no `state_default` in the `m.room.power_levels` event, or
+  there is no `m.room.power_levels` event, the `state_default` is 50.
+  If there is no `events_default` in the `m.room.power_levels` event,
+  or there is no `m.room.power_levels` event, the `events_default` is 0.
 
   The power level required to invite a user to the room, kick a user from the
   room, ban a user from the room, or redact an event sent by another user, is
@@ -32,15 +31,6 @@ description: |-
   event. `invite` defaults to 0 in either case.
 
   **Note:**
-
-  As noted above, in the absence of an `m.room.power_levels` event, the
-  `state_default` is 0, and all users are considered to have power level 0.
-  That means that **any** member of the room can send an
-  `m.room.power_levels` event, changing the permissions in the room.
-
-  Server implementations should therefore ensure that each room has an
-  `m.room.power_levels` event as soon as it is created. See also the
-  documentation of the `/createRoom` API.
 
   The allowed range for power level values is `[-(2**53)+1, (2**53)-1]`,
   as required by the [Canonical JSON specification](/appendices/#canonical-json).
@@ -75,9 +65,6 @@ properties:
         description: |-
             The default level required to send state events. Can be overridden
             by the `events` key. Defaults to 50 if unspecified.
-
-            **Note**: When there is no `m.room.power_levels` event in the room, this defaults
-            to 0. See description for more information.
         type: integer
       users:
         additionalProperties:
@@ -87,9 +74,11 @@ properties:
         type: object
       users_default:
         description: |-
-            The default power level for every user in the room, unless their
-            `user_id` is mentioned in the `users` key. Defaults to 0 if
+            The power level for users in the room whose `user_id` is not mentioned in the `users` key. Defaults to 0 if
             unspecified.
+
+            **Note**: When there is no `m.room.power_levels` event in the room, the room creator has
+            a power level of 100, and all other users have a power level of 0.     
         type: integer
       notifications:
         properties:
