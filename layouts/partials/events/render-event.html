@@ -56,7 +56,7 @@
 <h2>Content</h2>
 
 {{ $anchor_base := anchorize $event_name }}
-{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event_data.properties.content "anchor_base" $anchor_base) }}
+{{ $additional_types := index (partial "json-schema/resolve-additional-types" (dict "schema" $event_data.properties.content "anchor_base" $anchor_base)) 1 }}
 
 {{ range $additional_types }}
     {{ partial "openapi/render-object-table" . }}

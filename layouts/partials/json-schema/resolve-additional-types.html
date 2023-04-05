@@ -11,14 +11,18 @@
   Assumes that "resolve-refs" and "resolve-allof" has already been called on the
   input schema.
 
-  Returns an array of all the objects found. For each object, the following properties are returned:
-    * title
-    * properties
-    * required
-    * enum
-    * anchor: a string suitable for using as an html anchor for this object (if `anchor_base` was set, and the object has a title)
+  Returns a pair [$updated_definition, $additional_objects], where:
 
-  Note that the returned array may contain duplicate objects.
+    $updated_definition: TODO
+
+    $additional_objects is an array of all the objects found. For each object, the following properties are returned:
+      * title
+      * properties
+      * required
+      * enum
+      * anchor: a string suitable for using as an html anchor for this object (if `anchor_base` was set, and the object has a title)
+
+      Note that the returned array may contain duplicate objects.
 
 */}}
 
@@ -43,13 +47,13 @@
     */}}
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $more_objects = partial "get-additional-objects" (dict
+            {{ $res := partial "get-additional-objects" (dict
                 "this_object" $this_object.additionalProperties
                 "anchor_base" $anchor_base
                 "name" (printf "%s.additional" $name)
             ) }}
             {{/* appending an empty slice messes up the types and confuses go, so only do the append if $more_objects is non-empty */}}
-            {{ if $more_objects }}
+            {{ with $more_objects := index $res 1 }}
                 {{ $additional_objects = $additional_objects | append $more_objects }}
             {{ end }}
         {{ end }}
@@ -59,12 +63,12 @@
       Add any nested objects referenced in this object's `properties`
     */}}
     {{ range $key, $property := $this_object.properties}}
-        {{ $more_objects := partial "get-additional-objects" (dict
+        {{ $res := partial "get-additional-objects" (dict
             "this_object" $property
             "anchor_base" $anchor_base
             "name" (printf "%s.%s" $name $key)
         ) }}
-        {{ if $more_objects }}
+        {{ with $more_objects := index $res 1 }}
             {{ $additional_objects = $additional_objects | append $more_objects }}
         {{ end }}
     {{ end }}
@@ -77,22 +81,22 @@
     */}}
     {{ if reflect.IsSlice $this_object.items}}
         {{ range $idx, $item := $this_object.items }}
-            {{ $more_objects := partial "get-additional-objects" (dict
+            {{ $res := partial "get-additional-objects" (dict
                 "this_object" $item
                 "anchor_base" $anchor_base
                 "name" (printf "%s.items[%d]" $name $idx)
             ) }}
-            {{ if $more_objects }}
+            {{ with $more_objects := index $res 1 }}
                 {{ $additional_objects = $additional_objects | append $more_objects }}
             {{ end }}
         {{ end }}
     {{ else if reflect.IsMap $this_object.items}}
-        {{ $more_objects := partial "get-additional-objects" (dict
+        {{ $res := partial "get-additional-objects" (dict
              "this_object" $this_object.items
              "anchor_base" $anchor_base
              "name" (printf "%s.items" $name)
         ) }}
-        {{ if $more_objects }}
+        {{ with $more_objects := index $res 1 }}
             {{ $additional_objects = $additional_objects | append $more_objects }}
         {{ end }}
     {{ else }}
@@ -100,7 +104,7 @@
     {{ end }}
 {{ end }}
 
-{{ return $additional_objects }}
+{{ return slice $this_object $additional_objects }}
 
 
 {{/*
