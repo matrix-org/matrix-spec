@@ -116,8 +116,8 @@
     {{/*
       As far as I know we don't have something like Array.concat(), so add them one at a time
     */}}
-    {{ range $more_objects}}
-        {{ $additional_objects = $additional_objects | append (partial "clean-object" .) }}
+    {{ range $more_objects }}
+        {{ $additional_objects = $additional_objects | append . }}
     {{ end }}
     {{ return $additional_objects }}
 {{ end }}
