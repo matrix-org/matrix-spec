@@ -142,20 +142,39 @@ paths:
                   A list of [server's long-term public key, generated ephemeral
                   public key].
                 items:
-                  type: string
+                  type: object
+                  title: PublicKey
+                  properties:
+                    public_key:
+                      type: string
+                      description: |
+                        The public key, encoded using [unpadded Base64](/appendices/#unpadded-base64).
+                    key_validity_url:
+                      type: string
+                      description: |
+                        The URI of an endpoint where the validity of this key can be checked
+                        by passing it as a `public_key` query parameter. See
+                        [key management](/identity-service-api/#key-management).
+                  required: ['public_key', 'key_validity_url']
               display_name:
                 type: string
                 description: The generated (redacted) display_name.
             required: ['token', 'public_keys', 'display_name']
-            example:
-              application/json: {
-                "token": "sometoken",
-                "public_keys": [
-                  "serverpublickey",
-                  "ephemeralpublickey"
-                ],
-                "display_name": "f...@b..."
-              }
+          examples:
+            application/json: {
+              "token": "sometoken",
+              "public_keys": [
+                {
+                  "public_key": "serverPublicKeyBase64",
+                  "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/isvalid"
+                },
+                {
+                  "public_key": "ephemeralPublicKeyBase64",
+                  "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/ephemeral/isvalid"
+                }
+              ],
+              "display_name": "f...@b..."
+            }
         400:
           description: |
             An error has occurred.
