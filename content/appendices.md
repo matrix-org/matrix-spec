@@ -520,7 +520,7 @@ allocated by that homeserver.
 The precise grammar defining the allowable format of an identifier
 depends on the type of identifier. For example, event IDs can sometimes
 be represented with a `domain` component under some conditions - see the
-[Event IDs](#room-ids-and-event-ids) section below for more information.
+[Event IDs](#event-ids) section below for more information.
 
 #### User Identifiers
 
@@ -629,22 +629,19 @@ allowing representation of *any* character (unlike punycode, which
 provides no way to encode ASCII punctuation).
 {{% /boxes/rationale %}}
 
-#### Room IDs and Event IDs
+#### Room IDs
 
 A room has exactly one room ID. A room ID has the format:
 
     !opaque_id:domain
 
-An event has exactly one event ID. The format of an event ID depends
-upon the [room version specification](/rooms).
-
 The `domain` of a room ID is the [server name](#server-name) of the
-homeserver which created the room/event. The domain is used only for
+homeserver which created the room. The domain is used only for
 namespacing to avoid the risk of clashes of identifiers between
-different homeservers. There is no implication that the room or event in
+different homeservers. There is no implication that the room in
 question is still available at the corresponding homeserver.
 
-Event IDs and Room IDs are case-sensitive. They are not meant to be
+Room IDs are case-sensitive. They are not meant to be
 human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
@@ -661,7 +658,21 @@ homeserver to look up the alias.
 Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
 domain).
 
-#### URIs
+#### Event IDs
+
+An event has exactly one event ID. Event IDs take the form:
+
+    $opaque_id
+
+However, the precise format depends upon the [room version
+specification](/rooms): early room versions included a `domain` component,
+whereas more recent versions omit the domain and use a base64-encoded hash instead.
+
+Event IDs are case-sensitive. They are not meant to be human-readable. They are
+intended to be treated as fully opaque strings by clients.
+
+
+### URIs
 
 There are two major kinds of referring to a resource in Matrix: matrix.to
 and `matrix:` URI. The specification currently defines both as active/valid
@@ -672,7 +683,7 @@ be used to reference particular objects in a given context, such as mentioning
 a user in a message or linking someone to a particular point in the room's
 history (a permalink).
 
-##### Matrix URI scheme
+#### Matrix URI scheme
 
 {{% added-in v="1.2" %}}
 
@@ -777,7 +788,7 @@ Examples of common URIs are:
 A suggested client implementation algorithm is available in the
 [original MSC](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/2312-matrix-uri.md#recommended-implementation).
 
-##### matrix.to navigation
+#### matrix.to navigation
 
 {{% boxes/note %}}
 This namespacing existed prior to a `matrix:` scheme. This is **not**
@@ -841,7 +852,7 @@ matrix.to URIs pointing to groups might still exist: they take the form
 may not be encoded).
 {{% /boxes/note %}}
 
-##### Routing
+#### Routing
 
 Room IDs are not routable on their own as there is no reliable domain to
 send requests to. This is partially mitigated with the addition of a
