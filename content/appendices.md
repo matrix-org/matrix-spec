@@ -506,10 +506,9 @@ The sigil characters are as follows:
 -   `@`: User ID
 -   `!`: Room ID
 -   `$`: Event ID
--   `+`: Group ID
 -   `#`: Room alias
 
-User IDs, group IDs, room IDs, room aliases, and sometimes event IDs
+User IDs, room IDs, room aliases, and sometimes event IDs
 take the form:
 
     &localpart:domain
@@ -793,7 +792,7 @@ defined in [RFC 3986](https://tools.ietf.org/html/rfc3986):
 https://matrix.to/#/<identifier>/<extra parameter>?<additional arguments>
 ```
 
-The identifier may be a room ID, room alias, user ID, or group ID. The
+The identifier may be a room ID, room alias, or user ID. The
 extra parameter is only used in the case of permalinks where an event ID
 is referenced. The matrix.to URI, when referenced, must always start
 with `https://matrix.to/#/` followed by the identifier.
@@ -834,10 +833,9 @@ encoded when producing matrix.to URIs, however.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-<!-- TODO: @@TravisR: Make "Spaces" a link when that specification exists -->
 In prior versions of this specification, a concept of "groups" were mentioned
 to organize rooms. This functionality did not properly get introduced into
-the specification and is subsequently replaced with "Spaces". Historical
+the specification and is subsequently replaced with [Spaces](/client-server-api/#spaces). Historical
 matrix.to URIs pointing to groups might still exist: they take the form
 `https://matrix.to/#/%2Bexample%3Aexample.org` (where the `+` sigil may or
 may not be encoded).
