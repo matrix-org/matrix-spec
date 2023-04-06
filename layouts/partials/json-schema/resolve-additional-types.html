@@ -13,7 +13,10 @@
 
   Returns a pair [$updated_definition, $additional_objects], where:
 
-    $updated_definition: TODO
+    $updated_definition: Largely the same as the provided `schema`, except for the addition of an `anchor` property
+      for any objects we decided to generate anchors for.
+
+      For objects, this is the same as the first entry in `$additional_objects`.
 
     $additional_objects is an array of all the objects found. For each object, the following properties are returned:
       * title
@@ -38,11 +41,6 @@
     {{ end }}
 
     {{/*
-      Add the object we were passed into the $additional_objects array
-    */}}
-    {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object) }}
-
-    {{/*
       Add any nested objects referenced in this object's `additionalProperties`
     */}}
     {{ if $this_object.additionalProperties }}
@@ -56,12 +54,16 @@
             {{ with $more_objects := index $res 1 }}
                 {{ $additional_objects = $additional_objects | append $more_objects }}
             {{ end }}
+
+            {{/* update the object definition with any updates from the additional properties */}}
+            {{ $this_object = merge $this_object (dict "additionalProperties" (index $res 0)) }}
         {{ end }}
     {{ end }}
 
     {{/*
       Add any nested objects referenced in this object's `properties`
     */}}
+    {{ $updated_properties := dict }}
     {{ range $key, $property := $this_object.properties}}
         {{ $res := partial "get-additional-objects" (dict
             "this_object" $property
@@ -71,8 +73,20 @@
         {{ with $more_objects := index $res 1 }}
             {{ $additional_objects = $additional_objects | append $more_objects }}
         {{ end }}
+        {{ $updated_properties = merge $updated_properties (dict $key (index $res 0)) }}
     {{ end }}
 
+    {{/* update the object definition with any updates from the properties */}}
+    {{ $this_object = merge $this_object (dict "properties" $updated_properties) }}
+
+    {{/*
+      Add the updated object to the front of the $additional_objects array
+    */}}
+    {{ $res := slice (partial "clean-object" $this_object) }}
+    {{ if $additional_objects }}
+        {{ $res = $res | append $additional_objects }}
+    {{ end }}
+    {{ $additional_objects = $res }}
 {{ end }}
 
 {{ if eq $this_object.type "array" }}
@@ -99,6 +113,7 @@
         {{ with $more_objects := index $res 1 }}
             {{ $additional_objects = $additional_objects | append $more_objects }}
         {{ end }}
+        {{ $this_object = merge $this_object (dict "items" (index $res 0)) }}
     {{ else }}
         {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
     {{ end }}
