@@ -96,6 +96,9 @@
             This means we can write things like `EventFilter` rather than `object`.
         */}}
         {{ $type = .title }}
+        {{ if .anchor }}
+            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) (htmlEscape $type) | safeHTML }}
+        {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
             If the property uses `additionalProperties` to describe its
