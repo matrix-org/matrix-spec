@@ -7,7 +7,7 @@ user wants to send to a room would be uploaded here, as would an avatar
 the user wants to use.
 
 Uploads are POSTed to a resource on the user's local homeserver which
-returns a MXC URI which can later be used to GET the download. Content
+returns a `mxc://` URI which can later be used to GET the download. Content
 is downloaded from the recipient's local homeserver, which must first
 transfer the content from the origin homeserver using the same API
 (unless the origin and destination homeservers are the same).
@@ -23,9 +23,9 @@ When serving content, the server SHOULD provide a
 interacting with the media repository.
 {{% /boxes/added-in-paragraph %}}
 
-#### Matrix Content (MXC) URIs
+#### Matrix Content (`mxc://`) URIs
 
-Content locations are represented as Matrix Content (MXC) URIs. They
+Content locations are represented as Matrix Content (`mxc://`) URIs. They
 look like:
 
     mxc://<server-name>/<media-id>
@@ -88,10 +88,10 @@ The HTTP GET endpoint does not require any authentication. Knowing the
 URL of the content is sufficient to retrieve the content, even if the
 entity isn't in the room.
 
-MXC URIs are vulnerable to directory traversal attacks such as
+`mxc://` URIs are vulnerable to directory traversal attacks such as
 `mxc://127.0.0.1/../../../some_service/etc/passwd`. This would cause the
 target homeserver to try to access and return this file. As such,
-homeservers MUST sanitise MXC URIs by allowing only alphanumeric
+homeservers MUST sanitise `mxc://` URIs by allowing only alphanumeric
 (`A-Za-z0-9`), `_` and `-` characters in the `server-name` and
 `media-id` values. This set of whitelisted characters allows URL-safe
 base64 encodings specified in RFC 4648. Applying this character

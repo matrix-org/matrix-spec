@@ -44,7 +44,7 @@ properties:
         type: string
       url:
         description: |-
-          Required if the file is unencrypted. The URL (typically [MXC URI](/client-server-api/#matrix-content-mxc-uris))
+          Required if the file is unencrypted. The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris))
           to the file.
         type: string
       file:

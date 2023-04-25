@@ -98,7 +98,7 @@ paths:
                       type: string
                       format: uri
                       example: "mxc://bar.com/foo"
-                      description: The avatar url, as an MXC, if one exists.
+                      description: The avatar url, as an [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris), if one exists.
               limited:
                 type: boolean
                 description: Indicates if the result list has been truncated by the limit.

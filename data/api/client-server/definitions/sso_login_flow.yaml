@@ -54,7 +54,7 @@ properties:
         icon:
           type: string
           description: |-
-            Optional MXC URI to provide an image/icon representing the IdP.
+            Optional `mxc://` URI to provide an image/icon representing the IdP.
             Intended to be shown alongside the `name` if provided.
           example: "mxc://example.org/abc123"
         brand:
