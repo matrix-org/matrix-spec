@@ -20,6 +20,7 @@ host: localhost:8008
 schemes:
   - https
   - http
+basePath: /_matrix
 consumes:
   - application/json
   - "*/*"
@@ -29,7 +30,7 @@ produces:
 securityDefinitions:
   $ref: definitions/security.yaml
 paths:
-  "/_matrix/media/v3/upload":
+  "/media/v3/upload":
     post:
       summary: Upload some content to the content repository.
       operationId: uploadContent
@@ -100,7 +101,7 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/_matrix/media/v3/upload/{serverName}/{mediaId}":
+  "/media/v3/upload/{serverName}/{mediaId}":
     put:
       summary: Upload content to an `mxc://` URI that was created earlier.
       description: |-
@@ -195,7 +196,7 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/_matrix/media/v1/create":
+  "/media/v1/create":
     post:
       summary: Create a new `mxc://` URI without uploading the content.
       description: |-
@@ -263,7 +264,7 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/_matrix/media/v3/download/{serverName}/{mediaId}":
+  "/media/v3/download/{serverName}/{mediaId}":
     get:
       summary: "Download content from the content repository."
       operationId: getContent
@@ -446,7 +447,7 @@ paths:
             "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/_matrix/media/v3/thumbnail/{serverName}/{mediaId}":
+  "/media/v3/thumbnail/{serverName}/{mediaId}":
     get:
       summary: Download a thumbnail of content from the content repository
       description: |-
@@ -578,7 +579,7 @@ paths:
             "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/_matrix/media/v3/preview_url":
+  "/media/v3/preview_url":
     get:
       summary: "Get information about a URL for a client"
       description: |-
@@ -647,7 +648,7 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/_matrix/media/v3/config":
+  "/media/v3/config":
     get:
       summary: Get the configuration for the content repository.
       description: |-
