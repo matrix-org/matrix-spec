@@ -1,4 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
+# Copyright 2023 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -88,5 +89,13 @@ paths:
                   A unique identifier for the event.
             required:
               - event_id
+        400:
+          description: |-
+            The request is invalid. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned. As well as the normal common error codes, other reasons for rejection include:
+
+            - `M_DUPLICATE_ANNOTATION`: The request is an attempt to send a [duplicate annotation](/client-server-api/#avoiding-duplicate-annotations).
+          schema:
+            "$ref": "definitions/errors/error.yaml"
       tags:
         - Room participation
