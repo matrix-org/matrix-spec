@@ -58,7 +58,8 @@ When performing this count:
  * Implementations should ignore any annotation event which refers to an event
    which itself has an `m.relates_to` with `rel_type: m.annotation` or
    `rel_type: m.replace`. In other words, it is not possible to annotate a
-   [replacement event](#event-replacements) or an annotation.
+   [replacement event](#event-replacements) or an annotation.  Annotations should
+   instead refer to the original event.
 
  * When an annotation is redacted, it is removed from the count.
 
