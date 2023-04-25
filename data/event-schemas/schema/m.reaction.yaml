@@ -1,0 +1,37 @@
+allOf:
+  - $ref: core-event-schema/room_event.yaml
+description: |-
+  Indicates a reaction to a previous event.
+
+  Has no defined `content` properties of its own. Its only purpose is to hold an
+  [`m.relates_to`](/client-server-api/#definition-mrelates_to) property.
+
+  Since they contain no content other than `m.relates_to`, `m.reaction` events
+  are normally not encrypted, as there would be no benefit in doing so.
+type: object
+properties:
+  content:
+    type: object
+    properties:
+      m.relates_to:
+        description: |-
+          Indicates the event being reacted to, and the type of reaction.
+        type: object
+        title: ReactionRelatesTo
+        properties:
+          rel_type:
+            type: string
+            enum: ["m.annotation"]
+          event_id:
+            type: string
+            description: |-
+              The event ID of the event that this is a reaction to.
+            example: "$some_event_id"
+          key:
+            type: string
+            description: |-
+              An emoji representing the reaction being made. Should include the
+              unicode emoji presentation selector (`\uFE0F`) for codepoints
+              which allow it (see the [emoji variation sequences
+              list](https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-variation-sequences.txt)).
+            example: "👍"

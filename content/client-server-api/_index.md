@@ -1996,6 +1996,7 @@ This specification describes the following relationship types:
 
 * [Rich replies](#rich-replies) (**Note**: does not use `rel_type`).
 * [Event replacements](#event-replacements).
+* [Event annotations](#event-annotations-and-reactions).
 * [Threads](#threading).
 * [References](#reference-relations)
 
@@ -2579,6 +2580,7 @@ that profile.
 | [Moderation policies](#moderation-policy-lists)            | Optional  | Optional | Optional | Optional | Optional |
 | [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 
@@ -2665,5 +2667,7 @@ systems.
 {{< cs-module name="moderation_policies" >}}
 {{< cs-module name="spaces" >}}
 {{< cs-module name="event_replacements" >}}
+{{< cs-module name="event_annotations" >}}
 {{< cs-module name="threading" >}}
 {{< cs-module name="reference_relations" >}}
+

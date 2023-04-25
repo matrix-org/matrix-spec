@@ -1,0 +1,11 @@
+{
+    "$ref": "core/room_event.json",
+    "type": "m.reaction",
+    "content": {
+        "m.relates_to": {
+            "rel_type": "m.annotation",
+            "event_id": "$some_event_id",
+            "key": "👍"
+        }
+    }
+}
