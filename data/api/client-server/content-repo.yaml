@@ -106,7 +106,7 @@ paths:
       summary: Upload content to an `mxc://` URI that was created earlier.
       description: |-
         This endpoint permits uploading content to an `mxc://` URI that was created
-        earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav3create).
+        earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
       parameters:
@@ -157,7 +157,7 @@ paths:
             - The server does not permit the file type.
             - The user has reached a quota for uploaded content.
             - The request comes from a different user than the one that called
-              [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav3create).
+              [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
 
             A [standard error response](/client-server-api/#standard-error-response)
             will be returned with the `errcode` `M_FORBIDDEN`.
