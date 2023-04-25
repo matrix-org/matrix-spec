@@ -102,9 +102,9 @@ paths:
         - Media
   "/_matrix/media/v3/upload/{serverName}/{mediaId}":
     put:
-      summary: Upload content to an MXC URI that was created earlier.
+      summary: Upload content to an `mxc://` URI that was created earlier.
       description: |-
-        This endpoint permits uploading content to an MXC URI that was created
+        This endpoint permits uploading content to an `mxc://` URI that was created
         earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav3create).
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
@@ -197,9 +197,9 @@ paths:
         - Media
   "/_matrix/media/v1/create":
     post:
-      summary: Create a new MXC URI without uploading the content.
+      summary: Create a new `mxc://` URI without uploading the content.
       description: |-
-        Creates a new MXC URI, independently of the content being uploaded. The content must be provided later
+        Creates a new `mxc://` URI, independently of the content being uploaded. The content must be provided later
         via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](http://localhost:1313/client-server-api/#put_matrixmediav3uploadservernamemediaid).
 
         The server may optionally enforce a maximum age for unused IDs,
@@ -211,9 +211,9 @@ paths:
         to accommodate users on poor connection who find a better connection to
         complete the upload.
 
-        As well as limiting the rate of requests to create MXC URIs, the server
+        As well as limiting the rate of requests to create `mxc://` URIs, the server
         should limit the number of concurrent *pending media uploads* a given
-        user can have. A pending media upload is a created MXC URI where (a)
+        user can have. A pending media upload is a created `mxc://` URI where (a)
         the media has not yet been uploaded, and (b) has not yet expired (the
         `unused_expires_at` timestamp has not yet passed). In both cases, the
         server should respond with an HTTP 429 error with an errcode of
@@ -228,7 +228,7 @@ paths:
       parameters: []
       responses:
         200:
-          description: The [MXC URI](/client-server-api/#matrix-content-mxc-uris) for the uploaded content.
+          description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for the uploaded content.
           schema:
             type: object
             required: ["content_uri"]
@@ -237,7 +237,7 @@ paths:
                 type: string
                 format: uri
                 description: |-
-                  The [MXC URI](/client-server-api/#matrix-content-mxc-uris) at
+                  The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) at
                   which the content will be available, once it is uploaded.
                 example: "mxc://example.com/AQwafuaFswefuhsfAFAgsw"
               unused_expires_at:
