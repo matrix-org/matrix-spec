@@ -109,6 +109,20 @@ paths:
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
       parameters:
+        - in: path
+          type: string
+          name: serverName
+          x-example: matrix.org
+          required: true
+          description: |
+            The server name from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the authoritory component).
+        - in: path
+          type: string
+          name: mediaId
+          x-example: ascERGshawAWawugaAcauga
+          required: true
+          description: |
+            The media ID from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the path component).
         - in: header
           name: Content-Type
           type: string
