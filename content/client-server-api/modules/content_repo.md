@@ -7,7 +7,7 @@ user wants to send to a room would be uploaded here, as would an avatar
 the user wants to use.
 
 Uploads are POSTed to a resource on the user's local homeserver which
-returns a `mxc://` URI which can later be used to GET the download. Content
+returns an `mxc://` URI which can later be used to GET the download. Content
 is downloaded from the recipient's local homeserver, which must first
 transfer the content from the origin homeserver using the same API
 (unless the origin and destination homeservers are the same).
