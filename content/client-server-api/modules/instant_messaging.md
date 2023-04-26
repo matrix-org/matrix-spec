@@ -53,7 +53,7 @@ the tag.
 | `font` | `data-mx-bg-color`, `data-mx-color`, `color`                                                                                               |
 | `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
 | `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
-| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (MXC) URI](#matrix-content-mxc-uris))                           |
+| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
 
