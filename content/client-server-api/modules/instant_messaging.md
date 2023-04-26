@@ -53,7 +53,7 @@ the tag.
 | `font` | `data-mx-bg-color`, `data-mx-color`, `color`                                                                                               |
 | `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
 | `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
-| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (MXC) URI](#matrix-content-mxc-uris))                           |
+| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
 
@@ -315,7 +315,7 @@ When sending a spoiler, clients SHOULD provide the fallback in the `body` as sho
 (including the reason). The fallback SHOULD NOT include the text containing spoilers since
 `body` might show up in text-only clients or in notifications. To prevent spoilers showing up in
 such situations, clients are strongly encouraged to first upload the text containing spoilers
-to the media repository, then reference the MXC URI in a markdown-style link, as shown above.
+to the media repository, then reference the `mxc://` URI in a markdown-style link, as shown above.
 
 Clients SHOULD render spoilers differently with some sort of disclosure. For example, the
 client could blur the actual text and ask the user to click on it for it to be revealed.

@@ -297,7 +297,7 @@ paths:
                     avatar_url:
                       type: string
                       format: uri
-                      description: The mxc avatar url of the user this object is representing.
+                      description: The avatar of the user this object is representing, as an [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris).
                 description: A map from user ID to a RoomMember object.
                 type: object
         403:

@@ -59,7 +59,7 @@ paths:
             format: byte
       responses:
         200:
-          description: The [MXC URI](/client-server-api/#matrix-content-mxc-uris) for the uploaded content.
+          description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for the uploaded content.
           schema:
             type: object
             required: ["content_uri"]
@@ -67,7 +67,7 @@ paths:
               content_uri:
                 type: string
                 format: uri
-                description: "The [MXC URI](/client-server-api/#matrix-content-mxc-uris) to the uploaded content."
+                description: "The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to the uploaded content."
           examples:
             application/json: {
               "content_uri": "mxc://example.com/AQwafuaFswefuhsfAFAgsw"
@@ -393,7 +393,7 @@ paths:
                 type: string
                 format: uri
                 description: |-
-                  An [MXC URI](/client-server-api/#matrix-content-mxc-uris) to the image. Omitted if there is no image.
+                  An [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to the image. Omitted if there is no image.
           examples:
             application/json: {
                 "og:title": "Matrix Blog Post",
