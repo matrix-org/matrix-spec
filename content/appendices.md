@@ -598,6 +598,13 @@ character set:
 
     extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
 
+##### User IDs over federation
+
+Due to a lack of validation in original Matrix homeserver implementations,
+the localpart of user IDs over federation may contain any valid unicode
+codepoints except `:`. A future spec change may create a new room version
+to disallow such user IDs.
+
 ##### Mapping from other character sets
 
 In certain circumstances it will be desirable to map from a wider
@@ -645,6 +652,10 @@ Room IDs are case-sensitive. They are not meant to be
 human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
+The localpart of a room ID (`opaque_id` above) may contain any valid
+unicode codepoints except `:`, but it is recommended to only include
+ASCII letters and digits when generating them.
+
 #### Room Aliases
 
 A room may have zero or more aliases. A room alias has the format:
@@ -655,8 +666,11 @@ The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
 
-Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
-domain).
+The localpart of a room alias may contain any valid unicode codepoints
+except `:`.
+
+Room aliases MUST NOT exceed 255 bytes as UTF-8 (including the `#` sigil
+and the domain).
 
 #### Event IDs
 
