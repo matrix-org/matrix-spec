@@ -9,6 +9,18 @@ communication is supported (e.g. between two peers, or between a peer
 and a multi-point conferencing unit). This means that clients MUST only
 send call events to rooms with exactly two participants.
 
+All VoIP events have a `version` field. This will be used to determine whether
+devices support this new version of the protocol. For example, clients can use
+this field to know whether to expect an `m.call.select_answer` event from their
+opponent. If clients see events with `version` other than `0` or `"1"`
+(including, for example, the numeric value `1`), they should treat these the
+same as if they had `version` == `"1"`.
+
+Note that this implies any and all future versions of VoIP events should be
+backwards-compatible.  If it does become necessary to introduce a non
+backwards-compatible VoIP spec, the intention would be for it to simply use a
+separate set of event types.
+
 #### Events
 
 {{% event-group group_name="m.call" %}}
