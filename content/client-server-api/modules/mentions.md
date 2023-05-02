@@ -2,25 +2,49 @@
 ### User and room mentions
 
 This module allows users to mention other users and rooms within a room message.
-This is achieved by including a [Matrix URI](/appendices/#uris) in the HTML body of
-an [m.room.message](#mroommessage) event. This module does not have any server-specific
-behaviour to it.
+This is achieved by including metadata in the `m.mentions` content property of
+the event. The `m.mentions` propert consists of an object with two fields:
 
-Mentions apply only to [m.room.message](#mroommessage) events where the `msgtype` is
+* `user_ids`: A list of Matrix IDs of mentioned users.
+* `room`: A boolean set to `true` to mention the room. (`room` should otherwise
+  not be included on the event.)
+
+Although it is possible to silently mention users, it is recommended to include a
+[Matrix URI](/appendices/#uris) in the HTML body of  an [m.room.message](#mroommessage)
+event. This applies only to [m.room.message](#mroommessage) events where the `msgtype` is
 `m.text`, `m.emote`, or `m.notice`. The `format` for the event must be
 `org.matrix.custom.html` and therefore requires a `formatted_body`.
 
 To make a mention, reference the entity being mentioned in the
-`formatted_body` using an anchor, like so:
+`m.mentions` property, like so:
 
 ```json
 {
     "body": "Hello Alice!",
     "msgtype": "m.text",
     "format": "org.matrix.custom.html",
-    "formatted_body": "Hello <a href='https://matrix.to/#/@alice:example.org'>Alice</a>!"
+    "formatted_body": "Hello <a href='https://matrix.to/#/@alice:example.org'>Alice</a>!",
+    "m.mentions": {
+        "user_ids": ["@alice:example.org"]
+    }
 }
 ```
+
+Similarly, the entire room can be mentioned:
+
+```json
+{
+    "body": "Hello @room!",
+    "msgtype": "m.text",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "Hello @room!",
+    "m.mentions": {
+        "room": true
+    }
+}
+```
+
+Additionally, see [the `.m.rule.is_user_mention` and `.m.rule.is_room_mention` push rules](#predefined-rules).
 
 #### Client behaviour
 
@@ -45,13 +69,18 @@ Clients should display mentions differently from other elements. For
 example, this may be done by changing the background color of the
 mention to indicate that it is different from a normal link.
 
-If the current user is mentioned in a message (either by a mention as
-defined in this module or by a push rule), the client should show that
+If the current user is mentioned in a message, the client should show that
 mention differently from other mentions, such as by using a red
 background color to signify to the user that they were mentioned.
 
 When clicked, the mention should navigate the user to the appropriate
 user or room information.
+
+TODO Behavior with replies.
+
+TODO Behavior with edits.
+
+TODO Always include `m.mentions` property.
 
 {{% boxes/note %}}
 Similar to legacy [matrix.to URLs](/appendices/#matrixto-navigation),
