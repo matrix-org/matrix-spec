@@ -54,6 +54,8 @@ Or a rejected call:
 
 Calls are negotiated according to the WebRTC specification.
 
+##### Streams
+
 Clients are expected to send one stream with one track of kind `audio` (creating a
 voice call). They can optionally send a second track in the same stream of kind
 `video` (creating a video call).
