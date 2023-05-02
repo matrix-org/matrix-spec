@@ -69,6 +69,19 @@ track.
 A client may send other streams and tracks but the behaviour of the other party
 with respect to presenting such streams and tracks is undefined.
 
+##### Invitees
+The `invitee` field should be added whenever the call is intended for one
+specific user , and should be set to the Matrix user ID of that user. Invites
+without an `invitee` field are defined to be intended for any member of the
+room other than the sender of the event.
+
+Clients should consider an incoming call if they see a non-expired invite event where the `invitee` field is either
+absent or equal to their user's Matrix ID, however they should evaluate whether or not to ring based on their
+user's trust relationship with the callers and/or where the call was placed. As a starting point, it is
+suggested that clients ignore call invites from users in public rooms. It is strongly recommended that
+when clients do not ring for an incoming call invite, they still display the call invite in the room and
+annotate that it was ignored.
+
 ##### Glare
 
 "Glare" is a problem which occurs when two users call each other at

@@ -36,6 +36,10 @@
                 "lifetime": {
                     "type": "integer",
                     "description": "The time in milliseconds that the invite is valid for. Once the invite age exceeds this value, clients should discard it. They should also no longer show the call as awaiting an answer in the UI."
+                },
+                "invitee": {
+                    "type": "string",
+                    "description": "The ID of the user being called.",
                 }
             },
             "required": ["call_id", "offer", "version", "lifetime"]
