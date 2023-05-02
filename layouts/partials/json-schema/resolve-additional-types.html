@@ -43,17 +43,12 @@
     */}}
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object.additionalProperties) }}
-
-            {{ range $key, $property := $this_object.additionalProperties.properties }}
-                {{ $additional_objects = partial "get-additional-objects" (dict
-                    "this_object" $property
-                    "additional_objects" $additional_objects
-                    "anchor_base" $anchor_base
-                    "name" (printf "%s.%s" $name $key)
-                ) }}
-            {{ end }}
-
+            {{ $additional_objects = partial "get-additional-objects" (dict
+                "this_object" $this_object.additionalProperties
+                "additional_objects" $additional_objects
+                "anchor_base" $anchor_base
+                "name" (printf "%s.additional" $name)
+            ) }}
         {{ end }}
     {{ end }}
 
