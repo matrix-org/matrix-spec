@@ -54,6 +54,19 @@ Or a rejected call:
 
 Calls are negotiated according to the WebRTC specification.
 
+Clients are expected to send one stream with one track of kind `audio` (creating a
+voice call). They can optionally send a second track in the same stream of kind
+`video` (creating a video call).
+
+Clients implementing this specification use the first stream and will ignore
+any streamless tracks. Note that in the Javascript WebRTC API, this means
+`addTrack()` must be passed two parameters: a track and a stream, not just a
+track, and in a video call the stream must be the same for both audio and video
+track.
+
+A client may send other streams and tracks but the behaviour of the other party
+with respect to presenting such streams and tracks is undefined.
+
 ##### Glare
 
 "Glare" is a problem which occurs when two users call each other at
