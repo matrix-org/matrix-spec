@@ -435,9 +435,7 @@ Definition:
     "default": true,
     "enabled": false,
     "conditions": [],
-    "actions": [
-        "dont_notify"
-    ]
+    "actions": []
 }
 ```
 
@@ -459,9 +457,7 @@ Definition:
             "pattern": "m.notice",
         }
     ],
-    "actions": [
-        "dont_notify",
-    ]
+    "actions": []
 }
 ```
 
@@ -521,9 +517,7 @@ Definition:
             "pattern": "m.room.member"
         }
     ],
-    "actions": [
-        "dont_notify"
-    ]
+    "actions": []
 }
 ```
 
