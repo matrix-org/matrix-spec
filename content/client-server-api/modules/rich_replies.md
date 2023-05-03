@@ -177,3 +177,33 @@ This is where the reply goes.
 For `m.image`, the text should be `"sent an image."`. For `m.video`, the
 text should be `"sent a video."`. For `m.audio`, the text should be
 `"sent an audio file"`.
+
+#### Mentioning the replied to user
+
+In order to notify users of the reply, it may be desirable to include the `sender`
+of the replied to event and any users mentioned in that event. See
+[user and room mentions](#user-and-room-mentions) for additional information.
+
+An example including mentioning the original sender and other users:
+
+```json5
+{
+  "content": {
+    "m.relates_to": {
+      "m.in_reply_to": {
+        "event_id": "$another_event"
+      }
+    },
+    "body": "That sounds like a great idea!",
+    "m.mentions": {
+      "user_ids": [
+        // The sender of $another_event.
+        "@alice:example.org",
+        // Another Matrix ID copied from the m.mentions property of $another_event.
+        "@bob:example.org"
+      ]
+    }
+  },
+  // other fields as required by events
+}
+```

@@ -76,11 +76,11 @@ background color to signify to the user that they were mentioned.
 When clicked, the mention should navigate the user to the appropriate
 user or room information.
 
-TODO Behavior with replies.
-
 TODO Behavior with edits.
 
 TODO Always include `m.mentions` property.
+
+TODO Note that users should *never* include their own Matrix ID in `m.mentions`.
 
 {{% boxes/note %}}
 Similar to legacy [matrix.to URLs](/appendices/#matrixto-navigation),
