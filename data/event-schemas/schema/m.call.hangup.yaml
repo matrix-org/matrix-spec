@@ -29,7 +29,7 @@
                     ]
                 }
             },
-            "required": ["call_id", "version"]
+            "required": ["call_id", "version", "party_id"]
         },
         "type": {
             "type": "string",
