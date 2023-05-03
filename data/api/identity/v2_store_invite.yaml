@@ -158,7 +158,7 @@ paths:
                   required: ['public_key', 'key_validity_url']
               display_name:
                 type: string
-                description: The generated (redacted) display_name.
+                description: The generated (redacted) display name.
             required: ['token', 'public_keys', 'display_name']
           examples:
             application/json: {
