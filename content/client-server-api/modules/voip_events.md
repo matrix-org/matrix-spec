@@ -21,6 +21,26 @@ backwards-compatible.  If it does become necessary to introduce a non
 backwards-compatible VoIP spec, the intention would be for it to simply use a
 separate set of event types.
 
+#### Party Identifiers
+Whenever a client first participates in a new call, it generates a `party_id` for itself to use for the
+duration of the call. This needs to be long enough that the chance of a collision between multiple devices
+both generating an answer at the same time generating the same party ID is vanishingly small: 8 uppercase +
+lowercase alphanumeric characters is recommended. Parties in the call are identified by the tuple of
+`(user_id, party_id)`.
+
+The client  adds a `party_id` field containing this ID to the top-level of the content of all VoIP events
+it sends on the call, including `m.call.invite`. Clients use this to identify remote echo of their own
+events: since a user may now call themselves, they can no longer ignore events from their own user. This
+field also identifies different answers sent by different clients to an invite, and matches `m.call.candidates`
+events to their respective answer/invite.
+
+A client implementation may choose to use the device ID used in end-to-end cryptography for this purpose,
+or it may choose, for example, to use a different one for each call to avoid leaking information on which
+devices were used in a call (in an unencrypted room) or if a single device (ie. access token) were used to
+send signalling for more than one call party.
+
+A grammar for `party_id` is defined [below](#specify-exact-grammar-for-voip-ids).
+
 #### Events
 
 {{% event-group group_name="m.call" %}}

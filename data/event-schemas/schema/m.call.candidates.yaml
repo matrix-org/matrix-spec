@@ -35,6 +35,9 @@
                         "required": ["candidate", "sdpMLineIndex", "sdpMid"]
                     }
                 },
+                "party_id": {
+                    "This identifies the party that sent this event. A client may choose to re-use the device ID from end-to-end cryptography for the value of this field. "
+                },
                 "version": {
                     "type": "integer",
                     "description": "The version of the VoIP specification this message adheres to. This specification is version 1. This field is a string such that experimental implementations can use non-integer versions. This field was an integer in the previous spec version and implementations must accept an integer 0."
