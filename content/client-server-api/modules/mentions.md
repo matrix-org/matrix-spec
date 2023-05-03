@@ -45,6 +45,13 @@ Similarly, the entire room can be mentioned:
 ```
 
 Additionally, see [the `.m.rule.is_user_mention` and `.m.rule.is_room_mention` push rules](#predefined-rules).
+Users should not add their own Matrix ID to the `m.mentions` property as outgoing
+messages cannot self-notify.
+
+To disable legacy behaviour of notifications occurring due to matching against
+the localpart of Matrix IDs and display names it is recommended that clients include
+a `m.mentions` property on each event. If there are no mentions to include it can
+be an empty object.
 
 #### Client behaviour
 
@@ -77,10 +84,6 @@ When clicked, the mention should navigate the user to the appropriate
 user or room information.
 
 TODO Behavior with edits.
-
-TODO Always include `m.mentions` property.
-
-TODO Note that users should *never* include their own Matrix ID in `m.mentions`.
 
 {{% boxes/note %}}
 Similar to legacy [matrix.to URLs](/appendices/#matrixto-navigation),
