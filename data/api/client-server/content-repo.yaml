@@ -350,7 +350,7 @@ paths:
             "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/download/{serverName}/{mediaId}/{fileName}":
+  "/media/v3/download/{serverName}/{mediaId}/{fileName}":
     get:
       summary: Download content from the content repository overriding the file name
       description: |-
