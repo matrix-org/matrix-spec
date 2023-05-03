@@ -36,7 +36,8 @@
                     }
                 },
                 "party_id": {
-                    "This identifies the party that sent this event. A client may choose to re-use the device ID from end-to-end cryptography for the value of this field. "
+                    "type": "string",
+                    "description": "This identifies the party that sent this event. A client may choose to re-use the device ID from end-to-end cryptography for the value of this field. "
                 },
                 "version": {
                     "type": "integer",
