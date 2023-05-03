@@ -1,0 +1,1 @@
+Remove the `dont_notify` and `coalesce` push rule actions per [MSC3987](https://github.com/matrix-org/matrix-spec-proposals/pull/3987).

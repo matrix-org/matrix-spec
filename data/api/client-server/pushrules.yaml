@@ -75,18 +75,14 @@ paths:
                     ],
                     "override": [
                         {
-                            "actions": [
-                                "dont_notify"
-                            ],
+                            "actions": [],
                             "conditions": [],
                             "default": true,
                             "enabled": false,
                             "rule_id": ".m.rule.master"
                         },
                         {
-                            "actions": [
-                                "dont_notify"
-                            ],
+                            "actions": [],
                             "conditions": [
                                 {
                                     "key": "content.msgtype",
@@ -286,9 +282,7 @@ paths:
             rule itself such as the rule's `actions` and `conditions` if set.
           examples:
             application/json: {
-                "actions": [
-                    "dont_notify"
-                ],
+                "actions": [],
                 "pattern": "cake*lie",
                 "rule_id": "nocake",
                 "enabled": true,

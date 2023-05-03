@@ -147,17 +147,6 @@ actions are defined:
 
 :   This causes each matching event to generate a notification.
 
-`dont_notify`
-
-:   This prevents each matching event from generating a notification.
-
-`coalesce`
-
-:   This enables notifications for matching events but activates homeserver
-    specific behaviour to intelligently coalesce multiple events into a
-    single notification. Not all homeservers may support this. Those that do
-    not support it should treat it as the `notify` action.
-
 `set_tweak`
 
 :   Sets an entry in the `tweaks` dictionary key that is sent in the
@@ -194,6 +183,12 @@ Actions that have no parameters are represented as a string. Otherwise,
 they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
 `{ "set_tweak": "sound", "value": "default" }`.
+
+{{% boxes/note %}}
+Older versions of the Matrix specification included the `dont_notify` and
+`coalesce` actions. These should both be considered no-ops (ignored, not
+rejected) if received from a client.
+{{% /boxes/note %}}
 
 ##### Conditions
 
@@ -440,9 +435,7 @@ Definition:
     "default": true,
     "enabled": false,
     "conditions": [],
-    "actions": [
-        "dont_notify"
-    ]
+    "actions": []
 }
 ```
 
@@ -464,9 +457,7 @@ Definition:
             "pattern": "m.notice",
         }
     ],
-    "actions": [
-        "dont_notify",
-    ]
+    "actions": []
 }
 ```
 
@@ -526,9 +517,7 @@ Definition:
             "pattern": "m.room.member"
         }
     ],
-    "actions": [
-        "dont_notify"
-    ]
+    "actions": []
 }
 ```
 
@@ -882,14 +871,14 @@ To create a rule that suppresses notifications for the room with ID
 
     curl -X PUT -H "Content-Type: application/json" "https://example.com/_matrix/client/v3/pushrules/global/room/%21dj234r78wl45Gh4D%3Amatrix.org?access_token=123456" -d \
     '{
-       "actions" : ["dont_notify"]
+       "actions" : []
      }'
 
 To suppress notifications for the user `@spambot:matrix.org`:
 
     curl -X PUT -H "Content-Type: application/json" "https://example.com/_matrix/client/v3/pushrules/global/sender/%40spambot%3Amatrix.org?access_token=123456" -d \
     '{
-       "actions" : ["dont_notify"]
+       "actions" : []
      }'
 
 To always notify for messages that contain the work 'cake' and set a
