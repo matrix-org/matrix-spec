@@ -75,6 +75,15 @@ Or a rejected call:
 
 Calls are negotiated according to the WebRTC specification.
 
+In response to an invoming invite, a client may do one of several things:
+ * Attempt to accept the call by sending an `m.call.answer`.
+ * Actively reject the call everywhere: send an `m.call.reject` as per above, which will stop the call from
+   ringing on all the user's devices and the caller's client will inform them that the user has
+   rejected their call.
+ * Ignore the call: send no events, but stop alerting the user about the call. The user's other
+   devices will continue to ring, and the caller's device will continue to indicate that the call
+   is ringing, and will time the call out in the normal way if no other device responds.
+
 ##### Streams
 
 Clients are expected to send one stream with one track of kind `audio` (creating a
