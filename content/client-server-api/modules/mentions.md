@@ -3,7 +3,7 @@
 
 This module allows users to mention other users and rooms within a room message.
 This is achieved by including metadata in the `m.mentions` content property of
-the event. The `m.mentions` propert consists of an object with two fields:
+the event. The `m.mentions` property consists of an object with two fields:
 
 * `user_ids`: A list of Matrix IDs of mentioned users.
 * `room`: A boolean set to `true` to mention the room. (`room` should otherwise
