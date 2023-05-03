@@ -57,6 +57,7 @@ A call is set up with message events exchanged as follows:
     [..candidates..] -------->
                             [Answers call]
            <--------------- m.call.answer
+    m.call.select_answer ----------->
      [Call is active and ongoing]
            <--------------- m.call.hangup
 ```
