@@ -20,7 +20,7 @@ host: localhost:8008
 schemes:
   - https
   - http
-basePath: /_matrix/media/v3
+basePath: /_matrix
 consumes:
   - application/json
   - "*/*"
@@ -30,7 +30,7 @@ produces:
 securityDefinitions:
   $ref: definitions/security.yaml
 paths:
-  "/upload":
+  "/media/v3/upload":
     post:
       summary: Upload some content to the content repository.
       operationId: uploadContent
@@ -101,7 +101,170 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/download/{serverName}/{mediaId}":
+  "/media/v3/upload/{serverName}/{mediaId}":
+    put:
+      summary: Upload content to an `mxc://` URI that was created earlier.
+      description: |-
+        This endpoint permits uploading content to an `mxc://` URI that was created
+        earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
+      operationId: uploadContentToMXC
+      x-addedInMatrixVersion: "1.7"
+      parameters:
+        - in: path
+          type: string
+          name: serverName
+          x-example: matrix.org
+          required: true
+          description: |
+            The server name from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the authoritory component).
+        - in: path
+          type: string
+          name: mediaId
+          x-example: ascERGshawAWawugaAcauga
+          required: true
+          description: |
+            The media ID from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the path component).
+        - in: header
+          name: Content-Type
+          type: string
+          description: The content type of the file being uploaded
+          x-example: "application/pdf"
+        - in: query
+          type: string
+          x-example: "War and Peace.pdf"
+          name: filename
+          description: The name of the file being uploaded
+        - in: body
+          name: "content"
+          description: The content to be uploaded.
+          required: true
+          x-example: "<bytes>" # so the spec shows "<bytes>" without quotes.
+          schema:
+            type: string
+            example: "<bytes>"
+            format: byte
+      responses:
+        200:
+          description: The upload was successful.
+          schema:
+            type: object
+          examples:
+            application/json: {}
+        403:
+          description: |-
+            The user does not have permission to upload the content. Some reasons for this error include:
+
+            - The server does not permit the file type.
+            - The user has reached a quota for uploaded content.
+            - The request comes from a different user than the one that called
+              [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
+
+            A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_FORBIDDEN`.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot upload this content"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+        409:
+          description: |-
+            The endpoint was called with a media ID that already has content. A
+            [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_CANNOT_OVERWRITE_MEDIA`.
+          examples:
+            application/json: {
+              "errcode": "M_CANNOT_OVERWRITE_MEDIA",
+              "error": "Media already uploaded"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+        413:
+          description: |-
+            The uploaded content is too large for the server.
+          examples:
+            application/json: {
+              "errcode": "M_TOO_LARGE",
+              "error": "Cannot upload files larger than 100mb"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
+      tags:
+        - Media
+  "/media/v1/create":
+    post:
+      summary: Create a new `mxc://` URI without uploading the content.
+      description: |-
+        Creates a new `mxc://` URI, independently of the content being uploaded. The content must be provided later
+        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](http://localhost:1313/client-server-api/#put_matrixmediav3uploadservernamemediaid).
+
+        The server may optionally enforce a maximum age for unused IDs,
+        and delete media IDs when the client doesn't start the upload in time,
+        or when the upload was interrupted and not resumed in time. The server
+        should include the maximum POSIX millisecond timestamp to complete the
+        upload in the `unused_expires_at` field in the response JSON. The
+        recommended default expiration is 24 hours which should be enough time
+        to accommodate users on poor connection who find a better connection to
+        complete the upload.
+
+        As well as limiting the rate of requests to create `mxc://` URIs, the server
+        should limit the number of concurrent *pending media uploads* a given
+        user can have. A pending media upload is a created `mxc://` URI where (a)
+        the media has not yet been uploaded, and (b) has not yet expired (the
+        `unused_expires_at` timestamp has not yet passed). In both cases, the
+        server should respond with an HTTP 429 error with an errcode of
+        `M_LIMIT_EXCEEDED`.
+      operationId: createContent
+      consumes: ["application/json"]
+      produces: ["application/json"]
+      x-addedInMatrixVersion: "1.7"
+      security:
+        - accessToken: []
+      # empty json object
+      parameters: []
+      responses:
+        200:
+          description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for the uploaded content.
+          schema:
+            type: object
+            required: ["content_uri"]
+            properties:
+              content_uri:
+                type: string
+                format: uri
+                description: |-
+                  The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) at
+                  which the content will be available, once it is uploaded.
+                example: "mxc://example.com/AQwafuaFswefuhsfAFAgsw"
+              unused_expires_at:
+                type: integer
+                format: int64
+                description: |-
+                  The timestamp (in milliseconds since the unix epoch) when the
+                  generated media id will expire, if media is not uploaded.
+                example: 1647257217083
+        403:
+          description: |-
+            The user does not have permission to upload the content.
+          examples:
+            application/json: {
+              "errcode": "M_FORBIDDEN",
+              "error": "Cannot upload this content"
+            }
+          schema:
+            "$ref": "definitions/errors/error.yaml"
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
+      tags:
+        - Media
+  "/media/v3/download/{serverName}/{mediaId}":
     get:
       summary: "Download content from the content repository."
       operationId: getContent
@@ -131,6 +294,20 @@ paths:
             Indicates to the server that it should not attempt to fetch the media if it is deemed
             remote. This is to prevent routing loops where the server contacts itself. Defaults to
             true if not provided.
+        - in: query
+          type: integer
+          format: int64
+          name: timeout_ms
+          x-example: 5000
+          x-addedInMatrixVersion: "1.7"
+          default: 20000
+          description: |
+            The maximum number of milliseconds that the client is willing to
+            wait to start receiving data, in the case that the content has not
+            yet been uploaded. The default value is 20000 (20 seconds). The
+            content repository can and should impose a maximum value for this
+            parameter. The content repository may also choose to respond before
+            the timeout.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -146,6 +323,10 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
         502:
           description: |-
             The content is too large for the server to serve.
@@ -156,13 +337,20 @@ paths:
             }
           schema:
             "$ref": "definitions/errors/error.yaml"
-        429:
-          description: This request was rate-limited.
+        504:
+          description: |-
+            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_YET_UPLOADED",
+              "error": "Content has not yet been uploaded"
+            }
           schema:
-            "$ref": "definitions/errors/rate_limited.yaml"
+            "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/download/{serverName}/{mediaId}/{fileName}":
+  "/media/v3/download/{serverName}/{mediaId}/{fileName}":
     get:
       summary: Download content from the content repository overriding the file name
       description: |-
@@ -202,6 +390,20 @@ paths:
             Indicates to the server that it should not attempt to fetch the media if it is deemed
             remote. This is to prevent routing loops where the server contacts itself. Defaults to
             true if not provided.
+        - in: query
+          type: integer
+          format: int64
+          name: timeout_ms
+          x-example: 5000
+          x-addedInMatrixVersion: "1.7"
+          default: 20000
+          description: |
+            The maximum number of milliseconds that the client is willing to
+            wait to start receiving data, in the case that the content has not
+            yet been uploaded. The default value is 20000 (20 seconds). The
+            content repository can and should impose a maximum value for this
+            parameter. The content repository may also choose to respond before
+            the timeout.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -218,6 +420,10 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
         502:
           description: |-
             The content is too large for the server to serve.
@@ -228,13 +434,20 @@ paths:
             }
           schema:
             "$ref": "definitions/errors/error.yaml"
-        429:
-          description: This request was rate-limited.
+        504:
+          description: |-
+            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_YET_UPLOADED",
+              "error": "Content has not yet been uploaded"
+            }
           schema:
-            "$ref": "definitions/errors/rate_limited.yaml"
+            "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/thumbnail/{serverName}/{mediaId}":
+  "/media/v3/thumbnail/{serverName}/{mediaId}":
     get:
       summary: Download a thumbnail of content from the content repository
       description: |-
@@ -291,6 +504,20 @@ paths:
             Indicates to the server that it should not attempt to fetch
             the media if it is deemed remote. This is to prevent routing loops
             where the server contacts itself. Defaults to true if not provided.
+        - in: query
+          type: integer
+          format: int64
+          name: timeout_ms
+          x-example: 5000
+          x-addedInMatrixVersion: "1.7"
+          default: 20000
+          description: |
+            The maximum number of milliseconds that the client is willing to
+            wait to start receiving data, in the case that the content has not
+            yet been uploaded. The default value is 20000 (20 seconds). The
+            content repository can and should impose a maximum value for this
+            parameter. The content repository may also choose to respond before
+            the timeout.
       responses:
         200:
           description: "A thumbnail of the requested content."
@@ -325,6 +552,10 @@ paths:
             }
           schema:
             "$ref": "definitions/errors/error.yaml"
+        429:
+          description: This request was rate-limited.
+          schema:
+            "$ref": "definitions/errors/rate_limited.yaml"
         502:
           description: |-
             The remote content is too large for the server to thumbnail.
@@ -335,13 +566,20 @@ paths:
             }
           schema:
             "$ref": "definitions/errors/error.yaml"
-        429:
-          description: This request was rate-limited.
+        504:
+          description: |-
+            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_YET_UPLOADED",
+              "error": "Content has not yet been uploaded"
+            }
           schema:
-            "$ref": "definitions/errors/rate_limited.yaml"
+            "$ref": "definitions/errors/error.yaml"
       tags:
         - Media
-  "/preview_url":
+  "/media/v3/preview_url":
     get:
       summary: "Get information about a URL for a client"
       description: |-
@@ -410,7 +648,7 @@ paths:
             "$ref": "definitions/errors/rate_limited.yaml"
       tags:
         - Media
-  "/config":
+  "/media/v3/config":
     get:
       summary: Get the configuration for the content repository.
       description: |-
