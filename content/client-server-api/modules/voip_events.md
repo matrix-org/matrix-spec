@@ -39,7 +39,7 @@ or it may choose, for example, to use a different one for each call to avoid lea
 devices were used in a call (in an unencrypted room) or if a single device (ie. access token) were used to
 send signalling for more than one call party.
 
-A grammar for `party_id` is defined [below](#specify-exact-grammar-for-voip-ids).
+A grammar for `party_id` is defined [below](#grammar-for-voip-ids).
 
 #### Politeness
 In line with WebRTC perfect negotiation (https://w3c.github.io/webrtc-pc/#perfect-negotiation-example)
