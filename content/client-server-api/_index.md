@@ -24,7 +24,7 @@ Authentication](#client-authentication) for details).
 
 All `POST` and `PUT` endpoints, with the exception of [`POST
 /_matrix/media/v3/upload`](#post_matrixmediav3upload) and [`PUT
-/_matrix/media/v3/upload/{serverName}/{mediaId}`](http://localhost:1313/client-server-api/#put_matrixmediav3uploadservernamemediaid),
+/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
