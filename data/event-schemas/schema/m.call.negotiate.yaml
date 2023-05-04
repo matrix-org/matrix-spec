@@ -1,0 +1,90 @@
+---
+type: object
+description: |
+  Provides SDP negotiation semantics for media pause, hold/resume, ICE restarts
+  and voice/video call up/downgrading. Clients should implement & honour hold
+  functionality as per WebRTC's recommendation:
+  https://www.w3.org/TR/webrtc/#hold-functionality
+
+  If both the invite event and the accepted answer event have `version` equal
+  to `"1"`, either party may send `m.call.negotiate` with a `description` field
+  to offer new SDP to the other party. This event has `call_id` with the ID of
+  the call and `party_id` equal to the client's party ID for that call.  The
+  caller ignores any negotiate events with `party_id` + `user_id` tuple not
+  equal to that of the answer it accepted and the callee ignores any negotiate
+  events with `party_id` + `user_id` tuple not equal to that of the caller.
+  Clients should use the `party_id` field to ignore the remote echo of their
+  own negotiate events.
+
+  This has a `lifetime` field as in `m.call.invite`, after which the sender of
+  the negotiate event should consider the negotiation failed (timed out) and
+  the recipient should ignore it.
+
+  The `description` field is the same as the `offer` field in `m.call.invite`
+  and `answer` field in `m.call.answer` and is an `RTCSessionDescriptionInit`
+  object as per https://www.w3.org/TR/webrtc/#dom-rtcsessiondescriptioninit.
+
+  Once an `m.call.negotiate` event is received, the client must respond with
+  another `m.call.negotiate` event, with the SDP answer (with `"type": "answer"`)
+  in the `description` property.
+
+  This MSC also proposes clarifying the `m.call.invite` and `m.call.answer`
+  events to state that the `offer` and `answer` fields respectively are objects
+  of type `RTCSessionDescriptionInit`.  Hence the `type` field, whilst
+  redundant in these events, is included for ease of working with the WebRTC
+  API and is mandatory. Receiving clients should not attempt to validate the
+  `type` field, but simply pass the object into the WebRTC API.
+allOf:
+- "$ref": core-event-schema/room_event.yaml
+properties:
+  content:
+    type: object
+    properties:
+      call_id:
+        type: string
+        description: The ID of the call this event relates to.
+      version:
+        type: integer
+        description: The version of the VoIP specification this message adheres to.
+          This specification is version 1. This field is a string such that experimental
+          implementations can use non-integer versions. This field was an integer
+          in the previous spec version and implementations must accept an integer
+          0.
+      party_id:
+        type: string
+        description: This identifies the party that sent this event. A client may
+          choose to re-use the device ID from end-to-end cryptography for the value
+          of this field.
+      offer:
+        type: object
+        title: Offer
+        description: The session description object
+        properties:
+          type:
+            type: string
+            enum:
+            - offer
+            description: The type of session description.
+          sdp:
+            type: string
+            description: The SDP text of the session description.
+        required:
+        - type
+        - sdp
+      lifetime:
+        type: integer
+        description: The time in milliseconds that the invite is valid for.
+          Once the invite age exceeds this value, clients should discard it.
+          They should also no longer show the call as awaiting an answer in the
+          UI.
+    required:
+    - call_id
+    - version
+    - party_id
+    - offer
+    - lifetime
+  type:
+    type: string
+    enum:
+    - m.call.negotiate
+
