@@ -4,6 +4,7 @@
   "content": {
     "version" : "1",
     "party_id": "67890",
-    "call_id": "12345"
+    "call_id": "12345",
+    "reason": "user_hangup"
   }
 }

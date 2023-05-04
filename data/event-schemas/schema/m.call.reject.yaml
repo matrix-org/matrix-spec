@@ -50,7 +50,6 @@ properties:
     - call_id
     - version
     - party_id
-    - reason
   type:
     type: string
     enum:
