@@ -1,6 +1,7 @@
 ---
 type: object
-description: If the `m.call.invite` event has `version` `"1"`, a client wishing to
+description: |
+  If the `m.call.invite` event has `version` `"1"`, a client wishing to
   reject the call sends an `m.call.reject` event. This rejects the call on all devices,
   but if the calling device sees an `answer` before the `reject`, it disregards the
   reject event and carries on. The reject has a `party_id` just like an answer, and
@@ -9,6 +10,8 @@ description: If the `m.call.invite` event has `version` `"1"`, a client wishing 
   of its answer, it ends the call. If the `m.call.invite` event has `version` `0`,
   the callee sends an `m.call.hangup` event. If the calling user chooses to end the
   call before setup is complete, the client sends `m.call.hangup` as previously.
+
+  The meanings of the `reason` codes are the same as in [`m.call.hangup`](#mcallhangup).
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
@@ -32,17 +35,22 @@ properties:
           of this field. '
       reason:
         type: string
-        description: Optional error reason for the hangup. This should not be provided
-          when the user naturally ends or rejects the call. When there was an error
-          in the call negotiation, this should be `ice_failed` for when ICE negotiation
-          fails or `invite_timeout` for when the other party did not answer in time.
+        description: Reason for the hangup. Note that this was optional in
+          previous previous versions of the spec, so a missing value should be
+          treated as `user_hangup`.
         enum:
+        - ice_timeout
         - ice_failed
         - invite_timeout
+        - user_hangup
+        - user_media_failed
+        - user_busy
+        - unknown_error
     required:
     - call_id
     - version
     - party_id
+    - reason
   type:
     type: string
     enum:
