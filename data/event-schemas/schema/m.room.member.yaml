@@ -7,13 +7,9 @@ description: |-
   The following membership states are specified:
 
   - `invite` - The user has been invited to join a room, but has not yet joined it. They may not participate in the room until they join.
-
   - `join` - The user has joined the room (possibly after accepting an invite), and may participate in it.
-
   - `leave` - The user was once joined to the room, but has since left (possibly by choice, or possibly by being kicked).
-
   - `ban` - The user has been banned from the room, and is no longer allowed to join it until they are un-banned from the room (by having their membership state set to a value other than `ban`).
-
   - `knock` - The user has knocked on the room, requesting permission to participate. They may not participate in the room until they join.
 
   The `third_party_invite` property will be set if this invite is an `invite` event and is the successor of an `m.room.third_party_invite` event, and absent otherwise.
