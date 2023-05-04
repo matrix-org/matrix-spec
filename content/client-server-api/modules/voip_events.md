@@ -73,7 +73,7 @@ up the call.
 #### ICE Candidate Batching
 Clients should aim to send a small number of candidate events, with guidelines:
  * ICE candidates which can be discovered immediately or almost immediately in the invite/answer
-   event itself (eg. host candidates). If server reflexive or relay candiates can be gathered in
+   event itself (eg. host candidates). If server reflexive or relay candidates can be gathered in
    a sufficiently short period of time, these should be sent here too. A delay of around 200ms is
    suggested as a starting point.
  * The client should then allow some time for further candidates to be gathered in order to batch them,

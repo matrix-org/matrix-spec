@@ -11,7 +11,7 @@ description: |
       media had previously been received successfully, even if the ICE renegotiation itself failed.
    * `invite_timeout`: The other party did not answer in time.
    * `user_hangup`: Clients must now send this code when the user chooses to end the call, although
-     for backwards compatability with version 0, a clients should treat an absence of the `reason`
+     for backwards compatibility with version 0, a clients should treat an absence of the `reason`
      field as `user_hangup`.
    * `user_media_failed`: The client was unable to start capturing media in such a way that it is unable
      to continue the call.
