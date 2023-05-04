@@ -41,6 +41,85 @@ send signalling for more than one call party.
 
 A grammar for `party_id` is defined [below](#specify-exact-grammar-for-voip-ids).
 
+#### Politeness
+In line with WebRTC perfect negotiation (https://w3c.github.io/webrtc-pc/#perfect-negotiation-example)
+there are rules to establish which party is polite in the process of renegotiation. The callee is
+always the polite party. In a glare situation, the politenes of a party is therefore determined by
+whether the inbound or outbound call is used: if a client discards its outbound call in favour of
+an inbound call, it becomes the polite party.
+
+#### Call Event Liveness
+`m.call.invite` contains a `lifetime` field that indicates how long the offer is valid for. When
+a client receives an invite, it should use the event's `age` field in the sync response plus the
+time since it received the event from the homeserver to determine whether the invite is still valid.
+The use of the `age` field ensures that incorrect clocks on client devices don't break calls.
+
+If the invite is still valid *and will remain valid for long enough for the user to accept the call*,
+it should signal an incoming call. The amount of time allowed for the user to accept the call may
+vary between clients. For example, it may be longer on a locked mobile device than on an unlocked
+desktop device.
+
+The client should only signal an incoming call in a given room once it has completed processing the
+entire sync response and, for encrypted rooms, attempted to decrypt all encrypted events in the
+sync response for that room. This ensures that if the sync response contains subsequent events that
+indicate the call has been hung up, rejected, or answered elsewhere, the client does not signal it.
+
+If on startup, after processing locally stored events, the client determines that there is an invite
+that is still valid, it should still signal it but only after it has completed a sync from the homeserver.
+
+The minimal recommended lifetime is 90 seconds - this should give the user enough time to actually pick
+up the call.
+
+#### ICE Candidate Batching
+Clients should aim to send a small number of candidate events, with guidelines:
+ * ICE candidates which can be discovered immediately or almost immediately in the invite/answer
+   event itself (eg. host candidates). If server reflexive or relay candiates can be gathered in
+   a sufficiently short period of time, these should be sent here too. A delay of around 200ms is
+   suggested as a starting point.
+ * The client should then allow some time for further candidates to be gathered in order to batch them,
+   rather than sending each candidate as it arrives. A starting point of 2 seconds after sending the
+   invite or 500ms after sending the answer is suggested as a starting point (since a delay is natural
+   anyway after the invite whilst the client waits for the user to accept it).
+
+#### End-of-candidates
+An ICE candidate whose value is the empty string means that no more ICE candidates will
+be sent. Clients must send such a candidate in an `m.call.candidates` message.
+The WebRTC spec requires browsers to generate such a candidate, however note that at time of writing,
+not all browsers do (Chrome does not, but does generate an `icegatheringstatechange` event). The
+client should send any remaining candidates once candidate generation finishes, ignoring timeouts above.
+This allows bridges to batch the candidates together when bridging to protocols that don't support
+trickle ICE.
+
+#### DTMF
+Matrix clients can send DTMF as specified by WebRTC. The WebRTC standard as of August
+2020 does not support receiving DTMF but a Matrix client can receive and interpret the DTMF sent
+in the RTP payload.
+
+#### Grammar for VoIP IDs
+`call_id`s and `party_id` are explicitly defined to be between 1 and 255 characters long, consisting
+of the characters `[0-9a-zA-Z._~-]`.
+
+(Note that this matches the grammar of 'opaque IDs' from
+[MSC1597](https://github.com/matrix-org/matrix-spec-proposals/blob/rav/proposals/id_grammar/proposals/1597-id-grammar.md#opaque-ids),
+and that of the `id` property of the
+ [`m.login.sso` flow schema](https://spec.matrix.org/v1.5/client-server-api/#definition-mloginsso-flow-schema).)
+
+#### Behaviour on Room Leave
+If the client sees the user it is in a call with leave the room, the client should treat this
+as a hangup event for any calls that are in progress. No specific requirement is given for the
+situation where a client has sent an invite and the invitee leaves the room, but the client may
+wish to treat it as a rejection if there are no more users in the room who could answer the call
+(eg. the user is now alone or the `invitee` field was set on the invite).
+
+The same behaviour applies when a client is looking at historic calls.
+
+#### Supported Codecs
+The Matrix spec does not mandate particular audio or video codecs, but instead defers to the
+WebRTC spec. A compliant matrix VoIP client will behave in the same way as a supported 'browser'
+in terms of what codecs it supports and what variants thereof. The latest WebRTC specification
+applies, so clients should keep up to date with new versions of the WebRTC specification whether
+or not there have been any changes to the Matrix spec.
+
 #### Events
 
 {{% event-group group_name="m.call" %}}
