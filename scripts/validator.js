@@ -1,7 +1,7 @@
 "use strict";
 var fs = require("fs");
 var nopt = require("nopt");
-var parser = require("swagger-parser");
+var parser = require("@apidevtools/swagger-parser");
 var path = require("path");
 
 var opts = nopt({
@@ -14,8 +14,8 @@ var opts = nopt({
 
 if (opts.help) {
     console.log(
-        "Use swagger-parser to validate against Swagger 2.0\n"+
-        "Usage:\n"+
+        "Use swagger-parser to validate against OpenAPI 3.1.0\n" +
+        "Usage:\n" +
         "  node validator.js -s <schema_file_or_folder>"
     );
     process.exit(0);
@@ -26,7 +26,7 @@ if (!opts.schema) {
 }
 
 
-var errFn = function(err, api) {
+var errFn = function (err, api) {
     if (!err) {
         return;
     }
@@ -45,7 +45,7 @@ var errFn = function(err, api) {
 function makeHandler(scope) {
     if (!scope)
         scope = "Schema";
-    return function(err, api, metadata) {
+    return function (err, api, metadata) {
         if (err) {
             console.error("%s is not valid.", scope || "Schema");
             errFn(err, api, metadata); // Won't return
@@ -68,11 +68,11 @@ function makeHandler(scope) {
 var isDir = fs.lstatSync(opts.schema).isDirectory();
 if (isDir) {
     console.log("Checking directory %s for .yaml files...", opts.schema);
-    fs.readdir(opts.schema, function(err, files) {
+    fs.readdir(opts.schema, function (err, files) {
         if (err) {
             errFn(err); // Won't return
         }
-        files.forEach(function(f) {
+        files.forEach(function (f) {
             var suffix = ".yaml";
             if (f.indexOf(suffix, f.length - suffix.length) > 0) {
                 parser.validate(path.join(opts.schema, f), makeHandler(f));
@@ -80,7 +80,7 @@ if (isDir) {
         });
     });
 }
-else{
+else {
     parser.validate(opts.schema, makeHandler(opts.schema));
 }
 
