@@ -207,6 +207,48 @@ processed the events.
 
 {{% http-api spec="application-service" api="transactions" %}}
 
+#### Pinging
+
+{{% added-in v="1.7" %}}
+
+The application service API includes a ping mechanism to allow
+appservices to ensure that the homeserver can reach the appservice.
+Appservices may use this mechanism to detect misconfigurations and
+report them appropriately.
+
+Implementations using this mechanism should take care to not fail
+entirely in the event of temporary issues, e.g. gracefully handling
+cases where the appservice is started before the homeserver.
+
+The mechanism works as follows:
+
+```
+    Typical
+    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+      HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+      HS <--- AS : 200 OK {}
+    AS <--- HS : 200 OK {"duration_ms": 123}
+```
+
+```
+    Incorrect hs_token
+    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+      HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+      HS <--- AS : 401 Unauthorized {"errcode": "M_UNKNOWN_TOKEN"}
+    AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 401, "body": "{\"errcode\": \"M_UNKNOWN_TOKEN\"}"}
+```
+
+```
+    Can't connect to appservice
+    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+      HS -/-> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+    AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}
+```
+
+{{% http-api spec="client-server" api="appservice_ping" %}}
+
+{{% http-api spec="application-service" api="ping" %}}
+
 #### Querying
 
 The application service API includes two querying APIs: for room aliases
