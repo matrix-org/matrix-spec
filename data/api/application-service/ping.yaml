@@ -40,14 +40,6 @@ paths:
       security:
         - homeserverAccessToken: []
       parameters:
-        - in: path
-          name: txnId
-          type: string
-          description: |-
-            The transaction ID for this set of events. Homeservers generate
-            these IDs and they are used to ensure idempotency of requests.
-          required: true
-          x-example: "35"
         - in: body
           name: body
           description: Ping body with optional transaction ID.
