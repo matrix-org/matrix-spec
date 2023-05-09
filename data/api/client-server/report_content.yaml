@@ -29,11 +29,14 @@ securityDefinitions:
 paths:
   "/rooms/{roomId}/report/{eventId}":
     post:
-      summary: Reports an event as inappropriate.
+      summary: Reports an event as inappropriate. You must have permission to
+        retrieve this event e.g. by being a member in the room for this event.
       description: |-
         Reports an event as inappropriate to the server, which may then notify
         the appropriate people.
       operationId: reportContent
+      tags:
+        - Reporting content
       parameters:
         - in: path
           type: string
@@ -74,5 +77,13 @@ paths:
             type: object
           examples:
             application/json: {}
-      tags:
-        - Reporting content
+        404:
+          description: |-
+            The event was not found or you do not have permission to read this event.
+          examples:
+            application/json: {
+              "errcode": "M_NOT_FOUND",
+              "error": "The event was not found or you do not have permission to read this event."
+            }
+          schema:
+            $ref: "../client-server/definitions/errors/error.yaml"
