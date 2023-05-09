@@ -54,7 +54,6 @@ paths:
                 description: |-
                   A transaction ID for the ping, copied directly from the
                   client API appservice ping call.
-            required: ["events"]
       responses:
         200:
           description: The hs_token is valid and the ping request was successful.
