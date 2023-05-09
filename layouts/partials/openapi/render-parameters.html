@@ -21,7 +21,13 @@
     {{/* build a dict mapping from name->parameter, which render-object-table expects */}}
     {{ $param_dict := dict }}
     {{ range $parameter := . }}
-        {{ $param_dict = merge $param_dict (dict $parameter.name $parameter )}}
+        {{/*
+            merge the schema at the same level as the rest of the other fields because that is
+            what `render-object-table` expects. Put the schema first so examples in it are
+            overwritten.
+        */}}
+        {{ $param := merge $parameter.schema $parameter }}
+        {{ $param_dict = merge $param_dict (dict $parameter.name $param )}}
     {{ end }}
 
     {{/* and render the parameters */}}

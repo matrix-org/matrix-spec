@@ -38,11 +38,19 @@
 </table>
 
 {{ range $code, $response := $responses }}
-    {{ if $response.schema }}
+    {{/*
+        A response can have several content types so only insert the title once.
+    */}}
+    {{ $is_title_set := false }}
+    {{ range $content_type, $content := $response.content }}
+        {{ if $content.schema }}
 
+            {{ if not $is_title_set }}
+                {{ $is_title_set = true }}
 <h3>{{$code}} response</h3>
+            {{ end }}
 
-        {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $response.schema "path" $path) }}
+        {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $content.schema "path" $path) }}
         {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
         {{/*
@@ -51,9 +59,9 @@
         */}}
         {{ if eq $schema.type "array" }}
             {{ $type_of := "" }}
-            {{ if reflect.IsSlice $schema.items }}
+            {{ if $schema.items.anyOf }}
                 {{ $types := slice }}
-                {{ range $schema.items }}
+                {{ range $schema.items.anyOf }}
                     {{ if .title }}
                         {{ $types = $types | append .title}}
                     {{ else }}
@@ -84,9 +92,9 @@
         */}}
         {{ if or (eq $schema.type "object") (eq $schema.type "array") }}
             {{ $example := partial "json-schema/resolve-example" $schema }}
-            {{ if $response.examples }}
-                {{ $example = partial "json-schema/resolve-refs" (dict "schema" $response.examples "path" $path) }}
-                {{ $example = index $example "application/json" }}
+            {{ if $content.examples }}
+                {{ $example = partial "json-schema/resolve-refs" (dict "schema" $content.examples "path" $path) }}
+                {{ $example = $example.response.value }}
             {{ end }}
 
             {{ $example_json := jsonify (dict "indent" "  ") $example }}
@@ -96,6 +104,7 @@
 ```json
 {{ $example_json }}
 ```
+            {{ end }}
         {{ end }}
     {{ end }}
 {{ end }}
