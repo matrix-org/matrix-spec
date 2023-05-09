@@ -124,7 +124,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: object  # empty json object
               examples:
                 response:
                   value: {}

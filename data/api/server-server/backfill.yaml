@@ -40,8 +40,6 @@ paths:
           required: true
           example:
             - $abc123:matrix.org
-          style: form
-          explode: false
           schema:
             type: array
             items:

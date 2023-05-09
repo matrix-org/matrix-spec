@@ -49,8 +49,6 @@ paths:
           example:
             - "1"
             - "2"
-          style: form
-          explode: false
           schema:
             type: array
             items:
@@ -321,6 +319,18 @@ paths:
                 - origin_server_ts
                 - type
                 - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "join",
+                  "join_authorised_via_users_server": "@anyone:resident.example.org"
+              }
+            }
         required: true
       responses:
         "200":
@@ -356,9 +366,6 @@ paths:
                             description: |-
                               The [PDUs](/server-server-api/#pdus) that make up the auth chain. The event format varies depending
                               on the room version - check the [room version specification](/rooms) for precise event formats.
-                            schema:
-                              type: object
-                              properties: {}
                         state:
                           type: array
                           description: |-
@@ -372,9 +379,6 @@ paths:
                             description: |-
                               The [PDUs](/server-server-api/#pdus) for the fully resolved state of the room. The event format varies depending
                               on the room version - check the [room version specification](/rooms) for precise event formats.
-                            schema:
-                              type: object
-                              properties: {}
                       required:
                         - auth_chain
                         - state

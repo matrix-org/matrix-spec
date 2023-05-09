@@ -55,8 +55,6 @@ paths:
           example:
             - matrix.org
             - elsewhere.ca
-          style: form
-          explode: false
           schema:
             type: array
             items:

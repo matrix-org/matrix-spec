@@ -97,6 +97,8 @@ paths:
               - b
               - f
       responses:
+        # note: this endpoint deliberately does not support rate limiting, therefore a
+        # 429 error response is not included.
         "200":
           description: |-
             The paginated child events which point to the parent. If no events are
@@ -161,6 +163,7 @@ paths:
                   }
       tags:
         - Event relationships
+  # The same as above, with added `/{relType}`
   "/rooms/{roomId}/relations/{eventId}/{relType}":
     get:
       summary: Get the child events for a given parent event, with a given `relType`.
@@ -251,6 +254,8 @@ paths:
               - b
               - f
       responses:
+        # note: this endpoint deliberately does not support rate limiting, therefore a
+        # 429 error response is not included.
         "200":
           description: |-
             The paginated child events which point to the parent. If no events are
@@ -317,6 +322,7 @@ paths:
                   }
       tags:
         - Event relationships
+  # The same as above, with added `/{eventType}`
   "/rooms/{roomId}/relations/{eventId}/{relType}/{eventType}":
     get:
       summary: Get the child events for a given parent event, with a given `relType`
@@ -419,6 +425,8 @@ paths:
               - b
               - f
       responses:
+        # note: this endpoint deliberately does not support rate limiting, therefore a
+        # 429 error response is not included.
         "200":
           description: |-
             The paginated child events which point to the parent. If no events are

@@ -44,12 +44,10 @@ paths:
         - in: query
           name: ver
           description: The room versions the sending server has support for.
-          required: true
+          required: true  # knocking was supported in v7
           example:
             - "1"
             - "7"
-          style: form
-          explode: false
           schema:
             type: array
             items:
@@ -121,7 +119,7 @@ paths:
                       - content
                       - sender
                 required:
-                  - room_version
+                  - room_version  # knocking was added in v7
                   - event
               examples:
                 response:
@@ -273,6 +271,17 @@ paths:
                 - origin_server_ts
                 - type
                 - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "knock"
+              }
+            }
         required: true
       responses:
         "200":

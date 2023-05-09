@@ -16,6 +16,8 @@ info:
   title: Matrix Client-Server Sync Guest API
   version: 1.0.0
 paths:
+  # With an extra " " to disambiguate from the getEvents endpoint
+  # The extra space makes it sort first for what I'm sure is a good reason.
   "/events ":
     get:
       summary: Listen on the event stream of a particular room.

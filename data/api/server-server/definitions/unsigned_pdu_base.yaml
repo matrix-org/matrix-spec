@@ -56,20 +56,21 @@ properties:
       maxItems: 2
       minItems: 2
       items:
-        - type: string
-          title: Event ID
-          example: "$abc123:matrix.org"
-        - type: object
-          title: Event Hash
-          example: {
-            "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
-          }
-          properties:
-            sha256:
-              type: string
-              description: The event hash.
-              example: Base64EncodedSha256HashesShouldBe43BytesLong
-          required: ['sha256']
+        anyOf:
+          - type: string
+            title: Event ID
+            example: "$abc123:matrix.org"
+          - type: object
+            title: Event Hash
+            example: {
+              "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
+            }
+            properties:
+              sha256:
+                type: string
+                description: The event hash.
+                example: Base64EncodedSha256HashesShouldBe43BytesLong
+            required: ['sha256']
   depth:
     type: integer
     description: |-
@@ -91,20 +92,21 @@ properties:
       maxItems: 2
       minItems: 2
       items:
-        - type: string
-          title: Event ID
-          example: "$abc123:matrix.org"
-        - type: object
-          title: Event Hash
-          example: {
-            "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
-          }
-          properties:
-            sha256:
-              type: string
-              description: The event hash.
-              example: Base64EncodedSha256HashesShouldBe43BytesLong
-          required: ['sha256']
+        anyOf:
+          - type: string
+            title: Event ID
+            example: "$abc123:matrix.org"
+          - type: object
+            title: Event Hash
+            example: {
+              "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
+            }
+            properties:
+              sha256:
+                type: string
+                description: The event hash.
+                example: Base64EncodedSha256HashesShouldBe43BytesLong
+            required: ['sha256']
   redacts:
     type: string
     description: For redaction events, the ID of the event being redacted.

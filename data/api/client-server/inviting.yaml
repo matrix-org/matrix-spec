@@ -16,6 +16,8 @@ info:
   title: Matrix Client-Server Room Joining API
   version: 1.0.0
 paths:
+  # With an extra " " to disambiguate from the 3pid invite endpoint
+  # The extra space makes it sort first for what I'm sure is a good reason.
   "/rooms/{roomId}/invite ":
     post:
       summary: Invite a user to participate in a particular room.

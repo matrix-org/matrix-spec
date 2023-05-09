@@ -89,7 +89,7 @@ paths:
             application/json:
               schema:
                 type: object
-                maxProperties: 0
+                maxProperties: 0  # empty json object
               examples:
                 response:
                   value: {}

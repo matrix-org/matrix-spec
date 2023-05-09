@@ -151,6 +151,27 @@ paths:
                 - sender
                 - state_key
                 - content
+            example: {
+              "type": "m.room.member",
+              "room_id": "!abc123:matrix.org",
+              "sender": "@joe:matrix.org",
+              "state_key": "@someone:example.org",
+              "content": {
+                "membership": "invite",
+                "third_party_invite": {
+                  "display_name": "alice",
+                  "signed": {
+                    "mxid": "@alice:localhost",
+                    "token": "abc123",
+                    "signatures": {
+                      "magic.forest": {
+                        "ed25519:3": "fQpGIW1Snz+pwLZu6sTy2aHy/DYWWTspTJRPyNp0PKkymfIsNffysMl6ObMMFdIJhk6g6pwlIqZ54rxo8SLmAg"
+                      }
+                    }
+                  }
+                }
+              }
+            }
         description: A partial `m.room.member` event
         required: true
       responses:
@@ -225,6 +246,8 @@ paths:
                         type: string
                         description: The user ID that sent the invite.
                         example: "@bob:matrix.org"
+                      # TODO (TravisR): Make this reusable when doing IS spec changes
+                      #   also make sure it isn't lying about anything, like the key version
                       signed:
                         type: object
                         title: Identity Server Signatures
@@ -240,6 +263,7 @@ paths:
                             example: "@alice:matrix.org"
                           token:
                             type: string
+                            # TODO: What is this actually?
                             description: A token.
                             example: Hello World
                           signatures:

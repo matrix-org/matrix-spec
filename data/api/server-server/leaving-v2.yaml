@@ -17,6 +17,7 @@ info:
   title: Matrix Federation Leave Room API
   version: 1.0.0
 paths:
+  # Note: there is no v2 of make_leave (yet)
   "/send_leave/{roomId}/{eventId}":
     put:
       summary: Submit a signed leave event to a resident server
@@ -107,6 +108,17 @@ paths:
                 - type
                 - depth
                 - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "leave"
+              }
+            }
         required: true
       responses:
         "200":

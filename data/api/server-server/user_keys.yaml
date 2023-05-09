@@ -63,10 +63,13 @@ paths:
 
                       See the [Client-Server Key Algorithms](/client-server-api/#key-algorithms) section for more information on
                       the Key Object format.
+                    # User
                     additionalProperties:
                       type: object
+                      # Device
                       additionalProperties:
                         type: object
+                        # Key
                         additionalProperties:
                           type: object
                           title: KeyObject

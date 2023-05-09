@@ -174,8 +174,7 @@ paths:
                     The kind of pusher to configure. `"http"` makes a pusher that
                     sends HTTP pokes. `"email"` makes a pusher that emails the
                     user with unread notifications. `null` deletes the pusher.
-                  nullable: true
-                  type: string
+                  type: ["string", "null"]
                 app_id:
                   type: string
                   description: |-

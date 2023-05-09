@@ -52,6 +52,7 @@ paths:
                             might be and could be "alpha", semantically versioned, or arbitrary.
                       required:
                         - version
+                      # TODO: TravisR - Make this render
                       additionalProperties:
                         type: object
                         title: Internationalised Policy

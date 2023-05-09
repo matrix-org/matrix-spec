@@ -200,6 +200,9 @@ paths:
           example: YWxsCgpOb25lLDM1ODcwOA
           schema:
             type: string
+        # XXX: As mentioned in MSC1227, replacing `[not_]membership` with a JSON
+        # filter might be a better alternative.
+        # See https://github.com/matrix-org/matrix-doc/issues/1337
         - in: query
           name: membership
           description: |-

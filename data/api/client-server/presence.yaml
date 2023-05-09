@@ -65,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                type: object  # empty json object
               examples:
                 response:
                   value: {}
@@ -113,8 +113,7 @@ paths:
                       by this user.
                   status_msg:
                     description: The state message for this user if one was set.
-                    nullable: true
-                    type: string
+                    type: ["string", "null"]
                   currently_active:
                     type: boolean
                     description: Whether the user is currently active

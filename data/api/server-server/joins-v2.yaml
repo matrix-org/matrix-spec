@@ -17,6 +17,7 @@ info:
   title: Matrix Federation Join Room API
   version: 1.0.0
 paths:
+  # Note: there is no v2 of make_join (yet)
   "/send_join/{roomId}/{eventId}":
     put:
       summary: Submit a signed join event to a resident server
@@ -138,6 +139,18 @@ paths:
                 - origin_server_ts
                 - type
                 - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "join",
+                  "join_authorised_via_users_server": "@anyone:resident.example.org"
+              }
+            }
         required: true
       responses:
         "200":
@@ -171,9 +184,6 @@ paths:
                     items:
                       type: object
                       title: PDU
-                      schema:
-                        type: object
-                        properties: {}
                     x-changedInMatrixVersion:
                       "1.6": |-
                         reworded to include only consider state events returned in
@@ -190,9 +200,6 @@ paths:
                     items:
                       type: object
                       title: PDU
-                      schema:
-                        type: object
-                        properties: {}
                     x-changedInMatrixVersion:
                       "1.6": permit omission of membership events.
                   event:

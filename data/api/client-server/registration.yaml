@@ -66,6 +66,8 @@ paths:
           name: kind
           required: false
           description: The kind of account to register. Defaults to `user`.
+          # swagger-UI overrides the default with the example, so better make the
+          # example the default.
           example: user
           schema:
             type: string

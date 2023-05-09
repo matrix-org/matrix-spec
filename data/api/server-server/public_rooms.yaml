@@ -159,6 +159,7 @@ paths:
                         - $ref: ../client-server/definitions/public_rooms_chunk.yaml
                         - type: object
                           properties:
+                            # Override description of join_rule
                             join_rule:
                               type: string
                               description: |-

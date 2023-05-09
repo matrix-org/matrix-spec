@@ -38,12 +38,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json:
-            schema:
-              type: string
-              example: <bytes>
-              format: byte
-          "*/*":
+          application/octet-stream:
             schema:
               type: string
               example: <bytes>
@@ -146,12 +141,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json:
-            schema:
-              type: string
-              example: <bytes>
-              format: byte
-          "*/*":
+          application/octet-stream:
             schema:
               type: string
               example: <bytes>
@@ -168,9 +158,6 @@ paths:
               examples:
                 response:
                   value: {}
-            "*/*":
-              schema:
-                type: object
         "403":
           description: |-
             The user does not have permission to upload the content. Some reasons for this error include:
@@ -192,9 +179,6 @@ paths:
                     "errcode": "M_FORBIDDEN",
                     "error": "Cannot upload this content"
                   }
-            "*/*":
-              schema:
-                $ref: definitions/errors/error.yaml
         "409":
           description: |-
             The endpoint was called with a media ID that already has content. A
@@ -210,9 +194,6 @@ paths:
                     "errcode": "M_CANNOT_OVERWRITE_MEDIA",
                     "error": "Media already uploaded"
                   }
-            "*/*":
-              schema:
-                $ref: definitions/errors/error.yaml
         "413":
           description: The uploaded content is too large for the server.
           content:
@@ -225,16 +206,10 @@ paths:
                     "errcode": "M_TOO_LARGE",
                     "error": "Cannot upload files larger than 100mb"
                   }
-            "*/*":
-              schema:
-                $ref: definitions/errors/error.yaml
         "429":
           description: This request was rate-limited.
           content:
             application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
-            "*/*":
               schema:
                 $ref: definitions/errors/rate_limited.yaml
       tags:
@@ -266,6 +241,8 @@ paths:
       x-addedInMatrixVersion: "1.7"
       security:
         - accessToken: []
+      # empty json object
+      parameters: []
       responses:
         "200":
           description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for
@@ -371,24 +348,23 @@ paths:
               schema:
                 type: string
           content:
-            "*/*":
+            application/octet-stream:
               schema:
                 type: string
+                # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
-                format: binary
         "429":
           description: This request was rate-limited.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/rate_limited.yaml
         "502":
           description: The content is too large for the server to serve.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/error.yaml
-            application/json:
               examples:
                 response:
                   value: {
@@ -400,10 +376,9 @@ paths:
             The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
             will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/error.yaml
-            application/json:
               examples:
                 response:
                   value: {
@@ -485,24 +460,24 @@ paths:
               schema:
                 type: string
           content:
-            "*/*":
+            application/octet-stream:
               schema:
                 type: string
+                # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
                 format: binary
         "429":
           description: This request was rate-limited.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/rate_limited.yaml
         "502":
           description: The content is too large for the server to serve.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/error.yaml
-            application/json:
               examples:
                 response:
                   value: {
@@ -514,10 +489,9 @@ paths:
             The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
             will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
           content:
-            "*/*":
+            application/json:
               schema:
                 $ref: definitions/errors/error.yaml
-            application/json:
               examples:
                 response:
                   value: {
@@ -620,11 +594,13 @@ paths:
             image/jpeg:
               schema:
                 type: string
+                # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the thumbnail."
                 format: binary
             image/png:
               schema:
                 type: string
+                # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the thumbnail."
                 format: binary
         "400":
@@ -633,13 +609,9 @@ paths:
             the content. For example, the client requested non-integer dimensions or asked
             for negatively-sized images.
           content:
-            image/jpeg:
-              schema:
-                $ref: definitions/errors/error.yaml
-            image/png:
-              schema:
-                $ref: definitions/errors/error.yaml
             application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -649,13 +621,9 @@ paths:
         "413":
           description: The local content is too large for the server to thumbnail.
           content:
-            image/jpeg:
-              schema:
-                $ref: definitions/errors/error.yaml
-            image/png:
-              schema:
-                $ref: definitions/errors/error.yaml
             application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -665,22 +633,15 @@ paths:
         "429":
           description: This request was rate-limited.
           content:
-            image/jpeg:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
-            image/png:
+            application/json:
               schema:
                 $ref: definitions/errors/rate_limited.yaml
         "502":
           description: The remote content is too large for the server to thumbnail.
           content:
-            image/jpeg:
-              schema:
-                $ref: definitions/errors/error.yaml
-            image/png:
-              schema:
-                $ref: definitions/errors/error.yaml
             application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -692,13 +653,9 @@ paths:
             The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
             will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
           content:
-            image/jpeg:
-              schema:
-                $ref: definitions/errors/error.yaml
-            image/png:
-              schema:
-                $ref: definitions/errors/error.yaml
             application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
               examples:
                 response:
                   value: {

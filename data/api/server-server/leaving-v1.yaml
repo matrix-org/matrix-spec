@@ -222,6 +222,17 @@ paths:
                 - type
                 - depth
                 - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "leave"
+              }
+            }
         required: true
       responses:
         "200":
