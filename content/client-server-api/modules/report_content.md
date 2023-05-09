@@ -18,3 +18,6 @@ Servers are free to handle the reported content however they desire.
 This may be a dedicated room to alert server administrators to the
 reported content or some other mechanism for notifying the appropriate
 people.
+
+The server MUST verify that the user has permission to view the event
+before accepting a report.
