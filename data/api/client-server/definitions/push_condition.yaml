@@ -30,7 +30,7 @@ properties:
       the power level event the user needs a minimum power level for. Fields
       must be specified under the `notifications` property in the power level
       event's `content`.
-    x-example: content.body
+    example: content.body
   pattern:
     type: string
     description: |-

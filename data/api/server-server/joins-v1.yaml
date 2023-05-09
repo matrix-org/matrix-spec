@@ -12,21 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Federation Join Room API"
-  version: "1.0.0"
-host: localhost:8448
-schemes:
-  - https
-basePath: /_matrix/federation/v1
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Federation Join Room API
+  version: 1.0.0
 paths:
   "/make_join/{roomId}/{userId}":
     get:
@@ -40,118 +29,130 @@ paths:
       parameters:
         - in: path
           name: roomId
-          type: string
           description: The room ID that is about to be joined.
           required: true
-          x-example: "!abc123:matrix.org"
+          example: "!abc123:matrix.org"
+          schema:
+            type: string
         - in: path
           name: userId
-          type: string
           description: The user ID the join event will be for.
           required: true
-          x-example: "@someone:example.org"
-        - in: query
-          type: array
-          items:
+          example: "@someone:example.org"
+          schema:
             type: string
+        - in: query
           name: ver
           description: |-
             The room versions the sending server has support for. Defaults
             to `[1]`.
-          x-example: ["1", "2"]
+          example:
+            - "1"
+            - "2"
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
-        200:
+        "200":
           description: |-
             A template to be used for the rest of the [Joining Rooms](/server-server-api/#joining-rooms) handshake. Note that
             events have a different format depending on the room version - check the
             [room version specification](/rooms) for precise event formats. **The response body
             here describes the common event fields in more detail and may be missing other
             required fields for a PDU.**
-          schema:
-            type: object
-            properties:
-              room_version:
-                type: string
-                description: |-
-                  The version of the room where the server is trying to join. If not provided,
-                  the room version is assumed to be either "1" or "2".
-                example: "2"
-              event:
-                description: |-
-                  An unsigned template event. Note that events have a different format
-                  depending on the room version - check the [room version specification](/rooms)
-                  for precise event formats.
+          content:
+            application/json:
+              schema:
                 type: object
-                title: Event Template
                 properties:
-                  sender:
+                  room_version:
                     type: string
-                    description: The user ID of the joining member.
-                    example: "@someone:example.org"
-                  origin:
-                    type: string
-                    description: The name of the resident homeserver.
-                    example: "matrix.org"
-                  origin_server_ts:
-                    type: integer
-                    format: int64
-                    description: A timestamp added by the resident homeserver.
-                    example: 1234567890
-                  type:
-                    type: string
-                    description: The value `m.room.member`.
-                    example: "m.room.member"
-                  state_key:
-                    type: string
-                    description: The user ID of the joining member.
-                    example: "@someone:example.org"
-                  content:
+                    description: |-
+                      The version of the room where the server is trying to join. If not provided,
+                      the room version is assumed to be either "1" or "2".
+                    example: "2"
+                  event:
+                    description: |-
+                      An unsigned template event. Note that events have a different format
+                      depending on the room version - check the [room version specification](/rooms)
+                      for precise event formats.
                     type: object
-                    title: Membership Event Content
-                    description: The content of the event.
-                    example: {"membership": "join"}
+                    title: Event Template
                     properties:
-                      membership:
+                      sender:
                         type: string
-                        description: The value `join`.
-                        example: "join"
-                      join_authorised_via_users_server:
+                        description: The user ID of the joining member.
+                        example: "@someone:example.org"
+                      origin:
                         type: string
-                        x-addedInMatrixVersion: "1.2"
-                        description: |-
-                          Required if the room is [restricted](/client-server-api/#restricted-rooms)
-                          and is joining through one of the conditions available. If the
-                          user is responding to an invite, this is not required.
+                        description: The name of the resident homeserver.
+                        example: matrix.org
+                      origin_server_ts:
+                        type: integer
+                        format: int64
+                        description: A timestamp added by the resident homeserver.
+                        example: 1234567890
+                      type:
+                        type: string
+                        description: The value `m.room.member`.
+                        example: m.room.member
+                      state_key:
+                        type: string
+                        description: The user ID of the joining member.
+                        example: "@someone:example.org"
+                      content:
+                        type: object
+                        title: Membership Event Content
+                        description: The content of the event.
+                        example:
+                          membership: join
+                        properties:
+                          membership:
+                            type: string
+                            description: The value `join`.
+                            example: join
+                          join_authorised_via_users_server:
+                            type: string
+                            x-addedInMatrixVersion: "1.2"
+                            description: |-
+                              Required if the room is [restricted](/client-server-api/#restricted-rooms)
+                              and is joining through one of the conditions available. If the
+                              user is responding to an invite, this is not required.
 
-                          An arbitrary user ID belonging to the resident server in
-                          the room being joined that is able to issue invites to other
-                          users. This is used in later validation of the auth rules for
-                          the `m.room.member` event.
-                    required: ['membership']
-                required:
-                  - state_key
-                  - origin
-                  - origin_server_ts
-                  - type
-                  - content
-                  - sender
-          examples:
-            application/json: {
-              "room_version": "2",
-              "event": {
-                "room_id": "!somewhere:example.org",
-                "type": "m.room.member",
-                "state_key": "@someone:example.org",
-                "origin": "example.org",
-                "origin_server_ts": 1549041175876,
-                "sender": "@someone:example.org",
-                "content": {
-                  "membership": "join",
-                  "join_authorised_via_users_server": "@anyone:resident.example.org"
-                }
-              }
-            }
-        400:
+                              An arbitrary user ID belonging to the resident server in
+                              the room being joined that is able to issue invites to other
+                              users. This is used in later validation of the auth rules for
+                              the `m.room.member` event.
+                        required:
+                          - membership
+                    required:
+                      - state_key
+                      - origin
+                      - origin_server_ts
+                      - type
+                      - content
+                      - sender
+              examples:
+                response:
+                  value: {
+                    "room_version": "2",
+                    "event": {
+                      "room_id": "!somewhere:example.org",
+                      "type": "m.room.member",
+                      "state_key": "@someone:example.org",
+                      "origin": "example.org",
+                      "origin_server_ts": 1549041175876,
+                      "sender": "@someone:example.org",
+                      "content": {
+                        "membership": "join",
+                        "join_authorised_via_users_server": "@anyone:resident.example.org"
+                      }
+                    }
+                  }
+        "400":
           description: |-
             The request is invalid, the room the server is attempting
             to join has a version that is not listed in the `ver`
@@ -177,45 +178,53 @@ paths:
             resident server would be unable to meet the auth rules governing
             `join_authorised_via_users_server` on the resulting `m.room.member`
             event.
-          schema:
-            allOf:
-              - $ref: "../client-server/definitions/errors/error.yaml"
-              - type: object
-                properties:
-                  room_version:
-                    type: string
-                    description: |-
-                      The version of the room. Required if the `errcode`
-                      is `M_INCOMPATIBLE_ROOM_VERSION`.
-          examples:
-            application/json: {
-              "errcode": "M_INCOMPATIBLE_ROOM_VERSION",
-              "error": "Your homeserver does not support the features required to join this room",
-              "room_version": "3"
-            }
-        403:
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: ../client-server/definitions/errors/error.yaml
+                  - type: object
+                    properties:
+                      room_version:
+                        type: string
+                        description: |-
+                          The version of the room. Required if the `errcode`
+                          is `M_INCOMPATIBLE_ROOM_VERSION`.
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INCOMPATIBLE_ROOM_VERSION",
+                    "error": "Your homeserver does not support the features required to join this room",
+                    "room_version": "3"
+                  }
+        "403":
           description: |-
             The room that the joining server is attempting to join does not permit the user
             to join.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "You are not invited to this room",
-            }
-        404:
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You are not invited to this room"
+                  }
+        "404":
           description: |-
             The room that the joining server is attempting to join is unknown
             to the receiving server.
-          examples:
-            application/json: {
-              "errcode": "M_NOT_FOUND",
-              "error": "Unknown room",
-            }
-
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Unknown room"
+                  }
   "/send_join/{roomId}/{eventId}":
     put:
       summary: Submit a signed join event to a resident server
@@ -236,150 +245,173 @@ paths:
       parameters:
         - in: path
           name: roomId
-          type: string
           description: The room ID that is about to be joined.
           required: true
-          x-example: "!abc123:matrix.org"
+          example: "!abc123:matrix.org"
+          schema:
+            type: string
         - in: path
           name: eventId
-          type: string
           description: The event ID for the join event.
           required: true
-          x-example: "$abc123:example.org"
-        - in: body
-          name: body
-          type: object
-          required: true
+          example: $abc123:example.org
           schema:
-            type: object
-            properties:
-              sender:
-                type: string
-                description: The user ID of the joining member.
-                example: "@someone:example.org"
-              origin:
-                type: string
-                description: The name of the joining homeserver.
-                example: "matrix.org"
-              origin_server_ts:
-                type: integer
-                format: int64
-                description: A timestamp added by the joining homeserver.
-                example: 1234567890
-              type:
-                type: string
-                description: The value `m.room.member`.
-                example: "m.room.member"
-              state_key:
-                type: string
-                description: The user ID of the joining member.
-                example: "@someone:example.org"
-              content:
-                type: object
-                title: Membership Event Content
-                description: The content of the event.
-                example: {"membership": "join"}
-                properties:
-                  membership:
-                    type: string
-                    description: The value `join`.
-                    example: "join"
-                  join_authorised_via_users_server:
-                    type: string
-                    x-addedInMatrixVersion: "1.2"
-                    description: |-
-                      Required if the room is [restricted](/client-server-api/#restricted-rooms)
-                      and is joining through one of the conditions available. If the
-                      user is responding to an invite, this is not required.
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender:
+                  type: string
+                  description: The user ID of the joining member.
+                  example: "@someone:example.org"
+                origin:
+                  type: string
+                  description: The name of the joining homeserver.
+                  example: matrix.org
+                origin_server_ts:
+                  type: integer
+                  format: int64
+                  description: A timestamp added by the joining homeserver.
+                  example: 1234567890
+                type:
+                  type: string
+                  description: The value `m.room.member`.
+                  example: m.room.member
+                state_key:
+                  type: string
+                  description: The user ID of the joining member.
+                  example: "@someone:example.org"
+                content:
+                  type: object
+                  title: Membership Event Content
+                  description: The content of the event.
+                  example:
+                    membership: join
+                  properties:
+                    membership:
+                      type: string
+                      description: The value `join`.
+                      example: join
+                    join_authorised_via_users_server:
+                      type: string
+                      x-addedInMatrixVersion: "1.2"
+                      description: |-
+                        Required if the room is [restricted](/client-server-api/#restricted-rooms)
+                        and is joining through one of the conditions available. If the
+                        user is responding to an invite, this is not required.
 
-                      An arbitrary user ID belonging to the resident server in
-                      the room being joined that is able to issue invites to other
-                      users. This is used in later validation of the auth rules for
-                      the `m.room.member` event.
+                        An arbitrary user ID belonging to the resident server in
+                        the room being joined that is able to issue invites to other
+                        users. This is used in later validation of the auth rules for
+                        the `m.room.member` event.
 
-                      The resident server which owns the provided user ID must have a
-                      valid signature on the event. If the resident server is receiving
-                      the `/send_join` request, the signature must be added before sending
-                      or persisting the event to other servers.
-                required: ['membership']
-            required:
-              - state_key
-              - sender
-              - origin
-              - origin_server_ts
-              - type
-              - content
-          example: {
-            "room_id": "!somewhere:example.org",
-            "type": "m.room.member",
-            "state_key": "@someone:example.org",
-            "origin": "example.org",
-            "origin_server_ts": 1549041175876,
-            "sender": "@someone:example.org",
-            "content": {
-                "membership": "join",
-                "join_authorised_via_users_server": "@anyone:resident.example.org"
-            }
-          }
+                        The resident server which owns the provided user ID must have a
+                        valid signature on the event. If the resident server is receiving
+                        the `/send_join` request, the signature must be added before sending
+                        or persisting the event to other servers.
+                  required:
+                    - membership
+              required:
+                - state_key
+                - sender
+                - origin
+                - origin_server_ts
+                - type
+                - content
+        required: true
       responses:
-        200:
-          description: |-
-            The join event has been accepted into the room.
-          schema:
-            type: array
-            minItems: 2
-            maxItems: 2
-            items:
-              - type: integer
-                description: The value `200`.
-                example: 200
-              - type: object
-                title: Room State
-                description: The state for the room.
-                properties:
-                  origin:
-                    type: string
-                    description: The resident server's DNS name.
-                  auth_chain:
-                    type: array
-                    description: |-
-                      The auth chain for the entire current room state prior to the join event.
+        "200":
+          description: The join event has been accepted into the room.
+          content:
+            application/json:
+              schema:
+                type: array
+                minItems: 2
+                maxItems: 2
+                items:
+                  anyOf:
+                    - type: integer
+                      description: The value `200`.
+                      example: 200
+                    - type: object
+                      title: Room State
+                      description: The state for the room.
+                      properties:
+                        origin:
+                          type: string
+                          description: The resident server's DNS name.
+                        auth_chain:
+                          type: array
+                          description: |-
+                            The auth chain for the entire current room state prior to the join event.
 
-                      Note that events have a different format depending on the room version - check the
-                      [room version specification](/rooms) for precise event formats.
-                    items:
-                      type: object
-                      title: PDU
-                      description: |-
-                        The [PDUs](/server-server-api/#pdus) that make up the auth chain. The event format varies depending
-                        on the room version - check the [room version specification](/rooms) for precise event formats.
-                      schema:
-                        type: object
-                        properties: {}
-                  state:
-                    type: array
-                    description: |-
-                      The resolved current room state prior to the join event.
+                            Note that events have a different format depending on the room version - check the
+                            [room version specification](/rooms) for precise event formats.
+                          items:
+                            type: object
+                            title: PDU
+                            description: |-
+                              The [PDUs](/server-server-api/#pdus) that make up the auth chain. The event format varies depending
+                              on the room version - check the [room version specification](/rooms) for precise event formats.
+                            schema:
+                              type: object
+                              properties: {}
+                        state:
+                          type: array
+                          description: |-
+                            The resolved current room state prior to the join event.
 
-                      The event format varies depending on the room version - check the [room version specification](/rooms)
-                      for precise event formats.
-                    items:
-                      type: object
-                      title: PDU
-                      description: |-
-                        The [PDUs](/server-server-api/#pdus) for the fully resolved state of the room. The event format varies depending
-                        on the room version - check the [room version specification](/rooms) for precise event formats.
-                      schema:
-                        type: object
-                        properties: {}
-                required: ["auth_chain", "state", "origin"]
-          examples:
-            application/json: [
-              200,
-              {
-                "origin": "matrix.org",
-                "auth_chain": [{"$ref": "examples/minimal_pdu.json"}],
-                "state": [{"$ref": "examples/minimal_pdu.json"}],
-                "event": {"$ref": "examples/pdu_v4_join_membership.json"}
-              }
-            ]
+                            The event format varies depending on the room version - check the [room version specification](/rooms)
+                            for precise event formats.
+                          items:
+                            type: object
+                            title: PDU
+                            description: |-
+                              The [PDUs](/server-server-api/#pdus) for the fully resolved state of the room. The event format varies depending
+                              on the room version - check the [room version specification](/rooms) for precise event formats.
+                            schema:
+                              type: object
+                              properties: {}
+                      required:
+                        - auth_chain
+                        - state
+                        - origin
+              examples:
+                response:
+                  value: [
+                    200,
+                    {
+                      "origin": "matrix.org",
+                      "auth_chain": [
+                        {
+                          "$ref": "examples/minimal_pdu.json"
+                        }
+                      ],
+                      "state": [
+                        {
+                          "$ref": "examples/minimal_pdu.json"
+                        }
+                      ],
+                      "event": {
+                        "$ref": "examples/pdu_v4_join_membership.json"
+                      }
+                    }
+                  ]
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8448
+      basePath:
+        default: /_matrix/federation/v1
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

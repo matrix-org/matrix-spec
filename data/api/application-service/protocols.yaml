@@ -11,25 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Application Service API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/app/v1
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Application Service API
+  version: 1.0.0
 paths:
   "/thirdparty/protocol/{protocol}":
     get:
-      summary: Retrieve metadata about a specific protocol that the application service supports.
+      summary: Retrieve metadata about a specific protocol that the application
+        service supports.
       description: |-
         This API is called by the homeserver when it wants to present clients
         with specific information about the various third-party networks that
@@ -40,42 +30,53 @@ paths:
       parameters:
         - in: path
           name: protocol
-          type: string
           description: The protocol ID.
           required: true
-          x-example: "irc"
-      responses:
-        200:
-          description: The protocol was found and metadata returned.
+          example: irc
           schema:
-            $ref: definitions/protocol.yaml
-        401:
+            type: string
+      responses:
+        "200":
+          description: The protocol was found and metadata returned.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/protocol.yaml
+        "401":
           description: |-
             The homeserver has not supplied credentials to the application service.
             Optional error information can be included in the body of this response.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        403:
-          description: |-
-            The credentials supplied by the homeserver were rejected.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "403":
+          description: The credentials supplied by the homeserver were rejected.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
+                  }
+        "404":
           description: No protocol was found with the given path.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
+                  }
   "/thirdparty/user/{protocol}":
     get:
       summary: Retrieve the Matrix User ID of a corresponding third-party user.
@@ -89,102 +90,126 @@ paths:
       parameters:
         - in: path
           name: protocol
-          type: string
           description: The protocol ID.
           required: true
-          x-example: irc
+          example: irc
+          schema:
+            type: string
         - in: query
           name: fields...
-          type: string
           description: |-
             One or more custom fields that are passed to the application
             service to help identify the user.
-      responses:
-        200:
-          description: The Matrix User IDs found with the given parameters.
           schema:
-            $ref: definitions/user_batch.yaml
-        401:
+            type: string
+      responses:
+        "200":
+          description: The Matrix User IDs found with the given parameters.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/user_batch.yaml
+        "401":
           description: |-
             The homeserver has not supplied credentials to the application service.
             Optional error information can be included in the body of this response.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        403:
-          description: |-
-            The credentials supplied by the homeserver were rejected.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "403":
+          description: The credentials supplied by the homeserver were rejected.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
+                  }
+        "404":
           description: No users were found with the given parameters.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
+                  }
   "/thirdparty/location/{protocol}":
     get:
       summary: Retrieve Matrix-side portal rooms leading to a third-party location.
-      description: |-
-        Retrieve a list of Matrix portal rooms that lead to the matched third-party location.
+      description: Retrieve a list of Matrix portal rooms that lead to the matched
+        third-party location.
       operationId: queryLocationByProtocol
       security:
         - homeserverAccessToken: []
       parameters:
         - in: path
           name: protocol
-          type: string
           description: The protocol ID.
           required: true
-          x-example: irc
+          example: irc
+          schema:
+            type: string
         - in: query
           name: fields...
-          type: string
           description: |-
             One or more custom fields that are passed to the application
             service to help identify the third-party location.
-      responses:
-        200:
-          description: At least one portal room was found.
           schema:
-            $ref: definitions/location_batch.yaml
-        401:
+            type: string
+      responses:
+        "200":
+          description: At least one portal room was found.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/location_batch.yaml
+        "401":
           description: |-
             The homeserver has not supplied credentials to the application service.
             Optional error information can be included in the body of this response.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        403:
-          description: |-
-            The credentials supplied by the homeserver were rejected.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "403":
+          description: The credentials supplied by the homeserver were rejected.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
+                  }
+        "404":
           description: No mappings were found with the given parameters.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-  "/thirdparty/location":
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
+                  }
+  /thirdparty/location:
     get:
       summary: Reverse-lookup third-party locations given a Matrix room alias.
       description: |-
@@ -196,84 +221,118 @@ paths:
       parameters:
         - in: query
           name: alias
-          type: string
           description: The Matrix room alias to look up.
-      responses:
-        200:
-          description: |-
-            All found third-party locations.
           schema:
-            $ref: definitions/location_batch.yaml
-        401:
+            type: string
+      responses:
+        "200":
+          description: All found third-party locations.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/location_batch.yaml
+        "401":
           description: |-
             The homeserver has not supplied credentials to the application service.
             Optional error information can be included in the body of this response.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        403:
-          description: |-
-            The credentials supplied by the homeserver were rejected.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "403":
+          description: The credentials supplied by the homeserver were rejected.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
+                  }
+        "404":
           description: No mappings were found with the given parameters.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-  "/thirdparty/user":
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
+                  }
+  /thirdparty/user:
     get:
       summary: Reverse-lookup third-party users given a Matrix User ID.
-      description: |-
-        Retrieve an array of third-party users from a Matrix User ID.
+      description: Retrieve an array of third-party users from a Matrix User ID.
       operationId: queryUserByID
       security:
         - homeserverAccessToken: []
       parameters:
-        - in: query 
+        - in: query
           name: userid
-          type: string
           description: The Matrix User ID to look up.
-      responses:
-        200:
-          description: |-
-            An array of third-party users.
           schema:
-            $ref: definitions/user_batch.yaml
-        401:
+            type: string
+      responses:
+        "200":
+          description: An array of third-party users.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/user_batch.yaml
+        "401":
           description: |-
             The homeserver has not supplied credentials to the application service.
             Optional error information can be included in the body of this response.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        403:
-          description: |-
-            The credentials supplied by the homeserver were rejected.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "403":
+          description: The credentials supplied by the homeserver were rejected.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_UNAUTHORIZED"
+                  }
+        "404":
           description: No mappings were found with the given parameters.
-          examples:
-            application/json: {
-              "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
-            }
-          schema:
-            $ref: ../client-server/definitions/errors/error.yaml
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "COM.EXAMPLE.MYAPPSERVICE_NOT_FOUND"
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/app/v1
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Federation Public Rooms API"
-  version: "1.0.0"
-host: localhost:8448
-schemes:
-  - https
-basePath: /_matrix/federation/v1
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Federation Public Rooms API
+  version: 1.0.0
 paths:
-  "/publicRooms":
+  /publicRooms:
     get:
       summary: Get all the public rooms for a homeserver
       description: |-
@@ -38,36 +29,41 @@ paths:
       parameters:
         - in: query
           name: limit
-          type: integer
-          description: |-
-            The maximum number of rooms to return. Defaults to 0 (no limit).
-          x-example: 10
+          description: The maximum number of rooms to return. Defaults to 0 (no limit).
+          example: 10
+          schema:
+            type: integer
         - in: query
           name: since
-          type: string
           description: |-
             A pagination token from a previous call to this endpoint to fetch more
             rooms.
-          x-example: "GetMoreRoomsTokenHere"
+          example: GetMoreRoomsTokenHere
+          schema:
+            type: string
         - in: query
           name: include_all_networks
-          type: boolean
           description: |-
             Whether or not to include all networks/protocols defined by application
             services on the homeserver. Defaults to false.
-          x-example: false
+          example: false
+          schema:
+            type: boolean
         - in: query
           name: third_party_instance_id
-          type: string
           description: |-
             The specific third-party network/protocol to request from the homeserver.
             Can only be used if `include_all_networks` is false.
-          x-example: "irc"
-      responses:
-        200:
-          description: The public room list for the homeserver.
+          example: irc
           schema:
-            $ref: "../client-server/definitions/public_rooms_response.yaml"
+            type: string
+      responses:
+        "200":
+          description: The public room list for the homeserver.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/public_rooms_response.yaml
     post:
       summary: Gets the public rooms on the server with optional filter.
       description: |-
@@ -81,32 +77,27 @@ paths:
       operationId: queryPublicRooms
       security:
         - signedRequest: []
-      parameters:
-        - in: body
-          name: body
-          required: true
-          description: |-
-            Options for which rooms to return, or empty object to use defaults.
-          schema:
-            type: object
-            properties:
-              limit:
-                type: integer
-                description: |-
-                  Limit the number of results returned.
-              since:
-                type: string
-                description: |-
-                  A pagination token from a previous request, allowing servers
-                  to get the next (or previous) batch of rooms.  The direction
-                  of pagination is specified solely by which token is supplied,
-                  rather than via an explicit flag.
-              filter:
-                type: object
-                title: "Filter"
-                description: |-
-                  Filter to apply to the results.
-                properties:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: integer
+                  description: Limit the number of results returned.
+                since:
+                  type: string
+                  description: |-
+                    A pagination token from a previous request, allowing servers
+                    to get the next (or previous) batch of rooms.  The direction
+                    of pagination is specified solely by which token is supplied,
+                    rather than via an explicit flag.
+                filter:
+                  type: object
+                  title: Filter
+                  description: Filter to apply to the results.
+                  properties:
                     generic_search_term:
                       type: string
                       description: |-
@@ -122,85 +113,108 @@ paths:
                         for. To include rooms without a room type, specify `null` within this
                         list. When not specified, all applicable rooms (regardless of type)
                         are returned.
-              include_all_networks:
-                type: boolean
-                description: |-
-                  Whether or not to include all known networks/protocols from
-                  application services on the homeserver. Defaults to false.
-                example: false
-              third_party_instance_id:
-                type: string
-                description: |-
-                  The specific third-party network/protocol to request from the
-                  homeserver. Can only be used if `include_all_networks` is false.
-                example: "irc"
-            example: {
-              "limit": 10,
-              "filter": {
-                "generic_search_term": "foo",
-                "room_types": [null, "m.space"]
-              },
-              "include_all_networks": false,
-              "third_party_instance_id": "irc"
-            }
+                include_all_networks:
+                  type: boolean
+                  description: |-
+                    Whether or not to include all known networks/protocols from
+                    application services on the homeserver. Defaults to false.
+                  example: false
+                third_party_instance_id:
+                  type: string
+                  description: |-
+                    The specific third-party network/protocol to request from the
+                    homeserver. Can only be used if `include_all_networks` is false.
+                  example: irc
+              example: {
+                "limit": 10,
+                "filter": {
+                  "generic_search_term": "foo",
+                  "room_types": [
+                    null,
+                    "m.space"
+                  ]
+                },
+                "include_all_networks": false,
+                "third_party_instance_id": "irc"
+              }
+        description: Options for which rooms to return, or empty object to use defaults.
+        required: true
       responses:
-        200:
+        "200":
           description: A list of the rooms on the server.
-          schema:
-            type: object
-            description: A list of the rooms on the server.
-            required: ["chunk"]
-            properties:
-              chunk:
-                title: "PublicRoomsChunks"
-                type: array
-                description: A paginated chunk of public rooms.
-                items:
-                  allOf:
-                    - $ref: "../client-server/definitions/public_rooms_chunk.yaml"
-                    - type: object
-                      properties:
-                        # Override description of join_rule
-                        join_rule:
-                          type: string
-                          description: |-
-                            The room's join rule. When not present, the room is assumed to
-                            be `public`. Note that rooms with `invite` join rules are not
-                            expected here, but rooms with `knock` rules are given their
-                            near-public nature.
-              next_batch:
-                type: string
-                description: |-
-                  A pagination token for the response. The absence of this token
-                  means there are no more results to fetch and the client should
-                  stop paginating.
-              prev_batch:
-                type: string
-                description: |-
-                  A pagination token that allows fetching previous results. The
-                  absence of this token means there are no results before this
-                  batch, i.e. this is the first batch.
-              total_room_count_estimate:
-                type: integer
-                description: |-
-                   An estimate on the total number of public rooms, if the
-                   server has an estimate.
-          examples:
-            application/json: {
-              "chunk": [
-                {
-                  "avatar_url": "mxc://bleecker.street/CHEDDARandBRIE",
-                  "guest_can_join": false,
-                  "name": "CHEESE",
-                  "num_joined_members": 37,
-                  "room_id": "!ol19s:bleecker.street",
-                  "topic": "Tasty tasty cheese",
-                  "world_readable": true,
-                  "join_rule": "public",
-                  "room_type": "m.space"
-                }
-              ],
-              "next_batch": "p190q",
-              "prev_batch": "p1902",
-              "total_room_count_estimate": 115
-            }
+          content:
+            application/json:
+              schema:
+                type: object
+                description: A list of the rooms on the server.
+                required:
+                  - chunk
+                properties:
+                  chunk:
+                    title: PublicRoomsChunks
+                    type: array
+                    description: A paginated chunk of public rooms.
+                    items:
+                      allOf:
+                        - $ref: ../client-server/definitions/public_rooms_chunk.yaml
+                        - type: object
+                          properties:
+                            join_rule:
+                              type: string
+                              description: |-
+                                The room's join rule. When not present, the room is assumed to
+                                be `public`. Note that rooms with `invite` join rules are not
+                                expected here, but rooms with `knock` rules are given their
+                                near-public nature.
+                  next_batch:
+                    type: string
+                    description: |-
+                      A pagination token for the response. The absence of this token
+                      means there are no more results to fetch and the client should
+                      stop paginating.
+                  prev_batch:
+                    type: string
+                    description: |-
+                      A pagination token that allows fetching previous results. The
+                      absence of this token means there are no results before this
+                      batch, i.e. this is the first batch.
+                  total_room_count_estimate:
+                    type: integer
+                    description: |-
+                      An estimate on the total number of public rooms, if the
+                      server has an estimate.
+              examples:
+                response:
+                  value: {
+                    "chunk": [
+                      {
+                        "avatar_url": "mxc://bleecker.street/CHEDDARandBRIE",
+                        "guest_can_join": false,
+                        "name": "CHEESE",
+                        "num_joined_members": 37,
+                        "room_id": "!ol19s:bleecker.street",
+                        "topic": "Tasty tasty cheese",
+                        "world_readable": true,
+                        "join_rule": "public",
+                        "room_type": "m.space"
+                      }
+                    ],
+                    "next_batch": "p190q",
+                    "prev_batch": "p1902",
+                    "total_room_count_estimate": 115
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8448
+      basePath:
+        default: /_matrix/federation/v1
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

@@ -11,28 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Application Service Room Directory API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  # Note: this is the same access_token definition used elsewhere in the client
-  # server API, however this expects an access token for an application service.
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Application Service Room Directory API
+  version: 1.0.0
 paths:
   "/directory/list/appservice/{networkId}/{roomId}":
     put:
-      summary: |-
-        Updates a room's visibility in the application service's room directory.
+      summary: Updates a room's visibility in the application service's room directory.
       description: |-
         Updates the visibility of a given room on the application service's room
         directory.
@@ -46,43 +32,66 @@ paths:
       operationId: updateAppserviceRoomDirectoryVisibility
       parameters:
         - in: path
-          type: string
           name: networkId
           description: |-
             The protocol (network) ID to update the room list for. This would
             have been provided by the application service as being listed as
             a supported protocol.
           required: true
-          x-example: "irc"
+          example: irc
+          schema:
+            type: string
         - in: path
-          type: string
           name: roomId
           description: The room ID to add to the directory.
           required: true
-          x-example: "!somewhere:example.org"
-        - in: body
-          name: body
-          required: true
+          example: "!somewhere:example.org"
           schema:
-            type: object
-            properties:
-              visibility:
-                type: string
-                enum: ["public", "private"]
-                description: |-
-                  Whether the room should be visible (public) in the directory
-                  or not (private).
-                example: "public"
-            required: ['visibility']
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                visibility:
+                  type: string
+                  enum:
+                    - public
+                    - private
+                  description: |-
+                    Whether the room should be visible (public) in the directory
+                    or not (private).
+                  example: public
+              required:
+                - visibility
+        required: true
       security:
-        # again, this is the appservice's token - not a typical client's
         - accessToken: []
       responses:
-        200:
+        "200":
           description: The room's directory visibility has been updated.
-          schema:
-            type: object
-          examples:
-            application/json: {}
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
       tags:
         - Application service room directory management
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml
