@@ -310,7 +310,6 @@ for re-notifying if the sending client feels a large enough revision was made).
 For example, if there is an event mentioning Alice:
 
 ```json5
-```json
 {
     "event_id": "$original_event",
     "type": "m.room.message",
