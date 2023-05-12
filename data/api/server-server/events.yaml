@@ -144,7 +144,7 @@ paths:
           examples:
             application/json: {
                 "errcode": "M_NOT_FOUND",
-                "error": "Could not find event `$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"
+                "error": "Could not find event $Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"
               }
           schema:
             "$ref": "../client-server/definitions/errors/error.yaml"
