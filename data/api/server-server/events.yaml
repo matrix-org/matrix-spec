@@ -137,6 +137,17 @@ paths:
                   type: string
                 example: ["$an_event:example.org"]
             required: ['auth_chain_ids', 'pdu_ids']
+        404:
+          description: |-
+            No event was found or the server doesn't know about the state at that event
+            to return anything useful.
+          examples:
+            application/json: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Could not find event `$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"
+              }
+          schema:
+            "$ref": "../client-server/definitions/errors/error.yaml"
   "/event/{eventId}":
     get:
       summary: Get a single event
