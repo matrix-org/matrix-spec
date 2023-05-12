@@ -139,8 +139,8 @@ paths:
             required: ['auth_chain_ids', 'pdu_ids']
         404:
           description: |-
-            No event was found or the server doesn't know about the state at that event
-            to return anything useful.
+            The given `event_id` was found or the server doesn't know about the state at
+            that event to return anything useful.
           examples:
             application/json: {
                 "errcode": "M_NOT_FOUND",
