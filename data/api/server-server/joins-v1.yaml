@@ -218,6 +218,7 @@ paths:
 
   "/send_join/{roomId}/{eventId}":
     put:
+      deprecated: true
       summary: Submit a signed join event to a resident server
       description: |-
         **Note:**
