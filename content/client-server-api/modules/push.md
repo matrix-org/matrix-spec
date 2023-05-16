@@ -555,7 +555,7 @@ Definition:
 }
 ```
 
-**`.m.rule.contains_display_name`**
+<a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
 
 {{< changed-in v="1.7" >}}
 
@@ -624,7 +624,7 @@ Definition:
 }
 ```
 
-**`.m.rule.roomnotif`**
+<a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
 
 {{< changed-in v="1.7" >}}
 
@@ -752,7 +752,7 @@ Definition:
 
 ##### Default Content Rules
 
-**`.m.rule.contains_user_name`**
+<a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
 
 {{< changed-in v="1.7" >}}
 

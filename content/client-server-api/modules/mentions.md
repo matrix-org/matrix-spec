@@ -43,6 +43,17 @@ the localpart of Matrix IDs and display names it is recommended that clients inc
 a `m.mentions` property on each event. If there are no mentions to include it can
 be an empty object.
 
+{% boxes/rationale %}
+In previous versions of the specification, mentioning users was done by
+including the user's display name or the localpart of their Matrix ID and room
+mentions were done by including the string "@room" in the plaintext `body` of
+the event. This was prone to confusing and buggy behaviour.
+
+See the [`.m.rule.contains_display_name`](#_m_rule_contains_display_name),
+[`.m.rule.contains_user_name`](#_m_rule_contains_user_name), and
+[`.m.rule.roomnotif`](#_m_rule_roomnotif) deprecated push rules.
+{% /boxes/rationale %}
+
 #### Client behaviour
 
 In addition to using the appropriate `Matrix URI` for the mention,
