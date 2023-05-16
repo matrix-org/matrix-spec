@@ -308,6 +308,16 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -404,6 +414,16 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -518,6 +538,16 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "A thumbnail of the requested content."
