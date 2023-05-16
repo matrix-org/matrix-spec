@@ -249,14 +249,14 @@ events](#redactions-of-edited-events) below.
 **Note:** the `content` of the original event is left intact. In particular servers
 should **not** replace the content with that of the replacement event.
 
-{{ boxes/rationale }}
+{{% boxes/rationale %}}
 In previous versions of the specification, servers were expected to replace the
 content of an edited event whenever it was served to clients (with the
 exception of the
 [`GET /_matrix/client/v3/rooms/{roomId}/event/{eventId}`](#get_matrixclientv3roomsroomideventeventid)
 endpoint).  However, that behaviour made reliable client-side implementation
 difficult, and servers should no longer make this replacement.
-{{ /boxes/rationale }}
+{{% /boxes/rationale %}}
 
 #### Client behaviour
 
