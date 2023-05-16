@@ -523,6 +523,8 @@ Definition:
 
 **`.m.rule.is_user_mention`**
 
+{{< added-in v="1.7" >}}
+
 Matches any message which contains the user's Matrix ID in the list of `user_ids`
 under the `m.mentions` property.
 

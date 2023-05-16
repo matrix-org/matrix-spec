@@ -1,6 +1,8 @@
 
 ### User and room mentions
 
+{{< changed-in v="1.7" >}}
+
 This module allows users to "mention" other users and rooms within a room event.
 This is primarily used as an indicator that the recipient should receive a notification
 about the event.
