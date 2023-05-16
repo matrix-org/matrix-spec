@@ -48,7 +48,8 @@ Similarly, the entire room can be mentioned:
 }
 ```
 
-Additionally, see [the `.m.rule.is_user_mention` and `.m.rule.is_room_mention` push rules](#predefined-rules).
+Additionally, see the [`.m.rule.is_user_mention`](#_m_rule_is_user_mention) and
+[`.m.rule.is_room_mention`](#_m_rule_is_room_mention) push rules.
 Users should not add their own Matrix ID to the `m.mentions` property as outgoing
 messages cannot self-notify.
 

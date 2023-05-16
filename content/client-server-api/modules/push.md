@@ -521,7 +521,7 @@ Definition:
 }
 ```
 
-**`.m.rule.is_user_mention`**
+<a id="_m_rule_is_user_mention"/> **`.m.rule.is_user_mention`**
 
 {{< added-in v="1.7" >}}
 
@@ -590,7 +590,7 @@ Definition:
 }
 ```
 
-**`.m.rule.is_room_mention`**
+<a id="_m_rule_is_room_mention"/> **`.m.rule.is_room_mention`**
 
 {{< added-in v="1.7" >}}
 
