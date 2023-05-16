@@ -86,10 +86,3 @@ background color to signify to the user that they were mentioned.
 
 When clicked, the mention should navigate the user to the appropriate
 user or room information.
-
-{{% boxes/note %}}
-Similar to legacy [matrix.to URLs](/appendices/#matrixto-navigation),
-groups used to be representable by mentions. They follow a similar format
-to room mentions, though using the group ID in both the link and anchor
-text.
-{{% /boxes/note %}}
