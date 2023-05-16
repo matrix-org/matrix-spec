@@ -311,6 +311,7 @@ paths:
         - in: query
           type: boolean
           name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
           x-example: false
           required: false
           default: false
@@ -417,6 +418,7 @@ paths:
         - in: query
           type: boolean
           name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
           x-example: false
           required: false
           default: false
@@ -541,6 +543,7 @@ paths:
         - in: query
           type: boolean
           name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
           x-example: false
           required: false
           default: false
