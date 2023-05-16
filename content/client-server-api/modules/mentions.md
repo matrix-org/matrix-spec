@@ -1,7 +1,9 @@
 
 ### User and room mentions
 
-This module allows users to mention other users and rooms within a room message.
+This module allows users to "mention" other users and rooms within a room event.
+This is primarily used as an indicator that the recipient should receive a notification
+about the event.
 This is achieved by including metadata in the `m.mentions` content property of
 the event. The `m.mentions` property consists of an object with two fields:
 

@@ -296,7 +296,7 @@ they simply serve no purpose within the visible timeline.
 #### Edits of events with mentions
 
 When editing an event with [user and room mentions](#user-and-room-mentions) the
-replacement event will hae two `m.mentions` properties:
+replacement event will have two `m.mentions` properties:
 
 * One at the top-level of the `content`, which should contain mentions due to
   this edit revision.
