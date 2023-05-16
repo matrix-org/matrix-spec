@@ -334,6 +334,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         429:
           description: This request was rate-limited.
           schema:
@@ -442,6 +454,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         429:
           description: This request was rate-limited.
           schema:
@@ -563,6 +587,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the thumbnail."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         400:
           description: |-
             The request does not make sense to the server, or the server cannot thumbnail
