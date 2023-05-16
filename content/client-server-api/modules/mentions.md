@@ -7,32 +7,17 @@ This module allows users to "mention" other users and rooms within a room event.
 This is primarily used as an indicator that the recipient should receive a notification
 about the event.
 This is achieved by including metadata in the `m.mentions` content property of
-the event. The `m.mentions` property consists of an object with two fields:
+the event to reference the entity being mentioned.
 
-* `user_ids`: A list of Matrix IDs of mentioned users.
-* `room`: A boolean set to `true` to mention the room, for an `@room` notification. (`room` should otherwise
-  not be included on the event.)
+`m.mentions` is defined as follows:
+
+{{% definition path="api/client-server/definitions/m.mentions" %}}
 
 Although it is possible to silently mention users, it is recommended to include a
 [Matrix URI](/appendices/#uris) in the HTML body of  an [m.room.message](#mroommessage)
 event. This applies only to [m.room.message](#mroommessage) events where the `msgtype` is
 `m.text`, `m.emote`, or `m.notice`. The `format` for the event must be
 `org.matrix.custom.html` and therefore requires a `formatted_body`.
-
-To make a mention, reference the entity being mentioned in the
-`m.mentions` property, like so:
-
-```json
-{
-    "body": "Hello Alice!",
-    "msgtype": "m.text",
-    "format": "org.matrix.custom.html",
-    "formatted_body": "Hello <a href='https://matrix.to/#/@alice:example.org'>Alice</a>!",
-    "m.mentions": {
-        "user_ids": ["@alice:example.org"]
-    }
-}
-```
 
 Similarly, the entire room can be mentioned:
 
