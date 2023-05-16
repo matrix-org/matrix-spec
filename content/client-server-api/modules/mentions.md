@@ -38,20 +38,18 @@ Additionally, see the [`.m.rule.is_user_mention`](#_m_rule_is_user_mention) and
 Users should not add their own Matrix ID to the `m.mentions` property as outgoing
 messages cannot self-notify.
 
-To disable legacy behaviour of notifications occurring due to matching against
-the localpart of Matrix IDs and display names it is recommended that clients include
-a `m.mentions` property on each event. If there are no mentions to include it can
-be an empty object.
+Note that, for backwards compatibility, push rules such as [`.m.rule.contains_display_name`](#_m_rule_contains_display_name),
+[`.m.rule.contains_user_name`](#_m_rule_contains_user_name), and
+[`.m.rule.roomnotif`](#_m_rule_roomnotif) continue to  match if the `body` of
+the event contains the user's display name or ID. To avoid unintentional notifications,
+**it is recommended that clients include a `m.mentions` property on each event**.
+(If there are no mentions to include it can be an empty object.)
 
 {% boxes/rationale %}
 In previous versions of the specification, mentioning users was done by
 including the user's display name or the localpart of their Matrix ID and room
 mentions were done by including the string "@room" in the plaintext `body` of
 the event. This was prone to confusing and buggy behaviour.
-
-See the [`.m.rule.contains_display_name`](#_m_rule_contains_display_name),
-[`.m.rule.contains_user_name`](#_m_rule_contains_user_name), and
-[`.m.rule.roomnotif`](#_m_rule_roomnotif) deprecated push rules.
 {% /boxes/rationale %}
 
 #### Client behaviour
