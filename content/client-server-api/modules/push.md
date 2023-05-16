@@ -557,6 +557,8 @@ Definition:
 
 **`.m.rule.contains_display_name`**
 
+{{< changed-in v="1.7" >}}
+
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
 
@@ -590,6 +592,8 @@ Definition:
 
 **`.m.rule.is_room_mention`**
 
+{{< added-in v="1.7" >}}
+
 Matches any message from a sender with the proper power level with the `room`
 property of the `m.mentions` property set to `true`.
 
@@ -621,6 +625,8 @@ Definition:
 ```
 
 **`.m.rule.roomnotif`**
+
+{{< changed-in v="1.7" >}}
 
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
@@ -747,6 +753,8 @@ Definition:
 ##### Default Content Rules
 
 **`.m.rule.contains_user_name`**
+
+{{< changed-in v="1.7" >}}
 
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
