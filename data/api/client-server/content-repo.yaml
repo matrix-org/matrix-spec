@@ -308,6 +308,17 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -323,6 +334,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         429:
           description: This request was rate-limited.
           schema:
@@ -404,6 +427,17 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "The content that was previously uploaded."
@@ -420,6 +454,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the uploaded file."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         429:
           description: This request was rate-limited.
           schema:
@@ -518,6 +564,17 @@ paths:
             content repository can and should impose a maximum value for this
             parameter. The content repository may also choose to respond before
             the timeout.
+        - in: query
+          type: boolean
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          x-example: false
+          required: false
+          default: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
       responses:
         200:
           description: "A thumbnail of the requested content."
@@ -530,6 +587,18 @@ paths:
             type: file
             # This is a workaround for us not being able to say the response is required.
             description: "**Required.** The bytes for the thumbnail."
+        307:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
+        308:
+          description: "A redirect to the thumbnail of the requested content."
+          headers:
+            Location:
+              description: "The URL of the thumbnail content."
+              type: "string"
         400:
           description: |-
             The request does not make sense to the server, or the server cannot thumbnail
