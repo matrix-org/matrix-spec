@@ -559,8 +559,8 @@ Definition:
 
 {{% changed-in v="1.7" %}}
 
-As of `v1.7`, this rule is deprecated and should only be enabled if the event
-does not have an `m.mentions` property.
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message whose content contains the user's current display name
 in the room in which it was sent.
@@ -628,8 +628,8 @@ Definition:
 
 {{% changed-in v="1.7" %}}
 
-As of `v1.7`, this rule is deprecated and should only be enabled if the event
-does not have an `m.mentions` property.
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message from a sender with the proper power level whose content
 contains the text `@room`, signifying the whole room should be notified of
@@ -756,8 +756,8 @@ Definition:
 
 {{% changed-in v="1.7" %}}
 
-As of `v1.7`, this rule is deprecated and should only be enabled if the event
-does not have an `m.mentions` property.
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message whose content contains the local part of the user's
 Matrix ID, separated by word boundaries.
