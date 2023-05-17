@@ -11,8 +11,8 @@ description: |
   the callee sends an `m.call.hangup` event. If the calling user chooses to end the
   call before setup is complete, the client sends `m.call.hangup` as previously.
 
-Note that, unlike `m.call.hangup`, this event has no `reason` field: the rejection of
-a call is always implicitly because the user chose not to answer it.
+  Note that, unlike `m.call.hangup`, this event has no `reason` field: the rejection of
+  a call is always implicitly because the user chose not to answer it.
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
