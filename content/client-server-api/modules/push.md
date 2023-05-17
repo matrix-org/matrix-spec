@@ -557,7 +557,7 @@ Definition:
 
 <a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
 
-{{< changed-in v="1.7" >}}
+{{% changed-in v="1.7" %}}
 
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
@@ -626,7 +626,7 @@ Definition:
 
 <a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
 
-{{< changed-in v="1.7" >}}
+{{% changed-in v="1.7" %}}
 
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
@@ -754,7 +754,7 @@ Definition:
 
 <a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
 
-{{< changed-in v="1.7" >}}
+{{% changed-in v="1.7" %}}
 
 As of `v1.7`, this rule is deprecated and should only be enabled if the event
 does not have an `m.mentions` property.
