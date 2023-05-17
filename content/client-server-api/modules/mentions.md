@@ -18,6 +18,12 @@ Additionally, see the [`.m.rule.is_user_mention`](#_m_rule_is_user_mention) and
 Users should not add their own Matrix ID to the `m.mentions` property as outgoing
 messages cannot self-notify.
 
+{{% boxes/warning %}}
+If an encrypted event contains an `m.mentions` in its payload, it should be
+encrypted as normal. To properly process mentions in encrypted rooms, events
+must be decrypted first. See [receiving notifications](#receiving-notifications).
+{{% /boxes/warning %}}
+
 Note that, for backwards compatibility, push rules such as [`.m.rule.contains_display_name`](#_m_rule_contains_display_name),
 [`.m.rule.contains_user_name`](#_m_rule_contains_user_name), and
 [`.m.rule.roomnotif`](#_m_rule_roomnotif) continue to  match if the `body` of
