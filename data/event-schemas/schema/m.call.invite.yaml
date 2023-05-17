@@ -43,7 +43,7 @@
                 },
                 "invitee": {
                     "type": "string",
-                    "description": "The ID of the user being called.",
+                    "description": "The ID of the user being called. If omitted, any user in the room can answer.",
                 }
             },
             "required": ["call_id", "offer", "version", "lifetime", "party_id"]
