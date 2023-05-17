@@ -5,10 +5,11 @@ description: |
   be sent either once the call has has been established or before to abort the call.
 
   The meanings of the `reason` field are as follows:
-   * `ice_timeout`: The connection failed after some media was exchanged (as opposed to current
-   * `ice_failed` which means no media connection could be established). Note that, in the case of
-      an ICE renegotiation, a client should be sure to send `ice_timeout` rather than `ice_failed` if
-      media had previously been received successfully, even if the ICE renegotiation itself failed.
+   * `ice_failed`: ICE negotiation has failed and a media connection could not be established.
+   * `ice_timeout`: The connection failed after some media was exchanged (as opposed to `ice_failed`
+      which means no media connection could be established). Note that, in the case of an ICE
+      renegotiation, a client should be sure to send `ice_timeout` rather than `ice_failed` if media
+      had previously been received successfully, even if the ICE renegotiation itself failed.
    * `invite_timeout`: The other party did not answer in time.
    * `user_hangup`: Clients must now send this code when the user chooses to end the call, although
      for backwards compatibility with version 0, a clients should treat an absence of the `reason`
