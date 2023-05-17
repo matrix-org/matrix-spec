@@ -521,7 +521,46 @@ Definition:
 }
 ```
 
-**`.m.rule.contains_display_name`**
+<a id="_m_rule_is_user_mention"/> **`.m.rule.is_user_mention`**
+
+{{< added-in v="1.7" >}}
+
+Matches any message which contains the user's Matrix ID in the list of `user_ids`
+under the `m.mentions` property.
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.is_user_mention",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_property_contains",
+            "key": "content.m\\.mentions.user_ids",
+            "value": "[the user's Matrix ID]"
+        }
+    ],
+    "actions": [
+        "notify",
+        {
+            "set_tweak": "sound",
+            "value": "default"
+        },
+        {
+            "set_tweak": "highlight"
+        }
+    ]
+}
+```
+
+<a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
+
+{{% changed-in v="1.7" %}}
+
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message whose content contains the user's current display name
 in the room in which it was sent.
@@ -551,7 +590,46 @@ Definition:
 }
 ```
 
-**`.m.rule.roomnotif`**
+<a id="_m_rule_is_room_mention"/> **`.m.rule.is_room_mention`**
+
+{{< added-in v="1.7" >}}
+
+Matches any message from a sender with the proper power level with the `room`
+property of the `m.mentions` property set to `true`.
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.is_room_mention",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_property_is",
+            "key": "content.m\\.mentions.room",
+            "value": true
+        },
+        {
+            "kind": "sender_notification_permission",
+            "key": "room"
+        }
+    ],
+    "actions": [
+        "notify",
+        {
+            "set_tweak": "highlight"
+        }
+    ]
+}
+```
+
+<a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
+
+{{% changed-in v="1.7" %}}
+
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message from a sender with the proper power level whose content
 contains the text `@room`, signifying the whole room should be notified of
@@ -674,7 +752,12 @@ Definition:
 
 ##### Default Content Rules
 
-**`.m.rule.contains_user_name`**
+<a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
+
+{{% changed-in v="1.7" %}}
+
+As of `v1.7`, this rule is deprecated and **should only be enabled if the event
+does not have an [`m.mentions` property](#definition-mmentions)**.
 
 Matches any message whose content contains the local part of the user's
 Matrix ID, separated by word boundaries.

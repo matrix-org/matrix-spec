@@ -293,6 +293,73 @@ events will not be included in the aggregation bundled with the original
 event. Note that the subsequent edits are not actually redacted themselves:
 they simply serve no purpose within the visible timeline.
 
+#### Edits of events with mentions
+
+When editing an event with [user and room mentions](#user-and-room-mentions) the
+replacement event will have two `m.mentions` properties:
+
+* One at the top-level of the `content`, which should contain mentions due to
+  this edit revision.
+* One inside the `m.new_content` property, which should contain the resolved mentions
+  for the final version of the event.
+
+The difference between these properties ensures that users will not be notified
+for each edit revision of an event, but allows for new users to be mentioned (or
+for re-notifying if the sending client feels a large enough revision was made).
+
+For example, if there is an event mentioning Alice:
+
+```json5
+{
+    "event_id": "$original_event",
+    "type": "m.room.message",
+    "content": {
+        "body": "Hello Alice!",
+        "m.mentions": {
+            "user_ids": ["@alice:example.org"]
+        }
+    }
+}
+```
+
+And an edit to also mention Bob:
+
+```json5
+{
+  "content": {
+    "body": "* Hello Alice & Bob!",
+    "m.mentions": {
+      "user_ids": [
+        // Include only the newly mentioned user.
+        "@bob:example.org"
+      ]
+    },
+    "m.new_content": {
+      "body": "Hello Alice & Bob!",
+      "m.mentions": {
+        "user_ids": [
+          // Include all of the mentioned users.
+          "@alice:example.org",
+          "@bob:example.org"
+        ]
+      },
+    },
+    "m.relates_to": {
+      "rel_type": "m.replace",
+      "event_id": "$original_event"
+    }
+  },
+  // other fields as required by events
+}
+```
+
+If an edit revision removes a user's mention then that user's Matrix ID should be
+included in neither `m.mentions` property.
+
+Clients may also wish to modify the [client behaviour](#user-and-room-mentions) of
+determining if an event mentions the current user by checking the `m.mentions`
+property under `m.new_content`.
+
 #### Edits of replies
 
 Some particular constraints apply to events which replace a
