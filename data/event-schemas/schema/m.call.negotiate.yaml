@@ -3,8 +3,7 @@ type: object
 description: |
   Provides SDP negotiation semantics for media pause, hold/resume, ICE restarts
   and voice/video call up/downgrading. Clients should implement and honour hold
-  functionality as per WebRTC's recommendation:
-  https://www.w3.org/TR/webrtc/#hold-functionality
+  functionality as per [WebRTC's recommendation](https://www.w3.org/TR/webrtc/#hold-functionality).
 
   If both the invite event and the accepted answer event have `version` equal
   to `"1"`, either party may send `m.call.negotiate` with a `description` field
