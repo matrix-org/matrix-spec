@@ -11,7 +11,8 @@ description: |
   the callee sends an `m.call.hangup` event. If the calling user chooses to end the
   call before setup is complete, the client sends `m.call.hangup` as previously.
 
-  The meanings of the `reason` codes are the same as in [`m.call.hangup`](#mcallhangup).
+Note that, unlike `m.call.hangup`, this event has no `reason` field: the rejection of
+a call is always implicitly because the user chose not to answer it.
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
@@ -19,22 +20,6 @@ properties:
     type: object
     allOf:
     - "$ref": core-event-schema/call_event.yaml
-    properties:
-      reason:
-        type: string
-        description: Reason for the hangup. Note that this was optional in
-          previous previous versions of the spec, so a missing value should be
-          treated as `user_hangup`.
-        enum:
-        - ice_timeout
-        - ice_failed
-        - invite_timeout
-        - user_hangup
-        - user_media_failed
-        - user_busy
-        - unknown_error
-    required:
-    - reason
   type:
     type: string
     enum:
