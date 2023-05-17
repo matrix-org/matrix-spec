@@ -25,12 +25,12 @@ the event contains the user's display name or ID. To avoid unintentional notific
 **it is recommended that clients include a `m.mentions` property on each event**.
 (If there are no mentions to include it can be an empty object.)
 
-{% boxes/rationale %}
+{{% boxes/rationale %}}
 In previous versions of the specification, mentioning users was done by
 including the user's display name or the localpart of their Matrix ID and room
 mentions were done by including the string "@room" in the plaintext `body` of
 the event. This was prone to confusing and buggy behaviour.
-{% /boxes/rationale %}
+{{% /boxes/rationale %}}
 
 #### Client behaviour
 
