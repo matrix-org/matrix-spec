@@ -1,7 +1,5 @@
-allOf:
-- "$ref": room_event.yaml
-  description: "All call events share a set of common fields: those of room events
-    and some additional VoIP specific fields."
+description: "The content of all call events shares a set of common fields: those
+  of room events and some additional VoIP specific fields."
 properties:
   call_id:
     type: string
@@ -17,7 +15,7 @@ properties:
     type: string
     description: 'This identifies the party that sent this event. A client may
       choose to re-use the device ID from end-to-end cryptography for the value
-      of this field. '
+      of this field.'
 required:
 - call_id
 - version

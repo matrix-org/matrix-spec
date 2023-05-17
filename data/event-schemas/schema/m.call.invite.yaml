@@ -2,11 +2,14 @@
     "type": "object",
     "description": "This event is sent by the caller when they wish to establish a call.",
     "allOf": [{
-        "$ref": "core-event-schema/call_event.yaml"
+        "$ref": "core-event-schema/room_event.yaml"
     }],
     "properties": {
         "content": {
             "type": "object",
+            "allOf": [{
+                "$ref": "core-event-schema/call_event.yaml"
+            }],
             "properties": {
                 "offer": {
                     "type": "object",

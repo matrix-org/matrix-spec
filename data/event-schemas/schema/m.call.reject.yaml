@@ -13,10 +13,12 @@ description: |
 
   The meanings of the `reason` codes are the same as in [`m.call.hangup`](#mcallhangup).
 allOf:
-- "$ref": core-event-schema/call_event.yaml
+- "$ref": core-event-schema/room_event.yaml
 properties:
   content:
     type: object
+    allOf:
+    - "$ref": core-event-schema/call_event.yaml
     properties:
       reason:
         type: string

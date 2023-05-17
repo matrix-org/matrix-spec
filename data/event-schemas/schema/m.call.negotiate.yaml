@@ -34,10 +34,12 @@ description: |
   attempt to validate the `type` field, but simply pass the object into the
   WebRTC API.
 allOf:
-- "$ref": core-event-schema/call_event.yaml
+- "$ref": core-event-schema/room_event.yaml
 properties:
   content:
     type: object
+    allOf:
+    - "$ref": core-event-schema/call_event.yaml
     properties:
       offer:
         type: object
