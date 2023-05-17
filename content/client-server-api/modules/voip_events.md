@@ -30,7 +30,7 @@ lowercase alphanumeric characters is recommended. Parties in the call are identi
 
 The client  adds a `party_id` field containing this ID to the top-level of the content of all VoIP events
 it sends on the call, including `m.call.invite`. Clients use this to identify remote echo of their own
-events: since a user may now call themselves, they can no longer ignore events from their own user. This
+events: since a user may call themselves, they cannot simply ignore events from their own user. This
 field also identifies different answers sent by different clients to an invite, and matches `m.call.candidates`
 events to their respective answer/invite.
 
@@ -115,7 +115,7 @@ The same behaviour applies when a client is looking at historic calls.
 
 #### Supported Codecs
 The Matrix spec does not mandate particular audio or video codecs, but instead defers to the
-WebRTC spec. A compliant matrix VoIP client will behave in the same way as a supported 'browser'
+WebRTC spec. A compliant Matrix VoIP client will behave in the same way as a supported 'browser'
 in terms of what codecs it supports and what variants thereof. The latest WebRTC specification
 applies, so clients should keep up to date with new versions of the WebRTC specification whether
 or not there have been any changes to the Matrix spec.
@@ -154,7 +154,7 @@ Or a rejected call:
 
 Calls are negotiated according to the WebRTC specification.
 
-In response to an invoming invite, a client may do one of several things:
+In response to an incoming invite, a client may do one of several things:
  * Attempt to accept the call by sending an `m.call.answer`.
  * Actively reject the call everywhere: send an `m.call.reject` as per above, which will stop the call from
    ringing on all the user's devices and the caller's client will inform them that the user has
@@ -180,7 +180,7 @@ with respect to presenting such streams and tracks is undefined.
 
 ##### Invitees
 The `invitee` field should be added whenever the call is intended for one
-specific user , and should be set to the Matrix user ID of that user. Invites
+specific user, and should be set to the Matrix user ID of that user. Invites
 without an `invitee` field are defined to be intended for any member of the
 room other than the sender of the event.
 

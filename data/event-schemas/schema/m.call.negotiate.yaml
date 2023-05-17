@@ -2,7 +2,7 @@
 type: object
 description: |
   Provides SDP negotiation semantics for media pause, hold/resume, ICE restarts
-  and voice/video call up/downgrading. Clients should implement & honour hold
+  and voice/video call up/downgrading. Clients should implement and honour hold
   functionality as per WebRTC's recommendation:
   https://www.w3.org/TR/webrtc/#hold-functionality
 
