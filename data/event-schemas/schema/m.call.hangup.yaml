@@ -22,26 +22,11 @@ description: |
    * `unknown_error`: Some other failure occurred that meant the client was unable to continue the call
       rather than the user choosing to end it.
 allOf:
-- "$ref": core-event-schema/room_event.yaml
+- "$ref": core-event-schema/call_event.yaml
 properties:
   content:
     type: object
     properties:
-      call_id:
-        type: string
-        description: The ID of the call this event relates to.
-      version:
-        type: string
-        description: The version of the VoIP specification this message adheres to.
-          This specification is version 1. This field is a string such that experimental
-          implementations can use non-integer versions. This field was an integer
-          in the previous spec version and implementations must accept an integer
-          0.
-      party_id:
-        type: string
-        description: This identifies the party that sent this event. A client may
-          choose to re-use the device ID from end-to-end cryptography for the value
-          of this field.
       reason:
         type: string
         description: Reason for the hangup. Note that this was optional in
@@ -56,9 +41,6 @@ properties:
         - user_busy
         - unknown_error
     required:
-    - call_id
-    - version
-    - party_id
     - reason
   type:
     type: string

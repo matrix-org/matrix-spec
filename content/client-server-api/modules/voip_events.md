@@ -122,6 +122,12 @@ or not there have been any changes to the Matrix spec.
 
 #### Events
 
+##### Common Fields
+
+{{% event-fields event_type="call_event" %}}
+
+##### Events
+
 {{% event-group group_name="m.call" %}}
 
 #### Client behaviour

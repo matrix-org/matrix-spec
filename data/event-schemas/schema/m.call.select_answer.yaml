@@ -2,30 +2,18 @@
     "type": "object",
     "description": "This event is sent by the caller's client once it has decided which other client to talk to, by selecting one of multiple possible incoming `m.call.answer` events. Its `selected_party_id` field indicates the answer it's chosen. The `call_id` and `party_id` of the caller is also included. If the callee's client sees a `select_answer` for an answer with party ID other than the one it sent, it ends the call and informs the user the call was answered elsewhere. It does not send any events. Media can start flowing before this event is seen or even sent.  Clients that implement previous versions of this specification will ignore this event and behave as they did before.",
     "allOf": [{
-        "$ref": "core-event-schema/room_event.yaml"
+        "$ref": "core-event-schema/call_event.yaml"
     }],
     "properties": {
         "content": {
             "type": "object",
             "properties": {
-                "call_id": {
-                    "type": "string",
-                    "description": "The ID of the call this event relates to."
-                },
-                "version": {
-                    "type": "string",
-                    "description": "The version of the VoIP specification this message adheres to. This specification is version 1. This field is a string such that experimental implementations can use non-integer versions. This field was an integer in the previous spec version and implementations must accept an integer 0."
-                },
-                "party_id": {
-                    "type": "string",
-                    "description": "This identifies the party that sent this event. A client may choose to re-use the device ID from end-to-end cryptography for the value of this field. "
-                },
                 "selected_party_id": {
                     "type": "string",
                     "description": "The `party_id` field from the answer event that the caller chose."
                 },
             },
-            "required": ["call_id", "version"]
+            "required": ["selected_party_id"]
         },
         "type": {
             "type": "string",

@@ -34,26 +34,11 @@ description: |
   attempt to validate the `type` field, but simply pass the object into the
   WebRTC API.
 allOf:
-- "$ref": core-event-schema/room_event.yaml
+- "$ref": core-event-schema/call_event.yaml
 properties:
   content:
     type: object
     properties:
-      call_id:
-        type: string
-        description: The ID of the call this event relates to.
-      version:
-        type: string
-        description: The version of the VoIP specification this message adheres to.
-          This specification is version 1. This field is a string such that experimental
-          implementations can use non-integer versions. This field was an integer
-          in the previous spec version and implementations must accept an integer
-          0.
-      party_id:
-        type: string
-        description: This identifies the party that sent this event. A client may
-          choose to re-use the device ID from end-to-end cryptography for the value
-          of this field.
       offer:
         type: object
         title: Offer
@@ -77,9 +62,6 @@ properties:
           They should also no longer show the call as awaiting an answer in the
           UI.
     required:
-    - call_id
-    - version
-    - party_id
     - offer
     - lifetime
   type:

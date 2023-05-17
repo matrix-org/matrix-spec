@@ -2,16 +2,12 @@
     "type": "object",
     "description": "This event is sent by callers after sending an invite and by the callee after answering. Its purpose is to give the other party additional ICE candidates to try using to communicate.",
     "allOf": [{
-        "$ref": "core-event-schema/room_event.yaml"
+        "$ref": "core-event-schema/call_event.yaml"
     }],
     "properties": {
         "content": {
             "type": "object",
             "properties": {
-                "call_id": {
-                    "type": "string",
-                    "description": "The ID of the call this event relates to."
-                },
                 "candidates": {
                     "type": "array",
                     "description": "Array of objects describing the candidates.",
@@ -34,17 +30,9 @@
                         },
                         "required": ["candidate", "sdpMLineIndex", "sdpMid"]
                     }
-                },
-                "party_id": {
-                    "type": "string",
-                    "description": "This identifies the party that sent this event. A client may choose to re-use the device ID from end-to-end cryptography for the value of this field. "
-                },
-                "version": {
-                    "type": "string",
-                    "description": "The version of the VoIP specification this message adheres to. This specification is version 1. This field is a string such that experimental implementations can use non-integer versions. This field was an integer in the previous spec version and implementations must accept an integer 0."
                 }
             },
-            "required": ["call_id", "candidates", "version", "party_id"]
+            "required": ["candidates"]
         },
         "type": {
             "type": "string",
