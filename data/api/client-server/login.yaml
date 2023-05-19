@@ -295,7 +295,12 @@ paths:
           required: true
           schema:
             type: object
-            description: An empty JSON object.
+            properties:
+              auth:
+                description: |-
+                  Additional authentication information for the user-interactive authentication API.
+                allOf:
+                  - $ref: "definitions/auth_data.yaml"
       responses:
         200:
           description: The login token an unauthenticated client can use to log in as the requesting user.
