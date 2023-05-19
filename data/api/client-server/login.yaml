@@ -260,7 +260,7 @@ paths:
 
         This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
 
-        An already-authenticated client would call this endpoint to generate a single-use, time-limited,
+        An already-authenticated client can call this endpoint to generate a single-use, time-limited,
         token for an unauthenticated client to log in with, becoming logged in as the same user which
         called this endpoint. The unauthenticated client uses the generated token in a `m.login.token`
         login flow with the homeserver.
