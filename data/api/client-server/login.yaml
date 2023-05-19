@@ -68,9 +68,10 @@ paths:
                       description: |-
                         If `type` is `m.login.token`, an optional field to indicate
                         to the unauthenticated client that the homeserver supports
-                        the `POST /login/get_token` endpoint. Note that supporting
-                        the endpoint does not necessarily indicate that the user
-                        attempting to log in will be able to generate such a token.
+                        the [`POST /login/get_token`](/client-server-api/#post_matrixclientv3loginget_token)
+                        endpoint. Note that supporting the endpoint does not
+                        necessarily indicate that the user attempting to log in will
+                        be able to generate such a token.
         429:
           description: This request was rate-limited.
           schema:
