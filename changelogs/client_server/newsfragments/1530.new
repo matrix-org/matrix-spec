@@ -1,1 +1,1 @@
-[`POST /_matrix/client/v3/login/get_token`](/client-server-api/#post_matrixclientv3loginget_token).
+[`POST /_matrix/client/v3/login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).

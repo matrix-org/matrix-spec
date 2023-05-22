@@ -1181,6 +1181,8 @@ a token for their user ID if supported by the homeserver using `POST /login/get_
 
 {{% http-api spec="client-server" api="login" %}}
 
+{{% http-api spec="client-server" api="login_token" %}}
+
 {{% http-api spec="client-server" api="refresh" %}}
 
 {{% http-api spec="client-server" api="logout" %}}
