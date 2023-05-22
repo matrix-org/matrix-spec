@@ -71,6 +71,12 @@ change their reaction, the original reaction should be redacted and a new one
 sent in its place.
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+The `key` field in `m.reaction` can be any string so clients must take care to
+render long reactions in a sensible manner. For example, clients can elide
+overly-long reactions.
+{{% /boxes/note %}}
+
 #### Server behaviour
 
 ##### Avoiding duplicate annotations
