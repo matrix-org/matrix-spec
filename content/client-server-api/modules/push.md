@@ -700,7 +700,7 @@ Definition:
 
 {{% added-in v="1.7" %}}
 
-Matches any event whose type is `m.room.reaction`. This suppresses notifications for [`m.reaction`](#mreaction) events.
+Matches any event whose type is `m.reaction`. This suppresses notifications for [`m.reaction`](#mreaction) events.
 
 Definition:
 
