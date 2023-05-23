@@ -56,7 +56,7 @@ paths:
                   client API appservice ping call.
       responses:
         200:
-          description: The hs_token is valid and the ping request was successful.
+          description: The provided `hs_token` is valid and the ping request was successful.
           examples:
             application/json: {}
           schema:

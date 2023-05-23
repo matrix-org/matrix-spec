@@ -35,12 +35,13 @@ paths:
       summary: |-
         Ask the homeserver to ping the application service to ensure the connection works.
       description: |-
-        This API asks the homeserver to call the `/_matrix/app/v1/ping` endpoint
-        on the application service to ensure that the homeserver can communicate
+        This API asks the homeserver to call the
+        [`/_matrix/app/v1/ping`](#post_matrixappv1ping) endpoint on the
+        application service to ensure that the homeserver can communicate
         with the application service.
 
         This API requires the use of an application service access token (`as_token`)
-        instead of a typical client's access_token. This API cannot be invoked by
+        instead of a typical client's access token. This API cannot be invoked by
         users who are not identified as application services. Additionally, the
         appservice ID in the path must be the same as the appservice whose `as_token`
         is being used.
@@ -71,15 +72,16 @@ paths:
         - accessToken: []
       responses:
         200:
-          description: The ping was successful
+          description: The ping was successful.
           schema:
             type: object
             properties:
               duration_ms:
                 type: integer
                 description: |-
-                    The duration that the `/_matrix/app/v1/ping` request took
-                    from the homeserver's point of view.
+                    The duration in milliseconds that the
+                    [`/_matrix/app/v1/ping`](#post_matrixappv1ping)
+                    request took from the homeserver's point of view.
           examples:
             application/json: {"duration_ms": 123}
         400:
