@@ -1176,7 +1176,13 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
+{{< added-in v="1.7" >}} Already-authenticated clients can additionally generate
+a token for their user ID if supported by the homeserver using 
+[`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
+
 {{% http-api spec="client-server" api="login" %}}
+
+{{% http-api spec="client-server" api="login_token" %}}
 
 {{% http-api spec="client-server" api="refresh" %}}
 
