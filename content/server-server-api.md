@@ -1270,7 +1270,7 @@ specification](/rooms) for more information. It is
 calculated as follows.
 
 1.  The event is put through the redaction algorithm.
-2.  The `signatures`, `age_ts`, and `unsigned` properties are removed
+2.  The `signatures` and `unsigned` properties are removed
     from the event, if present.
 3.  The event is converted into [Canonical
     JSON](/appendices#canonical-json).
