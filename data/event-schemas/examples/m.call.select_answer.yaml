@@ -1,10 +1,10 @@
 {
   "$ref": "core/room_event.json",
-  "type": "m.call.hangup",
+  "type": "m.call.select_answer",
   "content": {
     "version" : "1",
-    "party_id": "67890",
     "call_id": "12345",
-    "reason": "user_hangup"
+    "party_id": "67890",
+    "selected_party_id": "111213"
   }
 }

@@ -7,11 +7,10 @@
     "properties": {
         "content": {
             "type": "object",
+            "allOf": [{
+                "$ref": "core-event-schema/call_event.yaml"
+            }],
             "properties": {
-                "call_id": {
-                    "type": "string",
-                    "description": "The ID of the call this event relates to."
-                },
                 "answer": {
                     "type": "object",
                     "title": "Answer",
@@ -28,13 +27,9 @@
                         }
                     },
                     "required": ["type", "sdp"]
-                },
-                "version": {
-                    "type": "number",
-                    "description": "The version of the VoIP specification this messages adheres to. This specification is version 0."
                 }
             },
-            "required": ["call_id", "answer", "version"]
+            "required": ["answer"]
         },
         "type": {
             "type": "string",

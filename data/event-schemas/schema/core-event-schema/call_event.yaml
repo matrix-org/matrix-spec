@@ -1,0 +1,25 @@
+description: "The content of all call events shares a set of common fields: those
+  of room events and some additional VoIP specific fields."
+properties:
+  call_id:
+    type: string
+    description: The ID of the call this event relates to.
+  version:
+    type: string
+    description: The version of the VoIP specification this message adheres to.
+      This specification is version 1. This field is a string such that experimental
+      implementations can use non-integer versions. This field was an integer
+      in the previous spec version and implementations must accept an integer
+      0.
+  party_id:
+    type: string
+    description: 'This identifies the party that sent this event. A client may
+      choose to re-use the device ID from end-to-end cryptography for the value
+      of this field.'
+    x-addedInMatrixVersion: "1.7"
+required:
+- call_id
+- version
+- party_id
+title: CallEvent
+type: object

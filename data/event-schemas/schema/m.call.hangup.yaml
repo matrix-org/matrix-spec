@@ -1,35 +1,54 @@
-{
-    "type": "object",
-    "description": "Sent by either party to signal their termination of the call. This can be sent either once the call has has been established or before to abort the call.",
-    "allOf": [{
-        "$ref": "core-event-schema/room_event.yaml"
-    }],
-    "properties": {
-        "content": {
-            "type": "object",
-            "properties": {
-                "call_id": {
-                    "type": "string",
-                    "description": "The ID of the call this event relates to."
-                },
-                "version": {
-                    "type": "integer",
-                    "description": "The version of the VoIP specification this message adheres to. This specification is version 0."
-                },
-                "reason": {
-                    "type": "string",
-                    "description": "Optional error reason for the hangup. This should not be provided when the user naturally ends or rejects the call. When there was an error in the call negotiation, this should be `ice_failed` for when ICE negotiation fails or `invite_timeout` for when the other party did not answer in time.",
-                    "enum": [
-                        "ice_failed",
-                        "invite_timeout"
-                    ]
-                }
-            },
-            "required": ["call_id", "version"]
-        },
-        "type": {
-            "type": "string",
-            "enum": ["m.call.hangup"]
-        }
-    }
-}
+---
+type: object
+description: |
+  Sent by either party to signal their termination of the call. This can
+  be sent either once the call has has been established or before to abort the call.
+
+  The meanings of the `reason` field are as follows:
+   * `ice_failed`: ICE negotiation has failed and a media connection could not be established.
+   * `ice_timeout`: The connection failed after some media was exchanged (as opposed to `ice_failed`
+      which means no media connection could be established). Note that, in the case of an ICE
+      renegotiation, a client should be sure to send `ice_timeout` rather than `ice_failed` if media
+      had previously been received successfully, even if the ICE renegotiation itself failed.
+   * `invite_timeout`: The other party did not answer in time.
+   * `user_hangup`: Clients must now send this code when the user chooses to end the call, although
+     for backwards compatibility with version 0, a clients should treat an absence of the `reason`
+     field as `user_hangup`.
+   * `user_media_failed`: The client was unable to start capturing media in such a way that it is unable
+     to continue the call.
+   * `user_busy`: The user is busy. Note that this exists primarily for bridging to other networks such
+      as the PSTN. A Matrix client that receives a call whilst already in a call would not generally reject
+      the new call unless the user had specifically chosen to do so.
+   * `unknown_error`: Some other failure occurred that meant the client was unable to continue the call
+      rather than the user choosing to end it.
+allOf:
+- "$ref": core-event-schema/room_event.yaml
+properties:
+  content:
+    type: object
+    allOf:
+    - "$ref": core-event-schema/call_event.yaml
+    properties:
+      reason:
+        type: string
+        description: Reason for the hangup. Note that this was optional in
+          previous previous versions of the spec, so a missing value should be
+          treated as `user_hangup`.
+        x-changedInMatrixVersion:
+          1.7: |-
+            Additional values were added.
+        enum:
+        - ice_timeout
+        - ice_failed
+        - invite_timeout
+        - user_hangup
+        - user_media_failed
+        - user_busy
+        - unknown_error
+    required:
+    - reason
+  type:
+    type: string
+    enum:
+    - m.call.hangup
+
