@@ -220,7 +220,8 @@ Implementations using this mechanism should take care to not fail
 entirely in the event of temporary issues, e.g. gracefully handling
 cases where the appservice is started before the homeserver.
 
-The mechanism works as follows:
+The mechanism works as follows (note: the human-readable `error` fields
+have been omitted for brevity):
 
 **Typical**
 
