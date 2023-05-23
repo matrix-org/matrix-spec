@@ -1,0 +1,1 @@
+Remove `age_ts` from the reference hash calculation section as it does no longer exists on events.
