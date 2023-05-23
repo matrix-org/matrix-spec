@@ -1,0 +1,1 @@
+Add `POST /_matrix/app/v1/ping` and `POST /_matrix/client/v1/appservice/{appserviceId}/ping` endpoints as per [MSC2659](https://github.com/matrix-org/matrix-spec-proposals/pull/2659).
