@@ -248,7 +248,9 @@ AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id"
 AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}
 ```
 
-{{% http-api spec="client-server" api="appservice_ping" %}}
+The `/_matrix/app/v1/ping` endpoint is described here. The
+[`/_matrix/client/v1/appservice/{appserviceId}/ping`](#post_matrixclientv1appserviceappserviceidping)
+endpoint is under the Client-Server API extensions section below.
 
 {{% http-api spec="application-service" api="ping" %}}
 
@@ -432,6 +434,15 @@ Similarly, normal users who attempt to create users or aliases *inside*
 an application service-defined namespace will receive the same
 `M_EXCLUSIVE` error code, but only if the application service has
 defined the namespace as `exclusive`.
+
+#### Pinging
+
+{{% added-in v="1.7" %}}
+
+This is the client-server API companion endpoint for the
+[pinging](#pinging) mechanism described above.
+
+{{% http-api spec="client-server" api="appservice_ping" %}}
 
 #### Using `/sync` and `/events`
 
