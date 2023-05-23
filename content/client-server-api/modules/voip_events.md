@@ -6,8 +6,8 @@ This module outlines how two users in a room can set up a Voice over IP
 WebRTC 1.0 standard. Call signalling is achieved by sending [message
 events](#events) to the room. In this version of the spec, only two-party
 communication is supported (e.g. between two peers, or between a peer
-and a multi-point conferencing unit). This means that clients MUST only
-send call events to rooms with exactly two participants.
+and a multi-point conferencing unit). Calls can take place in rooms with
+multiple members, but only two devices can take part in the call.
 
 All VoIP events have a `version` field. This is used to determine whether
 devices support this new version of the protocol. For example, clients can use
