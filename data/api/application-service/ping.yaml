@@ -34,8 +34,8 @@ paths:
         and the `hs_token` the homeserver has is correct.
 
         Currently this is only called by the homeserver as a direct result of
-        the application service calling the appservice ping endpoint in the
-        client API.
+        the application service calling
+        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`](#post_matrixclientv1appserviceappserviceidping).
       operationId: ping
       security:
         - homeserverAccessToken: []
@@ -53,7 +53,7 @@ paths:
                 type: string
                 description: |-
                   A transaction ID for the ping, copied directly from the
-                  client API appservice ping call.
+                  `POST /_matrix/client/v1/appservice/{appserviceId}/ping` call.
       responses:
         200:
           description: The provided `hs_token` is valid and the ping request was successful.
