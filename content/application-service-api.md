@@ -236,8 +236,8 @@ AS <--- HS : 200 OK {"duration_ms": 123}
 ```
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
-    HS <--- AS : 401 Unauthorized {"errcode": "M_UNKNOWN_TOKEN"}
-AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 401, "body": "{\"errcode\": \"M_UNKNOWN_TOKEN\"}"}
+    HS <--- AS : 403 Forbidden {"errcode": "M_FORBIDDEN"}
+AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 403, "body": "{\"errcode\": \"M_FORBIDDEN\"}"}
 ```
 
 **Can't connect to appservice**
