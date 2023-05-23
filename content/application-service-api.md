@@ -222,27 +222,30 @@ cases where the appservice is started before the homeserver.
 
 The mechanism works as follows:
 
-```
-    Typical
-    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
-      HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
-      HS <--- AS : 200 OK {}
-    AS <--- HS : 200 OK {"duration_ms": 123}
-```
+**Typical**
 
 ```
-    Incorrect hs_token
-    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
-      HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
-      HS <--- AS : 401 Unauthorized {"errcode": "M_UNKNOWN_TOKEN"}
-    AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 401, "body": "{\"errcode\": \"M_UNKNOWN_TOKEN\"}"}
+AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+    HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+    HS <--- AS : 200 OK {}
+AS <--- HS : 200 OK {"duration_ms": 123}
 ```
 
+**Incorrect `hs_token`**
+
 ```
-    Can't connect to appservice
-    AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
-      HS -/-> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
-    AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}
+AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+    HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+    HS <--- AS : 401 Unauthorized {"errcode": "M_UNKNOWN_TOKEN"}
+AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 401, "body": "{\"errcode\": \"M_UNKNOWN_TOKEN\"}"}
+```
+
+**Can't connect to appservice**
+
+```
+AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
+    HS -/-> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
+AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}
 ```
 
 {{% http-api spec="client-server" api="appservice_ping" %}}
