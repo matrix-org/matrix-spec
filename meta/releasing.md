@@ -4,6 +4,51 @@ The whole specification is now released as a single unit/artifact. This document
 the process for releasing the specification and a description of how the (public)
 machinery works.
 
+## Timeline
+
+The spec is released each calendar quarter. The target release dates are within the
+following ranges:
+
+* Q1: January 20-27 (critically, before FOSDEM).
+* Q2: May 20-27.
+* Q3: August 20-27.
+* Q4: November 1-15 (before recurring November conflicts).
+
+The SCT aims to have dates picked out by:
+
+* Q1: January 10.
+* Q2: May 1.
+* Q3: August 1.
+* Q4: October 15.
+
+When a release date is picked, a [checklist](https://github.com/matrix-org/matrix-spec/issues/new?assignees=&labels=release-blocker&projects=&template=release.md&title=Matrix+1.X)
+issue is created to track details of the release. Release blockers should continue to
+be accepted up until 7 calendar days prior to the release date.
+
+**Release dates are not promises.** The SCT reserves the ability to change, cancel,
+postpone, etc a release for any reason. Do not rely on a release happening on a given
+day until the release has actually happened & blog post published.
+
+Once a release is scheduled, the SCT will begin planning what the next release is
+expected to look like. The plan should be included in the spec release blog post,
+and be ready for exeuction on spec release day. Plans are guides and not promises.
+
+A blog post for the SCT members to review should be ready at minimum 1 week before
+the target release date. 1-2 days before the release itself, the prerequisite steps
+below are executed to ensure the spec release can go ahead.
+
+## Release composition
+
+*This section is a work in progress.*
+
+Mentioned above, the SCT aims to have spec releases quarterly. Each quarter has a
+slightly different theme to it:
+
+* Q1: Massive feature release, if possible. This generally happens thanks to FOSDEM.
+* Q2: Regular feature release, if possible.
+* Q3: Momentum-continuing feature release, if possible.
+* Q4: Maintenance release (or features, if possible).
+
 ## Prerequisites / preparation
 
 First, can we even release the spec? This stage is mostly preparation work needed
