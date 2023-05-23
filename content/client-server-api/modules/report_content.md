@@ -19,5 +19,6 @@ This may be a dedicated room to alert server administrators to the
 reported content or some other mechanism for notifying the appropriate
 people.
 
-The server MUST verify that the user has permission to view the event
-before accepting a report.
+{{< changed-in v="1.7" >}} The server MUST verify that the user 
+reporting the event is currently joined to the room the event is 
+in before accepting a report.

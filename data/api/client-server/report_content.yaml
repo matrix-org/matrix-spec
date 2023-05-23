@@ -29,11 +29,17 @@ securityDefinitions:
 paths:
   "/rooms/{roomId}/report/{eventId}":
     post:
-      summary: Reports an event as inappropriate. You must have permission to
-        retrieve this event e.g. by being a member in the room for this event.
+      summary: Reports an event as inappropriate. You must be joined to the room in order
+      to report an event.
       description: |-
         Reports an event as inappropriate to the server, which may then notify
         the appropriate people.
+        
+        It may be possible for clients to deduce whether an event exists by
+        timing the response, as only a report for an event that does exist
+        will require the homeserver to check whether a user is joined to
+        the room. To combat this, homeserver implementations may add
+        a random delay when generating a response.
       operationId: reportContent
       tags:
         - Reporting content
@@ -70,6 +76,9 @@ paths:
                 description: The reason the content is being reported. May be blank.
       security:
         - accessToken: []
+      x-changedInMatrixVersion:
+        1.7: |
+          This endpoint now requires the user to be joined to the room.
       responses:
         200:
           description: The event has been reported successfully.
@@ -80,6 +89,9 @@ paths:
         404:
           description: |-
             The event was not found or you do not have permission to read this event.
+
+            Homeserver implementations may additionally return this error if the
+            reported event has been redacted.
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
