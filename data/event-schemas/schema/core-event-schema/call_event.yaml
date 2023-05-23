@@ -16,6 +16,7 @@ properties:
     description: 'This identifies the party that sent this event. A client may
       choose to re-use the device ID from end-to-end cryptography for the value
       of this field.'
+    x-addedInMatrixVersion: "1.7"
 required:
 - call_id
 - version

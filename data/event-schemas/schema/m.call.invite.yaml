@@ -35,6 +35,7 @@
                 "invitee": {
                     "type": "string",
                     "description": "The ID of the user being called. If omitted, any user in the room can answer.",
+                    "x-addedInMatrixVersion": "1.7",
                 }
             },
             "required": ["offer", "lifetime"]

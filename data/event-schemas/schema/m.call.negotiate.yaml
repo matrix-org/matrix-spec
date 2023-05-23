@@ -33,6 +33,7 @@ description: |
   working with the WebRTC API and is mandatory. Receiving clients should not
   attempt to validate the `type` field, but simply pass the object into the
   WebRTC API.
+x-addedInMatrixVersion: "1.7"
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
