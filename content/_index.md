@@ -357,8 +357,8 @@ servers that are in the room that can be used to join via.
 
     HTTP GET
     #matrix:example.org      !aaabaa:matrix.org
-       |                    ^
-       |                    |
+           |                    ^
+           |                    |
     _______V____________________|____
     |          example.org           |
     | Mappings:                      |
