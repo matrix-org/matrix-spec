@@ -201,7 +201,7 @@ paths:
       summary: Create a new `mxc://` URI without uploading the content.
       description: |-
         Creates a new `mxc://` URI, independently of the content being uploaded. The content must be provided later
-        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](http://localhost:1313/client-server-api/#put_matrixmediav3uploadservernamemediaid).
+        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](/client-server-api/#put_matrixmediav3uploadservernamemediaid).
 
         The server may optionally enforce a maximum age for unused IDs,
         and delete media IDs when the client doesn't start the upload in time,
