@@ -1,0 +1,1 @@
+Add missing `knock_restricted` join rule to the `m.room.join_rules` schema.
