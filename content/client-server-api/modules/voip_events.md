@@ -44,7 +44,7 @@ A grammar for `party_id` is defined [below](#grammar-for-voip-ids).
 #### Politeness
 In line with [WebRTC perfect negotiation](https://w3c.github.io/webrtc-pc/#perfect-negotiation-example)
 there are rules to establish which party is polite in the process of renegotiation. The callee is
-always the polite party. In a glare situation, the politenes of a party is therefore determined by
+always the polite party. In a glare situation, the politeness of a party is therefore determined by
 whether the inbound or outbound call is used: if a client discards its outbound call in favour of
 an inbound call, it becomes the polite party.
 
