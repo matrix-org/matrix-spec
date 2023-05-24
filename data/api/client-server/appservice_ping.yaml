@@ -82,6 +82,8 @@ paths:
                     The duration in milliseconds that the
                     [`/_matrix/app/v1/ping`](#post_matrixappv1ping)
                     request took from the homeserver's point of view.
+            required:
+              - duration_ms
           examples:
             application/json: {"duration_ms": 123}
         400:
