@@ -12,7 +12,7 @@ following ranges:
 * Q1: January 20-27 (critically, before FOSDEM).
 * Q2: May 20-27.
 * Q3: August 20-27.
-* Q4: November 1-15 (before recurring November conflicts).
+* Q4: November 1-15 (before recurring November conflicts, like IETF).
 
 The SCT aims to have dates picked out by:
 
@@ -47,7 +47,7 @@ slightly different theme to it:
 * Q1: Massive feature release, if possible. This generally happens thanks to FOSDEM.
 * Q2: Regular feature release, if possible.
 * Q3: Momentum-continuing feature release, if possible.
-* Q4: Maintenance release (or features, if possible).
+* Q4: Preferably a maintenance release, but will accept features per normal.
 
 ## Prerequisites / preparation
 
