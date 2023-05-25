@@ -1,1 +1,0 @@
-Fix PDU examples by removing invalid OpenAPI reference to `examples/minimal_pdu.json`.

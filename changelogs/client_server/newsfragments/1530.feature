@@ -1,1 +1,0 @@
-Add an ability to use an existing session to log in another, as per [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882).
