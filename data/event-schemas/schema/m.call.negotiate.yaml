@@ -42,15 +42,16 @@ properties:
     allOf:
     - "$ref": core-event-schema/call_event.yaml
     properties:
-      offer:
+      description:
         type: object
-        title: Offer
+        title: Description
         description: The session description object
         properties:
           type:
             type: string
             enum:
             - offer
+            - answer
             description: The type of session description.
           sdp:
             type: string
@@ -58,15 +59,8 @@ properties:
         required:
         - type
         - sdp
-      lifetime:
-        type: integer
-        description: The time in milliseconds that the invite is valid for.
-          Once the invite age exceeds this value, clients should discard it.
-          They should also no longer show the call as awaiting an answer in the
-          UI.
     required:
-    - offer
-    - lifetime
+    - description
   type:
     type: string
     enum:
