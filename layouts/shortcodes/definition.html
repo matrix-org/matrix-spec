@@ -39,6 +39,8 @@
  <code>{{ $definition.title }}</code>
 </h1>
 
+</summary>
+
 <hr/>
 
 {{ if (index $definition "x-addedInMatrixVersion") }}
@@ -47,7 +49,6 @@
 
 {{ $definition.description | markdownify }}
 
-</summary>
 
 {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $definition "name" (printf "\"%s\"" $path)) }}
 {{ $additional_types = uniq $additional_types }}
