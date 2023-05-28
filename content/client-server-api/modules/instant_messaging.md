@@ -135,7 +135,7 @@ between rooms.
 Messages SHOULD appear immediately in the message view when a user
 presses the "send" button. This should occur even if the message is
 still sending. This is referred to as "local echo". Clients SHOULD
-implement "local echo" of messages. Clients MAY display messages in a
+implement "local echo" of messages. Clients might display messages in a
 different format to indicate that the server has not processed the
 message. This format should be removed when the server responds.
 
