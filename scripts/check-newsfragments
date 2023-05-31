@@ -21,6 +21,12 @@ matched=0
 while read f; do
     basename=$(basename $f)
     dirname=$(dirname $f)
+    extension="${f##*.}"
+
+    # check that each changelog file has a known extension
+    if ! [[ "$extension" == "new" || "$extension" == "feature" || "$extension" == "clarification" || "$extension" == "breaking" || "$extension" == "deprecation" ]]; then
+        echo -e "\e[31mERROR: newsfragment $f does not have one of the required file extensions for a changelog entry: .new, .feature, .clarification, .breaking, .deprecation\e[39m" >&2
+    fi
 
     # check that there is nothing that looks like a newsfile outside one of the
     # expected directories.
@@ -31,6 +37,7 @@ while read f; do
         # see if this newsfile corresponds to the right PR
         [[ -n "$pr" && "$basename" == "$pr".* ]] && matched=1
     fi
+# find all files in the 'changelogs/*/' dirs that are in the form `<digits>.<text>`
 done < <(find changelogs -regex '.*/[0-9]+\.[^/]+$')
 
 if [[ -n "$pr" && "$matched" -eq 0 ]]; then
