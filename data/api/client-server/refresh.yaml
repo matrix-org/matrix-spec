@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Registration and Login API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
+  title: Matrix Client-Server Registration and Login API
+  version: 1.0.0
 paths:
-  "/refresh":
+  /refresh:
     post:
       x-addedInMatrixVersion: "1.3"
       summary: Refresh an access token
@@ -48,63 +39,81 @@ paths:
 
         Application Service identity assertion is disabled for this endpoint.
       operationId: refresh
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            type: object
-            example: {
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
                 "refresh_token": "some_token"
               }
-            properties:
-              refresh_token:
-                type: string
-                description: The refresh token
-            required:
-              - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+                  description: The refresh token
+              required:
+                - refresh_token
+        required: true
       responses:
-        200:
+        "200":
           description: A new access token and refresh token were generated.
-          examples:
-            application/json: {
-                "access_token": "a_new_token",
-                "expires_in_ms": 60000,
-                "refresh_token": "another_new_token"
-              }
-          schema:
-            type: object
-            properties:
-              access_token:
-                type: string
-                description: |-
-                  The new access token to use.
-              refresh_token:
-                type: string
-                description: |-
-                  The new refresh token to use when the access token needs to
-                  be refreshed again. If not given, the old refresh token can
-                  be re-used.
-              expires_in_ms:
-                type: integer
-                description: |-
-                  The lifetime of the access token, in milliseconds. If not
-                  given, the client can assume that the access token will not
-                  expire.
-            required:
-              - access_token
-        401:
-          description: |-
-            The provided token was unknown, or has already been used.
-          examples:
-            application/json: {
-                "errcode": "M_UNKNOWN_TOKEN",
-                "error": "Soft logged out",
-                "soft_logout": true
-              }
-          schema:
-            "$ref": "definitions/errors/error.yaml"
-        429:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: The new access token to use.
+                  refresh_token:
+                    type: string
+                    description: |-
+                      The new refresh token to use when the access token needs to
+                      be refreshed again. If not given, the old refresh token can
+                      be re-used.
+                  expires_in_ms:
+                    type: integer
+                    description: |-
+                      The lifetime of the access token, in milliseconds. If not
+                      given, the client can assume that the access token will not
+                      expire.
+                required:
+                  - access_token
+              examples:
+                response:
+                  value: {
+                    "access_token": "a_new_token",
+                    "expires_in_ms": 60000,
+                    "refresh_token": "another_new_token"
+                  }
+        "401":
+          description: The provided token was unknown, or has already been used.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNKNOWN_TOKEN",
+                    "error": "Soft logged out",
+                    "soft_logout": true
+                  }
+        "429":
           description: This request was rate-limited.
-          schema:
-            "$ref": "definitions/errors/rate_limited.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/rate_limited.yaml
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3

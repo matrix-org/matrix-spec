@@ -11,21 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Sync Guest API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Sync Guest API
+  version: 1.0.0
 paths:
   # With an extra " " to disambiguate from the getEvents endpoint
   # The extra space makes it sort first for what I'm sure is a good reason.
@@ -48,62 +37,82 @@ paths:
         - accessToken: []
       parameters:
         - in: query
-          type: string
           name: from
           description: |-
             The token to stream from. This token is either from a previous
             request to this API or from the initial sync API.
           required: false
-          x-example: "s3456_9_0"
+          example: s3456_9_0
+          schema:
+            type: string
         - in: query
-          type: integer
           name: timeout
           description: The maximum time in milliseconds to wait for an event.
           required: false
-          x-example: "35000"
-        - in: query
-          type: string
-          name: room_id
-          description: |-
-            The room ID for which events should be returned.
-          x-example:
-            - "!somewhere:over.the.rainbow"
-      responses:
-        200:
-          description: "The events received, which may be none."
-          examples:
-            application/json: {
-                "start": "s3456_9_0",
-                "end": "s3457_9_0",
-                "chunk": [
-                  {
-                    "room_id": "!somewhere:over.the.rainbow",
-                    "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
-                  }
-                ]
-              }
+          example: "35000"
           schema:
-            type: object
-            properties:
-              start:
-                type: string
-                description: |-
-                  A token which correlates to the first value in `chunk`. This
-                  is usually the same token supplied to `from=`.
-              end:
-                type: string
-                description: |-
-                  A token which correlates to the last value in `chunk`. This
-                  token should be used in the next request to `/events`.
-              chunk:
-                type: array
-                description: "An array of events."
-                items:
-                  type: object
-                  title: Event
-                  allOf:
-                    - "$ref": "definitions/client_event.yaml"
-        400:
-          description: "Bad pagination `from` parameter."
+            type: integer
+        - in: query
+          name: room_id
+          description: The room ID for which events should be returned.
+          example:
+            - "!somewhere:over.the.rainbow"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The events received, which may be none.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start:
+                    type: string
+                    description: |-
+                      A token which correlates to the first value in `chunk`. This
+                      is usually the same token supplied to `from=`.
+                  end:
+                    type: string
+                    description: |-
+                      A token which correlates to the last value in `chunk`. This
+                      token should be used in the next request to `/events`.
+                  chunk:
+                    type: array
+                    description: An array of events.
+                    items:
+                      type: object
+                      title: Event
+                      allOf:
+                        - $ref: definitions/client_event.yaml
+              examples:
+                response:
+                  value: {
+                    "start": "s3456_9_0",
+                    "end": "s3457_9_0",
+                    "chunk": [
+                      {
+                        "room_id": "!somewhere:over.the.rainbow",
+                        "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
+                      }
+                    ]
+                  }
+        "400":
+          description: Bad pagination `from` parameter.
       tags:
         - Room participation
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

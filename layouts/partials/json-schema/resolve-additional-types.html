@@ -70,8 +70,8 @@
     {{/*
       Add any nested objects referenced in this object's `items`
     */}}
-    {{ if reflect.IsSlice $this_object.items}}
-        {{ range $idx, $item := $this_object.items }}
+    {{ if $this_object.items.anyOf }}
+        {{ range $idx, $item := $this_object.items.anyOf }}
             {{ $additional_objects = partial "get-additional-objects" (dict
                 "this_object" $item
                 "additional_objects" $additional_objects

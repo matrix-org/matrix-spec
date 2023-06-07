@@ -11,23 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Sync API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Sync API
+  version: 1.0.0
 paths:
-  "/events":
+  /events:
     get:
       summary: Listen on the event stream.
       description: |-
@@ -43,54 +32,61 @@ paths:
         - accessToken: []
       parameters:
         - in: query
-          type: string
           name: from
           description: |-
             The token to stream from. This token is either from a previous
             request to this API or from the initial sync API.
           required: false
-          x-example: "s3456_9_0"
+          example: s3456_9_0
+          schema:
+            type: string
         - in: query
-          type: integer
           name: timeout
           description: The maximum time in milliseconds to wait for an event.
           required: false
-          x-example: "35000"
-      responses:
-        200:
-          description: "The events received, which may be none."
-          examples:
-            application/json: {
-                "start": "s3456_9_0",
-                "end": "s3457_9_0",
-                "chunk": [
-                  {"$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"}
-                ]
-              }
+          example: "35000"
           schema:
-            type: object
-            properties:
-              start:
-                type: string
-                description: |-
-                  A token which correlates to the start of `chunk`. This
-                  is usually the same token supplied to `from=`.
-              end:
-                type: string
-                description: |-
-                  A token which correlates to the end of `chunk`. This
-                  token should be used in the next request to `/events`.
-              chunk:
-                type: array
-                description: "An array of events."
-                items:
-                  $ref: "definitions/client_event.yaml"
-        400:
-          description: "Bad pagination `from` parameter."
+            type: integer
+      responses:
+        "200":
+          description: The events received, which may be none.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  start:
+                    type: string
+                    description: |-
+                      A token which correlates to the start of `chunk`. This
+                      is usually the same token supplied to `from=`.
+                  end:
+                    type: string
+                    description: |-
+                      A token which correlates to the end of `chunk`. This
+                      token should be used in the next request to `/events`.
+                  chunk:
+                    type: array
+                    description: An array of events.
+                    items:
+                      $ref: definitions/client_event.yaml
+              examples:
+                response:
+                  value: {
+                    "start": "s3456_9_0",
+                    "end": "s3457_9_0",
+                    "chunk": [
+                      {
+                        "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
+                      }
+                    ]
+                  }
+        "400":
+          description: Bad pagination `from` parameter.
       tags:
         - Room participation
       deprecated: true
-  "/initialSync":
+  /initialSync:
     get:
       summary: Get the user's current state.
       description: |-
@@ -106,13 +102,13 @@ paths:
         - accessToken: []
       parameters:
         - in: query
-          type: integer
           name: limit
           description: The maximum number of messages to return for each room.
           required: false
-          x-example: "2"
+          example: "2"
+          schema:
+            type: integer
         - in: query
-          type: boolean
           name: archived
           description: |-
             Whether to include rooms that the user has left. If `false` then
@@ -120,176 +116,201 @@ paths:
             included. If set to `true` then rooms that the user has left are
             included as well. By default this is `false`.
           required: false
-          x-example: "true"
-      responses:
-        200:
-          description: The user's current state.
-          examples:
-            application/json: {
-                  "end": "s3456_9_0",
-                  "presence": [
-                      {"$ref": "../../event-schemas/examples/m.presence.yaml"}
-                  ],
-                  "account_data": [
-                    {
-                      "type": "org.example.custom.config",
-                      "content": {
-                        "custom_config_key": "custom_config_value"
-                      }
-                    }
-                  ],
-                  "rooms": [
-                      {
-                          "membership": "join",
-                          "messages": {
-                              "chunk": [
-                                  {
-                                    "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                    "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
-                                  },
-                                  {
-                                    "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                    "$ref": "../../event-schemas/examples/m.room.message$m.video.yaml"
-                                  }
-                              ],
-                              "end": "s3456_9_0",
-                              "start": "t44-3453_9_0"
-                          },
-                          "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                          "state": [
-                              {
-                                "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                "$ref": "../../event-schemas/examples/m.room.join_rules.yaml"
-                              },
-                              {
-                                "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                "$ref": "../../event-schemas/examples/m.room.member.yaml"
-                              },
-                              {
-                                "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                "$ref": "../../event-schemas/examples/m.room.create.yaml"
-                              },
-                              {
-                                "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
-                                "$ref": "../../event-schemas/examples/m.room.power_levels.yaml"
-                              }
-                          ],
-                          "visibility": "private",
-                          "account_data": [
-                            {
-                              "type": "m.tag",
-                              "content": {"tags": {"work": {"order": 1}}}
-                            },
-                            {
-                              "type": "org.example.custom.room.config",
-                              "content": {
-                                "custom_config_key": "custom_config_value"
-                              }
-                            }
-                          ]
-                      }
-                  ]
-              }
+          example: "true"
           schema:
-            type: object
-            properties:
-              end:
-                type: string
-                description: |-
-                  A token which correlates to the end of the timelines returned. This
-                  token should be used with the `/events` endpoint to listen for new
-                  events.
-              presence:
-                type: array
-                description: A list of presence events.
-                items:
-                  $ref: "definitions/client_event.yaml"
-              rooms:
-                type: array
-                items:
-                  type: object
-                  title: RoomInfo
-                  properties:
-                    room_id:
-                      type: string
-                      description: "The ID of this room."
-                    membership:
-                      type: string
-                      description: "The user's membership state in this room."
-                      enum: ["invite", "join", "leave", "ban"]
-                    invite:
-                        type: object
-                        title: "InviteEvent"
-                        description: "The invite event if `membership` is `invite`"
-                        allOf:
-                          - $ref: "definitions/client_event.yaml"
-                    messages:
+            type: boolean
+      responses:
+        "200":
+          description: The user's current state.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  end:
+                    type: string
+                    description: |-
+                      A token which correlates to the end of the timelines returned. This
+                      token should be used with the `/events` endpoint to listen for new
+                      events.
+                  presence:
+                    type: array
+                    description: A list of presence events.
+                    items:
+                      $ref: definitions/client_event.yaml
+                  rooms:
+                    type: array
+                    items:
                       type: object
-                      title: PaginationChunk
-                      description: "The pagination chunk for this room."
+                      title: RoomInfo
                       properties:
-                        start:
+                        room_id:
                           type: string
-                          description: |-
-                            A token which correlates to the start of `chunk`.
-                            Can be passed to
-                            [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
-                            to retrieve earlier events.
+                          description: The ID of this room.
+                        membership:
+                          type: string
+                          description: The user's membership state in this room.
+                          enum:
+                            - invite
+                            - join
+                            - leave
+                            - ban
+                        invite:
+                          type: object
+                          title: InviteEvent
+                          description: The invite event if `membership` is `invite`
+                          allOf:
+                            - $ref: definitions/client_event.yaml
+                        messages:
+                          type: object
+                          title: PaginationChunk
+                          description: The pagination chunk for this room.
+                          properties:
+                            start:
+                              type: string
+                              description: |-
+                                A token which correlates to the start of `chunk`.
+                                Can be passed to
+                                [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                                to retrieve earlier events.
 
-                            If no earlier events are available, this property may be omitted from
-                            the response.
-                        end:
-                          type: string
-                          description: |-
-                            A token which correlates to the end of `chunk`.
-                            Can be passed to
-                            [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
-                            to retrieve later events.
-                        chunk:
+                                If no earlier events are available, this property may be omitted from
+                                the response.
+                            end:
+                              type: string
+                              description: |-
+                                A token which correlates to the end of `chunk`.
+                                Can be passed to
+                                [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                                to retrieve later events.
+                            chunk:
+                              type: array
+                              description: |-
+                                If the user is a member of the room this will be a
+                                list of the most recent messages for this room. If
+                                the user has left the room this will be the
+                                messages that preceded them leaving. This array
+                                will consist of at most `limit` elements.
+                              items:
+                                $ref: definitions/client_event.yaml
+                          required:
+                            - end
+                            - chunk
+                        state:
                           type: array
                           description: |-
-                            If the user is a member of the room this will be a
-                            list of the most recent messages for this room. If
-                            the user has left the room this will be the
-                            messages that preceded them leaving. This array
-                            will consist of at most `limit` elements.
+                            If the user is a member of the room this will be the
+                            current state of the room as a list of events. If the
+                            user has left the room this will be the state of the
+                            room when they left it.
                           items:
-                            $ref: "definitions/client_event.yaml"
-                      required: ["end", "chunk"]
-                    state:
-                      type: array
-                      description: |-
-                        If the user is a member of the room this will be the
-                        current state of the room as a list of events. If the
-                        user has left the room this will be the state of the
-                        room when they left it.
-                      items:
-                        $ref: "definitions/client_event.yaml"
-                    visibility:
-                      type: string
-                      enum: ["private", "public"]
-                      description: |-
-                        Whether this room is visible to the `/publicRooms` API
-                        or not."
-                    account_data:
-                      type: array
-                      description: |-
-                        The private data that this user has attached to
-                        this room.
-                      items:
-                        $ref: "definitions/client_event.yaml"
-                  required: ["room_id", "membership"]
-              account_data:
-                type: array
-                description: |-
-                  The global private data created by this user.
-                items:
-                  title: Event
-                  type: object
-                  allOf:
-                    - "$ref": "../../event-schemas/schema/core-event-schema/event.yaml"
-            required: ["end", "rooms", "presence"]
-        404:
+                            $ref: definitions/client_event.yaml
+                        visibility:
+                          type: string
+                          enum:
+                            - private
+                            - public
+                          description: |-
+                            Whether this room is visible to the `/publicRooms` API
+                            or not."
+                        account_data:
+                          type: array
+                          description: |-
+                            The private data that this user has attached to
+                            this room.
+                          items:
+                            $ref: definitions/client_event.yaml
+                      required:
+                        - room_id
+                        - membership
+                  account_data:
+                    type: array
+                    description: The global private data created by this user.
+                    items:
+                      title: Event
+                      type: object
+                      allOf:
+                        - $ref: ../../event-schemas/schema/core-event-schema/event.yaml
+                required:
+                  - end
+                  - rooms
+                  - presence
+              examples:
+                response:
+                  value: {
+                    "end": "s3456_9_0",
+                    "presence": [
+                      {
+                        "$ref": "../../event-schemas/examples/m.presence.yaml"
+                      }
+                    ],
+                    "account_data": [
+                      {
+                        "type": "org.example.custom.config",
+                        "content": {
+                          "custom_config_key": "custom_config_value"
+                        }
+                      }
+                    ],
+                    "rooms": [
+                      {
+                        "membership": "join",
+                        "messages": {
+                          "chunk": [
+                            {
+                              "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                              "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
+                            },
+                            {
+                              "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                              "$ref": "../../event-schemas/examples/m.room.message$m.video.yaml"
+                            }
+                          ],
+                          "end": "s3456_9_0",
+                          "start": "t44-3453_9_0"
+                        },
+                        "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                        "state": [
+                          {
+                            "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                            "$ref": "../../event-schemas/examples/m.room.join_rules.yaml"
+                          },
+                          {
+                            "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                            "$ref": "../../event-schemas/examples/m.room.member.yaml"
+                          },
+                          {
+                            "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                            "$ref": "../../event-schemas/examples/m.room.create.yaml"
+                          },
+                          {
+                            "room_id": "!TmaZBKYIFrIPVGoUYp:localhost",
+                            "$ref": "../../event-schemas/examples/m.room.power_levels.yaml"
+                          }
+                        ],
+                        "visibility": "private",
+                        "account_data": [
+                          {
+                            "type": "m.tag",
+                            "content": {
+                              "tags": {
+                                "work": {
+                                  "order": 1
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "org.example.custom.room.config",
+                            "content": {
+                              "custom_config_key": "custom_config_value"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+        "404":
           description: There is no avatar URL for this user or this user does not exist.
       tags:
         - Room participation
@@ -310,20 +331,42 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: eventId
           description: The event ID to get.
           required: true
-          x-example: "$asfDuShaf7Gafaw:matrix.org"
-      responses:
-        200:
-          description: The full event.
-          examples:
-            application/json: {"$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"}
+          example: $asfDuShaf7Gafaw:matrix.org
           schema:
-            $ref: "definitions/client_event.yaml"
-        404:
-          description: The event was not found or you do not have permission to read this event.
+            type: string
+      responses:
+        "200":
+          description: The full event.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/client_event.yaml
+              examples:
+                response:
+                  value: {
+                    "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
+                  }
+        "404":
+          description: The event was not found or you do not have permission to read this
+            event.
       tags:
         - Room participation
       deprecated: true
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

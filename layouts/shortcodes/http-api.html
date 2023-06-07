@@ -20,7 +20,7 @@
 {{ $api := .Params.api}}
 
 {{ $api_data := index .Site.Data.api .Params.spec .Params.api }}
-{{ $base_url := $api_data.basePath }}
+{{ $base_url := (index $api_data.servers 0).variables.basePath.default }}
 {{ $path := delimit (slice "api" $spec) "/" }}
 
 {{ partial "openapi/render-api" (dict "api_data" $api_data "base_url" $base_url "path" $path) }}

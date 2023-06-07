@@ -102,9 +102,16 @@
             internal structure, handle this with a bit of recursion
         */}}
         {{ $type = delimit (slice "{string: " (partial "type-or-title" .additionalProperties) "}" ) "" }}
-    {{ else if reflect.IsSlice .type }}
+    {{ else if and .oneOf (reflect.IsSlice .oneOf) }}
         {{/* It's legal to specify an array of types. Join them together in that case */}}
-        {{ $type = delimit .type "|" }}
+
+        {{ $types := slice }}
+
+        {{ range .oneOf }}
+            {{ $types = $types | append .type }}
+        {{ end }}
+
+        {{ $type = delimit $types "|" }}
     {{ else }}
         {{ $type = .type }}
     {{ end }}

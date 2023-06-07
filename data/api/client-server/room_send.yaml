@@ -12,21 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server message event send API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server message event send API
+  version: 1.0.0
 paths:
   "/rooms/{roomId}/send/{eventType}/{txnId}":
     put:
@@ -44,58 +33,81 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: roomId
           description: The room to send the event to.
           required: true
-          x-example: "!636q39766251:example.com"
+          example: "!636q39766251:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: eventType
           description: The type of event to send.
           required: true
-          x-example: "m.room.message"
+          example: m.room.message
+          schema:
+            type: string
         - in: path
           name: txnId
-          type: string
           description: |-
             The [transaction ID](/client-server-api/#transaction-identifiers) for this event. Clients should generate an
             ID unique across requests with the same access token; it will be
             used by the server to ensure idempotency of requests.
           required: true
-          x-example: "35"
-        - in: body
-          name: body
-          required: true
+          example: "35"
           schema:
-            type: object
-            example: {
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
                 "msgtype": "m.text",
                 "body": "hello"
               }
+        required: true
       responses:
-        200:
-          description: "An ID for the sent event."
-          examples:
-            application/json: {
-                  "event_id": "$YUwRidLecu:example.com"
-              }
-          schema:
-            type: object
-            properties:
-              event_id:
-                type: string
-                description: |-
-                  A unique identifier for the event.
-            required:
-              - event_id
-        400:
+        "200":
+          description: An ID for the sent event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_id:
+                    type: string
+                    description: A unique identifier for the event.
+                required:
+                  - event_id
+              examples:
+                response:
+                  value: {
+                    "event_id": "$YUwRidLecu:example.com"
+                  }
+        "400":
           description: |-
             The request is invalid. A [standard error response](/client-server-api/#standard-error-response)
             will be returned. As well as the normal common error codes, other reasons for rejection include:
 
             - `M_DUPLICATE_ANNOTATION`: The request is an attempt to send a [duplicate annotation](/client-server-api/#avoiding-duplicate-annotations).
-          schema:
-            "$ref": "definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
       tags:
         - Room participation
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

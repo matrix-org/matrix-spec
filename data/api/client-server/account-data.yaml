@@ -11,21 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Client Config API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Client Config API
+  version: 1.0.0
 paths:
   "/user/{userId}/account_data/{type}":
     put:
@@ -40,71 +29,85 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: userId
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
             authorized to make requests for this user ID.
-          x-example: "@alice:example.com"
+          example: "@alice:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: type
           required: true
           description: |-
             The event type of the account data to set. Custom types should be
             namespaced to avoid clashes.
-          x-example: "org.example.custom.config"
-        - in: body
-          name: content
-          required: true
-          description: |-
-            The content of the account data.
+          example: org.example.custom.config
           schema:
-            type: object
-            example: {
-              "custom_account_data_key": "custom_config_value"}
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "custom_account_data_key": "custom_config_value"
+              }
+        description: The content of the account data.
+        required: true
       responses:
-        200:
-          description:
-            The account data was successfully added.
-          examples:
-            application/json: {}
-          schema:
-            type: object
-        400:
+        "200":
+          description: The account data was successfully added.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "400":
           description: |-
             The request body is not a JSON object. Errcode: `M_BAD_JSON`
             or `M_NOT_JSON`.
-          examples:
-            application/json: {
-              "errcode": "M_NOT_JSON",
-              "error": "Content must be a JSON object."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        403:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_JSON",
+                    "error": "Content must be a JSON object."
+                  }
+        "403":
           description: |-
             The access token provided is not authorized to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "Cannot add account data for other users."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        405:
-          examples:
-            application/json: {
-              "errcode": "M_BAD_JSON",
-              "error": "Cannot set m.fully_read through this API."
-            }
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot add account data for other users."
+                  }
+        "405":
           description: |-
             This `type` of account data is controlled by the server; it cannot be
             modified by clients. Errcode: `M_BAD_JSON`.
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_BAD_JSON",
+                    "error": "Cannot set m.fully_read through this API."
+                  }
       tags:
         - User data
     get:
@@ -117,51 +120,61 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: userId
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
             authorized to make requests for this user ID.
-          x-example: "@alice:example.com"
+          example: "@alice:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: type
           required: true
           description: |-
             The event type of the account data to get. Custom types should be
             namespaced to avoid clashes.
-          x-example: "org.example.custom.config"
-      responses:
-        200:
-          description:
-            The account data content for the given type.
+          example: org.example.custom.config
           schema:
-            type: object
-            example: {
-              "custom_account_data_key": "custom_config_value"}
-        403:
+            type: string
+      responses:
+        "200":
+          description: The account data content for the given type.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {
+                  "custom_account_data_key": "custom_config_value"
+                }
+        "403":
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "Cannot add account data for other users."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot add account data for other users."
+                  }
+        "404":
           description: |-
             No account data has been provided for this user with the given `type`.
             Errcode: `M_NOT_FOUND`.
-          examples:
-            application/json: {
-              "errcode": "M_NOT_FOUND",
-              "error": "Account data not found."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Account data not found."
+                  }
       tags:
         - User data
   "/user/{userId}/rooms/{roomId}/account_data/{type}":
@@ -176,79 +189,93 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: userId
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
             authorized to make requests for this user ID.
-          x-example: "@alice:example.com"
+          example: "@alice:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: roomId
           required: true
-          description: |-
-            The ID of the room to set account data on.
-          x-example: "!726s6s6q:example.com"
+          description: The ID of the room to set account data on.
+          example: "!726s6s6q:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: type
           required: true
           description: |-
             The event type of the account data to set. Custom types should be
             namespaced to avoid clashes.
-          x-example: "org.example.custom.room.config"
-        - in: body
-          name: content
-          required: true
-          description: |-
-            The content of the account data.
+          example: org.example.custom.room.config
           schema:
-            type: object
-            example: {
-              "custom_account_data_key": "custom_account_data_value"}
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "custom_account_data_key": "custom_account_data_value"
+              }
+        description: The content of the account data.
+        required: true
       responses:
-        200:
-          description:
-            The account data was successfully added.
-          examples:
-            application/json: {}
-          schema:
-            type: object
-        400:
+        "200":
+          description: The account data was successfully added.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "400":
           description: |-
             The request body is not a JSON object (errcode `M_BAD_JSON` or
             `M_NOT_JSON`), or the given `roomID` is not a valid room ID
             (errcode `M_INVALID_PARAM`).
-          examples:
-            application/json: {
-              "errcode": "M_NOT_JSON",
-              "error": "Content must be a JSON object."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        403:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_JSON",
+                    "error": "Content must be a JSON object."
+                  }
+        "403":
           description: |-
             The access token provided is not authorized to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "Cannot add account data for other users."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        405:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot add account data for other users."
+                  }
+        "405":
           description: |-
             This `type` of account data is controlled by the server; it cannot be
             modified by clients. Errcode: `M_BAD_JSON`.
-          examples:
-            application/json: {
-              "errcode": "M_BAD_JSON",
-              "error": "Cannot set m.fully_read through this API."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_BAD_JSON",
+                    "error": "Cannot set m.fully_read through this API."
+                  }
       tags:
         - User data
     get:
@@ -261,65 +288,93 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: userId
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
             authorized to make requests for this user ID.
-          x-example: "@alice:example.com"
+          example: "@alice:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: roomId
           required: true
-          description: |-
-            The ID of the room to get account data for.
-          x-example: "!726s6s6q:example.com"
+          description: The ID of the room to get account data for.
+          example: "!726s6s6q:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: type
           required: true
           description: |-
             The event type of the account data to get. Custom types should be
             namespaced to avoid clashes.
-          x-example: "org.example.custom.room.config"
-      responses:
-        200:
-          description:
-            The account data content for the given type.
+          example: org.example.custom.room.config
           schema:
-            type: object
-            example: {
-              "custom_account_data_key": "custom_config_value"}
-        400:
-          description: |-
-            The given `roomID` is not a valid room ID. Errcode: `M_INVALID_PARAM`.
-          examples:
-            application/json: {
-              "errcode": "M_INVALID_PARAM",
-              "error": "@notaroomid:example.org is not a valid room ID."
-            }
-        403:
+            type: string
+      responses:
+        "200":
+          description: The account data content for the given type.
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {
+                  "custom_account_data_key": "custom_config_value"
+                }
+        "400":
+          description: "The given `roomID` is not a valid room ID. Errcode:
+            `M_INVALID_PARAM`."
+          content:
+            application/json:
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "@notaroomid:example.org is not a valid room ID."
+                  }
+        "403":
           description: |-
             The access token provided is not authorized to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "Cannot add account data for other users."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        404:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot add account data for other users."
+                  }
+        "404":
           description: |-
             No account data has been provided for this user and this room with the 
             given `type`. Errcode: `M_NOT_FOUND`.
-          examples:
-            application/json: {
-              "errcode": "M_NOT_FOUND",
-              "error": "Room account data not found."
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Room account data not found."
+                  }
       tags:
         - User data
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml
