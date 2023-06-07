@@ -1,9 +1,8 @@
 # no doubt older versions would be fine for many of these but these were
 # current at the time of writing
 
-# jsonschema 3.0.0 objects to the $refs in our schema file. TODO: figure out
-# why.
-jsonschema >= 2.6.0, < 3.0.0
+# we need at least version 4.0.0 for support of JSON Schema Draft 2020-12.
+jsonschema >= 4.0.0
 
 PyYAML >= 3.12
 requests >= 2.18.4
