@@ -225,6 +225,7 @@ paths:
                   }
   "/send_join/{roomId}/{eventId}":
     put:
+      deprecated: true
       summary: Submit a signed join event to a resident server
       description: |-
         **Note:**
@@ -319,18 +320,6 @@ paths:
                 - origin_server_ts
                 - type
                 - content
-            example: {
-              "room_id": "!somewhere:example.org",
-              "type": "m.room.member",
-              "state_key": "@someone:example.org",
-              "origin": "example.org",
-              "origin_server_ts": 1549041175876,
-              "sender": "@someone:example.org",
-              "content": {
-                  "membership": "join",
-                  "join_authorised_via_users_server": "@anyone:resident.example.org"
-              }
-            }
         required: true
       responses:
         "200":

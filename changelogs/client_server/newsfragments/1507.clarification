@@ -1,1 +1,0 @@
-Clarify `m.location` scheme by partially reverting [f1f32d3](https://github.com/matrix-org/matrix-spec/commit/f1f32d3a15c325ee8aa9d2c6bafd96c38069bb53). Contributed by @HarHarLinks.

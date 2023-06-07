@@ -28,6 +28,7 @@ properties:
           - invite
           - private
           - restricted
+          - knock_restricted
         type: string
       allow:
         x-addedInMatrixVersion: "1.2"

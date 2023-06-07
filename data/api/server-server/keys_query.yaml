@@ -88,7 +88,6 @@ paths:
                     given.
                   additionalProperties:
                     type: object
-                    title: ServerName
                     description: The server names to query.
                     additionalProperties:
                       type: object

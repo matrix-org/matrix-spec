@@ -153,12 +153,6 @@ relationships and solid lines showing topological ordering.
 
 ![threaded-dag](/diagrams/threaded-dag.png)
 
-{{% boxes/note %}}
-`m.reaction` relationships are not currently specified, but are shown here for
-their conceptual place in a threaded DAG. They are currently proposed as
-[MSC2677](https://github.com/matrix-org/matrix-spec-proposals/pull/2677).
-{{% /boxes/note %}}
-
 This DAG can be represented as 3 threaded timelines, with `A` and `B` being thread
 roots:
 

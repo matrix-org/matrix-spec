@@ -140,6 +140,20 @@ paths:
                 required:
                   - auth_chain_ids
                   - pdu_ids
+        "404":
+          description: |-
+            The given `event_id` was not found or the server doesn't know about the state at
+            that event to return anything useful.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Could not find event $Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"
+                  }
   "/event/{eventId}":
     get:
       summary: Get a single event

@@ -219,7 +219,7 @@ paths:
       summary: Create a new `mxc://` URI without uploading the content.
       description: |-
         Creates a new `mxc://` URI, independently of the content being uploaded. The content must be provided later
-        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](http://localhost:1313/client-server-api/#put_matrixmediav3uploadservernamemediaid).
+        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](/client-server-api/#put_matrixmediav3uploadservernamemediaid).
 
         The server may optionally enforce a maximum age for unused IDs,
         and delete media IDs when the client doesn't start the upload in time,
@@ -242,7 +242,6 @@ paths:
       security:
         - accessToken: []
       # empty json object
-      parameters: []
       responses:
         "200":
           description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for
@@ -335,6 +334,18 @@ paths:
             type: integer
             format: int64
             default: 20000
+        - in: query
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          required: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
+          example: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: The content that was previously uploaded.
@@ -353,6 +364,21 @@ paths:
                 type: string
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
+                format: binary
+        "307":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
+        "308":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
         "429":
           description: This request was rate-limited.
           content:
@@ -445,6 +471,18 @@ paths:
             type: integer
             format: int64
             default: 20000
+        - in: query
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          required: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
+          example: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: The content that was previously uploaded.
@@ -466,6 +504,20 @@ paths:
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
                 format: binary
+        "307":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
+        "308":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
         "429":
           description: This request was rate-limited.
           content:
@@ -579,6 +631,18 @@ paths:
             type: integer
             format: int64
             default: 20000
+        - in: query
+          name: allow_redirect
+          x-addedInMatrixVersion: "1.7"
+          required: false
+          description: |
+            Indicates to the server that it may return a 307 or 308 redirect response that points
+            at the relevant media content. When not explicitly set to true the server must return
+            the media content itself.
+          example: false
+          schema:
+            type: boolean
+            default: false
       responses:
         "200":
           description: A thumbnail of the requested content.
@@ -600,9 +664,22 @@ paths:
             image/png:
               schema:
                 type: string
-                # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the thumbnail."
                 format: binary
+        "307":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
+        "308":
+          description: A redirect to the thumbnail of the requested content.
+          headers:
+            Location:
+              description: The URL of the thumbnail content.
+              schema:
+                type: string
         "400":
           description: |-
             The request does not make sense to the server, or the server cannot thumbnail

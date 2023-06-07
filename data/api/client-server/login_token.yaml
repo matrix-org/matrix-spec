@@ -1,0 +1,134 @@
+# Copyright 2023 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Registration and Login API
+  version: 1.0.0
+paths:
+  /login/get_token:
+    post:
+      summary: Optional endpoint to generate a single-use, time-limited,
+        `m.login.token` token.
+      description: |-
+        Optional endpoint - the server is not required to implement this endpoint if it does not
+        intend to use or support this functionality.
+
+        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+
+        An already-authenticated client can call this endpoint to generate a single-use, time-limited,
+        token for an unauthenticated client to log in with, becoming logged in as the same user which
+        called this endpoint. The unauthenticated client uses the generated token in a `m.login.token`
+        login flow with the homeserver.
+
+        Clients, both authenticated and unauthenticated, might wish to hide user interface which exposes
+        this feature if the server is not offering it. Authenticated clients can check for support on
+        a per-user basis with the `m.get_login_token` [capability](/client-server-api/#capabilities-negotiation),
+        while unauthenticated clients can detect server support by looking for an `m.login.token` login
+        flow with `get_login_token: true` on [`GET /login`](/client-server-api/#post_matrixclientv3login).
+
+        In v1.7 of the specification, transmission of the generated token to an unauthenticated client is
+        left as an implementation detail. Future MSCs such as [MSC3906](https://github.com/matrix-org/matrix-spec-proposals/pull/3906)
+        might standarise a way to transmit the token between clients.
+
+        The generated token MUST only be valid for a single login, enforced by the server. Clients which
+        intend to log in multiple devices must generate a token for each.
+
+        With other User-Interactive Authentication (UIA)-supporting endpoints, servers sometimes do not re-prompt
+        for verification if the session recently passed UIA. For this endpoint, servers should always re-prompt
+        the user for verification to ensure explicit consent is gained for each additional client.
+
+        Servers are encouraged to apply stricter than normal rate limiting to this endpoint, such as maximum
+        of 1 request per minute.
+      operationId: generateLoginToken
+      x-addedInMatrixVersion: "1.7"
+      security:
+        - accessToken: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                auth:
+                  description: Additional authentication information for the user-interactive
+                    authentication API.
+                  allOf:
+                    - $ref: definitions/auth_data.yaml
+        required: true
+      responses:
+        "200":
+          description: The login token an unauthenticated client can use to log in as the
+            requesting user.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - login_token
+                  - expires_in_ms
+                properties:
+                  login_token:
+                    type: string
+                    description: The login token for the `m.login.token` login flow.
+                  expires_in_ms:
+                    type: integer
+                    description: |-
+                      The time remaining in milliseconds until the homeserver will no longer accept the token. `120000`
+                      (2 minutes) is recommended as a default.
+              examples:
+                response:
+                  value: {
+                    "login_token": "<opaque string>",
+                    "expires_in_ms": 120000
+                  }
+        "400":
+          description: |-
+            The request was malformed, or the user does not have an ability to generate tokens for their devices,
+            as implied by the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+
+            Clients should verify whether the user has an ability to call this endpoint with the `m.get_login_token`
+            [capability](/client-server-api/#capabilities-negotiation).
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+        "401":
+          description: The homeserver requires additional authentication information.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/auth_response.yaml
+        "429":
+          description: This request was rate-limited.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/rate_limited.yaml
+      tags:
+        - Session management
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

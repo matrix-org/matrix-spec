@@ -25,6 +25,8 @@
    {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
   </h1>
 
+</summary>
+
   <hr/>
 
 {{ if (index $event_data "x-addedInMatrixVersion") }}
@@ -35,8 +37,6 @@
 {{ end -}}
 
 {{ $event_data.description | markdownify }}
-
-</summary>
 
 {{ $state_key := index $event_data.properties "state_key" }}
 

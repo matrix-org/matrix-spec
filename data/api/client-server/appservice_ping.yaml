@@ -1,0 +1,182 @@
+# Copyright 2023 Tulir Asokan
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Application Service Ping API
+  version: 1.0.0
+paths:
+  "/appservice/{appserviceId}/ping":
+    post:
+      x-addedInMatrixVersion: "1.7"
+      summary: Ask the homeserver to ping the application service to ensure the
+        connection works.
+      description: |-
+        This API asks the homeserver to call the
+        [`/_matrix/app/v1/ping`](#post_matrixappv1ping) endpoint on the
+        application service to ensure that the homeserver can communicate
+        with the application service.
+
+        This API requires the use of an application service access token (`as_token`)
+        instead of a typical client's access token. This API cannot be invoked by
+        users who are not identified as application services. Additionally, the
+        appservice ID in the path must be the same as the appservice whose `as_token`
+        is being used.
+      operationId: pingAppservice
+      parameters:
+        - in: path
+          name: appserviceId
+          description: |-
+            The appservice ID of the appservice to ping. This must be the same
+            as the appservice whose `as_token` is being used to authenticate the
+            request.
+          required: true
+          example: telegram
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                transaction_id:
+                  type: string
+                  description: An optional transaction ID that is passed through to the
+                    `/_matrix/app/v1/ping` call.
+                  example: mautrix-go_1683636478256400935_123
+        required: true
+      security:
+        # again, this is the appservice's token - not a typical client's
+        - accessToken: []
+      responses:
+        "200":
+          description: The ping was successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  duration_ms:
+                    type: integer
+                    description: |-
+                      The duration in milliseconds that the
+                      [`/_matrix/app/v1/ping`](#post_matrixappv1ping)
+                      request took from the homeserver's point of view.
+                required:
+                  - duration_ms
+              examples:
+                response:
+                  value: {
+                    "duration_ms": 123
+                  }
+        "400":
+          description: The application service doesn't have a URL configured. The errcode
+            is `M_URL_NOT_SET`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_URL_NOT_SET",
+                    "error": "Application service doesn't have a URL configured"
+                  }
+        "403":
+          description: The access token used to authenticate the request doesn't belong to
+            an appservice, or belongs to a different appservice than the one in
+            the path. The errcode is `M_FORBIDDEN`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Provided access token is not the appservice's as_token"
+                  }
+        "502":
+          description: |-
+            The application service returned a bad status, or the connection failed.
+            The errcode is `M_BAD_STATUS` or `M_CONNECTION_FAILED`.
+
+            For bad statuses, the response may include `status` and `body`
+            fields containing the HTTP status code and response body text
+            respectively to aid with debugging.
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Error
+                description: A Matrix-level Error
+                properties:
+                  errcode:
+                    type: string
+                    description: An error code.
+                    enum:
+                      - M_BAD_STATUS
+                      - M_CONNECTION_FAILED
+                  error:
+                    type: string
+                    description: A human-readable error message.
+                    example: Ping returned status 401
+                  status:
+                    type: integer
+                    description: The HTTP status code returned by the appservice.
+                    example: 401
+                  body:
+                    type: string
+                    description: The HTTP response body returned by the appservice.
+                    example: '{"errcode": "M_UNKNOWN_TOKEN"}'
+                required:
+                  - errcode
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_BAD_STATUS",
+                    "error": "Ping returned status 401",
+                    "status": 401,
+                    "body": "{\"errcode\": \"M_UNKNOWN_TOKEN\"}"
+                  }
+        "504":
+          description: The connection to the application service timed out. The errcode is
+            `M_CONNECTION_TIMEOUT`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_CONNECTION_TIMEOUT",
+                    "error": "Connection to application service timed out"
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    # Note: this is the same access_token definition used elsewhere in the client
+    # server API, however this expects an access token for an application service.
+    $ref: definitions/security.yaml
