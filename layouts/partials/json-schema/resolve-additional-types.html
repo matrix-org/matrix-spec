@@ -91,6 +91,20 @@
     {{ end }}
 {{ end }}
 
+{{ if and $this_object.oneOf (reflect.IsSlice $this_object.oneOf) }}
+    {{ range $idx, $item := $this_object.oneOf }}
+        /* although we expect resolve-allof to be called on the input, resolve-allof does not recurse into
+        * nested objects, so we have to call it again.
+        */
+        {{ $item = partial "json-schema/resolve-allof" $item }}
+        {{ $additional_objects = partial "json-schema/resolve-additional-types" (dict
+            "schema" $item
+            "anchor_base" $anchor_base
+            "name" (printf "%s.oneOf[%d]" $name $idx))
+        }}
+    {{ end }}
+{{ end }}
+
 {{ return $additional_objects }}
 
 

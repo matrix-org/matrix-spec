@@ -36,7 +36,7 @@
         {{ $property := partial "json-schema/resolve-allof" $property }}
         {{ $type := $property.type }}
 
-        {{ if eq $property.type "object" }}
+        {{ if or (eq $property.type "object") (and $property.oneOf (reflect.IsSlice .oneOf)) }}
             {{ $type = partial "type-or-title" $property }}
         {{ end }}
 
@@ -108,7 +108,7 @@
         {{ $types := slice }}
 
         {{ range .oneOf }}
-            {{ $types = $types | append .type }}
+            {{ $types = $types | append (partial "type-or-title" .) }}
         {{ end }}
 
         {{ $type = delimit $types "|" }}
