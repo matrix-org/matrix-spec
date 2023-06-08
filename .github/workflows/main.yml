@@ -25,7 +25,7 @@ jobs:
           node-version: '14'
       - name: "🔎 Run validator"
         run: |
-          npx @redocly/cli lint data/api/*/*.yaml
+          npx @redocly/cli@latest lint data/api/*/*.yaml
 
   check-examples:
     name: "🔎 Check Event schema examples"
