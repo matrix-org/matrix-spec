@@ -1,0 +1,10 @@
+# See https://redocly.com/docs/cli/configuration/ for more information.
+extends:
+  - minimal
+rules:
+  info-license: off
+  security-defined: off
+  operation-4xx-response: off
+  no-invalid-media-type-examples: off
+  no-path-trailing-slash: off
+  operation-2xx-response: off
