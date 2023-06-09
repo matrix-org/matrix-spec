@@ -33,17 +33,17 @@ properties:
     additionalProperties:
       type: object
       title: Verify Key
-      example: {
-        "ed25519:abc123": {
-          "key": "VGhpcyBzaG91bGQgYmUgYSByZWFsIGVkMjU1MTkgcGF5bG9hZA"
-        }
-      }
       properties:
         key:
           type: string
           description: The [Unpadded base64](/appendices/#unpadded-base64) encoded key.
           example: "VGhpcyBzaG91bGQgYmUgYSByZWFsIGVkMjU1MTkgcGF5bG9hZA"
       required: ["key"]
+    example: {
+      "ed25519:abc123": {
+        "key": "VGhpcyBzaG91bGQgYmUgYSByZWFsIGVkMjU1MTkgcGF5bG9hZA"
+      }
+    }
   old_verify_keys:
     type: object
     description: |-
@@ -56,12 +56,6 @@ properties:
     additionalProperties:
       type: object
       title: Old Verify Key
-      example: {
-        "ed25519:0ldK3y": {
-          "expired_ts": 1532645052628,
-          "key": "VGhpcyBzaG91bGQgYmUgeW91ciBvbGQga2V5J3MgZWQyNTUxOSBwYXlsb2FkLg"
-        }
-      }
       properties:
         expired_ts:
           type: integer
@@ -73,6 +67,12 @@ properties:
           description: The [Unpadded base64](/appendices/#unpadded-base64) encoded key.
           example: "VGhpcyBzaG91bGQgYmUgeW91ciBvbGQga2V5J3MgZWQyNTUxOSBwYXlsb2FkLg"
       required: ["expired_ts", "key"]
+    example: {
+      "ed25519:0ldK3y": {
+        "expired_ts": 1532645052628,
+        "key": "VGhpcyBzaG91bGQgYmUgeW91ciBvbGQga2V5J3MgZWQyNTUxOSBwYXlsb2FkLg"
+      }
+    }
   signatures:
     type: object
     description: |-
