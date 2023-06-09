@@ -23,16 +23,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: "⚙️ npm"
-        working-directory: "./scripts"
-        run: |
-          npm install
       - name: "🔎 Run validator"
-        working-directory: "./scripts"
         run: |
-          node validator.js -s "../data/api/application-service"
-          node validator.js -s "../data/api/client-server"
-          node validator.js -s "../data/api/push-gateway"
+          npx @redocly/cli@latest lint data/api/*/*.yaml
 
   check-examples:
     name: "🔎 Check Event schema examples"
