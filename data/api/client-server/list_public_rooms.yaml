@@ -214,7 +214,7 @@ paths:
                       type: array
                       x-addedInMatrixVersion: "1.4"
                       items:
-                        type: string
+                        type: ["string", "null"]
                       description: |-
                         An optional list of [room types](/client-server-api/#types) to search
                         for. To include rooms without a room type, specify `null` within this
