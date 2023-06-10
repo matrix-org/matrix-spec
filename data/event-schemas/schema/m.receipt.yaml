@@ -2,7 +2,7 @@ type: object
 title: Receipt Event
 description: Informs the client of new receipts.
 x-changedInMatrixVersion:
-    1.4: |
+    "1.4": |
         Added `m.read.private` receipts to the event's `content`.
 allOf:
     - $ref: "core-event-schema/event.yaml"

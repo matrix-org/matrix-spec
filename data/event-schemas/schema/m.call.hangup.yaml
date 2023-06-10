@@ -35,7 +35,7 @@ properties:
           previous previous versions of the spec, so a missing value should be
           treated as `user_hangup`.
         x-changedInMatrixVersion:
-          1.7: |-
+          "1.7": |-
             Additional values were added.
         enum:
         - ice_timeout
