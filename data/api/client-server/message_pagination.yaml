@@ -84,7 +84,7 @@ paths:
         - in: query
           name: limit
           description: "The maximum number of events to return. Default: 10."
-          example: "3"
+          example: 3
           schema:
             type: integer
         - in: query

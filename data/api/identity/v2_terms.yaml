@@ -131,7 +131,7 @@ paths:
                   items:
                     type: string
                   description: The URLs the user is accepting in this request.
-                  example: https://example.org/somewhere/terms-2.0-en.html
+                  example: [https://example.org/somewhere/terms-2.0-en.html]
               required:
                 - user_accepts
       responses:

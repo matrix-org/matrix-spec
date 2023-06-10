@@ -84,7 +84,7 @@ paths:
             changed since the point indicated by `since` will be returned.
 
             By default, this is `false`.
-          example: "false"
+          example: false
           schema:
             type: boolean
         - in: query
