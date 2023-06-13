@@ -5,6 +5,7 @@
     "version" : "1",
     "party_id": "67890",
     "call_id": "12345",
+    "lifetime": 10000,
     "description": {
       "type" : "offer",
       "sdp" : "v=0\r\no=- 6584580628695956864 2 IN IP4 127.0.0.1[...]"
