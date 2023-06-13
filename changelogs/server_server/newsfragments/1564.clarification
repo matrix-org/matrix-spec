@@ -1,0 +1,1 @@
+Allow `null` in `room_types` in `POST /publicRooms` endpoints schemas.
