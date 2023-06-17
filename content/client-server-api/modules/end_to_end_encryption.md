@@ -134,8 +134,7 @@ are offline/unable to upload additional keys, though sessions started using
 fallback keys could be vulnerable to replay attacks.
 {{% /boxes/warning %}}
 
-Devices will be informed, [via
-`/sync`](#a-namee2e-extensions-to-sync-extensions-to-sync), about the number of
+Devices will be informed, [via `/sync`](#e2e-extensions-to-sync), about the number of
 one-time keys remaining that can be claimed, as well as whether the fallback
 keys have been used. The device can thus ensure that, while it is online, there
 is a sufficient supply of one-time keys available, and that the fallback keys
@@ -1699,7 +1698,7 @@ When a client is updating a Megolm session in its store, the client MUST ensure:
 
 {{% http-api spec="client-server" api="keys" %}}
 
-##### <a name="e2e-extensions-to-sync"> Extensions to /sync
+##### Extensions to /sync {#e2e-extensions-to-sync}
 
 This module adds an optional `device_lists` property to the [`/sync`](/client-server-api/#get_matrixclientv3sync)  response,
 as specified below. The server need only populate this property for an
