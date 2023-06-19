@@ -327,6 +327,8 @@ paths:
             `M_INVALID_PARAM`."
           content:
             application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
