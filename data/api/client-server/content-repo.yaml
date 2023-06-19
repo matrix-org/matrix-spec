@@ -39,10 +39,7 @@ paths:
       requestBody:
         content:
           application/octet-stream:
-            schema:
-              type: string
-              example: <bytes>
-              format: byte
+            example: <bytes>
         description: The content to be uploaded.
         required: true
       responses:
@@ -142,10 +139,7 @@ paths:
       requestBody:
         content:
           application/octet-stream:
-            schema:
-              type: string
-              example: <bytes>
-              format: byte
+            example: <bytes>
         description: The content to be uploaded.
         required: true
       responses:
@@ -361,10 +355,8 @@ paths:
           content:
             application/octet-stream:
               schema:
-                type: string
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
-                format: binary
         "307":
           description: A redirect to the thumbnail of the requested content.
           headers:
@@ -500,10 +492,8 @@ paths:
           content:
             application/octet-stream:
               schema:
-                type: string
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
-                format: binary
         "307":
           description: A redirect to the thumbnail of the requested content.
           headers:
@@ -657,15 +647,11 @@ paths:
           content:
             image/jpeg:
               schema:
-                type: string
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the thumbnail."
-                format: binary
             image/png:
               schema:
-                type: string
                 description: "**Required.** The bytes for the thumbnail."
-                format: binary
         "307":
           description: A redirect to the thumbnail of the requested content.
           headers:
