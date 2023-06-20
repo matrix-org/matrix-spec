@@ -35,10 +35,13 @@
     {{ if $request_body }}
 <h3>Request body</h3>
         {{/*
-            A request can have several content types. Only show the schema for JSON.
+            A request can have several content types.
         */}}
         {{ $json_body := index $request_body.content "application/json" }}
         {{ if $json_body }}
+            {{/*
+                Display the JSON schemas
+            */}}
             {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $json_body.schema "path" $path) }}
             {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
@@ -47,6 +50,16 @@
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
             {{ end }}
+        {{ else }}
+            {{/*
+                Show the content types and description.
+            */}}
+            {{ $mimes := slice }}  
+            {{ range $mime, $body := $request_body.content }}
+                {{ $mimes = $mimes | append $mime }}
+            {{ end }}
+            {{ $content_type := delimit $mimes "|"}}
+            {{ partial "openapi/render-content-type" (dict "content_type" $content_type "description" $request_body.description) }}
         {{ end }}
 
 <h3>Request body example</h3>
@@ -54,17 +67,41 @@
             Show all the examples.
         */}}
         {{ range $mime, $body := $request_body.content }}
-            {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body.schema "path" $path) }}
-            {{ $schema := partial "json-schema/resolve-allof" $schema }}
+            {{ $example := dict }}
 
-            {{ $example := partial "json-schema/resolve-example" $schema }}
-            {{ $example_json := jsonify (dict "indent" "  ") $example }}
-            {{ $example_json = replace $example_json "\\u003c" "<" }}
-            {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
+            {{ if $body.schema }}
+                {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body.schema "path" $path) }}
+                {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
+                {{ $example = partial "json-schema/resolve-example" $schema }}
+            {{ end }}
+
+            {{ if and (eq ($example | len) 0) $body.example }}
+                {{/*
+                    If no example was generated from the schema, fallback to the
+                    main example.
+                */}}
+                {{ $example = $body.example }}
+            {{ end }}
+
+            {{ if eq $mime "application/json" }}
+                {{ $example_json := jsonify (dict "indent" "  ") $example }}
+                {{ $example_json = replace $example_json "\\u003c" "<" }}
+                {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
 ```json
 {{ $example_json }}
 ```
+            {{ else }}
+                {{ $example = $example | safeHTML }}
+                {{/*
+                    We need to set a language for the code otherwise the styling
+                    is different than other examples.
+                */}}
+```json
+{{ $example }}
+```
+            {{ end }}
+
         {{ end }}
     {{ end }}
 

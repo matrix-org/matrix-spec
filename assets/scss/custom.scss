@@ -374,7 +374,7 @@ footer {
       padding: 1rem;
     }
 
-    &.object-table, &.response-table {
+    &.object-table, &.response-table, &.content-type-table {
         border: 1px $table-border-color solid;
 
         caption {

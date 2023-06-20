@@ -38,73 +38,84 @@
 </table>
 
 {{ range $code, $response := $responses }}
-    {{/*
-        A response can have several content types so only insert the title once.
-    */}}
-    {{ $is_title_set := false }}
-    {{ range $content_type, $content := $response.content }}
-        {{ if $content.schema }}
-
-            {{ if not $is_title_set }}
-                {{ $is_title_set = true }}
+    {{ if $response.content }}
 <h3>{{$code}} response</h3>
-            {{ end }}
-
-        {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $content.schema "path" $path) }}
-        {{ $schema := partial "json-schema/resolve-allof" $schema }}
-
         {{/*
-          All this is to work out how to express the content of the response
-          in the case where it is an array.
+            A response can have several content types.
         */}}
-        {{ if eq $schema.type "array" }}
-            {{ $type_of := "" }}
-            {{ if $schema.items.anyOf }}
-                {{ $types := slice }}
-                {{ range $schema.items.anyOf }}
-                    {{ if .title }}
-                        {{ $types = $types | append .title}}
-                    {{ else }}
-                        {{ $types = $types | append .type }}
+        {{ $json_body := index $response.content "application/json" }}
+        {{ if $json_body }}
+            {{/*
+                Display the JSON schemas
+            */}}
+
+            {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $json_body.schema "path" $path) }}
+            {{ $schema := partial "json-schema/resolve-allof" $schema }}
+
+            {{/*
+            All this is to work out how to express the content of the response
+            in the case where it is an array.
+            */}}
+            {{ if eq $schema.type "array" }}
+                {{ $type_of := "" }}
+                {{ if $schema.items.anyOf }}
+                    {{ $types := slice }}
+                    {{ range $schema.items.anyOf }}
+                        {{ if .title }}
+                            {{ $types = $types | append .title}}
+                        {{ else }}
+                            {{ $types = $types | append .type }}
+                        {{ end }}
                     {{ end }}
+                    {{ $type_of = delimit $types ", "}}
+                {{ else }}
+                    {{ $type_of = $schema.items.title }}
                 {{ end }}
-                {{ $type_of = delimit $types ", "}}
-            {{ else }}
-                {{ $type_of = $schema.items.title }}
-            {{ end }}
 <p>Array of <code>{{ $type_of }}</code>.</p>
-        {{ end }}
-
-
-        {{/*
-          render object tables for any objects referenced in the
-          response. (This will be a no-op for response types which aren't
-          objects or arrays.)
-        */}}
-        {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
-        {{ $additional_types = uniq $additional_types }}
-        {{ range $additional_types }}
-            {{ partial "openapi/render-object-table" . }}
-        {{ end }}
-
-        {{/*
-           render an example. currently this is only supported for arrays and objects.
-        */}}
-        {{ if or (eq $schema.type "object") (eq $schema.type "array") }}
-            {{ $example := partial "json-schema/resolve-example" $schema }}
-            {{ if $content.examples }}
-                {{ $example = partial "json-schema/resolve-refs" (dict "schema" $content.examples "path" $path) }}
-                {{ $example = $example.response.value }}
             {{ end }}
 
-            {{ $example_json := jsonify (dict "indent" "  ") $example }}
-            {{ $example_json = replace $example_json "\\u003c" "<" }}
-            {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
+
+            {{/*
+            render object tables for any objects referenced in the
+            response. (This will be a no-op for response types which aren't
+            objects or arrays.)
+            */}}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
+            {{ $additional_types = uniq $additional_types }}
+            {{ range $additional_types }}
+                {{ partial "openapi/render-object-table" . }}
+            {{ end }}
+
+            {{/*
+            render an example. currently this is only supported for arrays and objects.
+            */}}
+            {{ if or (eq $schema.type "object") (eq $schema.type "array") }}
+                {{ $example := partial "json-schema/resolve-example" $schema }}
+                {{ if $json_body.examples }}
+                    {{ $example = partial "json-schema/resolve-refs" (dict "schema" $json_body.examples "path" $path) }}
+                    {{ $example = $example.response.value }}
+                {{ end }}
+
+                {{ $example_json := jsonify (dict "indent" "  ") $example }}
+                {{ $example_json = replace $example_json "\\u003c" "<" }}
+                {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
 
 ```json
 {{ $example_json }}
 ```
             {{ end }}
+        {{  else }}
+            {{/*
+                Show the content types and description.
+            */}}
+            {{ $mimes := slice }}
+            {{ $desc := "" }}
+            {{ range $mime, $body := $response.content }}
+                {{ $mimes = $mimes | append $mime }}
+                {{ $desc = $body.schema.description }}
+            {{ end }}
+            {{ $content_type := delimit $mimes "|"}}
+            {{ partial "openapi/render-content-type" (dict "content_type" $content_type "description" $desc) }}
         {{ end }}
     {{ end }}
 {{ end }}
