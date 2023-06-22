@@ -17,9 +17,7 @@ type: object
 properties:
   actions:
     items:
-      oneOf:
-      - type: object
-      - type: string
+      type: ["string", "object"]
     type: array
     description: |-
       The actions to perform when this rule is matched.

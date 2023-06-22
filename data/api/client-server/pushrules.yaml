@@ -458,9 +458,7 @@ paths:
                   type: array
                   description: The action(s) to perform when the conditions for this rule are met.
                   items:
-                    oneOf:
-                      - type: string
-                      - type: object
+                    type: ["string", "object"]
                 conditions:
                   type: array
                   description: |-
@@ -723,9 +721,7 @@ paths:
                     type: array
                     description: The action(s) to perform for this rule.
                     items:
-                      oneOf:
-                        - type: string
-                        - type: object
+                      type: ["string", "object"]
                 required:
                   - actions
               examples:
@@ -801,9 +797,7 @@ paths:
                   type: array
                   description: The action(s) to perform for this rule.
                   items:
-                    oneOf:
-                      - type: string
-                      - type: object
+                    type: ["string", "object"]
               required:
                 - actions
               example: {
