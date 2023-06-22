@@ -524,6 +524,8 @@ be represented with a `domain` component under some conditions - see the
 
 #### User Identifiers
 
+{{% changed-in v="1.8" %}}
+
 Users within Matrix are uniquely identified by their Matrix user ID. The
 user ID is namespaced to the homeserver which allocated the account and
 has the form:
@@ -532,7 +534,7 @@ has the form:
 
 The `localpart` of a user ID is an opaque identifier for that user. It
 MUST NOT be empty, and MUST contain only the characters `a-z`, `0-9`,
-`.`, `_`, `=`, `-`, and `/`.
+`.`, `_`, `=`, `-`, `/`, and `+`.
 
 The `domain` of a user ID is the [server name](#server-name) of the
 homeserver which allocated the account.
@@ -546,7 +548,7 @@ The complete grammar for a legal user ID is:
     user_id_localpart = 1*user_id_char
     user_id_char = DIGIT
                  / %x61-7A                   ; a-z
-                 / "-" / "." / "=" / "_" / "/"
+                 / "-" / "." / "=" / "_" / "/" / "+"
 
 {{% boxes/rationale %}}
 A number of factors were considered when defining the allowable
