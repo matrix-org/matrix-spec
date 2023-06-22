@@ -101,7 +101,9 @@ paths:
             One or more custom fields that are passed to the application
             service to help identify the user.
           schema:
-            type: string
+            type: object
+            additionalProperties:
+              type: string
       responses:
         "200":
           description: The Matrix User IDs found with the given parameters.
@@ -166,7 +168,9 @@ paths:
             One or more custom fields that are passed to the application
             service to help identify the third-party location.
           schema:
-            type: string
+            type: object
+            additionalProperties:
+              type: string
       responses:
         "200":
           description: At least one portal room was found.

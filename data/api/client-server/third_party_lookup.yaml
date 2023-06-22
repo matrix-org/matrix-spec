@@ -143,7 +143,9 @@ paths:
           description: One or more custom fields that are passed to the AS to help
             identify the user.
           schema:
-            type: string
+            type: object
+            additionalProperties:
+              type: string
       responses:
         "200":
           description: The Matrix User IDs found with the given parameters.
