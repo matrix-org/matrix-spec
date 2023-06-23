@@ -86,9 +86,7 @@ paths:
                             The action(s) to perform when the conditions for this rule are met.
                             See [Push Rules: API](/client-server-api/#push-rules-api).
                           items:
-                            oneOf:
-                              - type: object
-                              - type: string
+                            type: ["object", "string"]
                         event:
                           title: Event
                           description: The Event object for the event that triggered the notification.
