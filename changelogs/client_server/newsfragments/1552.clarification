@@ -1,1 +1,1 @@
-Added missing enumerated type for the m.reaction event.
+Fix missing `type` property for the m.reaction event.
