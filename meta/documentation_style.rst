@@ -189,6 +189,6 @@ When a new subheading is added, it must be referenced and ordered in this docume
 Describing grammar
 ~~~~~~~~~~~~~~~~~~
 
-Use  [RFC5234-style ABNF](https://datatracker.ietf.org/doc/html/rfc5234) when describing
+Use  `RFC5234-style ABNF <https://datatracker.ietf.org/doc/html/rfc5234>`_ when describing
 the grammar for something in the spec, such as user IDs or server names. Use lowercase
 and underscore-deliminated element names (`user_id`, not `UserID` or `user-id`).
