@@ -777,7 +777,7 @@ The method used to calculate these MACs depends upon the value of the
 message. All current implementations should use the `hkdf-hmac-sha256.v2` method which is
 defined as follows:
 
-The MAC used is HMAC as defined in [RFC
+An HMAC key is generated using HKDF, as defined in [RFC
 5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
 function. The shared secret is supplied as the input keying material. No salt
 is used, and in the info parameter is the concatenation of:
@@ -790,6 +790,10 @@ is used, and in the info parameter is the concatenation of:
 -   The `transaction_id` being used.
 -   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
     item being MAC-ed is the list of key IDs.
+
+A MAC is then generated using HMAC as defined in [RFC
+2104](https://tools.ietf.org/html/rfc2104) with the key generated above and
+using SHA-256 as the hash function.
 
 If a key is being MACed, the MAC is performed on the public key as encoded
 according to the [key algorithm](#key-algorithms).  For example, for `ed25519`
