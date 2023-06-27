@@ -61,7 +61,8 @@ place after an MSC has been accepted, not as part of a proposal itself.
 1. Install the extended version (often the OS default) of Hugo in version 0.93:
    <https://github.com/gohugoio/hugo/releases/tag/v0.93.3>
    Download the right `hugo_extended_*` for your platform and put it in your file path or the root directory and
-   remember to execute it from there). Note that currently the spec won't build in newer Hugo versions.
+   remember to execute it from there.
+   Note that currently the spec won't build in Hugo v0.114+.
 
    Alternatively, use the Docker image at
    https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
