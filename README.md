@@ -58,22 +58,23 @@ Additionally, the following directories may be of interest:
 Please read [CONTRIBUTING.rst](./CONTRIBUTING.rst) before authoring a change to the spec. Note that spec authoring takes
 place after an MSC has been accepted, not as part of a proposal itself.
 
-1. Install the extended version (often the OS default) of Hugo:
-   <https://gohugo.io/getting-started/installing>. Note that at least Hugo
-   v0.93.0 is required.
+1. Install the extended version (often the OS default) of Hugo in version 0.93:
+   <https://github.com/gohugoio/hugo/releases/tag/v0.93.3>
+   Download the right `hugo_extended_*` for your platform and put it in your file path or the root directory and
+   remember to execute it from there). Note that currently the spec won't build in newer Hugo versions.
 
    Alternatively, use the Docker image at
    https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
    to process the SCSS.)
-2. Run `npm i` to install the dependencies and fetch the docsy git submodule.
+3. Run `npm i` to install the dependencies and fetch the docsy git submodule.
    Note that this will require NodeJS to be installed.
-3. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
+4. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
    page and is not required.
-4. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
+5. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
    klakegg/hugo:ext serve`) to run a local webserver which builds whenever a file
    change is detected. If watching doesn't appear to be working for you, try
    adding `--disableFastRender` to the commandline.
-5. Edit the specification 🙂
+6. Edit the specification 🙂
 
 We use a highly customized [Docsy](https://www.docsy.dev/) theme for our generated site, which uses Bootstrap and Font
 Awesome. If you're looking at making design-related changes to the spec site, please coordinate with us in
