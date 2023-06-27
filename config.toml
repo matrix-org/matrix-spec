@@ -62,6 +62,10 @@ current_version_url = "https://spec.matrix.org/latest"
 footer_about_disable = false
 # Collapse HTTP API and event <details> elements
 rendered_data_collapsed = false
+# Hide the search entry in the sidebar
+sidebar_search_disable = true
+# Only show the current page's ancestors, siblings and direct descendants in the sidebar menu
+sidebar_menu_compact = true
 
 [params.links]
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
