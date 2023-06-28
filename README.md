@@ -58,11 +58,11 @@ Additionally, the following directories may be of interest:
 Please read [CONTRIBUTING.rst](./CONTRIBUTING.rst) before authoring a change to the spec. Note that spec authoring takes
 place after an MSC has been accepted, not as part of a proposal itself.
 
-1. Install the extended version (often the OS default) of Hugo in version 0.93:
-   <https://github.com/gohugoio/hugo/releases/tag/v0.93.3>
+1. Install the extended version (often the OS default) of Hugo in version 0.113:
+   <https://github.com/gohugoio/hugo/releases/tag/v0.113.0>
    Download the right `hugo_extended_*` for your platform and put it in your file path or the root directory and
    remember to execute it from there.
-   Note that currently the spec won't build in Hugo v0.114+.
+   Note that currently the spec won't build in Hugo v0.114+ (see [#1586](https://github.com/matrix-org/matrix-spec/issues/1586)).
 
    Alternatively, use the Docker image at
    https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
