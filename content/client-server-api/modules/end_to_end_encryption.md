@@ -891,7 +891,7 @@ following table to get the corresponding emoji:
 
 {{% boxes/note %}}
 This table is available as JSON at
-<https://github.com/matrix-org/matrix-doc/blob/master/data-definitions/sas-emoji.json>
+<https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji.json>.
 {{% /boxes/note %}}
 
 {{% boxes/rationale %}}
