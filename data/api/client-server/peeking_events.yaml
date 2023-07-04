@@ -49,14 +49,13 @@ paths:
           name: timeout
           description: The maximum time in milliseconds to wait for an event.
           required: false
-          example: "35000"
+          example: 35000
           schema:
             type: integer
         - in: query
           name: room_id
           description: The room ID for which events should be returned.
-          example:
-            - "!somewhere:over.the.rainbow"
+          example: "!somewhere:over.the.rainbow"
           schema:
             type: string
       responses:

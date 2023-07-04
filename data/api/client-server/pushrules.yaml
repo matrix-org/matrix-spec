@@ -543,7 +543,7 @@ paths:
           required: true
           description: |
             The kind of rule
-          example: cake
+          example: content
           schema:
             type: string
             enum:

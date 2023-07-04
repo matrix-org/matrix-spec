@@ -44,7 +44,7 @@ paths:
           name: timeout
           description: The maximum time in milliseconds to wait for an event.
           required: false
-          example: "35000"
+          example: 35000
           schema:
             type: integer
       responses:
@@ -105,7 +105,7 @@ paths:
           name: limit
           description: The maximum number of messages to return for each room.
           required: false
-          example: "2"
+          example: 2
           schema:
             type: integer
         - in: query
@@ -116,7 +116,7 @@ paths:
             included. If set to `true` then rooms that the user has left are
             included as well. By default this is `false`.
           required: false
-          example: "true"
+          example: true
           schema:
             type: boolean
       responses:

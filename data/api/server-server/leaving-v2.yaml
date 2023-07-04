@@ -109,7 +109,6 @@ paths:
                 - depth
                 - content
             example: {
-              "room_id": "!somewhere:example.org",
               "type": "m.room.member",
               "state_key": "@someone:example.org",
               "origin": "example.org",
@@ -117,7 +116,8 @@ paths:
               "sender": "@someone:example.org",
               "content": {
                   "membership": "leave"
-              }
+              },
+              "depth": 0
             }
         required: true
       responses:
