@@ -90,7 +90,8 @@ To ensure that all implementations use the same JSON encoding we define
 We define this encoding for a value to be the shortest
 UTF-8 JSON encoding with dictionary keys lexicographically sorted by
 Unicode codepoint. Numbers in the JSON must be integers in the range
-`[-(2**53)+1, (2**53)-1]`.
+`[-(2**53)+1, (2**53)-1]`, represented without exponents or decimal
+places, and negative zero `-0` MUST NOT appear.
 
 We pick UTF-8 as the encoding as it should be available to all platforms
 and JSON received from the network is likely to be already encoded using
@@ -302,6 +303,21 @@ The following canonical JSON should be produced:
 
 ```json
 {"a":null}
+```
+
+Given the following JSON object:
+
+```json
+{
+    "a": -0,
+    "b": 1e10
+}
+```
+
+The following canonical JSON should be produced:
+
+```json
+{"a":0,"b":10000000000}
 ```
 
 ### Signing Details
