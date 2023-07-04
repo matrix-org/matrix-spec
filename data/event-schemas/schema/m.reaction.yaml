@@ -37,3 +37,7 @@ properties:
               (see the [emoji variation sequences
               list](https://www.unicode.org/Public/UCD/latest/ucd/emoji/emoji-variation-sequences.txt)).
             example: "👍"
+  type:
+    enum:
+      - m.reaction
+    type: string
