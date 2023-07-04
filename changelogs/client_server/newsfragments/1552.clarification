@@ -1,1 +1,1 @@
-Fix missing `type` property for the m.reaction event.
+Fix missing `type` property in the JSON schema definition of the `m.reaction` event.  Contributed by @chebureki.
