@@ -776,33 +776,37 @@ The method used to calculate these MACs depends upon the value of the
 message. All current implementations should use the `hkdf-hmac-sha256.v2` method which is
 defined as follows:
 
-The MAC used is HMAC as defined in [RFC
-5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
-function. The shared secret is supplied as the input keying material. No salt
-is used, and in the info parameter is the concatenation of:
+1. An HMAC key is generated using HKDF, as defined in [RFC
+   5869](https://tools.ietf.org/html/rfc5869), using SHA-256 as the hash
+   function. The shared secret is supplied as the input keying material. No salt
+   is used, and in the info parameter is the concatenation of:
 
--   The string `MATRIX_KEY_VERIFICATION_MAC`.
--   The Matrix ID of the user whose key is being MAC-ed.
--   The Device ID of the device sending the MAC.
--   The Matrix ID of the other user.
--   The Device ID of the device receiving the MAC.
--   The `transaction_id` being used.
--   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
-    item being MAC-ed is the list of key IDs.
+   -   The string `MATRIX_KEY_VERIFICATION_MAC`.
+   -   The Matrix ID of the user whose key is being MAC-ed.
+   -   The Device ID of the device sending the MAC.
+   -   The Matrix ID of the other user.
+   -   The Device ID of the device receiving the MAC.
+   -   The `transaction_id` being used.
+   -   The Key ID of the key being MAC-ed, or the string `KEY_IDS` if the
+       item being MAC-ed is the list of key IDs.
 
-If a key is being MACed, the MAC is performed on the public key as encoded
-according to the [key algorithm](#key-algorithms).  For example, for `ed25519`
-keys, it is the unpadded base64-encoded key.
+2. A MAC is then generated using HMAC as defined in [RFC
+   2104](https://tools.ietf.org/html/rfc2104) with the key generated above and
+   using SHA-256 as the hash function.
 
-If the key list is being MACed, the list is sorted lexicographically and
-comma-separated with no extra whitespace added, with each key written in the
-form `{algorithm}:{keyId}`. For example, the key list could look like:
-`ed25519:Cross+Signing+Key,ed25519:DEVICEID`. In this way, the recipient can
-reconstruct the list from the names in the `mac` property of the
-`m.key.verification.mac` message and ensure that no keys were added or removed.
+   If a key is being MACed, the MAC is performed on the public key as encoded
+   according to the [key algorithm](#key-algorithms).  For example, for `ed25519`
+   keys, it is the unpadded base64-encoded key.
 
-The MAC values are base64-encoded and sent in a
-[`m.key.verification.mac`](#mkeyverificationmac) message.
+   If the key list is being MACed, the list is sorted lexicographically and
+   comma-separated with no extra whitespace added, with each key written in the
+   form `{algorithm}:{keyId}`. For example, the key list could look like:
+   `ed25519:Cross+Signing+Key,ed25519:DEVICEID`. In this way, the recipient can
+   reconstruct the list from the names in the `mac` property of the
+   `m.key.verification.mac` message and ensure that no keys were added or removed.
+
+3. The MAC values are base64-encoded and sent in a
+   [`m.key.verification.mac`](#mkeyverificationmac) message.
 
 {{% boxes/note %}}
 The MAC method `hkdf-hmac-sha256` used an incorrect base64 encoding, due to a
