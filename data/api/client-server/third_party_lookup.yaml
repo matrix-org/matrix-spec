@@ -139,7 +139,7 @@ paths:
           schema:
             type: string
         - in: query
-          name: fields...
+          name: fields
           description: One or more custom fields that are passed to the AS to help
             identify the user.
           schema:
