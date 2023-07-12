@@ -62,7 +62,7 @@ error message e.g.  `M_FORBIDDEN`. Error codes should have their namespace
 first in ALL CAPS, followed by a single `_`. For example, if there was a custom
 namespace `com.mydomain.here`, and a `FORBIDDEN` code, the error code should
 look like `COM.MYDOMAIN.HERE_FORBIDDEN`. Error codes defined by this
-specification should start `M_`.
+specification should start with `M_`.
 
 Some `errcode`s define additional keys which should be present in the error
 response object, but the keys `error` and `errcode` MUST always be present.
