@@ -1,6 +1,6 @@
 [tool.towncrier]
     version = "unused"
-    filename = "../rendered.md"
+    filename = "rendered.md"
     template = "template.md.jinja"
 
     [[tool.towncrier.type]]
@@ -32,3 +32,35 @@
         directory = "clarification"
         name = "Spec Clarifications"
         showcontent = true
+
+    [[tool.towncrier.section]]
+        name = "Client-Server API"
+        path = "client_server"
+
+    [[tool.towncrier.section]]
+        name = "Server-Server API"
+        path = "server_server"
+    
+    [[tool.towncrier.section]]
+        name = "Application Service API"
+        path = "application_service"
+
+    [[tool.towncrier.section]]
+        name = "Identity Service API"
+        path = "identity_service"
+    
+    [[tool.towncrier.section]]
+        name = "Push Gateway API"
+        path = "push_gateway"
+    
+    [[tool.towncrier.section]]
+        name = "Room Versions"
+        path = "room_versions"
+    
+    [[tool.towncrier.section]]
+        name = "Appendices"
+        path = "appendices"
+
+    [[tool.towncrier.section]]
+        name = "Internal Changes/Tooling"
+        path = "internal"
