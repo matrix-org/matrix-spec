@@ -2,7 +2,7 @@
 # current at the time of writing
 
 # we need at least version 4.0.0 for support of JSON Schema Draft 2020-12.
-jsonschema >= 4.0.0
+jsonschema == 4.17.3
 
 PyYAML >= 3.12
 requests >= 2.18.4
