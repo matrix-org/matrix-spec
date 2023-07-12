@@ -6,4 +6,4 @@ jsonschema >= 4.0.0
 
 PyYAML >= 3.12
 requests >= 2.18.4
-towncrier == 21.9.0rc1
+towncrier == 23.6.0

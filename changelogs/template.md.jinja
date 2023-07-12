@@ -1,0 +1,27 @@
+{% if versiondata.name %}
+### {{ versiondata.name }}
+{% endif %}
+{% for section_name, section in sections.items() %}
+{% if section_name %}
+
+### {{section_name}}
+{% endif %}
+
+{% if section %}
+{% for category, val in definitions.items() if category in section %}
+**{{ definitions[category]['name'] }}**
+
+{% for content, issues in section[category].items() %}
+- {{ content }} (
+{%- for issue in issues %}
+[{{issue}}](https://github.com/matrix-org/matrix-spec/issues/{{issue|trim('#')}}){% if not loop.last %}, {% endif %}
+{%- endfor %}
+)
+{% endfor %}
+
+{% endfor %}
+{% else %}
+No significant changes.
+
+{% endif %}
+{% endfor %}
