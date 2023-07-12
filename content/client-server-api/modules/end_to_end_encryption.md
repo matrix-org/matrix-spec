@@ -305,7 +305,7 @@ properties.
 | key       | JWK              | **Required.** A [JSON Web Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) object.       |
 | iv        | string           | **Required.** The 128-bit unique counter block used by AES-CTR, encoded as unpadded base64.    |
 | hashes    | {string: string} | **Required.** A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64. Clients should support the SHA-256 hash, which uses the key `sha256`. |
-| v         | string           | **Required.** Version of the encrypted attachments protocol. Must be `v2`.                     |
+| v         | string           | **Required.** Version of the encrypted attachment's protocol. Must be `v2`.                    |
 
 `JWK`
 
