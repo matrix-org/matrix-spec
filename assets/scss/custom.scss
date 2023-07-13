@@ -512,3 +512,24 @@ dd {
     border-radius: 0.25rem;  // was $border-radius, but that var isn't accessible here.
   }
 }
+
+/* Styling for the summary-table shortcode */
+.summary-table {
+  tr {
+    // Unset the .table-striped styling that docsy applies by default.
+    background-color: unset !important;
+  }
+  .required {
+    background-color: rgba($black, 0.07);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+  }
+  td {
+    position: relative;
+    padding: .3rem 0.75rem !important;
+  }
+}

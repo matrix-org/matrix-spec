@@ -2565,6 +2565,7 @@ that profile.
 
 #### Summary
 
+{{<summary-table>}}
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
@@ -2603,6 +2604,7 @@ that profile.
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
+{{</summary-table>}}
 
 *Please see each module for more details on what clients need to
 implement.*

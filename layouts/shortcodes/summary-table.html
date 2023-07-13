@@ -1,0 +1,6 @@
+{{/*
+
+  This template is used to visually emphasize table cells containing the text "Required".
+
+*/}}
+{{ print (replace .Inner "Required" "<span class=required></span>Required") "{.summary-table}" | markdownify }}
