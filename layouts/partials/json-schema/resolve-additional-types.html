@@ -91,6 +91,21 @@
     {{ end }}
 {{ end }}
 
+{{/*
+  Handle object schemas using the `oneOf` keyword
+  (https://json-schema.org/understanding-json-schema/reference/combining.html#oneof)
+*/}}
+{{ if $this_object.oneOf }}
+    {{ range $idx, $item := $this_object.oneOf }}
+        {{ $additional_objects = partial "get-additional-objects" (dict
+            "this_object" $item
+            "additional_objects" $additional_objects
+            "anchor_base" $anchor_base
+            "name" (printf "%s.oneOf[%d]" $name $idx)
+        ) }}
+    {{ end }}
+{{ end }}
+
 {{ return $additional_objects }}
 
 
