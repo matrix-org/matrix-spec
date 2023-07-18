@@ -11,11 +11,11 @@
     },
     "sdp_stream_metadata": {
         "271828182845": {
-            "purpose": "m.screenshare",
+            "purpose": "m.screenshare"
         },
         "314159265358": {
-            "purpose": "m.usermedia",
-        },
+            "purpose": "m.usermedia"
+        }
     }
   }
 }
