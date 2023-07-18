@@ -27,6 +27,23 @@
                         }
                     },
                     "required": ["type", "sdp"]
+                },
+                "sdp_stream_metadata": {
+                    "type": "object",
+                    "title": "SDP Stream Metadata",
+                    "x-addedInMatrixVersion": "1.7",
+                    "description": "Object describing the streams that will be sent",
+                    "additionalProperties": {
+                        "type": "object",
+                        "title": "Stream Metadata Block",
+                        "properties": {
+                            "purpose": {
+                              "type": "string",
+                              "enum": ["m.usermedia", "m.screenshare"]
+                            }
+                        },
+                        "required": ["purpose"]
+                    }
                 }
             },
             "required": ["answer"]
