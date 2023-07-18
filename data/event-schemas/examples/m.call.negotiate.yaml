@@ -9,6 +9,14 @@
     "offer": {
       "type" : "offer",
       "sdp" : "v=0\r\no=- 6584580628695956864 2 IN IP4 127.0.0.1[...]"
-    }
+    },
+    "sdp_stream_metadata": {
+        "271828182845": {
+            "purpose": "m.screenshare",
+        },
+        "314159265358": {
+            "purpose": "m.usermedia",
+        },
+    },
   }
 }
