@@ -355,7 +355,7 @@ footer {
        * results in annoying horizontal scrolling on mobile, so we instead
        * switch to a fixed table layout on a narrow browser width.
        * (On a wider width the default auto table-layout provides better readability.)
-      *
+       *
        * Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
        * tables with a "display" property of "block".
        * However, for "table-layout: fixed" to be effective, an element must have a
