@@ -36,11 +36,11 @@ Alternatively, consider flipping the column/row organization to be features
 up top and versions on the left.
 -->
 
-| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|-------------------|---|---|---|---|---|---|---|---|---|----|
-| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ |
-| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ |
-| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ |
+| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
+|-------------------|---|---|---|---|---|---|---|---|---|----|----|
+| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ |
+| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ |
 
 ## Complete list of room versions
 
@@ -57,8 +57,7 @@ the default room version when creating new rooms.
 
 The available room versions are:
 
--   [Version 1](/rooms/v1) - **Stable**. The current version of most
-    rooms.
+-   [Version 1](/rooms/v1) - **Stable**. The initial room version.
 -   [Version 2](/rooms/v2) - **Stable**. Implements State Resolution
     Version 2.
 -   [Version 3](/rooms/v3) - **Stable**. Introduces events whose IDs
@@ -76,6 +75,7 @@ The available room versions are:
     redacting some membership events.
 -   [Version 10](/rooms/v10) - **Stable**. Enforces integer-only power levels
     and adds `knock_restricted` join rule.
+-   [Version 11](/rooms/v11) - **Stable**. Clarifies the redaction algorithm.
 
 ## Room version grammar
 
