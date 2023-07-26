@@ -5,12 +5,15 @@ description: 'This event is created by the server to describe which event has be
 properties:
   content:
     properties:
+      redacts: |-
+        description: The event ID that was redacted. Starting in room version 11.
+        type: string
       reason:
         description: 'The reason for the redaction, if any.'
         type: string
     type: object
   redacts:
-    description: The event ID that was redacted.
+    description: The event ID that was redacted. For room versions 1 - 10.
     type: string
   type:
     enum:

@@ -6,7 +6,9 @@ properties:
   content:
     properties:
       creator:
-        description: The `user_id` of the room creator. This is set by the homeserver.
+        description: |-
+          The `user_id` of the room creator. This is set by the homeserver for room versions 1 - 10. Room versions
+          11 no longer includes this property, the event `sender` should be used instead.
         type: string
       m.federate:
         description: Whether users on other servers can join this room. Defaults to `true` if key does not exist.
