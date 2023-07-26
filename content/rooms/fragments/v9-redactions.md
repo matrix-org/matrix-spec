@@ -40,7 +40,7 @@ not in the following list:
 -   `membership`
 
 The content object must also be stripped of all keys, unless it is one
-of one of the following event types:
+of the following event types:
 
 -   `m.room.member` allows keys `membership`, `join_authorised_via_users_server`.
 -   `m.room.create` allows key `creator`.
