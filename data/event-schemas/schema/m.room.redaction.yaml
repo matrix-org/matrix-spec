@@ -5,7 +5,7 @@ description: 'This event is created by the server to describe which event has be
 properties:
   content:
     properties:
-      redacts: |-
+      redacts:
         description: The event ID that was redacted. Starting in room version 11.
         type: string
       reason:
