@@ -14,3 +14,8 @@ _rendered.rst
 /spec/
 changelogs/rendered.*
 .hugo_build.lock
+
+# Related to the nix developer environment.
+.devenv/
+.direnv/
+.envrc
