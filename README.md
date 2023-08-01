@@ -58,26 +58,75 @@ Additionally, the following directories may be of interest:
 Please read [CONTRIBUTING.rst](./CONTRIBUTING.rst) before authoring a change to the spec. Note that spec authoring takes
 place after an MSC has been accepted, not as part of a proposal itself.
 
-1. Install the extended version (often the OS default) of Hugo:
-   <https://gohugo.io/getting-started/installing>. Note that at least Hugo
-   v0.93.0 is required.
-
-   Alternatively, use the Docker image at
-   https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required
-   to process the SCSS.)
-2. Run `npm i` to install the dependencies and fetch the docsy git submodule.
-   Note that this will require NodeJS to be installed.
-3. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
-   page and is not required.
-4. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
-   klakegg/hugo:ext serve`) to run a local webserver which builds whenever a file
-   change is detected. If watching doesn't appear to be working for you, try
-   adding `--disableFastRender` to the commandline.
-5. Edit the specification 🙂
+### Setting up a developer environment
 
 We use a highly customized [Docsy](https://www.docsy.dev/) theme for our generated site, which uses Bootstrap and Font
 Awesome. If you're looking at making design-related changes to the spec site, please coordinate with us in
 [#matrix-docs:matrix.org](https://matrix.to/#/#matrix-docs:matrix.org) before opening a PR.
+
+You need some tools available on your computer in order to build the specification and view any changes you make. Below
+are several different methods to install them.
+
+#### With nix
+
+Install [nix](https://nixos.org/) and [enable support for flakes](https://nixos.wiki/wiki/Flakes#Enable_flakes). Alternatively,
+[this nix installer](https://github.com/DeterminateSystems/nix-installer#the-determinate-nix-installer) will do both of those
+things for you.
+
+Then run `nix develop --impure` to enter a shell with all dependencies installed for you.
+
+**Note:**
+You can avoid having to type the above command each time you want to activate the nix shell and instead have
+[direnv](https://direnv.net/) do it for you. In order to do so:
+
+1. [Install direnv](https://direnv.net/docs/installation.html).
+2. From the root of your `matrix-spec` checkout, create a `.envrc` file with the
+   contents `use flake --impure`. You can do that by running the following command:
+
+   ```
+   echo 'use flake --impure' >> .envrc
+   ```
+3. Run `direnv allow` to register the `.envrc` file.
+
+The nix development environment shell will now be activated and deactivated
+automatically as you move in and out of your `matrix-spec` checkout in your
+terminal.
+
+#### With docker
+
+Install [docker](https://www.docker.com/) and you're ready.
+[Podman](https://podman.io/) should also work if you prefer.
+
+#### Manual instructions
+
+1. Install the extended version (often the OS default) of Hugo:
+   <https://gohugo.io/getting-started/installing>. Note that at least Hugo
+   v0.93.0 is required.
+2. Run `npm i` to install the dependencies and fetch the docsy git submodule.
+   Note that this will require NodeJS to be installed.
+3. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
+   page and is not required.
+  
+### Render the specification
+
+Run `hugo serve` run a local webserver, which will "watch" for whenever a file
+change is detected, and re-render the content.
+
+If you're using the dockerised version of hugo, instead use:
+
+```
+docker run --rm -it -v $(pwd):/src -p 1313:1313 klakegg/hugo:ext serve
+```
+
+These commands will print the web address of where you can view the rendered
+spec content, typically http://localhost:1313. The content will update as you
+make changes in your editor.
+
+**Note:**
+If watching doesn't appear to be working for you, try adding
+`--disableFastRender` to the commandline.
+
+Now all that's left to do is edit the specification 🙂
 
 ## Building the specification
 
