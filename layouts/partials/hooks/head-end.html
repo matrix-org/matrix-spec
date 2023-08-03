@@ -16,13 +16,4 @@
 <link rel="preload" href="{{ "/css/fonts/Inter.css" | relURL }}" as="style">
 <link rel="stylesheet" href="{{ "/css/fonts/Inter.css" | relURL }}">
 
-{{ $scss := "scss/custom.scss"}}
-{{ if .Site.IsServer }}
 {{/* Note the missing postCSS. This makes it snappier to develop in Chrome, but makes it look sub-optimal in other browsers. */}}
-{{ $css := resources.Get $scss | toCSS (dict "enableSourceMap" true) }}
-<link href="{{ $css.RelPermalink }}" rel="stylesheet">
-{{ else }}
-{{ $css := resources.Get $scss | toCSS (dict "enableSourceMap" false) | postCSS | minify | fingerprint }}
-<link rel="preload" href="{{ $css.RelPermalink }}" as="style">
-<link href="{{ $css.RelPermalink }}" rel="stylesheet" integrity="{{ $css.Data.integrity }}">
-{{ end }}
