@@ -347,22 +347,21 @@ footer {
   }
 
   table {
+    /* Docsy itself applies a "display" property of "block" to all tables.
+     * https://github.com/google/docsy/pull/1477/files
+     *
+     * This causes table content to "bunch up", and generally not look as nice
+     * in our theme. Thus, we override the "display" property here.
+     *
+     * Docsy does have a method of completely removing all its table
+     * customisations: https://www.docsy.dev/docs/adding-content/lookandfeel/#tables
+     *
+     * This would allow us to style tables how we see fit, but doing so is more
+     * work than this rule :)
+     */
+    display: table !important;
+
     @media (max-width: 800px) {
-      /* Docsy by default applies `overflow-x: auto;` to tables, which
-       * results in annoying horizontal scrolling on mobile, so we instead
-       * switch to a fixed table layout on a narrow browser width.
-       * (On a wider width the default auto table-layout provides better readability.)
-       *
-       * Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
-       * tables with a "display" property of "block".
-       * However, for "table-layout: fixed" to be effective, an element must have a
-       * "display" property of "table".
-       *
-       * Thus, we override the "display" property here. This may no longer be necessary once
-       * Docsy updates to Bootstrap v5+: https://github.com/google/docsy/issues/470.
-       * For more details, see
-       * https://github.com/matrix-org/matrix-spec/pull/1295/files#r1010759688 */
-      display: table;
       table-layout: fixed;
       width: 100%;
 
