@@ -79,18 +79,23 @@ paths:
               examples:
                 response:
                   value: {}
-        404:
+        "404":
           description: |-
             The event was not found or you are not joined to the room where the
             event resides.
             
             Homeserver implementations can additionally return this error if the
             reported event has been redacted.
-          examples:
-            application/json: {
-              "errcode": "M_NOT_FOUND",
-              "error": "The event was not found or you are not joined to the room."
-            }
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "The event was not found or you are not joined to the room."
+                  }
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
       tags:
