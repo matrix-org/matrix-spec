@@ -96,8 +96,6 @@ paths:
                     "errcode": "M_NOT_FOUND",
                     "error": "The event was not found or you are not joined to the room."
                   }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
       tags:
         - Reporting content
 servers:
