@@ -35,12 +35,6 @@ paths:
         the appropriate people. The caller must be joined to the room to report
         it.
         
-        It can be possible for clients to deduce whether an event exists by
-        timing the response, as only a report for an event that does exist
-        will require the homeserver to check whether a user is joined to
-        the room. To combat this, homeserver implementations are encouraged
-        to add a random delay when generating the response.
-        
         It might be possible for clients to deduce whether an event exists by
         timing the response, as only a report for an event that does exist
         will require the homeserver to check whether a user is joined to
@@ -96,9 +90,6 @@ paths:
             event resides.
             
             Homeserver implementations can additionally return this error if the
-            reported event has been redacted.
-
-            Homeserver implementations may additionally return this error if the
             reported event has been redacted.
           examples:
             application/json: {
