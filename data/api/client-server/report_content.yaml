@@ -47,8 +47,6 @@ paths:
         the room. To combat this, homeserver implementations should add
         a random delay when generating a response.
       operationId: reportContent
-      tags:
-        - Reporting content
       parameters:
         - in: path
           type: string
@@ -109,3 +107,5 @@ paths:
             }
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
+      tags:
+        - Reporting content
