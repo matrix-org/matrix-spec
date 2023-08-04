@@ -11,21 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server message redaction API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server message redaction API
+  version: 1.0.0
 paths:
   "/rooms/{roomId}/redact/{eventId}/{txnId}":
     put:
@@ -47,50 +36,71 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: roomId
           description: The room from which to redact the event.
           required: true
-          x-example: "!637q39766251:example.com"
+          example: "!637q39766251:example.com"
+          schema:
+            type: string
         - in: path
-          type: string
           name: eventId
           description: The ID of the event to redact
           required: true
-          x-example: "bai2b1i9:matrix.org"
+          example: bai2b1i9:matrix.org
+          schema:
+            type: string
         - in: path
           name: txnId
-          type: string
           description: |-
             The [transaction ID](/client-server-api/#transaction-identifiers) for this event. Clients should generate a
             unique ID; it will be used by the server to ensure idempotency of requests.
           required: true
-          x-example: "37"
-        - in: body
-          name: body
-          required: true
+          example: "37"
           schema:
-            type: object
-            example: {
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
                 "reason": "Indecent material"
               }
-            properties:
-              reason:
-                type: string
-                description: The reason for the event being redacted.
+              properties:
+                reason:
+                  type: string
+                  description: The reason for the event being redacted.
+        required: true
       responses:
-        200:
-          description: "An ID for the redaction event."
-          examples:
-            application/json: {
-                  "event_id": "$YUwQidLecu:example.com"
-              }
-          schema:
-            type: object
-            properties:
-              event_id:
-                type: string
-                description: |-
-                  A unique identifier for the event.
+        "200":
+          description: An ID for the redaction event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_id:
+                    type: string
+                    description: A unique identifier for the event.
+              examples:
+                response:
+                  value: {
+                    "event_id": "$YUwQidLecu:example.com"
+                  }
       tags:
         - Room participation
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

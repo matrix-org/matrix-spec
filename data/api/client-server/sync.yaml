@@ -11,22 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server sync API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server sync API
+  version: 1.0.0
 paths:
-  "/sync":
+  /sync:
     get:
       summary: Synchronise the client's state and receive new messages.
       description: |-
@@ -57,7 +47,6 @@ paths:
       parameters:
         - in: query
           name: filter
-          type: string
           description: |-
             The ID of a filter created using the filter API or a filter JSON
             object encoded as a string. The server will detect whether it is
@@ -68,17 +57,19 @@ paths:
             long poll requests.
 
             See [Filtering](/client-server-api/#filtering) for more information.
-          x-example: "66696p746572"
+          example: 66696p746572
+          schema:
+            type: string
         - in: query
           name: since
-          type: string
           description: |-
             A point in time to continue a sync from. This should be the
             `next_batch` token returned by an earlier call to this endpoint.
-          x-example: "s72594_4483_1934"
+          example: s72594_4483_1934
+          schema:
+            type: string
         - in: query
           name: full_state
-          type: boolean
           description: |-
             Controls whether to include the full state for all rooms the user
             is a member of.
@@ -93,11 +84,11 @@ paths:
             changed since the point indicated by `since` will be returned.
 
             By default, this is `false`.
-          x-example: "false"
+          example: false
+          schema:
+            type: boolean
         - in: query
           name: set_presence
-          type: string
-          enum: ["offline", "online", "unavailable"]
           description: |-
             Controls whether the client is automatically marked as online by
             polling this API. If this parameter is omitted then the client is
@@ -105,10 +96,15 @@ paths:
             the parameter is set to "offline" then the client is not marked as
             being online when it uses this API. When set to "unavailable", the
             client is marked as being idle.
-          x-example: "offline"
+          example: offline
+          schema:
+            type: string
+            enum:
+              - offline
+              - online
+              - unavailable
         - in: query
           name: timeout
-          type: integer
           description: |-
             The maximum time to wait, in milliseconds, before returning this
             request. If no events (or other data) become available before this
@@ -116,405 +112,436 @@ paths:
 
             By default, this is `0`, so the server will return immediately
             even if the response is empty.
-          x-example: 30000
-      responses:
-        200:
-          description:
-            The initial snapshot or delta for the client to use to update their
-            state.
+          example: 30000
           schema:
-            type: object
-            properties:
-              next_batch:
-                type: string
-                description: |-
-                  The batch token to supply in the `since` param of the next
-                  `/sync` request.
-              rooms:
-                title: Rooms
+            type: integer
+      responses:
+        "200":
+          description: The initial snapshot or delta for the client to use to update their
+            state.
+          content:
+            application/json:
+              schema:
                 type: object
-                description: |-
-                  Updates to rooms.
                 properties:
-                  join:
-                    title: Joined Rooms
-                    type: object
+                  next_batch:
+                    type: string
                     description: |-
-                      The rooms that the user has joined, mapped as room ID to
-                      room information.
-                    additionalProperties:
-                      title: Joined Room
-                      type: object
-                      properties:
-                        summary:
-                          title: RoomSummary
+                      The batch token to supply in the `since` param of the next
+                      `/sync` request.
+                  rooms:
+                    title: Rooms
+                    type: object
+                    description: Updates to rooms.
+                    properties:
+                      join:
+                        title: Joined Rooms
+                        type: object
+                        description: |-
+                          The rooms that the user has joined, mapped as room ID to
+                          room information.
+                        additionalProperties:
+                          title: Joined Room
                           type: object
-                          description: |-
-                            Information about the room which clients may need to
-                            correctly render it to users.
                           properties:
-                            "m.heroes":
-                              type: array
+                            summary:
+                              title: RoomSummary
+                              type: object
                               description: |-
-                                The users which can be used to generate a room name
-                                if the room does not have one. Required if the room's
-                                `m.room.name` or `m.room.canonical_alias` state events
-                                are unset or empty.
+                                Information about the room which clients may need to
+                                correctly render it to users.
+                              properties:
+                                m.heroes:
+                                  type: array
+                                  description: |-
+                                    The users which can be used to generate a room name
+                                    if the room does not have one. Required if the room's
+                                    `m.room.name` or `m.room.canonical_alias` state events
+                                    are unset or empty.
 
-                                This should be the first 5 members of the room, ordered
-                                by stream ordering, which are joined or invited. The
-                                list must never include the client's own user ID. When
-                                no joined or invited members are available, this should
-                                consist of the banned and left users. More than 5 members
-                                may be provided, however less than 5 should only be provided
-                                when there are less than 5 members to represent.
+                                    This should be the first 5 members of the room, ordered
+                                    by stream ordering, which are joined or invited. The
+                                    list must never include the client's own user ID. When
+                                    no joined or invited members are available, this should
+                                    consist of the banned and left users. More than 5 members
+                                    may be provided, however less than 5 should only be provided
+                                    when there are less than 5 members to represent.
 
-                                When lazy-loading room members is enabled, the membership
-                                events for the heroes MUST be included in the `state`,
-                                unless they are redundant. When the list of users changes,
-                                the server notifies the client by sending a fresh list of
-                                heroes. If there are no changes since the last sync, this
-                                field may be omitted.
-                              items:
-                                type: string
-                            "m.joined_member_count":
-                              type: integer
+                                    When lazy-loading room members is enabled, the membership
+                                    events for the heroes MUST be included in the `state`,
+                                    unless they are redundant. When the list of users changes,
+                                    the server notifies the client by sending a fresh list of
+                                    heroes. If there are no changes since the last sync, this
+                                    field may be omitted.
+                                  items:
+                                    type: string
+                                m.joined_member_count:
+                                  type: integer
+                                  description: |-
+                                    The number of users with `membership` of `join`,
+                                    including the client's own user ID. If this field has
+                                    not changed since the last sync, it may be omitted.
+                                    Required otherwise.
+                                m.invited_member_count:
+                                  type: integer
+                                  description: |-
+                                    The number of users with `membership` of `invite`.
+                                    If this field has not changed since the last sync, it
+                                    may be omitted. Required otherwise.
+                            state:
+                              title: State
+                              type: object
                               description: |-
-                                 The number of users with `membership` of `join`,
-                                 including the client's own user ID. If this field has
-                                 not changed since the last sync, it may be omitted.
-                                 Required otherwise.
-                            "m.invited_member_count":
-                              type: integer
+                                Updates to the state, between the time indicated by
+                                the `since` parameter, and the start of the
+                                `timeline` (or all state up to the start of the
+                                `timeline`, if `since` is not given, or
+                                `full_state` is true).
+
+                                N.B. state updates for `m.room.member` events will
+                                be incomplete if `lazy_load_members` is enabled in
+                                the `/sync` filter, and only return the member events
+                                required to display the senders of the timeline events
+                                in this response.
+                              allOf:
+                                - $ref: definitions/state_event_batch.yaml
+                            timeline:
+                              title: Timeline
+                              type: object
                               description: |-
-                                 The number of users with `membership` of `invite`.
-                                 If this field has not changed since the last sync, it
-                                 may be omitted. Required otherwise.
-                        state:
-                          title: State
-                          type: object
-                          description: |-
-                            Updates to the state, between the time indicated by
-                            the `since` parameter, and the start of the
-                            `timeline` (or all state up to the start of the
-                            `timeline`, if `since` is not given, or
-                            `full_state` is true).
+                                The timeline of messages and state changes in the
+                                room.
+                              allOf:
+                                - $ref: definitions/timeline_batch.yaml
+                            ephemeral:
+                              title: Ephemeral
+                              type: object
+                              description: |-
+                                The new ephemeral events in the room (events that
+                                aren't recorded in the timeline or state of the
+                                room). In this version of the spec, these are
+                                [typing notification](#typing-notifications) and
+                                [read receipt](#receipts) events.
+                              allOf:
+                                - $ref: definitions/event_batch.yaml
+                            account_data:
+                              title: Account Data
+                              type: object
+                              description: |-
+                                The private data that this user has attached to
+                                this room.
+                              allOf:
+                                - $ref: definitions/event_batch.yaml
+                            unread_notifications:
+                              title: Unread Notification Counts
+                              type: object
+                              description: |-
+                                Counts of unread notifications for this room. See the
+                                [Receiving notifications](/client-server-api/#receiving-notifications) section
+                                for more information on how these are calculated.
 
-                            N.B. state updates for `m.room.member` events will
-                            be incomplete if `lazy_load_members` is enabled in
-                            the `/sync` filter, and only return the member events
-                            required to display the senders of the timeline events
-                            in this response.
-                          allOf:
-                            - $ref: "definitions/state_event_batch.yaml"
-                        timeline:
-                          title: Timeline
-                          type: object
-                          description: |-
-                            The timeline of messages and state changes in the
-                            room.
-                          allOf:
-                            - $ref: "definitions/timeline_batch.yaml"
-                        ephemeral:
-                          title: Ephemeral
-                          type: object
-                          description: |-
-                            The new ephemeral events in the room (events that
-                            aren't recorded in the timeline or state of the
-                            room). In this version of the spec, these are
-                            [typing notification](#typing-notifications) and
-                            [read receipt](#receipts) events.
-                          allOf:
-                            - $ref: "definitions/event_batch.yaml"
-                        account_data:
-                          title: Account Data
-                          type: object
-                          description: |-
-                            The private data that this user has attached to
-                            this room.
-                          allOf:
-                          - $ref: "definitions/event_batch.yaml"
-                        unread_notifications:
-                          title: Unread Notification Counts
-                          type: object
-                          description: |-
-                            Counts of unread notifications for this room. See the
-                            [Receiving notifications](/client-server-api/#receiving-notifications) section
-                            for more information on how these are calculated.
+                                If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
+                                these counts will only be for the main timeline rather than all events in the room.
+                                See the [threading module](#threading) for more information.
+                              x-changedInMatrixVersion:
+                                "1.4": |
+                                  Updated to reflect behaviour of having `unread_thread_notifications` as `true` in
+                                  the `RoomEventFilter` for `/sync`.
+                              properties:
+                                highlight_count:
+                                  title: Highlighted notification count
+                                  type: integer
+                                  description: The number of unread notifications for this room with the highlight
+                                    flag set.
+                                notification_count:
+                                  title: Total notification count
+                                  type: integer
+                                  description: The total number of unread notifications for this room.
+                            unread_thread_notifications:
+                              title: Unread Thread Notification Counts
+                              type: object
+                              description: |-
+                                If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
+                                the notification counts for each [thread](#threading) in this room. The object is
+                                keyed by thread root ID, with values matching `unread_notifications`.
 
-                            If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
-                            these counts will only be for the main timeline rather than all events in the room.
-                            See the [threading module](#threading) for more information.
-                          x-changedInMatrixVersion:
-                            1.4: |
-                              Updated to reflect behaviour of having `unread_thread_notifications` as `true` in
-                              the `RoomEventFilter` for `/sync`.
+                                If a thread does not have any notifications it can be omitted from this object. If
+                                no threads have notification counts, this whole object can be omitted.
+                              x-addedInMatrixVersion: "1.4"
+                              additionalProperties:
+                                title: ThreadNotificationCounts
+                                type: object
+                                properties:
+                                  highlight_count:
+                                    title: ThreadedHighlightNotificationCount
+                                    type: integer
+                                    description: The number of unread notifications for this *thread* with the
+                                      highlight flag set.
+                                  notification_count:
+                                    title: ThreadedTotalNotificationCount
+                                    type: integer
+                                    description: The total number of unread notifications for this *thread*.
+                      invite:
+                        title: Invited Rooms
+                        type: object
+                        description: |-
+                          The rooms that the user has been invited to, mapped as room ID to
+                          room information.
+                        additionalProperties:
+                          title: Invited Room
+                          type: object
                           properties:
-                            highlight_count:
-                                title: Highlighted notification count
-                                type: integer
-                                description: The number of unread notifications
-                                             for this room with the highlight flag set.
-                            notification_count:
-                                title: Total notification count
-                                type: integer
-                                description: The total number of unread notifications
-                                             for this room.
-                        unread_thread_notifications:
-                          title: Unread Thread Notification Counts
+                            invite_state:
+                              title: InviteState
+                              type: object
+                              description: |-
+                                The [stripped state](#stripped-state) of a room that the user has been invited
+                                to.
+                              properties:
+                                events:
+                                  description: The [stripped state events](#stripped-state) that form the invite
+                                    state.
+                                  items:
+                                    $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                  type: array
+                      knock:
+                        title: Knocked rooms
+                        type: object
+                        description: The rooms that the user has knocked upon, mapped as room ID to room
+                          information.
+                        additionalProperties:
+                          title: Knocked Room
                           type: object
-                          description: |-
-                            If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
-                            the notification counts for each [thread](#threading) in this room. The object is
-                            keyed by thread root ID, with values matching `unread_notifications`.
-
-                            If a thread does not have any notifications it can be omitted from this object. If
-                            no threads have notification counts, this whole object can be omitted.
-                          x-addedInMatrixVersion: "1.4"
-                          additionalProperties:
-                            title: ThreadNotificationCounts
-                            type: object
-                            properties:
-                              highlight_count:
-                                title: ThreadedHighlightNotificationCount
-                                type: integer
-                                description: |-
-                                  The number of unread notifications for this *thread* with the highlight flag set.
-                              notification_count:
-                                title: ThreadedTotalNotificationCount
-                                type: integer
-                                description: |-
-                                  The total number of unread notifications for this *thread*.
-                  invite:
-                    title: Invited Rooms
+                          properties:
+                            knock_state:
+                              title: KnockState
+                              type: object
+                              description: The [stripped state](#stripped-state) of a room that the user has
+                                knocked upon.
+                              properties:
+                                events:
+                                  description: The [stripped state events](#stripped-state) that form the knock
+                                    state.
+                                  items:
+                                    $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                  type: array
+                      leave:
+                        title: Left rooms
+                        type: object
+                        description: |-
+                          The rooms that the user has left or been banned from, mapped as room ID to
+                          room information.
+                        additionalProperties:
+                          title: Left Room
+                          type: object
+                          properties:
+                            state:
+                              title: State
+                              type: object
+                              description: The state updates for the room up to the start of the timeline.
+                              allOf:
+                                - $ref: definitions/state_event_batch.yaml
+                            timeline:
+                              title: Timeline
+                              type: object
+                              description: |-
+                                The timeline of messages and state changes in the
+                                room up to the point when the user left.
+                              allOf:
+                                - $ref: definitions/timeline_batch.yaml
+                            account_data:
+                              title: Account Data
+                              type: object
+                              description: |-
+                                The private data that this user has attached to
+                                this room.
+                              allOf:
+                                - $ref: definitions/event_batch.yaml
+                  presence:
+                    title: Presence
+                    type: object
+                    description: The updates to the presence status of other users.
+                    allOf:
+                      - $ref: definitions/event_batch.yaml
+                  account_data:
+                    title: Account Data
+                    type: object
+                    description: The global private data created by this user.
+                    allOf:
+                      - $ref: definitions/event_batch.yaml
+                  to_device:
+                    title: ToDevice
                     type: object
                     description: |-
-                      The rooms that the user has been invited to, mapped as room ID to
-                      room information.
-                    additionalProperties:
-                      title: Invited Room
-                      type: object
-                      properties:
-                        invite_state:
-                          title: InviteState
-                          type: object
-                          description: |-
-                            The [stripped state](#stripped-state) of a room that the user has been invited
-                            to.
-                          properties:
-                            events:
-                              description: The [stripped state events](#stripped-state) that form the invite state.
-                              items:
-                                $ref: "../../event-schemas/schema/core-event-schema/stripped_state.yaml"
-                              type: array
-                  knock:
-                    title: Knocked rooms
+                      Information on the send-to-device messages for the client
+                      device, as defined in [Send-to-Device messaging](/client-server-api/#extensions-to-sync).
+                  device_lists:
+                    title: DeviceLists
                     type: object
                     description: |-
-                      The rooms that the user has knocked upon, mapped as room ID to room information.
-                    additionalProperties:
-                      title: Knocked Room
-                      type: object
-                      properties:
-                        knock_state:
-                          title: KnockState
-                          type: object
-                          description: |-
-                            The [stripped state](#stripped-state) of a room that the user has knocked upon.
-                          properties:
-                            events:
-                              description: The [stripped state events](#stripped-state) that form the knock state.
-                              items:
-                                $ref: "../../event-schemas/schema/core-event-schema/stripped_state.yaml"
-                              type: array
-                  leave:
-                    title: Left rooms
+                      Information on end-to-end device updates, as specified in
+                      [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
+                  device_one_time_keys_count:
+                    title: One-time keys count
                     type: object
-                    description: |-
-                      The rooms that the user has left or been banned from, mapped as room ID to
-                      room information.
                     additionalProperties:
-                      title: Left Room
-                      type: object
-                      properties:
-                        state:
-                          title: State
-                          type: object
-                          description: |-
-                            The state updates for the room up to the start of the timeline.
-                          allOf:
-                            - $ref: "definitions/state_event_batch.yaml"
-                        timeline:
-                          title: Timeline
-                          type: object
-                          description: |-
-                            The timeline of messages and state changes in the
-                            room up to the point when the user left.
-                          allOf:
-                            - $ref: "definitions/timeline_batch.yaml"
-                        account_data:
-                          title: Account Data
-                          type: object
-                          description: |-
-                            The private data that this user has attached to
-                            this room.
-                          allOf:
-                          - $ref: "definitions/event_batch.yaml"
-              presence:
-                title: Presence
-                type: object
-                description: |-
-                  The updates to the presence status of other users.
-                allOf:
-                  - $ref: "definitions/event_batch.yaml"
-              account_data:
-                title: Account Data
-                type: object
-                description: |-
-                  The global private data created by this user.
-                allOf:
-                  - $ref: "definitions/event_batch.yaml"
-              to_device:
-                title: ToDevice
-                type: object
-                description: |-
-                  Information on the send-to-device messages for the client
-                  device, as defined in [Send-to-Device messaging](/client-server-api/#extensions-to-sync).
-              device_lists:
-                title: DeviceLists
-                type: object
-                description: |-
-                  Information on end-to-end device updates, as specified in
-                  [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
-              device_one_time_keys_count:
-                title: One-time keys count
-                type: object
-                additionalProperties:
-                  type: integer
-                description: |-
-                  Information on end-to-end encryption keys, as specified
-                  in [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
-            required:
-              - next_batch
-          examples:
-            application/json: {
-                "next_batch": "s72595_4483_1934",
-                "presence": {
-                  "events": [
-                    {"$ref": "../../event-schemas/examples/m.presence.yaml"}
-                  ]
-                },
-                "account_data": {
-                  "events": [
-                    {
-                      "type": "org.example.custom.config",
-                      "content": {
-                        "custom_config_key": "custom_config_value"
-                      }
-                    }
-                  ]
-                },
-                "rooms": {
-                  "join": {
-                    "!726s6s6q:example.com": {
-                      "summary": {
-                        "m.heroes": [
-                          "@alice:example.com",
-                          "@bob:example.com"
-                        ],
-                        "m.joined_member_count": 2,
-                        "m.invited_member_count": 0
-                      },
-                      "state": {
-                        "events": [
-                          {
-                            "$ref": "../../event-schemas/examples/m.room.member.yaml"
+                      type: integer
+                    description: |-
+                      Information on end-to-end encryption keys, as specified
+                      in [End-to-end encryption](/client-server-api/#e2e-extensions-to-sync).
+                required:
+                  - next_batch
+              examples:
+                response:
+                  value: {
+                    "next_batch": "s72595_4483_1934",
+                    "presence": {
+                      "events": [
+                        {
+                          "$ref": "../../event-schemas/examples/m.presence.yaml"
+                        }
+                      ]
+                    },
+                    "account_data": {
+                      "events": [
+                        {
+                          "type": "org.example.custom.config",
+                          "content": {
+                            "custom_config_key": "custom_config_value"
                           }
-                        ]
-                      },
-                      "timeline": {
-                        "events": [
-                          {
-                            "$ref": "../../event-schemas/examples/m.room.member.yaml"
+                        }
+                      ]
+                    },
+                    "rooms": {
+                      "join": {
+                        "!726s6s6q:example.com": {
+                          "summary": {
+                            "m.heroes": [
+                              "@alice:example.com",
+                              "@bob:example.com"
+                            ],
+                            "m.joined_member_count": 2,
+                            "m.invited_member_count": 0
                           },
-                          {
-                            "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
-                          }
-                        ],
-                        "limited": true,
-                        "prev_batch": "t34-23535_0_0"
-                      },
-                      "ephemeral": {
-                        "events": [
-                          {"$ref": "../../event-schemas/examples/m.typing.yaml"},
-                          {"$ref": "../../event-schemas/examples/m.receipt.yaml"}
-                        ]
-                      },
-                      "account_data": {
-                        "events": [
-                          {"$ref": "../../event-schemas/examples/m.tag.yaml"},
-                          {
-                            "type": "org.example.custom.room.config",
-                            "content": {
-                              "custom_config_key": "custom_config_value"
+                          "state": {
+                            "events": [
+                              {
+                                "$ref": "../../event-schemas/examples/m.room.member.yaml"
+                              }
+                            ]
+                          },
+                          "timeline": {
+                            "events": [
+                              {
+                                "$ref": "../../event-schemas/examples/m.room.member.yaml"
+                              },
+                              {
+                                "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml"
+                              }
+                            ],
+                            "limited": true,
+                            "prev_batch": "t34-23535_0_0"
+                          },
+                          "ephemeral": {
+                            "events": [
+                              {
+                                "$ref": "../../event-schemas/examples/m.typing.yaml"
+                              },
+                              {
+                                "$ref": "../../event-schemas/examples/m.receipt.yaml"
+                              }
+                            ]
+                          },
+                          "account_data": {
+                            "events": [
+                              {
+                                "$ref": "../../event-schemas/examples/m.tag.yaml"
+                              },
+                              {
+                                "type": "org.example.custom.room.config",
+                                "content": {
+                                  "custom_config_key": "custom_config_value"
+                                }
+                              }
+                            ]
+                          },
+                          "unread_notifications": {
+                            "highlight_count": 1,
+                            "notification_count": 5
+                          },
+                          "unread_thread_notifications": {
+                            "$threadroot": {
+                              "highlight_count": 3,
+                              "notification_count": 6
                             }
                           }
-                        ]
-                      },
-                      "unread_notifications": {
-                        "highlight_count": 1,
-                        "notification_count": 5
-                      },
-                      "unread_thread_notifications": {
-                        "$threadroot": {
-                          "highlight_count": 3,
-                          "notification_count": 6
                         }
-                      }
-                    }
-                  },
-                  "invite": {
-                    "!696r7674:example.com": {
-                      "invite_state": {
-                        "events": [
-                          {
-                            "sender": "@alice:example.com",
-                            "type": "m.room.name",
-                            "state_key": "",
-                            "content": {"name": "My Room Name"}
-                          },
-                          {
-                            "sender": "@alice:example.com",
-                            "type": "m.room.member",
-                            "state_key": "@bob:example.com",
-                            "content": {"membership": "invite"}
+                      },
+                      "invite": {
+                        "!696r7674:example.com": {
+                          "invite_state": {
+                            "events": [
+                              {
+                                "sender": "@alice:example.com",
+                                "type": "m.room.name",
+                                "state_key": "",
+                                "content": {
+                                  "name": "My Room Name"
+                                }
+                              },
+                              {
+                                "sender": "@alice:example.com",
+                                "type": "m.room.member",
+                                "state_key": "@bob:example.com",
+                                "content": {
+                                  "membership": "invite"
+                                }
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    }
-                  },
-                  "knock": {
-                    "!223asd456:example.com": {
-                      "knock_state": {
-                        "events": [
-                          {
-                            "sender": "@alice:example.com",
-                            "type": "m.room.name",
-                            "state_key": "",
-                            "content": {"name": "My Room Name"}
-                          },
-                          {
-                            "sender": "@bob:example.com",
-                            "type": "m.room.member",
-                            "state_key": "@bob:example.com",
-                            "content": {"membership": "knock"}
+                        }
+                      },
+                      "knock": {
+                        "!223asd456:example.com": {
+                          "knock_state": {
+                            "events": [
+                              {
+                                "sender": "@alice:example.com",
+                                "type": "m.room.name",
+                                "state_key": "",
+                                "content": {
+                                  "name": "My Room Name"
+                                }
+                              },
+                              {
+                                "sender": "@bob:example.com",
+                                "type": "m.room.member",
+                                "state_key": "@bob:example.com",
+                                "content": {
+                                  "membership": "knock"
+                                }
+                              }
+                            ]
                           }
-                        ]
-                      }
+                        }
+                      },
+                      "leave": {}
                     }
-                  },
-                  "leave": {}
-                }
-              }
+                  }
       tags:
         - Room participation
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

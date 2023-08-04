@@ -12,22 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Identity Service Store Invitations API"
-  version: "2.0.0"
-host: localhost:8090
-schemes:
-  - https
-basePath: /_matrix/identity/v2
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Identity Service Store Invitations API
+  version: 2.0.0
 paths:
-  "/store-invite":
+  /store-invite:
     post:
       summary: Store pending invitations to a user's 3pid.
       description: |-
@@ -62,142 +52,176 @@ paths:
       operationId: storeInviteV2
       security:
         - accessToken: []
-      parameters:
-        - in: body
-          name: body
-          schema:
-            type: object
-            properties:
-              medium:
-                type: string
-                description: The literal string `email`.
-                example: "email"
-              address:
-                type: string
-                description: The email address of the invited user.
-                example: "foo@example.com"
-              room_id:
-                type: string
-                description: The Matrix room ID to which the user is invited
-                example: "!something:example.org"
-              sender:
-                type: string
-                description: The Matrix user ID of the inviting user
-                example: "@bob:example.com"
-              room_alias:
-                type: string
-                description: |-
-                  The Matrix room alias for the room to which the user is
-                  invited. This should be retrieved from the `m.room.canonical_alias`
-                  state event.
-                example: "#somewhere:example.org"
-              room_avatar_url:
-                type: string
-                description: |-
-                  The Content URI for the room to which the user is invited. This should
-                  be retrieved from the `m.room.avatar` state event.
-                example: "mxc://example.org/s0meM3dia"
-              room_join_rules:
-                type: string
-                description: |-
-                  The `join_rule` for the room to which the user is invited. This should
-                  be retrieved from the `m.room.join_rules` state event.
-                example: "public"
-              room_name:
-                type: string
-                description: |-
-                  The name of the room to which the user is invited. This should be retrieved
-                  from the `m.room.name` state event.
-                example: "Bob's Emporium of Messages"
-              sender_display_name:
-                type: string
-                description: The display name of the user ID initiating the invite.
-                example: "Bob Smith"
-              sender_avatar_url:
-                type: string
-                description: The Content URI for the avatar of the user ID initiating the invite.
-                example: "mxc://example.org/an0th3rM3dia"
-              room_type:
-                type: string
-                description: |-
-                  The `type` from the `m.room.create` event's `content`. If the create event doesn't
-                  have a specified `type`, this field is not included.
-                example: "m.space"
-            required: ["medium", "address", "room_id", "sender"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                medium:
+                  type: string
+                  description: The literal string `email`.
+                  example: email
+                address:
+                  type: string
+                  description: The email address of the invited user.
+                  example: foo@example.com
+                room_id:
+                  type: string
+                  description: The Matrix room ID to which the user is invited
+                  example: "!something:example.org"
+                sender:
+                  type: string
+                  description: The Matrix user ID of the inviting user
+                  example: "@bob:example.com"
+                room_alias:
+                  type: string
+                  description: |-
+                    The Matrix room alias for the room to which the user is
+                    invited. This should be retrieved from the `m.room.canonical_alias`
+                    state event.
+                  example: "#somewhere:example.org"
+                room_avatar_url:
+                  type: string
+                  description: |-
+                    The Content URI for the room to which the user is invited. This should
+                    be retrieved from the `m.room.avatar` state event.
+                  example: mxc://example.org/s0meM3dia
+                room_join_rules:
+                  type: string
+                  description: |-
+                    The `join_rule` for the room to which the user is invited. This should
+                    be retrieved from the `m.room.join_rules` state event.
+                  example: public
+                room_name:
+                  type: string
+                  description: |-
+                    The name of the room to which the user is invited. This should be retrieved
+                    from the `m.room.name` state event.
+                  example: Bob's Emporium of Messages
+                sender_display_name:
+                  type: string
+                  description: The display name of the user ID initiating the invite.
+                  example: Bob Smith
+                sender_avatar_url:
+                  type: string
+                  description: The Content URI for the avatar of the user ID initiating the
+                    invite.
+                  example: mxc://example.org/an0th3rM3dia
+                room_type:
+                  type: string
+                  description: |-
+                    The `type` from the `m.room.create` event's `content`. If the create event doesn't
+                    have a specified `type`, this field is not included.
+                  example: m.space
+              required:
+                - medium
+                - address
+                - room_id
+                - sender
       responses:
-        200:
+        "200":
           description: The invitation was stored.
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-                description: |
-                  The generated token. Must be a string consisting of the
-                  characters `[0-9a-zA-Z.=_-]`. Its length must not exceed
-                  255 characters and it must not be empty.
-              public_keys:
-                type: array
-                description: |
-                  A list of [server's long-term public key, generated ephemeral
-                  public key].
-                items:
-                  type: object
-                  title: PublicKey
-                  properties:
-                    public_key:
-                      type: string
-                      description: |
-                        The public key, encoded using [unpadded Base64](/appendices/#unpadded-base64).
-                    key_validity_url:
-                      type: string
-                      description: |
-                        The URI of an endpoint where the validity of this key can be checked
-                        by passing it as a `public_key` query parameter. See
-                        [key management](/identity-service-api/#key-management).
-                  required: ['public_key', 'key_validity_url']
-              display_name:
-                type: string
-                description: The generated (redacted) display name.
-            required: ['token', 'public_keys', 'display_name']
-          examples:
-            application/json: {
-              "token": "sometoken",
-              "public_keys": [
-                {
-                  "public_key": "serverPublicKeyBase64",
-                  "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/isvalid"
-                },
-                {
-                  "public_key": "ephemeralPublicKeyBase64",
-                  "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/ephemeral/isvalid"
-                }
-              ],
-              "display_name": "f...@b..."
-            }
-        400:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: |
+                      The generated token. Must be a string consisting of the
+                      characters `[0-9a-zA-Z.=_-]`. Its length must not exceed
+                      255 characters and it must not be empty.
+                  public_keys:
+                    type: array
+                    description: |
+                      A list of [server's long-term public key, generated ephemeral
+                      public key].
+                    items:
+                      type: object
+                      title: PublicKey
+                      properties:
+                        public_key:
+                          type: string
+                          description: |
+                            The public key, encoded using [unpadded Base64](/appendices/#unpadded-base64).
+                        key_validity_url:
+                          type: string
+                          description: |
+                            The URI of an endpoint where the validity of this key can be checked
+                            by passing it as a `public_key` query parameter. See
+                            [key management](/identity-service-api/#key-management).
+                      required:
+                        - public_key
+                        - key_validity_url
+                  display_name:
+                    type: string
+                    description: The generated (redacted) display name.
+                required:
+                  - token
+                  - public_keys
+                  - display_name
+              examples:
+                response:
+                  value: {
+                    "token": "sometoken",
+                    "public_keys": [
+                      {
+                        "public_key": "serverPublicKeyBase64",
+                        "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/isvalid"
+                      },
+                      {
+                        "public_key": "ephemeralPublicKeyBase64",
+                        "key_validity_url": "https://example.com/_matrix/identity/v2/pubkey/ephemeral/isvalid"
+                      }
+                    ],
+                    "display_name": "f...@b..."
+                  }
+        "400":
           description: |
             An error has occurred.
 
             If the 3pid is already bound to a Matrix user ID, the error code
             will be `M_THREEPID_IN_USE`.  If the medium is unsupported, the
             error code will be `M_UNRECOGNIZED`.
-          examples:
-            application/json: {
-              "errcode": "M_THREEPID_IN_USE",
-              "error": "Binding already known",
-              "mxid": "@alice:example.com"
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-        403:
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_THREEPID_IN_USE",
+                    "error": "Binding already known",
+                    "mxid": "@alice:example.com"
+                  }
+        "403":
           description: |
             The user must do something in order to use this endpoint. One example
             is an `M_TERMS_NOT_SIGNED` error where the user must [agree to more terms](/identity-service-api/#terms-of-service).
-          examples:
-            application/json: {
-              "errcode": "M_TERMS_NOT_SIGNED",
-              "error": "Please accept our updated terms of service before continuing"
-            }
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TERMS_NOT_SIGNED",
+                    "error": "Please accept our updated terms of service before continuing"
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8090
+      basePath:
+        default: /_matrix/identity/v2
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

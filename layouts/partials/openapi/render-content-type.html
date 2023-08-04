@@ -1,0 +1,27 @@
+{{/*
+
+  Render a table showing content type and description, given:
+
+  * `content_type`: the content type as a string
+
+  * `description`: the description as a string
+
+*/}}
+
+{{ $content_type := .content_type }}
+{{ $description := .description}}
+
+{{ if $content_type }}
+
+<table class="content-type-table">
+ <thead>
+  <th class="col-name">Content-Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+ <tr>
+  <td><code>{{ $content_type }}</code></td>
+  <td>{{ $description | markdownify -}}</td>
+ </tr>
+</table>
+
+{{ end }}

@@ -23,16 +23,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: "⚙️ npm"
-        working-directory: "./scripts"
-        run: |
-          npm install
       - name: "🔎 Run validator"
-        working-directory: "./scripts"
         run: |
-          node validator.js -s "../data/api/application-service"
-          node validator.js -s "../data/api/client-server"
-          node validator.js -s "../data/api/push-gateway"
+          npx @redocly/cli@latest lint data/api/*/*.yaml
 
   check-examples:
     name: "🔎 Check Event schema examples"
@@ -93,18 +86,26 @@ jobs:
           pip install -r scripts/requirements.txt
       - name: "📦 Asset creation"
         run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            export RELEASE="${GITHUB_REF/refs\/tags\//}"
+          else
+            export RELEASE="unstable"
+          fi
           # The output path matches the final deployment path at spec.matrix.org
           scripts/dump-swagger.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api application-service \
+            -r "$RELEASE" \
             -o spec/application-service-api/api.json
           scripts/dump-swagger.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api client-server \
+            -r "$RELEASE" \
             -o spec/client-server-api/api.json
           scripts/dump-swagger.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api push-gateway \
+            -r "$RELEASE" \
             -o spec/push-gateway-api/api.json
           tar -czf openapi.tar.gz spec
       - name: "📤 Artifact upload"
@@ -147,7 +148,7 @@ jobs:
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@c03b5dbed22245418539b65eb9a3b1d5fdd9a0a6
         with:
-          hugo-version: '0.93.3'
+          hugo-version: '0.113.0'
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v2

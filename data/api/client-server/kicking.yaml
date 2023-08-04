@@ -11,21 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Room Kicking API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Room Kicking API
+  version: 1.0.0
 paths:
   "/rooms/{roomId}/kick":
     post:
@@ -43,39 +32,44 @@ paths:
         - accessToken: []
       parameters:
         - in: path
-          type: string
           name: roomId
           description: The room identifier (not alias) from which the user should be kicked.
           required: true
-          x-example: "!e42d8c:matrix.org"
-        - in: body
-          name: body
-          required: true
+          example: "!e42d8c:matrix.org"
           schema:
-            type: object
-            example: {
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
                 "reason": "Telling unfunny jokes",
                 "user_id": "@cheeky_monkey:matrix.org"
               }
-            properties:
-              user_id:
-                type: string
-                description: The fully qualified user ID of the user being kicked.
-              reason:
-                type: string
-                description: |-
-                  The reason the user has been kicked. This will be supplied as the
-                  `reason` on the target's updated [`m.room.member`](/client-server-api/#mroommember) event.
-            required: ["user_id"]
+              properties:
+                user_id:
+                  type: string
+                  description: The fully qualified user ID of the user being kicked.
+                reason:
+                  type: string
+                  description: |-
+                    The reason the user has been kicked. This will be supplied as the
+                    `reason` on the target's updated [`m.room.member`](/client-server-api/#mroommember) event.
+              required:
+                - user_id
+        required: true
       responses:
-        200:
+        "200":
           description: The user has been kicked from the room.
-          examples:
-            application/json: {
-              }
-          schema:
-            type: object
-        403:
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "403":
           description: |-
             You do not have permission to kick the user from the room. A meaningful `errcode` and
             description error text will be returned. Example reasons for rejections are:
@@ -83,12 +77,30 @@ paths:
             - The kicker is not currently in the room.
             - The kickee is not currently in the room.
             - The kicker's power level is insufficient to kick users from the room.
-          examples:
-            application/json: {
-                "errcode": "M_FORBIDDEN",
-                "error": "You do not have a high enough power level to kick from this room."
-              }
-          schema:
-            "$ref": "definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You do not have a high enough power level to kick from this room."
+                  }
       tags:
         - Room membership
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

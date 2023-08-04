@@ -13,19 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-swagger: "2.0"
+openapi: 3.1.0
 info:
-  title: "Matrix Identity Service Ping API"
-  version: "2.0.0"
-host: localhost:8090
-schemes:
-  - https
-basePath: /_matrix/identity
-produces:
-  - application/json
+  title: Matrix Identity Service Ping API
+  version: 2.0.0
 paths:
-  "/v2":
+  /v2:
     get:
       summary: Checks that an identity server is available at this API endpoint.
       description: |-
@@ -38,9 +31,24 @@ paths:
         by entities acting as a client for the identity server.
       operationId: pingV2
       responses:
-        200:
+        "200":
           description: An identity server is ready to serve requests.
-          examples:
-            application/json: {}
-          schema:
-            type: object
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8090
+      basePath:
+        default: /_matrix/identity

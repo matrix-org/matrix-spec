@@ -12,23 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Client-Server Room Creation API"
-  version: "1.0.0"
-host: localhost:8008
-schemes:
-  - https
-  - http
-basePath: /_matrix/client/v3
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Client-Server Room Creation API
+  version: 1.0.0
 paths:
-  "/createRoom":
+  /createRoom:
     post:
       summary: Create a new room
       description: |-
@@ -76,177 +65,192 @@ paths:
       operationId: createRoom
       security:
         - accessToken: []
-      parameters:
-        - in: body
-          name: body
-          description: The desired room configuration.
-          required: true
-          schema:
-            type: object
-            example: {
-              "preset": "public_chat",
-              "room_alias_name": "thepub",
-              "name": "The Grand Duke Pub",
-              "topic": "All about happy hour",
-              "creation_content": {
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "preset": "public_chat",
+                "room_alias_name": "thepub",
+                "name": "The Grand Duke Pub",
+                "topic": "All about happy hour",
+                "creation_content": {
                   "m.federate": false
+                }
               }
-            }
-            properties:
-              visibility:
-                type: string
-                enum: ["public", "private"]
-                description: |-
-                  A `public` visibility indicates that the room will be shown
-                  in the published room list. A `private` visibility will hide
-                  the room from the published room list. Rooms default to
-                  `private` visibility if this key is not included. NB: This
-                  should not be confused with `join_rules` which also uses the
-                  word `public`.
-              room_alias_name:
-                type: string
-                description: |-
-                  The desired room alias **local part**. If this is included, a
-                  room alias will be created and mapped to the newly created
-                  room. The alias will belong on the *same* homeserver which
-                  created the room. For example, if this was set to "foo" and
-                  sent to the homeserver "example.com" the complete room alias
-                  would be `#foo:example.com`.
-
-                  The complete room alias will become the canonical alias for
-                  the room and an `m.room.canonical_alias` event will be sent
-                  into the room.
-              name:
-                type: string
-                description: |-
-                  If this is included, an `m.room.name` event will be sent
-                  into the room to indicate the name of the room. See Room
-                  Events for more information on `m.room.name`.
-              topic:
-                type: string
-                description: |-
-                  If this is included, an `m.room.topic` event will be sent
-                  into the room to indicate the topic for the room. See Room
-                  Events for more information on `m.room.topic`.
-              invite:
-                type: array
-                description: |-
-                  A list of user IDs to invite to the room. This will tell the
-                  server to invite everyone in the list to the newly created room.
-                items:
+              properties:
+                visibility:
                   type: string
-              invite_3pid:
-                type: array
-                description: |-
-                  A list of objects representing third-party IDs to invite into
-                  the room.
-                items:
-                  type: object
-                  title: Invite3pid
-                  properties:
-                    id_server:
-                      type: string
-                      description: The hostname+port of the identity server which should be used for third-party identifier lookups.
-                    id_access_token:
-                      type: string
-                      description: |-
-                        An access token previously registered with the identity server. Servers
-                        can treat this as optional to distinguish between r0.5-compatible clients
-                        and this specification version.
-                    medium:
-                      type: string
-                      description: |-
-                        The kind of address being passed in the address field, for example `email`
-                        (see [the list of recognised values](/appendices/#3pid-types)).
-                    address:
-                      type: string
-                      description: The invitee's third-party identifier.
-                  required: ["id_server", "id_access_token", "medium", "address"]
-              room_version:
-                type: string
-                description: |-
-                  The room version to set for the room. If not provided, the homeserver is
-                  to use its configured default. If provided, the homeserver will return a
-                  400 error with the errcode `M_UNSUPPORTED_ROOM_VERSION` if it does not
-                  support the room version.
-                example: "1"
-              creation_content:
-                title: CreationContent
-                type: object
-                description: |-
-                  Extra keys, such as `m.federate`, to be added to the content
-                  of the [`m.room.create`](/client-server-api/#mroomcreate) event. The server will overwrite the following
-                  keys: `creator`, `room_version`. Future versions of the specification
-                  may allow the server to overwrite other keys.
-              initial_state:
-                type: array
-                description: |-
-                  A list of state events to set in the new room. This allows
-                  the user to override the default state events set in the new
-                  room. The expected format of the state events are an object
-                  with type, state_key and content keys set.
+                  enum:
+                    - public
+                    - private
+                  description: |-
+                    A `public` visibility indicates that the room will be shown
+                    in the published room list. A `private` visibility will hide
+                    the room from the published room list. Rooms default to
+                    `private` visibility if this key is not included. NB: This
+                    should not be confused with `join_rules` which also uses the
+                    word `public`.
+                room_alias_name:
+                  type: string
+                  description: |-
+                    The desired room alias **local part**. If this is included, a
+                    room alias will be created and mapped to the newly created
+                    room. The alias will belong on the *same* homeserver which
+                    created the room. For example, if this was set to "foo" and
+                    sent to the homeserver "example.com" the complete room alias
+                    would be `#foo:example.com`.
 
-                  Takes precedence over events set by `preset`, but gets
-                  overridden by `name` and `topic` keys.
-                items:
+                    The complete room alias will become the canonical alias for
+                    the room and an `m.room.canonical_alias` event will be sent
+                    into the room.
+                name:
+                  type: string
+                  description: |-
+                    If this is included, an `m.room.name` event will be sent
+                    into the room to indicate the name of the room. See Room
+                    Events for more information on `m.room.name`.
+                topic:
+                  type: string
+                  description: |-
+                    If this is included, an `m.room.topic` event will be sent
+                    into the room to indicate the topic for the room. See Room
+                    Events for more information on `m.room.topic`.
+                invite:
+                  type: array
+                  description: |-
+                    A list of user IDs to invite to the room. This will tell the
+                    server to invite everyone in the list to the newly created room.
+                  items:
+                    type: string
+                invite_3pid:
+                  type: array
+                  description: |-
+                    A list of objects representing third-party IDs to invite into
+                    the room.
+                  items:
+                    type: object
+                    title: Invite3pid
+                    properties:
+                      id_server:
+                        type: string
+                        description: The hostname+port of the identity server which should be used for
+                          third-party identifier lookups.
+                      id_access_token:
+                        type: string
+                        description: |-
+                          An access token previously registered with the identity server. Servers
+                          can treat this as optional to distinguish between r0.5-compatible clients
+                          and this specification version.
+                      medium:
+                        type: string
+                        description: |-
+                          The kind of address being passed in the address field, for example `email`
+                          (see [the list of recognised values](/appendices/#3pid-types)).
+                      address:
+                        type: string
+                        description: The invitee's third-party identifier.
+                    required:
+                      - id_server
+                      - id_access_token
+                      - medium
+                      - address
+                room_version:
+                  type: string
+                  description: |-
+                    The room version to set for the room. If not provided, the homeserver is
+                    to use its configured default. If provided, the homeserver will return a
+                    400 error with the errcode `M_UNSUPPORTED_ROOM_VERSION` if it does not
+                    support the room version.
+                  example: "1"
+                creation_content:
+                  title: CreationContent
                   type: object
-                  title: StateEvent
-                  properties:
-                    type:
-                      type: string
-                      description: The type of event to send.
-                    state_key:
-                      type: string
-                      description: The state_key of the state event. Defaults to an empty string.
-                    content:
-                      type: object
-                      description: The content of the event.
-                  required: ["type", "content"]
-              preset:
-                type: string
-                enum: ["private_chat", "public_chat", "trusted_private_chat"]
-                description: |-
-                  Convenience parameter for setting various default state events
-                  based on a preset.
+                  description: |-
+                    Extra keys, such as `m.federate`, to be added to the content
+                    of the [`m.room.create`](/client-server-api/#mroomcreate) event. The server will overwrite the following
+                    keys: `creator`, `room_version`. Future versions of the specification
+                    may allow the server to overwrite other keys.
+                initial_state:
+                  type: array
+                  description: |-
+                    A list of state events to set in the new room. This allows
+                    the user to override the default state events set in the new
+                    room. The expected format of the state events are an object
+                    with type, state_key and content keys set.
 
-                  If unspecified, the server should use the `visibility` to determine
-                  which preset to use. A visbility of `public` equates to a preset of
-                  `public_chat` and `private` visibility equates to a preset of
-                  `private_chat`.
-              is_direct:
-                type: boolean
-                description: |-
-                  This flag makes the server set the `is_direct` flag on the
-                  `m.room.member` events sent to the users in `invite` and
-                  `invite_3pid`. See [Direct Messaging](/client-server-api/#direct-messaging) for more information.
-              power_level_content_override:
-                title: Power Level Event Content
-                type: object
-                description: |-
-                  The power level content to override in the default power level
-                  event. This object is applied on top of the generated
-                  [`m.room.power_levels`](/client-server-api/#mroompower_levels)
-                  event content prior to it being sent to the room. Defaults to
-                  overriding nothing.
+                    Takes precedence over events set by `preset`, but gets
+                    overridden by `name` and `topic` keys.
+                  items:
+                    type: object
+                    title: StateEvent
+                    properties:
+                      type:
+                        type: string
+                        description: The type of event to send.
+                      state_key:
+                        type: string
+                        description: The state_key of the state event. Defaults to an empty string.
+                      content:
+                        type: object
+                        description: The content of the event.
+                    required:
+                      - type
+                      - content
+                preset:
+                  type: string
+                  enum:
+                    - private_chat
+                    - public_chat
+                    - trusted_private_chat
+                  description: |-
+                    Convenience parameter for setting various default state events
+                    based on a preset.
+
+                    If unspecified, the server should use the `visibility` to determine
+                    which preset to use. A visbility of `public` equates to a preset of
+                    `public_chat` and `private` visibility equates to a preset of
+                    `private_chat`.
+                is_direct:
+                  type: boolean
+                  description: |-
+                    This flag makes the server set the `is_direct` flag on the
+                    `m.room.member` events sent to the users in `invite` and
+                    `invite_3pid`. See [Direct Messaging](/client-server-api/#direct-messaging) for more information.
+                power_level_content_override:
+                  title: Power Level Event Content
+                  type: object
+                  description: |-
+                    The power level content to override in the default power level
+                    event. This object is applied on top of the generated
+                    [`m.room.power_levels`](/client-server-api/#mroompower_levels)
+                    event content prior to it being sent to the room. Defaults to
+                    overriding nothing.
+        description: The desired room configuration.
+        required: true
       responses:
-        200:
+        "200":
           description: Information about the newly created room.
-          schema:
-            type: object
-            description: Information about the newly created room.
-            properties:
-              room_id:
-                type: string
-                description: |-
-                  The created room's ID.
-            required: ['room_id']
-          examples:
-            application/json: {
-              "room_id": "!sefiuhWgwghwWgh:example.com"
-            }
-        400:
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Information about the newly created room.
+                properties:
+                  room_id:
+                    type: string
+                    description: The created room's ID.
+                required:
+                  - room_id
+              examples:
+                response:
+                  value: {
+                    "room_id": "!sefiuhWgwghwWgh:example.com"
+                  }
+        "400":
           description: |-
-
+            
             The request is invalid. A meaningful `errcode` and description
             error text will be returned. Example reasons for rejection include:
 
@@ -266,7 +270,24 @@ paths:
               of a homeserver which does not support the requested room version.
               The `errcode` will be `M_UNSUPPORTED_ROOM_VERSION` in these
               cases.
-          schema:
-            "$ref": "definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
       tags:
         - Room creation
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v3
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

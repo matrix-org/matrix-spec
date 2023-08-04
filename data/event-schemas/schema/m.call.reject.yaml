@@ -1,0 +1,28 @@
+---
+type: object
+description: |
+  If the `m.call.invite` event has `version` `"1"`, a client wishing to
+  reject the call sends an `m.call.reject` event. This rejects the call on all devices,
+  but if the calling device sees an `answer` before the `reject`, it disregards the
+  reject event and carries on. The reject has a `party_id` just like an answer, and
+  the caller sends a `select_answer` for it just like an answer. If another client
+  had already sent an answer and sees the caller select the reject response instead
+  of its answer, it ends the call. If the `m.call.invite` event has `version` `0`,
+  the callee sends an `m.call.hangup` event. If the calling user chooses to end the
+  call before setup is complete, the client sends `m.call.hangup` as previously.
+
+  Note that, unlike `m.call.hangup`, this event has no `reason` field: the rejection of
+  a call is always implicitly because the user chose not to answer it.
+x-addedInMatrixVersion: "1.7"
+allOf:
+- "$ref": core-event-schema/room_event.yaml
+properties:
+  content:
+    type: object
+    allOf:
+    - "$ref": core-event-schema/call_event.yaml
+  type:
+    type: string
+    enum:
+    - m.call.reject
+

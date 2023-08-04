@@ -68,9 +68,8 @@ Custom SCSS for the Matrix spec
     margin-top: 1rem;
   }
 
-  &>.td-sidebar-nav__section > li > a.td-sidebar-link {
-      font-weight: $font-weight-bold;
-      font-size: 1.3rem;
+  .td-sidebar-nav__section .ul-1 ul {
+    padding-left: 0;
   }
 
   /* This is to make the width of the items that have sub-items (like room versions)
@@ -79,12 +78,20 @@ Custom SCSS for the Matrix spec
     padding-right: 0 !important;
   }
 
-  a.indent-1 {
+  .ul-1 > li > a {
     padding-left: 1rem !important;
   }
 
-  a.indent-2 {
-    padding-left: 2rem;
+  .ul-2 > li > a {
+    padding-left: 2rem !important;
+  }
+
+  a.td-sidebar-link.tree-root {
+    color: $gray-800;
+    font-weight: $font-weight-bold;
+    font-size: 1.3rem;
+    margin-bottom: 0;
+    border-bottom: none;
   }
 
   a, a.td-sidebar-link {
@@ -103,7 +110,6 @@ Custom SCSS for the Matrix spec
 
     &.active, &active:hover {
       background-color: $secondary-background;
-      font-weight: $font-weight-normal;
     }
   }
 }
@@ -344,19 +350,37 @@ footer {
   }
 
   table {
-    /* Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
-     * tables with a "display" property of "block".
-     *
-     * However, for "table-layout: fixed" to be effective, an element must have a
-     * "display" property of "table".
-     *
-     * Thus, we override the "display" property here. This may no longer be necessary once
-     * Docsy updates to Bootstrap v5+: https://github.com/google/docsy/issues/470.
-     * For more details, see
-     * https://github.com/matrix-org/matrix-spec/pull/1295/files#r1010759688 */
-    display: table;
-    table-layout: fixed;
-    width: 100%;
+    @media (max-width: 800px) {
+      /* Docsy by default applies `overflow-x: auto;` to tables, which
+       * results in annoying horizontal scrolling on mobile, so we instead
+       * switch to a fixed table layout on a narrow browser width.
+       * (On a wider width the default auto table-layout provides better readability.)
+       *
+       * Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
+       * tables with a "display" property of "block".
+       * However, for "table-layout: fixed" to be effective, an element must have a
+       * "display" property of "table".
+       *
+       * Thus, we override the "display" property here. This may no longer be necessary once
+       * Docsy updates to Bootstrap v5+: https://github.com/google/docsy/issues/470.
+       * For more details, see
+       * https://github.com/matrix-org/matrix-spec/pull/1295/files#r1010759688 */
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+
+      .col-name, .col-type, .col-status {
+        width: 25%;
+      }
+
+      .col-description {
+        width: 50%;
+      }
+
+      .col-status-description {
+        width: 75%;
+      }
+    }
 
     // add some space between two tables when they are right next to each other
     & + table {
@@ -374,7 +398,7 @@ footer {
       padding: 1rem;
     }
 
-    &.object-table, &.response-table {
+    &.object-table, &.response-table, &.content-type-table {
         border: 1px $table-border-color solid;
 
         caption {
@@ -403,19 +427,6 @@ footer {
     &.basic-info th {
       width: 15rem;
     }
-
-    .col-name, .col-type, .col-status {
-      width: 25%;
-    }
-
-    .col-description {
-      width: 50%;
-    }
-
-    .col-status-description {
-      width: 75%;
-    }
-
   }
 
   pre {

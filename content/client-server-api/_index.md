@@ -62,7 +62,7 @@ error message e.g.  `M_FORBIDDEN`. Error codes should have their namespace
 first in ALL CAPS, followed by a single `_`. For example, if there was a custom
 namespace `com.mydomain.here`, and a `FORBIDDEN` code, the error code should
 look like `COM.MYDOMAIN.HERE_FORBIDDEN`. Error codes defined by this
-specification should start `M_`.
+specification should start with `M_`.
 
 Some `errcode`s define additional keys which should be present in the error
 response object, but the keys `error` and `errcode` MUST always be present.
@@ -237,18 +237,31 @@ For example, `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`
 would return a `200 OK` with the `event_id` of the original request in
 the response body.
 
-As well as the HTTP path, the scope of a transaction ID is a "client
-session", where that session is identified by a particular access token.
-When [refreshing](#refreshing-access-tokens) an access token, the
-transaction ID's scope is retained. This means that if a client with
-token `A` uses `TXN1` as their transaction ID, refreshes the token to
-`B`, and uses `TXN1` again it'll be assumed to be a duplicate request
-and ignored. If the client logs out and back in between the `A` and `B`
-tokens, `TXN1` could be used once for each.
+The scope of a transaction ID is for a single [device](../index.html#devices),
+and a single HTTP endpoint. In other words: a single device could use the same
+transaction ID for a request to [`PUT
+/_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+and [`PUT
+/_matrix/client/v3/sendToDevice/{eventType}/{txnId}`](#put_matrixclientv3sendtodeviceeventtypetxnid),
+and the two requests would be considered distinct because the two are
+considered separate endpoints. Similarly, if a client logs out and back in
+between two requests using the same transaction ID, the requests are distinct
+because the act of logging in and out creates a new device (unless an existing
+`device_id` is passed to [`POST
+/_matrix/client/v3/login`](#post_matrixclientv3login)). On the other hand, if a
+client re-uses a transaction ID for the same endpoint after
+[refreshing](#refreshing-access-tokens) an access token, it will be assumed to
+be a duplicate request and ignored. See also
+[Relationship between access tokens and devices](#relationship-between-access-tokens-and-devices).
 
 Some API endpoints may allow or require the use of `POST` requests
 without a transaction ID. Where this is optional, the use of a `PUT`
 request is strongly recommended.
+
+{{% boxes/rationale %}}
+Prior to `v1.7`, transaction IDs were scoped to "client sessions" rather than
+devices.
+{{% /boxes/rationale %}}
 
 ## Web Browser Clients
 
@@ -1163,7 +1176,13 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
+{{< added-in v="1.7" >}} Already-authenticated clients can additionally generate
+a token for their user ID if supported by the homeserver using 
+[`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
+
 {{% http-api spec="client-server" api="login" %}}
+
+{{% http-api spec="client-server" api="login_token" %}}
 
 {{% http-api spec="client-server" api="refresh" %}}
 
@@ -2671,4 +2690,3 @@ systems.
 {{< cs-module name="event_annotations" >}}
 {{< cs-module name="threading" >}}
 {{< cs-module name="reference_relations" >}}
-
