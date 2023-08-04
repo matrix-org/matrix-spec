@@ -29,16 +29,22 @@ securityDefinitions:
 paths:
   "/rooms/{roomId}/report/{eventId}":
     post:
-      summary: Reports an event as inappropriate. You must be joined to the room in order
-      to report an event.
+      summary: Report an event in a joined room as inappropriate.
       description: |-
         Reports an event as inappropriate to the server, which may then notify
-        the appropriate people.
+        the appropriate people. The caller must be joined to the room to report
+        it.
         
-        It may be possible for clients to deduce whether an event exists by
+        It can be possible for clients to deduce whether an event exists by
         timing the response, as only a report for an event that does exist
         will require the homeserver to check whether a user is joined to
-        the room. To combat this, homeserver implementations may add
+        the room. To combat this, homeserver implementations are encouraged
+        to add a random delay when generating the response.
+        
+        It might be possible for clients to deduce whether an event exists by
+        timing the response, as only a report for an event that does exist
+        will require the homeserver to check whether a user is joined to
+        the room. To combat this, homeserver implementations should add
         a random delay when generating a response.
       operationId: reportContent
       tags:
@@ -88,14 +94,18 @@ paths:
             application/json: {}
         404:
           description: |-
-            The event was not found or you do not have permission to read this event.
+            The event was not found or you are not joined to the room where the
+            event resides.
+            
+            Homeserver implementations can additionally return this error if the
+            reported event has been redacted.
 
             Homeserver implementations may additionally return this error if the
             reported event has been redacted.
           examples:
             application/json: {
               "errcode": "M_NOT_FOUND",
-              "error": "The event was not found or you do not have permission to read this event."
+              "error": "The event was not found or you are not joined to the room."
             }
           schema:
             $ref: "../client-server/definitions/errors/error.yaml"
