@@ -107,10 +107,6 @@ properties:
                 description: The event hash.
                 example: Base64EncodedSha256HashesShouldBe43BytesLong
             required: ['sha256']
-  redacts:
-    type: string
-    description: For redaction events, the ID of the event being redacted.
-    example: "$def456:matrix.org"
   unsigned:
     type: object
     title: UnsignedData
