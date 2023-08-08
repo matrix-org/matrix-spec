@@ -67,7 +67,7 @@ paths:
       security:
         - accessToken: []
       x-changedInMatrixVersion:
-        1.7: |
+        1.8: |
           This endpoint now requires the user to be joined to the room.
       responses:
         "200":
