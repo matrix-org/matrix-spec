@@ -21,10 +21,12 @@ not in the following list:
 The content object must also be stripped of all keys, unless it is one
 of the following event types:
 
--   `m.room.member` allows key `membership`.
--   `m.room.create` allows key `creator`.
--   `m.room.join_rules` allows key `join_rule`.
--   `m.room.power_levels` allows keys `ban`, `events`, `events_default`,
-    `kick`, `redact`, `state_default`, `users`, `users_default`.
--   `m.room.aliases` allows key `aliases`.
--   `m.room.history_visibility` allows key `history_visibility`.
+-   [`m.room.member`](/client-server-api#mroommember) allows key `membership`.
+-   [`m.room.create`](/client-server-api#mroomcreate) allows key `creator`.
+-   [`m.room.join_rules`](/client-server-api#mroomjoin_rules) allows key `join_rule`.
+-   [`m.room.power_levels`](/client-server-api#mroompower_levels) allows keys
+    `ban`, `events`, `events_default`, `kick`, `redact`, `state_default`, `users`,
+    `users_default`.
+-   [`m.room.aliases`](/client-server-api#historical-events) allows key `aliases`.
+-   [`m.room.history_visibility`](/client-server-api#mroomhistory_visibility) allows
+    key `history_visibility`.
