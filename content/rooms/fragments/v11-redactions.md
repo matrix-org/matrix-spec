@@ -2,8 +2,7 @@
 ---
 
 {{% added-in this=true %}} The top-level `origin`, `membership`, and `prev_state` properties
-are no longer protected from redaction. The `m.room.create` event no longer keeps the `creator`
-property and now keeps the entire `content` property. The `m.room.redaction` event keeps the
+are no longer protected from redaction. The `m.room.create` event now keeps the entire `content` property. The `m.room.redaction` event keeps the
 `redacts` property under `content`. The `m.room.power_levels` event keeps the `invite` property
 under `content`.
 
