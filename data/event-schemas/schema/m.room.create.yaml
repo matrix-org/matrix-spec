@@ -34,8 +34,6 @@ properties:
             type: string
             description: The event ID of the last known event in the old room.
         required: [room_id, event_id]
-    required:
-      - creator
     type: object
   state_key:
     description: A zero-length string.

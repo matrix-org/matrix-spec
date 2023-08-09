@@ -6,20 +6,18 @@ properties:
   content:
     properties:
       redacts:
-        description: The event ID that was redacted. Present starting in room version 11.
+        description: The event ID that was redacted. Required for, and present starting in, room version 11.
         type: string
       reason:
         description: 'The reason for the redaction, if any.'
         type: string
     type: object
   redacts:
-    description: Only present in room versions 1 - 10. The event ID that was redacted.
+    description: Required for, and only present in, room versions 1 - 10. The event ID that was redacted.
     type: string
   type:
     enum:
       - m.room.redaction
     type: string
-required:
-  - redacts
 title: Redaction
 type: object
