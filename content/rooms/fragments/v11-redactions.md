@@ -1,14 +1,3 @@
----
----
-
-{{% added-in this=true %}} The top-level `origin`, `membership`, and `prev_state` properties
-are no longer protected from redaction. The [`m.room.create`](/client-server-api#mroomcreate)
-event now keeps the entire `content` property. The [`m.room.redaction`](/client-server-api#mroomredaction)
-event keeps the `redacts` property under `content`. The
-[`m.room.power_levels`](/client-server-api#mroompower_levels) event keeps the
-`invite` property under `content`.
-
-The full redaction algorithm follows.
 
 Upon receipt of a redaction event, the server must strip off any keys
 not in the following list:

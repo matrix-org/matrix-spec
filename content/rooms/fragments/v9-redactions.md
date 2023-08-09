@@ -1,25 +1,3 @@
----
----
-
-{{% added-in this=true %}} [`m.room.member`](/client-server-api#mroommember) events
-now keep `join_authorised_via_users_server` in addition to other keys in `content`
-when being redacted.
-
-{{% boxes/rationale %}}
-Without the `join_authorised_via_users_server` property, redacted join events
-can become invalid when verifying the auth chain of a given event, thus creating
-a split-brain scenario where the user is able to speak from one server's
-perspective but most others will continually reject their events.
-
-This can theoretically be worked around with a rejoin to the room, being careful
-not to use the faulty events as `prev_events`, though instead it is encouraged
-to use v9 rooms over v8 rooms to outright avoid the situation.
-
-[Issue #3373](https://github.com/matrix-org/matrix-doc/issues/3373) has further
-information.
-{{% /boxes/rationale %}}
-
-The full redaction algorithm follows.
 
 Upon receipt of a redaction event, the server must strip off any keys
 not in the following list:
