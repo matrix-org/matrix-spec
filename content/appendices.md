@@ -611,17 +611,19 @@ characters permitted in user ID localparts. There are currently active
 users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
-and servers MUST accept user IDs with localparts from the expanded
-character set:
+and servers MUST accept user IDs with localparts consisting of any legal
+unicode codepoint except for `:`, including zero characters. Localparts
+MUST be valid UTF-8 sequences.
+
+Servers SHOULD NOT produce user IDs with localparts outside of the following
+character set, and SHOULD NOT forward such user IDs to clients when referenced
+outside the context of an event. For example, device list updates from "invalid"
+user IDs would be dropped by the receiving server.
 
     extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
 
-##### User IDs over federation
-
-Due to a lack of validation in original Matrix homeserver implementations,
-the localpart of user IDs over federation may contain any valid unicode
-codepoints except `:`. A future spec change may create a new room version
-to disallow such user IDs.
+A future room version may prevent users using a historical character set
+from participating. Use of the historical character set is *deprecated*.
 
 ##### Mapping from other character sets
 
