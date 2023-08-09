@@ -7,7 +7,7 @@ properties:
     properties:
       creator:
         description: |-
-          The `user_id` of the room creator. Only present in room versions 1 - 10. Starting with
+          The `user_id` of the room creator. **Required** for, and only present in, room versions 1 - 10. Starting with
           room version 11 the event `sender` should be used instead.
         type: string
       m.federate:
