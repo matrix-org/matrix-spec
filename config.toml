@@ -53,8 +53,8 @@ current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec. CI will set these values here automatically when a release git tag (i.e `v1.5`) is created.
 # major = "1"
-# minor = "6"
-# release_date = "February 14, 2023"
+# minor = "7"
+# release_date = "May 25, 2023"
 
 # User interface configuration
 [params.ui]
@@ -62,6 +62,10 @@ current_version_url = "https://spec.matrix.org/latest"
 footer_about_disable = false
 # Collapse HTTP API and event <details> elements
 rendered_data_collapsed = false
+# Hide the search entry in the sidebar
+sidebar_search_disable = true
+# Only show the current page's ancestors, siblings and direct descendants in the sidebar menu
+sidebar_menu_compact = true
 
 [params.links]
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.

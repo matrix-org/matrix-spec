@@ -1,4 +1,7 @@
 [submodule "themes/docsy"]
 	path = themes/docsy
+	# We use our own forked version of the Docsy theme,
+	# to avoid loading fonts from CDNs, which Docsy currently
+	# doesn't support (see https://github.com/google/docsy/issues/605).
 	url = https://github.com/matrix-org/docsy.git
 	branch = master

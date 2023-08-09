@@ -7,11 +7,10 @@
     "properties": {
         "content": {
             "type": "object",
+            "allOf": [{
+                "$ref": "core-event-schema/call_event.yaml"
+            }],
             "properties": {
-                "call_id": {
-                    "type": "string",
-                    "description": "A unique identifier for the call."
-                },
                 "offer": {
                     "type": "object",
                     "title": "Offer",
@@ -29,16 +28,17 @@
                     },
                     "required": ["type", "sdp"]
                 },
-                "version": {
-                    "type": "integer",
-                    "description": "The version of the VoIP specification this message adheres to. This specification is version 0."
-                },
                 "lifetime": {
                     "type": "integer",
                     "description": "The time in milliseconds that the invite is valid for. Once the invite age exceeds this value, clients should discard it. They should also no longer show the call as awaiting an answer in the UI."
+                },
+                "invitee": {
+                    "type": "string",
+                    "description": "The ID of the user being called. If omitted, any user in the room can answer.",
+                    "x-addedInMatrixVersion": "1.7",
                 }
             },
-            "required": ["call_id", "offer", "version", "lifetime"]
+            "required": ["offer", "lifetime"]
         },
         "type": {
             "type": "string",

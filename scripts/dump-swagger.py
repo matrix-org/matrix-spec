@@ -133,16 +133,15 @@ base_url = args.base_url.rstrip("/")
 logging.basicConfig()
 
 output = {
-    "basePath": "/",
-    "consumes": ["application/json"],
-    "produces": ["application/json"],
-    "host": "matrix.org",
     # The servers value will be picked up by RapiDoc to provide a way
     # to switch API servers. Useful when one wants to test compliance
     # of their server with the API.
     "servers": [
         {
-            "url": "https://{homeserver_address}/",
+            "url": "https://matrix.org",
+        },
+        {
+            "url": "https://{homeserver_address}",
             "variables": {
                 "homeserver_address": {
                     "default": "matrix-client.matrix.org",
@@ -151,20 +150,21 @@ output = {
             },
         }
     ],
-    "schemes": ["https"],
     "info": {
         "title": available_apis[selected_api],
         "version": release_label,
     },
-    "securityDefinitions": {},
+    "components": {
+        "securitySchemes": {}
+    },
     "paths": {},
-    "swagger": "2.0",
+    "openapi": "3.1.0",
 }
 
 selected_api_dir = os.path.join(api_dir, selected_api)
 try:
     with open(os.path.join(selected_api_dir, 'definitions', 'security.yaml')) as f:
-        output['securityDefinitions'] = yaml.safe_load(f)
+        output['components']['securitySchemes'] = yaml.safe_load(f)
 except FileNotFoundError:
     print("No security definitions available for this API")
 
@@ -174,12 +174,12 @@ for filename in os.listdir(selected_api_dir):
         continue
     filepath = os.path.join(selected_api_dir, filename)
 
-    print("Reading swagger API: %s" % filepath)
+    print("Reading OpenAPI: %s" % filepath)
     with open(filepath, "r") as f:
         api = yaml.safe_load(f.read())
         api = resolve_references(filepath, api)
 
-        basePath = api['basePath']
+        basePath = api['servers'][0]['variables']['basePath']['default']
         for path, methods in api["paths"].items():
             path = basePath + path
             for method, spec in methods.items():

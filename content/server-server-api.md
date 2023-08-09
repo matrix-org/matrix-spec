@@ -877,8 +877,7 @@ on the resulting `m.room.member` event.
 If the joining server fails all conditions then a 403 `M_FORBIDDEN` error
 is used by the resident server.
 
-<a name="knocking-rooms">
-## Knocking upon a room
+## Knocking upon a room {#knocking-rooms}
 
 Rooms can permit knocking through the join rules, and if permitted this
 gives users a way to request to join (be invited) to the room. Users who
@@ -1270,7 +1269,7 @@ specification](/rooms) for more information. It is
 calculated as follows.
 
 1.  The event is put through the redaction algorithm.
-2.  The `signatures`, `age_ts`, and `unsigned` properties are removed
+2.  The `signatures` and `unsigned` properties are removed
     from the event, if present.
 3.  The event is converted into [Canonical
     JSON](/appendices#canonical-json).

@@ -3,6 +3,7 @@
   Render the request part of a single HTTP API operation, given:
 
   * `parameters`: OpenAPI/Swagger data specifying the parameters
+  * `request_body`: OpenAPI/Swagger data specifying the request body
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
   * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
@@ -14,48 +15,94 @@
 */}}
 
 {{ $parameters := .parameters }}
+{{ $request_body := .request_body }}
 {{ $path := .path }}
 {{ $anchor_base := .anchor_base }}
 
 <h2>Request</h2>
 
-{{ if $parameters }}
+{{ if or $parameters $request_body }}
 
-    {{ $simple_parameters := where $parameters "in" "!=" "body"}}
-    {{ if $simple_parameters }}
+    {{ if $parameters }}
 <h3>Request parameters</h3>
 
-        {{ partial "openapi/render-parameters" (dict "parameters" $simple_parameters "type" "header" "caption" "header parameters") }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $simple_parameters "type" "path" "caption" "path parameters") }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $simple_parameters "type" "query" "caption" "query parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters") }}
 
     {{ end }}
 
-    {{ $body_parameters := where $parameters "in" "body"}}
-    {{ if $body_parameters }}
+    {{ if $request_body }}
 <h3>Request body</h3>
+        {{/*
+            A request can have several content types.
+        */}}
+        {{ $json_body := index $request_body.content "application/json" }}
+        {{ if $json_body }}
+            {{/*
+                Display the JSON schemas
+            */}}
+            {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $json_body.schema "path" $path) }}
+            {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
-        {{/* at most one body param is allowed by the spec */}}
-        {{ $body_parameter := index $body_parameters 0 }}
-        {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body_parameter.schema "path" $path) }}
-        {{ $schema := partial "json-schema/resolve-allof" $schema }}
-
-        {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
-        {{ $additional_types = uniq $additional_types }}
-        {{ range $additional_types }}
-            {{ partial "openapi/render-object-table" . }}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
+            {{ $additional_types = uniq $additional_types }}
+            {{ range $additional_types }}
+                {{ partial "openapi/render-object-table" . }}
+            {{ end }}
+        {{ else }}
+            {{/*
+                Show the content types and description.
+            */}}
+            {{ $mimes := slice }}  
+            {{ range $mime, $body := $request_body.content }}
+                {{ $mimes = $mimes | append $mime }}
+            {{ end }}
+            {{ $content_type := delimit $mimes "|"}}
+            {{ partial "openapi/render-content-type" (dict "content_type" $content_type "description" $request_body.description) }}
         {{ end }}
 
 <h3>Request body example</h3>
+        {{/*
+            Show all the examples.
+        */}}
+        {{ range $mime, $body := $request_body.content }}
+            {{ $example := dict }}
 
-        {{ $example := partial "json-schema/resolve-example" $schema }}
-        {{ $example_json := jsonify (dict "indent" "  ") $example }}
-        {{ $example_json = replace $example_json "\\u003c" "<" }}
-        {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
+            {{ if $body.schema }}
+                {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body.schema "path" $path) }}
+                {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
+                {{ $example = partial "json-schema/resolve-example" $schema }}
+            {{ end }}
+
+            {{ if and (eq ($example | len) 0) $body.example }}
+                {{/*
+                    If no example was generated from the schema, fallback to the
+                    main example.
+                */}}
+                {{ $example = $body.example }}
+            {{ end }}
+
+            {{ if eq $mime "application/json" }}
+                {{ $example_json := jsonify (dict "indent" "  ") $example }}
+                {{ $example_json = replace $example_json "\\u003c" "<" }}
+                {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
 ```json
 {{ $example_json }}
 ```
+            {{ else }}
+                {{ $example = $example | safeHTML }}
+                {{/*
+                    We need to set a language for the code otherwise the styling
+                    is different than other examples.
+                */}}
+```json
+{{ $example }}
+```
+            {{ end }}
+
+        {{ end }}
     {{ end }}
 
 {{ else }}

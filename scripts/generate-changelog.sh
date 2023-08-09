@@ -13,15 +13,8 @@ cd `dirname $0`/../changelogs
 # Pre-cleanup just in case it wasn't done on the last run
 rm -f rendered.md
 
-# Reversed order so that room versions ends up on the bottom
-towncrier --name "Internal Changes/Tooling" --dir "./internal" --config "./pyproject.toml" --yes
-towncrier --name "Appendices" --dir "./appendices" --config "./pyproject.toml" --yes
-towncrier --name "Room Versions" --dir "./room_versions" --config "./pyproject.toml" --yes
-towncrier --name "Push Gateway API" --dir "./push_gateway" --config "./pyproject.toml" --yes
-towncrier --name "Identity Service API" --dir "./identity_service" --config "./pyproject.toml" --yes
-towncrier --name "Application Service API" --dir "./application_service" --config "./pyproject.toml" --yes
-towncrier --name "Server-Server API" --dir "./server_server" --config "./pyproject.toml" --yes
-towncrier --name "Client-Server API" --dir "./client_server" --config "./pyproject.toml" --yes
+# Generate changelog
+towncrier --yes
 
 {
     # Prepare the header

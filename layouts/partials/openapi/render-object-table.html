@@ -36,7 +36,7 @@
         {{ $property := partial "json-schema/resolve-allof" $property }}
         {{ $type := $property.type }}
 
-        {{ if eq $property.type "object" }}
+        {{ if or (eq $property.type "object") (and $property.oneOf (reflect.IsSlice .oneOf)) }}
             {{ $type = partial "type-or-title" $property }}
         {{ end }}
 
@@ -104,7 +104,27 @@
         {{ $type = delimit (slice "{string: " (partial "type-or-title" .additionalProperties) "}" ) "" }}
     {{ else if reflect.IsSlice .type }}
         {{/* It's legal to specify an array of types. Join them together in that case */}}
-        {{ $type = delimit .type "|" }}
+
+        {{ $types := slice }}
+
+        {{ range .type }}
+            {{ $types = $types | append . }}
+        {{ end }}
+
+        {{ $type = delimit $types "|" }}
+    {{ else if and .oneOf (reflect.IsSlice .oneOf) }}
+        {{/*
+            This is like an array of types except some of the types probably have a schema.
+            Join them together too.
+        */}}
+
+        {{ $types := slice }}
+
+        {{ range .oneOf }}
+            {{ $types = $types | append (partial "type-or-title" .) }}
+        {{ end }}
+
+        {{ $type = delimit $types "|" }}
     {{ else }}
         {{ $type = .type }}
     {{ end }}

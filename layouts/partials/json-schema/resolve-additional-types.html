@@ -43,17 +43,12 @@
     */}}
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object.additionalProperties) }}
-
-            {{ range $key, $property := $this_object.additionalProperties.properties }}
-                {{ $additional_objects = partial "get-additional-objects" (dict
-                    "this_object" $property
-                    "additional_objects" $additional_objects
-                    "anchor_base" $anchor_base
-                    "name" (printf "%s.%s" $name $key)
-                ) }}
-            {{ end }}
-
+            {{ $additional_objects = partial "get-additional-objects" (dict
+                "this_object" $this_object.additionalProperties
+                "additional_objects" $additional_objects
+                "anchor_base" $anchor_base
+                "name" (printf "%s.additional" $name)
+            ) }}
         {{ end }}
     {{ end }}
 
@@ -75,8 +70,8 @@
     {{/*
       Add any nested objects referenced in this object's `items`
     */}}
-    {{ if reflect.IsSlice $this_object.items}}
-        {{ range $idx, $item := $this_object.items }}
+    {{ if $this_object.items.anyOf }}
+        {{ range $idx, $item := $this_object.items.anyOf }}
             {{ $additional_objects = partial "get-additional-objects" (dict
                 "this_object" $item
                 "additional_objects" $additional_objects
@@ -93,6 +88,21 @@
         ) }}
     {{ else }}
         {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
+    {{ end }}
+{{ end }}
+
+{{/*
+  Handle object schemas using the `oneOf` keyword
+  (https://json-schema.org/understanding-json-schema/reference/combining.html#oneof)
+*/}}
+{{ if $this_object.oneOf }}
+    {{ range $idx, $item := $this_object.oneOf }}
+        {{ $additional_objects = partial "get-additional-objects" (dict
+            "this_object" $item
+            "additional_objects" $additional_objects
+            "anchor_base" $anchor_base
+            "name" (printf "%s.oneOf[%d]" $name $idx)
+        ) }}
     {{ end }}
 {{ end }}
 

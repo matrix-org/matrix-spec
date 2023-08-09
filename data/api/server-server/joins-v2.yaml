@@ -12,21 +12,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-swagger: '2.0'
+openapi: 3.1.0
 info:
-  title: "Matrix Federation Join Room API"
-  version: "1.0.0"
-host: localhost:8448
-schemes:
-  - https
-basePath: /_matrix/federation/v2
-consumes:
-  - application/json
-produces:
-  - application/json
-securityDefinitions:
-  $ref: definitions/security.yaml
+  title: Matrix Federation Join Room API
+  version: 1.0.0
 paths:
   # Note: there is no v2 of make_join (yet)
   "/send_join/{roomId}/{eventId}":
@@ -55,19 +44,20 @@ paths:
       parameters:
         - in: path
           name: roomId
-          type: string
           description: The room ID that is about to be joined.
           required: true
-          x-example: "!abc123:matrix.org"
+          example: "!abc123:matrix.org"
+          schema:
+            type: string
         - in: path
           name: eventId
-          type: string
           description: The event ID for the join event.
           required: true
-          x-example: "$abc123:example.org"
+          example: $abc123:example.org
+          schema:
+            type: string
         - in: query
           name: omit_members
-          type: boolean
           description: |-
             If `true`, indicates that that calling server can accept a reduced
             response, in which membership events are omitted from `state` and
@@ -83,83 +73,180 @@ paths:
             response `state` field, and include the auth chains for these
             membership events in the response `auth_chain` field.
           x-addedInMatrixVersion: "1.6"
-        - in: body
-          name: body
-          type: object
-          required: true
           schema:
-            type: object
-            properties:
-              sender:
-                type: string
-                description: The user ID of the joining member.
-                example: "@someone:example.org"
-              origin:
-                type: string
-                description: The name of the joining homeserver.
-                example: "matrix.org"
-              origin_server_ts:
-                type: integer
-                format: int64
-                description: A timestamp added by the joining homeserver.
-                example: 1234567890
-              type:
-                type: string
-                description: The value `m.room.member`.
-                example: "m.room.member"
-              state_key:
-                type: string
-                description: The user ID of the joining member.
-                example: "@someone:example.org"
-              content:
+            type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender:
+                  type: string
+                  description: The user ID of the joining member.
+                  example: "@someone:example.org"
+                origin:
+                  type: string
+                  description: The name of the joining homeserver.
+                  example: matrix.org
+                origin_server_ts:
+                  type: integer
+                  format: int64
+                  description: A timestamp added by the joining homeserver.
+                  example: 1234567890
+                type:
+                  type: string
+                  description: The value `m.room.member`.
+                  example: m.room.member
+                state_key:
+                  type: string
+                  description: The user ID of the joining member.
+                  example: "@someone:example.org"
+                content:
+                  type: object
+                  title: Membership Event Content
+                  description: The content of the event.
+                  example:
+                    membership: join
+                  properties:
+                    membership:
+                      type: string
+                      description: The value `join`.
+                      example: join
+                    join_authorised_via_users_server:
+                      type: string
+                      x-addedInMatrixVersion: "1.2"
+                      description: |-
+                        Required if the room is [restricted](/client-server-api/#restricted-rooms)
+                        and is joining through one of the conditions available. If the
+                        user is responding to an invite, this is not required.
+
+                        An arbitrary user ID belonging to the resident server in
+                        the room being joined that is able to issue invites to other
+                        users. This is used in later validation of the auth rules for
+                        the `m.room.member` event.
+
+                        The resident server which owns the provided user ID must have a
+                        valid signature on the event. If the resident server is receiving
+                        the `/send_join` request, the signature must be added before sending
+                        or persisting the event to other servers.
+                  required:
+                    - membership
+              required:
+                - state_key
+                - sender
+                - origin
+                - origin_server_ts
+                - type
+                - content
+            example: {
+              "room_id": "!somewhere:example.org",
+              "type": "m.room.member",
+              "state_key": "@someone:example.org",
+              "origin": "example.org",
+              "origin_server_ts": 1549041175876,
+              "sender": "@someone:example.org",
+              "content": {
+                  "membership": "join",
+                  "join_authorised_via_users_server": "@anyone:resident.example.org"
+              }
+            }
+        required: true
+      responses:
+        "200":
+          description: The join event has been accepted into the room.
+          content:
+            application/json:
+              schema:
                 type: object
-                title: Membership Event Content
-                description: The content of the event.
-                example: {"membership": "join"}
                 properties:
-                  membership:
+                  origin:
                     type: string
-                    description: The value `join`.
-                    example: "join"
-                  join_authorised_via_users_server:
-                    type: string
+                    description: The resident server's DNS name.
+                  members_omitted:
+                    type: boolean
+                    description: "`true` if `m.room.member` events have been omitted from `state`."
+                    x-addedInMatrixVersion: "1.6"
+                  auth_chain:
+                    type: array
+                    description: |-
+                      All events in the auth chain for the new join event, as well
+                      as those in the auth chains for any events returned in
+                      `state`.
+
+                      If the `omit_members` query parameter was set to `true`, then
+                      any events that are returned in `state` may be omitted from
+                      `auth_chain`, whether or not membership events are omitted
+                      from `state`.
+
+                      Note that events have a different format depending on the room version - check the
+                      [room version specification](/rooms) for precise event formats.
+                    items:
+                      type: object
+                      title: PDU
+                    x-changedInMatrixVersion:
+                      "1.6": |-
+                        reworded to include only consider state events returned in
+                        `state`, and to allow elision of redundant events.
+                  state:
+                    type: array
+                    description: |-
+                      The resolved current room state prior to the join event.
+
+                      If the request had `omit_members` set to `true`, events of
+                      type `m.room.member` may be omitted from the response to
+                      reduce the size of the response. If this is done,
+                      `members_omitted` must be set to `true`.
+                    items:
+                      type: object
+                      title: PDU
+                    x-changedInMatrixVersion:
+                      "1.6": permit omission of membership events.
+                  event:
+                    type: object
+                    title: SignedMembershipEvent
                     x-addedInMatrixVersion: "1.2"
                     description: |-
-                      Required if the room is [restricted](/client-server-api/#restricted-rooms)
-                      and is joining through one of the conditions available. If the
-                      user is responding to an invite, this is not required.
+                      Required if the room version [supports restricted join rules](/rooms/#feature-matrix). The signed
+                      copy of the membership event sent to other servers by the resident server, including the resident
+                      server's signature.
+                  servers_in_room:
+                    type: array
+                    x-addedInMatrixVersion: "1.6"
+                    description: |-
+                      **Required** if `members_omitted` is true.
 
-                      An arbitrary user ID belonging to the resident server in
-                      the room being joined that is able to issue invites to other
-                      users. This is used in later validation of the auth rules for
-                      the `m.room.member` event.
-
-                      The resident server which owns the provided user ID must have a
-                      valid signature on the event. If the resident server is receiving
-                      the `/send_join` request, the signature must be added before sending
-                      or persisting the event to other servers.
-                required: ['membership']
-            required:
-              - state_key
-              - sender
-              - origin
-              - origin_server_ts
-              - type
-              - content
-          example: {
-            "room_id": "!somewhere:example.org",
-            "type": "m.room.member",
-            "state_key": "@someone:example.org",
-            "origin": "example.org",
-            "origin_server_ts": 1549041175876,
-            "sender": "@someone:example.org",
-            "content": {
-                "membership": "join",
-                "join_authorised_via_users_server": "@anyone:resident.example.org"
-            }
-          }
-      responses:
-        400:
+                      A list of the servers active in the room (ie, those with joined members) before the join.
+                    items:
+                      type: string
+                required:
+                  - auth_chain
+                  - state
+                  - origin
+              examples:
+                response:
+                  value: {
+                    "origin": "matrix.org",
+                    "auth_chain": [
+                      {
+                        "$ref": "examples/minimal_pdu.json"
+                      }
+                    ],
+                    "state": [
+                      {
+                        "$ref": "examples/minimal_pdu.json"
+                      }
+                    ],
+                    "event": {
+                      "$ref": "examples/pdu_v4_join_membership.json"
+                    },
+                    "members_omitted": true,
+                    "servers_in_room": [
+                      "matrix.org",
+                      "example.com"
+                    ]
+                  }
+        "400":
           description: |-
             The request is invalid in some way.
 
@@ -182,103 +269,42 @@ paths:
             resident server would be unable to meet the auth rules governing
             `join_authorised_via_users_server` on the resulting `m.room.member`
             event.
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
-          examples:
-            application/json: {
-              "errcode": "M_UNABLE_TO_GRANT_JOIN",
-              "error": "This server cannot send invites to you."
-            }
-        403:
-          schema:
-            $ref: "../client-server/definitions/errors/error.yaml"
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNABLE_TO_GRANT_JOIN",
+                    "error": "This server cannot send invites to you."
+                  }
+        "403":
           description: |-
             The room that the joining server is attempting to join does not permit the user
             to join.
-          examples:
-            application/json: {
-              "errcode": "M_FORBIDDEN",
-              "error": "You are not invited to this room",
-            }
-        200:
-          description: |-
-            The join event has been accepted into the room.
-          schema:
-            type: object
-            properties:
-              origin:
-                type: string
-                description: The resident server's DNS name.
-              members_omitted:
-                type: boolean
-                description: "`true` if `m.room.member` events have been omitted from `state`."
-                x-addedInMatrixVersion: "1.6"
-              auth_chain:
-                type: array
-                description: |-
-                  All events in the auth chain for the new join event, as well
-                  as those in the auth chains for any events returned in
-                  `state`.
-
-                  If the `omit_members` query parameter was set to `true`, then
-                  any events that are returned in `state` may be omitted from
-                  `auth_chain`, whether or not membership events are omitted
-                  from `state`.
-
-                  Note that events have a different format depending on the room version - check the
-                  [room version specification](/rooms) for precise event formats.
-                items:
-                  type: object
-                  title: PDU
-                  schema:
-                    type: object
-                    properties: {}
-                x-changedInMatrixVersion:
-                  "1.6": |-
-                    reworded to include only consider state events returned in
-                    `state`, and to allow elision of redundant events.
-              state:
-                type: array
-                description: |-
-                  The resolved current room state prior to the join event.
-
-                  If the request had `omit_members` set to `true`, events of
-                  type `m.room.member` may be omitted from the response to
-                  reduce the size of the response. If this is done,
-                  `members_omitted` must be set to `true`.
-                items:
-                  type: object
-                  title: PDU
-                  schema:
-                    type: object
-                    properties: {}
-                x-changedInMatrixVersion:
-                  "1.6": |-
-                    permit omission of membership events.
-              event:
-                type: object
-                title: SignedMembershipEvent
-                x-addedInMatrixVersion: "1.2"
-                description: |-
-                  Required if the room version [supports restricted join rules](/rooms/#feature-matrix). The signed
-                  copy of the membership event sent to other servers by the resident server, including the resident
-                  server's signature.
-              servers_in_room:
-                type: array
-                x-addedInMatrixVersion: "1.6"
-                description: |-
-                  **Required** if `members_omitted` is true.
-
-                  A list of the servers active in the room (ie, those with joined members) before the join.
-                items:
-                  type: string
-            required: ["auth_chain", "state", "origin"]
-          examples:
-            application/json: {
-              "origin": "matrix.org",
-              "auth_chain": [{"$ref": "examples/minimal_pdu.json"}],
-              "state": [{"$ref": "examples/minimal_pdu.json"}],
-              "event": {"$ref": "examples/pdu_v4_join_membership.json"},
-              "members_omitted": true,
-              "servers_in_room": ["matrix.org", "example.com"]
-            }
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You are not invited to this room"
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8448
+      basePath:
+        default: /_matrix/federation/v2
+components:
+  securitySchemes:
+    $ref: definitions/security.yaml

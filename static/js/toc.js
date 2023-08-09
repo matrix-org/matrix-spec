@@ -111,10 +111,17 @@ function makeToc() {
 
   const section = makeTocSection(tocTargets, 0);
   nav.appendChild(section.content);
-  // append title and content to the #toc placeholder
-  const toc = document.body.querySelector("#toc");
+  // build the TOC and append to it title and content
+  const toc = document.createElement("div");
+  toc.id = "toc";
   toc.appendChild(title);
   toc.appendChild(nav);
+
+  // append TOC to the section navigation
+  const section_nav = document.body.querySelector("#td-section-nav");
+  let hr = document.createElement("hr");
+  section_nav.appendChild(hr);
+  section_nav.appendChild(toc);
 
   // tell ToC items about any rendered-data headings they contain
   setTocItemChildren(section.content, headings);

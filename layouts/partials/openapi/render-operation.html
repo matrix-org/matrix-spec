@@ -64,7 +64,7 @@
 </table>
 
 <hr/>
-{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "path" $path "anchor_base" $anchor ) }}
+{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "path" $path "anchor_base" $anchor ) }}
 <hr/>
 {{ partial "openapi/render-responses" (dict "responses"  $operation_data.responses  "path" $path "anchor_base" $anchor ) }}
 

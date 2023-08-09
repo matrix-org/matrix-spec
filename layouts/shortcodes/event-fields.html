@@ -26,12 +26,12 @@
 <h1>
  <code>{{ humanize $event.title }}</code>
 </h1>
+</summary>
 
 <hr/>
 
 {{ $event.description | markdownify }}
 
-</summary>
 
 {{ $event = merge $event (dict "title" "") }}
 

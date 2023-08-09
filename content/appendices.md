@@ -90,7 +90,8 @@ To ensure that all implementations use the same JSON encoding we define
 We define this encoding for a value to be the shortest
 UTF-8 JSON encoding with dictionary keys lexicographically sorted by
 Unicode codepoint. Numbers in the JSON must be integers in the range
-`[-(2**53)+1, (2**53)-1]`.
+`[-(2**53)+1, (2**53)-1]`, represented without exponents or decimal
+places, and negative zero `-0` MUST NOT appear.
 
 We pick UTF-8 as the encoding as it should be available to all platforms
 and JSON received from the network is likely to be already encoded using
@@ -302,6 +303,21 @@ The following canonical JSON should be produced:
 
 ```json
 {"a":null}
+```
+
+Given the following JSON object:
+
+```json
+{
+    "a": -0,
+    "b": 1e10
+}
+```
+
+The following canonical JSON should be produced:
+
+```json
+{"a":0,"b":10000000000}
 ```
 
 ### Signing Details
@@ -524,6 +540,8 @@ be represented with a `domain` component under some conditions - see the
 
 #### User Identifiers
 
+{{% changed-in v="1.8" %}}
+
 Users within Matrix are uniquely identified by their Matrix user ID. The
 user ID is namespaced to the homeserver which allocated the account and
 has the form:
@@ -532,7 +550,7 @@ has the form:
 
 The `localpart` of a user ID is an opaque identifier for that user. It
 MUST NOT be empty, and MUST contain only the characters `a-z`, `0-9`,
-`.`, `_`, `=`, `-`, and `/`.
+`.`, `_`, `=`, `-`, `/`, and `+`.
 
 The `domain` of a user ID is the [server name](#server-name) of the
 homeserver which allocated the account.
@@ -546,7 +564,7 @@ The complete grammar for a legal user ID is:
     user_id_localpart = 1*user_id_char
     user_id_char = DIGIT
                  / %x61-7A                   ; a-z
-                 / "-" / "." / "=" / "_" / "/"
+                 / "-" / "." / "=" / "_" / "/" / "+"
 
 {{% boxes/rationale %}}
 A number of factors were considered when defining the allowable

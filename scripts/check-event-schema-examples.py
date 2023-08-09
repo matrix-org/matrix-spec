@@ -88,7 +88,7 @@ def check_example_file(examplepath, schemapath):
 
     fileurl = "file://" + os.path.abspath(schemapath)
     schema["id"] = fileurl
-    resolver = jsonschema.RefResolver(schemapath, schema, handlers={"file": load_file})
+    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": load_file})
 
     print ("Checking schema for: %r %r" % (examplepath, schemapath))
     try:
