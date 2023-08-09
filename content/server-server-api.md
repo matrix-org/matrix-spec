@@ -110,7 +110,7 @@ to send. The process overall is as follows:
     given. The target server must present a valid certificate for the IP
     address. The `Host` header in the request should be set to the
     server name, including the port if the server name included one.
-    
+
 2.  If the hostname is not an IP literal, and the server name includes an
     explicit port, resolve the hostname to an IP address using CNAME, AAAA or A
     records.
@@ -162,13 +162,12 @@ to send. The process overall is as follows:
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
 
-4.  If the `/.well-known` request resulted in an error response, a
-    server is found by resolving an SRV record for
-    `_matrix._tcp.<hostname>`. This may result in a hostname (to be
-    resolved using AAAA or A records) and port. Requests are made to the
-    resolved IP address and port, using 8448 as a default port, with a
-    `Host` header of `<hostname>`. The target server must present a
-    valid certificate for `<hostname>`.
+4.  If the `/.well-known` request resulted in an error response, a server is
+    found by resolving an SRV record for `_matrix._tcp.<hostname>`. This may
+    result in a hostname (to be resolved using AAAA or A records) and
+    port. Requests are made to the resolved IP address and port, with a `Host`
+    header of `<hostname>`. The target server must present a valid certificate
+    for `<hostname>`.
 
 5.  If the `/.well-known` request returned an error response, and the
     SRV record was not found, an IP address is resolved using CNAME, AAAA and A
