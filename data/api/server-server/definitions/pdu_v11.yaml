@@ -1,4 +1,4 @@
-# Copyright 2019 The Matrix.org Foundation C.I.C.
+# Copyright 2019-2023 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 type: object
 title: Persistent Data Unit
-description: A persistent data unit (event) for room version 4 and beyond.
+description: A persistent data unit (event) for room version 11 and beyond.
 example:
   $ref: "../examples/pdu_v11.json"
 allOf:
