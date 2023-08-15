@@ -754,7 +754,7 @@ Definition:
 
 {{% added-in v="1.8" %}}
 
-Suppresses notifications from events related to [event replacement](#event-replacements).
+Suppresses notifications related to [event replacements](#event-replacements).
 
 Definition:
 
