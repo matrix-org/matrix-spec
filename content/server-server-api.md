@@ -135,20 +135,20 @@ to send. The process overall is as follows:
     to step 4. If the response is valid, the `m.server` property is
     parsed as `<delegated_hostname>[:<delegated_port>]` and processed as
     follows:
-    -   If `<delegated_hostname>` is an IP literal, then that IP address
+    1.   If `<delegated_hostname>` is an IP literal, then that IP address
         should be used together with the `<delegated_port>` or 8448 if
         no port is provided. The target server must present a valid TLS
         certificate for the IP address. Requests must be made with a
         `Host` header containing the IP address, including the port if
         one was provided.
-    -   If `<delegated_hostname>` is not an IP literal, and
+    2.   If `<delegated_hostname>` is not an IP literal, and
         `<delegated_port>` is present, an IP address is discovered by
         looking up CNAME, AAAA or A records for `<delegated_hostname>`.  The
         resulting IP address is used, alongside the `<delegated_port>`.
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
         present a valid certificate for `<delegated_hostname>`.
-    -   If `<delegated_hostname>` is not an IP literal and no
+    3.   If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
         `_matrix._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
@@ -156,7 +156,7 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    -   If no SRV record is found, an IP address is resolved using CNAME, AAAA
+    4.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
         or A records. Requests are then made to the resolve IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
