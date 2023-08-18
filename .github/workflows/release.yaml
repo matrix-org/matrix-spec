@@ -1,0 +1,40 @@
+name: Release packages
+on:
+  release:
+    types: [published]
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+jobs:
+  # Releases to npm after bumping the package.json version from 0.0.0 to $TAG.0 as the tags only contain MAJOR.MINOR
+  npm:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    if: github.event.release.prerelease == false
+    defaults:
+      run:
+        working-directory: packages/npm
+    steps:
+      - name: 🧮 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🔧 Yarn cache
+        uses: actions/setup-node@v3
+        with:
+          cache: "yarn"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: 🔨 Install dependencies
+        run: "yarn install --frozen-lockfile"
+
+      - name: 🎖 Bump package.json version
+        run: "yarn version $VERSION"
+        env:
+          VERSION: ${{ github.event.release.tag_name }}.0
+
+      - name: 🚀 Publish to npm
+        id: npm-publish
+        uses: JS-DevTools/npm-publish@5a85faf05d2ade2d5b6682bfe5359915d5159c6c # v2.2.1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: packages/npm
+          access: public
+          ignore-scripts: false
