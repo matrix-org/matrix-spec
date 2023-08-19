@@ -148,7 +148,15 @@ to send. The process overall is as follows:
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
         present a valid certificate for `<delegated_hostname>`.
-    3.   If `<delegated_hostname>` is not an IP literal and no
+    3.  {{< added-in v="1.8" >}} If `<delegated_hostname>` is not an IP literal and no
+        `<delegated_port>` is present, an SRV record is looked up for
+        `_matrix-fed._tcp.<delegated_hostname>`. This may result in another
+        hostname (to be resolved using AAAA or A records) and port.
+        Requests should be made to the resolved IP address and port with
+        a `Host` header containing the `<delegated_hostname>`. The
+        target server must present a valid certificate for
+        `<delegated_hostname>`.
+    4.  **[Deprecated]** If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
         `_matrix._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
@@ -156,20 +164,27 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    4.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
+    5.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
         or A records. Requests are then made to the resolve IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
 
-4.  If the `/.well-known` request resulted in an error response, a server is
+4.  {{< added-in v="1.8" >}} If the `/.well-known` request resulted in an error response, a server is
+    found by resolving an SRV record for `_matrix-fed._tcp.<hostname>`. This may
+    result in a hostname (to be resolved using AAAA or A records) and
+    port. Requests are made to the resolved IP address and port, with a `Host`
+    header of `<hostname>`. The target server must present a valid certificate
+    for `<hostname>`.
+
+5.  **[Deprecated]** If the `/.well-known` request resulted in an error response, a server is
     found by resolving an SRV record for `_matrix._tcp.<hostname>`. This may
     result in a hostname (to be resolved using AAAA or A records) and
     port. Requests are made to the resolved IP address and port, with a `Host`
     header of `<hostname>`. The target server must present a valid certificate
     for `<hostname>`.
 
-5.  If the `/.well-known` request returned an error response, and the
+6.  If the `/.well-known` request returned an error response, and the
     SRV record was not found, an IP address is resolved using CNAME, AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
@@ -189,6 +204,14 @@ Note that the target of a SRV record may *not* be a CNAME, as
 mandated by [RFC2782](https://www.rfc-editor.org/rfc/rfc2782.html):
 
 > the name MUST NOT be an alias (in the sense of RFC 1034 or RFC 2181)
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Steps 3.4 and 5 are deprecated because they use a service name not registered by IANA.
+They may be removed in a future version of the specification. Server admins are encouraged
+to use `.well-known` over any form of SRV records.
+
+The IANA registration for port 8448 and `matrix-fed` can be found [here](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=matrix-fed).
 {{% /boxes/note %}}
 
 {{% http-api spec="server-server" api="wellknown" %}}
