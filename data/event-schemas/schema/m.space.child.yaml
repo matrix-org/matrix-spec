@@ -9,6 +9,8 @@ properties:
         type: array
         description: |-
           A list of servers to try and join through. See also: [Routing](/appendices/#routing).
+
+          When not present or invalid, the child room is not considered to be part of the space.
         items:
           type: string
       order:
