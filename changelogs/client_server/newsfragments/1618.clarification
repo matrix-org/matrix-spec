@@ -1,0 +1,1 @@
+Clarify that `via` property is required for `m.space.parent` and `m.space.child` as per MSC1772. Contributed by @PaarthShah
