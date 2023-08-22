@@ -1,1 +1,1 @@
-Fix JSON schema of custom fields in query.
+Fix type of custom `fields` in thirdparty lookup queries.
