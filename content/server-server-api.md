@@ -156,8 +156,9 @@ to send. The process overall is as follows:
         a `Host` header containing the `<delegated_hostname>`. The
         target server must present a valid certificate for
         `<delegated_hostname>`.
-    4.  **[Deprecated]** If `<delegated_hostname>` is not an IP literal and no
-        `<delegated_port>` is present, an SRV record is looked up for
+    4.  **[Deprecated]** If `<delegated_hostname>` is not an IP literal, no
+        `<delegated_port>` is present, and a `_matrix-fed._tcp.<delegated_hostname>`
+        SRV record was not found, an SRV record is looked up for
         `_matrix._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
         Requests should be made to the resolved IP address and port with
@@ -177,7 +178,8 @@ to send. The process overall is as follows:
     header of `<hostname>`. The target server must present a valid certificate
     for `<hostname>`.
 
-5.  **[Deprecated]** If the `/.well-known` request resulted in an error response, a server is
+5.  **[Deprecated]** If the `/.well-known` request resulted in an error response,
+    and a `_matrix-fed._tcp.<hostname>` SRV record was not found, a server is
     found by resolving an SRV record for `_matrix._tcp.<hostname>`. This may
     result in a hostname (to be resolved using AAAA or A records) and
     port. Requests are made to the resolved IP address and port, with a `Host`
