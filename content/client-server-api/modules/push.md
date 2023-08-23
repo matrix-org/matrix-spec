@@ -752,7 +752,7 @@ Definition:
 
 **`.m.rule.suppress_edits`**
 
-{{% added-in v="1.8" %}}
+{{% added-in v="1.9" %}}
 
 Suppresses notifications related to [event replacements](#event-replacements).
 
