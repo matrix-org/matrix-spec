@@ -1,1 +1,0 @@
-Add `matrix-fed` SRV lookup steps to server discovery, as per [MSC4040](https://github.com/matrix-org/matrix-spec-proposals/pull/4040).
