@@ -419,14 +419,16 @@ into the `m.` namespace.
 
 ### Timestamps
 
-Unless otherwise stated, timestamps are [Unix
-timestamps](https://en.wikipedia.org/wiki/Unix_time), but measured in
-milliseconds. This means, they approximate the number of milliseconds
-since 1970-01-01 00:00:00.000 UTC, but disregard leap seconds so that
-each day is precisely 86,400,000 milliseconds. This also means that
-timestamps can repeat. Most programming languages provide timestamps in
-that format natively. Throughout the specification this may be referred
-to as POSIX, Unix, or just "time in milliseconds".
+Unless otherwise stated, are timestamps are the number of milliseconds
+elapsed since the unix epoch (1970-01-01 00:00:00 UTC), but not counting
+leap seconds, so that each day is precisely 86,400,000 milliseconds.
+
+This means that timestamps can repeat during leap seconds. Most
+programming languages provide timestamps in that format natively, e.g.
+[ECMAScript](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-time-values-and-time-range).
+Throughout the specification this may be referred to as POSIX,
+[Unix](https://en.wikipedia.org/wiki/Unix_time), or just "time in
+milliseconds".
 
 ## Specification Versions
 
