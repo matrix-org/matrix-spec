@@ -419,7 +419,7 @@ into the `m.` namespace.
 
 ### Timestamps
 
-Unless otherwise stated, are timestamps are the number of milliseconds
+Unless otherwise stated, timestamps are the number of milliseconds
 elapsed since the unix epoch (1970-01-01 00:00:00 UTC), but not counting
 leap seconds, so that each day is precisely 86,400,000 milliseconds.
 
