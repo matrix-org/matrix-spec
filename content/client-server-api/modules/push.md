@@ -750,6 +750,30 @@ Definition:
 }
 ```
 
+**`.m.rule.suppress_edits`**
+
+{{% added-in v="1.9" %}}
+
+Suppresses notifications related to [event replacements](#event-replacements).
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.suppress_edits",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_property_is",
+            "key": "content.m\\.relates_to.rel_type",
+            "value": "m.replace"
+        }
+    ],
+    "actions": []
+}
+```
+
 ##### Default Content Rules
 
 <a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
