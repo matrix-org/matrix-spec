@@ -34,6 +34,8 @@ properties:
           Optional (default `false`) flag to denote whether the child is "suggested" or of interest
           to members of the space. This is primarily intended as a rendering hint for clients to
           display the room differently, such as eagerly rendering them in the room list.
+    required:
+      - via
     type: object
   state_key:
     description: The child room ID being described.
