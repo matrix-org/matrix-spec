@@ -40,7 +40,7 @@ paths:
                 one_time_keys:
                   # $ref: "definitions/one_time_keys.yaml"
                   # XXX: We can't define an actual object here, so we have to hope
-                  # that people will look at the swagger source or can figure it out
+                  # that people will look at the OpenAPI source or can figure it out
                   # from the other endpoints/example.
                   type: object
                   title: OneTimeKeys

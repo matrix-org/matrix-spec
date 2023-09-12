@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Runs an HTTP server on localhost:8000 which will serve the generated swagger
-# JSON so that it can be viewed in an online swagger UI.
+# Runs an HTTP server on localhost:8000 which will serve the generated OpenAPI
+# JSON so that it can be viewed in an online OpenAPI viewer.
 
 # Copyright 2016 OpenMarket Ltd
 #
