@@ -28,7 +28,9 @@ example: {
 }
 properties:
   user_ids:
-    type: string[]
+    type: array
+    items:
+      type: string
     description: A list of Matrix IDs of mentioned users.
   room:
     type: boolean
