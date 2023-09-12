@@ -42,40 +42,42 @@ allOf:
             "m.read":
               type: object
               description: Read receipts for users in the room.
-              title: User Read Receipt
-              properties:
-                event_ids:
-                  type: array
-                  description: |-
-                    The extremity event IDs that the user has read up to.
-                  minItems: 1
-                  maxItems: 1
-                  items:
-                    type: string
-                  example: ['$read_this_event:matrix.org']
-                data:
-                  type: object
-                  description: Metadata for the read receipt.
-                  title: Read Receipt Metadata
-                  properties:
-                    ts:
-                      type: integer
-                      format: int64
-                      description: |-
-                        A POSIX timestamp in milliseconds for when the user read
-                        the event specified in the read receipt.
-                      example: 1533358089009
-                    thread_id:
-                        type: string
-                        x-addedInMatrixVersion: "1.4"
+              additionalProperties:
+                type: object
+                title: User Read Receipt
+                properties:
+                  event_ids:
+                    type: array
+                    description: |-
+                      The extremity event IDs that the user has read up to.
+                    minItems: 1
+                    maxItems: 1
+                    items:
+                      type: string
+                    example: ['$read_this_event:matrix.org']
+                  data:
+                    type: object
+                    description: Metadata for the read receipt.
+                    title: Read Receipt Metadata
+                    properties:
+                      ts:
+                        type: integer
+                        format: int64
                         description: |-
-                            The root thread event's ID (or `main`) for which
-                            thread this receipt is intended to be under. If
-                            not specified, the read receipt is *unthreaded*
-                            (default).
-                        example: "$threadroot"
-                  required: ['ts']
-              required: ['event_ids', 'data']
+                          A POSIX timestamp in milliseconds for when the user read
+                          the event specified in the read receipt.
+                        example: 1533358089009
+                      thread_id:
+                          type: string
+                          x-addedInMatrixVersion: "1.4"
+                          description: |-
+                              The root thread event's ID (or `main`) for which
+                              thread this receipt is intended to be under. If
+                              not specified, the read receipt is *unthreaded*
+                              (default).
+                          example: "$threadroot"
+                    required: ['ts']
+                required: ['event_ids', 'data']
           required: ['m.read']
         example: {
           "!some_room:example.org": {
