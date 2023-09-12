@@ -92,17 +92,17 @@ jobs:
             export RELEASE="unstable"
           fi
           # The output path matches the final deployment path at spec.matrix.org
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api application-service \
             -r "$RELEASE" \
             -o spec/application-service-api/api.json
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api client-server \
             -r "$RELEASE" \
             -o spec/client-server-api/api.json
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api push-gateway \
             -r "$RELEASE" \

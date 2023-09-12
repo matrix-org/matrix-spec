@@ -88,12 +88,12 @@ spec to `/spec`. If you'd like to serve the spec off a path instead of a domain 
 to the `hugo -d "spec"` command.
 
 For building the OpenAPI definitions, create a python3 virtualenv and activate it. Then run `pip install -r ./scripts/requirements.txt`
-and finally `python ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
+and finally `python ./scripts/dump-openapi.py` to generate it to `./scripts/openapi/api-docs.json`. To make use of the generated file,
 there are a number of options:
 
-* You can open `./scripts/swagger-preview.html` in your browser, and then open the file by clicking on `Local JSON File`.
-* You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation by
-  opening `./scripts/swagger-preview.html` in your browser.
+* You can open `./scripts/openapi-preview.html` in your browser, and then open the file by clicking on `Local JSON File`.
+* You can run a local HTTP server by running `./scripts/openapi-http-server.py`, and then view the documentation by
+  opening `./scripts/openapi-preview.html` in your browser.
 
 ## Issue tracking
 
