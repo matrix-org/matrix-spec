@@ -13,6 +13,20 @@ the event to reference the entity being mentioned.
 
 {{% definition path="api/client-server/definitions/m.mentions" %}}
 
+An event's content will then look like this:
+
+```json
+{
+    "body": "Hello Alice!",
+    "msgtype": "m.text",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "Hello <a href='https://matrix.to/#/@alice:example.org'>Alice</a>!",
+    "m.mentions": {
+        "user_ids": ["@alice:example.org"]
+    }
+}
+```
+
 Additionally, see the [`.m.rule.is_user_mention`](#_m_rule_is_user_mention) and
 [`.m.rule.is_room_mention`](#_m_rule_is_room_mention) push rules.
 Users should not add their own Matrix ID to the `m.mentions` property as outgoing
