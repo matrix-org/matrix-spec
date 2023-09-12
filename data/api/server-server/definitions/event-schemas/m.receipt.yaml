@@ -24,7 +24,7 @@ allOf:
   - type: object
     properties:
       edu_type:
-        type: enum
+        type: string
         enum: ['m.receipt']
         description: The string `m.receipt`
         example: "m.receipt"

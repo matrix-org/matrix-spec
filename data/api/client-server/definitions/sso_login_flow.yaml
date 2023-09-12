@@ -15,7 +15,7 @@ type: object
 title: m.login.sso flow schema
 properties:
   type:
-    type: enum
+    type: string
     enum: ["m.login.sso"]
     description: The string `m.login.sso`
     example: "m.login.sso"
