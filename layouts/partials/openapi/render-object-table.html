@@ -104,6 +104,22 @@
         */}}
         {{ $additionalProperties := partial "json-schema/resolve-allof" .additionalProperties }}
         {{ $type = delimit (slice "{string: " (partial "property-type" $additionalProperties) "}" ) "" }}
+    {{ else if reflect.IsMap .patternProperties }}
+        {{/*
+            If the property uses `patternProperties` to describe its
+            internal structure, handle this with a bit of recursion.
+            Note that we ignore the pattern as the current definitions
+            always have a single pattern, but we might need to handle
+            them later to differentiate schemas according to patterns.
+        */}}
+        {{ $types := slice }}
+
+        {{ range $pattern, $schema := .patternProperties}}
+            {{ $schema = partial "json-schema/resolve-allof" $schema }}
+            {{ $types = $types | append (partial "property-type" $schema) }}
+        {{ end }}
+
+        {{ $type = delimit (slice "{string: " (delimit $types "|") "}" ) "" }}
     {{ else if reflect.IsSlice .type }}
         {{/* It's legal to specify an array of types. Join them together in that case */}}
 

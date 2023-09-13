@@ -53,6 +53,20 @@
     {{ end }}
 
     {{/*
+      Add any nested objects referenced in this object's `patternProperties`
+    */}}
+    {{ if $this_object.patternProperties }}
+        {{ range $pattern, $object := $this_object.patternProperties}}
+            {{ $additional_objects = partial "get-additional-objects" (dict
+                "this_object" $object
+                "additional_objects" $additional_objects
+                "anchor_base" $anchor_base
+                "name" (printf "%s.pattern.%s" $name $pattern)
+            ) }}
+        {{ end }}
+    {{ end }}
+
+    {{/*
       Add any nested objects referenced in this object's `properties`
     */}}
     {{ range $key, $property := $this_object.properties}}
