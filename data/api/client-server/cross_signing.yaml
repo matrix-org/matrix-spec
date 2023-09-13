@@ -162,7 +162,6 @@ paths:
           application/json:
             schema:
               type: object
-              title: Signatures
               additionalProperties:
                 type: object
                 additionalProperties:
