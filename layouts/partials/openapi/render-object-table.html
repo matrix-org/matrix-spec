@@ -44,17 +44,29 @@
  <tr>
   <td><code>{{ $property_name }}</code></td>
   <td><code>{{ partial "partials/property-type" $property }}</code></td>
-  <td>
-    {{ if $required }}<strong>Required: </strong>{{end -}}
-    {{ $property.description | markdownify -}}
-    {{ if $property.enum }}<p>One of: <code>[{{ delimit $property.enum ", " }}]</code>.</p>{{ end -}}
-    {{ if (index $property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $property "x-addedInMatrixVersion")) }}{{ end -}}
-    {{ if (index $property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $property "x-changedInMatrixVersion")) }}{{ end -}}
-  </td>
+  <td>{{ partial "partials/property-description" (dict "property" $property "required" $required) }}</td>
  </tr>
 
     {{ end }}
 
+</table>
+
+{{ else if (or .additionalProperties .patternProperties) }}
+<table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
+ {{ with $title }}
+ <caption>{{ . }}</caption>
+ {{ end }}
+ <thead>
+  <th class="col-type">Type</th>
+  <th class="col-description">Description</th>
+ </thead>
+
+    {{ $property := partial "json-schema/resolve-allof" . }}
+
+ <tr>
+  <td><code>{{ partial "partials/property-type" $property }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" $property) }}</td>
+ </tr>
 </table>
 
 {{ end }}
@@ -147,4 +159,15 @@
         {{ $type = .type }}
     {{ end }}
     {{ return $type }}
+{{ end }}
+
+{{/*
+    Computes the description to display for a property.
+*/}}
+{{ define "partials/property-description" }}
+    {{ if .required }}<strong>Required: </strong>{{end -}}
+    {{ .property.description | markdownify -}}
+    {{ if .property.enum }}<p>One of: <code>[{{ delimit .property.enum ", " }}]</code>.</p>{{ end -}}
+    {{ if (index .property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index .property "x-addedInMatrixVersion")) }}{{ end -}}
+    {{ if (index .property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index .property "x-changedInMatrixVersion")) }}{{ end -}}
 {{ end }}

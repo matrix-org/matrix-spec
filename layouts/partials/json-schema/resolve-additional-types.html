@@ -2,6 +2,7 @@
 
   Finds and returns all nested objects, given a dict containing:
    * `schema`: a JSON schema object
+   * `is_root`: Whether this is the root of the schema, meaning we should not clean the object so we can show additional and pattern properties.
    * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
    * `name`: optionally, a name to use for this object in error/warning messages. If left unset,
       the object's `title` property is used (if present).
@@ -11,7 +12,7 @@
   Assumes that "resolve-refs" and "resolve-allof" has already been called on the
   input schema.
 
-  Returns an array of all the objects found. For each object, the following properties are returned:
+  Returns an array of all the objects found. If `is_root` is true, the first object keeps all its properties. For all other objects, the following properties are returned:
     * title
     * properties
     * required
@@ -23,6 +24,7 @@
 */}}
 
 {{ $this_object := .schema }}
+{{ $is_root := .is_root }}
 {{ $anchor_base := .anchor_base }}
 {{ $additional_objects := slice }}
 {{ $name := .name | default $this_object.title | default "<untitled object>" }}
@@ -36,7 +38,11 @@
     {{/*
       Add the object we were passed into the $additional_objects array
     */}}
-    {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object) }}
+    {{ $this_additional_object := $this_object }}
+    {{ if not $is_root }}
+      {{ $this_additional_object = partial "clean-object" $this_object }}
+    {{ end }}
+    {{ $additional_objects = $additional_objects | append $this_additional_object }}
 
     {{/*
       Add any nested objects referenced in this object's `additionalProperties`

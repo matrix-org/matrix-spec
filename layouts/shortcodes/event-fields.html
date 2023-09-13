@@ -35,7 +35,7 @@
 
 {{ $event = merge $event (dict "title" "") }}
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event) }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event) "is_root" true }}
 {{ range $additional_types }}
     {{ partial "openapi/render-object-table" . }}
 {{end}}

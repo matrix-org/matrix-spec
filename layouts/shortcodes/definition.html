@@ -50,7 +50,7 @@
 {{ $definition.description | markdownify }}
 
 
-{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $definition "name" (printf "\"%s\"" $path)) }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $definition "name" (printf "\"%s\"" $path)) "is_root" true }}
 {{ $additional_types = uniq $additional_types }}
 
 {{ range $additional_types }}
