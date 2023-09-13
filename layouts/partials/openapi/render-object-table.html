@@ -34,24 +34,6 @@
     {{ range $property_name, $property := $properties }}
 
         {{ $property := partial "json-schema/resolve-allof" $property }}
-        {{ $type := $property.type }}
-
-        {{ if or (eq $property.type "object") (and $property.oneOf (reflect.IsSlice .oneOf)) }}
-            {{ $type = partial "type-or-title" $property }}
-        {{ end }}
-
-        {{/*
-            If the property is an array, indicate this with square brackets,
-            like `[type]`.
-        */}}
-        {{ if eq $property.type "array"}}
-            {{ $items := $property.items }}
-            {{ if $property.items }}
-                {{ $items = partial "json-schema/resolve-allof" $property.items }}
-            {{ end }}
-            {{ $inner_type := partial "type-or-title" $items }}
-            {{ $type = delimit (slice "[" $inner_type "]") "" }}
-        {{ end }}
 
         {{/*
           Handle two ways of indicating "required", one for simple parameters,
@@ -61,7 +43,7 @@
 
  <tr>
   <td><code>{{ $property_name }}</code></td>
-  <td><code>{{ $type }}</code></td>
+  <td><code>{{ partial "partials/property-type" $property }}</code></td>
   <td>
     {{ if $required }}<strong>Required: </strong>{{end -}}
     {{ $property.description | markdownify -}}
@@ -75,6 +57,32 @@
 
 </table>
 
+{{ end }}
+
+{{/*
+    Computes the type to display for a property.
+*/}}
+{{ define "partials/property-type" }}
+    {{ $type := .type }}
+
+    {{ if or (eq .type "object") (and .oneOf (reflect.IsSlice .oneOf)) }}
+        {{ $type = partial "type-or-title" . }}
+    {{ end }}
+
+    {{/*
+        If the property is an array, indicate this with square brackets,
+        like `[type]`.
+    */}}
+    {{ if eq .type "array"}}
+        {{ $items := .items }}
+        {{ if .items }}
+            {{ $items = partial "json-schema/resolve-allof" .items }}
+        {{ end }}
+        {{ $inner_type := partial "type-or-title" $items }}
+        {{ $type = delimit (slice "[" $inner_type "]") "" }}
+    {{ end }}
+
+    {{ return $type }}
 {{ end }}
 
 {{/*
@@ -94,7 +102,8 @@
             If the property uses `additionalProperties` to describe its
             internal structure, handle this with a bit of recursion
         */}}
-        {{ $type = delimit (slice "{string: " (partial "type-or-title" .additionalProperties) "}" ) "" }}
+        {{ $additionalProperties := partial "json-schema/resolve-allof" .additionalProperties }}
+        {{ $type = delimit (slice "{string: " (partial "property-type" $additionalProperties) "}" ) "" }}
     {{ else if reflect.IsSlice .type }}
         {{/* It's legal to specify an array of types. Join them together in that case */}}
 
