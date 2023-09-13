@@ -54,13 +54,6 @@
         {{ end }}
 
         {{/*
-            If the property is an enum, indicate this.
-        */}}
-        {{ if (and (eq $property.type "string") ($property.enum)) }}
-            {{ $type = "enum" }}
-        {{ end }}
-
-        {{/*
           Handle two ways of indicating "required", one for simple parameters,
           the other for request and response body objects.
         */}}
@@ -72,7 +65,7 @@
   <td>
     {{ if $required }}<strong>Required: </strong>{{end -}}
     {{ $property.description | markdownify -}}
-    {{ if eq $type "enum"}}<p>One of: <code>[{{ delimit $property.enum ", " }}]</code>.</p>{{ end -}}
+    {{ if $property.enum }}<p>One of: <code>[{{ delimit $property.enum ", " }}]</code>.</p>{{ end -}}
     {{ if (index $property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $property "x-addedInMatrixVersion")) }}{{ end -}}
     {{ if (index $property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $property "x-changedInMatrixVersion")) }}{{ end -}}
   </td>
