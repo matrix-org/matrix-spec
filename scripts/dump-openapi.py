@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# dump-swagger reads all of the OpenAPI docs used in spec generation and
+# dump-openapi reads all of the OpenAPI docs used in spec generation and
 # outputs a JSON file which merges them all, for use as input to an OpenAPI
 # viewer.
 
@@ -84,7 +84,7 @@ def edit_links(node, base_url):
             edit_links(item, base_url)
 
 parser = argparse.ArgumentParser(
-    "dump-swagger.py - assemble the OpenAPI specs into a single JSON file"
+    "dump-openapi.py - assemble the OpenAPI specs into a single JSON file"
 )
 parser.add_argument(
     "--base-url", "-b",
@@ -113,7 +113,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "-o", "--output",
-    default=os.path.join(scripts_dir, "swagger", "api-docs.json"),
+    default=os.path.join(scripts_dir, "openapi", "api-docs.json"),
     help="File to write the output to. Default: %(default)s"
 )
 args = parser.parse_args()

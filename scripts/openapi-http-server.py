@@ -41,13 +41,13 @@ if __name__ == '__main__':
         help='TCP port to listen on (default: %(default)s)',
     )
     parser.add_argument(
-        'swagger_dir', nargs='?',
-        default=os.path.join(scripts_dir, 'swagger'),
+        'openapi_dir', nargs='?',
+        default=os.path.join(scripts_dir, 'openapi'),
         help='directory to serve (default: %(default)s)',
     )
     args = parser.parse_args()
 
-    os.chdir(args.swagger_dir)
+    os.chdir(args.openapi)
 
     httpd = socketserver.TCPServer(("localhost", args.port),
                                    MyHTTPRequestHandler)

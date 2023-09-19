@@ -87,11 +87,11 @@ def check_response(filepath, request, code, response):
             ), e)
 
 
-def check_swagger_file(filepath):
+def check_openapi_file(filepath):
     with open(filepath) as f:
-        swagger = yaml.safe_load(f)
+        openapi = yaml.safe_load(f)
 
-    for path, path_api in swagger.get('paths', {}).items():
+    for path, path_api in openapi.get('paths', {}).items():
 
         for method, request_api in path_api.items():
             request = "%s %s" % (method.upper(), path)
@@ -169,7 +169,7 @@ if __name__ == '__main__':
     # Get the directory that this script is residing in
     script_directory = os.path.dirname(os.path.realpath(__file__))
 
-    # Resolve the directory containing the swagger sources,
+    # Resolve the directory containing the OpenAPI sources,
     # relative to the script path
     source_files_directory = os.path.realpath(os.path.join(script_directory, "../data"))
 
@@ -182,6 +182,6 @@ if __name__ == '__main__':
             path = os.path.join(root, filename)
 
             try:
-                check_swagger_file(path)
+                check_openapi_file(path)
             except Exception as e:
                 raise ValueError("Error checking file %s" % (path,), e)
