@@ -22,7 +22,7 @@ The Matrix spec is compiled with [Hugo](https://gohugo.io/) (a static site gener
 
 * `/data`: this can contain TOML, YAML, or JSON files. Files kept here are directly available to template code as
   [data objects](https://gohugo.io/templates/data-templates/), so templates don't need to load them from a file and
-  parse them. This is also where our Swagger/OpenAPI definitions and schemas are.
+  parse them. This is also where our OpenAPI definitions and schemas are.
 
 * `/layouts`: this contains [Hugo templates](https://gohugo.io/templates/). Some templates define the overall layout of
   a page: for example, whether it has header, footer, sidebar, and so on.
@@ -52,7 +52,7 @@ Additionally, the following directories may be of interest:
 * `/data-definitions`: Bits of structured data consumable by Matrix implementations.
 * `/meta`: Documentation relating to the spec's processes that are otherwise untracked (release instructions, etc).
 * `/scripts`: Various scripts for generating the spec and validating its contents.
-* `/packages`: Various packages for shipping spec files like OpenAPI/swagger bindings and data definitions.
+* `/packages`: Various packages for shipping spec files like OpenAPI bindings and data definitions.
 
 ## Authoring changes to the spec
 
@@ -87,13 +87,13 @@ steps for authoring changes to the specification and instead of `hugo serve` run
 spec to `/spec`. If you'd like to serve the spec off a path instead of a domain root (eg: `/unstable`), add `--baseURL "/unstable"`
 to the `hugo -d "spec"` command.
 
-For building the swagger definitions, create a python3 virtualenv and activate it. Then run `pip install -r ./scripts/requirements.txt`
-and finally `python ./scripts/dump-swagger.py` to generate it to `./scripts/swagger/api-docs.json`. To make use of the generated file,
+For building the OpenAPI definitions, create a python3 virtualenv and activate it. Then run `pip install -r ./scripts/requirements.txt`
+and finally `python ./scripts/dump-openapi.py` to generate it to `./scripts/openapi/api-docs.json`. To make use of the generated file,
 there are a number of options:
 
-* You can open `./scripts/swagger-preview.html` in your browser, and then open the file by clicking on `Local JSON File`.
-* You can run a local HTTP server by running `./scripts/swagger-http-server.py`, and then view the documentation by
-  opening `./scripts/swagger-preview.html` in your browser.
+* You can open `./scripts/openapi-preview.html` in your browser, and then open the file by clicking on `Local JSON File`.
+* You can run a local HTTP server by running `./scripts/openapi-http-server.py`, and then view the documentation by
+  opening `./scripts/openapi-preview.html` in your browser.
 
 ## Issue tracking
 

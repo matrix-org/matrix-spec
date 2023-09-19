@@ -2,7 +2,7 @@ node_modules
 /data/msc
 /env*
 /resources
-/scripts/swagger
+/scripts/openapi
 /scripts/tmp
 /hugo-config.toml
 /public

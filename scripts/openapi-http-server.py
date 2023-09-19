@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Runs an HTTP server on localhost:8000 which will serve the generated swagger
-# JSON so that it can be viewed in an online swagger UI.
+# Runs an HTTP server on localhost:8000 which will serve the generated OpenAPI
+# JSON so that it can be viewed in an online OpenAPI viewer.
 
 # Copyright 2016 OpenMarket Ltd
 #
@@ -41,13 +41,13 @@ if __name__ == '__main__':
         help='TCP port to listen on (default: %(default)s)',
     )
     parser.add_argument(
-        'swagger_dir', nargs='?',
-        default=os.path.join(scripts_dir, 'swagger'),
+        'openapi_dir', nargs='?',
+        default=os.path.join(scripts_dir, 'openapi'),
         help='directory to serve (default: %(default)s)',
     )
     args = parser.parse_args()
 
-    os.chdir(args.swagger_dir)
+    os.chdir(args.openapi_dir)
 
     httpd = socketserver.TCPServer(("localhost", args.port),
                                    MyHTTPRequestHandler)
