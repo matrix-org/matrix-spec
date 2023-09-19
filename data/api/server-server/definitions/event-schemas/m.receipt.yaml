@@ -41,7 +41,9 @@ allOf:
             # on. At that point, m.read can become optional (maybe).
             "m.read":
               type: object
-              description: Read receipts for users in the room.
+              description: |-
+                Read receipts for users in the room. The string key is the user
+                ID the receipt belongs to.
               additionalProperties:
                 type: object
                 title: User Read Receipt
