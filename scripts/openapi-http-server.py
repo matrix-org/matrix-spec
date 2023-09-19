@@ -47,7 +47,7 @@ if __name__ == '__main__':
     )
     args = parser.parse_args()
 
-    os.chdir(args.openapi)
+    os.chdir(args.openapi_dir)
 
     httpd = socketserver.TCPServer(("localhost", args.port),
                                    MyHTTPRequestHandler)
