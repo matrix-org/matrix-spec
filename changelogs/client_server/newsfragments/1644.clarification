@@ -1,0 +1,1 @@
+Clarify specification by adding `/logout` to the overview list of endpoints that don't take a request body.
