@@ -10,7 +10,9 @@ properties:
     properties:
       ignored_users:
         type: object
-        description: "The map of users to ignore"
+        description: |-
+          The map of users to ignore. This is a mapping of user ID to empty
+          object.
         patternProperties:
           "^@":
             type: "object"
