@@ -25,7 +25,8 @@ properties:
                         type: object
                         description: |-
                             A collection of users who have sent `m.read` receipts for
-                            this event.
+                            this event. The string key is the user ID the receipt 
+                            belongs to.
                         patternProperties:
                             "^@": &receiptUserMap
                                 type: object
