@@ -59,7 +59,6 @@
 {{ $additional_types := partial "json-schema/resolve-additional-types" (dict
     "schema" $event_data.properties.content
     "anchor_base" $anchor_base
-    "is_root" true
 ) }}
 {{ $additional_types = uniq $additional_types }}
 

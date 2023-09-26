@@ -80,7 +80,7 @@
             response. (This will be a no-op for response types which aren't
             objects or arrays.)
             */}}
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base "is_root" true) }}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
             {{ $additional_types = uniq $additional_types }}
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
