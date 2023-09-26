@@ -18,7 +18,7 @@
     * enum
     * anchor: a string suitable for using as an html anchor for this object (if `anchor_base` was set, and the object has a title)
 
-  Note that the returned array may contain duplicate objects.
+  Note that the returned array contains only unique objects.
 
 */}}
 
@@ -120,7 +120,7 @@
     {{ end }}
 {{ end }}
 
-{{ return $all_objects }}
+{{ return uniq $all_objects }}
 
 
 {{/*
