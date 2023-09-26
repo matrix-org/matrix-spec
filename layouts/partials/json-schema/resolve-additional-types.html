@@ -1,6 +1,6 @@
 {{/*
 
-  Finds and returns all nested objects, given a dict containing:
+  Finds and returns all objects, including nested ones, given a dict containing:
    * `schema`: a JSON schema object
    * `is_root`: Whether this is the root of the schema, meaning we should not clean the object so we can show additional and pattern properties.
    * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
@@ -26,7 +26,7 @@
 {{ $this_object := .schema }}
 {{ $is_root := .is_root }}
 {{ $anchor_base := .anchor_base }}
-{{ $additional_objects := slice }}
+{{ $all_objects := slice }}
 {{ $name := .name | default $this_object.title | default "<untitled object>" }}
 
 {{ if eq $this_object.type "object" }}
@@ -36,22 +36,22 @@
     {{ end }}
 
     {{/*
-      Add the object we were passed into the $additional_objects array
+      Add the object we were passed into the $all_objects array
     */}}
     {{ $this_additional_object := $this_object }}
     {{ if not $is_root }}
       {{ $this_additional_object = partial "clean-object" $this_object }}
     {{ end }}
-    {{ $additional_objects = $additional_objects | append $this_additional_object }}
+    {{ $all_objects = $all_objects | append $this_additional_object }}
 
     {{/*
       Add any nested objects referenced in this object's `additionalProperties`
     */}}
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+            {{ $all_objects = partial "get-additional-objects" (dict
                 "this_object" $this_object.additionalProperties
-                "additional_objects" $additional_objects
+                "all_objects" $all_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.additional" $name)
             ) }}
@@ -63,9 +63,9 @@
     */}}
     {{ if $this_object.patternProperties }}
         {{ range $pattern, $object := $this_object.patternProperties}}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+            {{ $all_objects = partial "get-additional-objects" (dict
                 "this_object" $object
-                "additional_objects" $additional_objects
+                "all_objects" $all_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.pattern.%s" $name $pattern)
             ) }}
@@ -76,9 +76,9 @@
       Add any nested objects referenced in this object's `properties`
     */}}
     {{ range $key, $property := $this_object.properties}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
+        {{ $all_objects = partial "get-additional-objects" (dict
             "this_object" $property
-            "additional_objects" $additional_objects
+            "all_objects" $all_objects
             "anchor_base" $anchor_base
             "name" (printf "%s.%s" $name $key)
         ) }}
@@ -92,17 +92,17 @@
     */}}
     {{ if $this_object.items.anyOf }}
         {{ range $idx, $item := $this_object.items.anyOf }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+            {{ $all_objects = partial "get-additional-objects" (dict
                 "this_object" $item
-                "additional_objects" $additional_objects
+                "all_objects" $all_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.items[%d]" $name $idx)
             ) }}
         {{ end }}
     {{ else if reflect.IsMap $this_object.items}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
+        {{ $all_objects = partial "get-additional-objects" (dict
              "this_object" $this_object.items
-             "additional_objects" $additional_objects
+             "all_objects" $all_objects
              "anchor_base" $anchor_base
              "name" (printf "%s.items" $name)
         ) }}
@@ -117,16 +117,16 @@
 */}}
 {{ if $this_object.oneOf }}
     {{ range $idx, $item := $this_object.oneOf }}
-        {{ $additional_objects = partial "get-additional-objects" (dict
+        {{ $all_objects = partial "get-additional-objects" (dict
             "this_object" $item
-            "additional_objects" $additional_objects
+            "all_objects" $all_objects
             "anchor_base" $anchor_base
             "name" (printf "%s.oneOf[%d]" $name $idx)
         ) }}
     {{ end }}
 {{ end }}
 
-{{ return $additional_objects }}
+{{ return $all_objects }}
 
 
 {{/*
@@ -136,7 +136,7 @@
     {{/* .name is the name of the object for logging purposes */}}
     {{ $name := .name }}
 
-    {{ $additional_objects := .additional_objects }}
+    {{ $all_objects := .all_objects }}
 
     {{ if not (reflect.IsMap .this_object) }}
       {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
@@ -152,9 +152,9 @@
       As far as I know we don't have something like Array.concat(), so add them one at a time
     */}}
     {{ range $more_objects}}
-        {{ $additional_objects = $additional_objects | append (partial "clean-object" .) }}
+        {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}
-    {{ return $additional_objects }}
+    {{ return $all_objects }}
 {{ end }}
 
 {{/*
