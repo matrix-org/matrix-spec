@@ -6,10 +6,16 @@
 
   * `anchor`: optional HTML element id for the table
 
-  * `properties`: dictionary of the properties to list, each given as:
+  * `properties`: optional dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
-  * `required`: array containing the names of required properties.
+  * `additionalProperties`: optional dictionary for properties with undefined
+    names, in the same format as `property_data`
+
+  * `patternProperties`: optional dictionary for properties with names adhering
+    to a regex pattern, in the same format as `property_data`
+
+  * `required`: optional array containing the names of required properties.
     In some cases (such as response body specifications) this isn't used, and
     instead properties have a `required` boolean attribute. We support this too.
 
@@ -72,7 +78,23 @@
 {{ end }}
 
 {{/*
-    Computes the type to display for a property.
+    Computes the type to display for a property, given:
+
+    * `type`: string or array of strings for the type(s) of the property
+    
+    * `title`: optional string for the title of the property
+
+    * `oneOf`: optional array of dictionaries describing the different formats
+      that the property can have
+
+    * `additionalProperties`: optional dictionary for properties with undefined
+      names
+
+    * `patternProperties`: optional dictionary for properties with names
+      adhering to a regex pattern
+
+    * `items`: if the type is an array, array of dictionaries describing the
+      format of the array's items
 */}}
 {{ define "partials/property-type" }}
     {{ $type := .type }}
@@ -98,8 +120,22 @@
 {{ end }}
 
 {{/*
-   Picks either the `title` of a property, or the `type`, to turn into the rendered type field.
-   Also handles `additionalProperties`, if no `title` is present.
+    Computes the type to display for a property's schema, given:
+
+    * `type`: string or array of strings for the type(s) of the property
+    
+    * `title`: optional string for the title of the property
+
+    * `oneOf`: optional array of dictionaries describing the different formats
+      that the property can have
+
+    * `additionalProperties`: optional dictionary for properties with undefined
+      names
+
+    * `patternProperties`: optional dictionary for properties with names
+      adhering to a regex pattern
+    
+    The title has a higher priority than anything else.
 */}}
 {{ define "partials/type-or-title" }}
     {{ $type := "" }}
@@ -162,7 +198,21 @@
 {{ end }}
 
 {{/*
-    Computes the description to display for a property.
+    Computes the description to display for a property, given:
+
+    * `required`: boolean indicating whether this property is required.
+
+    * `property`: dictionary describing the property's data, with these fields:
+
+      * `description`: string describing the property
+      
+      * `enum`: optional array indicating the accepted values for the property
+      
+      * `x-addedInMatrixVersion`: optional string indicating in which Matrix
+        spec version this property was added.
+
+      * `x-changedInMatrixVersion`: optional string indicating in which Matrix
+        spec version this property was last changed.
 */}}
 {{ define "partials/property-description" }}
     {{ if .required }}<strong>Required: </strong>{{end -}}
