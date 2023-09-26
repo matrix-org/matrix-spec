@@ -1,0 +1,1 @@
+Fix schemas used for account data and presence events in `GET /initialSync`.
