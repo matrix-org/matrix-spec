@@ -52,6 +52,15 @@ properties:
           object must include the `code` and `reason` properties from the
           `m.room_key.withheld` message that was received by the sender of
           this message.
+      shared_history:
+        type: boolean
+        description: |-
+          Whether the key may be forwarded to users who join the room after the
+          messages encrypted with this key have been sent.  Defaults to
+          `false`.
+
+          Should be set to the same value as the `shared_history` property of
+          the `m.room_key` event that was initially used to share the key.
     required:
       - algorithm
       - room_id
