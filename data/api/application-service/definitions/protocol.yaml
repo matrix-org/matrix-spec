@@ -41,7 +41,6 @@ properties:
     type: string
     example: "mxc://example.org/aBcDeFgH"
   field_types:
-    title: Field Types
     description: |-
       The type definitions for the fields defined in the `user_fields` and
       `location_fields`. Each entry in those arrays MUST have an entry here. The
