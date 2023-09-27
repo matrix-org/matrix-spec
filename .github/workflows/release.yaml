@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: "yarn"
+          cache-dependency-path: packages/npm/yarn.lock
           registry-url: "https://registry.npmjs.org"
 
       - name: 🔨 Install dependencies
