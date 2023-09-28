@@ -185,6 +185,15 @@ is as follows:
     -   Take care in creating your proposal. Specify your intended
         changes, and give reasoning to back them up. Changes without
         justification will likely be poorly received by the community.
+    -   Proposals must include a migration plan for how to switch
+        from unstable, prefixed implementations to stable, unprefixed ones
+        in both client and server applications.
+        Such plan should include specifics like:
+        - How to handle immutable data (e.g. past unstable events) that can't
+          be migrated.
+        - How to switch from unstable to stable push rules.
+        - When (not a precise point in time, but rather after what event) clients
+        are allowed to stop sending unstable events.
 -   Fork and make a PR to the
     [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repository.
     The ID of your PR will become the MSC ID for the lifetime of your
