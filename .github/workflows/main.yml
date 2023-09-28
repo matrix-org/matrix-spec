@@ -27,7 +27,7 @@ jobs:
         run: |
           npx @redocly/cli@latest lint data/api/*/*.yaml
 
-  check-examples:
+  check-event-examples:
     name: "🔎 Check Event schema examples"
     runs-on: ubuntu-latest
     steps:
@@ -45,7 +45,45 @@ jobs:
       - name: "🔎 Run validator"
         run: |
           python scripts/check-event-schema-examples.py
-        
+  
+  check-openapi-examples:
+    name: "🔎 Check OpenAPI definitions examples"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
+      - name: "🔎 Run validator"
+        run: |
+          python scripts/check-openapi-sources.py
+
+  check-schemas-examples:
+    name: "🔎 Check JSON Schemas inline examples"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v2
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
+      - name: "🔎 Run validator"
+        run: |
+          python scripts/check-json-schemas.py
+
   calculate-baseurl:
     name: "⚙️ Calculate baseURL for later jobs"
     runs-on: ubuntu-latest
