@@ -136,8 +136,8 @@ removing insignificant whitespace, fractions, exponents and redundant
 character escapes.
 
     value     = false / null / true / object / array / number / string
-    false     = %x66.61.6c.73.65
-    null      = %x6e.75.6c.6c
+    false     = %x66.61.6C.73.65
+    null      = %x6E.75.6C.6C
     true      = %x74.72.75.65
     object    = %x7B [ member *( %x2C member ) ] %7D
     member    = string %x3A value
