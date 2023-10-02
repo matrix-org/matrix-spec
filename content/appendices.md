@@ -141,7 +141,7 @@ character escapes.
     true      = %x74.72.75.65
     object    = %x7B [ member *( %x2C member ) ] %7D
     member    = string %x3A value
-    array     = %x5B [ value *( %x2C value ) ] %5B
+    array     = %x5B [ value *( %x2C value ) ] %5D
     number    = [ %x2D ] int
     int       = %x30 / ( %x31-39 *digit )
     digit     = %x30-39
