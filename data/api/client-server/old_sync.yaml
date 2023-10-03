@@ -137,7 +137,7 @@ paths:
                     type: array
                     description: A list of presence events.
                     items:
-                      $ref: definitions/client_event.yaml
+                      $ref: ../../event-schemas/schema/core-event-schema/event.yaml
                   rooms:
                     type: array
                     items:
@@ -219,7 +219,7 @@ paths:
                             The private data that this user has attached to
                             this room.
                           items:
-                            $ref: definitions/client_event.yaml
+                            $ref: ../../event-schemas/schema/core-event-schema/event.yaml
                       required:
                         - room_id
                         - membership
@@ -227,10 +227,7 @@ paths:
                     type: array
                     description: The global private data created by this user.
                     items:
-                      title: Event
-                      type: object
-                      allOf:
-                        - $ref: ../../event-schemas/schema/core-event-schema/event.yaml
+                      $ref: ../../event-schemas/schema/core-event-schema/event.yaml
                 required:
                   - end
                   - rooms
