@@ -63,7 +63,6 @@ properties:
           description: An placeholder serving as a valid example of the field value.
           type: string
       required: ['regexp', 'placeholder']
-    required: ['fieldname']
     example: {
       "network": {
         "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
