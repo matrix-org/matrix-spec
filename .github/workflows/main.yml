@@ -107,6 +107,11 @@ jobs:
             --api push-gateway \
             -r "$RELEASE" \
             -o spec/push-gateway-api/api.json
+          scripts/dump-openapi.py \
+              --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
+              --api server-server \
+              -r "$RELEASE" \
+              -o spec/server-server-api/api.json
           tar -czf openapi.tar.gz spec
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v2
