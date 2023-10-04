@@ -1304,7 +1304,7 @@ tries to read a message that it does not have keys for, it may request
 the key from the server and decrypt it. Backups are per-user, and users
 may replace backups with new backups.
 
-In contrast with [Key requests](#key-requests), Server-side key backups
+In contrast with [Key requests](#key-requests-and-forwarding), Server-side key backups
 do not require another device to be online from which to request keys.
 However, as the session keys are stored on the server encrypted, it
 requires users to enter a decryption key to decrypt the session keys.
@@ -1818,7 +1818,7 @@ indicate to the user why it cannot decrypt the event, rather than just
 showing a generic error message.
 
 In the same way, when one device requests keys from another using [Key
-requests](#key-requests), the device from which the key is being
+requests](#key-requests-and-forwarding), the device from which the key is being
 requested may want to tell the requester that it is purposely not
 sharing the key.
 
