@@ -22,7 +22,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "🔎 Run validator"
         run: |
           npx @redocly/cli@latest lint data/api/*/*.yaml
@@ -144,7 +144,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
@@ -221,7 +221,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
