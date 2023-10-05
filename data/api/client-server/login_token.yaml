@@ -39,7 +39,7 @@ paths:
 
         In v1.7 of the specification, transmission of the generated token to an unauthenticated client is
         left as an implementation detail. Future MSCs such as [MSC3906](https://github.com/matrix-org/matrix-spec-proposals/pull/3906)
-        might standarise a way to transmit the token between clients.
+        might standardise a way to transmit the token between clients.
 
         The generated token MUST only be valid for a single login, enforced by the server. Clients which
         intend to log in multiple devices must generate a token for each.
