@@ -14,6 +14,6 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Check spelling of proposals
-      uses: crate-ci/typos@4550e7d4371fcf55649adfcda9b77716658504b1
+      uses: crate-ci/typos@9be36f97fdbe645ee9a12449fb13aca856c2516a
       with:
         config: ${{github.workspace}}/.github/_typos.toml

@@ -27,7 +27,7 @@ paths:
         exception of the response format being fixed.
 
         This endpoint is preferred over the v1 API as it provides
-        a more standardised response format. Senders which receive
+        a more standarised response format. Senders which receive
         a 400, 404, or other status code which indicates this endpoint
         is not available should retry using the v1 API instead.
 

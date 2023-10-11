@@ -31,7 +31,7 @@ day until the release has actually happened & blog post published.
 
 Once a release is scheduled, the SCT will begin planning what the next release is
 expected to look like. The plan should be included in the spec release blog post,
-and be ready for execution on spec release day. Plans are guides and not promises.
+and be ready for exeuction on spec release day. Plans are guides and not promises.
 
 A blog post for the SCT members to review should be ready at minimum 1 week before
 the target release date. 1-2 days before the release itself, the prerequisite steps
