@@ -18,11 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "🔎 Run validator"
         run: |
           npx @redocly/cli@latest lint data/api/*/*.yaml
@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
         uses: actions/setup-python@v4
         with:
@@ -74,7 +74,7 @@ jobs:
     needs: [calculate-baseurl]
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
         uses: actions/setup-python@v4
         with:
@@ -114,7 +114,7 @@ jobs:
               -o spec/server-server-api/api.json
           tar -czf openapi.tar.gz spec
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: openapi-artifact
           path: openapi.tar.gz
@@ -126,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
         uses: actions/setup-python@v4
       - name: "➕ Install towncrier"
@@ -134,7 +134,7 @@ jobs:
       - name: "Generate changelog"
         run: ./scripts/generate-changelog.sh vUNSTABLE
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: changelog-artifact
           path: content/changelog/vUNSTABLE.md
@@ -147,16 +147,16 @@ jobs:
     if: ${{ always() }}
     steps:
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "➕ Setup Hugo"
-        uses: peaceiris/actions-hugo@c03b5dbed22245418539b65eb9a3b1d5fdd9a0a6
+        uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
           hugo-version: '0.113.0'
           extended: true
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "⚙️ npm"
         run: |
           npm i
@@ -174,7 +174,7 @@ jobs:
       # https://spec.matrix.org/latest/client-server-api/api.json
       # Works for /unstable/ and /v1.1/ as well.
       - name: "📥 Spec definition download"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
@@ -184,7 +184,7 @@ jobs:
       - name: "📦 Tarball creation"
         run: tar -czf spec.tar.gz spec
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: spec-artifact
           path: spec.tar.gz
@@ -195,10 +195,10 @@ jobs:
     needs: [calculate-baseurl, build-spec]
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "📥 Fetch built spec"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: spec-artifact
 
@@ -224,16 +224,16 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     steps:
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
       - name: "➕ Setup Hugo"
-        uses: peaceiris/actions-hugo@c03b5dbed22245418539b65eb9a3b1d5fdd9a0a6
+        uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
           hugo-version: '0.93.3'
           extended: true
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "⚙️ npm"
         run: |
           npm i
@@ -245,7 +245,7 @@ jobs:
           hugo --config config.toml,historical.toml --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
 
       - name: "📥 Spec definition download"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
@@ -255,7 +255,7 @@ jobs:
       - name: "📦 Tarball creation"
         run: tar -czf spec-historical.tar.gz spec
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: spec-historical-artifact
           path: spec-historical.tar.gz
