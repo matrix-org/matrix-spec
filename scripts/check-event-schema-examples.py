@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-#
+
+# Validates the examples under `../data/event_schemas` against their JSON
+# schemas. In the process, the JSON schemas are validated against the JSON
+# Schema 2020-12 specification.
+
 # Copyright 2016 OpenMarket Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -92,7 +96,8 @@ def check_example_file(examplepath, schemapath):
 
     print ("Checking schema for: %r %r" % (examplepath, schemapath))
     try:
-        jsonschema.validate(example, schema, resolver=resolver)
+        validator = jsonschema.Draft202012Validator(schema, resolver)
+        validator.validate(example)
     except Exception as e:
         raise ValueError("Error validating JSON schema for %r %r" % (
             examplepath, schemapath
