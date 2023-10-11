@@ -139,7 +139,6 @@ def check_schema_dir(schemadir):
         "files": 0,
         "errors": 0,
     }
-    errors = []
     for root, dirs, files in os.walk(schemadir):
         for schemadir in dirs:
             dir_report = check_schema_dir(os.path.join(root, schemadir))
@@ -157,7 +156,6 @@ def check_schema_dir(schemadir):
                 check_schema_file(os.path.join(root, filename))
             except Exception as e:
                 report["errors"] += 1
-                errors.append(sys.exc_info())
     return report
 
 # The directory that this script is residing in.
