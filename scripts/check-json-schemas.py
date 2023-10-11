@@ -53,6 +53,20 @@ except ImportError as e:
     import_error("jsonpath", "python-jsonpath", "jsonpath", e)
     raise
 
+try:
+    import attrs
+except ImportError as e:
+    import_error("attrs", "attrs", "attrs", e)
+    raise
+
+@attrs.define
+class SchemaDirReport:
+    files: int = 0
+    errors: int = 0
+
+    def add(self, other_report):
+        self.files += other_report.files
+        self.errors += other_report.errors
 
 def load_file(path):
     if not path.startswith("file://"):
@@ -134,16 +148,12 @@ def check_schema_file(schema_path):
     # Check schema examples are valid.
     check_schema_examples(schema_path, schema)
 
-def check_schema_dir(schemadir):
-    report = {
-        "files": 0,
-        "errors": 0,
-    }
+def check_schema_dir(schemadir: str) -> SchemaDirReport:
+    report = SchemaDirReport()
     for root, dirs, files in os.walk(schemadir):
         for schemadir in dirs:
             dir_report = check_schema_dir(os.path.join(root, schemadir))
-            report["files"] += dir_report["files"]
-            report["errors"] += dir_report["errors"]
+            report.add(dir_report)
         for filename in files:
             if filename.startswith("."):
                 # Skip over any vim .swp files.
@@ -152,10 +162,10 @@ def check_schema_dir(schemadir):
                 # Skip over any explicit examples (partial event definitions)
                 continue
             try:
-                report["files"] += 1
+                report.files += 1
                 check_schema_file(os.path.join(root, filename))
             except Exception as e:
-                report["errors"] += 1
+                report.errors += 1
     return report
 
 # The directory that this script is residing in.
@@ -174,17 +184,13 @@ schema_dirs = [
     "schemas",
 ]
 
-report = {
-    "files": 0,
-    "errors": 0,
-}
+report = SchemaDirReport()
 for schema_dir in schema_dirs:
     dir_report = check_schema_dir(os.path.join(project_dir, "data", schema_dir))
-    report["files"] += dir_report["files"]
-    report["errors"] += dir_report["errors"]
+    report.add(dir_report)
 
-print(f"Found {report['errors']} errors in {report['files']} files")
+print(f"Found {report.errors} errors in {report.files} files")
 
-if report["errors"]:
+if report.errors:
     sys.exit(1)
     
