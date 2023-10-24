@@ -187,7 +187,7 @@ to send. The process overall is as follows:
     for `<hostname>`.
 
 6.  If the `/.well-known` request returned an error response, and the
-    SRV records were not found, an IP address is resolved using CNAME, AAAA and A
+    no SRV records were found, an IP address is resolved using CNAME, AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
     server must present a valid certificate for `<hostname>`.
