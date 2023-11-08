@@ -454,7 +454,7 @@ Definition:
         {
             "kind": "event_match",
             "key": "content.msgtype",
-            "pattern": "m.notice",
+            "pattern": "m.notice"
         }
     ],
     "actions": []
