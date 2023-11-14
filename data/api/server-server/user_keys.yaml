@@ -34,7 +34,8 @@ paths:
                   type: object
                   description: |-
                     The keys to be claimed. A map from user ID, to a map from
-                    device ID to algorithm name.
+                    device ID to algorithm name. Requested users must be local
+                    to the receiving homeserver.
                   additionalProperties:
                     type: object
                     additionalProperties:
@@ -121,7 +122,8 @@ paths:
                   description: |-
                     The keys to be downloaded. A map from user ID, to a list of
                     device IDs, or to an empty list to indicate all devices for the
-                    corresponding user.
+                    corresponding user.  Requested users must be local to the
+                    receiving homeserver.
                   additionalProperties:
                     type: array
                     items:
