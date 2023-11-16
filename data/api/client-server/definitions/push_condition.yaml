@@ -23,8 +23,8 @@ properties:
   key:
     type: string
     description: |-
-      Required for `event_match` conditions. The dot-separated field of the
-      event to match.
+      Required for `event_match`, `event_property_is` and `event_property_contains`
+      conditions. The dot-separated field of the event to match.
 
       Required for `sender_notification_permission` conditions. The field in
       the power level event the user needs a minimum power level for. Fields
@@ -43,5 +43,11 @@ properties:
       optionally prefixed by one of, ==, <, >, >= or <=. A prefix of < matches
       rooms where the member count is strictly less than the given number and
       so forth. If no prefix is present, this parameter defaults to ==.
+  value:
+    type: ["string", "integer", "boolean", "null"]
+    description: |-
+      Required for `event_property_is` and `event_property_contains` conditions.
+      A non-compound [canonical JSON](/appendices#canonical-json) value to match
+      against.
 required:
   - kind
