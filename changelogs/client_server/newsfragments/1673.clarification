@@ -1,1 +1,1 @@
-Add properties of `event_property_is` and `event_property_contains` to PushConditions
+Add missing properties for `event_property_is` and `event_property_contains` push conditions to `PushConditions` object.
