@@ -77,6 +77,7 @@ algorithm is represented by an object with the following properties:
 |------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | key        | string     | **Required.** The unpadded Base64-encoded 32-byte Curve25519 public key.                                                                          |
 | signatures | Signatures | **Required.** Signatures of the key object. The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json). |
+| fallback   | boolean    | Indicates whether this is a [fallback key](#one-time-and-fallback-keys). Defaults to `false`.                                                     |
 
 Example:
 
@@ -150,7 +151,9 @@ JSON](/appendices/#signing-json).
 
 One-time and fallback keys are also uploaded to the homeserver using the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API. New
-one-time and fallback keys are uploaded as needed.
+one-time and fallback keys are uploaded as needed.  Fallback keys for key
+algorithms whose format is a signed JSON object should contain a property named
+`fallback` with a value of `true`.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
