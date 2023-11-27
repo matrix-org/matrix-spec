@@ -145,8 +145,8 @@ considered to be "in a thread" if:
   depth: a maximum of 3 hops is recommended to cover indirect relationships.)
 
 Events not in a thread but still in the room are considered to be in the "main
-timeline". Threaded receipts for the main timeline use a special thread ID of
-`main`.
+timeline". When referring to the main timeline as a thread (e.g. in receipts
+and notifications counts) a special thread ID of `main` is used.
 
 Thread roots are considered to be in the main timeline, as are events that are
 related to a thread root via non-thread relations. Note that clients providing a
