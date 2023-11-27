@@ -1,1 +1,1 @@
-Clarify that the `via` property is required for `m.space.parent` and `m.space.child` as per MSC1772. Contributed by @PaarthShah.
+Clarify that the `via` property is required for `m.space.parent` and `m.space.child` as per [MSC1772](https://github.com/matrix-org/matrix-spec-proposals/pull/1772). Contributed by @PaarthShah.
