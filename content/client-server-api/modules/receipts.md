@@ -139,8 +139,8 @@ Threading introduces a concept of multiple conversations being held in the same
 room and thus deserve their own read receipts and notification counts. An event is
 considered to be "in a thread" if:
 
-* It has a rel_type of m.thread, or
-* It has a parent event with this rel_type, or a parent of a parent, or further
+* It has a `rel_type` of `m.thread`, or
+* It has a parent event with this `rel_type`, or a parent of a parent, or further
   up the chain of relations. (Implementations should not recurse to arbitrary
   depth: a maximum of 3 hops is recommended to cover indirect relationships.)
 
