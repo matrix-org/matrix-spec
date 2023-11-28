@@ -140,9 +140,10 @@ room and thus deserve their own read receipts and notification counts. An event 
 considered to be "in a thread" if:
 
 * It has a `rel_type` of `m.thread`, or
-* It has a parent event with this `rel_type`, or a parent of a parent, or further
-  up the chain of relations. (Implementations should not recurse to arbitrary
-  depth: a maximum of 3 hops is recommended to cover indirect relationships.)
+* Following the event relationships, it has a parent event which references
+  the thread root with a `rel_type` of `m.thread`. Implementations should
+  not recurse infinitely, though: a maximum of 3 hops is recommended to
+  cover indirect relationships.
 
 Events not in a thread but still in the room are considered to be in the "main
 timeline". When referring to the main timeline as a thread (e.g. in receipts
