@@ -150,10 +150,7 @@ timeline". When referring to the main timeline as a thread (e.g. in receipts
 and notifications counts) a special thread ID of `main` is used.
 
 Thread roots are considered to be in the main timeline, as are events that are
-related to a thread root via non-thread relations. Note that clients providing a
-single-thread view will probably want to include thread roots and some of their
-child events (e.g. reactions) in that view, even though from a receipt point of
-view they are not part of that thread.
+related to a thread root via non-thread relations.
 
 The following is an example DAG for a room, with dotted lines showing event
 relationships and solid lines showing topological ordering.
