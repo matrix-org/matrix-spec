@@ -16,6 +16,7 @@ Previous release: <!-- LINK TO LAST RELEASE'S CHECKLIST -->
 
 Preflight checklist ([release steps](https://github.com/matrix-org/matrix-spec/blob/main/meta/releasing.md)):
 
+* [ ] Ensure the social media account holders are available for the release day.
 * [ ] Blog post written
 * [ ] Check for release blockers that may have been missed
 * [ ] Review/fix the changelog
