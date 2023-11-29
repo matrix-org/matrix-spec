@@ -1,1 +1,0 @@
-Clarify that an `m.room.name` event with an absent `name` field is not expected behavior.
