@@ -14,7 +14,8 @@ history behind a disclosure.
 Threads are established using a `rel_type` of `m.thread` and reference the
 *thread root* (the main timeline event to which the thread events refer). It is not possible to create a thread from an event which itself
 is the child of an event relationship (i.e., one with an `m.relates_to`
-property). It is therefore also not possible to nest threads. All events in a
+property with a `rel_type` property - see [Relationship types](#relationship-types)).
+It is therefore also not possible to nest threads. All events in a
 thread reference the thread root instead of the most recent message, unlike rich
 reply chains.
 
