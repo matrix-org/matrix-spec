@@ -20,7 +20,7 @@ paths:
     put:
       summary: Send a state event to the given room.
       description: |
-        State events can be sent using this endpoint.  These events will be appended
+        State events can be sent using this endpoint.  These events will be processed
         and the state overwritten if `<room id>`, `<event type>` and `<state key>` all
         match.
 
