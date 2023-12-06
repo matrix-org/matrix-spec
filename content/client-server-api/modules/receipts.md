@@ -208,7 +208,7 @@ event when the user expands that thread.
 
 #### Server behaviour
 
-For efficiency, receipts SHOULD be batched into one event per room
+For efficiency, receipts SHOULD be batched into one event per room and thread
 before delivering them to clients.
 
 Some receipts are sent across federation as EDUs with type `m.receipt`. The
