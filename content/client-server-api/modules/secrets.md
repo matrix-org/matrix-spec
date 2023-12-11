@@ -73,7 +73,7 @@ For the purposes of allowing clients to check whether a user has correctly
 entered the key, keys for use with the `m.secret_storage.v1.aes-hmac-sha2`
 algorithm are stored with some additional data.
 
-When storing a key, clients should:
+When storing a key, clients SHOULD:
 
 1.  Given the secret storage key, generate 64 bytes by performing an
     HKDF with SHA-256 as the hash, a salt of 32 bytes of 0, and the empty
@@ -90,13 +90,21 @@ When storing a key, clients should:
 4.  Pass the raw encrypted data through HMAC-SHA-256 using the MAC key
     generated above.
 
-5.  Encode the IV from step 2, and the MAC from step 4, using base64, and store
-    the results in the `iv` and `mac` properties respectively in the
-    `m.secret_storage.key.[key ID]` account-data. (The ciphertext from step 3
-    is discarded after passing through the MAC calculation.)
+5.  Encode the IV from step 2, and the MAC from step 4, using [unpadded
+    base64](/appendices/#unpadded-base64), and store the results in the `iv`
+    and `mac` properties respectively in the `m.secret_storage.key.[key ID]`
+    account-data. (The ciphertext from step 3 is discarded after passing
+    through the MAC calculation.)
 
 This process can be repeated by a client checking if the key is correct: the
-MAC should match if the key is correct.
+MAC should match if the key is correct. Note, however, that these properties
+are **optional**. If they are not present, clients must assume that the key is
+valid.
+
+Note also, that although clients SHOULD use unpadded base64 as specified above,
+some existing implementations use standard [RFC4648-compliant
+base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4) with padding,
+so clients must accept either encoding.
 
 The structure of a `m.secret_storage.key.[key ID]` account data object for use
 with this algorithm is therefore as follows:
@@ -108,8 +116,8 @@ with this algorithm is therefore as follows:
 | name        | string | Optional. The name of the key.                                                                       |
 | algorithm   | string | **Required.** The encryption algorithm to be used for this key: `m.secret_storage.v1.aes-hmac-sha2`. |
 | passphrase  | object | See [deriving keys from passphrases](#deriving-keys-from-passphrases) section for a description of this property. |
-| iv          | string | The 16-byte initialization vector, encoded with base64.                                              |
-| mac         | string | The MAC of the result of encrypting 32 bytes of 0, encoded with base64.                              |
+| iv          | string | Optional. The 16-byte initialization vector for the validation check, encoded as base64.             |
+| mac         | string | Optional. The MAC of the result of encrypting 32 bytes of 0, encoded as base64.                      |
 
 For example, it could look like:
 
@@ -216,8 +224,14 @@ HMAC-SHA-256. The secret is encrypted as follows:
     generated above.
 
 5.  Encode the IV from step 2, the ciphertext from step 3, and MAC from step 4,
-    using base64, and store them as the `iv`, `ciphertext`, and `mac`
-    properties respectively in the account data object.
+    using [unpadded base64](/appendices/#unpadded-base64), and store them as
+    the `iv`, `ciphertext`, and `mac` properties respectively in the account
+    data object.
+
+    **Note**: some existing implementations encode these properties using
+    standard [RFC4648-compliant
+    base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4) with
+    padding, so clients must accept either encoding.
 
 The structure of the `encrypted` property of an account data object encrypted
 with this algorithm is therefore as follows:
