@@ -5,9 +5,6 @@
   "main": "none.js",
   "scripts": {
     "get-proposals": "node ./scripts/proposals.js",
-    "get:submodule": "git submodule update --init --depth 1",
-    "_prepare:docsy": "cd themes/docsy && npm install",
-    "prepare": "npm run get:submodule && npm run _prepare:docsy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

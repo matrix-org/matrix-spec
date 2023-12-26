@@ -1,0 +1,4 @@
+github.com/FortAwesome/Font-Awesome v0.0.0-20230327165841-0698449d50f2/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
+github.com/twbs/bootstrap v5.2.3+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=
+github.com/zecakeh/matrix-org-docsy v0.0.0-20231226095549-1c8de745d9b7 h1:DGstD4oYUcKxkFhKKVSH6gcyfBRWktPXnpSoi/UrH44=
+github.com/zecakeh/matrix-org-docsy v0.0.0-20231226095549-1c8de745d9b7/go.mod h1:Q0KwVmjPqWr3VPVApiF3G+UT72V/oSm5ZA+ekLxuLOA=
