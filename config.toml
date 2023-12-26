@@ -20,6 +20,21 @@ languageName ="English"
 # Weight used for sorting.
 weight = 1
 
+# Entries in the main menu in the header.
+[menus]
+[[menus.main]]
+    name = 'Foundation'
+    url = 'https://matrix.org/foundation/'
+    weight = 10
+[[menus.main]]
+    name = 'FAQs'
+    url = 'https://matrix.org/faq'
+    weight = 20
+[[menus.main]]
+    name = 'Blog'
+    url = 'https://matrix.org/blog/posts'
+    weight = 30
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
