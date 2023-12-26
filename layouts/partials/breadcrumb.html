@@ -8,8 +8,8 @@
 */}}
 
 {{ if not .IsHome }}
-<nav aria-label="breadcrumb" class="d-none d-md-block d-print-none">
-	<ol class="breadcrumb spb-1">
+<nav aria-label="breadcrumb" class="td-breadcrumbs">
+	<ol class="breadcrumb">
 {{ template "breadcrumbnav" (dict "p1" . "p2" .) }}
 	</ol>
 </nav	>
