@@ -131,5 +131,5 @@ sidebar_menu_compact = true
     extended = true
     min = "0.110.0"
   [[module.imports]]
-    path = "github.com/zecakeh/matrix-org-docsy"
+    path = "github.com/matrix-org/docsy"
     disable = false
