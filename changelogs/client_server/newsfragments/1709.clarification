@@ -1,0 +1,1 @@
+Clarify that a `knock` -> `join` membership transition is legal in `knock_restricted` rooms.
