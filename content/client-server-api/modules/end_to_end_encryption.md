@@ -1364,10 +1364,18 @@ The `session_data` field in the backups is constructed as follows:
     PKCS\#7 padding. This encrypted data, encoded using unpadded base64,
     becomes the `ciphertext` property of the `session_data`.
 
-5.  Pass the raw encrypted data (prior to base64 encoding) through
-    HMAC-SHA-256 using the MAC key generated above. The first 8 bytes of
-    the resulting MAC are base64-encoded, and become the `mac` property
-    of the `session_data`.
+5.  Pass an empty string through HMAC-SHA-256 using the MAC key generated above.
+    The first 8 bytes of the resulting MAC are base64-encoded, and become the
+    `mac` property of the `session_data`.
+
+    {{% boxes/warning %}}
+    This was intended to pass the raw encrypted data, but due to a bug in
+    libolm, all implementations have since passed an empty string instead.
+
+    Future versions of the spec will fix this problem. See
+    [MSC4048](https://github.com/matrix-org/matrix-spec-proposals/pull/4048)
+    for a potential new key backup algorithm version that would fix this issue.
+    {{% /boxes/warning %}}
 
 {{% definition path="api/client-server/definitions/key_backup_session_data" %}}
 
