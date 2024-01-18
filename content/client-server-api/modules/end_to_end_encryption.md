@@ -1776,9 +1776,9 @@ Example response:
     ],
   },
   "device_one_time_keys_count": {
-    "curve25519": 10,
     "signed_curve25519": 20
-  }
+  },
+  "device_unused_fallback_key_types": ["signed_curve25519"]
 }
 ```
 
