@@ -52,7 +52,6 @@ paths:
 
                     May be absent if no new one-time keys are required.
                   example:
-                    curve25519:AAAAAQ: /qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8
                     signed_curve25519:AAAAHg:
                       key: zKbLg+NrIjpnagy+pIY6uPL4ZwEG2v+8F9lmgsnlZzs
                       signatures:
@@ -84,7 +83,6 @@ paths:
 
                     May be absent if a new fallback key is not required.
                   example:
-                    curve25519:AAAAAG: /qyvZvwjiTxGdGU0RCguDCLeR+nmsb3FfNG3/Ve4vU8
                     signed_curve25519:AAAAGj:
                       key: zKbLg+NrIjpnagy+pIY6uPL4ZwEG2v+8F9lmgsnlZzs
                       fallback: true
@@ -111,7 +109,6 @@ paths:
                       If an algorithm is not listed, the count for that algorithm
                       is to be assumed zero.
                     example:
-                      curve25519: 10
                       signed_curve25519: 20
                 required:
                   - one_time_key_counts
