@@ -45,18 +45,26 @@
  * referenced twice within `schema`, it will only be returned once).
  */
 
-{{ return partial "resolve-additional-types-inner" (dict
+{{ $res := partial "resolve-additional-types-inner" (dict
     "schema" .schema
     "anchor_base" .anchor_base
     "name" (.name | default .schema.title | default "<untitled object>")
 ) }}
+{{ return $res.objects }}
 
 /*
  * A helper for the resolve-additional-types partial.
  *
  * Takes the same inputs as resolve-additional-types itself, except that `name` is mandatory.
  *
- * Returns the array of object schema definitions.
+ * Returns a dict containing:
+ *
+ *   * `objects`: The array of object schema definitions.
+ *
+ *   * `schema`: An updated copy of the `schema` input (eg, nested `allOf`
+ *     entries are expanded, and an `anchor` may be added). If the input
+ *     `schema` was itself an object, this will be the same as the first entry
+ *     in `objects`.
  */
 {{ define "partials/resolve-additional-types-inner" }}
     {{ $this_object := .schema }}
@@ -73,35 +81,38 @@
         /* Add any nested objects referenced in this object's `additionalProperties` */
         {{ if $this_object.additionalProperties }}
             {{ if reflect.IsMap $this_object.additionalProperties }}
-                {{ $all_objects = partial "get-additional-objects" (dict
+                {{ $res := partial "get-additional-objects" (dict
                     "this_object" $this_object.additionalProperties
                     "all_objects" $all_objects
                     "anchor_base" $anchor_base
                     "name" (printf "%s.additional" $name)
                 ) }}
+                {{ $all_objects = $res.objects }}
             {{ end }}
         {{ end }}
 
         /* Add any nested objects referenced in this object's `patternProperties` */
         {{ if $this_object.patternProperties }}
             {{ range $pattern, $object := $this_object.patternProperties}}
-                {{ $all_objects = partial "get-additional-objects" (dict
+                {{ $res := partial "get-additional-objects" (dict
                     "this_object" $object
                     "all_objects" $all_objects
                     "anchor_base" $anchor_base
                     "name" (printf "%s.pattern.%s" $name $pattern)
                 ) }}
+                {{ $all_objects = $res.objects }}
             {{ end }}
         {{ end }}
 
         /* Add any nested objects referenced in this object's `properties` */
         {{ range $key, $property := $this_object.properties}}
-            {{ $all_objects = partial "get-additional-objects" (dict
+            {{ $res := partial "get-additional-objects" (dict
                 "this_object" $property
                 "all_objects" $all_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.%s" $name $key)
             ) }}
+            {{ $all_objects = $res.objects }}
         {{ end }}
 
         /* Finally, prepend the object we were passed onto the $all_objects array */
@@ -116,20 +127,22 @@
         /* Add any nested objects referenced in this object's `items` */
         {{ if $this_object.items.anyOf }}
             {{ range $idx, $item := $this_object.items.anyOf }}
-                {{ $all_objects = partial "get-additional-objects" (dict
+                {{ $res := partial "get-additional-objects" (dict
                     "this_object" $item
                     "all_objects" $all_objects
                     "anchor_base" $anchor_base
                     "name" (printf "%s.items[%d]" $name $idx)
                 ) }}
+                {{ $all_objects = $res.objects }}
             {{ end }}
         {{ else if reflect.IsMap $this_object.items}}
-            {{ $all_objects = partial "get-additional-objects" (dict
+            {{ $res := partial "get-additional-objects" (dict
                  "this_object" $this_object.items
                  "all_objects" $all_objects
                  "anchor_base" $anchor_base
                  "name" (printf "%s.items" $name)
             ) }}
+            {{ $all_objects = $res.objects }}
         {{ else }}
             {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
         {{ end }}
@@ -140,16 +153,20 @@
      */
     {{ if $this_object.oneOf }}
         {{ range $idx, $item := $this_object.oneOf }}
-            {{ $all_objects = partial "get-additional-objects" (dict
+            {{ $res := partial "get-additional-objects" (dict
                 "this_object" $item
                 "all_objects" $all_objects
                 "anchor_base" $anchor_base
                 "name" (printf "%s.oneOf[%d]" $name $idx)
             ) }}
+            {{ $all_objects = $res.objects }}
         {{ end }}
     {{ end }}
 
-    {{ return uniq $all_objects }}
+    {{ return (dict
+        "objects" (uniq $all_objects)
+        "schema" $this_object
+    ) }}
 {{ end }}
 
 /* This actually makes the recursive call and adds the returned object schema definitions to the array.
@@ -161,7 +178,10 @@
  *     object. If nil, no anchors are generated.
  *   * `all_objects`: the array of object schema definitions so far.
  *
- * Returns the array of object definitions.
+ * Returns a dict containing:
+ *   * `objects`: The array of object schema definitions.
+ *   * `schema`: An updated copy of the `schema` input (eg, nested `allOf`
+ *     entries are expanded, and an `anchor` may be added).
  */
 {{ define "partials/get-additional-objects" }}
     /* .name is the name of the object for logging purposes */
@@ -178,11 +198,14 @@
      */
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
 
-    {{ $more_objects := partial "resolve-additional-types-inner" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
-    {{ range $more_objects}}
+    {{ $res := partial "resolve-additional-types-inner" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
+    {{ range $res.objects }}
         {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}
-    {{ return $all_objects }}
+    {{ return (dict
+        "objects" $all_objects
+        "schema" $res.schema
+    ) }}
 {{ end }}
 
 /* Only copy the bits of the object that we actually care about.
