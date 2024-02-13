@@ -88,11 +88,15 @@
                     "name" (printf "%s.additional" $name)
                 ) }}
                 {{ $all_objects = $res.objects }}
+
+                /* Update the top-level schema with the updated subschemas for the additionalProperties */
+                {{ $this_object = merge $this_object (dict "additionalProperties" $res.schema) }}
             {{ end }}
         {{ end }}
 
         /* Add any nested objects referenced in this object's `patternProperties` */
         {{ if $this_object.patternProperties }}
+            {{ $updated_pattern_properties := dict }}
             {{ range $pattern, $object := $this_object.patternProperties}}
                 {{ $res := partial "get-additional-objects" (dict
                     "this_object" $object
@@ -101,21 +105,32 @@
                     "name" (printf "%s.pattern.%s" $name $pattern)
                 ) }}
                 {{ $all_objects = $res.objects }}
+                {{ $updated_pattern_properties = merge $updated_pattern_properties (dict $pattern $res.schema) }}
             {{ end }}
+
+            /* Update the top-level schema with the updated subschemas for the patternProperties */
+            {{ $this_object = merge $this_object (dict "patternProperties" $updated_pattern_properties) }}
         {{ end }}
 
         /* Add any nested objects referenced in this object's `properties` */
-        {{ range $key, $property := $this_object.properties}}
-            {{ $res := partial "get-additional-objects" (dict
-                "this_object" $property
-                "all_objects" $all_objects
-                "anchor_base" $anchor_base
-                "name" (printf "%s.%s" $name $key)
-            ) }}
-            {{ $all_objects = $res.objects }}
+        {{ if $this_object.properties }}
+            {{ $updated_properties := dict }}
+            {{ range $key, $property := $this_object.properties}}
+                {{ $res := partial "get-additional-objects" (dict
+                    "this_object" $property
+                    "all_objects" $all_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.%s" $name $key)
+                ) }}
+                {{ $all_objects = $res.objects }}
+                {{ $updated_properties = merge $updated_properties (dict $key $res.schema) }}
+            {{ end }}
+
+            /* Update the top-level schema with the updated subschemas for the regular properties */
+            {{ $this_object = merge $this_object (dict "properties" $updated_properties) }}
         {{ end }}
 
-        /* Finally, prepend the object we were passed onto the $all_objects array */
+        /* Finally, prepend the updated schema for the top-level object onto the $all_objects array */
         {{ $tmp := slice $this_object }}
         {{ if $all_objects }}
             {{ $tmp = $tmp | append $all_objects }}
@@ -143,6 +158,8 @@
                  "name" (printf "%s.items" $name)
             ) }}
             {{ $all_objects = $res.objects }}
+            /* Update the top-level schema with the updated subschema for the items */
+            {{ $this_object = merge $this_object (dict "items" $res.schema) }}
         {{ else }}
             {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
         {{ end }}
