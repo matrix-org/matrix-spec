@@ -1,5 +1,4 @@
-{{/*
-
+/*
   Finds and returns all objects, including nested ones, given a dict containing:
    * `schema`: a JSON schema object
    * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
@@ -19,8 +18,7 @@
     * anchor: a string suitable for using as an html anchor for this object (if `anchor_base` was set, and the object has a title)
 
   Note that the returned array contains only unique objects.
-
-*/}}
+*/
 
 {{ $this_object := .schema }}
 {{ $anchor_base := .anchor_base }}
@@ -28,19 +26,15 @@
 {{ $name := .name | default $this_object.title | default "<untitled object>" }}
 
 {{ if eq $this_object.type "object" }}
-    {{/* give this object an anchor, if it has a name */}}
+    /* Give this object an anchor, if it has a name */
     {{ if (and $anchor_base $this_object.title) }}
         {{ $this_object = merge $this_object (dict "anchor" (printf "%s_%s" $anchor_base (anchorize $this_object.title))) }}
     {{ end }}
 
-    {{/*
-      Add the object we were passed into the $all_objects array
-    */}}
+    /* Add the object we were passed into the $all_objects array */
     {{ $all_objects = $all_objects | append $this_object }}
 
-    {{/*
-      Add any nested objects referenced in this object's `additionalProperties`
-    */}}
+    /* Add any nested objects referenced in this object's `additionalProperties` */
     {{ if $this_object.additionalProperties }}
         {{ if reflect.IsMap $this_object.additionalProperties }}
             {{ $all_objects = partial "get-additional-objects" (dict
@@ -52,9 +46,7 @@
         {{ end }}
     {{ end }}
 
-    {{/*
-      Add any nested objects referenced in this object's `patternProperties`
-    */}}
+    /* Add any nested objects referenced in this object's `patternProperties` */
     {{ if $this_object.patternProperties }}
         {{ range $pattern, $object := $this_object.patternProperties}}
             {{ $all_objects = partial "get-additional-objects" (dict
@@ -66,9 +58,7 @@
         {{ end }}
     {{ end }}
 
-    {{/*
-      Add any nested objects referenced in this object's `properties`
-    */}}
+    /* Add any nested objects referenced in this object's `properties` */
     {{ range $key, $property := $this_object.properties}}
         {{ $all_objects = partial "get-additional-objects" (dict
             "this_object" $property
@@ -77,13 +67,10 @@
             "name" (printf "%s.%s" $name $key)
         ) }}
     {{ end }}
-
 {{ end }}
 
 {{ if eq $this_object.type "array" }}
-    {{/*
-      Add any nested objects referenced in this object's `items`
-    */}}
+    /* Add any nested objects referenced in this object's `items` */
     {{ if $this_object.items.anyOf }}
         {{ range $idx, $item := $this_object.items.anyOf }}
             {{ $all_objects = partial "get-additional-objects" (dict
@@ -105,10 +92,10 @@
     {{ end }}
 {{ end }}
 
-{{/*
+/*
   Handle object schemas using the `oneOf` keyword
   (https://json-schema.org/understanding-json-schema/reference/combining.html#oneof)
-*/}}
+*/
 {{ if $this_object.oneOf }}
     {{ range $idx, $item := $this_object.oneOf }}
         {{ $all_objects = partial "get-additional-objects" (dict
@@ -123,11 +110,11 @@
 {{ return uniq $all_objects }}
 
 
-{{/*
+/*
   This actually makes the recursive call and adds the returned objects to the array
-*/}}
+*/
 {{ define "partials/get-additional-objects" }}
-    {{/* .name is the name of the object for logging purposes */}}
+    /* .name is the name of the object for logging purposes */
     {{ $name := .name }}
 
     {{ $all_objects := .all_objects }}
@@ -142,20 +129,17 @@
     {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
 
     {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
-    {{/*
-      As far as I know we don't have something like Array.concat(), so add them one at a time
-    */}}
     {{ range $more_objects}}
         {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}
     {{ return $all_objects }}
 {{ end }}
 
-{{/*
+/*
   Only copy the bits of the object that we actually care about.
   This is needed for uniqify to work - otherwise objects that are the same
   but with (for example) different examples will be considered different.
-*/}}
+*/
 {{ define "partials/clean-object" }}
     {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "anchor" .anchor) }}
 {{ end }}
