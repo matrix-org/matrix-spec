@@ -70,9 +70,6 @@
             {{ $this_object = merge $this_object (dict "anchor" (printf "%s_%s" $anchor_base (anchorize $this_object.title))) }}
         {{ end }}
 
-        /* Add the object we were passed into the $all_objects array */
-        {{ $all_objects = $all_objects | append $this_object }}
-
         /* Add any nested objects referenced in this object's `additionalProperties` */
         {{ if $this_object.additionalProperties }}
             {{ if reflect.IsMap $this_object.additionalProperties }}
@@ -106,6 +103,13 @@
                 "name" (printf "%s.%s" $name $key)
             ) }}
         {{ end }}
+
+        /* Finally, prepend the object we were passed onto the $all_objects array */
+        {{ $tmp := slice $this_object }}
+        {{ if $all_objects }}
+            {{ $tmp = $tmp | append $all_objects }}
+        {{ end }}
+        {{ $all_objects = $tmp }}
     {{ end }}
 
     {{ if eq $this_object.type "array" }}
