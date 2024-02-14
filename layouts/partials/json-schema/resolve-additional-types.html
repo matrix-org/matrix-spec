@@ -24,8 +24,9 @@
  *     `resolve-allof` is called on the top-level `schema` beforehand,
  *     `resolve-allof` doesn't recurse down to subschemas).
  *
- *   * If `anchor_base` is set, each object with a `title` is given an `anchor`,
- *     which is a string suitable for using as an html anchor for that object schema.
+ *   * If `anchor_base` is set, each object with a `title` and `properties`
+ *     is given an `anchor`, which is a string suitable for using as an html
+ *     anchor for that object schema.
  *
  *   * With the *exception* of the top-level `schema` (if it is an object),
  *     properties outside the following list are removed:
@@ -64,8 +65,8 @@
     {{ $all_objects := slice }}
 
     {{ if eq $this_object.type "object" }}
-        /* Give this object an anchor, if it has a name */
-        {{ if (and $anchor_base $this_object.title) }}
+        /* Give this object an anchor, if it has a name and properties */
+        {{ if (and $anchor_base $this_object.title $this_object.properties) }}
             {{ $this_object = merge $this_object (dict "anchor" (printf "%s_%s" $anchor_base (anchorize $this_object.title))) }}
         {{ end }}
 
