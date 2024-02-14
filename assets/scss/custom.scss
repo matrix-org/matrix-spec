@@ -524,3 +524,98 @@ nav.foldable-nav {
         margin: initial;
     }
 }
+
+// Fix some visual bugs regarding sidebar_menu_foldable / foldable-nav support
+// and extend it to ordered lists
+nav.foldable-nav {
+    .with-child ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .ol-1 > li {
+        padding-left: 1.5em;
+    }
+
+    ol.foldable {
+        max-height: 0;
+        overflow: hidden;
+    }
+
+    input:checked ~ ol.foldable {
+        max-height: 100vmax;
+    }
+
+    .ol-1 .with-child > label:before {
+        display: inline-block;
+        font-family: inherit;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 900; content: "+";
+        position: absolute;
+        left: 0.1em;
+        padding-left: 0.4em;
+        padding-right: 0.4em;
+        font-size: 1em;
+        color: $gray-900;
+        transform: unset;
+        transition: unset;
+    }
+
+    .ol-1 .with-child > input:checked ~ label:before {
+        color: $gray-900;
+        content: "-";
+        transform: unset;
+        transition: unset;
+    }
+
+    .with-child ol { margin-top: 0.1em; }
+
+    /* Fix bugs and annoyances with unordered lists */
+    .ul-1 .with-child > label:before {
+        font-weight: 900; content: "+";
+        font-family: inherit;
+        transform: unset;
+        transition: unset;
+    }
+
+    .ul-1 .with-child > input:checked ~ label:before {
+        color: $gray-900;
+        content: "-";
+        transform: unset;
+        transition: unset;
+    }
+
+}
+
+@media (hover: hover) and (pointer: fine) {
+    nav.foldable-nav {
+
+        .ul-1 .with-child > label:hover:before {
+            color: $gray-900;
+            transform: unset;
+            transition: unset;
+        }
+
+        .ul-1 .with-child > input:checked ~ label:hover:before {
+            color: $gray-900;
+            transform: unset;
+            transition: unset;
+        }
+
+        .ol-1 .with-child > label:hover:before {
+            color: $gray-900;
+            transform: unset;
+            transition: unset;
+        }
+
+        .ol-1 .with-child > input:checked ~ label:hover:before {
+            color: $gray-900;
+            transform: unset;
+            transition: unset;
+        }
+    }
+}

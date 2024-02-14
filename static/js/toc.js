@@ -107,9 +107,10 @@ function makeToc() {
 
   // we have to adjust heading IDs to ensure that they are unique
   const nav = document.createElement("nav");
+  nav.classList.add("td-sidebar-nav", "foldable-nav");
   nav.id = "TableOfContents";
 
-  const section = makeTocSection(tocTargets, 0);
+  const section = makeTocSection(tocTargets, 0, 1);
   nav.appendChild(section.content);
   // build the TOC and append to it title and content
   const toc = document.createElement("div");
@@ -130,10 +131,24 @@ function makeToc() {
 // create a single ToC entry
 function makeTocEntry(heading) {
   const li = document.createElement("li");
+  li.classList.add("td-sidebar-nav__section-title", "td-sidebar-nav__section");
+
+  const input = document.createElement("input");
+  input.setAttribute("id", `toc-${heading.id}-check`);
+  input.setAttribute("type", "checkbox");
+  const label = document.createElement("label");
+  label.setAttribute("for", `toc-${heading.id}-check`);
+
   const a = document.createElement("a");
   a.setAttribute("href", `#${heading.id}`);
+  a.setAttribute("id", `toc-${heading.id}`);
+  a.classList.add("td-sidebar-link", "td-sidebar-link__page");
   a.textContent = heading.textContent;
-  li.appendChild(a);
+
+  li.appendChild(input);
+  li.appendChild(label);
+  label.appendChild(a);
+
   return li;
 }
 
@@ -142,8 +157,9 @@ Each ToC section is an `<ol>` element.
 ToC entries are `<li>` elements and these contain nested ToC sections,
 whenever we go to the next heading level down.
 */
-function makeTocSection(headings, index) {
+function makeTocSection(headings, index, depth) {
   const ol = document.createElement("ol");
+  ol.classList.add("td-sidebar-nav__section", `ol-${depth}`);
   let previousHeading = null;
   let previousLi = null;
   let i = index;
@@ -152,13 +168,20 @@ function makeTocSection(headings, index) {
     const thisHeading = headings[i];
     if (previousHeading && (thisHeading.tagName > previousHeading.tagName)) {
       // we are going down a heading level, create a new nested section
-      const section = makeTocSection(headings, i);
+      const section = makeTocSection(headings, i, depth+1);
       previousLi.appendChild(section.content);
-      i = section.index -1;
+      if (depth >= 1) {
+          section.content.classList.add("foldable");
+      }
+      previousLi.classList.add("with-child");
+      i = section.index - 1;
     }
     else if (previousHeading && (previousHeading.tagName > thisHeading.tagName)) {
       // we have come back up a level, so a section is finished
       for (let li of lis) {
+        if (!li.classList.contains("with-child")) {
+          li.classList.add("without-child");
+        }
         ol.appendChild(li);
       }
       return {
@@ -174,6 +197,9 @@ function makeTocSection(headings, index) {
     }
   }
   for (let li of lis) {
+    if (!li.classList.contains("with-child")) {
+      li.classList.add("without-child");
+    }
     ol.appendChild(li);
   }
   return  {
