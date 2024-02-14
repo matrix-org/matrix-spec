@@ -517,3 +517,10 @@ dd {
     border-radius: 0.25rem;  // was $border-radius, but that var isn't accessible here.
   }
 }
+
+// Avoid visual artefacts with sidebar_menu_foldable / foldable-nav
+nav.foldable-nav {
+    .td-sidebar-nav__section, .with-child ul {
+        margin: initial;
+    }
+}
