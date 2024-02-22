@@ -59,7 +59,22 @@
   </tr>
  <tr>
   <th>Requires authentication:</th>
-  <td>{{ if $operation_data.security }}Yes{{ else }}No{{ end }}</td>
+  {{/*
+    Authentication is optional if one of these is true:
+      - the security key is not set
+      - the security value contains an empty object
+  */}}
+  {{ $requires_authentication := 1 }}
+  {{ if $operation_data.security }}
+    {{ range $operation_data.security }}
+      {{ if eq (len (index $operation_data.security 0)) 0 }}
+        {{ $requires_authentication = 0 }}
+      {{ end }}
+    {{ end }}
+  {{ else }}
+    {{ $requires_authentication = 0 }}
+  {{ end }}
+  <td>{{ if $requires_authentication }}Yes{{ else }}No{{ end }}</td>
  </tr>
 </table>
 
