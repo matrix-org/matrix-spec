@@ -660,7 +660,7 @@ The process between Alice and Bob verifying each other would be:
 11. Alice's device receives Bob's message and verifies the commitment
     hash from earlier matches the hash of the key Bob's device just sent
     and the content of Alice's `m.key.verification.start` message.
-12. Both Alice and Bob's devices perform an Elliptic-curve Diffie-Hellman using
+12. Both Alice's and Bob's devices perform an Elliptic-curve Diffie-Hellman using
     their private ephemeral key, and the other device's ephemeral public key
     (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)
     for Alice's device and
