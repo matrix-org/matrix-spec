@@ -51,7 +51,7 @@ paths:
         endpoint invalidates all access tokens for the user, including the token used in
         the request, and therefore the attacker is unable to take over the account in
         this way.
-      operationId: logout_all
+      operationId: logoutAll
       security:
         - accessToken: []
       responses:
