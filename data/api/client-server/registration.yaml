@@ -632,6 +632,8 @@ paths:
                     The server should additionally erase any non-event data
                     associated with the user, such as [account data](/client-server-api/#client-config)
                     and [contact 3PIDs](/client-server-api/#adding-account-administrative-contact-information).
+
+                    Defaults to `false` if not present.
         required: true
       responses:
         "200":
