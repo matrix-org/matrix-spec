@@ -6,8 +6,29 @@ properties:
   content:
     properties:
       body:
-        description: "A description of the video e.g. 'Gangnam style', or some kind of content description for accessibility e.g. 'video attachment'."
+        description: |-
+          If `filename` is not set or the value of both properties are
+          identical, this is the filename of the original upload. Otherwise,
+          this is a caption for the video.
         type: string
+        x-changedInMatrixVersion:
+          "1.10": This property can act as a caption for the video.
+      format:
+        description: |-
+          The format used in the `formatted_body`. Currently only
+          `org.matrix.custom.html` is supported.
+        type: string
+        x-addedInMatrixVersion: "1.10"
+      formatted_body:
+        description: |-
+          The formatted version of the `body`, when it acts as a caption. This
+          is required if `format` is specified.
+        type: string
+        x-addedInMatrixVersion: "1.10"
+      filename:
+        description: The original filename of the uploaded file.
+        type: string
+        x-addedInMatrixVersion: "1.10"
       info:
         description: Metadata about the video clip referred to in `url`.
         properties:
