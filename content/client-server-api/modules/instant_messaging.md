@@ -19,8 +19,6 @@ room itself such as a room name and topic.
 
 ##### m.room.message msgtypes
 
-{{% changed-in v="1.10" %}}
-
 Each [m.room.message](#mroommessage) MUST have a `msgtype` key which identifies the
 type of message being sent. Each type has their own required and
 optional keys, as outlined below. If a client cannot display the given
@@ -35,10 +33,11 @@ field is present, a `formatted_body` with the HTML must be provided. The plain
 text version of the HTML should be provided in the `body`.
 
 {{% boxes/note %}}
-Until v1.10 of the spec, the `format` and `formatted` fields were limited to
-`m.text`, `m.emote`, `m.notice`, and `m.key.verification.request`. As of v1.10
-this list is now expanded to include `m.image`, `m.file`, `m.audio` and
-`m.video` for [media captions](#media-captions).
+{{% changed-in v="1.10" %}}
+In previous versions of the specification, the `format` and `formatted` fields
+were limited to `m.text`, `m.emote`, `m.notice`, and
+`m.key.verification.request`. This list is expanded to include `m.image`,
+`m.file`, `m.audio` and `m.video` for [media captions](#media-captions).
 {{% /boxes/note %}}
 
 Clients should limit the HTML they render to avoid Cross-Site Scripting,
