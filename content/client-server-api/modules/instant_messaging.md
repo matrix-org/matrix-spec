@@ -37,8 +37,23 @@ HTML injection, and similar attacks. The strongly suggested set of HTML
 tags to permit, denying the use and rendering of anything else, is:
 `font`, `del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`,
 `a`, `ul`, `ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`,
-`strike`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
+`strike`, `s`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
 `th`, `td`, `caption`, `pre`, `span`, `img`, `details`, `summary`.
+
+
+{{% boxes/note %}}
+HTML features MAY be deprecated and replaced by their modern equivalent without
+requiring a [Spec Change Proposal](/proposals) when they are deprecated in the
+WHATWG HTML Living Standard.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}}
+
+The `strike` tag is deprecated. Clients MUST stop sending new messages using
+this tag and replace it with `s` or `del`.
+{{% /boxes/note %}}
+
 
 Not all attributes on those tags should be permitted as they may be
 avenues for other disruption attempts, such as adding `onclick` handlers
