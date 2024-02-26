@@ -836,15 +836,15 @@ is the concatenation of:
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.start` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.start` message, encoded as
+    unpadded base64, followed by `|`.
 -   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.accept` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.accept` message, encoded as
+    unpadded base64, followed by `|`.
 -   The `transaction_id` being used.
 
 When the `key_agreement_protocol` is the deprecated method `curve25519`,
