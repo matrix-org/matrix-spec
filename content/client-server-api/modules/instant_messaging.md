@@ -358,7 +358,7 @@ An example of a media message with a caption is:
     "filename": "dog.jpg",
     "body": "this is a ~~cat~~ picture :3",
     "format": "org.matrix.custom.html",
-    "formatted_body": "this is a <strike>cat</strike> picture :3",
+    "formatted_body": "this is a <s>cat</s> picture :3",
     "info": {
         "w": 479,
         "h": 640,
