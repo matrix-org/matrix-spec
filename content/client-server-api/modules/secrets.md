@@ -84,7 +84,7 @@ When storing a key, clients SHOULD:
     differences in AES-CTR implementations), and use this as the AES
     initialization vector (IV).
 
-3.  Encrypt a message consisting of 32 byutes of 0, using AES-CTR-256 using the
+3.  Encrypt a message consisting of 32 bytes of 0, using AES-CTR-256 using the
     AES key and IV generated above.
 
 4.  Pass the raw encrypted data through HMAC-SHA-256 using the MAC key
