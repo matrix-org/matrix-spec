@@ -612,8 +612,8 @@ users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
 and servers MUST accept user IDs with localparts consisting of any legal
-unicode codepoint except for `:`, including the empty string. Localparts
-MUST be valid UTF-8 sequences.
+unicode codepoint except for `:` and `NUL` (U+0000), including other control
+characters and the empty string. Localparts MUST be valid UTF-8 sequences.
 
 Servers SHOULD NOT produce user IDs with localparts outside of the following
 character set, and SHOULD NOT forward such user IDs to clients when referenced
@@ -673,8 +673,9 @@ human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
 The localpart of a room ID (`opaque_id` above) may contain any valid
-unicode codepoints except `:`, but it is recommended to only include
-ASCII letters and digits (`A-Z`, `a-z`, `0-9`) when generating them.
+unicode codepoints, including control characters, except `:` and `NUL`
+(U+0000), but it is recommended to only include ASCII letters and
+digits (`A-Z`, `a-z`, `0-9`) when generating them.
 
 #### Room Aliases
 
