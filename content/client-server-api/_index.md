@@ -363,6 +363,8 @@ specify parameter values. The flow for this method is as follows:
 
 {{% http-api spec="client-server" api="versions" %}}
 
+{{% http-api spec="client-server" api="support" %}}
+
 ## Client Authentication
 
 Most API endpoints require the user to identify themselves by presenting
