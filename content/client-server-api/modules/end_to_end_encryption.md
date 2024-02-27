@@ -660,10 +660,12 @@ The process between Alice and Bob verifying each other would be:
 11. Alice's device receives Bob's message and verifies the commitment
     hash from earlier matches the hash of the key Bob's device just sent
     and the content of Alice's `m.key.verification.start` message.
-12. Both Alice and Bob's devices perform an Elliptic-curve
-    Diffie-Hellman
-    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)),
-    using the result as the shared secret.
+12. Both Alice's and Bob's devices perform an Elliptic-curve Diffie-Hellman using
+    their private ephemeral key, and the other device's ephemeral public key
+    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)
+    for Alice's device and
+    *ECDH(K<sub>B</sub><sup>private</sup>*, *K<sub>A</sub><sup>public</sup>*)
+    for Bob's device), using the result as the shared secret.
 13. Both Alice and Bob's devices display a SAS to their users, which is
     derived from the shared key using one of the methods in this
     section. If multiple SAS methods are available, clients should allow
@@ -836,15 +838,15 @@ is the concatenation of:
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.start` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.start` message, encoded as
+    unpadded base64, followed by `|`.
 -   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.accept` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.accept` message, encoded as
+    unpadded base64, followed by `|`.
 -   The `transaction_id` being used.
 
 When the `key_agreement_protocol` is the deprecated method `curve25519`,

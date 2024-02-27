@@ -27,17 +27,25 @@ instead.
 
 Some message types support HTML in the event content that clients should
 prefer to display if available. Currently `m.text`, `m.emote`, `m.notice`,
-and `m.key.verification.request` support an additional `format` parameter of
-`org.matrix.custom.html`. When this field is present, a `formatted_body`
-with the HTML must be provided. The plain text version of the HTML
-should be provided in the `body`.
+`m.image`, `m.file`, `m.audio`, `m.video` and `m.key.verification.request`
+support an additional `format` parameter of `org.matrix.custom.html`. When this
+field is present, a `formatted_body` with the HTML must be provided. The plain
+text version of the HTML should be provided in the `body`.
+
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}}
+In previous versions of the specification, the `format` and `formatted` fields
+were limited to `m.text`, `m.emote`, `m.notice`, and
+`m.key.verification.request`. This list is expanded to include `m.image`,
+`m.file`, `m.audio` and `m.video` for [media captions](#media-captions).
+{{% /boxes/note %}}
 
 Clients should limit the HTML they render to avoid Cross-Site Scripting,
 HTML injection, and similar attacks. The strongly suggested set of HTML
 tags to permit, denying the use and rendering of anything else, is:
 `font`, `del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`,
 `a`, `ul`, `ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`,
-`strike`, `s`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
+`s`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
 `th`, `td`, `caption`, `pre`, `span`, `img`, `details`, `summary`.
 
 
@@ -334,6 +342,49 @@ to the media repository, then reference the `mxc://` URI in a markdown-style lin
 
 Clients SHOULD render spoilers differently with some sort of disclosure. For example, the
 client could blur the actual text and ask the user to click on it for it to be revealed.
+
+##### Media captions
+
+{{% added-in v="1.10" %}}
+
+Media messages, comprised of `m.image`, `m.file`, `m.audio` and `m.video`, can
+include a caption to convey additional information about the media.
+
+To send captions, clients MUST use the `filename` and the `body`, and optionally
+the `formatted_body` with the `org.matrix.custom.html` format, described above.
+
+If the `filename` is present, and its value is different than `body`, then
+`body` is considered to be a caption, otherwise `body` is a filename. `format`
+and `formatted_body` are only used for captions.
+
+{{% boxes/note %}}
+In previous versions of the specification, `body` was usually used to set the
+filename of the uploaded file, and `filename` was only present on `m.file` with
+the same purpose.
+{{% /boxes/note %}}
+
+An example of a media message with a caption is:
+
+```json
+{
+    "msgtype": "m.image",
+    "url": "mxc://example.org/abc123",
+    "filename": "dog.jpg",
+    "body": "this is a ~~cat~~ picture :3",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "this is a <s>cat</s> picture :3",
+    "info": {
+        "w": 479,
+        "h": 640,
+        "mimetype": "image/jpeg",
+        "size": 27253
+    },
+    "m.mentions": {}
+}
+```
+
+Clients MUST render the caption alongside the media and SHOULD prefer its
+formatted representation.
 
 #### Server behaviour
 
