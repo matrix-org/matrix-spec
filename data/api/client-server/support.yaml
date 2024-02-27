@@ -101,23 +101,23 @@ paths:
 
                       At least one of `contacts` or `support_page` is required.
                     example: "https://example.org/support.html"
-                examples:
-                  response:
-                    value:
-                      {
-                        "contacts": [
-                          {
-                            "matrix_id": "@admin:example.org",
-                            "email_address": "admin@example.org",
-                            "role": "m.role.admin"
-                          },
-                          {
-                            "email_address": "security@example.org",
-                            "role": "m.role.security"
-                          }
-                        ],
-                        "support_page": "https://example.org/support.html"
-                      }
+              examples:
+                response:
+                  value:
+                    {
+                      "contacts": [
+                        {
+                          "matrix_id": "@admin:example.org",
+                          "email_address": "admin@example.org",
+                          "role": "m.role.admin"
+                        },
+                        {
+                          "email_address": "security@example.org",
+                          "role": "m.role.security"
+                        }
+                      ],
+                      "support_page": "https://example.org/support.html"
+                    }
         "404":
           description: No server support information available.
       tags:
