@@ -7,9 +7,6 @@ canonifyURLs = true
 
 enableRobotsTXT = true
 
-# Hugo allows theme composition (and inheritance). The precedence is from left to right.
-theme = ["docsy"]
-
 # We disable RSS, because (a) it's useless, (b) Hugo seems to generate broken
 # links to it when used with a --baseURL (for example, https://spec.matrix.org/v1.4/
 # contains `<link rel="alternate" type="application/rss&#43;xml" href="/v1.4/v1.4/index.xml">`).
@@ -22,6 +19,21 @@ description = "Home of the Matrix specification for decentralised communication"
 languageName ="English"
 # Weight used for sorting.
 weight = 1
+
+# Entries in the main menu in the header.
+[menus]
+[[menus.main]]
+    name = 'Foundation'
+    url = 'https://matrix.org/foundation/'
+    weight = 10
+[[menus.main]]
+    name = 'FAQs'
+    url = 'https://matrix.org/faq'
+    weight = 20
+[[menus.main]]
+    name = 'Blog'
+    url = 'https://matrix.org/blog/posts'
+    weight = 30
 
 [markup]
   [markup.goldmark]
@@ -111,3 +123,13 @@ sidebar_menu_compact = true
     X-Frame-Options = "sameorigin"
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET"
+
+# hugo module configuration
+
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.110.0"
+  [[module.imports]]
+    path = "github.com/matrix-org/docsy"
+    disable = false

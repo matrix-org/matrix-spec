@@ -20,7 +20,7 @@ $dark: #333;
 $gray-100: #FBFBFB;
 
 $secondary-background: #E5F5FB;
-$secondary-lighter-background: #F4FaFC;
+$secondary-lighter-background: #F4FAFC;
 $secondary-lightest-background: #FBFDFD;
 
 
@@ -33,8 +33,7 @@ $warning-background: #FFE0E0;
 // colours for definition tables.
 // the border colour matches that used for "highlight" divs
 $table-border-color: rgba(black, .125);
-$table-row-alternate: $secondary-lightest-background;
-$table-row-default: $secondary-lighter-background;
+$table-bg: $secondary-lightest-background;
 
 /* Configure docsy to use the default system fonts instead of Google Fonts.
  * See https://www.docsy.dev/docs/adding-content/lookandfeel/#fonts */
