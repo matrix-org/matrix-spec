@@ -81,7 +81,7 @@
     Computes the type to display for a property, given:
 
     * `type`: string or array of strings for the type(s) of the property
-    
+
     * `title`: optional string for the title of the property
 
     * `oneOf`: optional array of dictionaries describing the different formats
@@ -95,6 +95,9 @@
 
     * `items`: if the type is an array, array of dictionaries describing the
       format of the array's items
+
+    * `anchor`: optional HTML element id for the target type, which will be used to link to it.
+
 */}}
 {{ define "partials/property-type" }}
     {{ $type := .type }}
@@ -123,7 +126,7 @@
     Computes the type to display for a property's schema, given:
 
     * `type`: string or array of strings for the type(s) of the property
-    
+
     * `title`: optional string for the title of the property
 
     * `oneOf`: optional array of dictionaries describing the different formats
@@ -134,7 +137,9 @@
 
     * `patternProperties`: optional dictionary for properties with names
       adhering to a regex pattern
-    
+
+    * `anchor`: optional HTML element id for the target type, which will be used to link to it.
+
     The title has a higher priority than anything else.
 */}}
 {{ define "partials/type-or-title" }}
@@ -145,6 +150,9 @@
             This means we can write things like `EventFilter` rather than `object`.
         */}}
         {{ $type = .title }}
+        {{ if .anchor }}
+            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) (htmlEscape $type) | safeHTML }}
+        {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
             If the property uses `additionalProperties` to describe its
@@ -205,9 +213,9 @@
     * `property`: dictionary describing the property's data, with these fields:
 
       * `description`: string describing the property
-      
+
       * `enum`: optional array indicating the accepted values for the property
-      
+
       * `x-addedInMatrixVersion`: optional string indicating in which Matrix
         spec version this property was added.
 
