@@ -1,0 +1,1 @@
+Clarify Server-Server API request signing example by using the `POST` HTTP method, as `GET` requests don't have request bodies.

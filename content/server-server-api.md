@@ -290,7 +290,7 @@ Step 1 sign JSON:
 
 ```
 {
-    "method": "GET",
+    "method": "POST",
     "uri": "/target",
     "origin": "origin.hs.example.com",
     "destination": "destination.hs.example.com",
@@ -311,7 +311,7 @@ condition applies throughout the request signing process.
 
 Step 2 add Authorization header:
 
-    GET /target HTTP/1.1
+    POST /target HTTP/1.1
     Authorization: X-Matrix origin="origin.hs.example.com",destination="destination.hs.example.com",key="ed25519:key1",sig="ABCDEF..."
     Content-Type: application/json
 
