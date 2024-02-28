@@ -154,7 +154,7 @@ paths:
           name: server
           description: |-
             The server to fetch the public room lists from. Defaults to the
-            local server.
+            local server. Case sensitive.
           schema:
             type: string
       responses:
@@ -181,7 +181,7 @@ paths:
           name: server
           description: |-
             The server to fetch the public room lists from. Defaults to the
-            local server.
+            local server. Case sensitive.
           schema:
             type: string
       requestBody:

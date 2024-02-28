@@ -72,7 +72,7 @@ ask.
 Adding to the changelog
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-All API specifications require a changelog entry. Adding to the changelog can only
+All changes to the contents of this repository require a changelog entry. Adding to the changelog can only
 be done after you've opened your pull request, so be sure to do that first.
 
 The changelog is managed by `Towncrier <https://github.com/twisted/towncrier>`_ in the

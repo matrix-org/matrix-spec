@@ -137,16 +137,20 @@ either a thread root's event ID or `main` for the main timeline.
 
 Threading introduces a concept of multiple conversations being held in the same
 room and thus deserve their own read receipts and notification counts. An event is
-considered to be "in a thread" if it meets any of the following criteria:
-* It has a `rel_type` of `m.thread`.
-* It has child events with a `rel_type` of `m.thread` (in which case it'd be the
-  thread root).
-* Following the event relationships, it has a parent event which qualifies for
-  one of the above. Implementations should not recurse infinitely, though: a
-  maximum of 3 hops is recommended to cover indirect relationships.
+considered to be "in a thread" if:
 
-Events not in a thread but still in the room are considered to be part of the
-"main timeline", or a special thread with an ID of `main`.
+* It has a `rel_type` of `m.thread`, or
+* Following the event relationships, it has a parent event which references
+  the thread root with a `rel_type` of `m.thread`. Implementations should
+  not recurse infinitely, though: a maximum of 3 hops is recommended to
+  cover indirect relationships.
+
+Events not in a thread but still in the room are considered to be in the "main
+timeline". When referring to the main timeline as a thread (e.g. in receipts
+and notifications counts) a special thread ID of `main` is used.
+
+Thread roots are considered to be in the main timeline, as are events that are
+related to a thread root via non-thread relations.
 
 The following is an example DAG for a room, with dotted lines showing event
 relationships and solid lines showing topological ordering.
@@ -204,7 +208,7 @@ event when the user expands that thread.
 
 #### Server behaviour
 
-For efficiency, receipts SHOULD be batched into one event per room
+For efficiency, receipts SHOULD be batched into one event per room and thread
 before delivering them to clients.
 
 Some receipts are sent across federation as EDUs with type `m.receipt`. The

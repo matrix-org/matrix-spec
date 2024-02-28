@@ -60,7 +60,8 @@ specific fallback text is different for each `msgtype`, however the
 general format for the `body` is:
 
 ```text
-> <@alice:example.org> This is the original body
+> <@alice:example.org> This is the first line of the original body
+> This is the second line
 
 This is where the reply goes
 ```

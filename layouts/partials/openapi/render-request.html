@@ -2,8 +2,8 @@
 
   Render the request part of a single HTTP API operation, given:
 
-  * `parameters`: OpenAPI/Swagger data specifying the parameters
-  * `request_body`: OpenAPI/Swagger data specifying the request body
+  * `parameters`: OpenAPI data specifying the parameters
+  * `request_body`: OpenAPI data specifying the request body
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
   * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
@@ -46,7 +46,6 @@
             {{ $schema := partial "json-schema/resolve-allof" $schema }}
 
             {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
-            {{ $additional_types = uniq $additional_types }}
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
             {{ end }}

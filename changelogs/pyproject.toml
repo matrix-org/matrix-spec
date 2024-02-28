@@ -1,39 +1,66 @@
 [tool.towncrier]
     version = "unused"
-    filename = "../rendered.md"
-    issue_format = "[#{issue}](https://github.com/matrix-org/matrix-spec/issues/{issue})"
-    title_format = "### {name}"  # Matches rendered spec, even if awkward
-    underlines = "   "  # 3 spaces intentionally to hide RST headings
-
-    # Note: The names below have the <strong> tag built-in so the rendered spec *and* the generated
-    # changelog can benefit from sane headings.
+    filename = "rendered.md"
+    template = "template.md.jinja"
 
     [[tool.towncrier.type]]
         directory = "breaking"
-        name = "<strong>Breaking Changes</strong>"
+        name = "Breaking Changes"
         showcontent = true
 
     [[tool.towncrier.type]]
         directory = "deprecation"
-        name = "<strong>Deprecations</strong>"
+        name = "Deprecations"
         showcontent = true
 
     [[tool.towncrier.type]]
         directory = "new"
-        name = "<strong>New Endpoints</strong>"
+        name = "New Endpoints"
         showcontent = true
 
     [[tool.towncrier.type]]
         directory = "removal"
-        name = "<strong>Removed Endpoints</strong>"
+        name = "Removed Endpoints"
         showcontent = true
 
     [[tool.towncrier.type]]
         directory = "feature"
-        name = "<strong>Backwards Compatible Changes</strong>"
+        name = "Backwards Compatible Changes"
         showcontent = true
 
     [[tool.towncrier.type]]
         directory = "clarification"
-        name = "<strong>Spec Clarifications</strong>"
+        name = "Spec Clarifications"
         showcontent = true
+
+    [[tool.towncrier.section]]
+        name = "Client-Server API"
+        path = "client_server"
+
+    [[tool.towncrier.section]]
+        name = "Server-Server API"
+        path = "server_server"
+    
+    [[tool.towncrier.section]]
+        name = "Application Service API"
+        path = "application_service"
+
+    [[tool.towncrier.section]]
+        name = "Identity Service API"
+        path = "identity_service"
+    
+    [[tool.towncrier.section]]
+        name = "Push Gateway API"
+        path = "push_gateway"
+    
+    [[tool.towncrier.section]]
+        name = "Room Versions"
+        path = "room_versions"
+    
+    [[tool.towncrier.section]]
+        name = "Appendices"
+        path = "appendices"
+
+    [[tool.towncrier.section]]
+        name = "Internal Changes/Tooling"
+        path = "internal"

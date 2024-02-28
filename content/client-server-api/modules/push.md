@@ -454,7 +454,7 @@ Definition:
         {
             "kind": "event_match",
             "key": "content.msgtype",
-            "pattern": "m.notice",
+            "pattern": "m.notice"
         }
     ],
     "actions": []
@@ -744,6 +744,30 @@ Definition:
             "kind": "event_match",
             "key": "state_key",
             "pattern": ""
+        }
+    ],
+    "actions": []
+}
+```
+
+**`.m.rule.suppress_edits`**
+
+{{% added-in v="1.9" %}}
+
+Suppresses notifications related to [event replacements](#event-replacements).
+
+Definition:
+
+```json
+{
+    "rule_id": ".m.rule.suppress_edits",
+    "default": true,
+    "enabled": true,
+    "conditions": [
+        {
+            "kind": "event_property_is",
+            "key": "content.m\\.relates_to.rel_type",
+            "value": "m.replace"
         }
     ],
     "actions": []
@@ -1046,16 +1070,16 @@ ahead), however if the `m.read.private` receipt were to be updated to
 event D then the user has read up to D (the `m.read` receipt is now
 behind the `m.read.private` receipt).
 
-{{< added-in v="1.4" >}} When handling threaded read receipts, the server
-is to partition the notification count to each thread (with the main timeline
-being its own thread). To determine if an event is part of a thread the
-server follows the [event relationship](#forming-relationships-between-events)
-until it finds a thread root (as specified by the [threading module](#threading)),
-however it is not recommended that the server traverse infinitely. Instead,
-implementations are encouraged to do a maximum of 3 hops to find a thread
-before deciding that the event does not belong to a thread. This is primarily
-to ensure that future events, like `m.reaction`, are correctly considered
-"part of" a given thread.
+{{< added-in v="1.4" >}} When handling threaded read receipts, the server is to
+partition the notification count to each thread (with the main timeline being
+its own thread). To determine if an event is part of a thread the server follows
+the [event relationship](#forming-relationships-between-events) until it finds a
+thread root via an `m.thread` relation (as specified by the [threading
+module](#threading)), however it is not recommended that the server traverse
+infinitely. Instead, implementations are encouraged to do a maximum of 3 hops to
+find a thread before deciding that the event does not belong to a thread. This
+is primarily to ensure that future events, like `m.reaction`, are correctly
+considered "part of" a given thread.
 
 #### Server behaviour
 

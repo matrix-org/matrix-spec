@@ -18,10 +18,17 @@ info:
 paths:
   "/rooms/{roomId}/report/{eventId}":
     post:
-      summary: Reports an event as inappropriate.
+      summary: Report an event in a joined room as inappropriate.
       description: |-
         Reports an event as inappropriate to the server, which may then notify
-        the appropriate people.
+        the appropriate people. The caller must be joined to the room to report
+        it.
+        
+        It might be possible for clients to deduce whether an event exists by
+        timing the response, as only a report for an event that does exist
+        will require the homeserver to check whether a user is joined to
+        the room. To combat this, homeserver implementations should add
+        a random delay when generating a response.
       operationId: reportContent
       parameters:
         - in: path
@@ -59,6 +66,9 @@ paths:
         required: true
       security:
         - accessToken: []
+      x-changedInMatrixVersion:
+        1.8: |
+          This endpoint now requires the user to be joined to the room.
       responses:
         "200":
           description: The event has been reported successfully.
@@ -69,6 +79,23 @@ paths:
               examples:
                 response:
                   value: {}
+        "404":
+          description: |-
+            The event was not found or you are not joined to the room where the
+            event resides.
+            
+            Homeserver implementations can additionally return this error if the
+            reported event has been redacted.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "The event was not found or you are not joined to the room."
+                  }
       tags:
         - Reporting content
 servers:

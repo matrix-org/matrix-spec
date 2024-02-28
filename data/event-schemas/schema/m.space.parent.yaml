@@ -20,6 +20,8 @@ properties:
 
           When multiple `canonical` parents are found, the lowest parent when ordering by room ID
           lexicographically by Unicode code-points should be used.
+    required:
+      - via
     type: object
   state_key:
     description: The parent room ID.

@@ -18,3 +18,7 @@ Servers are free to handle the reported content however they desire.
 This may be a dedicated room to alert server administrators to the
 reported content or some other mechanism for notifying the appropriate
 people.
+
+{{< changed-in v="1.8" >}} The server MUST verify that the user 
+reporting the event is currently joined to the room the event is 
+in before accepting a report.

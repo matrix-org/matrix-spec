@@ -77,6 +77,7 @@ algorithm is represented by an object with the following properties:
 |------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | key        | string     | **Required.** The unpadded Base64-encoded 32-byte Curve25519 public key.                                                                          |
 | signatures | Signatures | **Required.** Signatures of the key object. The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json). |
+| fallback   | boolean    | Indicates whether this is a [fallback key](#one-time-and-fallback-keys). Defaults to `false`.                                                     |
 
 Example:
 
@@ -150,7 +151,9 @@ JSON](/appendices/#signing-json).
 
 One-time and fallback keys are also uploaded to the homeserver using the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API. New
-one-time and fallback keys are uploaded as needed.
+one-time and fallback keys are uploaded as needed.  Fallback keys for key
+algorithms whose format is a signed JSON object should contain a property named
+`fallback` with a value of `true`.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
@@ -657,10 +660,12 @@ The process between Alice and Bob verifying each other would be:
 11. Alice's device receives Bob's message and verifies the commitment
     hash from earlier matches the hash of the key Bob's device just sent
     and the content of Alice's `m.key.verification.start` message.
-12. Both Alice and Bob's devices perform an Elliptic-curve
-    Diffie-Hellman
-    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)),
-    using the result as the shared secret.
+12. Both Alice's and Bob's devices perform an Elliptic-curve Diffie-Hellman using
+    their private ephemeral key, and the other device's ephemeral public key
+    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)
+    for Alice's device and
+    *ECDH(K<sub>B</sub><sup>private</sup>*, *K<sub>A</sub><sup>public</sup>*)
+    for Bob's device), using the result as the shared secret.
 13. Both Alice and Bob's devices display a SAS to their users, which is
     derived from the shared key using one of the methods in this
     section. If multiple SAS methods are available, clients should allow
@@ -833,15 +838,15 @@ is the concatenation of:
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.start` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.start` message, encoded as
+    unpadded base64, followed by `|`.
 -   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.accept` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.accept` message, encoded as
+    unpadded base64, followed by `|`.
 -   The `transaction_id` being used.
 
 When the `key_agreement_protocol` is the deprecated method `curve25519`,
@@ -1361,10 +1366,18 @@ The `session_data` field in the backups is constructed as follows:
     PKCS\#7 padding. This encrypted data, encoded using unpadded base64,
     becomes the `ciphertext` property of the `session_data`.
 
-5.  Pass the raw encrypted data (prior to base64 encoding) through
-    HMAC-SHA-256 using the MAC key generated above. The first 8 bytes of
-    the resulting MAC are base64-encoded, and become the `mac` property
-    of the `session_data`.
+5.  Pass an empty string through HMAC-SHA-256 using the MAC key generated above.
+    The first 8 bytes of the resulting MAC are base64-encoded, and become the
+    `mac` property of the `session_data`.
+
+{{% boxes/warning %}}
+Step 5 was intended to pass the raw encrypted data, but due to a bug in libolm,
+all implementations have since passed an empty string instead.
+
+Future versions of the spec will fix this problem. See
+[MSC4048](https://github.com/matrix-org/matrix-spec-proposals/pull/4048) for a
+potential new key backup algorithm version that would fix this issue.
+{{% /boxes/warning %}}
 
 {{% definition path="api/client-server/definitions/key_backup_session_data" %}}
 
@@ -1765,9 +1778,9 @@ Example response:
     ],
   },
   "device_one_time_keys_count": {
-    "curve25519": 10,
     "signed_curve25519": 20
-  }
+  },
+  "device_unused_fallback_key_types": ["signed_curve25519"]
 }
 ```
 
