@@ -172,16 +172,17 @@ In response to an incoming invite, a client may do one of several things:
 ##### Streams
 
 Clients may send more than one stream in a VoIP call. Metadata can be included in
-the `m.call.invite`, `m.call.answer` and `m.call.negotiate` events to describe the
-streams being sent. This is the `sdp_stream_metadata` field.
+the [`m.call.invite`](/client-server-api/#mcallinvite), [`m.call.answer`](/client-server-api/#mcallanswer)
+and [`m.call.negotiate`](/client-server-api/#mcallnegotiate) events to describe
+the streams being sent, using the `sdp_stream_metadata` property.
 
-This field is an object in which each key is one stream `id` in the session
-description. The values are objects with the following fields:
+`sdp_stream_metadata` maps from the `id` of a stream in the session description, 
+to metadata about that stream.  Currently only one property is defined for the
+metadata. This is `purpose`, which should be a string indicating the purpose of
+the stream. The following `purpose`s are defined:
 
- * `purpose` - a string indicating the purpose of the stream. For compatibility
-   between client the following values are defined:
-   *  `m.usermedia` - stream that contains the webcam and/or microphone tracks
-   *  `m.screenshare` - stream with the screen-sharing tracks
+*  `m.usermedia` - stream that contains the webcam and/or microphone tracks
+*  `m.screenshare` - stream with the screen-sharing tracks
 
 If an incoming stream is not described in `sdp_stream_metadata` and
 `sdp_stream_metadata` is present, the stream should be ignored. If a stream has
@@ -193,12 +194,11 @@ that in the JavaScript WebRTC API, this means `addTrack()` must be passed two
 parameters: a track and a stream, not just a track, and in a video call the
 stream must be the same for both audio and video track.
 
-During the initial invite and answer exchange clients find out if the field
-`sdp_stream_metadata` is missing. For backwards compatibility if it is not
-present in the event sent by the opponent, the client should ignore any new
-incoming streams (i.e. it should use the first one) and it shouldn't send more
-than one stream (i.e. clients cannot send a video feed and a screenshare at the
-same time, as is the case in current clients).
+For backwards compatibility, if `sdp_stream_metadata` is not present in the
+initial [`m.call.invite`](/client-server-api/#mcallinvite) or [`m.call.answer`](/client-server-api/#mcallanswer)
+event sent by the other party, the client should ignore any new incoming streams
+(i.e. it should use the first one) and it shouldn't send more than one stream
+(i.e. clients cannot send a video feed and a screenshare at the same time).
 
 ##### Invitees
 The `invitee` field should be added whenever the call is intended for one
