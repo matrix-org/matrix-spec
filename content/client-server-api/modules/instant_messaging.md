@@ -52,7 +52,7 @@ tags to permit, denying the use and rendering of anything else, is:
 {{% added-in v="1.10" %}}
 HTML features MAY be deprecated and replaced by their modern equivalent without
 requiring a [Spec Change Proposal](/proposals) when they are deprecated in the
-WHATWG HTML Living Standard.
+[WHATWG HTML Living Standard](https://html.spec.whatwg.org/multipage/).
 {{% /boxes/note %}}
 
 Not all attributes on those tags should be permitted as they may be
