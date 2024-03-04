@@ -60,21 +60,22 @@
  <tr>
   <th>Requires authentication:</th>
   {{/*
-    Authentication is optional if one of these is true:
-      - the security key is not set
-      - the security value contains an empty object
+    Authentication is defined with the `security` key. We assume that the
+    key is not set if no authentication is necessary. If the key is set,
+    authentication is required unless it contains an item that is an empty
+    object.
   */}}
-  {{ $requires_authentication := 1 }}
+  {{ $requires_authentication := "Yes" }}
   {{ if $operation_data.security }}
     {{ range $operation_data.security }}
       {{ if eq (len (index $operation_data.security 0)) 0 }}
-        {{ $requires_authentication = 0 }}
+        {{ $requires_authentication = "Optional" }}
       {{ end }}
     {{ end }}
   {{ else }}
-    {{ $requires_authentication = 0 }}
+    {{ $requires_authentication = "No" }}
   {{ end }}
-  <td>{{ if $requires_authentication }}Yes{{ else }}No{{ end }}</td>
+  <td>{{ $requires_authentication }}</td>
  </tr>
 </table>
 
