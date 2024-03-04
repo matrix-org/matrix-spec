@@ -18,16 +18,16 @@ info:
 paths:
   /matrix/support:
     get:
-      summary: Gets Matrix server admin contact and support page of the domain.
+      summary: Gets homeserver contacts and support details.
       description: |-
         Gets server admin contact and support page of the domain.
 
         Like the [well-known discovery URI](/client-server-api/#well-known-uri),
-        this should be accessed with the hostname of the homeserver, by making a
+        this should be accessed with the hostname of the homeserver by making a
         GET request to `https://hostname/.well-known/matrix/support`.
 
-        Note that this endpoint is not necessarily handled by the homeserver,
-        but by another webserver, to be used for discovering support information
+        Note that this endpoint is not necessarily handled by the homeserver.
+        It may be served by another webserver, used for discovering support information
         for the homeserver.
       operationId: getWellknownSupport
       x-addedInMatrixVersion: "1.10"
@@ -45,7 +45,7 @@ paths:
                       Ways to contact the server administrator.
 
                       At least one of `contacts` or `support_page` is required.
-                      If only this is set, it must contain at least one item.
+                      If only `contacts` is set, it must contain at least one item.
                     items:
                       type: object
                       title: Contact
@@ -54,8 +54,7 @@ paths:
                         matrix_id:
                           type: string
                           description: |-
-                            A Matrix User ID allowing to contact the
-                            administrator.
+                            A Matrix User ID representing the administrator.
 
                             It could be an account registered on a different
                             homeserver so the administrator can be contacted
@@ -66,8 +65,7 @@ paths:
                         email_address:
                           type: string
                           description: |-
-                            An email address allowing to contact the
-                            administrator.
+                            An email address to reach the administrator.
 
                             At least one of `matrix_id` or `email_address` is
                             required.
@@ -80,7 +78,7 @@ paths:
                             An informal description of what the contact methods
                             are used for.
 
-                            `m.role.admin` is a catch-all user for any queries
+                            `m.role.admin` is a catch-all role for any queries
                             and `m.role.security` is intended for sensitive
                             requests.
 
