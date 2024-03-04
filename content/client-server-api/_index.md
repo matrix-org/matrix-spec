@@ -42,6 +42,7 @@ in the Appendices for conventions which all Matrix APIs are expected to follow,
 and [Web Browser Clients](#web-browser-clients) below for additional
 requirements for server responses.
 
+
 ### Standard error response
 
 Any errors which occur at the Matrix API level MUST return a "standard
@@ -2539,6 +2540,9 @@ return a standard error response of the form:
 
 The `retry_after_ms` key SHOULD be included to tell the client how long
 they have to wait in milliseconds before they can try again.
+
+The `Retry-After` HTTP header MAY be specified by the server. When this header
+is set, it SHOULD be preferred by clients over the `retry_after_ms` value.
 
 ## Modules
 
