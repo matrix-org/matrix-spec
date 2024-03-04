@@ -27,8 +27,8 @@ paths:
         GET request to `https://hostname/.well-known/matrix/support`.
 
         Note that this endpoint is not necessarily handled by the homeserver.
-        It may be served by another webserver, used for discovering support information
-        for the homeserver.
+        It may be served by another webserver, used for discovering support
+        information for the homeserver.
       operationId: getWellknownSupport
       x-addedInMatrixVersion: "1.10"
       responses:
@@ -45,7 +45,8 @@ paths:
                       Ways to contact the server administrator.
 
                       At least one of `contacts` or `support_page` is required.
-                      If only `contacts` is set, it must contain at least one item.
+                      If only `contacts` is set, it must contain at least one
+                      item.
                     items:
                       type: object
                       title: Contact
