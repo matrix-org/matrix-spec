@@ -55,7 +55,8 @@ paths:
                         matrix_id:
                           type: string
                           description: |-
-                            A Matrix User ID representing the administrator.
+                            A [Matrix User ID](/appendices/#user-identifiers)
+                            representing the administrator.
 
                             It could be an account registered on a different
                             homeserver so the administrator can be contacted
