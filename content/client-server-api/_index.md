@@ -42,7 +42,6 @@ in the Appendices for conventions which all Matrix APIs are expected to follow,
 and [Web Browser Clients](#web-browser-clients) below for additional
 requirements for server responses.
 
-
 ### Standard error response
 
 Any errors which occur at the Matrix API level MUST return a "standard
