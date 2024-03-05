@@ -63,6 +63,7 @@ paths:
                     allOf:
                       - $ref: ../client-server/definitions/public_rooms_chunk.yaml
                       - type: object
+                        title: SpaceHierarchyParentRoom
                         properties:
                           room_type:
                             type: string
@@ -106,6 +107,7 @@ paths:
                       allOf:
                         - $ref: ../client-server/definitions/public_rooms_chunk.yaml
                         - type: object
+                          title: SpaceHierarchyChildRoomsChunk
                           properties:
                             room_type:
                               type: string

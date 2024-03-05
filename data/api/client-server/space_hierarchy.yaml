@@ -92,7 +92,7 @@ paths:
                       allOf:
                         - $ref: definitions/public_rooms_chunk.yaml
                         - type: object
-                          title: ChildRoomsChunk
+                          title: SpaceHierarchyRoomsChunk
                           properties:
                             room_type:
                               type: string
