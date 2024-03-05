@@ -43,10 +43,10 @@ were limited to `m.text`, `m.emote`, `m.notice`, and
 Clients should limit the HTML they render to avoid Cross-Site Scripting,
 HTML injection, and similar attacks. The strongly suggested set of HTML
 tags to permit, denying the use and rendering of anything else, is:
-`font`, `del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`,
-`a`, `ul`, `ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`,
-`s`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
-`th`, `td`, `caption`, `pre`, `span`, `img`, `details`, `summary`.
+`del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`, `a`, `ul`,
+`ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`, `s`, `code`,
+`hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`, `th`, `td`,
+`caption`, `pre`, `span`, `img`, `details`, `summary`.
 
 {{% boxes/note %}}
 {{% added-in v="1.10" %}}
@@ -65,7 +65,6 @@ the tag.
 
 | Tag    | Permitted Attributes                                                                                                                       |
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `font` | `data-mx-bg-color`, `data-mx-color`, `color`                                                                                               |
 | `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
 | `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
 | `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
