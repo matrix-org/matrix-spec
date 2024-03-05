@@ -20,18 +20,26 @@ properties:
           properties:
             sdpMid:
               type: string
-              description: The SDP media type this candidate is intended for.
+              description: |-
+                The SDP media type this candidate is intended for.
+
+                At least one of `sdpMid` or `sdpMLineIndex` is required, unless
+                this an end-of-candidates candidate.
             sdpMLineIndex:
               type: number
-              description: The index of the SDP 'm' line this candidate is intended
-                for.
+              description: |-
+                The index of the SDP 'm' line this candidate is intended for.
+
+                At least one of `sdpMid` or `sdpMLineIndex` is required, unless
+                this an end-of-candidates candidate.
             candidate:
               type: string
-              description: The SDP 'a' line of the candidate.
+              description: |-
+                The SDP 'a' line of the candidate.
+
+                If this is an end-of-candidates candidate, this is empty.
           required:
             - candidate
-            - sdpMLineIndex
-            - sdpMid
     required:
       - candidates
   type:
