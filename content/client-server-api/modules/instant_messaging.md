@@ -55,6 +55,14 @@ requiring a [Spec Change Proposal](/proposals) when they are deprecated in the
 [WHATWG HTML Living Standard](https://html.spec.whatwg.org/multipage/).
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}}
+In previous versions of the specification, the `font` tag was suggested with the
+`data-mx-bg-color`, `data-mx-color` and `color` attributes. This tag is now
+deprecated in favor of the `span` tag with the `data-mx-bg-color` and
+`data-mx-color` attributes in new messages.
+{{% /boxes/note %}}
+
 Not all attributes on those tags should be permitted as they may be
 avenues for other disruption attempts, such as adding `onclick` handlers
 or excessively large text. Clients should only permit the attributes
