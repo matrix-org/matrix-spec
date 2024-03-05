@@ -119,10 +119,6 @@ paths:
                               description: |-
                                 If the room is a [restricted room](#restricted-rooms), these are the room IDs which
                                 are specified by the join rules. Empty or omitted otherwise.
-                          required:
-                            - room_type
-                            - allowed_room_ids
-                            - children_state
                   inaccessible_children:
                     type: array
                     items:
