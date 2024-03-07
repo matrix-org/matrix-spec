@@ -37,7 +37,8 @@ properties:
               description: |-
                 The SDP 'a' line of the candidate.
 
-                If this is an end-of-candidates candidate, this is empty.
+                If this is an [end-of-candidates](/client-server-api/#end-of-candidates)
+                candidate, this is the empty string.
           required:
             - candidate
     required:
