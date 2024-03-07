@@ -1,0 +1,1 @@
+Clarify that the `children_state`, `room_type` and `allowed_room_ids` properties in the items of the `children` array of the response of the `GET /hierarchy` endpoint are not required.
