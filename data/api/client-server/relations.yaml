@@ -297,6 +297,8 @@ paths:
             Implementations may perform more but should be careful to not infinitely recurse.
 
             The default value is `false`.
+          schema:
+            type: boolean
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -492,6 +494,8 @@ paths:
             Implementations may perform more but should be careful to not infinitely recurse.
 
             The default value is `false`.
+          schema:
+            type: boolean
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
