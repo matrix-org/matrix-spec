@@ -437,8 +437,8 @@ an application service-defined namespace will receive the same
 defined the namespace as `exclusive`.
 
 If either endpoint is called with the `m.login.application_service` login type,
-but without a valid `as_token`, the endpoints will return `M_MISSING_TOKEN` or
-`M_UNKNOWN_TOKEN`.
+but without a valid `as_token`, the endpoints will return an error with the
+`M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` error code.
 
 #### Pinging
 
