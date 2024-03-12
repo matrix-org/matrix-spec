@@ -33,69 +33,12 @@ paths:
       security:
         - accessToken: []
       parameters:
-        - in: path
-          name: roomId
-          description: The ID of the room containing the parent event.
-          required: true
-          example: "!636q39766251:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The ID of the parent event whose child events are to be returned.
-          required: true
-          example: $asfDuShaf7Gafaw
-          schema:
-            type: string
-        - in: query
-          name: from
-          description: |-
-            The pagination token to start returning results from. If not supplied, results
-            start at the most recent topological event known to the server.
-
-            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
-            `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-            or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
-          required: false
-          example: page2_token
-          schema:
-            type: string
-        - in: query
-          name: to
-          description: |-
-            The pagination token to stop returning results at. If not supplied, results
-            continue up to `limit` or until there are no more events.
-
-            Like `from`, this can be a previous token from a prior call to this endpoint
-            or from `/messages` or `/sync`.
-          required: false
-          example: page3_token
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: |-
-            The maximum number of results to return in a single `chunk`. The server can
-            and should apply a maximum value to this parameter to avoid large responses.
-
-            Similarly, the server should apply a default value when not supplied.
-          required: false
-          example: 20
-          schema:
-            type: integer
-        - in: query
-          name: dir
-          x-addedInMatrixVersion: "1.4"
-          description: |-
-            Optional (default `b`) direction to return events from. If this is set to `f`, events
-            will be returned in chronological order starting at `from`. If it
-            is set to `b`, events will be returned in *reverse* chronological
-            order, again starting at `from`.
-          schema:
-            type: string
-            enum:
-              - b
-              - f
+        - $ref: '#/components/parameters/roomId'
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/dir'
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -508,3 +451,73 @@ servers:
 components:
   securitySchemes:
     $ref: definitions/security.yaml
+  parameters:
+    roomId:
+        in: path
+        name: roomId
+        description: The ID of the room containing the parent event.
+        required: true
+        example: "!636q39766251:matrix.org"
+        schema:
+          type: string
+    eventId:
+        in: path
+        name: eventId
+        description: The ID of the parent event whose child events are to be returned.
+        required: true
+        example: $asfDuShaf7Gafaw
+        schema:
+          type: string
+    from:
+        in: query
+        name: from
+        description: |-
+          The pagination token to start returning results from. If not supplied, results
+          start at the most recent topological event known to the server.
+
+          Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
+          `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
+          or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+        required: false
+        example: page2_token
+        schema:
+          type: string
+    to:
+        in: query
+        name: to
+        description: |-
+          The pagination token to stop returning results at. If not supplied, results
+          continue up to `limit` or until there are no more events.
+
+          Like `from`, this can be a previous token from a prior call to this endpoint
+          or from `/messages` or `/sync`.
+        required: false
+        example: page3_token
+        schema:
+          type: string
+    limit:
+        in: query
+        name: limit
+        description: |-
+          The maximum number of results to return in a single `chunk`. The server can
+          and should apply a maximum value to this parameter to avoid large responses.
+
+          Similarly, the server should apply a default value when not supplied.
+        required: false
+        example: 20
+        schema:
+          type: integer
+    dir:
+        in: query
+        name: dir
+        x-addedInMatrixVersion: "1.4"
+        description: |-
+          Optional (default `b`) direction to return events from. If this is set to `f`, events
+          will be returned in chronological order starting at `from`. If it
+          is set to `b`, events will be returned in *reverse* chronological
+          order, again starting at `from`.
+        schema:
+          type: string
+          enum:
+            - b
+            - f
