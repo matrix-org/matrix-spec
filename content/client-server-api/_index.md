@@ -2156,6 +2156,19 @@ following endpoint.
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
 
+When using the `recurse` parameter, note that there no way for a client to
+affect how much the server recurses. If the client decides that the server's
+recursion level is insufficient, it could, for example, perform the recursion
+manually, or disable whatever feature requires more recursion.
+
+Filters specified via `event_type` or `rel_type` will be applied to all events
+returned, whether direct or indirect relations. Events that would match the filter,
+but whose only relation to the original given event is through a non-matching
+intermediate event, will not be included. This means that supplying a `rel_type`
+parameter of `m.thread` is not appropriate for fetching all events in a thread since
+relations to the threaded events would be filtered out. For this purpose, clients should
+omit the `rel_type` parameter and perform any necessary filtering on the client side.
+
 {{% boxes/note %}}
 Because replies do not use `rel_type`, they will not be accessible via this API.
 {{% /boxes/note %}}
