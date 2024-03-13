@@ -28,19 +28,18 @@ Ref: https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#re
 
 {{ $ref_value := index $schema "$ref"}}
 {{ if $ref_value }}
-    {{ $ref_url := urls.Parse $ref_value }}
+    {{/* Resolve the ref URI relative to the path of the schema file */}}
+    {{ $base_uri := urls.Parse $path }}
+    {{ $ref_uri := urls.Parse $ref_value }}
+    {{ $full_uri := $base_uri.ResolveReference $ref_uri }}
 
-    {{ if ne $ref_url.Path "" }}
-        {{/* Reference to a different file: load it */}}
-        {{ $full_path := path.Join $path $ref_url.Path }}
-        {{ $without_ext := replaceRE "\\.[^\\.]*$" "" $full_path }}
-        {{ $pieces := split $without_ext "/" }}
-        {{ $ret = index site.Data $pieces }}
-    {{ else }}
-        {{ $ret = $root_schema }}
-    {{ end }}
+    {{/* strip the extension, and the leading `/`, from the path */}}
+    {{ $full_path := strings.TrimPrefix "/" (replaceRE "\\.[^\\.]*$" "" $full_uri.Path) }}
 
-    {{ if ne $ref_url.Fragment "" }}
+    {{ $pieces := split $full_path "/" }}
+    {{ $ret = index site.Data $pieces }}
+
+    {{ if $ref_uri.Fragment }}
         {{/*
         Per https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#relative-references-in-uris:
 
@@ -55,7 +54,7 @@ Ref: https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#re
         subsequent keys as indexes.
         */}}
 
-        {{ $keys := split (strings.TrimPrefix "/" $ref_url.Fragment ) "/" }}
+        {{ $keys := split (strings.TrimPrefix "/" $ref_uri.Fragment ) "/" }}
         {{ $ret = index $ret $keys }}
     {{ end }}
 
