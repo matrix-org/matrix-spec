@@ -381,7 +381,7 @@ of the MSC working in order for it to move into FCP. This can usually be
 a branch/pull request to whichever implementation of choice that proves
 the MSC works in practice, though in some cases the MSC itself will be
 small enough to be considered proven. Implementations do not need to be
-merged no released, but must be of sufficient quality to show that the
+merged or released, but must be of sufficient quality to show that the
 MSC works. Where it's unclear if an MSC will require an implementation
 proof, ask in [\#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org).
 Proposals may require both server-side and client-side implementations.
@@ -390,7 +390,7 @@ Proposals that have not yet been implemented will have the
 `needs-implementation` label. After an implementation has been made, add a
 comment in the GitHub issue indicating so. After an implementation has been
 made, we will check it to verify that it implements the MSC. Proposals that
-have implementations that we have not yet been checked will have the
+have implementations that have not yet been checked will have the
 `implementation-needs-checking` label.
 
 ### Early release of an MSC/idea
