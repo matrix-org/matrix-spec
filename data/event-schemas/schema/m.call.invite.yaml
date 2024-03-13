@@ -38,7 +38,7 @@
                     "x-addedInMatrixVersion": "1.7"
                 },
                 "sdp_stream_metadata": {
-                    "$ref": "core-event-schema/sdp_stream_metadata.yaml"
+                    "$ref": "components/sdp_stream_metadata.yaml"
                 }
             },
             "required": ["offer", "lifetime"]

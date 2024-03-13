@@ -29,7 +29,7 @@
                     "required": ["type", "sdp"]
                 },
                 "sdp_stream_metadata": {
-                    "$ref": "core-event-schema/sdp_stream_metadata.yaml"
+                    "$ref": "components/sdp_stream_metadata.yaml"
                 }
             },
             "required": ["answer"]
