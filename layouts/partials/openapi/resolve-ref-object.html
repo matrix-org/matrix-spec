@@ -1,0 +1,74 @@
+{{/*
+
+Handles OpenAPI "Reference Objects".
+
+Reference objects are JSON objects with a single property, `$ref` (and
+optionally a `summary` and `description`). This partial resolves the reference
+and returns the expanded object.
+
+The input parameter is a dict with the following keys:
+
+* `schema`: A schema object to check for $ref properties.
+
+* `path`: The path of the schema file containing the (potential) ref; used for resolving
+  relative references.
+
+* `root_schema`: The top-level schema which contains the potential ref; use for resolving `#/`
+  references.
+
+Ref: https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#reference-object.
+
+*/}}
+
+{{ $schema := .schema }}
+{{ $path := .path }}
+{{ $root_schema := .root_schema }}
+
+{{ $ret := $schema }}
+
+{{ $ref_value := index $schema "$ref"}}
+{{ if $ref_value }}
+    {{ $ref_url := urls.Parse $ref_value }}
+
+    {{ if ne $ref_url.Path "" }}
+        {{/* Reference to a different file: load it */}}
+        {{ $full_path := path.Join $path $ref_url.Path }}
+        {{ $without_ext := replaceRE "\\.[^\\.]*$" "" $full_path }}
+        {{ $pieces := split $without_ext "/" }}
+        {{ $ret = index site.Data $pieces }}
+    {{ else }}
+        {{ $ret = $root_schema }}
+    {{ end }}
+
+    {{ if ne $ref_url.Fragment "" }}
+        {{/*
+        Per https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#relative-references-in-uris:
+
+        > If a URI contains a fragment identifier, then the fragment should
+        > be resolved per the fragment resolution mechanism of the
+        > referenced document. If the representation of the referenced
+        > document is JSON or YAML, then the fragment identifier SHOULD be
+        > interpreted as a JSON-Pointer as per RFC6901.
+
+        RFC6901, in a nutshell, says the pointer is a series of keys
+        separated by `/`. We strip off the leading `/` and use the
+        subsequent keys as indexes.
+        */}}
+
+        {{ $keys := split (strings.TrimPrefix "/" $ref_url.Fragment ) "/" }}
+        {{ $ret = index $ret $keys }}
+    {{ end }}
+
+    {{/*
+    OpenAPI spec says that "summary" and "description" from the reference object override
+    the values from the referenced component.
+    */}}
+    {{ if isset $schema "summary" }}
+        {{ $ret = merge $ret (dict "summary" $schema.summary) }}
+    {{ end }}
+    {{ if isset $schema "description" }}
+        {{ $ret = merge $ret (dict "description" $schema.summary) }}
+    {{ end }}
+{{ end }}
+
+{{ return $ret }}

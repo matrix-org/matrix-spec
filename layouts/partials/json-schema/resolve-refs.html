@@ -7,6 +7,14 @@
   rather than a normal `dict` because with `dict` you can't replace key values:
   https://discourse.gohugo.io/t/how-can-i-add-set-and-delete-keys-in-a-dictionary/29661
 
+  XXX: This partial should be phased out, and replaced with
+  `openapi/resolve-ref-object`.  OpenAPI 3 doesn't really allow arbitrary JSON
+  references. As [swagger.io] says: "A common misconception is that `$ref` is
+  allowed anywhere in an OpenAPI specification file. Actually `$ref` is only
+  allowed in places where the OpenAPI 3.0 Specification explicitly states that
+  the value may be a reference."
+
+  [swagger.io]: https://swagger.io/docs/specification/using-ref/#allowed-places
 */}}
 
 {{ $schema := .schema }}
