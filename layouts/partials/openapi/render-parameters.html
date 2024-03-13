@@ -3,8 +3,10 @@
   Render the parameters of a given type, given:
 
   * `parameters`: OpenAPI data specifying the parameters
-  * `type`: the type of parameters to render: "header, ""path", "query"
+  * `type`: the type of parameters to render: "header", "path", "query"
   * `caption`: caption to use for the table
+  * `path`: the path where this definition was found, to enable us to resolve "$ref"
+  * `root_schema`: the root schema object where this definition was found, to enable us to resolve local "$ref" references
 
   This template renders a single table containing parameters of the given type.
 
@@ -13,14 +15,23 @@
 {{ $parameters := .parameters }}
 {{ $type := .type }}
 {{ $caption := .caption }}
+{{ $root_schema := .root_schema }}
+{{ $path := .path }}
 
-{{ $parameters_of_type := where $parameters "in" $type }}
+{{/* build a dict mapping from name->parameter, which render-object-table expects */}}
+{{ $param_dict := dict }}
 
-{{ with $parameters_of_type }}
-
-    {{/* build a dict mapping from name->parameter, which render-object-table expects */}}
-    {{ $param_dict := dict }}
-    {{ range $parameter := . }}
+{{ range $parameter := $parameters }}
+    {{/*
+        Per https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#operation-object:
+        the parameters can be reference objects; resolve them now.
+    */}}
+    {{ $parameter = partial "openapi/resolve-ref-object" (dict
+        "schema" $parameter
+        "root_schema" $root_schema
+        "path" $path
+    ) }}
+    {{ if (eq $parameter.in $type) }}
         {{/*
             merge the schema at the same level as the rest of the other fields because that is
             what `render-object-table` expects. Put the schema first so examples in it are
@@ -29,8 +40,7 @@
         {{ $param := merge $parameter.schema $parameter }}
         {{ $param_dict = merge $param_dict (dict $parameter.name $param )}}
     {{ end }}
-
-    {{/* and render the parameters */}}
-    {{ partial "openapi/render-object-table" (dict "title" $caption "properties" $param_dict) }}
-
 {{ end }}
+
+{{/* and render the parameters */}}
+{{ partial "openapi/render-object-table" (dict "title" $caption "properties" $param_dict) }}
