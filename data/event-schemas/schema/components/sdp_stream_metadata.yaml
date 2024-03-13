@@ -20,8 +20,8 @@ additionalProperties:
 
         The possible values are:
 
-        * `m.usermedia` - stream that contains the webcam and/or microphone
-          tracks
-        * `m.screenshare` - stream with the screen-sharing tracks      
+        * `m.usermedia`: Stream that contains the webcam and/or microphone
+          tracks.
+        * `m.screenshare`: Stream with the screen-sharing tracks.
   required:
     - purpose
