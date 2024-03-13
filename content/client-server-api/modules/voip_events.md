@@ -189,16 +189,13 @@ If an incoming stream is not described in `sdp_stream_metadata` and
 a `purpose` of an unknown type (i.e. not `m.usermedia` or `m.screenshare`), it
 should be ignored.
 
-Clients implementing this specification will ignore any streamless tracks. Note
-that in the JavaScript WebRTC API, this means `addTrack()` must be passed two
-parameters: a track and a stream, not just a track, and in a video call the
-stream must be the same for both audio and video track.
-
 For backwards compatibility, if `sdp_stream_metadata` is not present in the
 initial [`m.call.invite`](/client-server-api/#mcallinvite) or [`m.call.answer`](/client-server-api/#mcallanswer)
 event sent by the other party, the client should ignore any new incoming streams
 (i.e. it should use the first one) and it shouldn't send more than one stream
 (i.e. clients cannot send a video feed and a screenshare at the same time).
+
+Clients implementing this specification should ignore any streamless tracks.
 
 ##### Invitees
 The `invitee` field should be added whenever the call is intended for one
