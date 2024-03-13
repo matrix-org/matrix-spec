@@ -106,7 +106,7 @@ No resource was found for this request.
 
 `M_LIMIT_EXCEEDED`
 Too many requests have been sent in a short period of time. Wait a while
-then try again.
+then try again. See [Rate limiting section](#rate-limiting)
 
 `M_UNRECOGNIZED`
 The server did not understand the request. This is expected to be returned with
@@ -211,6 +211,28 @@ only read state (e.g.: `/sync`, get account data, etc).
 `M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
+
+#### Rate limiting
+
+Homeservers SHOULD implement rate limiting to reduce the risk of being
+overloaded. If a request is refused due to rate limiting, it should
+return a standard error response of the form:
+
+```json
+{
+  "errcode": "M_LIMIT_EXCEEDED",
+  "error": "string",
+  "retry_after_ms": integer (optional, deprecated)
+}
+```
+
+The `retry_after_ms` key SHOULD be included to tell the client how long
+they have to wait in milliseconds before they can try again.
+
+{{% added-in v="1.10" %}}
+
+The `Retry-After` HTTP header SHOULD be specified by the server on any 429
+code response. It SHOULD be preferred by clients, falling back to `retry_after_ms`.
 
 ### Transaction identifiers
 
@@ -2523,25 +2545,9 @@ not have to perform extra round trips to query it.
 
 ## Security
 
-### Rate limiting
-
-Homeservers SHOULD implement rate limiting to reduce the risk of being
-overloaded. If a request is refused due to rate limiting, it should
-return a standard error response of the form:
-
-```json
-{
-  "errcode": "M_LIMIT_EXCEEDED",
-  "error": "string",
-  "retry_after_ms": integer (optional)
-}
-```
-
-The `retry_after_ms` key SHOULD be included to tell the client how long
-they have to wait in milliseconds before they can try again.
-
-The `Retry-After` HTTP header MAY be specified by the server. When this header
-is set, it SHOULD be preferred by clients over the `retry_after_ms` value.
+{{% boxes/note %}}
+The rate limiting section is now part of the [API standards section](#rate-limiting).
+{{% /boxes/note %}}
 
 ## Modules
 
