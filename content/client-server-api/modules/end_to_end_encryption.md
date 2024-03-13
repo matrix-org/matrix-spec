@@ -1292,7 +1292,7 @@ state as reported by the homeserver: clients should not assume that users who
 have `m.room.member` events with `membership: "join"` are legitimately in the
 room, as such events could be spoofed by the homeserver.  Clients should use
 other means of ensuring that a user is actually in the room before sharing keys
-for old messages with them.  For example, clients can share keys for old
+for old messages with them. For example, clients can share keys for old
 messages only to users that they invite to the room, as then they know that the
 user is supposed to be in the room.
 {{% /boxes/note %}}
