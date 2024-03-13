@@ -6,7 +6,6 @@
   * `type`: the type of parameters to render: "header", "path", "query"
   * `caption`: caption to use for the table
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
-  * `root_schema`: the root schema object where this definition was found, to enable us to resolve local "$ref" references
 
   This template renders a single table containing parameters of the given type.
 
@@ -15,7 +14,6 @@
 {{ $parameters := .parameters }}
 {{ $type := .type }}
 {{ $caption := .caption }}
-{{ $root_schema := .root_schema }}
 {{ $path := .path }}
 
 {{/* build a dict mapping from name->parameter, which render-object-table expects */}}
@@ -26,11 +24,7 @@
         Per https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#operation-object:
         the parameters can be reference objects; resolve them now.
     */}}
-    {{ $parameter = partial "openapi/resolve-ref-object" (dict
-        "schema" $parameter
-        "root_schema" $root_schema
-        "path" $path
-    ) }}
+    {{ $parameter = partial "openapi/resolve-ref-object" (dict "schema" $parameter "path" $path) }}
     {{ if (eq $parameter.in $type) }}
         {{/*
             merge the schema at the same level as the rest of the other fields because that is

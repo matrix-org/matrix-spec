@@ -13,16 +13,12 @@ The input parameter is a dict with the following keys:
 * `path`: The path of the schema file containing the (potential) ref; used for resolving
   relative references.
 
-* `root_schema`: The top-level schema which contains the potential ref; use for resolving `#/`
-  references.
-
 Ref: https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.1.0.md#reference-object.
 
 */}}
 
 {{ $schema := .schema }}
 {{ $path := .path }}
-{{ $root_schema := .root_schema }}
 
 {{ $ret := $schema }}
 

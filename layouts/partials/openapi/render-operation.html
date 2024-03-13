@@ -6,7 +6,6 @@
   * `endpoint`: the endpoint
   * `operation_data`: the OpenAPI data for the operation
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
-  * `root_schema`: the root schema object where this definition was found, to enable us to resolve local "$ref" references
 
   This template renders the operation as a `<section>` containing:
 
@@ -23,7 +22,6 @@
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
 {{ $path := .path }}
-{{ $root_schema := .root_schema }}
 {{ $anchor := anchorize $endpoint }}
 
 <section class="rendered-data http-api {{ $method }}">
@@ -82,7 +80,7 @@
 </table>
 
 <hr/>
-{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "path" $path "anchor_base" $anchor "root_schema" $root_schema ) }}
+{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "path" $path "anchor_base" $anchor ) }}
 <hr/>
 {{ partial "openapi/render-responses" (dict "responses"  $operation_data.responses  "path" $path "anchor_base" $anchor ) }}
 

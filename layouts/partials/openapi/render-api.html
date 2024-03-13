@@ -21,7 +21,7 @@
 
     {{/* note that a `paths` entry can be a $ref */}}
 
-    {{ $params := dict "endpoint" $endpoint "path" $path "root_schema" $api_data }}
+    {{ $params := dict "endpoint" $endpoint "path" $path }}
 
     {{ with $path_data.get }}
 

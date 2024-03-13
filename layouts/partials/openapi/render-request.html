@@ -5,7 +5,6 @@
   * `parameters`: OpenAPI data specifying the parameters
   * `request_body`: OpenAPI data specifying the request body
   * `path`: the path where this definition was found, to enable us to resolve "$ref"
-  * `root_schema`: the root schema object where this definition was found, to enable us to resolve local "$ref" references
   * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
   This template renders:
@@ -18,7 +17,6 @@
 {{ $parameters := .parameters }}
 {{ $request_body := .request_body }}
 {{ $path := .path }}
-{{ $root_schema := .root_schema }}
 {{ $anchor_base := .anchor_base }}
 
 <h2>Request</h2>
@@ -33,22 +31,18 @@
             "type" "header"
             "caption" "header parameters"
             "path" $path
-            "root_schema" $root_schema
         ) }}
         {{ partial "openapi/render-parameters" (dict
             "parameters" $parameters
             "type" "path"
             "caption" "path parameters"
             "path" $path
-            "root_schema" $root_schema
         ) }}
         {{ partial "openapi/render-parameters" (dict
             "parameters" $parameters
             "type" "query"
             "caption" "query parameters"
-            "root_schema" $root_schema
             "path" $path
-            "root_schema" $root_schema
         ) }}
     {{ end }}
 
