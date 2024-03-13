@@ -5,6 +5,7 @@
   * `parameters`: OpenAPI data specifying the parameters
   * `type`: the type of parameters to render: "header, ""path", "query"
   * `caption`: caption to use for the table
+  * `path`: the path where this definition was found, to enable us to resolve "$ref"
 
   This template renders a single table containing parameters of the given type.
 
@@ -13,7 +14,9 @@
 {{ $parameters := .parameters }}
 {{ $type := .type }}
 {{ $caption := .caption }}
+{{ $path := .path }}
 
+{{ $parameters = partial "json-schema/resolve-refs" (dict "schema" $parameters "path" $path) }}
 {{ $parameters_of_type := where $parameters "in" $type }}
 
 {{ with $parameters_of_type }}
@@ -32,5 +35,4 @@
 
     {{/* and render the parameters */}}
     {{ partial "openapi/render-object-table" (dict "title" $caption "properties" $param_dict) }}
-
 {{ end }}

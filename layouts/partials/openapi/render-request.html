@@ -26,9 +26,9 @@
     {{ if $parameters }}
 <h3>Request parameters</h3>
 
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters") }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters") }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters" "path" .path) }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters" "path" .path) }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters" "path" .path) }}
 
     {{ end }}
 

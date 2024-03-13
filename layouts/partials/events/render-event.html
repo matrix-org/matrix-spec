@@ -77,7 +77,7 @@
     */}}
     {{ if $desired_example_name }}
         {{ if eq $example_name $desired_example_name }}
-            {{ partial "events/example" $example }}
+            {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
         {{ end }}
     {{/*
       If `$desired_example_name` is not given, we will include any
@@ -86,7 +86,7 @@
       the event name includes a "$".
     */}}
     {{ else if eq $event_name $example_name }}
-        {{ partial "events/example" $example }}
+        {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
     {{/*
       If `$desired_example_name` is not given, we will include any
       examples whose first part (before "$") matches the event name
@@ -96,7 +96,7 @@
         {{ $pieces := split $example_name "$" }}
         {{ $example_base_name := index $pieces 0 }}
         {{ if eq $event_name $example_base_name }}
-             {{ partial "events/example" $example }}
+             {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
         {{ end }}
     {{ end }}
 {{ end }}

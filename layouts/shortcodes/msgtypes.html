@@ -6,7 +6,6 @@
 
 */}}
 
-{{ $path := "event-schemas/schema" }}
 {{ $compact := false }}
 
 {{/*
@@ -40,6 +39,7 @@
 {{ range $msgtypes }}
 
     {{ $event_data := index $site_data "event-schemas" "schema" . }}
+    {{ $path := delimit (slice "event-schemas/schema" .) "/" }}
     {{ $event_data = partial "json-schema/resolve-refs" (dict "schema" $event_data "path" $path) }}
     {{ $event_data := partial "json-schema/resolve-allof" $event_data }}
 

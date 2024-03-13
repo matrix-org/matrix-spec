@@ -26,6 +26,8 @@
   <th class="col-status-description">Description</th>
  </thead>
 
+{{ $responses = partial "json-schema/resolve-refs" (dict "schema" $responses "path" $path) }}
+
 {{ range $code, $response := $responses }}
 
  <tr>
@@ -49,8 +51,7 @@
                 Display the JSON schemas
             */}}
 
-            {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $json_body.schema "path" $path) }}
-            {{ $schema := partial "json-schema/resolve-allof" $schema }}
+            {{ $schema := partial "json-schema/resolve-allof" $json_body.schema }}
 
             {{/*
             All this is to work out how to express the content of the response
