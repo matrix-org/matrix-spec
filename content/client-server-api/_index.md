@@ -226,13 +226,14 @@ return a standard error response of the form:
 }
 ```
 
-The `retry_after_ms` key SHOULD be included to tell the client how long
-they have to wait in milliseconds before they can try again.
-
 {{% added-in v="1.10" %}}
 
-The `Retry-After` HTTP header SHOULD be specified by the server on any 429
-code response. It SHOULD be preferred by clients, falling back to `retry_after_ms`.
+The [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
+HTTP header SHOULD be specified by the server on any 429 code response.
+
+The `retry_after_ms` key MAY be included to tell the client how long
+they have to wait in milliseconds before they can try again. This field is
+deprecated, in favour of the `Retry-After` header.
 
 ### Transaction identifiers
 
@@ -2542,12 +2543,6 @@ Additionally, when homeservers emit room membership events for their own
 users, they should include the display name and avatar URL fields in
 these events so that clients already have these details to hand, and do
 not have to perform extra round trips to query it.
-
-## Security
-
-{{% boxes/note %}}
-The rate limiting section is now part of the [API standards section](#rate-limiting).
-{{% /boxes/note %}}
 
 ## Modules
 
