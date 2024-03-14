@@ -436,9 +436,11 @@ an application service-defined namespace will receive the same
 `M_EXCLUSIVE` error code, but only if the application service has
 defined the namespace as `exclusive`.
 
-If either endpoint is called with the `m.login.application_service` login type,
-but without a valid `as_token`, the endpoints will return an error with the
-`M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` error code.
+If `/register` or `/login` is called with the `m.login.application_service`
+login type, but without a valid `as_token`, the endpoints will return an error
+with the `M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` error code and 401 as the HTTP
+status code. This is the same behavior as invalid auth in the client-server API
+(see [Using access tokens](/client-server-api/#using-access-tokens)).
 
 #### Pinging
 
