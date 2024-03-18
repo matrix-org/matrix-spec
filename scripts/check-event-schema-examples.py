@@ -18,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import helpers
 import sys
 import json
 import os
@@ -48,51 +49,16 @@ except ImportError as e:
     raise
 
 
-def load_file(path):
-    print("Loading reference: %s" % path)
-    if not path.startswith("file://"):
-        raise Exception("Bad ref: %s" % (path,))
-    path = path[len("file://"):]
-    with open(path, "r") as f:
-        if path.endswith(".json"):
-            return json.load(f)
-        else:
-            # We have to assume it's YAML because some of the YAML examples
-            # do not have file extensions.
-            return yaml.safe_load(f)
-
-
-def resolve_references(path, schema):
-    if isinstance(schema, dict):
-        # do $ref first
-        if '$ref' in schema:
-            value = schema['$ref']
-            path = os.path.abspath(os.path.join(os.path.dirname(path), value))
-            ref = load_file("file://" + path)
-            result = resolve_references(path, ref)
-            del schema['$ref']
-        else:
-            result = {}
-
-        for key, value in schema.items():
-            result[key] = resolve_references(path, value)
-        return result
-    elif isinstance(schema, list):
-        return [resolve_references(path, value) for value in schema]
-    else:
-        return schema
-
-
 def check_example_file(examplepath, schemapath):
     with open(examplepath) as f:
-        example = resolve_references(examplepath, json.load(f))
+        example = helpers.resolve_references(examplepath, json.load(f))
 
     with open(schemapath) as f:
         schema = yaml.safe_load(f)
 
     fileurl = "file://" + os.path.abspath(schemapath)
     schema["id"] = fileurl
-    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": load_file})
+    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": helpers.load_file_from_uri})
 
     print ("Checking schema for: %r %r" % (examplepath, schemapath))
     try:

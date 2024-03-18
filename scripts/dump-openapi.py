@@ -20,6 +20,7 @@
 
 import argparse
 import errno
+import helpers
 import json
 import logging
 import os.path
@@ -30,34 +31,6 @@ import yaml
 
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
 api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
-
-def resolve_references(path, schema):
-    if isinstance(schema, dict):
-        # do $ref first
-        if '$ref' in schema:
-            value = schema['$ref']
-            previous_path = path
-            path = os.path.join(os.path.dirname(path), value)
-            try:
-                with open(path, encoding="utf-8") as f:
-                    ref = yaml.safe_load(f)
-                result = resolve_references(path, ref)
-                del schema['$ref']
-                path = previous_path
-            except FileNotFoundError:
-                print("Resolving {}".format(schema))
-                print("File not found: {}".format(path))
-                result = {}
-        else:
-            result = {}
-
-        for key, value in schema.items():
-            result[key] = resolve_references(path, value)
-        return result
-    elif isinstance(schema, list):
-        return [resolve_references(path, value) for value in schema]
-    else:
-        return schema
 
 def prefix_absolute_path_references(text, base_url):
     """Adds base_url to absolute-path references.
@@ -176,7 +149,7 @@ for filename in os.listdir(selected_api_dir):
     print("Reading OpenAPI: %s" % filepath)
     with open(filepath, "r") as f:
         api = yaml.safe_load(f.read())
-        api = resolve_references(filepath, api)
+        api = helpers.resolve_references(filepath, api)
 
         basePath = api['servers'][0]['variables']['basePath']['default']
         for path, methods in api["paths"].items():
