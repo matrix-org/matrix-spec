@@ -19,6 +19,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import helpers
 import sys
 import json
 import os
@@ -49,9 +50,7 @@ except ImportError as e:
 
 
 def check_schema(filepath, example, schema):
-    example = resolve_references(filepath, example)
-    schema = resolve_references(filepath, schema)
-    resolver = jsonschema.RefResolver(filepath, schema, handlers={"file": load_file})
+    resolver = jsonschema.RefResolver(filepath, schema, handlers={"file": helpers.load_file_from_uri})
     validator = jsonschema.Draft202012Validator(schema, resolver)
     validator.validate(example)
 
@@ -120,6 +119,8 @@ def check_openapi_file(filepath):
     with open(filepath) as f:
         openapi = yaml.safe_load(f)
 
+    openapi = helpers.resolve_references(filepath, openapi)
+
     openapi_version = openapi.get('openapi')
     if not openapi_version:
         # This is not an OpenAPI file, skip.
@@ -147,64 +148,6 @@ def check_openapi_file(filepath):
 
                 if json_response:
                     check_response(filepath, request, code, json_response)
-
-
-def resolve_references(path, schema):
-    """Recurse through a given schema until we find a $ref key. Upon doing so,
-    check that the referenced file exists, then load it up and check all of the
-    references in that file. Continue on until we've hit all dead ends.
-
-    $ref values are deleted from schemas as they are validated, to prevent
-    duplicate work.
-    """
-    if isinstance(schema, dict):
-        # do $ref first
-        if '$ref' in schema:
-            # Pull the referenced filepath from the schema
-            referenced_file = schema['$ref']
-
-            # Referenced filepaths are relative, so take the current path's
-            # directory and append the relative, referenced path to it.
-            inner_path = os.path.join(os.path.dirname(path), referenced_file)
-
-            # Then convert the path (which may contiain '../') into a
-            # normalised, absolute path
-            inner_path = os.path.abspath(inner_path)
-
-            # Load the referenced file
-            ref = load_file("file://" + inner_path)
-
-            # Check that the references in *this* file are valid
-            result = resolve_references(inner_path, ref)
-
-            # They were valid, and so were the sub-references. Delete
-            # the reference here to ensure we don't pass over it again
-            # when checking other files
-            del schema['$ref']
-        else:
-            result = {}
-
-        for key, value in schema.items():
-            result[key] = resolve_references(path, value)
-        return result
-    elif isinstance(schema, list):
-        return [resolve_references(path, value) for value in schema]
-    else:
-        return schema
-
-
-def load_file(path):
-    print("Loading reference: %s" % path)
-    if not path.startswith("file://"):
-        raise Exception("Bad ref: %s" % (path,))
-    path = path[len("file://"):]
-    with open(path, "r") as f:
-        if path.endswith(".json"):
-            return json.load(f)
-        else:
-            # We have to assume it's YAML because some of the YAML examples
-            # do not have file extensions.
-            return yaml.safe_load(f)
 
 
 if __name__ == '__main__':

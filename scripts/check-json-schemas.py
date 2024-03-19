@@ -18,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import helpers
 import sys
 import json
 import os
@@ -67,23 +68,11 @@ class SchemaDirReport:
     def add(self, other_report):
         self.files += other_report.files
         self.errors += other_report.errors
-
-def load_file(path):
-    if not path.startswith("file://"):
-        raise Exception(f"Bad ref: {path}")
-    path = path[len("file://"):]
-    with open(path, "r") as f:
-        if path.endswith(".json"):
-            return json.load(f)
-        else:
-            # We have to assume it's YAML because some of the YAML examples
-            # do not have file extensions.
-            return yaml.safe_load(f)
         
 def check_example(path, schema, example):
     # URI with scheme is necessary to make RefResolver work.
     fileurl = "file://" + os.path.abspath(path)
-    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": load_file})
+    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": helpers.load_file_from_uri})
     validator = jsonschema.Draft202012Validator(schema, resolver)
 
     validator.validate(example)
