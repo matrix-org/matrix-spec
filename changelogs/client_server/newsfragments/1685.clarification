@@ -1,1 +1,1 @@
-Clarify that read-receipts should be batched by thread as well as room.
+Clarify that read receipts should be batched by thread as well as by room.

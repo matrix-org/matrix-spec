@@ -1,1 +1,1 @@
-Use the `body` field as media caption, as per [MSC2530](https://github.com/matrix-org/matrix-spec-proposals/pull/2530).
+Use the `body` field as optional media caption, as per [MSC2530](https://github.com/matrix-org/matrix-spec-proposals/pull/2530).
