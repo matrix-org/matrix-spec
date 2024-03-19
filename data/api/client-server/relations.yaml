@@ -336,7 +336,7 @@ components:
           type: integer
           description: |-
             If the `recurse` parameter was supplied by the client, this response field is
-            mandatory and gives the actual depth to which the server recursed. The the client
+            mandatory and gives the actual depth to which the server recursed. If the client
             did not specify the `recurse` parameter, this field must be absent.
   responses:
     "404":
