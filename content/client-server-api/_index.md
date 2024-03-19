@@ -231,7 +231,7 @@ return a standard error response of the form:
 Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
 for any response with a 429 status code.
 
-The `retry_after_ms` key MAY be included to tell the client how long
+The `retry_after_ms` property MAY be included to tell the client how long
 they have to wait in milliseconds before they can try again. This property is
 deprecated, in favour of the `Retry-After` header.
 
