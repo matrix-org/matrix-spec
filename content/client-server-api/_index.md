@@ -2157,7 +2157,7 @@ This endpoint is particularly useful if the client has lost context on the aggre
 a parent event and needs to rebuild/verify it.
 
 When using the `recurse` parameter, note that there no way for a client to
-affect how much the server recurses. If the client decides that the server's
+control how far the server recurses. If the client decides that the server's
 recursion level is insufficient, it could, for example, perform the recursion
 manually, or disable whatever feature requires more recursion.
 
