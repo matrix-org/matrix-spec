@@ -1,0 +1,1 @@
+Clarify that the `/login` and `/register` endpoints should fail when using the `m.login.application_service` login type without a valid `as_token`.
