@@ -106,7 +106,7 @@ No resource was found for this request.
 
 `M_LIMIT_EXCEEDED`
 Too many requests have been sent in a short period of time. Wait a while
-then try again. See [Rate limiting section](#rate-limiting)
+then try again. See [Rate limiting](#rate-limiting).
 
 `M_UNRECOGNIZED`
 The server did not understand the request. This is expected to be returned with
@@ -226,13 +226,13 @@ return a standard error response of the form:
 }
 ```
 
-{{% added-in v="1.10" %}}
+{{% changed-in v="1.10" %}}: `retry_after_ms` property deprecated in favour of `Retry-After` header.
 
-The [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
-HTTP header SHOULD be specified by the server on any 429 code response.
+Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
+for any response with a 429 status code.
 
 The `retry_after_ms` key MAY be included to tell the client how long
-they have to wait in milliseconds before they can try again. This field is
+they have to wait in milliseconds before they can try again. This property is
 deprecated, in favour of the `Retry-After` header.
 
 ### Transaction identifiers
