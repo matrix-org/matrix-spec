@@ -171,18 +171,31 @@ In response to an incoming invite, a client may do one of several things:
 
 ##### Streams
 
-Clients are expected to send one stream with one track of kind `audio` (creating a
-voice call). They can optionally send a second track in the same stream of kind
-`video` (creating a video call).
+Clients may send more than one stream in a VoIP call. The streams should be
+differentiated by including metadata in the [`m.call.invite`](/client-server-api/#mcallinvite),
+[`m.call.answer`](/client-server-api/#mcallanswer) and [`m.call.negotiate`](/client-server-api/#mcallnegotiate)
+events, using the `sdp_stream_metadata` property.
 
-Clients implementing this specification use the first stream and will ignore
-any streamless tracks. Note that in the JavaScript WebRTC API, this means
-`addTrack()` must be passed two parameters: a track and a stream, not just a
-track, and in a video call the stream must be the same for both audio and video
-track.
+`sdp_stream_metadata` maps from the `id` of a stream in the session description, 
+to metadata about that stream. Currently only one property is defined for the
+metadata. This is `purpose`, which should be a string indicating the purpose of
+the stream. The following `purpose`s are defined:
 
-A client may send other streams and tracks but the behaviour of the other party
-with respect to presenting such streams and tracks is undefined.
+*  `m.usermedia` - stream that contains the webcam and/or microphone tracks
+*  `m.screenshare` - stream with the screen-sharing tracks
+
+If `sdp_stream_metadata` is present and an incoming stream is not listed in it,
+the stream should be ignored. If a stream has a `purpose` of an unknown type, it
+should also be ignored.
+
+For backwards compatibility, if `sdp_stream_metadata` is not present in the
+initial [`m.call.invite`](/client-server-api/#mcallinvite) or [`m.call.answer`](/client-server-api/#mcallanswer)
+event sent by the other party, the client should assume that this property is
+not supported by the other party. It means that multiple streams cannot be
+differentiated: the client should only use the first incoming stream and
+shouldn't send more than one stream.
+
+Clients implementing this specification should ignore any streamless tracks.
 
 ##### Invitees
 The `invitee` field should be added whenever the call is intended for one

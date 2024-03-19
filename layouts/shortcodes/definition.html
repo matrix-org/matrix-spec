@@ -22,10 +22,6 @@
   {{ errorf "site data %s not found" $path }}
 {{ end }}
 
-{{/* The base path, which we use to resolve $ref, omits the last component */}}
-{{ $pieces = first (sub (len $pieces) 1) $pieces}}
-{{ $path = delimit $pieces "/" }}
-
 {{/* Resolve $ref and allOf */}}
 {{ $definition = partial "json-schema/resolve-refs" (dict "schema" $definition "path" $path) }}
 {{ $definition = partial "json-schema/resolve-allof" $definition }}

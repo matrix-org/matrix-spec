@@ -1,13 +1,18 @@
 {{/*
 
-  Renders an event example.  Resolves `$ref`s, serializes as JSON, and ensures
+  Renders an event example. Resolves `$ref`s, serializes as JSON, and ensures
   that it can be included in HTML.
 
-  This partial is called with the example event object as its context.
+  Parameters:
+
+    * `schema`: the schema of the example
+    * `name`: the name of the example
 
 */}}
 
-{{ $example_content := partial "json-schema/resolve-refs" (dict "schema" . "path" "event-schemas/examples") }}
+{{ $path := delimit (slice "event-schemas/examples" .name) "/" }}
+
+{{ $example_content := partial "json-schema/resolve-refs" (dict "schema" .schema "path" $path) }}
 {{ $example_json := jsonify (dict "indent" "  ") $example_content }}
 {{ $example_json = replace $example_json "\\u003c" "<" }}
 {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}

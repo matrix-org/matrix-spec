@@ -1,7 +1,10 @@
 {{/*
 
   Resolves the `$ref` JSON schema keyword, by recursively replacing
-  it with the object it points to.
+  it with the object it points to, given:
+
+  * `schema`: the schema where the references should be resolved
+  * `path`: the path of the file containing the schema
 
   This template uses [`Scratch`](https://gohugo.io/functions/scratch/)
   rather than a normal `dict` because with `dict` you can't replace key values:
@@ -20,8 +23,12 @@
     {{ $scratch.Set "result_map" dict }}
 
     {{ $ref_value := index $schema "$ref"}}
-    {{ if $ref_value}}
-        {{ $full_path := path.Join $path $ref_value }}
+    {{ if $ref_value }}
+        {{ $uri := urls.Parse $path }}
+        {{ $ref_uri := urls.Parse $ref_value }}
+        {{ $full_uri := $uri.ResolveReference $ref_uri }}
+
+        {{ $full_path := strings.TrimPrefix "/" $full_uri.Path }}
         {{/*
           Apparently Hugo doesn't give us a nice way to split the extension off a filename.
         */}}
@@ -30,11 +37,18 @@
 
         {{ $ref := index site.Data $pieces }}
 
+        {{/* If there is a fragment, follow the JSON Pointer */}}
+        {{ if $full_uri.Fragment }}
+            {{ $fragment := strings.TrimPrefix "/" $full_uri.Fragment }}
+            {{ $pieces := split $fragment "/" }}
+            {{ $ref = index $ref $pieces }}
+        {{ end }}
+
         {{ $new_path := (path.Split $full_path).Dir}}
         {{ $result_map := partial "json-schema/resolve-refs" (dict "schema" $ref "path" $new_path)}}
         {{ if $result_map}}
             {{ $scratch.Set "result_map" $result_map }}
-        {{end }}
+        {{ end }}
     {{ end }}
 
 
