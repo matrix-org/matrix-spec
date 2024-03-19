@@ -312,7 +312,7 @@ components:
         If set to `true`, all events which relate to the given event, or relate to
         events that relate to the given event, will be included.
 
-        It is recommended that at least 3 levels of relationships are traversed.
+        It is recommended that homeservers traverse at least 3 levels of relationships.
         Implementations may perform more but should be careful to not infinitely recurse.
 
         The default value is `false`.
