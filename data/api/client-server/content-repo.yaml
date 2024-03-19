@@ -633,6 +633,28 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          name: animated
+          x-addedInMatrixVersion: "1.10"
+          required: false
+          description: |
+            Indicates preference for an animated thumbnail from the server, if possible. Animated
+            thumbnails typically use the content types `image/gif`, `image/png` (with APNG format),
+            `image/apng`, and `image/webp` instead of the common static `image/png` or `image/jpeg`
+            content types.
+
+            When `true`, the server SHOULD return an animated thumbnail if possible and supported.
+            When `false`, the server MUST NOT return an animated thumbnail. For example, returning a
+            static `image/png` or `image/jpeg` thumbnail. When not provided, the server SHOULD NOT
+            return an animated thumbnail.
+
+            Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
+
+            When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
+            server should behave as though `animated` is `false`.
+          example: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: A thumbnail of the requested content.
@@ -644,6 +666,9 @@ paths:
                 enum:
                   - image/jpeg
                   - image/png
+                  - image/apng
+                  - image/gif
+                  - image/webp
           content:
             image/jpeg:
               schema:
@@ -651,7 +676,22 @@ paths:
                 description: "**Required.** The bytes for the thumbnail."
             image/png:
               schema:
-                description: "**Required.** The bytes for the thumbnail."
+                x-changedInMatrixVersion: "1.10"
+                description: |
+                  **Required.** The bytes for the thumbnail. The thumbnail MAY use an animated
+                  format if `animated=true`.
+            image/apng:
+              schema:
+                x-addedInMatrixVersion: "1.10"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/gif:
+              schema:
+                x-addedInMatrixVersion: "1.10"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/webp:
+              schema:
+                x-addedInMatrixVersion: "1.10"
+                description: "**Required.** The bytes for the *animated* thumbnail."
         "307":
           description: A redirect to the thumbnail of the requested content.
           headers:
