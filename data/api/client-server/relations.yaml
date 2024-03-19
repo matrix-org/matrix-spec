@@ -304,7 +304,7 @@ components:
       required: false
       description: |-
         Whether to additionally include events which only relate indirectly to the
-        given event, ie. events related to the root events via one or more direct relationships.
+        given event, i.e. events related to the root events via one or more direct relationships.
 
         If set to `false`, only events which have direct a relation with the given
         event will be included.
