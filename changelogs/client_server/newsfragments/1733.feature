@@ -1,0 +1,1 @@
+Add server support discovery endpoint, as per [MSC1929](https://github.com/matrix-org/matrix-spec-proposals/pull/1929).
