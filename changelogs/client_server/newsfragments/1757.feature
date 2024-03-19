@@ -1,1 +1,1 @@
-Add optional `animated` query string option to `GET /_matrix/media/v2/thumbnail`, as per [MSC2705](https://github.com/matrix-org/matrix-spec-proposals/pull/2705).
+Add optional `animated` query string option to `GET /_matrix/media/v3/thumbnail`, as per [MSC2705](https://github.com/matrix-org/matrix-spec-proposals/pull/2705).
