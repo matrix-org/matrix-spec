@@ -63,6 +63,8 @@ properties:
         type: integer
         description: The time in milliseconds that the negotiation is valid for.
           Once the negotiation age exceeds this value, clients should discard it.
+      sdp_stream_metadata:
+        $ref: components/sdp_stream_metadata.yaml
     required:
     - description
     - lifetime
