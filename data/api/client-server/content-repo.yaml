@@ -637,8 +637,22 @@ paths:
         "200":
           description: A thumbnail of the requested content.
           headers:
+            Content-Disposition:
+              x-addedInMatrixVersion: "1.10"
+              description: |
+                **Required**. The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be `inline`, and SHOULD contain a file name (e.g. `thumbnail.png`).
+
+                Servers should note the [Content-Type restrictions for serving inline content](/client-server-api/#serving-inline-content),
+                as these limitations imply which formats should be used for thumbnail generation.
+              schema:
+                type: string
+                example: "inline; filename=\"thumbnail.png\""
             Content-Type:
-              description: The content type of the thumbnail.
+              x-changedInMatrixVersion:
+                "1.10": |
+                  This header became required in order to support `Content-Disposition`.
+              description: "**Required**. The content type of the thumbnail."
               schema:
                 type: string
                 enum:
