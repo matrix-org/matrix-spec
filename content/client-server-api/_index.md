@@ -106,7 +106,7 @@ No resource was found for this request.
 
 `M_LIMIT_EXCEEDED`
 Too many requests have been sent in a short period of time. Wait a while
-then try again.
+then try again. See [Rate limiting](#rate-limiting).
 
 `M_UNRECOGNIZED`
 The server did not understand the request. This is expected to be returned with
@@ -212,6 +212,28 @@ only read state (e.g.: `/sync`, get account data, etc).
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
 
+#### Rate limiting
+
+Homeservers SHOULD implement rate limiting to reduce the risk of being
+overloaded. If a request is refused due to rate limiting, it should
+return a standard error response of the form:
+
+```json
+{
+  "errcode": "M_LIMIT_EXCEEDED",
+  "error": "string",
+  "retry_after_ms": integer (optional, deprecated)
+}
+```
+
+Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
+for any response with a 429 status code.
+
+The `retry_after_ms` property MAY be included to tell the client how long
+they have to wait in milliseconds before they can try again. This property is
+deprecated, in favour of the `Retry-After` header.
+
+{{< changed-in v="1.10" >}}: `retry_after_ms` property deprecated in favour of `Retry-After` header.
 ### Transaction identifiers
 
 The client-server API typically uses `HTTP PUT` to submit requests with
@@ -2535,25 +2557,6 @@ Additionally, when homeservers emit room membership events for their own
 users, they should include the display name and avatar URL fields in
 these events so that clients already have these details to hand, and do
 not have to perform extra round trips to query it.
-
-## Security
-
-### Rate limiting
-
-Homeservers SHOULD implement rate limiting to reduce the risk of being
-overloaded. If a request is refused due to rate limiting, it should
-return a standard error response of the form:
-
-```json
-{
-  "errcode": "M_LIMIT_EXCEEDED",
-  "error": "string",
-  "retry_after_ms": integer (optional)
-}
-```
-
-The `retry_after_ms` key SHOULD be included to tell the client how long
-they have to wait in milliseconds before they can try again.
 
 ## Modules
 
