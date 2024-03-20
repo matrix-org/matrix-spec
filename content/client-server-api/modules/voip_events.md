@@ -177,20 +177,6 @@ differentiated by including metadata in the [`m.call.invite`](/client-server-api
 events, using the `sdp_stream_metadata` property. An [`m.call.sdp_stream_metadata_changed`](/client-server-api/#mcallsdp_stream_metadata_changed)
 event can be sent when the metadata changes but no negotiation is required.
 
-`sdp_stream_metadata` maps from the `id` of a stream in the session description, 
-to metadata about that stream. Currently three properties are defined for the
-metadata: `purpose`, `audio_muted` and `video_muted`.
-
-`purpose` should be a string indicating the purpose of the stream. The following
-`purpose`s are defined:
-
-*  `m.usermedia` - stream that contains the webcam and/or microphone tracks
-*  `m.screenshare` - stream with the screen-sharing tracks
-
-`audio_muted` and `video_muted` are booleans that indicate whether the audio and
-video tracks in the stream are muted, respectively. All tracks should be assumed
-unmuted unless specified otherwise.
-
 Clients are recommended to not mute the audio of WebRTC tracks locally when an
 incoming stream has the `audio_muted` field set to `true`. This is because when
 the other user unmutes themselves, there may be a slight delay between their
