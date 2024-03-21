@@ -1,0 +1,1 @@
+Clarify that the `m.push_rules` account data type cannot be set using the `/account_data` API, as per [MSC4010](https://github.com/matrix-org/matrix-spec-proposals/pull/4010).

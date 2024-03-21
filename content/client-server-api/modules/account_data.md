@@ -26,6 +26,15 @@ These events can also be received in a `/events` response or in the
 
 #### Server Behaviour
 
-Servers MUST reject clients from setting account data for event types
-that the server manages. Currently, this only includes
-[m.fully\_read](#mfully_read).
+Servers MUST reject setting account data for event types
+that the server manages by using a 405 error response.
+Currently, this only includes [`m.fully_read`](#mfully_read)
+and [`m.push_rules`](#push-rules-events). This applies to
+both global and room-specific account data.
+
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}} `m.push_rules` was added to the rejection
+list.
+{{% /boxes/note %}}
+
+Servers must allow clients to read the above event types as normal.
