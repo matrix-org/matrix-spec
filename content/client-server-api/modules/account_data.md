@@ -36,6 +36,4 @@ This applies to both global and room-specific account data.
 list.
 {{% /boxes/note %}}
 
-Servers must allow clients to read the above event types as normal. Note that
-`m.fully_read` only exists for room-specific account data and `m.push_rules`
-only exists for global account data.
+Servers must allow clients to read the above event types as normal.
