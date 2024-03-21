@@ -28,4 +28,9 @@ These events can also be received in a `/events` response or in the
 
 Servers MUST reject clients from setting account data for event types
 that the server manages. Currently, this only includes
-[m.fully\_read](#mfully_read).
+[`m.fully_read`](#mfully_read) and [`m.push_rules`](#mfully_read).
+This applies to both global and room-specific account data.
+
+Servers must allow clients to read the above event types as normal. Note that
+`m.fully_read` only exists for room-specific account data and `m.push_rules`
+only exists for global account data.
