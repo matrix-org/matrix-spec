@@ -18,6 +18,11 @@ for api in application-service client-server push-gateway server-server; do
     --api "$api" \
     -r "$RELEASE" \
     -o "$FILE"
+
   yarn openapi-typescript "$FILE" --output "$api.d.ts"
+  # We remove these lines to workaround dodgy types
+  sed -i.bak "/\[key: string\]: Record<string, never> \| undefined;/d" client-server.d.ts
+  rm "$api.d.ts.bak"
+
   rm "$FILE"
 done
