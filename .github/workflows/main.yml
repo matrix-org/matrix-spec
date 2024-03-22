@@ -45,7 +45,7 @@ jobs:
       - name: "🔎 Run validator"
         run: |
           python scripts/check-event-schema-examples.py
-  
+
   check-openapi-examples:
     name: "🔎 Check OpenAPI definitions examples"
     runs-on: ubuntu-latest
@@ -268,7 +268,7 @@ jobs:
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
-          hugo-version: '0.93.3'
+          hugo-version: '0.113.0'
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
