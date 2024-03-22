@@ -1,1 +1,0 @@
-Add support for `$ref` URIs containing fragments in OpenAPI definitions and JSON schemas.

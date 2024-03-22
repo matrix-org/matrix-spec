@@ -1,1 +1,0 @@
-Clearly indicate that each `Content-Type` may have distinct behaviour on non-JSON requests/responses.
