@@ -26,8 +26,9 @@ jobs:
       - name: 🔨 Install dependencies
         run: "yarn install --frozen-lockfile"
 
+      # We bump the package.json version to git, we just need it for publish to do the right thing
       - name: 🎖 Bump package.json version
-        run: "yarn version --new-version ${VERSION#v}"
+        run: "yarn version --new-version ${VERSION#v} --no-git-tag-version"
         env:
           VERSION: ${{ github.event.release.tag_name }}.0
 
