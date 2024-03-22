@@ -27,7 +27,7 @@ jobs:
         run: "yarn install --frozen-lockfile"
 
       - name: 🎖 Bump package.json version
-        run: "yarn version --new-version $VERSION"
+        run: "yarn version --new-version ${VERSION#v}"
         env:
           VERSION: ${{ github.event.release.tag_name }}.0
 
