@@ -5,9 +5,15 @@
   "author": "matrix.org",
   "license": "Apache-2.0",
   "files": [
-    "sas-emoji.json"
+    "sas-emoji.json",
+    "*.d.ts"
   ],
   "scripts": {
-    "prepare": "cp ../../data-definitions/sas-emoji.json ."
+    "prepare": "yarn run prepare:emoji && yarn run prepare:types",
+    "prepare:emoji": "cp ../../data-definitions/sas-emoji.json .",
+    "prepare:types": "./openapi.sh"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^6.7.5"
   }
 }
