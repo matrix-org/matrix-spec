@@ -2,7 +2,7 @@
 
 # Script to generate OpenAPI typescript definitions for the Matrix APIs
 
-RELEASE="${npm_package_version%.0}"
+RELEASE="${npm_package_version%.*}"
 SPEC_DIR="v${RELEASE}"
 if [ "$RELEASE" == "0.0" ]; then
   RELEASE="unstable"
