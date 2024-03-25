@@ -14,17 +14,20 @@ fi
 BASE_URL="https://spec.matrix.org/$SPEC_DIR"
 
 for api in application-service client-server push-gateway server-server; do
-  FILE="$api-api.json"
+  # Combine the docs for the API into a single file for openapi-typescript to consume
+  combined_doc="$api-api.json"
   ../../scripts/dump-openapi.py \
     --base-url "$BASE_URL" \
     --api "$api" \
     -r "$RELEASE" \
     -o "$FILE"
 
-  yarn openapi-typescript "$FILE" --output "$api.d.ts"
-  # We remove these lines to workaround dodgy types
+  yarn openapi-typescript "$combined_doc" --output "$api.d.ts"
+
+  # We remove these lines to workaround https://github.com/drwpow/openapi-typescript/issues/1055
   sed -i.bak "/\[key: string\]: Record<string, never> \| undefined;/d" client-server.d.ts
+  # The sed line above is compatible with both BSD and GNU sed which means we have to manually remove the backup file
   rm "$api.d.ts.bak"
 
-  rm "$FILE"
+  rm "$combined_doc"
 done
