@@ -2,6 +2,8 @@
 
 # Script to generate OpenAPI typescript definitions for the Matrix APIs
 
+set -e
+
 RELEASE="${npm_package_version%.*}"
 SPEC_DIR="v${RELEASE}"
 if [ "$RELEASE" == "0.0" ]; then
