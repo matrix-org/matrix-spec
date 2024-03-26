@@ -40,10 +40,14 @@ Custom SCSS for the Matrix spec
   .navbar-brand {
     font-size: 1.1rem;
 
+    @media (max-width: 768px) {
+      text-align: center;
+      white-space: normal;
+    }
+
     .navbar-version {
       color: $secondary;
     }
-
   }
 
   .nav-link {
@@ -170,6 +174,12 @@ footer {
     display: inline; visibility: visible; counter-increment: h6; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "
   }
 
+}
+
+.td-main main {
+  @media (max-width: 768px) {
+    padding-top: 0;
+  }
 }
 
 /* Adjust the scroll margin for everything in the main content, so that
@@ -471,12 +481,20 @@ of .td-content. This applies the same style to any blockquotes that descend from
 Make padding symmetrical (this selector is used in the default styles to apply padding-left: 3rem)
 */
 .pl-md-5, .px-md-5 {
-  padding-right: 3rem;
+  @media (min-width: 768px) {
+    padding-right: 3rem;
+  }
 }
 
 /* Adjust default styles for info banner */
 .pageinfo-primary {
-  max-width: 80%;
+  @media (min-width: 768px) {
+    max-width: 80%;
+  }
+  @media (max-width: 768px) {
+    margin-top: 0;
+    margin-right: 0;
+  }
   margin-left: 0;
   border: 0;
   border-left: solid 5px $secondary;
