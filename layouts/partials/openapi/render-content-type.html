@@ -1,27 +1,30 @@
 {{/*
 
-  Render a table showing content type and description, given:
+  Render a table showing content types and their descriptions, given
+  two arrays with equal length:
 
-  * `content_type`: the content type as a string
+  * `content_types`: the content type strings
 
-  * `description`: the description as a string
+  * `descriptions`: the description strings
 
 */}}
 
-{{ $content_type := .content_type }}
-{{ $description := .description}}
+{{ $content_types := .content_types }}
+{{ $descriptions := .descriptions}}
 
-{{ if $content_type }}
+{{ if (gt (len $content_types) 0) }}
 
 <table class="content-type-table">
  <thead>
   <th class="col-name">Content-Type</th>
   <th class="col-description">Description</th>
  </thead>
+ {{ range $idx, $content_type := $content_types }}
  <tr>
   <td><code>{{ $content_type }}</code></td>
-  <td>{{ $description | markdownify -}}</td>
+  <td>{{ index $descriptions $idx | markdownify -}}</td>
  </tr>
+ {{ end }}
 </table>
 
 {{ end }}

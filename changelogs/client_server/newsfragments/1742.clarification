@@ -1,1 +1,0 @@
-Clarify that `sdpMid` and `sdpMLineIndex` are not required in `m.call.candidates`.

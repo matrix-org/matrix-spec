@@ -1,1 +1,0 @@
-Clarify that the key backup MAC is implemented incorrectly and does not pass the ciphertext through HMAC-SHA-256.
