@@ -1,5 +1,5 @@
 type: object
-x-addedInMatrixVersion: "1.10"
+x-addedInMatrixVersion: "1.11"
 description: |-
   This event is sent by callers when they wish to update a stream's metadata
   but no negotiation is required.

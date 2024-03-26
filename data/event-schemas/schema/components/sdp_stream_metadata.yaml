@@ -29,11 +29,13 @@ additionalProperties:
         Whether the audio track in the stream is muted.
 
         Defaults to `false` if not present.
+      x-addedInMatrixVersion: "1.11"        
     video_muted:
       type: boolean
       description: |-
         Whether the video track in the stream is muted.
 
         Defaults to `false` if not present.
+      x-addedInMatrixVersion: "1.11"        
   required:
   - purpose
