@@ -175,6 +175,7 @@ footer {
 
 }
 
+/* Remove some padding before the main content, when the sidebar is disabled */
 .td-main main {
   @media (max-width: 768px) {
     padding-top: 0;
