@@ -491,10 +491,8 @@ Make padding symmetrical (this selector is used in the default styles to apply p
   @media (min-width: 768px) {
     max-width: 80%;
   }
-  @media (max-width: 768px) {
-    margin-top: 0;
-    margin-right: 0;
-  }
+  margin-top: 0;
+  margin-right: 0;
   margin-left: 0;
   border: 0;
   border-left: solid 5px $secondary;
