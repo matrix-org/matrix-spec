@@ -118,7 +118,7 @@ Custom SCSS for the Matrix spec
   }
 }
 
-@media (min-width: 768px) {
+@include media-breakpoint-up(md) {
   @supports (position: sticky) {
     .td-sidebar-nav {
       /* This overrides calc(100vh - 10rem);, which gives us a blank space at the bottom of the sidebar */
@@ -177,7 +177,7 @@ footer {
 
 /* Remove some padding before the main content, when the sidebar is disabled */
 .td-main main {
-  @media (max-width: 768px) {
+  @include media-breakpoint-down(md) {
     padding-top: 0;
   }
 }
@@ -481,7 +481,7 @@ of .td-content. This applies the same style to any blockquotes that descend from
 Make padding symmetrical (this selector is used in the default styles to apply padding-left: 3rem)
 */
 .pl-md-5, .px-md-5 {
-  @media (min-width: 768px) {
+  @include media-breakpoint-up(md) {
     padding-right: 3rem;
   }
 }
