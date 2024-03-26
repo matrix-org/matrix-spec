@@ -174,15 +174,19 @@ In response to an incoming invite, a client may do one of several things:
 Clients may send more than one stream in a VoIP call. The streams should be
 differentiated by including metadata in the [`m.call.invite`](/client-server-api/#mcallinvite),
 [`m.call.answer`](/client-server-api/#mcallanswer) and [`m.call.negotiate`](/client-server-api/#mcallnegotiate)
-events, using the `sdp_stream_metadata` property.
+events, using the `sdp_stream_metadata` property. An [`m.call.sdp_stream_metadata_changed`](/client-server-api/#mcallsdp_stream_metadata_changed)
+event can be sent when the metadata changes but no negotiation is required.
 
-`sdp_stream_metadata` maps from the `id` of a stream in the session description, 
-to metadata about that stream. Currently only one property is defined for the
-metadata. This is `purpose`, which should be a string indicating the purpose of
-the stream. The following `purpose`s are defined:
+Clients are recommended to not mute the audio of WebRTC tracks locally when an
+incoming stream has the `audio_muted` field set to `true`. This is because when
+the other user unmutes themselves, there may be a slight delay between their
+client sending audio and the [`m.call.sdp_stream_metadata_changed`](/client-server-api/#mcallsdp_stream_metadata_changed)
+event arriving and any audio sent in between will not be heard. The other user
+will still stop transmitting audio once they mute on their side, so no audio is
+sent without the user's knowledge.
 
-*  `m.usermedia` - stream that contains the webcam and/or microphone tracks
-*  `m.screenshare` - stream with the screen-sharing tracks
+The same suggestion does not apply to `video_muted`. Clients _should_ mute video
+locally, so that the receiving side doesn't see a black video.
 
 If `sdp_stream_metadata` is present and an incoming stream is not listed in it,
 the stream should be ignored. If a stream has a `purpose` of an unknown type, it
