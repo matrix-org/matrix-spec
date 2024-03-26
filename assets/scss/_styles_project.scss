@@ -40,10 +40,9 @@ Custom SCSS for the Matrix spec
   .navbar-brand {
     font-size: 1.1rem;
 
-    @media (max-width: 768px) {
-      text-align: center;
-      white-space: normal;
-    }
+    /* Allow the text to wrap if it is wider than the viewport */
+    text-align: center;
+    white-space: normal;
 
     .navbar-version {
       color: $secondary;
