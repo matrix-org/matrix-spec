@@ -488,7 +488,7 @@ Make padding symmetrical (this selector is used in the default styles to apply p
 
 /* Adjust default styles for info banner */
 .pageinfo-primary {
-  @media (min-width: 768px) {
+  @include media-breakpoint-up(lg) {
     max-width: 80%;
   }
   margin-top: 0;
