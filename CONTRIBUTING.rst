@@ -12,7 +12,7 @@ The documentation style is described at
 https://github.com/matrix-org/matrix-spec/blob/main/meta/documentation_style.rst.
 
 Matrix-spec workflows
---------------------
+---------------------
 
 Specification changes
 ~~~~~~~~~~~~~~~~~~~~~
