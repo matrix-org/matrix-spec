@@ -635,7 +635,7 @@ paths:
             default: false
         - in: query
           name: animated
-          x-addedInMatrixVersion: "1.10"
+          x-addedInMatrixVersion: "1.11"
           required: false
           description: |
             Indicates preference for an animated thumbnail from the server, if possible. Animated
@@ -676,21 +676,22 @@ paths:
                 description: "**Required.** The bytes for the thumbnail."
             image/png:
               schema:
-                x-changedInMatrixVersion: "1.10"
+                x-changedInMatrixVersion:
+                  "1.11": The PNG may be of the APNG variety if animation is supported and requested.
                 description: |
                   **Required.** The bytes for the thumbnail. The thumbnail MAY use an animated
                   format if `animated=true`.
             image/apng:
               schema:
-                x-addedInMatrixVersion: "1.10"
+                x-addedInMatrixVersion: "1.11"
                 description: "**Required.** The bytes for the *animated* thumbnail."
             image/gif:
               schema:
-                x-addedInMatrixVersion: "1.10"
+                x-addedInMatrixVersion: "1.11"
                 description: "**Required.** The bytes for the *animated* thumbnail."
             image/webp:
               schema:
-                x-addedInMatrixVersion: "1.10"
+                x-addedInMatrixVersion: "1.11"
                 description: "**Required.** The bytes for the *animated* thumbnail."
         "307":
           description: A redirect to the thumbnail of the requested content.
