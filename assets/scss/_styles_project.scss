@@ -40,10 +40,13 @@ Custom SCSS for the Matrix spec
   .navbar-brand {
     font-size: 1.1rem;
 
+    /* Allow the text to wrap if it is wider than the viewport */
+    text-align: center;
+    white-space: normal;
+
     .navbar-version {
       color: $secondary;
     }
-
   }
 
   .nav-link {
@@ -115,7 +118,7 @@ Custom SCSS for the Matrix spec
   }
 }
 
-@media (min-width: 768px) {
+@include media-breakpoint-up(md) {
   @supports (position: sticky) {
     .td-sidebar-nav {
       /* This overrides calc(100vh - 10rem);, which gives us a blank space at the bottom of the sidebar */
@@ -170,6 +173,13 @@ footer {
     display: inline; visibility: visible; counter-increment: h6; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "
   }
 
+}
+
+/* Remove some padding before the main content, when the sidebar is disabled */
+.td-main main {
+  @include media-breakpoint-down(md) {
+    padding-top: 0;
+  }
 }
 
 /* Adjust the scroll margin for everything in the main content, so that
@@ -471,12 +481,18 @@ of .td-content. This applies the same style to any blockquotes that descend from
 Make padding symmetrical (this selector is used in the default styles to apply padding-left: 3rem)
 */
 .pl-md-5, .px-md-5 {
-  padding-right: 3rem;
+  @include media-breakpoint-up(md) {
+    padding-right: 3rem;
+  }
 }
 
 /* Adjust default styles for info banner */
 .pageinfo-primary {
-  max-width: 80%;
+  @include media-breakpoint-up(lg) {
+    max-width: 80%;
+  }
+  margin-top: 0;
+  margin-right: 0;
   margin-left: 0;
   border: 0;
   border-left: solid 5px $secondary;
