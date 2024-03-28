@@ -23,8 +23,9 @@ Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
 All `POST` and `PUT` endpoints, with the exception of [`POST
-/_matrix/media/v3/upload`](#post_matrixmediav3upload) and [`PUT
-/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+/_matrix/media/v3/upload`](#post_matrixmediav3upload), [`PUT
+/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid)
+and [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout),
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
