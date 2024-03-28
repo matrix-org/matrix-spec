@@ -43,6 +43,14 @@ properties:
     type: string
     description: |-
       Unpadded base64-encoded session key in [session-export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).
+  shared_history:
+    type: boolean
+    description: |-
+      Whether the key may be forwarded to users who join the room after the
+      messages encrypted with this key have been sent.  Defaults to `false`.
+
+      Should be set to the same value as the `shared_history` property of
+      the `m.room_key` event that was initially used to share the key.
 example: {
   "algorithm": "m.megolm.v1.aes-sha2",
   "forwarding_curve25519_key_chain": [

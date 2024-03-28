@@ -23,6 +23,18 @@ properties:
       session_key:
         type: string
         description: The key to be exchanged.
+      shared_history:
+        type: boolean
+        description: |-
+          Whether the key may be forwarded to users who join the room after the
+          messages encrypted with this key have been sent.  Defaults to
+          `false`.
+
+          This can be set to `true` if the history visibility settings of the
+          room allow users to read events in the room from before they have
+          joined, that is, if the `m.room.history_visibility` state event is
+          `"world_readable"` or `"shared"`. For more information, see [Key
+          requests and forwarding](#key-requests-and-forwarding).
     required:
       - algorithm
       - room_id

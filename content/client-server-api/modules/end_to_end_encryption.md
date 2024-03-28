@@ -1237,20 +1237,22 @@ access to the previously exchanged messages. To address this issue,
 several methods are provided to allow users to transfer keys from one
 device to another.
 
-##### Key requests
+##### Key requests and forwarding
 
-When a device is missing keys to decrypt messages, it can request the
-keys by sending [m.room\_key\_request](#mroom_key_request) to-device messages to other
-devices with `action` set to `request`.
+When a device is missing keys to decrypt messages, the keys can be forwarded to
+it from a device that has the keys to allow it to decrypt the messages.
 
-If a device wishes to share the keys with that device, it can forward
-the keys to the first device by sending an encrypted
-[m.forwarded\_room\_key](#mforwarded_room_key) to-device message. The first device should
-then send an [m.room\_key\_request](#mroom_key_request) to-device message with `action`
-set to `request_cancellation` to the other devices that it had
-originally sent the key request to; a device that receives a
-`request_cancellation` should disregard any previously-received
-`request` message with the same `request_id` and `requesting_device_id`.
+The device that is missing the keys can request the keys from other devices by
+sending [m.room\_key\_request](#mroom_key_request) to-device messages with
+`action` set to `request`. If a device that receives the request wishes to
+share the keys with that device, it can forward the keys to the first device by
+sending an encrypted [m.forwarded\_room\_key](#mforwarded_room_key) to-device
+message. The first device should then send an
+[m.room\_key\_request](#mroom_key_request) to-device message with `action` set
+to `request_cancellation` to the other devices that it had originally sent the
+key request to; a device that receives a `request_cancellation` should
+disregard any previously-received `request` message with the same `request_id`
+and `requesting_device_id`.
 
 If a device does not wish to share keys with that device, it can
 indicate this by sending an [m.room\_key.withheld](#mroom_keywithheld) to-device message,
@@ -1264,6 +1266,42 @@ of the same user, and should only request and accept forwarded keys from
 verified devices of the same user.
 {{% /boxes/note %}}
 
+Devices can also forward keys without waiting for a request.  For example, when
+a user is invited to an encrypted room, the inviter may wish to allow the
+invitee to decrypt old messages, as the invitee would otherwise be unable to
+read the messages even if the [room history visibility
+setting](#room-history-visibility) allows them to fetch the message events.
+
+To ensure that keys are only shared for messages sent while the history
+visibility setting allowed for non-members to view the events, the `m.room_key`
+event used to share the initial room key should have the `shared_history`
+property set to `true` if the history visibility for the room is set to
+`"world_readable"` or `"shared"`. If the history visibility for the room is any
+other value, including being unset or an unrecognized value, the
+`shared_history` property should be set to `false` or be unset. If the key is
+subsequently backed up or forwarded, the `shared_history` property (if present)
+should be preserved in the backup or `m.forwarded_room_key` event,
+respectively.
+
+A consequence of this is that when a room's history visibility settings change
+such that the value of the `shared_history` property would change, event
+senders should rotate their room keys.
+
+This property may be used by clients to determine which keys to share with
+other devices. For example, when inviting a user to an encrypted room, the
+inviter may choose to share only the keys with `shared_history` set to `true`.
+
+{{% boxes/note %}}
+When sharing keys for old messages, clients must not blindly trust the current
+state as reported by the homeserver: clients should not assume that users who
+have `m.room.member` events with `membership: "join"` are legitimately in the
+room, as such events could be spoofed by the homeserver.  Clients should use
+other means of ensuring that a user is actually in the room before sharing keys
+for old messages with them. For example, clients can share keys for old
+messages only to users that they invite to the room, as then they know that the
+user is supposed to be in the room.
+{{% /boxes/note %}}
+
 ##### Server-side key backups
 
 Devices may upload encrypted copies of keys to the server. When a device
@@ -1271,7 +1309,7 @@ tries to read a message that it does not have keys for, it may request
 the key from the server and decrypt it. Backups are per-user, and users
 may replace backups with new backups.
 
-In contrast with [Key requests](#key-requests), Server-side key backups
+In contrast with [Key requests](#key-requests-and-forwarding), Server-side key backups
 do not require another device to be online from which to request keys.
 However, as the session keys are stored on the server encrypted, it
 requires users to enter a decryption key to decrypt the session keys.
@@ -1793,7 +1831,7 @@ indicate to the user why it cannot decrypt the event, rather than just
 showing a generic error message.
 
 In the same way, when one device requests keys from another using [Key
-requests](#key-requests), the device from which the key is being
+requests](#key-requests-and-forwarding), the device from which the key is being
 requested may want to tell the requester that it is purposely not
 sharing the key.
 
