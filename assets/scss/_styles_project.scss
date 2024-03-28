@@ -437,6 +437,31 @@ footer {
     &.basic-info th {
       width: 15rem;
     }
+
+    /* Arrange rows vertically when horizontal space is constrained to avoid overflowing */
+    @include media-breakpoint-down(sm) {
+      /* Make cells full width without vertical margin */
+      &.basic-info th, &.basic-info td {
+        width: 100%;
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      /* Remove border and padding between header & data cells to make them appear like a single cell */
+      &.basic-info td {
+        padding-top: 0;
+        border-top: none;
+      }
+      &.basic-info th {
+        border-bottom: none;
+      }
+
+      /* Remove top border on all but the first header cell to prevent double borders between rows */
+      &.basic-info tr + tr th {
+        border-top: none;
+      }
+    }
   }
 
   pre {
