@@ -58,7 +58,8 @@ paths:
         request.
       operationId: getAccount
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The token holder's information.
@@ -99,7 +100,8 @@ paths:
         future requests to the server.
       operationId: logout
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The token was successfully logged out.

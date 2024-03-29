@@ -28,7 +28,8 @@ paths:
         any of the algorithms defined in this specification.
       operationId: getHashDetails
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The hash function information.
@@ -70,7 +71,8 @@ paths:
         later in this specification.
       operationId: lookupUsersV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

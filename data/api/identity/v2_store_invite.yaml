@@ -51,7 +51,8 @@ paths:
         the `address` of the pending invite for display purposes.
       operationId: storeInviteV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

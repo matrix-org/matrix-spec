@@ -27,7 +27,8 @@ paths:
         to `store-invite`, and fetch the sender of the invite.
       operationId: blindlySignStuffV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

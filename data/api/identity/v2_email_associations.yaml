@@ -40,7 +40,8 @@ paths:
         deprecated.
       operationId: emailRequestTokenV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -107,7 +108,8 @@ paths:
         deprecated.
       operationId: emailSubmitTokenPostV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -180,7 +182,8 @@ paths:
         used by end-users, and so the response should be human-readable.
       operationId: emailSubmitTokenGetV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: sid

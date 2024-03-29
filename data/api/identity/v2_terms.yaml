@@ -119,7 +119,8 @@ paths:
         may not be accepting all terms at once.
       operationId: agreeToTerms
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

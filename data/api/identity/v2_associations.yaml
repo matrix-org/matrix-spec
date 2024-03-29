@@ -23,7 +23,8 @@ paths:
       description: Determines if a given 3pid has been validated by a user.
       operationId: getValidated3pidV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: sid
@@ -128,7 +129,8 @@ paths:
         deprecated.
       operationId: bindV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -279,7 +281,8 @@ paths:
         homeserver is acting on behalf of a client.
       operationId: unbindV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
