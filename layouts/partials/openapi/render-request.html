@@ -4,7 +4,6 @@
 
   * `parameters`: OpenAPI data specifying the parameters
   * `request_body`: OpenAPI data specifying the request body
-  * `path`: the path where this definition was found, to enable us to resolve "$ref"
   * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
   This template renders:
@@ -16,7 +15,6 @@
 
 {{ $parameters := .parameters }}
 {{ $request_body := .request_body }}
-{{ $path := .path }}
 {{ $anchor_base := .anchor_base }}
 
 <h2>Request</h2>
@@ -26,9 +24,9 @@
     {{ if $parameters }}
 <h3>Request parameters</h3>
 
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters" "path" .path) }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters" "path" .path) }}
-        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters" "path" .path) }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters") }}
 
     {{ end }}
 
@@ -42,8 +40,7 @@
             {{/*
                 Display the JSON schemas
             */}}
-            {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $json_body.schema "path" $path) }}
-            {{ $schema := partial "json-schema/resolve-allof" $schema }}
+            {{ $schema := partial "json-schema/resolve-allof" $json_body.schema }}
 
             {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
             {{ range $additional_types }}
@@ -70,8 +67,7 @@
             {{ $example := dict }}
 
             {{ if $body.schema }}
-                {{ $schema := partial "json-schema/resolve-refs" (dict "schema" $body.schema "path" $path) }}
-                {{ $schema := partial "json-schema/resolve-allof" $schema }}
+                {{ $schema := partial "json-schema/resolve-allof" $body.schema }}
 
                 {{ $example = partial "json-schema/resolve-example" $schema }}
             {{ end }}
