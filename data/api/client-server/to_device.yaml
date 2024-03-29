@@ -24,7 +24,8 @@ paths:
         client devices.
       operationId: sendToDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: eventType

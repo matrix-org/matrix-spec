@@ -65,7 +65,8 @@ paths:
                   description: The reason the content is being reported. May be blank.
         required: true
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       x-changedInMatrixVersion:
         1.8: |
           This endpoint now requires the user to be joined to the room.

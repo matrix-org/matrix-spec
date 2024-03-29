@@ -45,7 +45,8 @@ paths:
       operationId: getVersions
       security:
         - {}
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       x-changedInMatrixVersion:
         "1.10": |
           This endpoint can behave differently when authentication is provided.

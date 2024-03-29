@@ -46,7 +46,8 @@ paths:
         found in that direction is outside of the expected range.
       operationId: getEventByTimestamp
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

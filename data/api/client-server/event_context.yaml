@@ -28,7 +28,8 @@ paths:
         [Lazy-loading room members](/client-server-api/#lazy-loading-room-members) for more information.
       operationId: getEventContext
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

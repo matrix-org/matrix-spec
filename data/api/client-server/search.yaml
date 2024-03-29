@@ -22,7 +22,8 @@ paths:
       description: Performs a full text search across different categories.
       operationId: search
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: next_batch

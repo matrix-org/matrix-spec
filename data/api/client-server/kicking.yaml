@@ -29,7 +29,8 @@ paths:
         the target member's state by making a request to `/rooms/<room id>/state/m.room.member/<user id>`.
       operationId: kick
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

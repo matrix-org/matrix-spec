@@ -22,7 +22,8 @@ paths:
       description: Upgrades the given room to a particular room version.
       operationId: upgradeRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

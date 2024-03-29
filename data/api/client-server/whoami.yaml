@@ -30,7 +30,8 @@ paths:
         body.
       operationId: getTokenOwner
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The token belongs to a known user.

@@ -21,7 +21,8 @@ paths:
       summary: Create a new mapping from room alias to room ID.
       operationId: setRoomAlias
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomAlias
@@ -172,7 +173,8 @@ paths:
         have permission to update the `m.room.canonical_alias` event.
       operationId: deleteRoomAlias
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomAlias
@@ -229,7 +231,8 @@ paths:
         state event.
       operationId: getLocalAliases
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

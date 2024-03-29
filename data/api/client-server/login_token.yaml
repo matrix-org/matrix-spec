@@ -53,7 +53,8 @@ paths:
       operationId: generateLoginToken
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

@@ -31,7 +31,8 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEvents
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/roomId'
         - $ref: '#/components/parameters/eventId'
@@ -88,7 +89,8 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEventsWithRelType
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/roomId'
         - $ref: '#/components/parameters/eventId'
@@ -149,7 +151,8 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEventsWithRelTypeAndEventType
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/roomId'
         - $ref: '#/components/parameters/eventId'

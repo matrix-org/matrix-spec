@@ -38,7 +38,8 @@ paths:
         `m.room.member` event to the room.
       operationId: inviteUser
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

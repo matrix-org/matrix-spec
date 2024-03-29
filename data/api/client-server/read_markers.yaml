@@ -25,7 +25,8 @@ paths:
         the read receipt's location.
       operationId: setReadMarker
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

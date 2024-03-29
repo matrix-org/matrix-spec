@@ -30,7 +30,8 @@ paths:
         [Room Events](/client-server-api/#room-events) for the m. event specification.
       operationId: sendMessage
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

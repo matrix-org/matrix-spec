@@ -62,7 +62,8 @@ paths:
         append a `m.room.third_party_invite` event to the room.
       operationId: inviteBy3PID
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

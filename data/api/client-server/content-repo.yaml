@@ -22,7 +22,8 @@ paths:
       summary: Upload some content to the content repository.
       operationId: uploadContent
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: header
           name: Content-Type
@@ -234,7 +235,8 @@ paths:
       operationId: createContent
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       # empty json object
       responses:
         "200":
@@ -741,7 +743,8 @@ paths:
         being shared should also not be shared with the homeserver.
       operationId: getUrlPreview
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: url
@@ -816,7 +819,8 @@ paths:
         than is advertised by the server on this endpoint.
       operationId: getConfig
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The public content repository configuration for the matrix server.

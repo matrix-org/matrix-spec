@@ -25,7 +25,8 @@ paths:
         [Device keys](/client-server-api/#device-keys) for the device are deleted alongside the device.
       operationId: logout
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The access token used in the request was successfully invalidated.
@@ -53,7 +54,8 @@ paths:
         this way.
       operationId: logout_all
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The user's access tokens were successfully invalidated.

@@ -23,7 +23,8 @@ paths:
       description: Gets all currently active pushers for the authenticated user.
       operationId: getPushers
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The pushers for this user.
@@ -136,7 +137,8 @@ paths:
         user is deleted.
       operationId: postPusher
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

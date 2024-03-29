@@ -39,7 +39,8 @@ paths:
         being removed or are already present in the state event.
       operationId: setRoomStateWithKey
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

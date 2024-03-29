@@ -27,7 +27,8 @@ paths:
         specified in this document.
       operationId: getWhoIs
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

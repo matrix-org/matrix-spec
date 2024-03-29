@@ -22,7 +22,8 @@ paths:
       description: Gets information about all devices for the current user.
       operationId: getDevices
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: Device information
@@ -58,7 +59,8 @@ paths:
       description: Gets information on a single device, by device id.
       operationId: getDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -93,7 +95,8 @@ paths:
       description: Updates the metadata on the given device.
       operationId: updateDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -140,7 +143,8 @@ paths:
         Deletes the given device, and invalidates any access token associated with it.
       operationId: deleteDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -191,7 +195,8 @@ paths:
         Deletes the given devices, and invalidates any access token associated with them.
       operationId: deleteDevices
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

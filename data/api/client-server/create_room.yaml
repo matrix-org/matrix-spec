@@ -64,7 +64,8 @@ paths:
         `creation_content`.
       operationId: createRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

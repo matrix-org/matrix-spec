@@ -32,7 +32,8 @@ paths:
         `Accept-Language` header provided in the request, if present.
       operationId: searchUserDirectory
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:

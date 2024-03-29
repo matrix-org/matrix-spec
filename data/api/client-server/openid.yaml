@@ -30,7 +30,8 @@ paths:
         example.
       operationId: requestOpenIdToken
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

@@ -30,7 +30,8 @@ paths:
         rooms and parent events are not covered by this endpoint.
       operationId: getSpaceHierarchy
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

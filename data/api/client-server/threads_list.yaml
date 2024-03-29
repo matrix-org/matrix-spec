@@ -27,7 +27,8 @@ paths:
         user has participated in the thread.
       operationId: getThreadRoots
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

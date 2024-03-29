@@ -26,7 +26,8 @@ paths:
         user has stopped typing.
       operationId: setTyping
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

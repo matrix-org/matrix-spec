@@ -25,7 +25,8 @@ paths:
         specified.
       operationId: postReceipt
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

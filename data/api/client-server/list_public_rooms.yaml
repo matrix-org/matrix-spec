@@ -74,7 +74,8 @@ paths:
         the room creator or a server administrator.
       operationId: setRoomVisibilityOnDirectory
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -175,7 +176,8 @@ paths:
         of joined members, with the largest rooms first.
       operationId: queryPublicRooms
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: server

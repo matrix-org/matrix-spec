@@ -43,7 +43,8 @@ paths:
         events, alongside other state, when lazy-loading is not enabled.
       operationId: sync
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: filter

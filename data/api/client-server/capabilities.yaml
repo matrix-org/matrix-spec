@@ -24,7 +24,8 @@ paths:
         and other relevant capabilities.
       operationId: getCapabilities
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The capabilities of the server.

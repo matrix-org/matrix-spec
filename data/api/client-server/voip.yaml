@@ -24,7 +24,8 @@ paths:
         calls.
       operationId: getTurnServer
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The TURN server credentials.

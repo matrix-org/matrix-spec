@@ -24,7 +24,8 @@ paths:
         retrieve this event e.g. by being a member in the room for this event.
       operationId: getOneRoomEvent
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -78,7 +79,8 @@ paths:
         taken from the state of the room when they left.
       operationId: getRoomStateWithKey
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -128,7 +130,8 @@ paths:
       description: Get the state events for the current state of a room.
       operationId: getRoomState
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -234,7 +237,8 @@ paths:
               - leave
               - ban
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: |-
@@ -284,7 +288,8 @@ paths:
           schema:
             type: string
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: A map of MXID to room member objects.

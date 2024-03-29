@@ -38,7 +38,8 @@ paths:
         [`/sync`](/client-server-api/#get_matrixclientv3sync) API.
       operationId: knockRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias

@@ -26,7 +26,8 @@ paths:
         [/sync](#get_matrixclientv3sync).
       operationId: setAccountData
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -117,7 +118,8 @@ paths:
         that set the account data.
       operationId: getAccountData
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -186,7 +188,8 @@ paths:
         clients in the per-room entries via [/sync](#get_matrixclientv3sync).
       operationId: setAccountDataPerRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -285,7 +288,8 @@ paths:
         visible to the user that set the account data.
       operationId: getAccountDataPerRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

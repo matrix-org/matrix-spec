@@ -25,7 +25,8 @@ paths:
         restrict which events are returned to the client.
       operationId: defineFilter
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -119,7 +120,8 @@ paths:
       summary: Download a filter
       operationId: getFilter
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

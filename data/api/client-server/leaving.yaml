@@ -33,7 +33,8 @@ paths:
         they were previously allowed to see.
       operationId: leaveRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -91,7 +92,8 @@ paths:
         before calling this API.
       operationId: forgetRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId

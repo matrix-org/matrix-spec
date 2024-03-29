@@ -26,7 +26,8 @@ paths:
         presence state of another user.
       operationId: setPresence
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -82,7 +83,8 @@ paths:
       description: Get the given user's presence state.
       operationId: getPresence
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId

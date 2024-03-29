@@ -67,8 +67,8 @@ paths:
                 - visibility
         required: true
       security:
-        # again, this is the appservice's token - not a typical client's
-        - accessToken: []
+        - appserviceAccessTokenQuery: []
+        - appserviceAccessTokenBearer: []
       responses:
         "200":
           description: The room's directory visibility has been updated.
@@ -95,6 +95,4 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    # Note: this is the same access_token definition used elsewhere in the client
-    # server API, however this expects an access token for an application service.
     $ref: definitions/security.yaml

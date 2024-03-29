@@ -33,7 +33,8 @@ paths:
         Server administrators may redact events sent by users on their server.
       operationId: redactEvent
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
