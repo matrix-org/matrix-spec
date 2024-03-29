@@ -95,4 +95,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    appserviceAccessTokenQuery:
+      $ref: definitions/security.yaml#/appserviceAccessTokenQuery
+    appserviceAccessTokenBearer:
+      $ref: definitions/security.yaml#/appserviceAccessTokenBearer

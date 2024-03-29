@@ -269,3 +269,9 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v3
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
