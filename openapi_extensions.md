@@ -26,3 +26,8 @@ property, etc).
 
 A variation of the above: indicates changes to the associated parameter in
 particular Matrix specification versions.
+
+## Use of `$ref` inside examples
+
+Although the OpenAPI/JSON Schema specs only allow to use `$ref` to reference a
+whole example, we use it to compose examples from other examples.
