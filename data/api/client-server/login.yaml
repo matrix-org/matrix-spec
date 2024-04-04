@@ -114,8 +114,7 @@ paths:
 
                     This must be a type returned in one of the flows of the
                     response of the [`GET /login`](/client-server-api/#get_matrixclientv3login)
-                    endpoint, like `m.login.password`, `m.login.token` or
-                    `m.login.sso`.
+                    endpoint, like `m.login.password` or `m.login.token`.
                 identifier:
                   $ref: definitions/user_identifier.yaml
                 user:
