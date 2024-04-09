@@ -24,6 +24,5 @@
 {{ $path := delimit (slice "api" $spec $api) "/" }}
 
 {{ $api_data = partial "json-schema/resolve-refs" (dict "schema" $api_data "path" $path) }}
-{{ $api_data := partial "json-schema/resolve-allof" $api_data }}
 
 {{ partial "openapi/render-api" (dict "api_data" $api_data "base_url" $base_url) }}
