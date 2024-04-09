@@ -3,7 +3,6 @@
   Render the response part of a single HTTP API operation, given:
 
   * `responses`: OpenAPI data specifying the responses
-  * `path`: the path where this definition was found, to enable us to resolve "$ref"
   * `anchor_base`: a prefix to add to the HTML anchors generated for each object
 
   This template renders:
@@ -15,7 +14,6 @@
 */}}
 
 {{ $responses := .responses }}
-{{ $path := .path }}
 {{ $anchor_base := .anchor_base }}
 
 <h2>Responses</h2>
@@ -25,8 +23,6 @@
   <th class="col-status">Status</th>
   <th class="col-status-description">Description</th>
  </thead>
-
-{{ $responses = partial "json-schema/resolve-refs" (dict "schema" $responses "path" $path) }}
 
 {{ range $code, $response := $responses }}
 
@@ -92,8 +88,7 @@
             {{ if or (eq $schema.type "object") (eq $schema.type "array") }}
                 {{ $example := partial "json-schema/resolve-example" $schema }}
                 {{ if $json_body.examples }}
-                    {{ $example = partial "json-schema/resolve-refs" (dict "schema" $json_body.examples "path" $path) }}
-                    {{ $example = $example.response.value }}
+                    {{ $example = $json_body.examples.response.value }}
                 {{ end }}
 
                 {{ $example_json := jsonify (dict "indent" "  ") $example }}
