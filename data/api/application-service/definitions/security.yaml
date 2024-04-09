@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 homeserverAccessToken:
-  type: apiKey
-  name: Authorization
-  in: header
+  type: http
+  scheme: bearer
   description: The `Bearer` `hs_token` provided by the application service's registration.

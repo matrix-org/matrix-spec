@@ -33,7 +33,8 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoomById
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -126,7 +127,8 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias
@@ -229,4 +231,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

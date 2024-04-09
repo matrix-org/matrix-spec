@@ -57,8 +57,8 @@ paths:
                   example: mautrix-go_1683636478256400935_123
         required: true
       security:
-        # again, this is the appservice's token - not a typical client's
-        - accessToken: []
+        - appserviceAccessTokenQuery: []
+        - appserviceAccessTokenBearer: []
       responses:
         "200":
           description: The ping was successful.
@@ -177,6 +177,7 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    # Note: this is the same access_token definition used elsewhere in the client
-    # server API, however this expects an access token for an application service.
-    $ref: definitions/security.yaml
+    appserviceAccessTokenQuery:
+      $ref: definitions/security.yaml#/appserviceAccessTokenQuery
+    appserviceAccessTokenBearer:
+      $ref: definitions/security.yaml#/appserviceAccessTokenBearer

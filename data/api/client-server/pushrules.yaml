@@ -26,7 +26,8 @@ paths:
         specified key e.g. the `global` key.
       operationId: getPushRules
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: All the push rulesets for this user.
@@ -242,7 +243,8 @@ paths:
       description: Retrieve a single specified push rule.
       operationId: getPushRule
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -313,7 +315,8 @@ paths:
       description: This endpoint removes the push rule defined in the path.
       operationId: deletePushRule
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -389,7 +392,8 @@ paths:
         When creating push rules, they MUST be enabled by default.
       operationId: setPushRule
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -527,7 +531,8 @@ paths:
       description: This endpoint gets whether the specified push rule is enabled.
       operationId: isPushRuleEnabled
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -598,7 +603,8 @@ paths:
         push rule.
       operationId: setPushRuleEnabled
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -676,7 +682,8 @@ paths:
       description: This endpoint get the actions for the specified push rule.
       operationId: getPushRuleActions
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -756,7 +763,8 @@ paths:
         This can be used to change the actions of builtin rules.
       operationId: setPushRuleActions
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: scope
@@ -849,4 +857,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

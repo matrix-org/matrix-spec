@@ -387,7 +387,8 @@ paths:
         access token provided in the request. Whether other access tokens for
         the user are revoked depends on the request parameters.
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       operationId: changePassword
       requestBody:
         content:
@@ -591,7 +592,8 @@ paths:
         parameter because the homeserver is expected to sign the request to the
         identity server instead.
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       operationId: deactivateAccount
       requestBody:
         content:
@@ -757,3 +759,9 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v3
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
