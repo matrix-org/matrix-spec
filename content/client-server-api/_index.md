@@ -943,11 +943,12 @@ or completely closed registration (where the homeserver administrators create
 and distribute accounts).
 
 The token required for this authentication type is shared out of band from
-Matrix and is an opaque string with maximum length of 64 characters in the
-range `[A-Za-z0-9._~-]`. The server can keep any number of tokens for any
-length of time/validity. Such cases might be a token limited to 100 uses or
-for the next 2 hours - after the tokens expire, they can no longer be used
-to create accounts.
+Matrix and is an opaque string using the [Opaque Identifier
+Grammar](/appendices#opaque-identifiers), with maximum length of 64
+characters. The server can keep any number of tokens for any length of
+time/validity. Such cases might be a token limited to 100 uses or for the next
+2 hours - after the tokens expire, they can no longer be used to create
+accounts.
 
 To use this authentication type, clients should submit an auth dict with just
 the type, token, and session:
@@ -1201,7 +1202,7 @@ is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
 {{< added-in v="1.7" >}} Already-authenticated clients can additionally generate
-a token for their user ID if supported by the homeserver using 
+a token for their user ID if supported by the homeserver using
 [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
 
 {{% http-api spec="client-server" api="login" %}}
