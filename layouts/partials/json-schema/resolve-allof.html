@@ -16,45 +16,32 @@
 {{ $ret := . }}
 {{ $original := . }}
 
-{{ if reflect.IsSlice $ret }}
+{{ if reflect.IsSlice $original }}
     {{/*
       If it's a slice, just recurse.
     */}}
-    {{ $result_slice := slice }}
+    {{ $ret = slice }}
 
-    {{ range $ret }}
+    {{ range $original }}
         {{ $resolved := partial "json-schema/resolve-allof" . }}
-        {{ $result_slice = $result_slice | append $resolved }}
+        {{ $ret = $ret | append $resolved }}
     {{ end }}
-
-    {{ $ret = $result_slice }}
-{{ end }}
-
-{{ if reflect.IsMap $ret }}
-    {{/*
-      First, we recurse into the other keys. Doing it now avoids to recurse
-      twice in keys resolved by allOf values.
-    */}}
-    {{ range $key, $value := $ret }}
-        {{ if ne $key "allOf" }}
-            {{ $resolved := partial "json-schema/resolve-allof" $value }}
-            {{ $ret = merge $ret (dict $key $resolved) }}
-        {{ end }}
-    {{ end }}
+{{ else if reflect.IsMap $original }}
+    {{ $ret = dict }}
 
     {{/*
       We special-case 'required', and accumulate the values from all the 'allOf'
       entries (rather than simply overriding them). Start the accumulation here.
     */}}
     {{ $required := slice }}
+    {{ with $original.required }}
+      {{ $required = . }}
+    {{ end }}
 
-    {{ with $ret.allOf }}
-
+    {{ with $original.allOf }}
         {{/*
-          construct a new dict, with each of the allOf entries merged into it in
-          turn.
+          Merge each of the allOf entries.
         */}}
-        {{ $all_of_values := dict }}
         {{ range . }}
             {{/*
               First, resolve allOf in child.  
@@ -72,23 +59,22 @@
               Note also that `merge` does a *deep* merge - nested maps are also
               merged. (Slices are replaced though.)
             */}}
-            {{ $all_of_values = merge $all_of_values $resolved }}
+            {{ $ret = merge $ret $resolved }}
         {{ end }}
+    {{ end }}
 
-        {{/*
-          Finally, merge in the original, allowing the original to override allOf.
-        */}}
-        {{ $ret = merge $all_of_values $ret }}
-
-        {{/*
-          special-case 'required': replace it with the union of all the
-          'required' arrays from the original and allOf values.
-        */}}
-        {{ with $ret.required }}
-            {{ $required = union $required $ret.required }}
+    {{/*
+      Finally, merge in the original, allowing the original to override allOf.
+    */}}
+    {{ range $key, $value := $original }}
+        {{ if and (ne $key "allOf") (ne $key "required") }}
+            {{ $resolved := partial "json-schema/resolve-allof" $value }}
+            {{ $ret = merge $ret (dict $key $resolved) }}
         {{ end }}
+    {{ end }}
 
-        {{ $ret = merge $ret (dict "required" $required) }}
+    {{ with $required }}
+      {{ $ret = merge $ret (dict "required" .) }}
     {{ end }}
 {{ end }}
 
