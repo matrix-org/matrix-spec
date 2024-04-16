@@ -546,8 +546,10 @@ request parameter.
 A client should first make a request with no `auth` parameter.
 The homeserver returns an HTTP 401 response, with a JSON body, as follows:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -590,8 +592,10 @@ given. It also contains other keys dependent on the auth type being
 attempted. For example, if the client is attempting to complete auth
 type `example.type.foo`, it might submit something like this:
 
-    POST /_matrix/client/v3/endpoint HTTP/1.1
-    Content-Type: application/json
+```
+POST /_matrix/client/v3/endpoint HTTP/1.1
+Content-Type: application/json
+```
 
 ```json
 {
@@ -611,8 +615,10 @@ along with the same object as when no authentication was attempted, with
 the addition of the `completed` key which is an array of auth types the
 client has completed successfully:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -643,8 +649,10 @@ but the client may make a second attempt, it returns the same HTTP
 status 401 response as above, with the addition of the standard
 `errcode` and `error` fields describing the error. For example:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -671,8 +679,10 @@ status 401 response as above, with the addition of the standard
 If the request fails for a reason other than authentication, the server
 returns an error message in the standard format. For example:
 
-    HTTP/1.1 400 Bad request
-    Content-Type: application/json
+```
+HTTP/1.1 400 Bad request
+Content-Type: application/json
+```
 
 ```json
 {
