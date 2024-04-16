@@ -88,7 +88,8 @@ def load_file_from_uri(path):
             return yaml.safe_load(f)
 
 def load_resource_from_uri(path):
-    """Load a JSON or YAML JSON Schema from a file:// URI.
+    """Load a JSON or YAML JSON Schema, as a `referencing.Resource` object, from
+    a file:// URI.
     """
     contents = load_file_from_uri(path)    
     resource = referencing.Resource(
