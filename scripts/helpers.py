@@ -19,6 +19,7 @@
 import json
 import os
 import os.path
+import referencing
 import urllib.parse
 import yaml
 
@@ -85,3 +86,13 @@ def load_file_from_uri(path):
             # We have to assume it's YAML because some of the YAML examples
             # do not have file extensions.
             return yaml.safe_load(f)
+
+def load_resource_from_uri(path):
+    """Load a JSON or YAML JSON Schema from a file:// URI.
+    """
+    contents = load_file_from_uri(path)    
+    resource = referencing.Resource(
+        contents=contents,
+        specification=referencing.jsonschema.DRAFT202012
+    )
+    return resource

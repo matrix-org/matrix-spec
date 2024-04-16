@@ -1,8 +1,8 @@
 # no doubt older versions would be fine for many of these but these were
 # current at the time of writing
 
-# we need at least version 4.0.0 for support of JSON Schema Draft 2020-12.
-jsonschema == 4.17.3
+# we need at least version 4.18.0 for support of referencing library.
+jsonschema >= 4.18.0
 
 python-jsonpath == 0.9.0
 attrs >= 23.1.0
