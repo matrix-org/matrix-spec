@@ -96,13 +96,8 @@ Matrix clients can send DTMF as specified by WebRTC. The WebRTC standard as of A
 in the RTP payload.
 
 #### Grammar for VoIP IDs
-`call_id`s and `party_id` are explicitly defined to be between 1 and 255 characters long, consisting
-of the characters `[0-9a-zA-Z._~-]`.
 
-(Note that this matches the grammar of 'opaque IDs' from
-[MSC1597](https://github.com/matrix-org/matrix-spec-proposals/blob/rav/proposals/id_grammar/proposals/1597-id-grammar.md#opaque-ids),
-and that of the `id` property of the
- [`m.login.sso` flow schema](#definition-mloginsso-flow-schema).)
+`call_id`s and `party_id` must follow the [Opaque Identifier Grammar](/appendices#opaque-identifiers).
 
 #### Behaviour on Room Leave
 If the client sees the user it is in a call with leave the room, the client should treat this

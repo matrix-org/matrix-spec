@@ -921,6 +921,25 @@ unique servers based on the following criteria:
     specify the servers it can. For example, a room with only 2 users in
     it would result in maximum 2 `via` parameters.
 
+### Opaque Identifiers
+
+The specification defines some identifiers to use the *Opaque Identifier
+Grammar*. This is a common grammar intended for non-user-visible identifiers
+which do not require parsing or interpretation (other than as a unique
+identifier).
+
+The grammar is defined as:
+
+* Identifiers must be entirely composed of the characters `[0-9]`, `[A-Z]`,
+  `[a-z]`, `-`, `.`, `_`, and `~`.
+* Unless otherwise specified, identifiers must be at least one character and at
+  most 255 characters in length.
+
+{{% boxes/note %}}
+The acceptable character set matches the unreserved character set in [RFC
+3986](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3).
+{{% /boxes/note %}}
+
 ## 3PID Types
 
 Third-party Identifiers (3PIDs) represent identifiers on other
