@@ -923,8 +923,8 @@ unique servers based on the following criteria:
 
 ### Opaque Identifiers
 
-The specification defines some identifiers to use the /Opaque Identifier
-Grammar/. This is a common grammar intended for non-user-visible identifiers
+The specification defines some identifiers to use the *Opaque Identifier
+Grammar*. This is a common grammar intended for non-user-visible identifiers
 which do not require parsing or interpretation (other than as a unique
 identifier).
 
