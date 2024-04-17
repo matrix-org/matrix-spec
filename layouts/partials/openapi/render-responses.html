@@ -47,7 +47,7 @@
                 Display the JSON schemas
             */}}
 
-            {{ $schema := partial "json-schema/resolve-allof" $json_body.schema }}
+            {{ $schema := $json_body.schema }}
 
             {{/*
             All this is to work out how to express the content of the response

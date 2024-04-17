@@ -40,7 +40,7 @@
             {{/*
                 Display the JSON schemas
             */}}
-            {{ $schema := partial "json-schema/resolve-allof" $json_body.schema }}
+            {{ $schema := $json_body.schema }}
 
             {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
             {{ range $additional_types }}
@@ -67,9 +67,7 @@
             {{ $example := dict }}
 
             {{ if $body.schema }}
-                {{ $schema := partial "json-schema/resolve-allof" $body.schema }}
-
-                {{ $example = partial "json-schema/resolve-example" $schema }}
+                {{ $example = partial "json-schema/resolve-example" $body.schema }}
             {{ end }}
 
             {{ if and (eq ($example | len) 0) $body.example }}

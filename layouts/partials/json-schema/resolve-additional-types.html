@@ -20,10 +20,6 @@
  * The returned entries are based on the JSON schema definitions found by
  * recursing through the input `schema`, with the following differences:
  *
- *   * `allOf` references are expanded. (Although this partial requires that
- *     `resolve-allof` is called on the top-level `schema` beforehand,
- *     `resolve-allof` doesn't recurse down to subschemas).
- *
  *   * If `anchor_base` is set, each object with a `title` and `properties`
  *     is given an `anchor`, which is a string suitable for using as an html
  *     anchor for that object schema.
@@ -210,12 +206,7 @@
       {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
     {{ end }}
 
-    /* Although we expect resolve-allof to be called on the input, resolve-allof does not recurse into
-     * nested schemas, so we have to call it again.
-     */
-    {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
-
-    {{ $res := partial "resolve-additional-types-inner" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
+    {{ $res := partial "resolve-additional-types-inner" (dict "schema" .this_object "anchor_base" .anchor_base "name" $name) }}
     {{ range $res.objects }}
         {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}

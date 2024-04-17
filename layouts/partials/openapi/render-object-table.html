@@ -38,9 +38,6 @@
  </thead>
 
     {{ range $property_name, $property := $properties }}
-
-        {{ $property := partial "json-schema/resolve-allof" $property }}
-
         {{/*
           Handle two ways of indicating "required", one for simple parameters,
           the other for request and response body objects.
@@ -67,7 +64,7 @@
   <th class="col-description">Description</th>
  </thead>
 
- {{ $property := partial "json-schema/resolve-allof" . }}
+ {{ $property := . }}
 
  <tr>
   <td><code>{{ partial "partials/property-type" $property }}</code></td>
@@ -111,9 +108,6 @@
             like `[type]`.
         */}}
         {{ $items := .items }}
-        {{ if .items }}
-            {{ $items = partial "json-schema/resolve-allof" .items }}
-        {{ end }}
         {{ $inner_type := partial "property-type" $items }}
         {{ $type = delimit (slice "[" $inner_type "]") "" }}
     {{ else if or (reflect.IsSlice .type) .oneOf }}
@@ -180,8 +174,7 @@
             If the property uses `additionalProperties` to describe its
             internal structure, handle this with a bit of recursion
         */}}
-        {{ $additionalProperties := partial "json-schema/resolve-allof" .additionalProperties }}
-        {{ $type = delimit (slice "{string: " (partial "property-type" $additionalProperties) "}" ) "" }}
+        {{ $type = delimit (slice "{string: " (partial "property-type" .additionalProperties) "}" ) "" }}
     {{ else if reflect.IsMap .patternProperties }}
         {{/*
             If the property uses `patternProperties` to describe its
@@ -193,7 +186,6 @@
         {{ $types := slice }}
 
         {{ range $pattern, $schema := .patternProperties}}
-            {{ $schema = partial "json-schema/resolve-allof" $schema }}
             {{ $types = $types | append (partial "property-type" $schema) }}
         {{ end }}
 
