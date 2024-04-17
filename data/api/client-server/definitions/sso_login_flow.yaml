@@ -40,10 +40,7 @@ properties:
           description: |-
             Opaque string chosen by the homeserver, uniquely identifying
             the IdP from other IdPs the homeserver might support. Should
-            be between 1 and 255 characters in length, containing unreserved
-            characters under [RFC 3986](http://www.ietf.org/rfc/rfc3986.txt)
-            (`ALPHA  DIGIT  "-" / "." / "_" / "~"`). Clients are not intended
-            to parse or infer meaning from opaque strings.
+            use the [Opaque identifier Grammar](/appendices#opaque-identifiers).
           example: "com.example.idp.github"
         name:
           type: string
