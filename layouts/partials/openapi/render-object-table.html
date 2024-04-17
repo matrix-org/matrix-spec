@@ -46,7 +46,7 @@
 
  <tr>
   <td><code>{{ $property_name }}</code></td>
-  <td><code>{{ partial "partials/property-type" $property }}</code></td>
+  <td><code>{{ partial "partials/property-type" $property | safeHTML }}</code></td>
   <td>{{ partial "partials/property-description" (dict "property" $property "required" $required) }}</td>
  </tr>
 
@@ -67,7 +67,7 @@
  {{ $property := . }}
 
  <tr>
-  <td><code>{{ partial "partials/property-type" $property }}</code></td>
+  <td><code>{{ partial "partials/property-type" $property | safeHTML }}</code></td>
   <td>{{ partial "partials/property-description" (dict "property" $property) }}</td>
  </tr>
 </table>
@@ -128,14 +128,14 @@
             {{ end }}
         {{ else }}
             {{ range .type }}
-                {{ $types = $types | append . }}
+                {{ $types = $types | append (htmlEscape .) }}
             {{ end }}
         {{ end }}
 
         {{ $type = delimit $types "|" }}
     {{ else }}
         {{/* A simple type like string or boolean */}}
-        {{ $type = .type }}
+        {{ $type = (htmlEscape .type) }}
     {{ end }}
 
     {{ return $type }}
@@ -165,9 +165,9 @@
             If the property has a `title`, use that rather than `type`.
             This means we can write things like `EventFilter` rather than `object`.
         */}}
-        {{ $type = .title }}
+        {{ $type = .title | htmlEscape }}
         {{ if .anchor }}
-            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) (htmlEscape $type) | safeHTML }}
+            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
         {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
