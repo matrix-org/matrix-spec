@@ -268,7 +268,8 @@ jobs:
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@16361eb4acea8698b220b76c0d4e84e1fd22c61d
         with:
-          hugo-version: '0.113.0'
+          # Cannot build the spec with Hugo 0.125.0 because of https://github.com/google/docsy/issues/1930
+          hugo-version: '0.124.1'
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
