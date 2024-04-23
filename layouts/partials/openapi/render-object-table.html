@@ -179,17 +179,47 @@
         {{/*
             If the property uses `patternProperties` to describe its
             internal structure, handle this with a bit of recursion.
-            Note that we ignore the pattern as the current definitions
+            Types are grouped by pattern format. Note that we ignore
+            patterns without a format as the current definitions
             always have a single pattern, but we might need to handle
             them later to differentiate schemas according to patterns.
         */}}
-        {{ $types := slice }}
 
-        {{ range $pattern, $schema := .patternProperties}}
-            {{ $types = $types | append (partial "property-type" $schema) }}
+        {{/* Use a Scratch to manipulate the map easily. */}}
+        {{ $scratch := newScratch }}
+
+        {{ range $pattern, $schema := .patternProperties }}
+            {{ $formatId := "string" }}
+            {{ with index $schema "x-pattern-format" }}
+                {{ $formatId = . }}
+            {{ end }}
+
+            {{/* Initialize the map for the format if it doesn't exist. */}}
+            {{ if not (reflect.IsSlice ($scratch.Get $formatId)) }}
+                {{ $scratch.Set $formatId slice }}
+            {{ end }}
+
+            {{ $scratch.Add $formatId (partial "property-type" $schema) }}
         {{ end }}
 
-        {{ $type = delimit (slice "{string: " (delimit $types "|") "}" ) "" }}
+        {{/* First generate the type string for each format. */}}
+        {{ $types := slice }}
+        {{ range $formatId, $formatTypes := $scratch.Values }}
+            {{ $formatKey := "string" }}
+            {{ if ne $formatId "string" }}
+                {{ with index site.Data "custom-formats" $formatId }}
+                    {{ $formatKey = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
+                {{ else }}
+                    {{ errorf "Unsupported value for `x-pattern-format`: %s" $formatId }}
+                {{ end }}
+            {{ end }}
+
+            {{ $formatString := printf "{%s: %s}" $formatKey (delimit $formatTypes "|") }}
+            {{ $types = $types | append $formatString }}
+        {{ end }}
+
+        {{/* Then join all the formats. */}}
+        {{ $type = delimit $types "|" }}
     {{ end }}
 
     {{ return $type }}

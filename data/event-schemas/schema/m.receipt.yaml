@@ -16,7 +16,7 @@ properties:
         patternProperties:
             "^\\$":
                 type: object
-                x-pattern: "$EVENT_ID"
+                x-pattern-format: "mx-event-id"
                 title: Event Receipts
                 description: |-
                     The collection of receipts for this event ID.
@@ -34,7 +34,7 @@ properties:
                                 description: |-
                                     The mapping of user ID to receipt. The user ID is the
                                     entity who sent this receipt.
-                                x-pattern: "$USER_ID"
+                                x-pattern-format: "mx-user-id"
                                 properties:
                                     ts:
                                         type: integer

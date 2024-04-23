@@ -31,3 +31,12 @@ particular Matrix specification versions.
 
 Although the OpenAPI/JSON Schema specs only allow to use `$ref` to reference a
 whole example, we use it to compose examples from other examples.
+
+## Custom `x-pattern-format` key and custom formats 
+
+In JSON Schema, `format` is a property to convey semantic information about a
+schema. We define `x-pattern-format` as a key on the schemas under
+`patternProperties` with the same use as `format`, but that applies to the
+pattern of the property. We also define custom values for formats with the `mx-`
+prefix in `data/custom-formats.yaml`. Those values are recognized in the
+rendered specification and link to the definition of the format.
