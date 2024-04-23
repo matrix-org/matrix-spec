@@ -9,11 +9,11 @@
   * `properties`: optional dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
-  * `additionalProperties`: optional dictionary for properties with undefined
-    names, in the same format as `property_data`
+  * `additionalProperties`: an OpenAPI schema document for additional properties
+    on the object.
 
   * `patternProperties`: optional dictionary for properties with names adhering
-    to a regex pattern, in the same format as `property_data`
+    to a regex pattern. A map from regex pattern to OpenAPI schema document.
 
   * `required`: optional array containing the names of required properties.
     In some cases (such as response body specifications) this isn't used, and
@@ -55,6 +55,15 @@
 </table>
 
 {{ else if (or .additionalProperties .patternProperties) }}
+
+{{/*
+A special format of table for objects which only have additionalProperties or patternProperties.
+
+This is only ever used for top-level objects. Nested objects in this situation are just shown
+as rows within their parent object, and don't get their own table. (They are filtered out in
+resolve-additional-types.)
+*/}}
+
 <table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
  {{ with $title }}
  <caption>{{ . }}</caption>
@@ -113,7 +122,7 @@
     {{ else if or (reflect.IsSlice .type) .oneOf }}
         {{/*
             It's legal to specify an array of types.
-            
+
             There are two ways to do that:
               - Use an array of strings.
               - Use oneOf, with items having a schema.
