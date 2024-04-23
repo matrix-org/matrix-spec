@@ -21,14 +21,13 @@
 # mx-custom-key:
 #   title: The title rendered in the specification
 #   url: /url/to#definition
-#   pattern: "REGEX" (not used for rendering, but allows to define the common
-#                     pattern to use for the format)
 
 mx-user-id:
   title: User ID
   url: /appendices#user-identifiers
-  pattern: "^@"
+  # regex: "^@"
+
 mx-event-id:
   title: Event ID
   url: /appendices#event-ids
-  pattern: "^\\$"
+  # regex: "^\\$"
