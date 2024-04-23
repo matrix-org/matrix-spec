@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# The list of custom formats supported for the `format` key and the
-# `x-pattern-format` extension (see `openapi_extensions.md` for more details).
+
+# This file contains the list of custom formats supported for the `format` key
+# and the `x-pattern-format` extension (see `openapi_extensions.md` for more
+# details).
 #
 # Each entry must use the `mx-` prefix and have the form:
 #
