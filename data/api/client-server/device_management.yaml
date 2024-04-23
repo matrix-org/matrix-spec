@@ -36,9 +36,7 @@ paths:
                     type: array
                     description: A list of all registered devices for this user.
                     items:
-                      type: object
-                      allOf:
-                        - $ref: definitions/client_device.yaml
+                      $ref: definitions/client_device.yaml
               examples:
                 response:
                   value: {
@@ -75,9 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: definitions/client_device.yaml
+                $ref: definitions/client_device.yaml
               examples:
                 response:
                   value: {

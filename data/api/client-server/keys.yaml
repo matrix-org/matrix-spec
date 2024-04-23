@@ -226,8 +226,7 @@ paths:
                       uploaded via `/keys/signatures/upload` that the requesting user
                       is allowed to see.
                     additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                      $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -244,8 +243,7 @@ paths:
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
                     additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                      $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -265,8 +263,7 @@ paths:
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
                     additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                      $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"

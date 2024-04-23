@@ -841,8 +841,7 @@ paths:
                   type: object
                   description: A map of room IDs to room key backup data.
                   additionalProperties:
-                    allOf:
-                      - $ref: definitions/room_key_backup.yaml
+                    $ref: definitions/room_key_backup.yaml
                   example:
                     "!room:example.org":
                       sessions:
@@ -946,8 +945,7 @@ paths:
                     type: object
                     description: A map of room IDs to room key backup data.
                     additionalProperties:
-                      allOf:
-                        - $ref: definitions/room_key_backup.yaml
+                      $ref: definitions/room_key_backup.yaml
                     example:
                       "!room:example.org":
                         sessions:

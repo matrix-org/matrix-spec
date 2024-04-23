@@ -14,37 +14,22 @@
 properties:
   content:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   override:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   room:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   sender:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   underride:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
 type: object

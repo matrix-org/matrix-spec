@@ -171,8 +171,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -186,8 +185,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -318,8 +316,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -333,8 +330,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {

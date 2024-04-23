@@ -18,9 +18,7 @@ allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
   content:
-    type: object
-    allOf:
-    - "$ref": core-event-schema/call_event.yaml
+    "$ref": core-event-schema/call_event.yaml
   type:
     type: string
     enum:
