@@ -26,7 +26,6 @@
 {{ $required := .required}}
 
 {{ if $properties }}
-
 <table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
  {{ with $title }}
  <caption>{{ . }}</caption>
@@ -52,6 +51,28 @@
 
     {{ end }}
 
+    {{/*
+      If the object has additional properties *as well as* regular properties, we add a special row to the table.
+
+      Note that, per https://json-schema.org/draft/2020-12/json-schema-core#name-boolean-json-schemas, JSON schemas
+      can be a simple "true" or "false" as well as the more normal object.
+
+      `additionalProperties: true` is pretty much the default for Matrix (it means: "you're allowed to include random
+      unspecced properties in your object"), so nothing to do here.
+
+      `additionalProperties: false` means "you're not allowed to include any unspecced properties in your object". We
+      may want to consider how to display that; for now we just ignore it.
+
+      TODO: support `patternProperties` here.
+    */}}
+    {{ if reflect.IsMap .additionalProperties }}
+
+ <tr>
+  <td>&lt;Other properties&gt;</code></td>
+  <td><code>{{ partial "partials/property-type" .additionalProperties }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
+ </tr>
+    {{ end }}
 </table>
 
 {{ else if (or .additionalProperties .patternProperties) }}
