@@ -470,9 +470,7 @@ paths:
                     rule to be applied to an event. A rule with no conditions
                     always matches. Only applicable to `underride` and `override` rules.
                   items:
-                    type: object
-                    allOf:
-                      - $ref: definitions/push_condition.yaml
+                    $ref: definitions/push_condition.yaml
                 pattern:
                   type: string
                   description: Only applicable to `content` rules. The glob-style pattern to match
