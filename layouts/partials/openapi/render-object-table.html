@@ -185,26 +185,24 @@
             them later to differentiate schemas according to patterns.
         */}}
 
-        {{/* Use a Scratch to manipulate the map easily. */}}
-        {{ $scratch := newScratch }}
+        {{/*
+            Construct a map from format ID to the type string of the format.
+        */}}
+        {{ $formatMap := newScratch }}
 
         {{ range $pattern, $schema := .patternProperties }}
-            {{ $formatId := "string" }}
-            {{ with index $schema "x-pattern-format" }}
-                {{ $formatId = . }}
+            {{ $formatId := or (index $schema "x-pattern-format") "string" }}
+
+            {{ if $formatMap.Get $formatId }}
+                {{ errorf "'%s' pattern format is defined more than once for the same property" $formatId }}
             {{ end }}
 
-            {{/* Initialize the map for the format if it doesn't exist. */}}
-            {{ if not (reflect.IsSlice ($scratch.Get $formatId)) }}
-                {{ $scratch.Set $formatId slice }}
-            {{ end }}
-
-            {{ $scratch.Add $formatId (partial "property-type" $schema) }}
+            {{ $formatMap.Set $formatId (partial "property-type" $schema) }}
         {{ end }}
 
         {{/* First generate the type string for each format. */}}
         {{ $types := slice }}
-        {{ range $formatId, $formatTypes := $scratch.Values }}
+        {{ range $formatId, $formatType := $formatMap.Values }}
             {{ $formatKey := "string" }}
             {{ if ne $formatId "string" }}
                 {{ with index site.Data "custom-formats" $formatId }}
@@ -214,7 +212,7 @@
                 {{ end }}
             {{ end }}
 
-            {{ $formatString := printf "{%s: %s}" $formatKey (delimit $formatTypes "|") }}
+            {{ $formatString := printf "{%s: %s}" $formatKey $formatType }}
             {{ $types = $types | append $formatString }}
         {{ end }}
 
