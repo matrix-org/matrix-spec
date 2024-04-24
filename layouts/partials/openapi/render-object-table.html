@@ -160,8 +160,12 @@
     {{ $type := "object" }}
     {{ if and .title (or .properties (not (or .additionalProperties .patternProperties))) }}
         {{/*
-            If the property has a `title`, use that rather than `type`.
-            This means we can write things like `EventFilter` rather than `object`.
+          We only want to use the title in two cases:
+
+          * The object is rendered as a separate table that will use the same
+            title, which means that the object must have `properties`.
+          * The object doesn't define any properties, because showing the title
+            (like `EventFilter`) is better than showing `object`.
         */}}
         {{ $type = .title | htmlEscape }}
         {{ if .anchor }}
