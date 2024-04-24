@@ -155,12 +155,10 @@
       adhering to a regex pattern
 
     * `anchor`: optional HTML element id for the target type, which will be used to link to it.
-
-    The title has a higher priority than anything else.
 */}}
 {{ define "partials/object-type-or-title" }}
     {{ $type := "object" }}
-    {{ if .title }}
+    {{ if and .title (or .properties (not (or .additionalProperties .patternProperties))) }}
         {{/*
             If the property has a `title`, use that rather than `type`.
             This means we can write things like `EventFilter` rather than `object`.
