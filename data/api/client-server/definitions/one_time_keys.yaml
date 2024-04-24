@@ -9,6 +9,7 @@ additionalProperties:
   oneOf:
     - type: string
     - type: object
+      title: KeyObject
       properties:
         key:
           type: string
@@ -18,7 +19,7 @@ additionalProperties:
           description: |-
             Signature for the device. Mapped from user ID to signature object,
             containing mapping from _key signing identifier_ to the signature
-            (see also: https://spec.matrix.org/v1.2/appendices/#signing-json)
+            (see also: [Signing JSON](/appendices/#signing-json))
           additionalProperties:
             type: object
       required: ['key', 'signatures']
