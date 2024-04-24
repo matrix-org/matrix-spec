@@ -9,11 +9,11 @@
   * `properties`: optional dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
-  * `additionalProperties`: an OpenAPI schema document for additional properties
-    on the object.
+  * `additionalProperties`: a JSON Schema for additional properties on the
+    object.
 
   * `patternProperties`: optional dictionary for properties with names adhering
-    to a regex pattern. A map from regex pattern to OpenAPI schema document.
+    to a regex pattern. A map from regex pattern to JSON Schema.
 
   * `required`: optional array containing the names of required properties.
     In some cases (such as response body specifications) this isn't used, and
@@ -69,7 +69,7 @@
 
  <tr>
   <td>&lt;Other properties&gt;</code></td>
-  <td><code>{{ partial "partials/property-type" .additionalProperties }}</code></td>
+  <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
   <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
  </tr>
     {{ end }}
