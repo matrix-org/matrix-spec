@@ -165,10 +165,12 @@ paths:
               type: object
               description: |-
                 A map of user ID to a map of key ID to signed JSON object.
-              additionalProperties:
-                type: object
-                additionalProperties:
+              patternProperties:
+                "^@":
+                  x-pattern-format: mx-user-id
                   type: object
+                  additionalProperties:
+                    type: object
               example: {
                 "@alice:example.com": {
                   "HIJKLMN": {
@@ -238,11 +240,13 @@ paths:
                       A map from user ID to key ID to an error for any signatures
                       that failed.  If a signature was invalid, the `errcode` will
                       be set to `M_INVALID_SIGNATURE`.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
+                    patternProperties:
+                      "^@":
                         type: object
-                        title: Error
+                        x-pattern-format: mx-user-id
+                        additionalProperties:
+                          type: object
+                          title: Error
                     example:
                       "@alice:example.com":
                         HIJKLMN:

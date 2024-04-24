@@ -20,6 +20,8 @@ additionalProperties:
             Signature for the device. Mapped from user ID to signature object,
             containing mapping from _key signing identifier_ to the signature
             (see also: [Signing JSON](/appendices/#signing-json))
-          additionalProperties:
-            type: object
+          patternProperties:
+            "^@":
+              x-pattern-format: mx-user-id
+              type: object
       required: ['key', 'signatures']

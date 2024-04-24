@@ -57,12 +57,14 @@ paths:
                     The messages to send. A map from user ID, to a map from
                     device ID to message body. The device ID may also be `*`,
                     meaning all known devices for the user.
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
                       type: object
-                      title: EventContent
-                      description: Message content
+                      additionalProperties:
+                        type: object
+                        title: EventContent
+                        description: Message content
                   example:
                     "@alice:example.com":
                       TLLBEANAAG:
