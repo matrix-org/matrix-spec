@@ -99,11 +99,11 @@ jobs:
         # the asterisk matching behaviour, not the literal string.
         run: |
           if [ "${GITHUB_EVENT_NAME}" == "pull_request" ]; then
-              echo ::set-output name=baseURL::/
+              echo "baseURL=/" >> "$GITHUB_OUTPUT"
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-              echo ::set-output name=baseURL::"/${GITHUB_REF/refs\/tags\//}"
+              echo "baseURL=/${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"
           else
-              echo ::set-output name=baseURL::/unstable
+              echo "baseURL=/unstable" >> "$GITHUB_OUTPUT"
           fi
 
   build-openapi:

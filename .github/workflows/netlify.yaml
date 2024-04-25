@@ -32,7 +32,7 @@ jobs:
           pr_number=$(curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "$pulls_uri" |
                jq -r '.[] | .number')
           echo "PR number: $pr_number"
-          echo "::set-output name=prnumber::$pr_number"
+          echo "prnumber=$pr_number" >> "$GITHUB_OUTPUT"
         
       - name: '📥 Download artifact'
         uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
