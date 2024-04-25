@@ -1,0 +1,1 @@
+Replace `set-output` with environment files in CI.
