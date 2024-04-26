@@ -14,7 +14,8 @@
 accessTokenQuery:
   type: apiKey
   description: |-
-    The `access_token` returned by a call to `/register`, as a query parameter.
+    **Deprecated.** The `access_token` returned by a call to `/register`, as a
+    query parameter.
   name: access_token
   in: query
 accessTokenBearer:

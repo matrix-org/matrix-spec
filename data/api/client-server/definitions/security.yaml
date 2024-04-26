@@ -14,7 +14,7 @@
 accessTokenQuery:
   type: apiKey
   description: |-
-    The `access_token` returned by a call to `/login` or `/register`, as a query
+    **Deprecated.** The `access_token` returned by a call to `/login` or `/register`, as a query
     parameter.
 
     It can also be the `as_token` of an application service.
@@ -33,7 +33,8 @@ accessTokenBearer:
 appserviceAccessTokenQuery:
   type: apiKey
   description: |-
-    The `as_token` of an application service, as a query parameter.
+    **Deprecated.** The `as_token` of an application service, as a query
+    parameter.
   name: access_token
   in: query
 appserviceAccessTokenBearer:

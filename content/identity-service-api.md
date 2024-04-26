@@ -162,15 +162,20 @@ of access tokens to authenticate users. The access tokens provided by an
 Identity Server cannot be used to authenticate Client-Server API
 requests.
 
-An access token is provided to an endpoint in one of two ways:
+Access tokens may be provided via a request header, using the
+Authentication Bearer scheme: `Authorization: Bearer TheTokenHere`.
 
-1.  Via a query string parameter, `access_token=TheTokenHere`.
-2.  Via a request header, `Authorization: Bearer TheTokenHere`.
+Clients may alternatively provide the access token via a query string
+parameter: `access_token=TheTokenHere`. This method is deprecated to
+prevent the access token being leaked in access/HTTP logs and SHOULD NOT
+be used by clients.
 
-Clients are encouraged to the use the `Authorization` header where
-possible to prevent the access token being leaked in access/HTTP logs.
-The query string should only be used in cases where the `Authorization`
-header is inaccessible for the client.
+Identity Servers MUST support both methods.
+
+{{% boxes/note %}}
+{{% changed-in v="1.11" %}}
+Sending the access token as a query string parameter is now deprecated.
+{{% /boxes/note %}}
 
 When credentials are required but missing or invalid, the HTTP call will
 return with a status of 401 and the error code `M_UNAUTHORIZED`.
