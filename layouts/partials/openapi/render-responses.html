@@ -38,6 +38,24 @@
 {{ range $code, $response := $responses }}
     {{ if $response.content }}
 <h3>{{$code}} response</h3>
+        {{/* Display defined headers */}}
+        {{ if $response.headers }}
+            {{/* build a dict mapping from name->schema, which render-object-table expects */}}
+            {{ $headers_dict := dict }}
+            {{ range $header_name,$header_props := $response.headers }}
+                {{/*
+                    merge the schema at the same level as the rest of the other fields because that is
+                    what `render-object-table` expects. Put the schema first so examples in it are
+                    overwritten.
+                */}}
+                {{ $header_schema := merge $header_props.schema $header_props }}
+                {{ $headers_dict = merge $headers_dict (dict $header_name $header_schema )}}
+            {{ end }}
+
+            {{/* and render the headers */}}
+            {{ partial "openapi/render-object-table" (dict "title" "Headers" "properties" $headers_dict) }}
+        {{ end }}
+
         {{/*
             A response can have several content types.
         */}}
