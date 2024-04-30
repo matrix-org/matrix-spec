@@ -980,6 +980,133 @@ in the registration process that their token has expired.
 
 {{% http-api spec="client-server" api="registration_tokens" %}}
 
+##### Terms of service at registration
+
+{{% added-in v="1.11" %}}
+
+| Type                     | Description                                                           |
+|--------------------------|-----------------------------------------------------------------------|
+| `m.login.terms`          | Authentication requires the user to accept a set of terms of service. |
+
+{{% boxes/note %}}
+The `m.login.terms` authentication type is only valid on the
+[`/register`](#post_matrixclientv3register) endpoint.
+{{% /boxes/note %}}
+
+This authentication type is used when the homeserver requires new users to
+accept a given set of policy douments, such as a terms of service and a privacy
+policy. There may be many different types of documents, all of which are
+versioned and presented in (potentially) multiple languages.
+
+When the server requires the user to accept some terms, it does so by returning
+a 401 response to the `/register` request, where the response body includes
+`m.login.terms` in the `flows` list, and the `m.login.terms` property in the
+`params` object has the structure [shown below](#definition-mloginterms-params).
+
+If a client encounters an invalid parameter, registration should stop with an
+error presented to the user.
+
+The client should present the user with a checkbox to accept each policy,
+including a link to the provided url. Once the user has done so, the client
+submits an `auth` dict as follows, to indicate that all of the policies have
+been accepted:
+
+```json
+{
+  "type": "m.login.terms",
+  "session": "<session ID>"
+}
+```
+
+The server is expected to track which document versions it presented to the
+user during registration, if applicable.
+
+
+**Example**
+
+1. A client might submit a registration request as follows:
+
+   ```
+   POST /_matrix/client/v3/register
+   ```
+   ```json
+   {
+     "username": "cheeky_monkey",
+     "password": "ilovebananas"
+   }
+   ```
+
+2. The server requires the user to accept some terms of service before
+   registration, so returns the following response:
+
+   ```
+   HTTP/1.1 401 Unauthorized
+   Content-Type: application/json
+   ```
+   ```json
+   {
+     "flows": [
+       { "stages": [ "m.login.terms" ] }
+     ],
+     "params": {
+       "m.login.terms": {
+         "policies": {
+           "terms_of_service": {
+             "version": "1.2",
+             "en": {
+                 "name": "Terms of Service",
+                 "url": "https://example.org/somewhere/terms-1.2-en.html"
+             },
+             "fr": {
+                 "name": "Conditions d'utilisation",
+                 "url": "https://example.org/somewhere/terms-1.2-fr.html"
+             }
+           }
+         }
+       }
+     },
+     "session": "kasgjaelkgj"
+   }
+   ```
+
+3. The client presents the list of documents to the user, inviting them to
+   accept the polices.
+
+4. The client repeats the registration request, confirming that the user has
+   accepted the documents:
+   ```
+   POST /_matrix/client/v3/register
+   ```
+   ```json
+   {
+     "username": "cheeky_monkey",
+     "password": "ilovebananas",
+     "auth": {
+       "type": "m.login.terms",
+       "session": "kasgjaelkgj"
+     }
+   }
+   ```
+
+5. All authentication steps have now completed, so the request is successful:
+   ```
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   ```
+   ```json
+   {
+     "access_token": "abc123",
+     "device_id": "GHTYAJCE",
+     "user_id": "@cheeky_monkey:matrix.org"
+   }
+   ```
+
+{{% definition path="api/client-server/definitions/m.login.terms_params" %}}
+
+
+
+
+
 #### Fallback
 
 Clients cannot be expected to be able to know how to process every
