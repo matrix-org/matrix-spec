@@ -29,6 +29,8 @@
  *
  *     * title
  *     * properties
+ *     * additionalProperties
+ *     * patternProperties
  *     * required
  *     * enum
  *     * anchor
@@ -45,27 +47,31 @@
     "schema" .schema
     "anchor_base" .anchor_base
     "name" (.name | default .schema.title | default "<untitled object>")
+    "top_level" true
 ) }}
 {{ return $res.objects }}
 
 /*
  * A helper for the resolve-additional-types partial.
  *
- * Takes the same inputs as resolve-additional-types itself, except that `name` is mandatory.
+ * Takes the same inputs as resolve-additional-types itself, except:
+ *   * `name` is mandatory.
+ *   * `top_level`, if set, indicates that this is the top-level object.
  *
  * Returns a dict containing:
  *
  *   * `objects`: The array of object schema definitions.
  *
- *   * `schema`: An updated copy of the `schema` input (eg, nested `allOf`
- *     entries are expanded, and an `anchor` may be added). If the input
- *     `schema` was itself an object, this will be the same as the first entry
- *     in `objects`.
+ *   * `schema`: An updated copy of the `schema` input (eg, an `anchor` may be added).
+ *     If the input `schema` was itself an object that we should create a table for,
+ *     this will be the same as the first entry in `objects`.
  */
 {{ define "partials/resolve-additional-types-inner" }}
     {{ $this_object := .schema }}
     {{ $anchor_base := .anchor_base }}
     {{ $name := .name }}
+    {{ $top_level := .top_level }}
+
     {{ $all_objects := slice }}
 
     {{ if eq $this_object.type "object" }}
@@ -126,12 +132,24 @@
             {{ $this_object = merge $this_object (dict "properties" $updated_properties) }}
         {{ end }}
 
-        /* Finally, prepend the updated schema for the top-level object onto the $all_objects array */
-        {{ $tmp := slice $this_object }}
-        {{ if $all_objects }}
-            {{ $tmp = $tmp | append $all_objects }}
+        /* We'll want to create a table for `$this_object` itself if either:
+         *
+         *  - The object has some regular properties (not just patternProperties or additionalProperties), or:
+         *  - It is the top-level object. (We use a special format of table for top-level objects that
+         *    only have patternProperties or additionalProperties)
+         *
+         * In those cases, prepend the updated schema for the top-level object onto the $all_objects array.
+         *
+         * We think about this last so that we can take advantage of any updates to the schema that happened
+         * above (in particular, addition of `anchor` attributes).
+         */
+        {{ if or $this_object.properties $top_level }}
+            {{ $tmp := slice $this_object }}
+            {{ if $all_objects }}
+                {{ $tmp = $tmp | append $all_objects }}
+            {{ end }}
+            {{ $all_objects = $tmp }}
         {{ end }}
-        {{ $all_objects = $tmp }}
     {{ end }}
 
     {{ if eq $this_object.type "array" }}
@@ -198,8 +216,7 @@
  *
  * Returns a dict containing:
  *   * `objects`: The array of object schema definitions.
- *   * `schema`: An updated copy of the `schema` input (eg, nested `allOf`
- *     entries are expanded, and an `anchor` may be added).
+ *   * `schema`: An updated copy of the `schema` input (eg, an `anchor` may be added).
  */
 {{ define "partials/get-additional-objects" }}
     /* .name is the name of the object for logging purposes */
@@ -211,7 +228,7 @@
       {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
     {{ end }}
 
-    {{ $res := partial "resolve-additional-types-inner" (dict "schema" .this_object "anchor_base" .anchor_base "name" $name) }}
+    {{ $res := partial "resolve-additional-types-inner" (dict "schema" .this_object "anchor_base" .anchor_base "name" $name "top_level" false) }}
     {{ range $res.objects }}
         {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}
@@ -226,5 +243,5 @@
  * but with (for example) different examples will be considered different.
  */
 {{ define "partials/clean-object" }}
-    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "anchor" .anchor) }}
+    {{ return (dict "title" .title "properties" .properties "additionalProperties" .additionalProperties "patternProperties" .patternProperties "required" .required "enum" .enum "anchor" .anchor) }}
 {{ end }}
