@@ -84,6 +84,9 @@
     * `oneOf`: optional array of dictionaries describing the different formats
       that the property can have
 
+    * `properties`: if the type is an object, optional dictionary for
+      well-defined properties, each given as: `property_name` : `property_data`
+
     * `additionalProperties`: if the type is an object, optional dictionary for
       properties with undefined names
 
@@ -148,6 +151,9 @@
 
     * `title`: optional string for the title of the object property
 
+    * `properties`: optional dictionary for well-defined properties, each given
+      as: `property_name` : `property_data`
+
     * `additionalProperties`: optional dictionary for properties with undefined
       names
 
@@ -155,19 +161,19 @@
       adhering to a regex pattern
 
     * `anchor`: optional HTML element id for the target type, which will be used to link to it.
-
-    The title has a higher priority than anything else.
 */}}
 {{ define "partials/object-type-or-title" }}
     {{ $type := "object" }}
-    {{ if .title }}
+    {{ if .properties }}
         {{/*
-            If the property has a `title`, use that rather than `type`.
-            This means we can write things like `EventFilter` rather than `object`.
+            The object has its own (regular) properties, so we will make a
+            separate table for it. Refer to it using its title, if it has one.
         */}}
-        {{ $type = .title | htmlEscape }}
-        {{ if .anchor }}
-            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
+        {{ if .title }}
+          {{ $type = .title | htmlEscape }}
+          {{ if .anchor }}
+              {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
+          {{ end }}
         {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
@@ -218,6 +224,13 @@
 
         {{/* Then join all the formats. */}}
         {{ $type = delimit $types "|" }}
+    {{ else if .title }}
+        {{/*
+            No properties, so there won't be a separate table. We use the title
+            anyway, because showing the title (like `EventFilter`) is better
+            than showing `object`.
+        */}}
+        {{ $type = .title | htmlEscape }}
     {{ end }}
 
     {{ return $type }}
