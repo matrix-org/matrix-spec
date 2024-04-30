@@ -32,10 +32,10 @@ jobs:
           pr_number=$(curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' "$pulls_uri" |
                jq -r '.[] | .number')
           echo "PR number: $pr_number"
-          echo "::set-output name=prnumber::$pr_number"
+          echo "prnumber=$pr_number" >> "$GITHUB_OUTPUT"
         
       - name: '📥 Download artifact'
-        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           workflow: main.yaml
           run_id: ${{ github.event.workflow_run.id }}
@@ -46,8 +46,7 @@ jobs:
         
       - name: "📤 Deploy to Netlify"
         id: netlify
-        # v2.1.0
-        uses: nwtgck/actions-netlify@7a92f00dde8c92a5a9e8385ec2919775f7647352
+        uses: nwtgck/actions-netlify@4cbaf4c08f1a7bfa537d6113472ef4424e4eb654 # v3.0.0
         with:
           publish-dir: spec
           deploy-message: "Deploy from GitHub Actions"

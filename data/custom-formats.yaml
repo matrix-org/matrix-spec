@@ -1,4 +1,4 @@
-# Copyright 2019 The Matrix.org Foundation C.I.C.
+# Copyright 2024 Commaille Kévin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,18 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-accessTokenQuery:
-  type: apiKey
-  description: |-
-    **Deprecated.** The `access_token` returned by a call to `/register`, as a
-    query parameter.
-  name: access_token
-  in: query
-accessTokenBearer:
-  type: http
-  description: |-
-    The `access_token` returned by a call to `/register`, using the
-    `Authorization: Bearer` header.
-    
-    This is the preferred method.
-  scheme: bearer
+
+# This file contains the list of custom formats supported for the `format` key
+# and the `x-pattern-format` extension (see `openapi_extensions.md` for more
+# details).
+#
+# Each entry must use the `mx-` prefix and have the form:
+#
+# mx-custom-key:
+#   title: The title rendered in the specification
+#   url: /url/to#definition
+
+mx-user-id:
+  title: User ID
+  url: /appendices#user-identifiers
+  # regex: "^@"
+
+mx-event-id:
+  title: Event ID
+  url: /appendices#event-ids
+  # regex: "^\\$"
