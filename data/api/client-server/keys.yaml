@@ -39,12 +39,9 @@ paths:
                   allOf:
                     - $ref: definitions/device_keys.yaml
                 one_time_keys:
-                  # $ref: "definitions/one_time_keys.yaml"
-                  # XXX: We can't define an actual object here, so we have to hope
-                  # that people will look at the OpenAPI source or can figure it out
-                  # from the other endpoints/example.
+                  allOf:
+                    - $ref: "definitions/one_time_keys.yaml"
                   type: object
-                  title: OneTimeKeys
                   description: |-
                     One-time public keys for "pre-key" messages.  The names of
                     the properties should be in the format
@@ -65,10 +62,9 @@ paths:
                           ed25519:JLAFKJWSCS: IQeCEPb9HFk217cU9kw9EOiusC6kMIkoIRnbnfOh5Oc63S1ghgyjShBGpu34blQomoalCyXWyhaaT3MrLZYQAA
                 fallback_keys:
                   x-addedInMatrixVersion: "1.2"
-                  # $ref: "definitions/one_time_keys.yaml"
-                  # XXX: We can't define an actual object here - see above.
+                  allOf:
+                    - $ref: "definitions/one_time_keys.yaml"
                   type: object
-                  title: OneTimeKeys
                   description: |-
                     The public key which should be used if the device's one-time keys
                     are exhausted. The fallback key is not deleted once used, but should
@@ -349,13 +345,7 @@ paths:
                     additionalProperties:
                       type: object
                       additionalProperties:
-                        # $ref: "definitions/one_time_keys.yaml"
-                        # XXX: We can't define an actual object here, so we have to hope
-                        # that people will read the link provided in the description
-                        # and figure it out from the other endpoints/example.
-                        # See also one_time_key parameter for /keys/upload above.
-                        type: object
-                        title: OneTimeKeys
+                        $ref: "definitions/one_time_keys.yaml"
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
