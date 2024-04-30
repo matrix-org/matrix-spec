@@ -158,18 +158,16 @@
 */}}
 {{ define "partials/object-type-or-title" }}
     {{ $type := "object" }}
-    {{ if and .title (or .properties (not (or .additionalProperties .patternProperties))) }}
+    {{ if .properties }}
         {{/*
-          We only want to use the title in two cases:
-
-          * The object is rendered as a separate table that will use the same
-            title, which means that the object must have `properties`.
-          * The object doesn't define any properties, because showing the title
-            (like `EventFilter`) is better than showing `object`.
+            The object has its own (regular) properties, so we will make a
+            separate table for it. Refer to it using its title, if it has one.
         */}}
-        {{ $type = .title | htmlEscape }}
-        {{ if .anchor }}
-            {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
+        {{ if .title }}
+          {{ $type = .title | htmlEscape }}
+          {{ if .anchor }}
+              {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
+          {{ end }}
         {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
@@ -192,6 +190,13 @@
         {{ end }}
 
         {{ $type = delimit (slice "{string: " (delimit $types "|") "}" ) "" }}
+    {{ else if .title }}
+        {{/*
+            No properties, so there won't be a separate table. We use the title
+            anyway, because showing the title (like `EventFilter`) is better
+            than showing `object`.
+        */}}
+        {{ $type = .title }}
     {{ end }}
 
     {{ return $type }}
