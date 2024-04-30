@@ -1008,8 +1008,8 @@ error presented to the user.
 
 The client should present the user with a checkbox to accept each policy,
 including a link to the provided url. Once the user has done so, the client
-submits an `auth` dict as follows, to indicate that all of the policies have
-been accepted:
+submits an `auth` dict with just the `type` and `session`, as follows, to
+indicate that all of the policies have been accepted:
 
 ```json
 {
@@ -1102,10 +1102,6 @@ user during registration, if applicable.
    ```
 
 {{% definition path="api/client-server/definitions/m.login.terms_params" %}}
-
-
-
-
 
 #### Fallback
 
