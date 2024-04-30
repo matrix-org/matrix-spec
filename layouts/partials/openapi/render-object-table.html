@@ -196,7 +196,7 @@
             anyway, because showing the title (like `EventFilter`) is better
             than showing `object`.
         */}}
-        {{ $type = .title }}
+        {{ $type = .title | htmlEscape }}
     {{ end }}
 
     {{ return $type }}
