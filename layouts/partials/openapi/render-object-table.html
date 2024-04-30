@@ -84,6 +84,9 @@
     * `oneOf`: optional array of dictionaries describing the different formats
       that the property can have
 
+    * `properties`: if the type is an object, optional dictionary for
+      well-defined properties, each given as: `property_name` : `property_data`
+
     * `additionalProperties`: if the type is an object, optional dictionary for
       properties with undefined names
 
@@ -147,6 +150,9 @@
     * `type`: string equal to "object"
 
     * `title`: optional string for the title of the object property
+
+    * `properties`: optional dictionary for well-defined properties, each given
+      as: `property_name` : `property_data`
 
     * `additionalProperties`: optional dictionary for properties with undefined
       names
