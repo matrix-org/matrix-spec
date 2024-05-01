@@ -42,7 +42,7 @@ properties:
           - $ref: namespace_list.yaml
           - description: |-
               A list of namespaces defining the user IDs that the application
-              service is interested in, in addition to it's `sender_localpart`.
+              service is interested in, in addition to its `sender_localpart`.
               Events will be sent to the AS if a local user matching one of the
               namespaces is the target of the event, or is a joined member of
               the room where the event occurred.
