@@ -9,11 +9,11 @@
   * `properties`: optional dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
-  * `additionalProperties`: optional dictionary for properties with undefined
-    names, in the same format as `property_data`
+  * `additionalProperties`: a JSON Schema for additional properties on the
+    object.
 
   * `patternProperties`: optional dictionary for properties with names adhering
-    to a regex pattern, in the same format as `property_data`
+    to a regex pattern. A map from regex pattern to JSON Schema.
 
   * `required`: optional array containing the names of required properties.
     In some cases (such as response body specifications) this isn't used, and
@@ -26,7 +26,6 @@
 {{ $required := .required}}
 
 {{ if $properties }}
-
 <table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
  {{ with $title }}
  <caption>{{ . }}</caption>
@@ -52,9 +51,40 @@
 
     {{ end }}
 
+    {{/*
+      If the object has additional properties *as well as* regular properties, we add a special row to the table.
+
+      Note that, per https://json-schema.org/draft/2020-12/json-schema-core#name-boolean-json-schemas, JSON schemas
+      can be a simple "true" or "false" as well as the more normal object.
+
+      `additionalProperties: true` is pretty much the default for Matrix (it means: "you're allowed to include random
+      unspecced properties in your object"), so nothing to do here.
+
+      `additionalProperties: false` means "you're not allowed to include any unspecced properties in your object". We
+      may want to consider how to display that; for now we just ignore it.
+
+      TODO: support `patternProperties` here.
+    */}}
+    {{ if reflect.IsMap .additionalProperties }}
+
+ <tr>
+  <td>&lt;Other properties&gt;</code></td>
+  <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
+ </tr>
+    {{ end }}
 </table>
 
 {{ else if (or .additionalProperties .patternProperties) }}
+
+{{/*
+A special format of table for objects which only have additionalProperties or patternProperties.
+
+This is only ever used for top-level objects. Nested objects in this situation are just shown
+as rows within their parent object, and don't get their own table. (They are filtered out in
+resolve-additional-types.)
+*/}}
+
 <table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
  {{ with $title }}
  <caption>{{ . }}</caption>
@@ -116,7 +146,7 @@
     {{ else if or (reflect.IsSlice .type) .oneOf }}
         {{/*
             It's legal to specify an array of types.
-            
+
             There are two ways to do that:
               - Use an array of strings.
               - Use oneOf, with items having a schema.
