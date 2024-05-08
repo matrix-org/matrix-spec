@@ -429,6 +429,15 @@ representation instead. Clients SHOULD, however, aim to support, at minimum, the
 basic LaTeX2e maths commands and the TeX maths commands, with the possible
 exception of commands that could be security risks.
 
+{{% boxes/warning %}}
+Certain commands, such as [those that can create macros](https://katex.org/docs/supported#macros),
+are potentially dangerous. Clients should either decline to process those
+commands, or should take care to ensure that they are handled in safe ways (such
+as by limiting recursion). In general, LaTeX commands should be filtered by
+allowing known-good commands rather than forbidding known-bad commands. Some
+LaTeX libraries may have options for doing this.
+{{% /boxes/warning %}}
+
 #### Server behaviour
 
 Homeservers SHOULD reject `m.room.message` events which don't have a
