@@ -366,7 +366,7 @@ For compatibility with older servers, the sender should
 - only include one space after `X-Matrix`,
 - only use lower-case names,
 - avoid using backslashes in parameter values, and
-- not include whitespace around the commas between name=value pairs.
+- avoid including whitespace around the commas between name=value pairs.
 
 For compatibility with older servers, the recipient should allow colons to be
 included in values without requiring the value to be enclosed in quotes.
