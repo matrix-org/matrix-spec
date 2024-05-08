@@ -262,22 +262,8 @@ For example, data encrypted using this algorithm could look like this:
 ##### Key representation
 
 When a user is given a raw key for `m.secret_storage.v1.aes-hmac-sha2`,
-it will be presented as a string constructed as follows:
-
-1.  The key is prepended by the two bytes `0x8b` and `0x01`
-2.  All the bytes in the string above, including the two header bytes,
-    are XORed together to form a parity byte. This parity byte is
-    appended to the byte string.
-3.  The byte string is encoded using base58, using the same [mapping as
-    is used for Bitcoin
-    addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart),
-    that is, using the alphabet
-    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
-4.  The string is formatted into groups of four characters separated by
-    spaces.
-
-When decoding a raw key, the process should be reversed, with the
-exception that whitespace is insignificant in the user's input.
+the key should be presented as a string using the common [cryptographic key
+representation](/appendices/#cryptographic-key-representation).
 
 ##### Deriving keys from passphrases
 

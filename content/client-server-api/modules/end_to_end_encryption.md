@@ -674,7 +674,7 @@ The process between Alice and Bob verifying each other would be:
     their devices if they match or not.
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
-    * Each of the keys that they wish the other user to verify (usually their 
+    * Each of the keys that they wish the other user to verify (usually their
       device ed25519 key and their master cross-signing key).
     * The complete list of key IDs that they wish the other user to verify.
 
@@ -1315,23 +1315,8 @@ replace it with the new key based on the key metadata as follows:
 ###### Recovery key
 
 If the recovery key (the private half of the backup encryption key) is
-presented to the user to save, it is presented as a string constructed
-as follows:
-
-1.  The 256-bit curve25519 private key is prepended by the bytes `0x8B`
-    and `0x01`
-2.  All the bytes in the string above, including the two header bytes,
-    are XORed together to form a parity byte. This parity byte is
-    appended to the byte string.
-3.  The byte string is encoded using base58, using the same [mapping as
-    is used for Bitcoin
-    addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart),
-    that is, using the alphabet
-    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
-4.  A space should be added after every 4th character.
-
-When reading in a recovery key, clients must disregard whitespace, and
-perform the reverse of steps 1 through 3.
+given to the user, the key should be presented as a string using the common [cryptographic key
+representation](/appendices/#cryptographic-key-representation).
 
 The recovery key can also be stored on the server or shared with other devices
 using the [Secrets](#secrets) module. When doing so, it is identified using the
