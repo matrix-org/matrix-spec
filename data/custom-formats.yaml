@@ -31,3 +31,8 @@ mx-event-id:
   title: Event ID
   url: /appendices#event-ids
   # regex: "^\\$"
+
+uri:
+  title: URI
+  url: http://tools.ietf.org/html/rfc3986
+  # no regex

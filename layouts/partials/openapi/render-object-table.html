@@ -128,6 +128,8 @@ resolve-additional-types.)
 
     * `anchor`: optional HTML element id for the target type, which will be used to link to it.
 
+    * `format`: optional string for the format of the type, used for strings.
+
 */}}
 {{ define "partials/property-type" }}
     {{ $type := "" }}
@@ -143,6 +145,15 @@ resolve-additional-types.)
         {{ $items := .items }}
         {{ $inner_type := partial "property-type" $items }}
         {{ $type = delimit (slice "[" $inner_type "]") "" }}
+    {{ else if eq .type "string" }}
+        {{ $type = "string" }}
+
+        {{/* If the string uses a known format, use it. */}}
+        {{ with .format }}
+            {{ with partial "custom-format" . }}
+                {{ $type = . }}
+            {{ end }}
+        {{ end }}
     {{ else if or (reflect.IsSlice .type) .oneOf }}
         {{/*
             It's legal to specify an array of types.
@@ -167,7 +178,7 @@ resolve-additional-types.)
 
         {{ $type = delimit $types "|" }}
     {{ else }}
-        {{/* A simple type like string or boolean */}}
+        {{/* A simple type like integer or boolean */}}
         {{ $type = (htmlEscape .type) }}
     {{ end }}
 
@@ -241,8 +252,8 @@ resolve-additional-types.)
         {{ range $formatId, $formatType := $formatMap.Values }}
             {{ $formatKey := "string" }}
             {{ if ne $formatId "string" }}
-                {{ with index site.Data "custom-formats" $formatId }}
-                    {{ $formatKey = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
+                {{ with partial "custom-format" $formatId }}
+                    {{ $formatKey = . }}
                 {{ else }}
                     {{ errorf "Unsupported value for `x-pattern-format`: %s" $formatId }}
                 {{ end }}
@@ -289,4 +300,19 @@ resolve-additional-types.)
     {{ if .property.enum }}<p>One of: <code>[{{ delimit .property.enum ", " }}]</code>.</p>{{ end -}}
     {{ if (index .property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index .property "x-addedInMatrixVersion")) }}{{ end -}}
     {{ if (index .property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index .property "x-changedInMatrixVersion")) }}{{ end -}}
+{{ end }}
+
+
+{{/*
+    Computes the type to display for a string format, given the identifier of
+    the format as a string.
+*/}} 
+{{ define "partials/custom-format" }}
+  {{ $customFormat := "" }}
+
+  {{ with index site.Data "custom-formats" . }}
+    {{ $customFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
+  {{ end }}
+
+  {{ return $customFormat }}
 {{ end }}
