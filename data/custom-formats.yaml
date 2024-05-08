@@ -36,3 +36,8 @@ mx-room-id:
   title: Room ID
   url: /appendices#room-ids
   # regex: "^!"
+
+uri:
+  title: URI
+  url: http://tools.ietf.org/html/rfc3986
+  # no regex
