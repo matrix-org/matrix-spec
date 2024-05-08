@@ -840,8 +840,11 @@ paths:
                 rooms:
                   type: object
                   description: A map of room IDs to room key backup data.
-                  additionalProperties:
-                    $ref: definitions/room_key_backup.yaml
+                  patternProperties:
+                    "^!":
+                      x-pattern-format: mx-room-id
+                      allOf:
+                        - $ref: definitions/room_key_backup.yaml
                   example:
                     "!room:example.org":
                       sessions:
@@ -944,8 +947,11 @@ paths:
                   rooms:
                     type: object
                     description: A map of room IDs to room key backup data.
-                    additionalProperties:
-                      $ref: definitions/room_key_backup.yaml
+                    patternProperties:
+                      "^!":
+                        x-pattern-format: mx-room-id
+                        allOf:
+                          - $ref: definitions/room_key_backup.yaml
                     example:
                       "!room:example.org":
                         sessions:

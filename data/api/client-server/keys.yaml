@@ -137,11 +137,13 @@ paths:
                     The keys to be downloaded. A map from user ID, to a list of
                     device IDs, or to an empty list to indicate all devices for the
                     corresponding user.
-                  additionalProperties:
-                    type: array
-                    items:
-                      type: string
-                      description: device ID
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: array
+                      items:
+                        type: string
+                        description: device ID
                   example:
                     "@alice:example.com": []
               required:
@@ -177,24 +179,26 @@ paths:
                       the information returned will be the same as uploaded via
                       `/keys/upload`, with the addition of an `unsigned`
                       property.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
-                        title: DeviceInformation
-                        allOf:
-                          - $ref: definitions/device_keys.yaml
-                        properties:
-                          unsigned:
-                            title: UnsignedDeviceInfo
-                            type: object
-                            description: |-
-                              Additional data added to the device key information
-                              by intermediate servers, and not covered by the
-                              signatures.
-                            properties:
-                              device_display_name:
-                                type: string
-                                description: The display name which the user set on the device.
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        type: object
+                        additionalProperties:
+                          title: DeviceInformation
+                          allOf:
+                            - $ref: definitions/device_keys.yaml
+                          properties:
+                            unsigned:
+                              title: UnsignedDeviceInfo
+                              type: object
+                              description: |-
+                                Additional data added to the device key information
+                                by intermediate servers, and not covered by the
+                                signatures.
+                              properties:
+                                device_display_name:
+                                  type: string
+                                  description: The display name which the user set on the device.
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
@@ -221,8 +225,11 @@ paths:
                       `/keys/device_signing/upload`, along with the signatures
                       uploaded via `/keys/signatures/upload` that the requesting user
                       is allowed to see.
-                    additionalProperties:
-                      $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -238,8 +245,11 @@ paths:
                       from user ID, to self-signing key information.  For each key, the
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
-                    additionalProperties:
-                      $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -258,8 +268,11 @@ paths:
                       from user ID, to user-signing key information.  The
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
-                    additionalProperties:
-                      $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -297,12 +310,14 @@ paths:
                   description: |-
                     The keys to be claimed. A map from user ID, to a map from
                     device ID to algorithm name.
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
-                      type: string
-                      description: algorithm
-                      example: signed_curve25519
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: object
+                      additionalProperties:
+                        type: string
+                        description: algorithm
+                        example: signed_curve25519
                   example:
                     "@alice:example.com":
                       JLAFKJWSCS: signed_curve25519
@@ -342,10 +357,12 @@ paths:
 
                       If necessary, the claimed key might be a fallback key. Fallback
                       keys are re-used by the server until replaced by the device.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
-                        $ref: "definitions/one_time_keys.yaml"
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        type: object
+                        additionalProperties:
+                          $ref: "definitions/one_time_keys.yaml"
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
