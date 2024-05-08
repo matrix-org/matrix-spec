@@ -350,9 +350,10 @@ def authorization_headers(origin_name, origin_signing_key,
 
 The format of the Authorization header is given in
 [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
-summary, the header begins with authorization scheme `X-Matrix`, followed by
-one or more spaces, followed by a comma-separated list of parameters written as
-name=value pairs. The names are case insensitive and order does not matter. The
+summary, the header begins with authorization scheme `X-Matrix`, followed by one
+or more spaces, followed by a comma-separated list of parameters written as
+name=value pairs. Zero or more spaces and tabs around each comma are allowed.
+The names are case insensitive and order does not matter. The
 values must be enclosed in quotes if they contain characters that are not
 allowed in `token`s, as defined in
 [RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
@@ -363,8 +364,9 @@ replaced by the character that follows the backslash.
 
 For compatibility with older servers, the sender should
 - only include one space after `X-Matrix`,
-- only use lower-case names, and
-- avoid using backslashes in parameter values.
+- only use lower-case names,
+- avoid using backslashes in parameter values, and
+- avoid including whitespace around the commas between name=value pairs.
 
 For compatibility with older servers, the recipient should allow colons to be
 included in values without requiring the value to be enclosed in quotes.
