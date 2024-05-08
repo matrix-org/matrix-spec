@@ -984,9 +984,9 @@ in the registration process that their token has expired.
 
 {{% added-in v="1.11" %}}
 
-| Type                     | Description                                                           |
-|--------------------------|-----------------------------------------------------------------------|
-| `m.login.terms`          | Authentication requires the user to accept a set of terms of service. |
+| Type                     | Description                                                              |
+|--------------------------|--------------------------------------------------------------------------|
+| `m.login.terms`          | Authentication requires the user to accept a set of policy documents. |
 
 {{% boxes/note %}}
 The `m.login.terms` authentication type is only valid on the
@@ -994,7 +994,7 @@ The `m.login.terms` authentication type is only valid on the
 {{% /boxes/note %}}
 
 This authentication type is used when the homeserver requires new users to
-accept a given set of policy douments, such as a terms of service and a privacy
+accept a given set of policy documents, such as a terms of service and a privacy
 policy. There may be many different types of documents, all of which are
 versioned and presented in (potentially) multiple languages.
 
@@ -1007,7 +1007,7 @@ If a client encounters an invalid parameter, registration should stop with an
 error presented to the user.
 
 The client should present the user with a checkbox to accept each policy,
-including a link to the provided url. Once the user has done so, the client
+including a link to the provided URL. Once the user has done so, the client
 submits an `auth` dict with just the `type` and `session`, as follows, to
 indicate that all of the policies have been accepted:
 
