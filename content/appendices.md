@@ -945,7 +945,7 @@ The acceptable character set matches the unreserved character set in [RFC
 Sometimes it is necessary to present a private cryptographic key in the user
 interface.
 
-When this happens, the key should be presented as a string formatted as
+When this happens, the key SHOULD be presented as a string formatted as
 follows:
 
 1.  The raw key is prepended by the two bytes `0x8B` and `0x01`.
