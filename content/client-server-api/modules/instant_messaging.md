@@ -430,12 +430,17 @@ basic LaTeX2e maths commands and the TeX maths commands, with the possible
 exception of commands that could be security risks.
 
 {{% boxes/warning %}}
-Certain commands, such as [those that can create macros](https://katex.org/docs/supported#macros),
+In general, LaTeX places a heavy burden on client authors to ensure that it is
+processed safely. Certain commands, such as [those that can create macros](https://katex.org/docs/supported#macros),
 are potentially dangerous. Clients should either decline to process those
 commands, or should take care to ensure that they are handled in safe ways (such
 as by limiting recursion). In general, LaTeX commands should be filtered by
-allowing known-good commands rather than forbidding known-bad commands. Some
-LaTeX libraries may have options for doing this.
+allowing known-good commands rather than forbidding known-bad commands.
+
+Therefore, clients should not render mathematics by calling a LaTeX compiler
+without proper sandboxing, as those executables were not written to handle
+untrusted input. Some LaTeX rendering libraries are better suited for that by
+allowing only a subset of LaTeX and enforcing recursion limits.
 {{% /boxes/warning %}}
 
 #### Server behaviour
