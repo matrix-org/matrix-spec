@@ -948,7 +948,8 @@ interface.
 When this happens, the key SHOULD be presented as a string formatted as
 follows:
 
-1.  The raw key is prepended by the two bytes `0x8B` and `0x01`.
+1.  A byte array is created, consisting of two bytes `0x8B` and `0x01`,
+    followed by the raw key.
 2.  All the bytes in the array above, including the two header bytes,
     are XORed together to form a parity byte. This parity byte is
     appended to the byte array.
