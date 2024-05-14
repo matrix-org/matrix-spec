@@ -37,6 +37,11 @@ mx-room-id:
   url: /appendices#room-ids
   # regex: "^!"
 
+mx-server-name:
+  title: Server Name
+  url: /appendices#server-name
+  # no regex
+
 uri:
   title: URI
   url: http://tools.ietf.org/html/rfc3986

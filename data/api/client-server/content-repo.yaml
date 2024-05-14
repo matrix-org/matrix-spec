@@ -605,6 +605,7 @@ components:
       example: matrix.org
       schema:
         type: string
+        format: mx-server-name
     mediaId:
       in: path
       name: mediaId
