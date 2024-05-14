@@ -940,6 +940,31 @@ The acceptable character set matches the unreserved character set in [RFC
 3986](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3).
 {{% /boxes/note %}}
 
+## Cryptographic key representation
+
+Sometimes it is necessary to present a private cryptographic key in the user
+interface.
+
+When this happens, the key SHOULD be presented as a string formatted as
+follows:
+
+1.  A byte array is created, consisting of two bytes `0x8B` and `0x01`,
+    followed by the raw key.
+2.  All the bytes in the array above, including the two header bytes,
+    are XORed together to form a parity byte. This parity byte is
+    appended to the byte array.
+3.  The byte array is encoded using base58, using the the alphabet
+    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
+4.  A space is added after every 4th character.
+
+When reading in a key, clients should disregard whitespace, and
+perform the reverse of steps 1 through 4.
+
+{{% boxes/note %}}
+The base58 alphabet is the same as that used for [Bitcoin
+addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart).
+{{% /boxes/note %}}
+
 ## 3PID Types
 
 Third-party Identifiers (3PIDs) represent identifiers on other

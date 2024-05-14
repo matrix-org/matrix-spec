@@ -674,7 +674,7 @@ The process between Alice and Bob verifying each other would be:
     their devices if they match or not.
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
-    * Each of the keys that they wish the other user to verify (usually their 
+    * Each of the keys that they wish the other user to verify (usually their
       device ed25519 key and their master cross-signing key).
     * The complete list of key IDs that they wish the other user to verify.
 
@@ -1271,10 +1271,10 @@ tries to read a message that it does not have keys for, it may request
 the key from the server and decrypt it. Backups are per-user, and users
 may replace backups with new backups.
 
-In contrast with [Key requests](#key-requests), Server-side key backups
-do not require another device to be online from which to request keys.
-However, as the session keys are stored on the server encrypted, it
-requires users to enter a decryption key to decrypt the session keys.
+In contrast with [key requests](#key-requests), server-side key backups do not
+require another device to be online from which to request keys. However, as
+the session keys are stored on the server encrypted, the client requires a
+[decryption key](#decryption-key) to decrypt the session keys.
 
 To create a backup, a client will call [POST
 /\_matrix/client/v3/room\_keys/version](#post_matrixclientv3room_keysversion) and define how the keys are to
@@ -1295,7 +1295,7 @@ Clients must only store keys in backups after they have ensured that the
 
 - checking that it is signed by the user's [master cross-signing
   key](#cross-signing) or by a verified device belonging to the same user, or
-- by deriving the public key from a private key that it obtained from a trusted
+- deriving the public key from a private key that it obtained from a trusted
   source. Trusted sources for the private key include the user entering the
   key, retrieving the key stored in [secret storage](#secret-storage), or
   obtaining the key via [secret sharing](#sharing) from a verified device
@@ -1312,31 +1312,24 @@ replace it with the new key based on the key metadata as follows:
 -   and finally, if `is_verified` and `first_message_index` are equal,
     then it will keep the key with a lower `forwarded_count`.
 
-###### Recovery key
+###### Decryption key
 
-If the recovery key (the private half of the backup encryption key) is
-presented to the user to save, it is presented as a string constructed
-as follows:
+Normally, the decryption key (i.e. the secret part of the encryption key) is
+stored on the server or shared with other devices using the [Secrets](#secrets)
+module. When doing so, it is identified using the name `m.megolm_backup.v1`,
+and the key is base64-encoded before being encrypted.
 
-1.  The 256-bit curve25519 private key is prepended by the bytes `0x8B`
-    and `0x01`
-2.  All the bytes in the string above, including the two header bytes,
-    are XORed together to form a parity byte. This parity byte is
-    appended to the byte string.
-3.  The byte string is encoded using base58, using the same [mapping as
-    is used for Bitcoin
-    addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart),
-    that is, using the alphabet
-    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
-4.  A space should be added after every 4th character.
+If the backup decryption key is given directly to the user, the key should be
+presented as a string using the common [cryptographic key
+representation](/appendices/#cryptographic-key-representation).
 
-When reading in a recovery key, clients must disregard whitespace, and
-perform the reverse of steps 1 through 3.
-
-The recovery key can also be stored on the server or shared with other devices
-using the [Secrets](#secrets) module. When doing so, it is identified using the
-name `m.megolm_backup.v1`, and the key is base64-encoded before being
-encrypted.
+{{% boxes/note %}}
+The backup decryption key was previously referred to as a "recovery
+key". However, this conflicted with common practice in client user
+interfaces, which often use the term "recovery key" to refer to the [secret
+storage](#storage) key. The term "recovery key" is no longer used in this
+specification.
+{{% /boxes/note %}}
 
 ###### Backup algorithm: `m.megolm_backup.v1.curve25519-aes-sha2`
 
