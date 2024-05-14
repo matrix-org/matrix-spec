@@ -42,7 +42,8 @@ paths:
                 properties:
                   content_uri:
                     type: string
-                    format: uri
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
                     description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
                       the uploaded content.
               examples:
@@ -185,7 +186,8 @@ paths:
                 properties:
                   content_uri:
                     type: string
-                    format: uri
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
                     description: |-
                       The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) at
                       which the content will be available, once it is uploaded.

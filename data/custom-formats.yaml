@@ -42,6 +42,11 @@ mx-server-name:
   url: /appendices#server-name
   # no regex
 
+mx-mxc-uri:
+  title: Matrix Content URI
+  url: /client-server-api#matrix-content-mxc-uris
+  # regex: "^mxc:\\/\\/"
+
 uri:
   title: URI
   url: http://tools.ietf.org/html/rfc3986
