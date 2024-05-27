@@ -426,8 +426,9 @@ An example of a mathematical notation is:
 The LaTeX format is poorly defined and has several extensions, so if a client
 encounters syntax that it cannot render, it SHOULD present the fallback
 representation instead. Clients SHOULD, however, aim to support, at minimum, the
-basic LaTeX2e maths commands and the TeX maths commands, with the possible
-exception of commands that could be security risks.
+basic [LaTeX2e](https://www.latex-project.org/) maths commands and the
+[TeX](https://tug.org/) maths commands, with the possible exception of commands
+that could be security risks.
 
 {{% boxes/warning %}}
 In general, LaTeX places a heavy burden on client authors to ensure that it is
