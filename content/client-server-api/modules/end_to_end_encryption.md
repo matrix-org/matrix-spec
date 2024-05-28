@@ -597,6 +597,30 @@ package naming convention.
 
 {{% event event="m.key.verification.cancel" %}}
 
+###### General key verification error handling
+
+At any point the interactive verification can go wrong. The following describes
+what to do when an error happens:
+
+-   Alice or Bob can cancel the verification at any time. An
+    `m.key.verification.cancel` message must be sent to signify the
+    cancellation.
+-   The verification can time out. Clients should time out a verification that
+    does not complete within 10 minutes. Additionally, clients should expire a
+    `transaction_id` which goes unused for 10 minutes after having last
+    sent/received it. The client should inform the user that the verification
+    timed out, and send an appropriate `m.key.verification.cancel` message to
+    the other device.
+-   When the same device attempts to initiate multiple verification attempts,
+    the recipient should cancel all attempts with that device.
+-   When a device receives an unknown `transaction_id`, it should send an
+    appropriate `m.key.verification.cancel` message to the other device
+    indicating as such. This does not apply for inbound
+    `m.key.verification.start` or `m.key.verification.cancel` messages.
+-   If the device receives a message out of sequence or that it was not
+    expecting, it should notify the other device with an appropriate
+    `m.key.verification.cancel` message.
+
 ##### Short Authentication String (SAS) verification
 
 SAS verification is a user-friendly key verification process built off
@@ -720,35 +744,17 @@ devices:
           |                                 |
 ```
 
-###### Error and exception handling
+###### SAS error handling
 
 At any point the interactive verification can go wrong. The following
 describes what to do when an error happens:
 
--   Alice or Bob can cancel the verification at any time. An
-    `m.key.verification.cancel` message must be sent to signify the
-    cancellation.
--   The verification can time out. Clients should time out a
-    verification that does not complete within 10 minutes. Additionally,
-    clients should expire a `transaction_id` which goes unused for 10
-    minutes after having last sent/received it. The client should inform
-    the user that the verification timed out, and send an appropriate
-    `m.key.verification.cancel` message to the other device.
--   When the same device attempts to initiate multiple verification
-    attempts, the recipient should cancel all attempts with that device.
--   When a device receives an unknown `transaction_id`, it should send
-    an appropriate `m.key.verification.cancel` message to the other
-    device indicating as such. This does not apply for inbound
-    `m.key.verification.start` or `m.key.verification.cancel` messages.
 -   If the two devices do not share a common key share, hash, HMAC, or
     SAS method then the device should notify the other device with an
     appropriate `m.key.verification.cancel` message.
 -   If the user claims the Short Authentication Strings do not match,
     the device should send an appropriate `m.key.verification.cancel`
     message to the other device.
--   If the device receives a message out of sequence or that it was not
-    expecting, it should notify the other device with an appropriate
-    `m.key.verification.cancel` message.
 
 ###### Verification messages specific to SAS
 
