@@ -616,7 +616,7 @@ what to do when an error happens:
 -   When a device receives an unknown `transaction_id`, it should send an
     appropriate `m.key.verification.cancel` message to the other device
     indicating as such. This does not apply for inbound
-    `m.key.verification.start` or `m.key.verification.cancel` messages.
+    `m.key.verification.request` or `m.key.verification.cancel` messages.
 -   If the device receives a message out of sequence or that it was not
     expecting, it should notify the other device with an appropriate
     `m.key.verification.cancel` message.
