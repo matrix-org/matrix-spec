@@ -1,11 +1,3 @@
----
-name: Spec clarification/not a proposal
-about: A change that's not a spec proposal, such as a clarification to the spec itself.
-title: ''
-labels: ''
-assignees: ''
-
----
 
 ### Pull Request Checklist
 
