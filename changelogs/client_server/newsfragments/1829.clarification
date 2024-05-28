@@ -1,1 +1,1 @@
-Clarified that the device's Ed25519 signing key should be used in QR code verification (as opposed to the device's Curve25519 identity key).
+Clarify that the device's Ed25519 signing key should be used in QR code verification (as opposed to the device's Curve25519 identity key).
