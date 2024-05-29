@@ -27,7 +27,7 @@ paths:
 
         This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
         
-        User-Interactive Authentication is required, except in these cases:
+        User-Interactive Authentication MUST be performed, except in these cases:
         - there is no existing cross-signing master key uploaded to the homeserver, OR
         - there is an existing cross-signing master key and it exactly matches the
           cross-signing master key provided in the request body. If there are any additional
