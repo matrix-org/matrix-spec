@@ -35,10 +35,10 @@ paths:
           match the existing keys stored on the server. In other words, the request contains
           no new keys.
         
-        This allows clients to freely upload 1 set of keys, but not modify/overwrite keys if
-        they already exist. By allowing clients to upload the same set of keys more than once,
-        this makes this endpoint idempotent in the case where the response is lost over the
-        network, which would otherwise cause a UIA challenge upon retry.
+        This allows clients to freely upload one set of keys, but not modify/overwrite keys if
+        they already exist. Allowing clients to upload the same set of keys more than once 
+        makes this endpoint idempotent in the case where the response is lost over the network,
+        which would otherwise cause a UIA challenge upon retry.
       operationId: uploadCrossSigningKeys
       security:
         - accessTokenQuery: []
