@@ -745,7 +745,7 @@ Specifically, the following mappings are used:
 * `r` for room aliases.
 * `u` for users.
 * `roomid` for room IDs (note the distinction from room aliases).
-* `e` for events, when after a room reference (`roomid`).
+* `e` for events, when after a room ID (`roomid`). Use of `e` after a room alias (`r`) is deprecated.
 
 {{% boxes/note %}}
 During development of this URI format, types of `user`, `room`, and `event`
