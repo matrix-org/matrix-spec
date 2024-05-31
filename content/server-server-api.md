@@ -1212,7 +1212,7 @@ of `M_FORBIDDEN`.
 
 The following endpoint prefixes MUST be protected:
 
--   `/_matrix/federation/v1/send` (on a per-PDU basis)
+-   `/_matrix/federation/v1/send` (on a per-PDU and EDU basis)
 -   `/_matrix/federation/v1/make_join`
 -   `/_matrix/federation/v1/make_leave`
 -   `/_matrix/federation/v1/send_join`
