@@ -1,0 +1,1 @@
+Clarify that the `event` field of the `/v2/send_join` response is only required when `join_authorised_via_users_server` was present in the `content` field of the request.
