@@ -209,7 +209,7 @@ processed the events.
 
 #### Pinging
 
-{{% added-in v="1.7" %}}
+{{% added-in v="1.10" %}}
 
 The application service API includes a ping mechanism to allow
 appservices to ensure that the homeserver can reach the appservice.
