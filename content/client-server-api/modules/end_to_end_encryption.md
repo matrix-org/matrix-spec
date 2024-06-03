@@ -1179,10 +1179,16 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned using this format will encode binary
-strings in the general form:
+The QR codes to be displayed and scanned must be
+[ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) compatible and
+contain a single segment that uses the byte mode encoding.
 
-- the ASCII string `MATRIX`
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment must be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
 - one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
@@ -1210,7 +1216,7 @@ strings in the general form:
   secret, and it is not a fixed size, clients will just use the remainder of
   binary string as the shared secret.
 
-For example, if Alice displays a QR code encoding the following binary string:
+For example, if Alice displays a QR code encoding the following binary data:
 
 ```
       "MATRIX"    |ver|mode| len   | event ID
