@@ -745,7 +745,7 @@ Specifically, the following mappings are used:
 * `r` for room aliases.
 * `u` for users.
 * `roomid` for room IDs (note the distinction from room aliases).
-* `e` for events, when after a room reference (`r` or `roomid`).
+* `e` for events, when after a room ID (`roomid`). Use of `e` after a room alias (`r`) is deprecated.
 
 {{% boxes/note %}}
 During development of this URI format, types of `user`, `room`, and `event`
@@ -753,6 +753,13 @@ were used: these MUST NOT be produced any further, though implementations might
 wish to consider handling them as `u`, `r`, and `e` respectively.
 
 `roomid` was otherwise unchanged.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{< changed-in v="1.11" >}}
+Referencing event IDs within a room identified by room alias (`r`) rather than room ID
+(`roomid`) is now deprecated.  We are not aware of these ever having been used in
+practice, and are nonsensical given room aliases are mutable.
 {{% /boxes/note %}}
 
 The `id without sigil` is simply the identifier for the entity without the defined
@@ -799,7 +806,6 @@ Examples of common URIs are:
 <!-- Author's note: These examples should be consistent with the matrix.to counterparts. -->
 * Link to `#somewhere:example.org`: `matrix:r/somewhere:example.org`
 * Link to `!somewhere:example.org`: `matrix:roomid/somewhere:example.org?via=elsewhere.ca`
-* Link to `$event` in `#somewhere:example.org`: `matrix:r/somewhere:example.org/e/event`
 * Link to `$event` in `!somewhere:example.org`: `matrix:roomid/somewhere:example.org/e/event?via=elsewhere.ca`
 * Link to chat with `@alice:example.org`: `matrix:u/alice:example.org?action=chat`
 
@@ -809,9 +815,9 @@ A suggested client implementation algorithm is available in the
 #### matrix.to navigation
 
 {{% boxes/note %}}
-This namespacing existed prior to a `matrix:` scheme. This is **not**
-meant to be interpreted as an available web service - see below for more
-details.
+matrix.to is a Namespace URI which existed prior to a `matrix:` URI scheme.
+This is **not** meant to be interpreted as an available web service - see
+below for more details.
 {{% /boxes/note %}}
 
 A matrix.to URI has the following format, based upon the specification
@@ -843,9 +849,15 @@ Examples of matrix.to URIs are:
 <!-- Author's note: These examples should be consistent with the matrix scheme counterparts. -->
 * Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere%3Aexample.org`
 * Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org?via=elsewhere.ca`
-* Link to `$event` in `#somewhere:example.org`: `https://matrix.to/#/%23somewhere:example.org/%24event%3Aexample.org`
 * Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
 * Link to `@alice:example.org`: `https://matrix.to/#/%40alice%3Aexample.org`
+
+{{% boxes/note %}}
+{{< changed-in v="1.11" >}}
+Referencing event IDs within a room identified by room alias rather than room ID
+is now deprecated.  We are not aware of these ever having been used in
+practice, and are nonsensical given room aliases are mutable.
+{{% /boxes/note %}}
 
 {{% boxes/note %}}
 Historically, clients have not produced URIs which are fully encoded.
