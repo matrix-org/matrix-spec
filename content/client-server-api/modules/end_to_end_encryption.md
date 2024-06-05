@@ -1200,7 +1200,7 @@ The binary segment must be of the following form:
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string (i.e. one UTF-8 byte per character)
 - the first key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00` or `0x01`, then the current user's own master cross-signing public key
   - if `0x02`, then the current device's Ed25519 signing key
@@ -1211,10 +1211,10 @@ The binary segment must be of the following form:
     key is
   - if `0x02`, then what the device thinks the user's master cross-signing key
     is
-- a random shared secret, as a byte string.  It is suggested to use a secret
+- a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
-  binary string as the shared secret.
+  binary segment as the shared secret.
 
 For example, if Alice displays a QR code encoding the following binary data:
 
