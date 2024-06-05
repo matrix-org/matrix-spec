@@ -1,0 +1,1 @@
+Clarify that authentication is optional on the `POST /account/password` and `POST /account/deactivate` endpoints.
