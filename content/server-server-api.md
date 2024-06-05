@@ -390,9 +390,9 @@ Unknown parameters are ignored.
 
 {{% boxes/note %}}
 {{< changed-in v="1.11" >}}
-This section used to reference [RFC7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
-and [RFC7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
-were obsoleted by RFC9110 without changes to the sections of interest here.
+This section used to reference [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
+and [RFC 7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
+were obsoleted by RFC 9110 without changes to the sections of interest here.
 {{% /boxes/note %}}
 
 ### Response Authentication
