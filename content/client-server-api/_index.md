@@ -29,12 +29,12 @@ JSON object.  Clients should supply a `Content-Type` header of
 
 The exceptions are:
 
-- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload),
-  which takes any type of request body depending on what type of media is to be uploaded.
-- [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
-  which takes any type of request body depending on what type of media is to be uploaded.
-- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout),
-  which does not take any request body.
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+  [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+  both of which take the uploaded media as the request body.
+- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
+  [`POST /_matrix/client/v3/logout/all`](#post_matrixclientv3logoutall),
+  which take an empty request body.
 
 Similarly, all endpoints require the server to return a JSON object,
 with the exception of 200 responses to
