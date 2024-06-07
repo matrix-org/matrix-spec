@@ -744,7 +744,7 @@ devices:
           |                                 |
 ```
 
-###### SAS error handling
+###### Error handling during SAS verification
 
 At any point the interactive verification can go wrong. The following
 describes what to do when an error happens:
