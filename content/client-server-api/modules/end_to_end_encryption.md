@@ -471,7 +471,7 @@ In general, verification operates as follows:
   that the verification was successful.
 
 Verifications can be cancelled by either device at any time by sending an
-[`m.key.verification.cancel`](#mkeyverificationcancel) event with a `code` field
+[m.key.verification.cancel](#mkeyverificationcancel) event with a `code` field
 that indicates the reason it was cancelled. The
 [Error handling during key verification](#error-handling-during-key-verification)
 section explains specific situations where cancellation messages should be sent.
