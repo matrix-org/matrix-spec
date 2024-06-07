@@ -597,7 +597,7 @@ package naming convention.
 
 {{% event event="m.key.verification.cancel" %}}
 
-###### General key verification error handling
+###### Error handling during key verification
 
 At any point the interactive verification can go wrong. The following describes
 what to do when an error happens:
