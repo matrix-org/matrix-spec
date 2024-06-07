@@ -750,8 +750,10 @@ devices:
 ###### Error handling during SAS verification
 
 At any point the interactive verification can go wrong. In addition to the
-[Error handling during key verification](#error-handling-during-key-verification) The following describes
-what to do when an error happens:
+general
+[error handling during key verification](#error-handling-during-key-verification)
+that is applicable to all verification methods, the following describes what to
+do when SAS-specific errors happen:
 
 -   If the two devices do not share a common key share, hash, HMAC, or
     SAS method then the device should notify the other device with an
