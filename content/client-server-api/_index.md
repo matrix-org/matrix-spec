@@ -1842,16 +1842,15 @@ updates not being sent.
 
 The complete event MUST NOT be larger than 65536 bytes, when formatted
 with the [federation event format](#room-event-format), including any
-signatures, and encoded as [Canonical
-JSON](/appendices#canonical-json).
+signatures, and encoded as [Canonical JSON](/appendices#canonical-json).
 
 There are additional restrictions on sizes per key:
 
--   `sender` MUST NOT exceed 255 bytes (including domain).
--   `room_id` MUST NOT exceed 255 bytes.
+-   `sender` MUST NOT exceed the size limit for [user IDs](/appendices/#user-identifiers).
+-   `room_id` MUST NOT exceed the size limit for [room IDs](/appendices/#room-ids).
 -   `state_key` MUST NOT exceed 255 bytes.
 -   `type` MUST NOT exceed 255 bytes.
--   `event_id` MUST NOT exceed 255 bytes.
+-   `event_id` MUST NOT exceed the size limit for [event IDs](/appendices/#event-ids).
 
 Some event types have additional size restrictions which are specified
 in the description of the event. Additional keys have no limit other

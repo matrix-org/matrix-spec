@@ -1,0 +1,1 @@
+Move size limits for user, room and event IDs into the appendix and clarify that the length is to be measured in bytes.
