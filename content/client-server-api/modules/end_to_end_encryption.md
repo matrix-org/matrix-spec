@@ -603,7 +603,7 @@ At any point the interactive verification can go wrong. The following describes
 what to do when an error happens:
 
 -   Alice or Bob can cancel the verification at any time. An
-    `m.key.verification.cancel` message must be sent to signify the
+    [`m.key.verification.cancel`](#mkeyverificationcancel) message must be sent to signify the
     cancellation.
 -   The verification can time out. Clients should time out a verification that
     does not complete within 10 minutes. Additionally, clients should expire a
