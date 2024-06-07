@@ -35,9 +35,9 @@
         */}}
         {{ if reflect.IsMap $this_object.items }}
             {{ $items_example := partial "json-schema/resolve-example" $this_object.items }}
-            {{ $example = slice $items_example }}
-        {{ else }}
-            {{ $example = slice }}
+            {{ if $items_example }}
+                {{ $example = slice $items_example }}
+            {{ end }}
         {{ end }}
     {{ end }}
 
