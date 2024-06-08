@@ -1,0 +1,15 @@
+{{/*
+
+  A modified version of the toc.html partial in Docsy.
+
+*/}}
+{{ $page := .Params }}
+{{ if not .Params.notoc -}}
+  {{ with .TableOfContents -}}
+    <hr>
+    <div id="toc">
+        <a id="toc-title" href="#">{{ $page.Title }}</a>
+        {{ . -}}
+    </div>
+  {{ end -}}
+{{ end -}}
