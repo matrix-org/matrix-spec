@@ -124,7 +124,7 @@ properties:
           (i.e, they have no `m.room.member` state), this property is set to
           `leave`.
 
-          It is recommended that homeservers SHOULD populate this property
+          Homeservers SHOULD populate this property
           wherever practical, but they MAY omit it if necessary (for example,
           if calculating the value is expensive, servers might choose to only
           implement it in encrypted rooms). The property is *not* normally populated
