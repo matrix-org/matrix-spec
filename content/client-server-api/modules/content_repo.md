@@ -44,7 +44,7 @@ mxc://<server-name>/<media-id>
 <media-id> : An opaque ID which identifies the content.
 ```
 
-#### Client behaviour
+#### Client behaviour {id="content-repo-client-behaviour"}
 
 Clients can access the content repository using the following endpoints.
 
@@ -52,6 +52,33 @@ Clients can access the content repository using the following endpoints.
 {{< changed-in v="1.11" >}} Clients SHOULD NOT use the deprecated media endpoints
 described below. Instead, they SHOULD use the new endpoints which require authentication.
 {{% /boxes/added-in-paragraph %}}
+
+{{% boxes/warning %}}
+By Matrix 1.12, servers SHOULD "freeze" the deprecated, unauthenticated, endpoints
+to prevent newly-uploaded media from being downloaded. This SHOULD mean that any
+media uploaded *before* the freeze remains accessible via the deprecated endpoints,
+and any media uploaded *after* (or *during*) the freeze SHOULD only be accessible
+through the new, authenticated, endpoints. For remote media, "newly-uploaded" is
+determined by the date the cache was populated. This may mean the media is older
+than the freeze, but because the server had to re-download it, it is now considered
+"new".
+
+Clients SHOULD update to support the authenticated endpoints before servers freeze
+unauthenticated access.
+
+Servers SHOULD consider their local ecosystem impact before enacting a freeze.
+This could mean ensuring their users' typical clients support the new endpoints
+when available, or updating bridges to start using media proxies.
+
+An *example* timeline for a server may be:
+
+* Matrix 1.11 release: Clients begin supporting authenticated media.
+* Matrix 1.12 release: Servers freeze unauthenticated media access.
+  * Media uploaded prior to this point still works with the deprecated endpoints.
+  * Newly uploaded (or cached) media *only* works on the authenticated endpoints.
+
+Matrix 1.12 is expected to be released in the July-September 2024 calendar quarter.
+{{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="authed-content-repo" %}}
 

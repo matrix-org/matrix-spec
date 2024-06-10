@@ -219,6 +219,13 @@ paths:
     get:
       deprecated: true
       summary: Download content from the content repository.
+      description: |-
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContent
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -261,6 +268,13 @@ paths:
         This will download content from the content repository (same as
         the previous endpoint) but replace the target file name with the one
         provided by the caller.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentOverrideName
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -311,6 +325,13 @@ paths:
       description: |-
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentThumbnail
       parameters:
         - $ref: '#/components/parameters/serverName'
