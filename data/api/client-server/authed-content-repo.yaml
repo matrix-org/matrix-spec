@@ -1,5 +1,5 @@
 # Copyright 2016 OpenMarket Ltd
-# Copyright 2019 The Matrix.org Foundation C.I.C.
+# Copyright 2019-2024 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Content Repository API
+  title: Matrix Client-Server (Authenticated) Content Repository API
   version: 1.0.0
 paths:
-  "/media/v3/download/{serverName}/{mediaId}":
+  "/media/download/{serverName}/{mediaId}":
     get:
-      deprecated: true
+      x-addedInMatrixVersion: "1.11"
       summary: Download content from the content repository.
-      operationId: getContent
+      operationId: getContentAuthed
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
@@ -55,15 +55,15 @@ paths:
           $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
-  "/media/v3/download/{serverName}/{mediaId}/{fileName}":
+  "/media/download/{serverName}/{mediaId}/{fileName}":
     get:
-      deprecated: true
+      x-addedInMatrixVersion: "1.11"
       summary: Download content from the content repository overriding the file name
       description: |-
         This will download content from the content repository (same as
         the previous endpoint) but replace the target file name with the one
         provided by the caller.
-      operationId: getContentOverrideName
+      operationId: getContentOverrideNameAuthed
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
@@ -106,14 +106,14 @@ paths:
           $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
-  "/media/v3/thumbnail/{serverName}/{mediaId}":
+  "/media/thumbnail/{serverName}/{mediaId}":
     get:
-      deprecated: true
+      x-addedInMatrixVersion: "1.11"
       summary: Download a thumbnail of content from the content repository
       description: |-
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
-      operationId: getContentThumbnail
+      operationId: getContentThumbnailAuthed
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
@@ -258,9 +258,9 @@ paths:
           $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
-  /media/v3/preview_url:
+  /media/preview_url:
     get:
-      deprecated: true
+      x-addedInMatrixVersion: "1.11"
       summary: Get information about a URL for a client
       description: |-
         Get information about a URL for the client. Typically this is called when a
@@ -272,7 +272,7 @@ paths:
         do not want to share with the homeserver, and this can mean that the URLs
         being shared should also not be shared with the homeserver.
         {{% /boxes/note %}}
-      operationId: getUrlPreview
+      operationId: getUrlPreviewAuthed
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []
@@ -330,9 +330,9 @@ paths:
           $ref: '#/components/responses/rateLimited'
       tags:
         - Media
-  /media/v3/config:
+  /media/config:
     get:
-      deprecated: true
+      x-addedInMatrixVersion: "1.11"
       summary: Get the configuration for the content repository.
       description: |-
         This endpoint allows clients to retrieve the configuration of the content
@@ -347,7 +347,7 @@ paths:
         repository APIs, for example, proxies may enforce a lower upload size limit
         than is advertised by the server on this endpoint.
         {{% /boxes/note %}}
-      operationId: getConfig
+      operationId: getConfigAuthed
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []
@@ -386,7 +386,7 @@ servers:
       hostname:
         default: localhost:8008
       basePath:
-        default: /_matrix
+        default: /_matrix/client/v1
 components:
   securitySchemes:
     accessTokenQuery:
