@@ -28,10 +28,12 @@ interacting with the media repository.
 Content locations are represented as Matrix Content (`mxc://`) URIs. They
 look like:
 
-    mxc://<server-name>/<media-id>
+```
+mxc://<server-name>/<media-id>
 
-    <server-name> : The name of the homeserver where this content originated, e.g. matrix.org
-    <media-id> : An opaque ID which identifies the content.
+<server-name> : The name of the homeserver where this content originated, e.g. matrix.org
+<media-id> : An opaque ID which identifies the content.
+```
 
 #### Client behaviour
 
