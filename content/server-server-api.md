@@ -1189,15 +1189,26 @@ using the following EDU:
 
 Attachments to events (images, files, etc) are uploaded to a homeserver
 via the Content Repository described in the [Client-Server
-API](/client-server-api). When a server wishes
+API](/client-server-api/#content-repository). When a server wishes
 to serve content originating from a remote server, it needs to ask the
 remote server for the media.
 
-Servers should use the server described in the Matrix Content URI, which
-has the format `mxc://{ServerName}/{MediaID}`. Servers should use the
-download endpoint described in the [Client-Server
-API](/client-server-api), being sure to use
-the `allow_remote` parameter (set to `false`).
+Servers should use the server described in the [Matrix Content URI](/client-server-api/#matrix-content-mxc-uris).
+Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
+`ServerName` using the below endpoints.
+
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} Servers were previously advised to use the `/_matrix/media/*`
+endpoints described by the [Content Repository module in the Client-Server API](/client-server-api/#content-repository),
+however, those endpoints have been deprecated. New endpoints are introduced which
+require authentication. Naturally, as a server is not a user, they cannot provide
+the required access token to those endpoints. Instead, servers MUST try the endpoints
+described below before falling back to the deprecated `/_matrix/media/*` endpoints
+when they receive a `404 M_UNRECOGNIZED` error. When falling back, servers MUST
+be sure to set `allow_remote` to `false`.
+{{% /boxes/added-in-paragraph %}}
+
+{{% http-api spec="server-server" api="content_repository" %}}
 
 ## Server Access Control Lists (ACLs)
 
