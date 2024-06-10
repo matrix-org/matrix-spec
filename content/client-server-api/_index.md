@@ -2316,7 +2316,7 @@ following endpoint.
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
 
-When using the `recurse` parameter, note that there no way for a client to
+When using the `recurse` parameter, note that there is no way for a client to
 control how far the server recurses. If the client decides that the server's
 recursion level is insufficient, it could, for example, perform the recursion
 itself, or disable whatever feature requires more recursion.
