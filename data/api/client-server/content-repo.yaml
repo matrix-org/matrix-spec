@@ -217,6 +217,7 @@ paths:
         - Media
   "/media/v3/download/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download content from the content repository.
       operationId: getContent
       parameters:
@@ -254,6 +255,7 @@ paths:
         - Media
   "/media/v3/download/{serverName}/{mediaId}/{fileName}":
     get:
+      deprecated: true
       summary: Download content from the content repository overriding the file name
       description: |-
         This will download content from the content repository (same as
@@ -304,6 +306,7 @@ paths:
         - Media
   "/media/v3/thumbnail/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download a thumbnail of content from the content repository
       description: |-
         Download a thumbnail of content from the content repository.
@@ -455,6 +458,7 @@ paths:
         - Media
   /media/v3/preview_url:
     get:
+      deprecated: true
       summary: Get information about a URL for a client
       description: |-
         Get information about a URL for the client. Typically this is called when a
@@ -525,6 +529,7 @@ paths:
         - Media
   /media/v3/config:
     get:
+      deprecated: true
       summary: Get the configuration for the content repository.
       description: |-
         This endpoint allows clients to retrieve the configuration of the content
@@ -625,7 +630,7 @@ components:
         Indicates to the server that it should not attempt to fetch the media if
         it is deemed remote. This is to prevent routing loops where the server
         contacts itself.
-        
+
         Defaults to `true` if not provided.
       example: false
       schema:
