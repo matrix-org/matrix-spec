@@ -23,6 +23,15 @@ When serving content, the server SHOULD provide a
 interacting with the media repository.
 {{% /boxes/added-in-paragraph %}}
 
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} The unauthenticated download endpoints have been
+deprecated in favour of newer, authenticated, ones. This change included updating
+the pathing of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
+with the exception of the `/upload` and `/create` endpoints. The upload/create
+endpoints are expected to undergo a similar transition in a later version of the
+specification.
+{{% /boxes/added-in-paragraph %}}
+
 #### Matrix Content (`mxc://`) URIs
 
 Content locations are represented as Matrix Content (`mxc://`) URIs. They
@@ -37,7 +46,14 @@ mxc://<server-name>/<media-id>
 
 #### Client behaviour
 
-Clients can upload and download content using the following HTTP APIs.
+Clients can access the content repository using the following endpoints.
+
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} Clients SHOULD NOT use the deprecated media endpoints
+described below. Instead, they SHOULD use the new endpoints which require authentication.
+{{% /boxes/added-in-paragraph %}}
+
+{{% http-api spec="client-server" api="authed-content-repo" %}}
 
 {{% http-api spec="client-server" api="content-repo" %}}
 
