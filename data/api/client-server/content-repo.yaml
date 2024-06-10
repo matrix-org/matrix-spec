@@ -220,6 +220,11 @@ paths:
       deprecated: true
       summary: Download content from the content repository.
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         {{% boxes/warning %}}
         {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
         for media which exists, but is after the server froze unauthenticated
@@ -265,6 +270,11 @@ paths:
       deprecated: true
       summary: Download content from the content repository overriding the file name
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}/{fileName}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaidfilename)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         This will download content from the content repository (same as
         the previous endpoint) but replace the target file name with the one
         provided by the caller.
@@ -323,6 +333,11 @@ paths:
       deprecated: true
       summary: Download a thumbnail of content from the content repository
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/thumbnail/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediathumbnailservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
 
@@ -482,6 +497,10 @@ paths:
       deprecated: true
       summary: Get information about a URL for a client
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/preview_url`](/client-server-api/#get_matrixclientv1mediapreview_url).
+        {{% /boxes/note %}}
+
         Get information about a URL for the client. Typically this is called when a
         client sees a URL in a message and wants to render a preview for the user.
 
@@ -553,6 +572,10 @@ paths:
       deprecated: true
       summary: Get the configuration for the content repository.
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/config`](/client-server-api/#get_matrixclientv1mediaconfig).
+        {{% /boxes/note %}}
+
         This endpoint allows clients to retrieve the configuration of the content
         repository, such as upload limitations.
         Clients SHOULD use this as a guide when using content repository endpoints.
