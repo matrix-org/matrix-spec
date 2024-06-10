@@ -27,6 +27,10 @@ paths:
         the query string. These URLs may be copied by users verbatim and provided
         in a chat message to another user, disclosing the sender's access token.
         {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
       operationId: getContentAuthed
       security:
         - accessTokenQuery: []
@@ -34,9 +38,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
-        - $ref: '#/components/parameters/allow_remote'
         - $ref: '#/components/parameters/timeout_ms'
-        - $ref: '#/components/parameters/allow_redirect'
       responses:
         "200":
           description: The content that was previously uploaded.
@@ -78,6 +80,10 @@ paths:
         the query string. These URLs may be copied by users verbatim and provided
         in a chat message to another user, disclosing the sender's access token.
         {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
       operationId: getContentOverrideNameAuthed
       security:
         - accessTokenQuery: []
@@ -92,9 +98,7 @@ paths:
           example: filename.jpg
           schema:
             type: string
-        - $ref: '#/components/parameters/allow_remote'
         - $ref: '#/components/parameters/timeout_ms'
-        - $ref: '#/components/parameters/allow_redirect'
       responses:
         "200":
           description: The content that was previously uploaded.
@@ -137,6 +141,10 @@ paths:
         the query string. These URLs may be copied by users verbatim and provided
         in a chat message to another user, disclosing the sender's access token.
         {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
       operationId: getContentThumbnailAuthed
       security:
         - accessTokenQuery: []
@@ -173,9 +181,7 @@ paths:
             enum:
               - crop
               - scale
-        - $ref: '#/components/parameters/allow_remote'
         - $ref: '#/components/parameters/timeout_ms'
-        - $ref: '#/components/parameters/allow_redirect'
         - in: query
           name: animated
           x-addedInMatrixVersion: "1.11"
@@ -440,20 +446,6 @@ components:
       example: ascERGshawAWawugaAcauga
       schema:
         type: string
-    allow_remote:
-      in: query
-      name: allow_remote
-      required: false
-      description: |-
-        Indicates to the server that it should not attempt to fetch the media if
-        it is deemed remote. This is to prevent routing loops where the server
-        contacts itself.
-
-        Defaults to `true` if not provided.
-      example: false
-      schema:
-        type: boolean
-        default: true
     timeout_ms:
       in: query
       name: timeout_ms
@@ -469,19 +461,6 @@ components:
         type: integer
         format: int64
         default: 20000
-    allow_redirect:
-      in: query
-      name: allow_redirect
-      x-addedInMatrixVersion: "1.7"
-      required: false
-      description: |
-        Indicates to the server that it may return a 307 or 308 redirect
-        response that points at the relevant media content. When not explicitly
-        set to `true` the server must return the media content itself.
-      example: false
-      schema:
-        type: boolean
-        default: false
   responses:
     rateLimited:
       description: This request was rate-limited.
