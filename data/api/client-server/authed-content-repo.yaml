@@ -21,7 +21,16 @@ paths:
     get:
       x-addedInMatrixVersion: "1.11"
       summary: Download content from the content repository.
+      description: |-
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
       operationId: getContentAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
@@ -58,12 +67,21 @@ paths:
   "/media/download/{serverName}/{mediaId}/{fileName}":
     get:
       x-addedInMatrixVersion: "1.11"
-      summary: Download content from the content repository overriding the file name
+      summary: Download content from the content repository overriding the file name.
       description: |-
         This will download content from the content repository (same as
-        the previous endpoint) but replace the target file name with the one
+        the previous endpoint) but replaces the target file name with the one
         provided by the caller.
+
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
       operationId: getContentOverrideNameAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
@@ -113,7 +131,16 @@ paths:
       description: |-
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
       operationId: getContentThumbnailAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
         - $ref: '#/components/parameters/mediaId'
