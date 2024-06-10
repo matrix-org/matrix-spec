@@ -1,0 +1,740 @@
+# Copyright 2016 OpenMarket Ltd
+# Copyright 2019 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Content Repository API
+  version: 1.0.0
+paths:
+  /media/v3/upload:
+    post:
+      summary: Upload some content to the content repository.
+      operationId: uploadContent
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - $ref: '#/components/parameters/contentType'
+        - $ref: '#/components/parameters/filename'
+      requestBody:
+        $ref: '#/components/requestBodies/bytes'
+      responses:
+        "200":
+          description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for
+            the uploaded content.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - content_uri
+                properties:
+                  content_uri:
+                    type: string
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
+                    description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
+                      the uploaded content.
+              examples:
+                response:
+                  value: {
+                    "content_uri": "mxc://example.com/AQwafuaFswefuhsfAFAgsw"
+                  }
+        "403":
+          description: |-
+            The user does not have permission to upload the content. Some reasons for this error include:
+
+            - The server does not permit the file type.
+            - The user has reached a quota for uploaded content.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot upload this content"
+                  }
+        "413":
+          $ref: '#/components/responses/uploadTooLarge'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+  "/media/v3/upload/{serverName}/{mediaId}":
+    put:
+      summary: Upload content to an `mxc://` URI that was created earlier.
+      description: |-
+        This endpoint permits uploading content to an `mxc://` URI that was created
+        earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
+      operationId: uploadContentToMXC
+      x-addedInMatrixVersion: "1.7"
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+          description: |
+            The server name from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the authority component).
+        - $ref: '#/components/parameters/mediaId'
+          description: |
+            The media ID from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the path component).
+        - $ref: '#/components/parameters/contentType'
+        - $ref: '#/components/parameters/filename'
+      requestBody:
+        $ref: '#/components/requestBodies/bytes'
+      responses:
+        "200":
+          description: The upload was successful.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "403":
+          description: |-
+            The user does not have permission to upload the content. Some reasons for this error include:
+
+            - The server does not permit the file type.
+            - The user has reached a quota for uploaded content.
+            - The request comes from a different user than the one that called
+              [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
+
+            A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_FORBIDDEN`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot upload this content"
+                  }
+        "409":
+          description: |-
+            The endpoint was called with a media ID that already has content. A
+            [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_CANNOT_OVERWRITE_MEDIA`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_CANNOT_OVERWRITE_MEDIA",
+                    "error": "Media already uploaded"
+                  }
+        "413":
+          $ref: '#/components/responses/uploadTooLarge'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+  /media/v1/create:
+    post:
+      summary: Create a new `mxc://` URI without uploading the content.
+      description: |-
+        Creates a new `mxc://` URI, independently of the content being uploaded. The content must be provided later
+        via [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](/client-server-api/#put_matrixmediav3uploadservernamemediaid).
+
+        The server may optionally enforce a maximum age for unused IDs,
+        and delete media IDs when the client doesn't start the upload in time,
+        or when the upload was interrupted and not resumed in time. The server
+        should include the maximum POSIX millisecond timestamp to complete the
+        upload in the `unused_expires_at` field in the response JSON. The
+        recommended default expiration is 24 hours which should be enough time
+        to accommodate users on poor connection who find a better connection to
+        complete the upload.
+
+        As well as limiting the rate of requests to create `mxc://` URIs, the server
+        should limit the number of concurrent *pending media uploads* a given
+        user can have. A pending media upload is a created `mxc://` URI where (a)
+        the media has not yet been uploaded, and (b) has not yet expired (the
+        `unused_expires_at` timestamp has not yet passed). In both cases, the
+        server should respond with an HTTP 429 error with an errcode of
+        `M_LIMIT_EXCEEDED`.
+      operationId: createContent
+      x-addedInMatrixVersion: "1.7"
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      # empty json object
+      responses:
+        "200":
+          description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for
+            the uploaded content.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - content_uri
+                properties:
+                  content_uri:
+                    type: string
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
+                    description: |-
+                      The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) at
+                      which the content will be available, once it is uploaded.
+                    example: mxc://example.com/AQwafuaFswefuhsfAFAgsw
+                  unused_expires_at:
+                    type: integer
+                    format: int64
+                    description: |-
+                      The timestamp (in milliseconds since the unix epoch) when the
+                      generated media id will expire, if media is not uploaded.
+                    example: 1647257217083
+        "403":
+          description: The user does not have permission to upload the content.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Cannot upload this content"
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+  "/media/v3/download/{serverName}/{mediaId}":
+    get:
+      deprecated: true
+      summary: Download content from the content repository.
+      operationId: getContent
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
+      responses:
+        "200":
+          description: The content that was previously uploaded.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/downloadContentType'
+            Content-Disposition:
+              description: The name of the file that was previously uploaded, if set.
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the uploaded file."
+        "307":
+          $ref: '#/components/responses/downloadRedirect'
+        "308":
+          $ref: '#/components/responses/downloadRedirect'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          $ref: '#/components/responses/downloadTooLarge'
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  "/media/v3/download/{serverName}/{mediaId}/{fileName}":
+    get:
+      deprecated: true
+      summary: Download content from the content repository overriding the file name
+      description: |-
+        This will download content from the content repository (same as
+        the previous endpoint) but replace the target file name with the one
+        provided by the caller.
+      operationId: getContentOverrideName
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - in: path
+          name: fileName
+          required: true
+          description: A filename to give in the `Content-Disposition` header.
+          example: filename.jpg
+          schema:
+            type: string
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
+      responses:
+        "200":
+          description: The content that was previously uploaded.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/downloadContentType'
+            Content-Disposition:
+              description: |-
+                The `fileName` requested or the name of the file that was previously
+                uploaded, if set.
+              schema:
+                type: string
+          content:
+            application/octet-stream:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the uploaded file."
+        "307":
+          $ref: '#/components/responses/downloadRedirect'
+        "308":
+          $ref: '#/components/responses/downloadRedirect'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          $ref: '#/components/responses/downloadTooLarge'
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  "/media/v3/thumbnail/{serverName}/{mediaId}":
+    get:
+      deprecated: true
+      summary: Download a thumbnail of content from the content repository
+      description: |-
+        Download a thumbnail of content from the content repository.
+        See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+      operationId: getContentThumbnail
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - in: query
+          name: width
+          required: true
+          description: |-
+            The *desired* width of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: height
+          required: true
+          description: |-
+            The *desired* height of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: method
+          description: |-
+            The desired resizing method. See the [Thumbnails](/client-server-api/#thumbnails)
+            section for more information.
+          example: scale
+          schema:
+            type: string
+            enum:
+              - crop
+              - scale
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
+        - in: query
+          name: animated
+          x-addedInMatrixVersion: "1.11"
+          required: false
+          description: |
+            Indicates preference for an animated thumbnail from the server, if possible. Animated
+            thumbnails typically use the content types `image/gif`, `image/png` (with APNG format),
+            `image/apng`, and `image/webp` instead of the common static `image/png` or `image/jpeg`
+            content types.
+
+            When `true`, the server SHOULD return an animated thumbnail if possible and supported.
+            When `false`, the server MUST NOT return an animated thumbnail. For example, returning a
+            static `image/png` or `image/jpeg` thumbnail. When not provided, the server SHOULD NOT
+            return an animated thumbnail.
+
+            Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
+
+            When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
+            server should behave as though `animated` is `false`.
+          example: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: A thumbnail of the requested content.
+          headers:
+            Content-Type:
+              description: The content type of the thumbnail.
+              schema:
+                type: string
+                enum:
+                  - image/jpeg
+                  - image/png
+                  - image/apng
+                  - image/gif
+                  - image/webp
+          content:
+            image/jpeg:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the thumbnail."
+            image/png:
+              schema:
+                x-changedInMatrixVersion:
+                  "1.11": The PNG may be of the APNG variety if animation is supported and requested.
+                description: |
+                  **Required.** The bytes for the thumbnail. The thumbnail MAY use an animated
+                  format if `animated=true`.
+            image/apng:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/gif:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/webp:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+        "307":
+          $ref: '#/components/responses/thumbnailRedirect'
+        "308":
+          $ref: '#/components/responses/thumbnailRedirect'
+        "400":
+          description: |-
+            The request does not make sense to the server, or the server cannot thumbnail
+            the content. For example, the client requested non-integer dimensions or asked
+            for negatively-sized images.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNKNOWN",
+                    "error": "Cannot generate thumbnails for the requested content"
+                  }
+        "413":
+          description: The local content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          description: The remote content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  /media/v3/preview_url:
+    get:
+      deprecated: true
+      summary: Get information about a URL for a client
+      description: |-
+        Get information about a URL for the client. Typically this is called when a
+        client sees a URL in a message and wants to render a preview for the user.
+
+        **Note:**
+        Clients should consider avoiding this endpoint for URLs posted in encrypted
+        rooms. Encrypted rooms often contain more sensitive information the users
+        do not want to share with the homeserver, and this can mean that the URLs
+        being shared should also not be shared with the homeserver.
+      operationId: getUrlPreview
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - in: query
+          name: url
+          description: The URL to get a preview of.
+          required: true
+          example: https://matrix.org
+          schema:
+            type: string
+            format: uri
+        - in: query
+          name: ts
+          description: |-
+            The preferred point in time to return a preview for. The server may
+            return a newer version if it does not have the requested version
+            available.
+          example: 1510610716656
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: |-
+            The OpenGraph data for the URL, which may be empty. Some values are
+            replaced with matrix equivalents if they are provided in the response.
+            The differences from the OpenGraph protocol are described here.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matrix:image:size:
+                    type: integer
+                    format: int64
+                    description: The byte-size of the image. Omitted if there is no image attached.
+                  og:image:
+                    type: string
+                    format: uri
+                    description: An [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
+                      the image. Omitted if there is no image.
+              examples:
+                response:
+                  value: {
+                    "og:title": "Matrix Blog Post",
+                    "og:description": "This is a really cool blog post from matrix.org",
+                    "og:image": "mxc://example.com/ascERGshawAWawugaAcauga",
+                    "og:image:type": "image/png",
+                    "og:image:height": 48,
+                    "og:image:width": 48,
+                    "matrix:image:size": 102400
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+  /media/v3/config:
+    get:
+      deprecated: true
+      summary: Get the configuration for the content repository.
+      description: |-
+        This endpoint allows clients to retrieve the configuration of the content
+        repository, such as upload limitations.
+        Clients SHOULD use this as a guide when using content repository endpoints.
+        All values are intentionally left optional. Clients SHOULD follow
+        the advice given in the field description when the field is not available.
+
+        **NOTE:** Both clients and server administrators should be aware that proxies
+        between the client and the server may affect the apparent behaviour of content
+        repository APIs, for example, proxies may enforce a lower upload size limit
+        than is advertised by the server on this endpoint.
+      operationId: getConfig
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: The public content repository configuration for the matrix server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  m.upload.size:
+                    type: integer
+                    format: int64
+                    description: |-
+                      The maximum size an upload can be in bytes.
+                      Clients SHOULD use this as a guide when uploading content.
+                      If not listed or null, the size limit should be treated as unknown.
+              examples:
+                response:
+                  value: {
+                    "m.upload.size": 50000000
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  parameters:
+    contentType:
+      in: header
+      name: Content-Type
+      description: The content type of the file being uploaded
+      example: application/pdf
+      schema:
+        type: string
+    filename:
+      in: query
+      name: filename
+      description: The name of the file being uploaded
+      example: War and Peace.pdf
+      schema:
+        type: string
+    serverName:
+      in: path
+      name: serverName
+      required: true
+      description: |
+        The server name from the `mxc://` URI (the authority component).
+      example: matrix.org
+      schema:
+        type: string
+        format: mx-server-name
+    mediaId:
+      in: path
+      name: mediaId
+      required: true
+      description: |
+        The media ID from the `mxc://` URI (the path component).
+      example: ascERGshawAWawugaAcauga
+      schema:
+        type: string
+    allow_remote:
+      in: query
+      name: allow_remote
+      required: false
+      description: |-
+        Indicates to the server that it should not attempt to fetch the media if
+        it is deemed remote. This is to prevent routing loops where the server
+        contacts itself.
+
+        Defaults to `true` if not provided.
+      example: false
+      schema:
+        type: boolean
+        default: true
+    timeout_ms:
+      in: query
+      name: timeout_ms
+      x-addedInMatrixVersion: "1.7"
+      description: |
+        The maximum number of milliseconds that the client is willing to wait to
+        start receiving data, in the case that the content has not yet been
+        uploaded. The default value is 20000 (20 seconds). The content
+        repository can and should impose a maximum value for this parameter. The
+        content repository may also choose to respond before the timeout.
+      example: 5000
+      schema:
+        type: integer
+        format: int64
+        default: 20000
+    allow_redirect:
+      in: query
+      name: allow_redirect
+      x-addedInMatrixVersion: "1.7"
+      required: false
+      description: |
+        Indicates to the server that it may return a 307 or 308 redirect
+        response that points at the relevant media content. When not explicitly
+        set to `true` the server must return the media content itself.
+      example: false
+      schema:
+        type: boolean
+        default: false
+  requestBodies:
+    bytes:
+      content:
+        application/octet-stream:
+          example: <bytes>
+      description: The content to be uploaded.
+      required: true
+  responses:
+    uploadTooLarge:
+      description: The uploaded content is too large for the server.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "Cannot upload files larger than 100mb"
+              }
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/rate_limited.yaml
+    notYetUploaded:
+      description: |-
+        The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_YET_UPLOADED",
+                "error": "Content has not yet been uploaded"
+              }
+    downloadRedirect:
+      description: A redirect to the requested content.
+      headers:
+        Location:
+          description: The URL of the content.
+          schema:
+            type: string
+            format: uri
+    downloadTooLarge:
+      description: The content is too large for the server to serve.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "Content is too large to serve"
+              }
+    thumbnailRedirect:
+      description: A redirect to the thumbnail of the requested content.
+      headers:
+        Location:
+          description: The URL of the thumbnail content.
+          schema:
+            type: string
+            format: uri
+  headers:
+    downloadContentType:
+      description: The content type of the file that was previously uploaded.
+      schema:
+        type: string
+
