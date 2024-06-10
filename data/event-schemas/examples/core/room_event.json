@@ -5,6 +5,7 @@
     "sender": "@example:example.org",
     "origin_server_ts": 1432735824653,
     "unsigned": {
-      "age": 1234
+      "age": 1234,
+      "membership": "join"
     }
 }
