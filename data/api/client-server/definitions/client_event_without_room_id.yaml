@@ -128,7 +128,8 @@ properties:
           wherever practical, but they MAY omit it if necessary (for example,
           if calculating the value is expensive, servers might choose to only
           implement it in encrypted rooms). The property is *not* normally populated
-          in the application service API (where there is no clear definition of "requesting user").
+          in events pushed to application services via the application service transaction API
+          (where there is no clear definition of "requesting user").
         type: string
         example: join
         x-addedInMatrixVersion: "1.11"
