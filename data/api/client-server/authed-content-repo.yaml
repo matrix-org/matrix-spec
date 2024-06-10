@@ -266,11 +266,12 @@ paths:
         Get information about a URL for the client. Typically this is called when a
         client sees a URL in a message and wants to render a preview for the user.
 
-        **Note:**
+        {{% boxes/note %}}
         Clients should consider avoiding this endpoint for URLs posted in encrypted
         rooms. Encrypted rooms often contain more sensitive information the users
         do not want to share with the homeserver, and this can mean that the URLs
         being shared should also not be shared with the homeserver.
+        {{% /boxes/note %}}
       operationId: getUrlPreview
       security:
         - accessTokenQuery: []
@@ -340,10 +341,12 @@ paths:
         All values are intentionally left optional. Clients SHOULD follow
         the advice given in the field description when the field is not available.
 
-        **NOTE:** Both clients and server administrators should be aware that proxies
+        {{% boxes/note %}}
+        Both clients and server administrators should be aware that proxies
         between the client and the server may affect the apparent behaviour of content
         repository APIs, for example, proxies may enforce a lower upload size limit
         than is advertised by the server on this endpoint.
+        {{% /boxes/note %}}
       operationId: getConfig
       security:
         - accessTokenQuery: []
