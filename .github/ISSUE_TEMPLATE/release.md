@@ -1,6 +1,6 @@
 ---
-name: [SCT] Release checklist
-about: Used by the Spec Core Team to create a new release.
+name: '[SCT] Release checklist'
+about: 'Used by the Spec Core Team to create a new release.'
 title: 'Matrix 1.X'
 labels: 'release-blocker'
 assignees: ''
