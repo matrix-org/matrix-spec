@@ -22,12 +22,19 @@ recommended outside test environments.
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
-All `POST` and `PUT` endpoints, with the exception of [`POST
-/_matrix/media/v3/upload`](#post_matrixmediav3upload) and [`PUT
-/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+All `POST` and `PUT` endpoints, with the exception of those listed below,
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
+
+The exceptions are:
+
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+  [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+  both of which take the uploaded media as the request body.
+- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
+  [`POST /_matrix/client/v3/logout/all`](#post_matrixclientv3logoutall),
+  which take an empty request body.
 
 Similarly, all endpoints require the server to return a JSON object,
 with the exception of 200 responses to
