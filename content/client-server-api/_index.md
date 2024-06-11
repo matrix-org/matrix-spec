@@ -2757,6 +2757,9 @@ that profile.
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
+| [Secrets](#secrets)                                        | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Invites](#third-party-invites)                | Optional  | Required | Optional | Optional | Optional |
+| [Room Tagging](#room-tagging)                              | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
