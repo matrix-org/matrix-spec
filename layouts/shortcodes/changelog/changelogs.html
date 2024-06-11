@@ -5,6 +5,6 @@
 
 {{ with .Page.Resources.Match "*.md" }}
 {{ range ((sort . "Params.date" "desc")) }}
-{{ .Content }}
+{{ .RenderShortcodes }}
 {{ end }}
 {{ end }}

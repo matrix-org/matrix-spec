@@ -90,6 +90,7 @@ properties:
           "origin_server_ts": 1632491098485,
           "unsigned": {
             "age": 1257,
+            "membership": "leave"
           }
         }
       transaction_id:
@@ -112,3 +113,23 @@ properties:
             this.
         title: EventContent
         type: object
+      membership:
+        description: |
+          The room membership of the user making the request, at the time of the event.
+
+          This property is the value of the `membership` property of the
+          requesting user's [`m.room.member`](/client-server-api#mroommember)
+          state at the point of the event, including any changes caused by the
+          event. If the user had yet to join the room at the time of the event
+          (i.e, they have no `m.room.member` state), this property is set to
+          `leave`.
+
+          Homeservers SHOULD populate this property
+          wherever practical, but they MAY omit it if necessary (for example,
+          if calculating the value is expensive, servers might choose to only
+          implement it in encrypted rooms). The property is *not* normally populated
+          in events pushed to application services via the application service transaction API
+          (where there is no clear definition of "requesting user").
+        type: string
+        example: join
+        x-addedInMatrixVersion: "1.11"
