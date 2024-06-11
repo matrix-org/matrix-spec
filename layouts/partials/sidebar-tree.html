@@ -1,9 +1,12 @@
 {{/*
 
-  A modified version of the siderbar-tree.html partial in Docsy to add the ToC.
+  A modified version of the siderbar-tree.html partial in Docsy, adding:
+  
+  * The "toc.html" partial at L45.
 
 */}}
 
+{{/* We cache this partial for bigger sites and set the active class client side. */ -}}
 {{ $sidebarCacheLimit := .Site.Params.ui.sidebar_cache_limit | default 2000 -}}
 {{ $shouldDelayActive := ge (len .Site.Pages) $sidebarCacheLimit -}}
 <div id="td-sidebar-menu" class="td-sidebar__inner{{ if $shouldDelayActive }} d-none{{ end }}">
