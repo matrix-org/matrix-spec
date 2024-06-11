@@ -55,7 +55,7 @@ properties:
             Intended to be shown alongside the `name` if provided.
 
             {{% boxes/note %}}
-            Clients will need to use the deprecated [`/download`](/client-server-api/#get_matrixmediav3downloadservernamemediaid)
+            Clients SHOULD use the deprecated [`/download`](/client-server-api/#get_matrixmediav3downloadservernamemediaid)
             and [`/thumbnail`](/client-server-api/#get_matrixmediav3thumbnailservernamemediaid)
             endpoints to retrieve this media item because clients will not have
             an access token they can authenticate with yet. Servers SHOULD ensure

@@ -70,6 +70,9 @@ Servers SHOULD consider their local ecosystem impact before enacting a freeze.
 This could mean ensuring their users' typical clients support the new endpoints
 when available, or updating bridges to start using media proxies.
 
+In addition to the above, servers SHOULD exclude [IdP icons used in the `m.login.sso` flow](/client-server-api/#definition-mloginsso-flow-schema)
+from the freeze. See the `m.login.sso` flow schema for details.
+
 An *example* timeline for a server may be:
 
 * Matrix 1.11 release: Clients begin supporting authenticated media.
