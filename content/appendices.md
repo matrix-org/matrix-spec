@@ -611,10 +611,19 @@ characters permitted in user ID localparts. There are currently active
 users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
-and servers MUST accept user IDs with localparts from the expanded
-character set:
+and servers MUST accept user IDs with localparts consisting of any legal
+unicode codepoint except for `:` and `NUL` (U+0000), including other control
+characters and the empty string. Localparts MUST be valid UTF-8 sequences.
+
+Servers SHOULD NOT produce user IDs with localparts outside of the following
+character set, and SHOULD NOT forward such user IDs to clients when referenced
+outside the context of an event. For example, device list updates from "invalid"
+user IDs would be dropped by the receiving server.
 
     extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
+
+A future room version may prevent users using a historical character set
+from participating. Use of the historical character set is *deprecated*.
 
 ##### Mapping from other character sets
 
@@ -663,6 +672,11 @@ Room IDs are case-sensitive. They are not meant to be
 human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
+The localpart of a room ID (`opaque_id` above) may contain any valid
+unicode codepoints, including control characters, except `:` and `NUL`
+(U+0000), but it is recommended to only include ASCII letters and
+digits (`A-Z`, `a-z`, `0-9`) when generating them.
+
 #### Room Aliases
 
 A room may have zero or more aliases. A room alias has the format:
@@ -673,8 +687,11 @@ The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
 
-Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
-domain).
+The localpart of a room alias may contain any valid unicode codepoints
+except `:`.
+
+Room aliases MUST NOT exceed 255 bytes as UTF-8 (including the `#` sigil
+and the domain).
 
 #### Event IDs
 
