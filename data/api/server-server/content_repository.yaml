@@ -52,6 +52,11 @@ paths:
                      can be retrieved. The URL at `Location` SHOULD have appropriate
                      `Content-Type` and `Content-Disposition` headers which describe
                      the media.
+
+                     When `Location` is present, servers SHOULD NOT cache the URL.
+                     The remote server may have applied time limits on its validity.
+                     If the caller requires an up-to-date URL, it SHOULD re-request
+                     the media download.
         "429":
           $ref: '#/components/responses/rateLimited'
         "502":
@@ -164,6 +169,11 @@ paths:
                      can be retrieved. The URL at `Location` SHOULD have appropriate
                      `Content-Type` and `Content-Disposition` headers which describe
                      the media.
+
+                     When `Location` is present, servers SHOULD NOT cache the URL.
+                     The remote server may have applied time limits on its validity.
+                     If the caller requires an up-to-date URL, it SHOULD re-request
+                     the media download.
 
                   {{% boxes/note %}}
                   The `Content-Type` for the second part SHOULD be one of:
