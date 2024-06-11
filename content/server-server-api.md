@@ -1193,7 +1193,7 @@ API](/client-server-api/#content-repository). When a server wishes
 to serve content originating from a remote server, it needs to ask the
 remote server for the media.
 
-Servers should use the server described in the [Matrix Content URI](/client-server-api/#matrix-content-mxc-uris).
+Servers MUST use the server described in the [Matrix Content URI](/client-server-api/#matrix-content-mxc-uris).
 Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
 `ServerName` using the below endpoints.
 
