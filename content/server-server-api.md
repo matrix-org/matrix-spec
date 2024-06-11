@@ -349,14 +349,14 @@ def authorization_headers(origin_name, origin_signing_key,
 ```
 
 The format of the Authorization header is given in
-[RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
+[Section 11.4 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-11.4). In
 summary, the header begins with authorization scheme `X-Matrix`, followed by one
 or more spaces, followed by a comma-separated list of parameters written as
 name=value pairs. Zero or more spaces and tabs around each comma are allowed.
 The names are case insensitive and order does not matter. The
 values must be enclosed in quotes if they contain characters that are not
 allowed in `token`s, as defined in
-[RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+[Section 5.6.2 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2); if a
 value is a valid `token`, it may or may not be enclosed in quotes. Quoted
 values may include backslash-escaped characters. When parsing the header, the
 recipient must unescape the characters. That is, a backslash-character pair is
@@ -387,6 +387,13 @@ The authorization parameters to include are:
 - `signature`: the signature of the JSON as calculated in step 1.
 
 Unknown parameters are ignored.
+
+{{% boxes/note %}}
+{{< changed-in v="1.11" >}}
+This section used to reference [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
+and [RFC 7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
+were obsoleted by RFC 9110 without changes to the sections of interest here.
+{{% /boxes/note %}}
 
 ### Response Authentication
 
