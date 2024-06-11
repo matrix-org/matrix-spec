@@ -37,8 +37,8 @@ paths:
               schema:
                 # This is a workaround for us not being able to say the response is required.
                 description: |-
-                  **Required.** MUST contain a `boundary` delineating exactly two
-                  parts:
+                  **Required.** MUST contain a `boundary` (per [RFC 1341](https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html))
+                  delineating exactly two parts:
 
                   The first part has a `Content-Type` header of `application/json`
                   and describes the media's metadata, if any. Currently, this will
@@ -149,8 +149,8 @@ paths:
               schema:
                 # This is a workaround for us not being able to say the response is required.
                 description: |-
-                  **Required.** MUST contain a `boundary` delineating exactly two
-                  parts:
+                  **Required.** MUST contain a `boundary` (per [RFC 1341](https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html))
+                  delineating exactly two parts:
 
                   The first part has a `Content-Type` header of `application/json`
                   and describes the media's metadata, if any. Currently, this will
