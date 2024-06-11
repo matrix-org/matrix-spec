@@ -61,7 +61,7 @@ place after an MSC has been accepted, not as part of a proposal itself.
 
 1. Install the extended version (often the OS default) of Hugo:
    <https://gohugo.io/getting-started/installing>. Note that at least Hugo
-   v0.113.0 is required.
+   v0.117.0 is required.
 
    Alternatively, use the Docker image at
    https://hub.docker.com/r/klakegg/hugo/. (The "extended edition" is required

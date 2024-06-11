@@ -22,11 +22,19 @@ recommended outside test environments.
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
-All `POST` and `PUT` endpoints, with the exception of media upload endpoints
-in the [Content Repository module](#content-repository),
+All `POST` and `PUT` endpoints, with the exception of those listed below,
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
+
+The exceptions are:
+
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+  [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+  both of which take the uploaded media as the request body.
+- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
+  [`POST /_matrix/client/v3/logout/all`](#post_matrixclientv3logoutall),
+  which take an empty request body.
 
 Similarly, all endpoints require the server to return a JSON object,
 with the exception of 200 responses to the media download endpoints in the
@@ -225,7 +233,7 @@ return a standard error response of the form:
 ```
 
 Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
-for any response with a 429 status code.
+header for any response with a 429 status code.
 
 The `retry_after_ms` property MAY be included to tell the client how long
 they have to wait in milliseconds before they can try again. This property is
@@ -2803,42 +2811,42 @@ operations and run in a resource constrained environment. Like embedded
 applications, they are not intended to be fully-fledged communication
 systems.
 
-{{< cs-module name="instant_messaging" >}}
-{{< cs-module name="rich_replies" >}}
-{{< cs-module name="voip_events" >}}
-{{< cs-module name="typing_notifications" >}}
-{{< cs-module name="receipts" >}}
-{{< cs-module name="read_markers" >}}
-{{< cs-module name="presence" >}}
-{{< cs-module name="content_repo" >}}
-{{< cs-module name="send_to_device" >}}
-{{< cs-module name="device_management" >}}
-{{< cs-module name="end_to_end_encryption" >}}
-{{< cs-module name="secrets" >}}
-{{< cs-module name="history_visibility" >}}
-{{< cs-module name="push" >}}
-{{< cs-module name="third_party_invites" >}}
-{{< cs-module name="search" >}}
-{{< cs-module name="guest_access" >}}
-{{< cs-module name="room_previews" >}}
-{{< cs-module name="tags" >}}
-{{< cs-module name="account_data" >}}
-{{< cs-module name="admin" >}}
-{{< cs-module name="event_context" >}}
-{{< cs-module name="sso_login" >}}
-{{< cs-module name="dm" >}}
-{{< cs-module name="ignore_users" >}}
-{{< cs-module name="stickers" >}}
-{{< cs-module name="report_content" >}}
-{{< cs-module name="third_party_networks" >}}
-{{< cs-module name="openid" >}}
-{{< cs-module name="server_acls" >}}
-{{< cs-module name="mentions" >}}
-{{< cs-module name="room_upgrades" >}}
-{{< cs-module name="server_notices" >}}
-{{< cs-module name="moderation_policies" >}}
-{{< cs-module name="spaces" >}}
-{{< cs-module name="event_replacements" >}}
-{{< cs-module name="event_annotations" >}}
-{{< cs-module name="threading" >}}
-{{< cs-module name="reference_relations" >}}
+{{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
+{{% cs-module name="voip_events" %}}
+{{% cs-module name="typing_notifications" %}}
+{{% cs-module name="receipts" %}}
+{{% cs-module name="read_markers" %}}
+{{% cs-module name="presence" %}}
+{{% cs-module name="content_repo" %}}
+{{% cs-module name="send_to_device" %}}
+{{% cs-module name="device_management" %}}
+{{% cs-module name="end_to_end_encryption" %}}
+{{% cs-module name="secrets" %}}
+{{% cs-module name="history_visibility" %}}
+{{% cs-module name="push" %}}
+{{% cs-module name="third_party_invites" %}}
+{{% cs-module name="search" %}}
+{{% cs-module name="guest_access" %}}
+{{% cs-module name="room_previews" %}}
+{{% cs-module name="tags" %}}
+{{% cs-module name="account_data" %}}
+{{% cs-module name="admin" %}}
+{{% cs-module name="event_context" %}}
+{{% cs-module name="sso_login" %}}
+{{% cs-module name="dm" %}}
+{{% cs-module name="ignore_users" %}}
+{{% cs-module name="stickers" %}}
+{{% cs-module name="report_content" %}}
+{{% cs-module name="third_party_networks" %}}
+{{% cs-module name="openid" %}}
+{{% cs-module name="server_acls" %}}
+{{% cs-module name="mentions" %}}
+{{% cs-module name="room_upgrades" %}}
+{{% cs-module name="server_notices" %}}
+{{% cs-module name="moderation_policies" %}}
+{{% cs-module name="spaces" %}}
+{{% cs-module name="event_replacements" %}}
+{{% cs-module name="event_annotations" %}}
+{{% cs-module name="threading" %}}
+{{% cs-module name="reference_relations" %}}
