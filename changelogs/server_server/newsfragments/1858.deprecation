@@ -1,0 +1,1 @@
+Use of the Client-Server API `/_matrix/media/*` endpoints is now deprecated. New, authenticated, endpoints are available instead.
