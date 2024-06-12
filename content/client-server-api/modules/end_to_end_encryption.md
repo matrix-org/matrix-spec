@@ -1179,13 +1179,13 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned must be
-[ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) compatible and
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
 contain a single segment that uses the byte mode encoding.
 
 The error correction level can be chosen by the device displaying the QR code.
 
-The binary segment must be of the following form:
+The binary segment MUST be of the following form:
 
 - the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
   `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
