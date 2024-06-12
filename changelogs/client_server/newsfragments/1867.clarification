@@ -1,0 +1,1 @@
+Add missing 403 response on `/profile/{userId}/avatar_url` and `/profile/{userId}/displayname`.
