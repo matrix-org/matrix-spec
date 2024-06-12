@@ -1530,9 +1530,11 @@ claiming to have sent messages which they didn't. `sender` must
 correspond to the user who sent the event, `recipient` to the local
 user, and `recipient_keys` to the local ed25519 key.
 
-Clients must confirm that the `sender_key` and the `ed25519` field value
-under the `keys` property match the keys returned by [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for
-the given user, and must also verify the signature of the keys from the
+Clients must confirm that the `sender_key` property in the cleartext
+`m.room.encrypted` event body, and the `keys.ed25519` property in the
+decrypted plaintext, match the keys returned by
+[`/keys/query`](#post_matrixclientv3keysquery) for
+the given user. Clients must also verify the signature of the keys from the
 `/keys/query` response. Without this check, a client cannot be sure that
 the sender device owns the private part of the ed25519 key it claims to
 have in the Olm payload. This is crucial when the ed25519 key corresponds
