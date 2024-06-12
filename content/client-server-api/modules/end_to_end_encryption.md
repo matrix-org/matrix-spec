@@ -1,5 +1,7 @@
 
-### End-to-End Encryption testme
+### End-to-End Encryption
+
+Testme.
 
 Matrix optionally supports end-to-end encryption, allowing rooms to be
 created whose conversation contents are not decryptable or interceptable
