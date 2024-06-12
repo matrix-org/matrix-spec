@@ -689,11 +689,11 @@ However, the precise format depends upon the [room version
 specification](/rooms): early room versions included a `domain` component,
 whereas more recent versions omit the domain and use a base64-encoded hash instead.
 
+In addition to the requirements of the room version, the length of an event ID,
+including the `$` sigil and the domain where present, MUST NOT exceed 255 bytes.
+
 Event IDs are case-sensitive. They are not meant to be human-readable. They are
 intended to be treated as fully opaque strings by clients.
-
-The length of an event ID MUST NOT exceed 255 bytes.
-
 
 ### URIs
 
