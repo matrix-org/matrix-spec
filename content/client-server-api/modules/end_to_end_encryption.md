@@ -1206,11 +1206,11 @@ The binary segment MUST be of the following form:
   - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
-    cross-signing key is
+    cross-signing public key is
   - if `0x01`, then what the device thinks the other device's Ed25519 signing
+    public key is
+  - if `0x02`, then what the device thinks the user's master cross-signing public
     key is
-  - if `0x02`, then what the device thinks the user's master cross-signing key
-    is
 - a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
