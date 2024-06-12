@@ -1179,10 +1179,16 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned using this format will encode binary
-strings in the general form:
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
 
-- the ASCII string `MATRIX`
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
 - one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
@@ -1194,23 +1200,23 @@ strings in the general form:
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00` or `0x01`, then the current user's own master cross-signing public key
   - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
-    cross-signing key is
+    cross-signing public key is
   - if `0x01`, then what the device thinks the other device's Ed25519 signing
+    public key is
+  - if `0x02`, then what the device thinks the user's master cross-signing public
     key is
-  - if `0x02`, then what the device thinks the user's master cross-signing key
-    is
-- a random shared secret, as a byte string.  It is suggested to use a secret
+- a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
-  binary string as the shared secret.
+  binary segment as the shared secret.
 
-For example, if Alice displays a QR code encoding the following binary string:
+For example, if Alice displays a QR code encoding the following binary data:
 
 ```
       "MATRIX"    |ver|mode| len   | event ID
