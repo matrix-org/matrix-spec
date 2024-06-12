@@ -1200,7 +1200,7 @@ The binary segment MUST be of the following form:
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID encoded as a UTF-8 string (i.e. one UTF-8 byte per character)
+  - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00` or `0x01`, then the current user's own master cross-signing public key
   - if `0x02`, then the current device's Ed25519 signing key
