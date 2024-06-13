@@ -25,8 +25,8 @@ interacting with the media repository.
 
 {{% boxes/added-in-paragraph %}}
 {{< changed-in v="1.11" >}} The unauthenticated download endpoints have been
-deprecated in favour of newer, authenticated, ones. This change included updating
-the pathing of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
+deprecated in favour of newer, authenticated, ones. This change includes updating
+the paths of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
 with the exception of the `/upload` and `/create` endpoints. The upload/create
 endpoints are expected to undergo a similar transition in a later version of the
 specification.
