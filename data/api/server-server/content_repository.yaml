@@ -137,7 +137,7 @@ paths:
             Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
 
             When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
-            server should behave as though `animated` is `false`.
+            server SHOULD behave as though `animated` is `false`.
           example: false
           schema:
             type: boolean
@@ -265,8 +265,8 @@ components:
         The maximum number of milliseconds that the client is willing to wait to
         start receiving data, in the case that the content has not yet been
         uploaded. The default value is 20000 (20 seconds). The content
-        repository can and should impose a maximum value for this parameter. The
-        content repository may also choose to respond before the timeout.
+        repository SHOULD impose a maximum value for this parameter. The
+        content repository MAY respond before the timeout.
       example: 5000
       schema:
         type: integer
