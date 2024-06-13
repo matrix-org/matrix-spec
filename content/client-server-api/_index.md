@@ -2727,45 +2727,45 @@ that profile.
 
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
-| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
-| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
-| [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
+| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
+| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
 | [Push Notifications](#push-notifications)                  | Optional  | Required | Optional | Optional | Optional |
 | [Receipts](#receipts)                                      | Required  | Required | Required | Required | Optional |
-| [Fully read markers](#fully-read-markers)                  | Optional  | Optional | Optional | Optional | Optional |
-| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
-| [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
-| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
-| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
-| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
 | [Room History Visibility](#room-history-visibility)        | Required  | Required | Required | Required | Optional |
-| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Room Upgrades](#room-upgrades)                            | Required  | Required | Required | Required | Optional |
-| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
-| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
-| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Invites](#third-party-invites)                | Optional  | Required | Optional | Optional | Optional |
+| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
+| [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
+| [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
+| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
-| [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
-| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
-| [SSO Client Login/Authentication](#sso-client-loginauthentication) | Optional  | Optional | Optional | Optional | Optional |
-| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
-| [Server Access Control Lists (ACLs)](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
-| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
-| [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
-| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
-| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Fully read markers](#fully-read-markers)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
+| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
-| [Secrets](#secrets)                                        | Optional  | Optional | Optional | Optional | Optional |
-| [Third-party Invites](#third-party-invites)                | Optional  | Required | Optional | Optional | Optional |
+| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Room Tagging](#room-tagging)                              | Optional  | Optional | Optional | Optional | Optional |
+| [SSO Client Login/Authentication](#sso-client-loginauthentication) | Optional  | Optional | Optional | Optional | Optional |
+| [Secrets](#secrets)                                        | Optional  | Optional | Optional | Optional | Optional |
+| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Server Access Control Lists (ACLs)](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
+| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
+| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
+| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
+| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
