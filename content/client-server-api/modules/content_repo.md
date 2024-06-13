@@ -23,19 +23,67 @@ When serving content, the server SHOULD provide a
 interacting with the media repository.
 {{% /boxes/added-in-paragraph %}}
 
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} The unauthenticated download endpoints have been
+deprecated in favour of newer, authenticated, ones. This change includes updating
+the paths of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
+with the exception of the `/upload` and `/create` endpoints. The upload/create
+endpoints are expected to undergo a similar transition in a later version of the
+specification.
+{{% /boxes/added-in-paragraph %}}
+
 #### Matrix Content (`mxc://`) URIs
 
 Content locations are represented as Matrix Content (`mxc://`) URIs. They
 look like:
 
-    mxc://<server-name>/<media-id>
+```
+mxc://<server-name>/<media-id>
 
-    <server-name> : The name of the homeserver where this content originated, e.g. matrix.org
-    <media-id> : An opaque ID which identifies the content.
+<server-name> : The name of the homeserver where this content originated, e.g. matrix.org
+<media-id> : An opaque ID which identifies the content.
+```
 
-#### Client behaviour
+#### Client behaviour {id="content-repo-client-behaviour"}
 
-Clients can upload and download content using the following HTTP APIs.
+Clients can access the content repository using the following endpoints.
+
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} Clients SHOULD NOT use the deprecated media endpoints
+described below. Instead, they SHOULD use the new endpoints which require authentication.
+{{% /boxes/added-in-paragraph %}}
+
+{{% boxes/warning %}}
+By Matrix 1.12, servers SHOULD "freeze" the deprecated, unauthenticated, endpoints
+to prevent newly-uploaded media from being downloaded. This SHOULD mean that any
+media uploaded *before* the freeze remains accessible via the deprecated endpoints,
+and any media uploaded *after* (or *during*) the freeze SHOULD only be accessible
+through the new, authenticated, endpoints. For remote media, "newly-uploaded" is
+determined by the date the cache was populated. This may mean the media is older
+than the freeze, but because the server had to re-download it, it is now considered
+"new".
+
+Clients SHOULD update to support the authenticated endpoints before servers freeze
+unauthenticated access.
+
+Servers SHOULD consider their local ecosystem impact before enacting a freeze.
+This could mean ensuring their users' typical clients support the new endpoints
+when available, or updating bridges to start using media proxies.
+
+In addition to the above, servers SHOULD exclude [IdP icons used in the `m.login.sso` flow](/client-server-api/#definition-mloginsso-flow-schema)
+from the freeze. See the `m.login.sso` flow schema for details.
+
+An *example* timeline for a server may be:
+
+* Matrix 1.11 release: Clients begin supporting authenticated media.
+* Matrix 1.12 release: Servers freeze unauthenticated media access.
+  * Media uploaded prior to this point still works with the deprecated endpoints.
+  * Newly uploaded (or cached) media *only* works on the authenticated endpoints.
+
+Matrix 1.12 is expected to be released in the July-September 2024 calendar quarter.
+{{% /boxes/warning %}}
+
+{{% http-api spec="client-server" api="authed-content-repo" %}}
 
 {{% http-api spec="client-server" api="content-repo" %}}
 

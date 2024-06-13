@@ -37,9 +37,8 @@ The exceptions are:
   which take an empty request body.
 
 Similarly, all endpoints require the server to return a JSON object,
-with the exception of 200 responses to
-[`GET /_matrix/media/v3/download/{serverName}/{mediaId}`](#get_matrixmediav3downloadservernamemediaid)
-and [`GET /_matrix/media/v3/thumbnail/{serverName}/{mediaId}`](#get_matrixmediav3thumbnailservernamemediaid).
+with the exception of 200 responses to the media download endpoints in the
+[Content Repository module](#content-repository).
 Servers must include a `Content-Type` header of `application/json` for all JSON responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.
