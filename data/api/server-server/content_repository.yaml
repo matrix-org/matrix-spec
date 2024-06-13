@@ -37,7 +37,7 @@ paths:
               schema:
                 # This is a workaround for us not being able to say the response is required.
                 description: |-
-                  **Required.** MUST contain a `boundary` (per [RFC 1341](https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html))
+                  **Required.** MUST contain a `boundary` (per [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046#section-5.1))
                   delineating exactly two parts:
 
                   The first part has a `Content-Type` header of `application/json`
@@ -154,7 +154,7 @@ paths:
               schema:
                 # This is a workaround for us not being able to say the response is required.
                 description: |-
-                  **Required.** MUST contain a `boundary` (per [RFC 1341](https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html))
+                  **Required.** MUST contain a `boundary` (per [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046#section-5.1))
                   delineating exactly two parts:
 
                   The first part has a `Content-Type` header of `application/json`
