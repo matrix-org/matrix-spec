@@ -7,7 +7,7 @@ properties:
     properties:
       info:
         allOf:
-          - $ref: core-event-schema/msgtype_infos/image_info.yaml
+          - $ref: core-event-schema/msgtype_infos/avatar_info.yaml
         description: Metadata about the image referred to in `url`.
       url:
         description: |-
