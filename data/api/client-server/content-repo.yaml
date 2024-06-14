@@ -81,6 +81,9 @@ paths:
         earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
           description: |
