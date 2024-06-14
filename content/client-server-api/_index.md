@@ -355,9 +355,9 @@ as per the [CORS](#web-browser-clients) section in this specification.
 The `.well-known` method uses a JSON file at a predetermined location to
 specify parameter values. The flow for this method is as follows:
 
-1.  Extract the server name from the user's Matrix ID by splitting the
+1.  Extract the [server name](/appendices/#server-name) from the user's Matrix ID by splitting the
     Matrix ID at the first colon.
-2.  Extract the hostname from the server name.
+2.  Extract the hostname from the server name as described by the [grammar](/appendices/#server-name).
 3.  Make a GET request to `https://hostname/.well-known/matrix/client`.
     1.  If the returned status code is 404, then `IGNORE`.
     2.  If the returned status code is not 200, or the response body is
