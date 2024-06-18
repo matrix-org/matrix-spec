@@ -166,7 +166,7 @@ to send. The process overall is as follows:
         target server must present a valid certificate for
         `<delegated_hostname>`.
     5.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
-        or A records. Requests are then made to the resolve IP address
+        or A records. Requests are then made to the resolved IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
