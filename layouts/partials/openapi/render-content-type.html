@@ -4,13 +4,16 @@
   two arrays with equal length:
 
   * `content_types`: the content type strings
-
   * `descriptions`: the description strings
+  * `added_in`: the "added in" version
+  * `changed_in`: the "changed in" dictionary
 
 */}}
 
 {{ $content_types := .content_types }}
 {{ $descriptions := .descriptions}}
+{{ $added_in := .added_in}}
+{{ $changed_in := .changed_in}}
 
 {{ if (gt (len $content_types) 0) }}
 
@@ -22,7 +25,11 @@
  {{ range $idx, $content_type := $content_types }}
  <tr>
   <td><code>{{ $content_type }}</code></td>
-  <td>{{ index $descriptions $idx | markdownify -}}</td>
+  <td>
+   {{ index $descriptions $idx | markdownify -}}
+   {{ if (index $added_in $idx) }}{{ partial "added-in" (dict "v" (index $added_in $idx)) }}{{ end -}}
+   {{ if (index $changed_in $idx) }}{{ partial "changed-in" (dict "changes_dict" (index $changed_in $idx)) }}{{ end -}}
+  </td>
  </tr>
  {{ end }}
 </table>
