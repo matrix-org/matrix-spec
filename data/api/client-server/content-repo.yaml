@@ -712,8 +712,9 @@ components:
     bytes:
       content:
         application/octet-stream:
-          example: <bytes>
-      description: The content to be uploaded.
+          schema:
+            description: The content to be uploaded.
+            example: <bytes>
       required: true
   responses:
     uploadTooLarge:

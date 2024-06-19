@@ -3,17 +3,11 @@
   Render a table showing content types and their descriptions, given
   two arrays with equal length:
 
-  * `content_types`: the content type strings
-  * `descriptions`: the description strings
-  * `added_in`: the "added in" version
-  * `changed_in`: the "changed in" dictionary
+  * `content_types`: OpenAPI data specifying the content types
 
 */}}
 
 {{ $content_types := .content_types }}
-{{ $descriptions := .descriptions}}
-{{ $added_in := .added_in}}
-{{ $changed_in := .changed_in}}
 
 {{ if (gt (len $content_types) 0) }}
 
@@ -22,13 +16,13 @@
   <th class="col-name">Content-Type</th>
   <th class="col-description">Description</th>
  </thead>
- {{ range $idx, $content_type := $content_types }}
+ {{ range $mime, $body := $content_types }}
  <tr>
-  <td><code>{{ $content_type }}</code></td>
+  <td><code>{{ $mime }}</code></td>
   <td>
-   {{ index $descriptions $idx | markdownify -}}
-   {{ if (index $added_in $idx) }}{{ partial "added-in" (dict "v" (index $added_in $idx)) }}{{ end -}}
-   {{ if (index $changed_in $idx) }}{{ partial "changed-in" (dict "changes_dict" (index $changed_in $idx)) }}{{ end -}}
+   {{ $body.schema.description | markdownify -}}
+   {{ if (index $body.schema "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $body.schema "x-addedInMatrixVersion")) }}{{ end -}}
+   {{ if (index $body.schema "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $body.schema "x-changedInMatrixVersion")) }}{{ end -}}
   </td>
  </tr>
  {{ end }}

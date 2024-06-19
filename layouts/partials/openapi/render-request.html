@@ -50,17 +50,7 @@
             {{/*
                 Show the content types and description.
             */}}
-            {{ $mimes := slice }}
-            {{ $descriptions := slice }}
-            {{ $added_in := slice }}
-            {{ $changed_in := slice }}
-            {{ range $mime, $body := $request_body.content }}
-                {{ $mimes = $mimes | append $mime }}
-                {{ $descriptions = $descriptions | append $request_body.description }}
-                {{ $added_in = $added_in | append (index $request_body "x-addedInMatrixVersion") }}
-                {{ $changed_in = $changed_in | append (index $request_body "x-changedInMatrixVersion") }}
-            {{ end }}
-            {{ partial "openapi/render-content-type" (dict "content_types" $mimes "descriptions" $descriptions "added_in" $added_in "changed_in" $changed_in) }}
+            {{ partial "openapi/render-content-type" (dict "content_types" $request_body.content) }}
         {{ end }}
 
 <h3>Request body example</h3>
