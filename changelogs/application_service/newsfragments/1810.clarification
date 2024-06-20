@@ -1,0 +1,1 @@
+Clarify that appservices should be notified of events relating to the `sender_localpart` user.

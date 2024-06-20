@@ -1,1 +1,0 @@
-Clarify that the HKDF calculation for SAS uses base64-encoded keys rather than the raw key bytes.

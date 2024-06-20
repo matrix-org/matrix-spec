@@ -43,6 +43,12 @@ except ImportError as e:
     raise
 
 try:
+    import referencing
+except ImportError as e:
+    import_error("referencing", "referencing", "referencing", e)
+    raise
+
+try:
     import yaml
 except ImportError as e:
     import_error("yaml", "PyYAML", "yaml", e)
@@ -50,8 +56,11 @@ except ImportError as e:
 
 
 def check_schema(filepath, example, schema):
-    resolver = jsonschema.RefResolver(filepath, schema, handlers={"file": helpers.load_file_from_uri})
-    validator = jsonschema.Draft202012Validator(schema, resolver)
+    # $id as a URI with scheme is necessary to make registry resolver work.
+    schema["$id"] = filepath
+
+    registry = referencing.Registry(retrieve=helpers.load_resource_from_uri)
+    validator = jsonschema.validators.Draft202012Validator(schema, registry=registry)
     validator.validate(example)
 
 

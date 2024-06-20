@@ -46,7 +46,8 @@ paths:
         found in that direction is outside of the expected range.
       operationId: getEventByTimestamp
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -136,4 +137,7 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -24,7 +24,8 @@ paths:
       description: Publishes end-to-end encryption keys for the device.
       operationId: uploadKeys
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -38,12 +39,9 @@ paths:
                   allOf:
                     - $ref: definitions/device_keys.yaml
                 one_time_keys:
-                  # $ref: "definitions/one_time_keys.yaml"
-                  # XXX: We can't define an actual object here, so we have to hope
-                  # that people will look at the OpenAPI source or can figure it out
-                  # from the other endpoints/example.
+                  allOf:
+                    - $ref: "definitions/one_time_keys.yaml"
                   type: object
-                  title: OneTimeKeys
                   description: |-
                     One-time public keys for "pre-key" messages.  The names of
                     the properties should be in the format
@@ -64,10 +62,9 @@ paths:
                           ed25519:JLAFKJWSCS: IQeCEPb9HFk217cU9kw9EOiusC6kMIkoIRnbnfOh5Oc63S1ghgyjShBGpu34blQomoalCyXWyhaaT3MrLZYQAA
                 fallback_keys:
                   x-addedInMatrixVersion: "1.2"
-                  # $ref: "definitions/one_time_keys.yaml"
-                  # XXX: We can't define an actual object here - see above.
+                  allOf:
+                    - $ref: "definitions/one_time_keys.yaml"
                   type: object
-                  title: OneTimeKeys
                   description: |-
                     The public key which should be used if the device's one-time keys
                     are exhausted. The fallback key is not deleted once used, but should
@@ -120,7 +117,8 @@ paths:
       description: Returns the current devices and identity keys for the given users.
       operationId: queryKeys
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -139,11 +137,13 @@ paths:
                     The keys to be downloaded. A map from user ID, to a list of
                     device IDs, or to an empty list to indicate all devices for the
                     corresponding user.
-                  additionalProperties:
-                    type: array
-                    items:
-                      type: string
-                      description: device ID
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: array
+                      items:
+                        type: string
+                        description: device ID
                   example:
                     "@alice:example.com": []
               required:
@@ -179,24 +179,26 @@ paths:
                       the information returned will be the same as uploaded via
                       `/keys/upload`, with the addition of an `unsigned`
                       property.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
-                        title: DeviceInformation
-                        allOf:
-                          - $ref: definitions/device_keys.yaml
-                        properties:
-                          unsigned:
-                            title: UnsignedDeviceInfo
-                            type: object
-                            description: |-
-                              Additional data added to the device key information
-                              by intermediate servers, and not covered by the
-                              signatures.
-                            properties:
-                              device_display_name:
-                                type: string
-                                description: The display name which the user set on the device.
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        type: object
+                        additionalProperties:
+                          title: DeviceInformation
+                          allOf:
+                            - $ref: definitions/device_keys.yaml
+                          properties:
+                            unsigned:
+                              title: UnsignedDeviceInfo
+                              type: object
+                              description: |-
+                                Additional data added to the device key information
+                                by intermediate servers, and not covered by the
+                                signatures.
+                              properties:
+                                device_display_name:
+                                  type: string
+                                  description: The display name which the user set on the device.
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
@@ -223,9 +225,11 @@ paths:
                       `/keys/device_signing/upload`, along with the signatures
                       uploaded via `/keys/signatures/upload` that the requesting user
                       is allowed to see.
-                    additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -241,9 +245,11 @@ paths:
                       from user ID, to self-signing key information.  For each key, the
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
-                    additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -262,9 +268,11 @@ paths:
                       from user ID, to user-signing key information.  The
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
-                    additionalProperties:
-                      allOf:
-                        - $ref: definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -283,7 +291,8 @@ paths:
       description: Claims one-time keys for use in pre-key messages.
       operationId: claimKeys
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -301,12 +310,14 @@ paths:
                   description: |-
                     The keys to be claimed. A map from user ID, to a map from
                     device ID to algorithm name.
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
-                      type: string
-                      description: algorithm
-                      example: signed_curve25519
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: object
+                      additionalProperties:
+                        type: string
+                        description: algorithm
+                        example: signed_curve25519
                   example:
                     "@alice:example.com":
                       JLAFKJWSCS: signed_curve25519
@@ -346,16 +357,12 @@ paths:
 
                       If necessary, the claimed key might be a fallback key. Fallback
                       keys are re-used by the server until replaced by the device.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
-                        # $ref: "definitions/one_time_keys.yaml"
-                        # XXX: We can't define an actual object here, so we have to hope
-                        # that people will read the link provided in the description
-                        # and figure it out from the other endpoints/example.
-                        # See also one_time_key parameter for /keys/upload above.
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
                         type: object
-                        title: OneTimeKeys
+                        additionalProperties:
+                          $ref: "definitions/one_time_keys.yaml"
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
@@ -383,7 +390,8 @@ paths:
           identity keys, between `from` and `to`.
       operationId: getKeysChanges
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: from
@@ -453,4 +461,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

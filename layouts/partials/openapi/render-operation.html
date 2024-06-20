@@ -5,7 +5,6 @@
   * `method`: the method, e.g. GET, PUT
   * `endpoint`: the endpoint
   * `operation_data`: the OpenAPI data for the operation
-  * `path`: the path where this definition was found, to enable us to resolve "$ref"
 
   This template renders the operation as a `<section>` containing:
 
@@ -21,7 +20,6 @@
 {{ $method := .method }}
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
-{{ $path := .path }}
 {{ $anchor := anchorize $endpoint }}
 
 <section class="rendered-data http-api {{ $method }}">
@@ -80,9 +78,9 @@
 </table>
 
 <hr/>
-{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "path" $path "anchor_base" $anchor ) }}
+{{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "anchor_base" $anchor ) }}
 <hr/>
-{{ partial "openapi/render-responses" (dict "responses"  $operation_data.responses  "path" $path "anchor_base" $anchor ) }}
+{{ partial "openapi/render-responses" (dict "responses" $operation_data.responses "anchor_base" $anchor ) }}
 
 </details>
 

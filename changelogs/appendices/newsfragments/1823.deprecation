@@ -1,0 +1,1 @@
+Deprecate linking to events in rooms identified by alias, as per [MSC4132](https://github.com/matrix-org/matrix-spec-proposals/pull/4132).

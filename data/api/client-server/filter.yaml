@@ -25,7 +25,8 @@ paths:
         restrict which events are returned to the client.
       operationId: defineFilter
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -119,7 +120,8 @@ paths:
       summary: Download a filter
       operationId: getFilter
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -141,9 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: definitions/sync_filter.yaml
+                $ref: definitions/sync_filter.yaml
               examples:
                 response:
                   value: {
@@ -214,4 +214,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

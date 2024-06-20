@@ -1,0 +1,1 @@
+Clarify that the `type` of the `POST /login` request must be one of the types returned by the `GET /login` response.

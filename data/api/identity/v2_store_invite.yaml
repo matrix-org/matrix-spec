@@ -51,7 +51,8 @@ paths:
         the `address` of the pending invite for display purposes.
       operationId: storeInviteV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -224,4 +225,7 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

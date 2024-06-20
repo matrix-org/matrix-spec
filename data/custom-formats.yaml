@@ -1,0 +1,53 @@
+# Copyright 2024 Commaille Kévin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This file contains the list of custom formats supported for the `format` key
+# and the `x-pattern-format` extension (see `openapi_extensions.md` for more
+# details).
+#
+# Each entry must use the `mx-` prefix and have the form:
+#
+# mx-custom-key:
+#   title: The title rendered in the specification
+#   url: /url/to#definition
+
+mx-user-id:
+  title: User ID
+  url: /appendices#user-identifiers
+  # regex: "^@"
+
+mx-event-id:
+  title: Event ID
+  url: /appendices#event-ids
+  # regex: "^\\$"
+
+mx-room-id:
+  title: Room ID
+  url: /appendices#room-ids
+  # regex: "^!"
+
+mx-server-name:
+  title: Server Name
+  url: /appendices#server-name
+  # no regex
+
+mx-mxc-uri:
+  title: Matrix Content URI
+  url: /client-server-api#matrix-content-mxc-uris
+  # regex: "^mxc:\\/\\/"
+
+uri:
+  title: URI
+  url: http://tools.ietf.org/html/rfc3986
+  # no regex

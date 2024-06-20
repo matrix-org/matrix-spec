@@ -1,7 +1,7 @@
 The following labels are used to help categorize issues:
 
 `spec-omission <https://github.com/matrix-org/matrix-spec/labels/spec-omission>`_
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 
 Things which have been implemented but not currently specified. These may range
 from entire API endpoints, to particular options or return parameters.
@@ -17,7 +17,7 @@ Examples:
   <https://github.com/matrix-org/matrix-doc/issues/904>`_
 
 `clarification <https://github.com/matrix-org/matrix-spec/labels/clarification>`_
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
 
 An area where the spec could do with being more explicit.
 
@@ -30,7 +30,7 @@ Examples:
   <https://github.com/matrix-org/matrix-doc/issues/686>`_
 
 `spec-bug <https://github.com/matrix-org/matrix-spec/labels/spec-bug>`_
-----------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 Something which is in the spec, but is wrong.
 
@@ -47,7 +47,7 @@ Examples:
   <https://github.com/matrix-org/matrix-doc/issues/695>`_
 
 `improvement <https://github.com/matrix-org/matrix-spec/labels/improvement>`_
-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 
 A suggestion for a relatively simple improvement to the protocol.
 
@@ -59,7 +59,7 @@ Examples:
   <https://github.com/matrix-org/matrix-spec/issues/145>`_
 
 `feature <https://github.com/matrix-org/matrix-spec/labels/feature>`_
---------------------------------------------------------------------
+---------------------------------------------------------------------
 
 A suggestion for a significant extension to the matrix protocol which
 needs considerable consideration before implementation.
@@ -72,7 +72,7 @@ Examples:
 
 
 `wart <https://github.com/matrix-org/matrix-spec/labels/wart>`_
---------------------------------------------------------------
+---------------------------------------------------------------
 
 A point where the protocol is inconsistent or inelegant, but which isn't really
 causing anybody any problems right now. Might be nice to consider fixing one
@@ -80,7 +80,7 @@ day.
 
 
 `question <https://github.com/matrix-org/matrix-spec/labels/question>`_
-----------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 A thought or idea about the protocol which we aren't really sure whether to
 pursue or not.

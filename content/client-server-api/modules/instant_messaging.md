@@ -73,11 +73,12 @@ the tag.
 
 | Tag    | Permitted Attributes                                                                                                                       |
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
+| `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages)), `data-mx-maths` (see [mathematical messages](#mathematical-messages)) |
 | `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
 | `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
+| `div` | `data-mx-maths` (see [mathematical messages](#mathematical-messages))                                                                      |
 
 Additionally, web clients should ensure that *all* `a` tags get a
 `rel="noopener"` to prevent the target page from referencing the
@@ -384,6 +385,64 @@ An example of a media message with a caption is:
 
 Clients MUST render the caption alongside the media and SHOULD prefer its
 formatted representation.
+
+##### Mathematical messages
+
+{{% added-in v="1.11" %}}
+
+Users might want to send mathematical notations in their messages.
+
+To send mathematical notations clients MUST use the `formatted_body` and
+therefore the `org.matrix.custom.html` format, described above. This makes
+mathematical notations valid on any `msgtype` which can support this format
+appropriately.
+
+Mathematical notations themselves use the `span` or `div` tags, depending
+whether the notation should be presented inline or not. The mathematical
+notation is written in [LaTeX](https://www.latex-project.org/) format using the
+`data-mx-maths` attribute.
+
+The contents of the tag should be a fallback representation for clients that
+cannot render the LaTeX format. The fallback representation could be, for
+example, an image, or an HTML approximation, or the raw LaTeX source. When using
+an image as a fallback, the sending client should be aware of issues that may
+arise from the receiving client using a different background colour. The `body`
+should include a textual representation of the notation.
+
+An example of a mathematical notation is:
+
+```json
+{
+  "msgtype": "m.text",
+  "format": "org.matrix.custom.html",
+  "body": "This is an equation: sin(x)=a/b.",
+  "formatted_body": "This is an equation:
+      <span data-mx-maths=\"\\sin(x)=\\frac{a}{b}\">
+        sin(<i>x</i>)=<sup><i>a</i></sup>/<sub><i>b</i></sub>
+      </span>"
+}
+```
+
+The LaTeX format is poorly defined and has several extensions, so if a client
+encounters syntax that it cannot render, it SHOULD present the fallback
+representation instead. Clients SHOULD, however, aim to support, at minimum, the
+basic [LaTeX2e](https://www.latex-project.org/) maths commands and the
+[TeX](https://tug.org/) maths commands, with the possible exception of commands
+that could be security risks.
+
+{{% boxes/warning %}}
+In general, LaTeX places a heavy burden on client authors to ensure that it is
+processed safely. Certain commands, such as [those that can create macros](https://katex.org/docs/supported#macros),
+are potentially dangerous. Clients should either decline to process those
+commands, or should take care to ensure that they are handled in safe ways (such
+as by limiting recursion). In general, LaTeX commands should be filtered by
+allowing known-good commands rather than forbidding known-bad commands.
+
+Therefore, clients should not render mathematics by calling a LaTeX compiler
+without proper sandboxing, as those executables were not written to handle
+untrusted input. Some LaTeX rendering libraries are better suited for that by
+allowing only a subset of LaTeX and enforcing recursion limits.
+{{% /boxes/warning %}}
 
 #### Server behaviour
 

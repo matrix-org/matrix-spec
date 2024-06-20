@@ -13,7 +13,7 @@ deciding what content is undesirable for any particular entity and
 should instead be empowering those entities to make their own decisions.
 As such, a generic framework for communicating "moderation policy lists"
 or "moderation policy rooms" is described. Note that this module only
-describes the data structures and not how they should be interpreting:
+describes the data structures and not how they should be interpreted:
 the entity making the decisions on filtering is best positioned to
 interpret the rules how it sees fit.
 

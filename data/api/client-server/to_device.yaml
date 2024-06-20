@@ -24,7 +24,8 @@ paths:
         client devices.
       operationId: sendToDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: eventType
@@ -56,12 +57,14 @@ paths:
                     The messages to send. A map from user ID, to a map from
                     device ID to message body. The device ID may also be `*`,
                     meaning all known devices for the user.
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
                       type: object
-                      title: EventContent
-                      description: Message content
+                      additionalProperties:
+                        type: object
+                        title: EventContent
+                        description: Message content
                   example:
                     "@alice:example.com":
                       TLLBEANAAG:
@@ -95,4 +98,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

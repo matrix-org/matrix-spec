@@ -24,7 +24,8 @@ paths:
         set this user's display name, e.g. you need to have their `access_token`.
       operationId: setDisplayName
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -109,7 +110,8 @@ paths:
         set this user's avatar URL, e.g. you need to have their `access_token`.
       operationId: setAvatarUrl
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -269,4 +271,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -1,0 +1,1 @@
+Do not use the `title` of objects containing only `additionalProperties` or `patternProperties`.

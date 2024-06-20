@@ -123,8 +123,8 @@ authentication is successful, the browser will be redirected to that
 
     For example, consider a web-based client at
     `https://client.example.com`, which wants to initiate SSO login on
-    the homeserver at `server.example.org`. It does this by storing the
-    homeserver name in a query parameter for the `redirectUrl`: it
+    the homeserver with [server name](/appendices/#server-name) `server.example.org`. It does this by storing the
+    server name in a query parameter for the `redirectUrl`: it
     redirects to
     `https://server.example.org/login/sso/redirect?redirectUrl=https://client.example.com?hs=server.example.org`.
 

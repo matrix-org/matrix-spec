@@ -166,7 +166,7 @@ to send. The process overall is as follows:
         target server must present a valid certificate for
         `<delegated_hostname>`.
     5.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
-        or A records. Requests are then made to the resolve IP address
+        or A records. Requests are then made to the resolved IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
@@ -349,13 +349,14 @@ def authorization_headers(origin_name, origin_signing_key,
 ```
 
 The format of the Authorization header is given in
-[RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
-summary, the header begins with authorization scheme `X-Matrix`, followed by
-one or more spaces, followed by a comma-separated list of parameters written as
-name=value pairs. The names are case insensitive and order does not matter. The
+[Section 11.4 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-11.4). In
+summary, the header begins with authorization scheme `X-Matrix`, followed by one
+or more spaces, followed by a comma-separated list of parameters written as
+name=value pairs. Zero or more spaces and tabs around each comma are allowed.
+The names are case insensitive and order does not matter. The
 values must be enclosed in quotes if they contain characters that are not
 allowed in `token`s, as defined in
-[RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+[Section 5.6.2 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2); if a
 value is a valid `token`, it may or may not be enclosed in quotes. Quoted
 values may include backslash-escaped characters. When parsing the header, the
 recipient must unescape the characters. That is, a backslash-character pair is
@@ -363,8 +364,9 @@ replaced by the character that follows the backslash.
 
 For compatibility with older servers, the sender should
 - only include one space after `X-Matrix`,
-- only use lower-case names, and
-- avoid using backslashes in parameter values.
+- only use lower-case names,
+- avoid using backslashes in parameter values, and
+- avoid including whitespace around the commas between name=value pairs.
 
 For compatibility with older servers, the recipient should allow colons to be
 included in values without requiring the value to be enclosed in quotes.
@@ -385,6 +387,13 @@ The authorization parameters to include are:
 - `signature`: the signature of the JSON as calculated in step 1.
 
 Unknown parameters are ignored.
+
+{{% boxes/note %}}
+{{< changed-in v="1.11" >}}
+This section used to reference [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
+and [RFC 7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
+were obsoleted by RFC 9110 without changes to the sections of interest here.
+{{% /boxes/note %}}
 
 ### Response Authentication
 
@@ -1187,15 +1196,26 @@ using the following EDU:
 
 Attachments to events (images, files, etc) are uploaded to a homeserver
 via the Content Repository described in the [Client-Server
-API](/client-server-api). When a server wishes
+API](/client-server-api/#content-repository). When a server wishes
 to serve content originating from a remote server, it needs to ask the
 remote server for the media.
 
-Servers should use the server described in the Matrix Content URI, which
-has the format `mxc://{ServerName}/{MediaID}`. Servers should use the
-download endpoint described in the [Client-Server
-API](/client-server-api), being sure to use
-the `allow_remote` parameter (set to `false`).
+Servers MUST use the server described in the [Matrix Content URI](/client-server-api/#matrix-content-mxc-uris).
+Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
+`ServerName` using the below endpoints.
+
+{{% boxes/added-in-paragraph %}}
+{{< changed-in v="1.11" >}} Servers were previously advised to use the `/_matrix/media/*`
+endpoints described by the [Content Repository module in the Client-Server API](/client-server-api/#content-repository),
+however, those endpoints have been deprecated. New endpoints are introduced which
+require authentication. Naturally, as a server is not a user, they cannot provide
+the required access token to those endpoints. Instead, servers MUST try the endpoints
+described below before falling back to the deprecated `/_matrix/media/*` endpoints
+when they receive a `404 M_UNRECOGNIZED` error. When falling back, servers MUST
+be sure to set `allow_remote` to `false`.
+{{% /boxes/added-in-paragraph %}}
+
+{{% http-api spec="server-server" api="content_repository" %}}
 
 ## Server Access Control Lists (ACLs)
 

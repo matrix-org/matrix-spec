@@ -23,7 +23,8 @@ paths:
       description: List the tags set by a user on a room.
       operationId: getRoomTags
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -52,16 +53,7 @@ paths:
                   tags:
                     type: object
                     additionalProperties:
-                      title: Tag
-                      type: object
-                      properties:
-                        order:
-                          type: number
-                          format: float
-                          description: |-
-                            A number in a range `[0,1]` describing a relative
-                            position of the room under the given tag.
-                      additionalProperties: true
+                      $ref: definitions/tag.yaml
               examples:
                 response:
                   value: {
@@ -83,7 +75,8 @@ paths:
       description: Add a tag to the room.
       operationId: setRoomTag
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -112,18 +105,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                order:
-                  type: number
-                  format: float
-                  description: |-
-                    A number in a range `[0,1]` describing a relative
-                    position of the room under the given tag.
-              additionalProperties: true
-              example: {
-                "order": 0.25
-              }
+              $ref: definitions/tag.yaml
         description: Extra data for the tag, e.g. ordering.
         required: true
       responses:
@@ -143,7 +125,8 @@ paths:
       description: Remove a tag from the room.
       operationId: deleteRoomTag
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -194,4 +177,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

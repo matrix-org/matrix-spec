@@ -22,7 +22,8 @@ paths:
       description: Gets information about all devices for the current user.
       operationId: getDevices
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: Device information
@@ -35,9 +36,7 @@ paths:
                     type: array
                     description: A list of all registered devices for this user.
                     items:
-                      type: object
-                      allOf:
-                        - $ref: definitions/client_device.yaml
+                      $ref: definitions/client_device.yaml
               examples:
                 response:
                   value: {
@@ -58,7 +57,8 @@ paths:
       description: Gets information on a single device, by device id.
       operationId: getDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -73,9 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: definitions/client_device.yaml
+                $ref: definitions/client_device.yaml
               examples:
                 response:
                   value: {
@@ -93,7 +91,8 @@ paths:
       description: Updates the metadata on the given device.
       operationId: updateDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -140,7 +139,8 @@ paths:
         Deletes the given device, and invalidates any access token associated with it.
       operationId: deleteDevice
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: deviceId
@@ -191,7 +191,8 @@ paths:
         Deletes the given devices, and invalidates any access token associated with them.
       operationId: deleteDevices
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -250,4 +251,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

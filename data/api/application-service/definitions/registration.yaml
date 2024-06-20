@@ -29,7 +29,9 @@ properties:
     description: A secret token that the homeserver will use authenticate requests to the application service.
   sender_localpart:
     type: string
-    description: The localpart of the user associated with the application service.
+    description: |-
+      The localpart of the user associated with the application service. Events will be sent to the AS if this user is the target of the event, or
+      is a joined member of the room where the event occurred.
   namespaces:
     type: object
     title: Namespaces
@@ -40,9 +42,10 @@ properties:
           - $ref: namespace_list.yaml
           - description: |-
               A list of namespaces defining the user IDs that the application
-              service is interested in. Events will be sent to the AS if a
-              local user matching one of the namespaces is the target of the event,
-              or is a joined member of the room where the event occurred.
+              service is interested in, in addition to its `sender_localpart`.
+              Events will be sent to the AS if a local user matching one of the
+              namespaces is the target of the event, or is a joined member of
+              the room where the event occurred.
       rooms:
         allOf:
           - $ref: namespace_list.yaml

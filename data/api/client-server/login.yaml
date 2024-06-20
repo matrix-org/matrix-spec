@@ -109,10 +109,12 @@ paths:
               properties:
                 type:
                   type: string
-                  enum:
-                    - m.login.password
-                    - m.login.token
-                  description: The login type being used.
+                  description: |-
+                    The login type being used.
+
+                    This must be a type returned in one of the flows of the
+                    response of the [`GET /login`](/client-server-api/#get_matrixclientv3login)
+                    endpoint, like `m.login.password` or `m.login.token`.
                 identifier:
                   $ref: definitions/user_identifier.yaml
                 user:
@@ -284,4 +286,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

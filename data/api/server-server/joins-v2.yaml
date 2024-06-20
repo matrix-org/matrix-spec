@@ -207,9 +207,9 @@ paths:
                     title: SignedMembershipEvent
                     x-addedInMatrixVersion: "1.2"
                     description: |-
-                      Required if the room version [supports restricted join rules](/rooms/#feature-matrix). The signed
-                      copy of the membership event sent to other servers by the resident server, including the resident
-                      server's signature.
+                      The membership event sent to other servers by the resident server including a signature
+                      from the resident server. Required if the room is [restricted](/client-server-api/#restricted-rooms)
+                      and the joining user is authorised by one of the conditions.
                   servers_in_room:
                     type: array
                     x-addedInMatrixVersion: "1.6"
@@ -307,4 +307,5 @@ servers:
         default: /_matrix/federation/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

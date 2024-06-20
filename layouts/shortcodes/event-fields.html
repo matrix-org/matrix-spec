@@ -13,7 +13,7 @@
 */}}
 
 {{ $event := index .Site.Data "event-schemas" "schema" "core-event-schema" .Params.event_type }}
-{{ $path := "event-schemas/schema/core-event-schema" }}
+{{ $path := delimit (slice "event-schemas/schema/core-event-schema" .Params.event_type) "/" }}
 
 {{ $event = partial "json-schema/resolve-refs" (dict "schema" $event "path" $path) }}
 {{ $event := partial "json-schema/resolve-allof" $event }}

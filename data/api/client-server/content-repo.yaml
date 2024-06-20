@@ -22,26 +22,13 @@ paths:
       summary: Upload some content to the content repository.
       operationId: uploadContent
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
-        - in: header
-          name: Content-Type
-          description: The content type of the file being uploaded
-          example: application/pdf
-          schema:
-            type: string
-        - in: query
-          name: filename
-          description: The name of the file being uploaded
-          example: War and Peace.pdf
-          schema:
-            type: string
+        - $ref: '#/components/parameters/contentType'
+        - $ref: '#/components/parameters/filename'
       requestBody:
-        content:
-          application/octet-stream:
-            example: <bytes>
-        description: The content to be uploaded.
-        required: true
+        $ref: '#/components/requestBodies/bytes'
       responses:
         "200":
           description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) for
@@ -55,7 +42,8 @@ paths:
                 properties:
                   content_uri:
                     type: string
-                    format: uri
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
                     description: The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
                       the uploaded content.
               examples:
@@ -80,23 +68,9 @@ paths:
                     "error": "Cannot upload this content"
                   }
         "413":
-          description: The uploaded content is too large for the server.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_TOO_LARGE",
-                    "error": "Cannot upload files larger than 100mb"
-                  }
+          $ref: '#/components/responses/uploadTooLarge'
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
       tags:
         - Media
   "/media/v3/upload/{serverName}/{mediaId}":
@@ -107,41 +81,20 @@ paths:
         earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
-        - in: path
-          name: serverName
-          required: true
+        - $ref: '#/components/parameters/serverName'
           description: |
-            The server name from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the authoritory component).
-          example: matrix.org
-          schema:
-            type: string
-        - in: path
-          name: mediaId
-          required: true
+            The server name from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the authority component).
+        - $ref: '#/components/parameters/mediaId'
           description: |
             The media ID from the `mxc://` URI returned by `POST /_matrix/media/v1/create` (the path component).
-          example: ascERGshawAWawugaAcauga
-          schema:
-            type: string
-        - in: header
-          name: Content-Type
-          description: The content type of the file being uploaded
-          example: application/pdf
-          schema:
-            type: string
-        - in: query
-          name: filename
-          description: The name of the file being uploaded
-          example: War and Peace.pdf
-          schema:
-            type: string
+        - $ref: '#/components/parameters/contentType'
+        - $ref: '#/components/parameters/filename'
       requestBody:
-        content:
-          application/octet-stream:
-            example: <bytes>
-        description: The content to be uploaded.
-        required: true
+        $ref: '#/components/requestBodies/bytes'
       responses:
         "200":
           description: The upload was successful.
@@ -189,23 +142,9 @@ paths:
                     "error": "Media already uploaded"
                   }
         "413":
-          description: The uploaded content is too large for the server.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_TOO_LARGE",
-                    "error": "Cannot upload files larger than 100mb"
-                  }
+          $ref: '#/components/responses/uploadTooLarge'
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
       tags:
         - Media
   /media/v1/create:
@@ -234,7 +173,8 @@ paths:
       operationId: createContent
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       # empty json object
       responses:
         "200":
@@ -249,7 +189,8 @@ paths:
                 properties:
                   content_uri:
                     type: string
-                    format: uri
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
                     description: |-
                       The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) at
                       which the content will be available, once it is uploaded.
@@ -274,80 +215,38 @@ paths:
                     "error": "Cannot upload this content"
                   }
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
       tags:
         - Media
   "/media/v3/download/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download content from the content repository.
+      description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContent
       parameters:
-        - in: path
-          name: serverName
-          required: true
-          description: |
-            The server name from the `mxc://` URI (the authoritory component)
-          example: matrix.org
-          schema:
-            type: string
-        - in: path
-          name: mediaId
-          required: true
-          description: |
-            The media ID from the `mxc://` URI (the path component)
-          example: ascERGshawAWawugaAcauga
-          schema:
-            type: string
-        - in: query
-          name: allow_remote
-          required: false
-          description: |
-            Indicates to the server that it should not attempt to fetch the media if it is deemed
-            remote. This is to prevent routing loops where the server contacts itself. Defaults to
-            true if not provided.
-          example: false
-          schema:
-            type: boolean
-            default: true
-        - in: query
-          name: timeout_ms
-          x-addedInMatrixVersion: "1.7"
-          description: |
-            The maximum number of milliseconds that the client is willing to
-            wait to start receiving data, in the case that the content has not
-            yet been uploaded. The default value is 20000 (20 seconds). The
-            content repository can and should impose a maximum value for this
-            parameter. The content repository may also choose to respond before
-            the timeout.
-          example: 5000
-          schema:
-            type: integer
-            format: int64
-            default: 20000
-        - in: query
-          name: allow_redirect
-          x-addedInMatrixVersion: "1.7"
-          required: false
-          description: |
-            Indicates to the server that it may return a 307 or 308 redirect response that points
-            at the relevant media content. When not explicitly set to true the server must return
-            the media content itself.
-          example: false
-          schema:
-            type: boolean
-            default: false
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
       responses:
         "200":
           description: The content that was previously uploaded.
           headers:
             Content-Type:
-              description: The content type of the file that was previously uploaded.
-              schema:
-                type: string
+              $ref: '#/components/headers/downloadContentType'
             Content-Disposition:
               description: The name of the file that was previously uploaded, if set.
               schema:
@@ -358,78 +257,41 @@ paths:
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
         "307":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/downloadRedirect'
         "308":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/downloadRedirect'
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
         "502":
-          description: The content is too large for the server to serve.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_TOO_LARGE",
-                    "error": "Content is too large to serve"
-                  }
+          $ref: '#/components/responses/downloadTooLarge'
         "504":
-          description: |-
-            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
-            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_YET_UPLOADED",
-                    "error": "Content has not yet been uploaded"
-                  }
+          $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
   "/media/v3/download/{serverName}/{mediaId}/{fileName}":
     get:
+      deprecated: true
       summary: Download content from the content repository overriding the file name
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}/{fileName}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaidfilename)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         This will download content from the content repository (same as
         the previous endpoint) but replace the target file name with the one
         provided by the caller.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentOverrideName
       parameters:
-        - in: path
-          name: serverName
-          required: true
-          description: |
-            The server name from the `mxc://` URI (the authoritory component)
-          example: matrix.org
-          schema:
-            type: string
-        - in: path
-          name: mediaId
-          required: true
-          description: |
-            The media ID from the `mxc://` URI (the path component)
-          example: ascERGshawAWawugaAcauga
-          schema:
-            type: string
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
         - in: path
           name: fileName
           required: true
@@ -437,52 +299,15 @@ paths:
           example: filename.jpg
           schema:
             type: string
-        - in: query
-          name: allow_remote
-          required: false
-          description: |
-            Indicates to the server that it should not attempt to fetch the media if it is deemed
-            remote. This is to prevent routing loops where the server contacts itself. Defaults to
-            true if not provided.
-          example: false
-          schema:
-            type: boolean
-            default: true
-        - in: query
-          name: timeout_ms
-          x-addedInMatrixVersion: "1.7"
-          description: |
-            The maximum number of milliseconds that the client is willing to
-            wait to start receiving data, in the case that the content has not
-            yet been uploaded. The default value is 20000 (20 seconds). The
-            content repository can and should impose a maximum value for this
-            parameter. The content repository may also choose to respond before
-            the timeout.
-          example: 5000
-          schema:
-            type: integer
-            format: int64
-            default: 20000
-        - in: query
-          name: allow_redirect
-          x-addedInMatrixVersion: "1.7"
-          required: false
-          description: |
-            Indicates to the server that it may return a 307 or 308 redirect response that points
-            at the relevant media content. When not explicitly set to true the server must return
-            the media content itself.
-          example: false
-          schema:
-            type: boolean
-            default: false
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
       responses:
         "200":
           description: The content that was previously uploaded.
           headers:
             Content-Type:
-              description: The content type of the file that was previously uploaded.
-              schema:
-                type: string
+              $ref: '#/components/headers/downloadContentType'
             Content-Disposition:
               description: |-
                 The `fileName` requested or the name of the file that was previously
@@ -495,77 +320,40 @@ paths:
                 # This is a workaround for us not being able to say the response is required.
                 description: "**Required.** The bytes for the uploaded file."
         "307":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/downloadRedirect'
         "308":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/downloadRedirect'
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
         "502":
-          description: The content is too large for the server to serve.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_TOO_LARGE",
-                    "error": "Content is too large to serve"
-                  }
+          $ref: '#/components/responses/downloadTooLarge'
         "504":
-          description: |-
-            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
-            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_YET_UPLOADED",
-                    "error": "Content has not yet been uploaded"
-                  }
+          $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
   "/media/v3/thumbnail/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download a thumbnail of content from the content repository
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/thumbnail/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediathumbnailservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentThumbnail
       parameters:
-        - in: path
-          name: serverName
-          required: true
-          description: |
-            The server name from the `mxc://` URI (the authoritory component)
-          example: example.org
-          schema:
-            type: string
-        - in: path
-          name: mediaId
-          required: true
-          description: |
-            The media ID from the `mxc://` URI (the path component)
-          example: ascERGshawAWawugaAcauga
-          schema:
-            type: string
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
         - in: query
           name: width
           required: true
@@ -595,44 +383,31 @@ paths:
             enum:
               - crop
               - scale
+        - $ref: '#/components/parameters/allow_remote'
+        - $ref: '#/components/parameters/timeout_ms'
+        - $ref: '#/components/parameters/allow_redirect'
         - in: query
-          name: allow_remote
+          name: animated
+          x-addedInMatrixVersion: "1.11"
           required: false
-          description: |-
-            Indicates to the server that it should not attempt to fetch
-            the media if it is deemed remote. This is to prevent routing loops
-            where the server contacts itself. Defaults to true if not provided.
+          description: |
+            Indicates preference for an animated thumbnail from the server, if possible. Animated
+            thumbnails typically use the content types `image/gif`, `image/png` (with APNG format),
+            `image/apng`, and `image/webp` instead of the common static `image/png` or `image/jpeg`
+            content types.
+
+            When `true`, the server SHOULD return an animated thumbnail if possible and supported.
+            When `false`, the server MUST NOT return an animated thumbnail. For example, returning a
+            static `image/png` or `image/jpeg` thumbnail. When not provided, the server SHOULD NOT
+            return an animated thumbnail.
+
+            Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
+
+            When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
+            server SHOULD behave as though `animated` is `false`.
           example: false
           schema:
             type: boolean
-            default: true
-        - in: query
-          name: timeout_ms
-          x-addedInMatrixVersion: "1.7"
-          description: |
-            The maximum number of milliseconds that the client is willing to
-            wait to start receiving data, in the case that the content has not
-            yet been uploaded. The default value is 20000 (20 seconds). The
-            content repository can and should impose a maximum value for this
-            parameter. The content repository may also choose to respond before
-            the timeout.
-          example: 5000
-          schema:
-            type: integer
-            format: int64
-            default: 20000
-        - in: query
-          name: allow_redirect
-          x-addedInMatrixVersion: "1.7"
-          required: false
-          description: |
-            Indicates to the server that it may return a 307 or 308 redirect response that points
-            at the relevant media content. When not explicitly set to true the server must return
-            the media content itself.
-          example: false
-          schema:
-            type: boolean
-            default: false
       responses:
         "200":
           description: A thumbnail of the requested content.
@@ -644,6 +419,9 @@ paths:
                 enum:
                   - image/jpeg
                   - image/png
+                  - image/apng
+                  - image/gif
+                  - image/webp
           content:
             image/jpeg:
               schema:
@@ -651,21 +429,27 @@ paths:
                 description: "**Required.** The bytes for the thumbnail."
             image/png:
               schema:
-                description: "**Required.** The bytes for the thumbnail."
+                x-changedInMatrixVersion:
+                  "1.11": The PNG may be of the APNG variety if animation is supported and requested.
+                description: |
+                  **Required.** The bytes for the thumbnail. The thumbnail MAY use an animated
+                  format if `animated=true`.
+            image/apng:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/gif:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/webp:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
         "307":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/thumbnailRedirect'
         "308":
-          description: A redirect to the thumbnail of the requested content.
-          headers:
-            Location:
-              description: The URL of the thumbnail content.
-              schema:
-                type: string
+          $ref: '#/components/responses/thumbnailRedirect'
         "400":
           description: |-
             The request does not make sense to the server, or the server cannot thumbnail
@@ -694,11 +478,7 @@ paths:
                     "error": "Content is too large to thumbnail"
                   }
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
         "502":
           description: The remote content is too large for the server to thumbnail.
           content:
@@ -712,25 +492,18 @@ paths:
                     "error": "Content is too large to thumbnail"
                   }
         "504":
-          description: |-
-            The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
-            will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_YET_UPLOADED",
-                    "error": "Content has not yet been uploaded"
-                  }
+          $ref: '#/components/responses/notYetUploaded'
       tags:
         - Media
   /media/v3/preview_url:
     get:
+      deprecated: true
       summary: Get information about a URL for a client
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/preview_url`](/client-server-api/#get_matrixclientv1mediapreview_url).
+        {{% /boxes/note %}}
+
         Get information about a URL for the client. Typically this is called when a
         client sees a URL in a message and wants to render a preview for the user.
 
@@ -741,7 +514,8 @@ paths:
         being shared should also not be shared with the homeserver.
       operationId: getUrlPreview
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: url
@@ -793,17 +567,18 @@ paths:
                     "matrix:image:size": 102400
                   }
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
+          $ref: '#/components/responses/rateLimited'
       tags:
         - Media
   /media/v3/config:
     get:
+      deprecated: true
       summary: Get the configuration for the content repository.
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/config`](/client-server-api/#get_matrixclientv1mediaconfig).
+        {{% /boxes/note %}}
+
         This endpoint allows clients to retrieve the configuration of the content
         repository, such as upload limitations.
         Clients SHOULD use this as a guide when using content repository endpoints.
@@ -816,7 +591,8 @@ paths:
         than is advertised by the server on this endpoint.
       operationId: getConfig
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The public content repository configuration for the matrix server.
@@ -838,11 +614,7 @@ paths:
                     "m.upload.size": 50000000
                   }
         "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
+          $ref: '#/components/responses/rateLimited'
       tags:
         - Media
 servers:
@@ -859,4 +631,157 @@ servers:
         default: /_matrix
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  parameters:
+    contentType:
+      in: header
+      name: Content-Type
+      description: The content type of the file being uploaded
+      example: application/pdf
+      schema:
+        type: string
+    filename:
+      in: query
+      name: filename
+      description: The name of the file being uploaded
+      example: War and Peace.pdf
+      schema:
+        type: string
+    serverName:
+      in: path
+      name: serverName
+      required: true
+      description: |
+        The server name from the `mxc://` URI (the authority component).
+      example: matrix.org
+      schema:
+        type: string
+        format: mx-server-name
+    mediaId:
+      in: path
+      name: mediaId
+      required: true
+      description: |
+        The media ID from the `mxc://` URI (the path component).
+      example: ascERGshawAWawugaAcauga
+      schema:
+        type: string
+    allow_remote:
+      in: query
+      name: allow_remote
+      required: false
+      description: |-
+        Indicates to the server that it should not attempt to fetch the media if
+        it is deemed remote. This is to prevent routing loops where the server
+        contacts itself.
+
+        Defaults to `true` if not provided.
+      example: false
+      schema:
+        type: boolean
+        default: true
+    timeout_ms:
+      in: query
+      name: timeout_ms
+      x-addedInMatrixVersion: "1.7"
+      description: |
+        The maximum number of milliseconds that the client is willing to wait to
+        start receiving data, in the case that the content has not yet been
+        uploaded. The default value is 20000 (20 seconds). The content
+        repository SHOULD impose a maximum value for this parameter. The
+        content repository MAY respond before the timeout.
+      example: 5000
+      schema:
+        type: integer
+        format: int64
+        default: 20000
+    allow_redirect:
+      in: query
+      name: allow_redirect
+      x-addedInMatrixVersion: "1.7"
+      required: false
+      description: |
+        Indicates to the server that it may return a 307 or 308 redirect
+        response that points at the relevant media content. When not explicitly
+        set to `true` the server must return the media content itself.
+      example: false
+      schema:
+        type: boolean
+        default: false
+  requestBodies:
+    bytes:
+      content:
+        application/octet-stream:
+          example: <bytes>
+      description: The content to be uploaded.
+      required: true
+  responses:
+    uploadTooLarge:
+      description: The uploaded content is too large for the server.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "Cannot upload files larger than 100mb"
+              }
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/rate_limited.yaml
+    notYetUploaded:
+      description: |-
+        The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_YET_UPLOADED",
+                "error": "Content has not yet been uploaded"
+              }
+    downloadRedirect:
+      description: A redirect to the requested content.
+      headers:
+        Location:
+          description: The URL of the content.
+          schema:
+            type: string
+            format: uri
+    downloadTooLarge:
+      description: The content is too large for the server to serve.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "Content is too large to serve"
+              }
+    thumbnailRedirect:
+      description: A redirect to the thumbnail of the requested content.
+      headers:
+        Location:
+          description: The URL of the thumbnail content.
+          schema:
+            type: string
+            format: uri
+  headers:
+    downloadContentType:
+      description: The content type of the file that was previously uploaded.
+      schema:
+        type: string
+

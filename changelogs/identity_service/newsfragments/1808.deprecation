@@ -1,0 +1,1 @@
+Authentication using a query string is now deprecated, as per [MSC4126](https://github.com/matrix-org/matrix-spec-proposals/issues/4126). The `Authorization` header should be used instead.
