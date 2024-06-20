@@ -662,7 +662,7 @@ Definition:
 }
 ```
 
-**<a name="mruletombstone"></a>`.m.rule.tombstone`**
+**<a id="mruletombstone"></a>`.m.rule.tombstone`**
 
 Matches any state event whose type is `m.room.tombstone`. This is
 intended to notify users of a room when it is upgraded, similar to what
@@ -696,7 +696,7 @@ Definition:
 }
 ```
 
-**<a name="mrulereaction"></a>`.m.rule.reaction`**
+**<a id="mrulereaction"></a>`.m.rule.reaction`**
 
 {{% added-in v="1.7" %}}
 
