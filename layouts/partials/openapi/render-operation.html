@@ -46,7 +46,7 @@
   {{ partial "changed-in" (dict "changes_dict" (index $operation_data "x-changedInMatrixVersion")) }}
 {{ end -}}
 
-<p>{{ $operation_data.description | markdownify }}</p>
+{{ $operation_data.description | page.RenderString (dict "display" "block") }}
 
 
 <table class="basic-info">
