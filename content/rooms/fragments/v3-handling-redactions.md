@@ -1,6 +1,6 @@
 ---
 ---
-{{% added-in this=true %}} In room versions 1 and 2, redactions were
+{{% added-in v=3 %}} In room versions 1 and 2, redactions were
 explicitly part of the [authorization rules](/rooms/v1/#authorization-rules)
 under Rule 11. As of room version 3, these conditions no longer exist as
 represented by [this version's authorization rules](#authorization-rules).
