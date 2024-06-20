@@ -21,7 +21,7 @@ Clients can of course also call other endpoints such as [GET
 and [GET /search](#post_matrixclientv3search) to
 access events outside the `/events` stream.
 
-{{% http-api spec="client-server" api="peeking_events" %}}
+{{% http-api spec="client-server" api="peeking_events" anchor_base="peeking" %}}
 
 #### Server behaviour
 
