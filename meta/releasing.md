@@ -113,8 +113,8 @@ release.
 Patch releases are used to fix the most recent release on record. Typically a patch
 release will be deployed if there is an issue with the build machinery, a factual
 error is introduced by the release, or there are notable clarity issues introduced
-by the release which may affect implementation. In all cases, patch releases should
-*not* be used if more than 2-4 weeks have passed since the release.
+by the release which may affect implementation. It's usually not a good idea to
+ship a patch release if it can be avoided.
 
 Typos and similar do not generally require a patch release.
 
