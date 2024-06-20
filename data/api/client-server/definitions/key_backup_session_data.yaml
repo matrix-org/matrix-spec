@@ -14,7 +14,7 @@
 
 
 type: object
-title: SessionData
+title: BackedUpSessionData
 description: |-
   The format of a backed-up session key, prior to encryption, when using the
   `m.megolm_backup.v1.curve25519-aes-sha2` algorithm.

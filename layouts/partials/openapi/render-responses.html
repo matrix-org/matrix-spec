@@ -39,6 +39,7 @@
 
 {{ range $code, $response := $responses }}
     {{ if $response.content }}
+        {{ $anchor := printf "%s_response-%s" $anchor_base $code }}
 <h3>{{$code}} response</h3>
         {{/* Display defined headers */}}
         {{ if $response.headers }}
@@ -97,7 +98,7 @@
             response. (This will be a no-op for response types which aren't
             objects or arrays.)
             */}}
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor) }}
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
             {{ end }}
