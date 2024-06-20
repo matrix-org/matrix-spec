@@ -31,9 +31,11 @@
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
-  <th class="col-name">Name</th>
-  <th class="col-type">Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-name">Name</th>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
 
     {{ range $property_name, $property := $properties }}
@@ -90,8 +92,10 @@ resolve-additional-types.)
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
-  <th class="col-type">Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
 
  {{ $property := . }}
