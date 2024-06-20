@@ -1,1 +1,0 @@
-Clarify that the `event` field of the `/v2/send_join` response is only required when the event is signed by the resident server.

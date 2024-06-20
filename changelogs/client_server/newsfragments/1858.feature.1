@@ -1,1 +1,0 @@
-Media downloads and thumbnails are now authenticated, as per [MSC3916](https://github.com/matrix-org/matrix-spec-proposals/pull/3916).

@@ -1,1 +1,0 @@
-Add `/logout` and clarify the endpoints which do not take a JSON request body.
