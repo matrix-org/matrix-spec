@@ -20,14 +20,14 @@
 {{ $method := .method }}
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
-{{ $anchor := anchorize $endpoint }}
+{{ $anchor := printf "%s%s" (lower $method) (anchorize $endpoint) }}
 
 <section class="rendered-data http-api {{ $method }}">
 
 <details {{ if not site.Params.ui.rendered_data_collapsed }}open{{ end }}>
 <summary>
 
-  <h1 id="{{ lower $method }}{{ $anchor }}">
+  <h1 id="{{ $anchor }}">
    <span class="http-api-method {{ $method }}">{{ $method }}</span>
    <span class="endpoint{{ if $operation_data.deprecated }} deprecated-inline{{ end }}">{{ $endpoint }}</span>
   </h1>
