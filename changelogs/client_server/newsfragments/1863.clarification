@@ -1,1 +1,1 @@
-Minor clarifications to the "end-to-end encryption" module.
+Clarify where keys reside when checking an `m.room.encrypted` event.

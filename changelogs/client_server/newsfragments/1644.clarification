@@ -1,1 +1,1 @@
-Clarify specification by adding `/logout` to the overview list of endpoints that don't take a JSON request body.
+Add `/logout` and clarify the endpoints which do not take a JSON request body.
