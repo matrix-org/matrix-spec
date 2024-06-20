@@ -1,16 +1,12 @@
 {{/*
 
-  Render a table showing content types and their descriptions, given
-  two arrays with equal length:
+  Render a table showing content types and their descriptions, given:
 
-  * `content_types`: the content type strings
-
-  * `descriptions`: the description strings
+  * `content_types`: OpenAPI data specifying the content types as a dictionary of the form {string: {"schema": JsonSchema}}
 
 */}}
 
 {{ $content_types := .content_types }}
-{{ $descriptions := .descriptions}}
 
 {{ if (gt (len $content_types) 0) }}
 
@@ -21,10 +17,14 @@
     <th class="col-description">Description</th>
   </tr>
  </thead>
- {{ range $idx, $content_type := $content_types }}
+ {{ range $mime, $body := $content_types }}
  <tr>
-  <td><code>{{ $content_type }}</code></td>
-  <td>{{ index $descriptions $idx | markdownify -}}</td>
+  <td><code>{{ $mime }}</code></td>
+  <td>
+   {{ $body.schema.description | markdownify -}}
+   {{ if (index $body.schema "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $body.schema "x-addedInMatrixVersion")) }}{{ end -}}
+   {{ if (index $body.schema "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $body.schema "x-changedInMatrixVersion")) }}{{ end -}}
+  </td>
  </tr>
  {{ end }}
 </table>
