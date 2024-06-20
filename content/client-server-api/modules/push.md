@@ -521,7 +521,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_is_user_mention"/> **`.m.rule.is_user_mention`**
+<a id="_m_rule_is_user_mention"></a> **`.m.rule.is_user_mention`**
 
 {{< added-in v="1.7" >}}
 
@@ -555,7 +555,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
+<a id="_m_rule_contains_display_name"></a> **`.m.rule.contains_display_name`**
 
 {{% changed-in v="1.7" %}}
 
@@ -590,7 +590,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_is_room_mention"/> **`.m.rule.is_room_mention`**
+<a id="_m_rule_is_room_mention"></a> **`.m.rule.is_room_mention`**
 
 {{< added-in v="1.7" >}}
 
@@ -624,7 +624,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
+<a id="_m_rule_roomnotif"></a> **`.m.rule.roomnotif`**
 
 {{% changed-in v="1.7" %}}
 
@@ -662,7 +662,7 @@ Definition:
 }
 ```
 
-**<a name="mruletombstone"></a>`.m.rule.tombstone`**
+**<a id="mruletombstone"></a>`.m.rule.tombstone`**
 
 Matches any state event whose type is `m.room.tombstone`. This is
 intended to notify users of a room when it is upgraded, similar to what
@@ -696,7 +696,7 @@ Definition:
 }
 ```
 
-**<a name="mrulereaction"></a>`.m.rule.reaction`**
+**<a id="mrulereaction"></a>`.m.rule.reaction`**
 
 {{% added-in v="1.7" %}}
 
@@ -776,7 +776,7 @@ Definition:
 
 ##### Default Content Rules
 
-<a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
+<a id="_m_rule_contains_user_name"></a> **`.m.rule.contains_user_name`**
 
 {{% changed-in v="1.7" %}}
 
