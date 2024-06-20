@@ -44,9 +44,6 @@ Spec releases do not currently have attached themes, though when planning a rele
 a broad theme may be considered. Ideally, each release contains a "hero feature"
 which is highlighted in the later blog post.
 
-Maintenance-only releases are discouraged, but typical in Q4 to give implementations
-a small bit of reprieve from feature development.
-
 ## Prerequisites / preparation
 
 First, can we even release the spec? This stage is mostly preparation work needed
