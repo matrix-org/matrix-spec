@@ -1349,7 +1349,7 @@ the following format:
 The `session_data` field in the backups is constructed as follows:
 
 1.  Encode the session key to be backed up as a JSON object using the
-    `SessionData` format defined below.
+    `BackedUpSessionData` format defined below.
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1427,7 +1427,7 @@ user-supplied passphrase, and is created as follows:
 
 ###### Key export format
 
-The exported sessions are formatted as a JSON array of `SessionData`
+The exported sessions are formatted as a JSON array of `ExportedSessionData`
 objects described as follows:
 
 {{% definition path="api/client-server/definitions/megolm_export_session_data" %}}
