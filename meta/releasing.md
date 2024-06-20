@@ -6,13 +6,12 @@ machinery works.
 
 ## Timeline
 
-The spec is released each calendar quarter. The target release dates are within the
-following ranges:
+The spec is released each calendar quarter. The *target* months are:
 
-* Q1: January 20-27 (if needed before FOSDEM) or February 21-28.
-* Q2: May 15-22.
-* Q3: August 1-7 or August 20-27 depending on feature requirements.
-* Q4: November 1-15 (before recurring November conflicts, like IETF).
+* Q1: January or February.
+* Q2: May.
+* Q3: August.
+* Q4: November.
 
 The SCT aims to have dates picked out 2 weeks before the chosen release date. When
 possible, releases should be scheduled for Thursdays and Fridays to allow a few
