@@ -117,6 +117,9 @@ resolve-additional-types.)
 
     * `oneOf`: optional array of dictionaries describing the different formats
       that the property can have
+    
+    * `anyOf`: optional array of dictionaries describing the different formats
+      that the property can have
 
     * `properties`: if the type is an object, optional dictionary for
       well-defined properties, each given as: `property_name` : `property_data`
@@ -158,13 +161,14 @@ resolve-additional-types.)
                 {{ $type = . }}
             {{ end }}
         {{ end }}
-    {{ else if or (reflect.IsSlice .type) .oneOf }}
+    {{ else if or (reflect.IsSlice .type) .oneOf .anyOf }}
         {{/*
             It's legal to specify an array of types.
 
-            There are two ways to do that:
+            There are three ways to do that:
               - Use an array of strings.
               - Use oneOf, with items having a schema.
+              - Use anyOf, with items having a schema.
 
             Join them together in that case, like `type|other_type`.
         */}}
@@ -172,6 +176,10 @@ resolve-additional-types.)
 
         {{ if .oneOf }}
             {{ range .oneOf }}
+                {{ $types = $types | append (partial "property-type" .) }}
+            {{ end }}
+        {{ else if .anyOf }}
+            {{ range .anyOf }}
                 {{ $types = $types | append (partial "property-type" .) }}
             {{ end }}
         {{ else }}
