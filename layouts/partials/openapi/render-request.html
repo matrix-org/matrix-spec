@@ -16,6 +16,7 @@
 {{ $parameters := .parameters }}
 {{ $request_body := .request_body }}
 {{ $anchor_base := .anchor_base }}
+{{ $anchor := printf "%s_request" $anchor_base }}
 
 <h2>Request</h2>
 
@@ -42,7 +43,7 @@
             */}}
             {{ $schema := $json_body.schema }}
 
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor) }}
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
             {{ end }}
