@@ -70,7 +70,7 @@
     {{ if reflect.IsMap .additionalProperties }}
 
  <tr>
-  <td>&lt;Other properties&gt;</code></td>
+  <td>&lt;Other properties&gt;</td>
   <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
   <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
  </tr>
