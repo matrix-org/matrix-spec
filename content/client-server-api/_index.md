@@ -251,9 +251,10 @@ the request idempotent.
 
 The transaction ID should **only** be used for this purpose.
 
-From the client perspective, after the request has finished, the `{txnId}`
-value should be changed by for the next request (how is not specified; a
-monotonically increasing integer is recommended).
+After the request has finished, clients should change the `{txnId}` value for
+the next request. How this is achieved, is left as an implementation detail.
+It is recommended that clients use either version 4 UUIDs or a concatenation
+of the current timestamp and a monotonically increasing integer.
 
 The homeserver should identify a request as a retransmission if the
 transaction ID is the same as a previous request, and the path of the
