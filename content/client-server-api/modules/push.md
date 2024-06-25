@@ -184,11 +184,13 @@ they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
 `{ "set_tweak": "sound", "value": "default" }`.
 
-{{% boxes/note %}}
+###### Historical Actions
+
 Older versions of the Matrix specification included the `dont_notify` and
-`coalesce` actions. These should both be considered no-ops (ignored, not
-rejected) if received from a client.
-{{% /boxes/note %}}
+`coalesce` actions. Homeservers MUST ignore these actions by stripping them
+from any actions array they encounter. This means that setting the actions
+on a rule to e.g. `["dont_notify"]` MUST be equivalent to setting an empty
+actions array.
 
 ##### Conditions
 
