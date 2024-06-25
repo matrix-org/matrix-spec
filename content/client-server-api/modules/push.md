@@ -187,10 +187,10 @@ other keys as their parameters, e.g.
 ###### Historical Actions
 
 Older versions of the Matrix specification included the `dont_notify` and
-`coalesce` actions. Homeservers MUST ignore these actions by stripping them
-from any actions array they encounter. This means that setting the actions
-on a rule to e.g. `["dont_notify"]` MUST be equivalent to setting an empty
-actions array.
+`coalesce` actions. Clients and homeservers MUST ignore these actions, for
+instance, by stripping them from actions arrays they encounter. This means,
+for example, that a rule with `["dont_notify"]` actions MUST be equivalent
+to a rule with an empty actions array.
 
 ##### Conditions
 
