@@ -1,0 +1,1 @@
+Clarify that the deprecated dont_notify and coalesce push rule actions MUST be ignored, not rejected by homeservers.
