@@ -158,7 +158,7 @@ paths:
               schema:
                 $ref: ../application-service/definitions/user_batch.yaml
         "404":
-          description: The Matrix User ID was not found
+          description: The Matrix User ID was not found.
           content:
             application/json:
               schema:
@@ -232,7 +232,7 @@ paths:
               schema:
                 $ref: ../application-service/definitions/user_batch.yaml
         "404":
-          description: The Matrix User ID was not found
+          description: The Matrix User ID was not found.
           content:
             application/json:
               schema:
