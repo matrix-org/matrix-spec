@@ -15,6 +15,9 @@ secret when storing, fetching, requesting, or sharing the secret.
 Secrets are plain strings; structured data can be stored by encoding it
 as a string.
 
+The mechanism described in this section is known as "secure secret storage and
+sharing", "SSSS", or "4S".
+
 #### Storage
 
 When secrets are stored on the server, they are stored in the user's
