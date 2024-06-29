@@ -23,4 +23,7 @@ properties:
     type: string
     description: A human-readable error message.
     example: An unknown error occurred
+  soft_logout:
+    type: boolean
+    description: If true within a 401 response, the client can offer to re-log in the user.
 required: ["errcode"]

@@ -1,0 +1,1 @@
+Add missing `soft_logout` property to `error.yaml`, as used by `refresh.yaml`. Contributed by @PaarthShah.
