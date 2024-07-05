@@ -1,0 +1,1 @@
+Clarify that the fallback login page calls `window.matrixLogin.onLogin` instead of `window.onLogin`.
