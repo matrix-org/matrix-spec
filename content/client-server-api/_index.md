@@ -1401,7 +1401,10 @@ fallback login API:
 
 This returns an HTML and JavaScript page which can perform the entire
 login process. The page will attempt to call the JavaScript function
-`window.matrixLogin.onLogin` when login has been successfully completed.
+`window.matrixLogin.onLogin(response)` when login has been successfully
+completed. The argument, `response`, is the JSON response body of
+[`POST /_matrix/client/v3/login`](#post_matrixclientv3login) parsed
+into a JavaScript object.
 
 {{% added-in v="1.1" %}} Non-credential parameters valid for the `/login`
 endpoint can be provided as query string parameters here. These are to be
