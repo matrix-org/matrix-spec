@@ -65,8 +65,8 @@ attention irrespective of [read receipts](#receipts) or
 
 The user's unread marker in a room is kept under an `m.marked_unread`
 event in the room's [account data](#client-config). The event may be read
-to determine the user's current unread marker state in the room, and just
-like other account data events the event will be pushed down the event
+to determine the user's current unread marker state in the room. Just
+like other account data events, the event will be pushed down the event
 stream when updated.
 
 {{% event event="m.marked_unread" %}}
