@@ -99,6 +99,8 @@ the ``newsfragments`` directory. The ``type`` can be one of the following:
 
 * ``deprecation`` - Used when deprecating something.
 
+* ``removal`` - Used when removing something that was unused or previously deprecated.
+
 All news fragments must have a brief summary explaining the change in the
 contents of the file. The summary must end in a full stop to be in line with
 the style guide and formatting must be done using Markdown.
