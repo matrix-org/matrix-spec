@@ -74,7 +74,7 @@ stream when updated.
 ##### Client behaviour
 
 Clients MUST update unread markers by directly modifying the `m.marked_unread`
-account data event. When marking a room as unread, clients SHOULD NOT change
+room account data event. When marking a room as unread, clients SHOULD NOT change
 the `m.fully_read` marker so that the user's read position in the room is
 retained.
 
