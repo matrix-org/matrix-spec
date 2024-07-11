@@ -1,4 +1,4 @@
-### Read and Unread Markers
+### Read and unread markers
 
 #### Fully read markers
 
