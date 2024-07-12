@@ -80,6 +80,10 @@ paths:
                         $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can change 3PID associations
                           on their account.
+                      m.get_login_token:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can generate tokens to log further
+                          clients into their account.
               examples:
                 response:
                   value: {
