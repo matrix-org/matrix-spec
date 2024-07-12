@@ -1661,7 +1661,7 @@ is able to use [`POST /login/get_token`](/client-server-api/#post_matrixclientv1
 to generate single-use, time-limited tokens to log unauthenticated clients
 into their account.
 
-When not listed, clients SHOULD assume the user is able to generate tokens.
+When not listed, clients SHOULD assume the user is unable to generate tokens.
 
 An example of the capability API's response for this capability is:
 
