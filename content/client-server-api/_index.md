@@ -2749,7 +2749,7 @@ that profile.
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
 | [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
-| [Fully read markers](#fully-read-markers)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Read and Unread Markers](#read-and-unread-markers)        | Optional  | Optional | Optional | Optional | Optional |
 | [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |

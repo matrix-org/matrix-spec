@@ -1,0 +1,25 @@
+{
+    "type": "object",
+    "title": "Unread Marker Event",
+    "description": "The current state of the user's unread marker in a room. This event appears in the user's room account data for the room the marker is applicable for.",
+    "allOf": [{
+        "$ref": "core-event-schema/event.yaml"
+    }],
+    "properties": {
+        "content": {
+            "type": "object",
+            "properties": {
+                "unread": {
+                    "type": "boolean",
+                    "description": "Whether the room is marked unread or not."
+                }
+            },
+            "required": ["unread"]
+        },
+        "type": {
+            "type": "string",
+            "enum": ["m.marked_unread"]
+        }
+    },
+    "required": ["type", "content"]
+}
