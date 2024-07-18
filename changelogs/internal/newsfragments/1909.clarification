@@ -1,0 +1,1 @@
+Treat `additionalProperties: true` equivalent to `additionalProperties: {}` when rendering object tables.
