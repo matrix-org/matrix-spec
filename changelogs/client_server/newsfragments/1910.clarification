@@ -1,0 +1,1 @@
+Update response schema of `GET /_matrix/client/v3/profile/{userId}` to clarify that properties other than `displayname` or `avatar_url` can be returned.
