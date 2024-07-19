@@ -1654,6 +1654,27 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.get_login_token` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to use [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token)
+to generate single-use, time-limited tokens to log unauthenticated clients
+into their account.
+
+When not listed, clients SHOULD assume the user is unable to generate tokens.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.get_login_token": {
+      "enabled": false
+    }
+  }
+}
+```
+
 ## Filtering
 
 Filters can be created on the server and can be passed as a parameter to
