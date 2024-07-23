@@ -73,6 +73,7 @@
       TODO: support `patternProperties` here.
     */}}
     {{ if reflect.IsMap .additionalProperties }}
+
  <tr>
   <td>&lt;Other properties&gt;</td>
   <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
