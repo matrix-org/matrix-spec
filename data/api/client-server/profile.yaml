@@ -222,7 +222,7 @@ paths:
                     type: string
                     description: The user's display name if they have set one, otherwise not
                       present.
-                additionalProperties: true
+                additionalProperties: {}
               examples:
                 response:
                   value: {
