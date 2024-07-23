@@ -68,17 +68,16 @@
       TODO: support `patternProperties` here.
     */}}
 
-    {{/* Map `additionalProperties: true` to the equivalent `additionalProperties: {}` */}}
-    {{ $additionalProperties := .additionalProperties }}
-    {{ if eq $additionalProperties true }}
-      {{ $additionalProperties = dict }}
+    {{/* Enforce `additionalProperties: {}` instead of the equivalent `additionalProperties: true` for easier processing */}}
+    {{ if eq .additionalProperties true }}
+      {{ errorf "Use `additionalProperties: {}` instead of `additionalProperties: true`" }}
     {{ end }}
 
-    {{ if reflect.IsMap $additionalProperties }}
+    {{ if reflect.IsMap .additionalProperties }}
  <tr>
   <td>&lt;Other properties&gt;</td>
-  <td><code>{{ partial "partials/property-type" $additionalProperties | safeHTML }}</code></td>
-  <td>{{ partial "partials/property-description" (dict "property" $additionalProperties) }}</td>
+  <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
  </tr>
     {{ end }}
 </table>

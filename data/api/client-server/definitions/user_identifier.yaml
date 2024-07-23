@@ -21,4 +21,4 @@ properties:
     description: The type of identification.  See [Identifier types](/client-server-api/#identifier-types) for supported values and additional property descriptions.
 required:
   - type
-additionalProperties: true
+additionalProperties: {}

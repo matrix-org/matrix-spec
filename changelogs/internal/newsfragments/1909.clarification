@@ -1,1 +1,1 @@
-Treat `additionalProperties: true` equivalent to `additionalProperties: {}` when rendering object tables.
+Enforce `additionalProperties: {}` instead of the equivalent `additionalProperties: true` for easier processing.
