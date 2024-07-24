@@ -53,11 +53,6 @@
 
     {{ end }}
 
-    {{/* Enforce `additionalProperties: {}` instead of the equivalent `additionalProperties: true` for easier processing */}}
-    {{ if eq .additionalProperties true }}
-      {{ errorf "Use `additionalProperties: {}` instead of `additionalProperties: true`" }}
-    {{ end }}
-
     {{/*
       If the object has additional properties *as well as* regular properties, we add a special row to the table.
 
@@ -72,6 +67,9 @@
 
       TODO: support `patternProperties` here.
     */}}
+    {{ if eq .additionalProperties true }}
+      {{ errorf "`additionalProperties: true` is de facto the default for Matrix and doesn't provide any information" }}
+    {{ end }}
     {{ if reflect.IsMap .additionalProperties }}
 
  <tr>

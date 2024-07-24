@@ -1,1 +1,0 @@
-Enforce `additionalProperties: {}` instead of the equivalent `additionalProperties: true` for easier processing.

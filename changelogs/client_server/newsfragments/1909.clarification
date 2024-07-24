@@ -1,1 +1,1 @@
-The `UserIdentifier` object in `POST /_matrix/client/v3/login` can contain additional properties.
+The `UserIdentifier` object in `POST /_matrix/client/v3/login` contains additional properties that depend on the identification type.
