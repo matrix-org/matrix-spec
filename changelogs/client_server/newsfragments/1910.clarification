@@ -1,1 +1,1 @@
-Update response schema of `GET /_matrix/client/v3/profile/{userId}` to clarify that properties other than `displayname` or `avatar_url` can be returned.
+Don't mention that `GET /_matrix/client/v3/profile/{userId}` can return additional properties because this is true for almost every endpoint.
