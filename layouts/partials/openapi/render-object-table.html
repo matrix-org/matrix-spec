@@ -67,9 +67,6 @@
 
       TODO: support `patternProperties` here.
     */}}
-    {{ if eq .additionalProperties true }}
-      {{ errorf "`additionalProperties: true` is de facto the default for Matrix and doesn't provide any information" }}
-    {{ end }}
     {{ if reflect.IsMap .additionalProperties }}
 
  <tr>
