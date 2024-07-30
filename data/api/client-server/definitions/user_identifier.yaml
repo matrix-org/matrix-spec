@@ -24,4 +24,4 @@ properties:
 required:
   - type
 additionalProperties:
-  description: Keys dependent on the identification type
+  description: Keys dependent on the identification type.
