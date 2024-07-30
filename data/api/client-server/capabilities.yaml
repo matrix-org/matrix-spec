@@ -46,16 +46,8 @@ paths:
                       type: object
                     properties:
                       m.change_password:
-                        type: object
+                        $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can change their password.
-                        title: ChangePasswordCapability
-                        properties:
-                          enabled:
-                            type: boolean
-                            description: True if the user can change their password, false otherwise.
-                            example: false
-                        required:
-                          - enabled
                       m.room_versions:
                         type: object
                         description: The room versions the server supports.
@@ -78,6 +70,20 @@ paths:
                         required:
                           - default
                           - available
+                      m.set_displayname:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can change their display name.
+                      m.set_avatar_url:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can change their avatar.
+                      m.3pid_changes:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can change 3PID associations
+                          on their account.
+                      m.get_login_token:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can generate tokens to log further
+                          clients into their account.
               examples:
                 response:
                   value: {
@@ -125,3 +131,14 @@ components:
       $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer
+  schemas:
+    booleanCapability:
+      type: object
+      title: BooleanCapability
+      properties:
+        enabled:
+          type: boolean
+          description: True if the user can perform the action, false otherwise.
+          example: false
+      required:
+        - enabled

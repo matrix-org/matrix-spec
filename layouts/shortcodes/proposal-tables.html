@@ -33,7 +33,7 @@
 {{ $states := .Site.Data.msc.proposals }}
 
 {{ range $states }}
-<h3 id="{{.label}}" class="proposal-table-title">{{ .title }}</h3>
+### {{ .title }} {.proposal-table-title}
     {{ if .proposals }}
 <table class="msc-table table">
   <thead>

@@ -16,6 +16,7 @@
 allOf:
   - $ref: key_backup_session_data.yaml
   - type: object
+    title: ExportedSessionData
     description: |-
       The format used to encode a Megolm session key for export.
 

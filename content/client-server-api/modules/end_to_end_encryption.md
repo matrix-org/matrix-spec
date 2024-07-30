@@ -1179,10 +1179,16 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned using this format will encode binary
-strings in the general form:
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
 
-- the ASCII string `MATRIX`
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
 - one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
@@ -1194,23 +1200,23 @@ strings in the general form:
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00` or `0x01`, then the current user's own master cross-signing public key
   - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
-    cross-signing key is
+    cross-signing public key is
   - if `0x01`, then what the device thinks the other device's Ed25519 signing
+    public key is
+  - if `0x02`, then what the device thinks the user's master cross-signing public
     key is
-  - if `0x02`, then what the device thinks the user's master cross-signing key
-    is
-- a random shared secret, as a byte string.  It is suggested to use a secret
+- a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
-  binary string as the shared secret.
+  binary segment as the shared secret.
 
-For example, if Alice displays a QR code encoding the following binary string:
+For example, if Alice displays a QR code encoding the following binary data:
 
 ```
       "MATRIX"    |ver|mode| len   | event ID
@@ -1343,7 +1349,7 @@ the following format:
 The `session_data` field in the backups is constructed as follows:
 
 1.  Encode the session key to be backed up as a JSON object using the
-    `SessionData` format defined below.
+    `BackedUpSessionData` format defined below.
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1421,7 +1427,7 @@ user-supplied passphrase, and is created as follows:
 
 ###### Key export format
 
-The exported sessions are formatted as a JSON array of `SessionData`
+The exported sessions are formatted as a JSON array of `ExportedSessionData`
 objects described as follows:
 
 {{% definition path="api/client-server/definitions/megolm_export_session_data" %}}
@@ -1530,9 +1536,11 @@ claiming to have sent messages which they didn't. `sender` must
 correspond to the user who sent the event, `recipient` to the local
 user, and `recipient_keys` to the local ed25519 key.
 
-Clients must confirm that the `sender_key` and the `ed25519` field value
-under the `keys` property match the keys returned by [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for
-the given user, and must also verify the signature of the keys from the
+Clients must confirm that the `sender_key` property in the cleartext
+`m.room.encrypted` event body, and the `keys.ed25519` property in the
+decrypted plaintext, match the keys returned by
+[`/keys/query`](#post_matrixclientv3keysquery) for
+the given user. Clients must also verify the signature of the keys from the
 `/keys/query` response. Without this check, a client cannot be sure that
 the sender device owns the private part of the ed25519 key it claims to
 have in the Olm payload. This is crucial when the ed25519 key corresponds

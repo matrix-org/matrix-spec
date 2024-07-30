@@ -1,0 +1,28 @@
+description: Metadata about an avatar image.
+properties:
+  h:
+    description: |-
+      The intended display height of the image in pixels. This may
+      differ from the intrinsic dimensions of the image file.
+    type: integer
+  w:
+    description: |-
+      The intended display width of the image in pixels. This may
+      differ from the intrinsic dimensions of the image file.
+    type: integer
+  mimetype:
+    description: The mimetype of the image, e.g. `image/jpeg`.
+    type: string
+  size:
+    description: Size of the image in bytes.
+    type: integer
+  thumbnail_url:
+    description: |-
+      The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)) to a thumbnail of the image.
+    type: string
+  thumbnail_info:
+    allOf:
+      - $ref: thumbnail_info.yaml
+    description: Metadata about the image referred to in `thumbnail_url`.
+title: AvatarInfo
+type: object

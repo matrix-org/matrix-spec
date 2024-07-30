@@ -81,6 +81,9 @@ paths:
         earlier via [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
           description: |
@@ -217,7 +220,20 @@ paths:
         - Media
   "/media/v3/download/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download content from the content repository.
+      description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContent
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -254,11 +270,24 @@ paths:
         - Media
   "/media/v3/download/{serverName}/{mediaId}/{fileName}":
     get:
+      deprecated: true
       summary: Download content from the content repository overriding the file name
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/download/{serverName}/{mediaId}/{fileName}`](/client-server-api/#get_matrixclientv1mediadownloadservernamemediaidfilename)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         This will download content from the content repository (same as
         the previous endpoint) but replace the target file name with the one
         provided by the caller.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentOverrideName
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -304,10 +333,23 @@ paths:
         - Media
   "/media/v3/thumbnail/{serverName}/{mediaId}":
     get:
+      deprecated: true
       summary: Download a thumbnail of content from the content repository
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/thumbnail/{serverName}/{mediaId}`](/client-server-api/#get_matrixclientv1mediathumbnailservernamemediaid)
+        (requires authentication).
+        {{% /boxes/note %}}
+
         Download a thumbnail of content from the content repository.
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+
+        {{% boxes/warning %}}
+        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        for media which exists, but is after the server froze unauthenticated
+        media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
+        information.
+        {{% /boxes/warning %}}
       operationId: getContentThumbnail
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -362,7 +404,7 @@ paths:
             Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
 
             When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
-            server should behave as though `animated` is `false`.
+            server SHOULD behave as though `animated` is `false`.
           example: false
           schema:
             type: boolean
@@ -455,8 +497,13 @@ paths:
         - Media
   /media/v3/preview_url:
     get:
+      deprecated: true
       summary: Get information about a URL for a client
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/preview_url`](/client-server-api/#get_matrixclientv1mediapreview_url).
+        {{% /boxes/note %}}
+
         Get information about a URL for the client. Typically this is called when a
         client sees a URL in a message and wants to render a preview for the user.
 
@@ -525,8 +572,13 @@ paths:
         - Media
   /media/v3/config:
     get:
+      deprecated: true
       summary: Get the configuration for the content repository.
       description: |-
+        {{% boxes/note %}}
+        Replaced by [`GET /_matrix/client/v1/media/config`](/client-server-api/#get_matrixclientv1mediaconfig).
+        {{% /boxes/note %}}
+
         This endpoint allows clients to retrieve the configuration of the content
         repository, such as upload limitations.
         Clients SHOULD use this as a guide when using content repository endpoints.
@@ -625,7 +677,7 @@ components:
         Indicates to the server that it should not attempt to fetch the media if
         it is deemed remote. This is to prevent routing loops where the server
         contacts itself.
-        
+
         Defaults to `true` if not provided.
       example: false
       schema:
@@ -639,8 +691,8 @@ components:
         The maximum number of milliseconds that the client is willing to wait to
         start receiving data, in the case that the content has not yet been
         uploaded. The default value is 20000 (20 seconds). The content
-        repository can and should impose a maximum value for this parameter. The
-        content repository may also choose to respond before the timeout.
+        repository SHOULD impose a maximum value for this parameter. The
+        content repository MAY respond before the timeout.
       example: 5000
       schema:
         type: integer
@@ -663,8 +715,9 @@ components:
     bytes:
       content:
         application/octet-stream:
-          example: <bytes>
-      description: The content to be uploaded.
+          schema:
+            description: The content to be uploaded.
+            example: <bytes>
       required: true
   responses:
     uploadTooLarge:

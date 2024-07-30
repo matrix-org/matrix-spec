@@ -19,11 +19,26 @@ paths:
   /keys/device_signing/upload:
     post:
       x-addedInMatrixVersion: "1.1"
+      x-changedInMatrixVersion:
+        "1.11": UIA is not always required for this endpoint.
       summary: Upload cross-signing keys.
       description: |-
         Publishes cross-signing keys for the user.
 
         This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+        
+        User-Interactive Authentication MUST be performed, except in these cases:
+        - there is no existing cross-signing master key uploaded to the homeserver, OR
+        - there is an existing cross-signing master key and it exactly matches the
+          cross-signing master key provided in the request body. If there are any additional
+          keys provided in the request (self-signing key, user-signing key) they MUST also
+          match the existing keys stored on the server. In other words, the request contains
+          no new keys.
+        
+        This allows clients to freely upload one set of keys, but not modify/overwrite keys if
+        they already exist. Allowing clients to upload the same set of keys more than once 
+        makes this endpoint idempotent in the case where the response is lost over the network,
+        which would otherwise cause a UIA challenge upon retry.
       operationId: uploadCrossSigningKeys
       security:
         - accessTokenQuery: []

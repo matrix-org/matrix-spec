@@ -42,9 +42,9 @@ properties:
     example: "mxc://example.org/aBcDeFgH"
   field_types:
     description: |-
-      The type definitions for the fields defined in the `user_fields` and
-      `location_fields`. Each entry in those arrays MUST have an entry here. The
-      `string` key for this object is field name itself.
+      The type definitions for the fields defined in `user_fields` and
+      `location_fields`. Each entry in those arrays MUST have an entry here.
+      The `string` key for this object is the field name itself.
 
       May be an empty object if no fields are defined.
     type: object
@@ -60,7 +60,7 @@ properties:
             may apply additional validation or filtering.
           type: string
         placeholder:
-          description: An placeholder serving as a valid example of the field value.
+          description: A placeholder serving as a valid example of the field value.
           type: string
       required: ['regexp', 'placeholder']
     example: {

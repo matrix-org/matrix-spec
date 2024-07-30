@@ -31,9 +31,11 @@
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
-  <th class="col-name">Name</th>
-  <th class="col-type">Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-name">Name</th>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
 
     {{ range $property_name, $property := $properties }}
@@ -68,7 +70,7 @@
     {{ if reflect.IsMap .additionalProperties }}
 
  <tr>
-  <td>&lt;Other properties&gt;</code></td>
+  <td>&lt;Other properties&gt;</td>
   <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
   <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
  </tr>
@@ -90,8 +92,10 @@ resolve-additional-types.)
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
-  <th class="col-type">Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
 
  {{ $property := . }}
@@ -112,6 +116,9 @@ resolve-additional-types.)
     * `title`: optional string for the title of the property
 
     * `oneOf`: optional array of dictionaries describing the different formats
+      that the property can have
+    
+    * `anyOf`: optional array of dictionaries describing the different formats
       that the property can have
 
     * `properties`: if the type is an object, optional dictionary for
@@ -154,13 +161,14 @@ resolve-additional-types.)
                 {{ $type = . }}
             {{ end }}
         {{ end }}
-    {{ else if or (reflect.IsSlice .type) .oneOf }}
+    {{ else if or (reflect.IsSlice .type) .oneOf .anyOf }}
         {{/*
             It's legal to specify an array of types.
 
-            There are two ways to do that:
+            There are three ways to do that:
               - Use an array of strings.
               - Use oneOf, with items having a schema.
+              - Use anyOf, with items having a schema.
 
             Join them together in that case, like `type|other_type`.
         */}}
@@ -168,6 +176,10 @@ resolve-additional-types.)
 
         {{ if .oneOf }}
             {{ range .oneOf }}
+                {{ $types = $types | append (partial "property-type" .) }}
+            {{ end }}
+        {{ else if .anyOf }}
+            {{ range .anyOf }}
                 {{ $types = $types | append (partial "property-type" .) }}
             {{ end }}
         {{ else }}

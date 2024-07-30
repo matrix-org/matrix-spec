@@ -1,1 +1,0 @@
-Add support for mathematical messages, as per [MSC2191](https://github.com/matrix-org/matrix-spec-proposals/pull/2191).

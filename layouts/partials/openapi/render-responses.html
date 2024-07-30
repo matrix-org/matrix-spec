@@ -20,8 +20,10 @@
 
 <table class="response-table">
  <thead>
-  <th class="col-status">Status</th>
-  <th class="col-status-description">Description</th>
+  <tr>
+    <th class="col-status">Status</th>
+    <th class="col-status-description">Description</th>
+  </tr>
  </thead>
 
 {{ range $code, $response := $responses }}
@@ -37,6 +39,7 @@
 
 {{ range $code, $response := $responses }}
     {{ if $response.content }}
+        {{ $anchor := printf "%s_response-%s" $anchor_base $code }}
 <h3>{{$code}} response</h3>
         {{/* Display defined headers */}}
         {{ if $response.headers }}
@@ -95,7 +98,7 @@
             response. (This will be a no-op for response types which aren't
             objects or arrays.)
             */}}
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor_base) }}
+            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor) }}
             {{ range $additional_types }}
                 {{ partial "openapi/render-object-table" . }}
             {{ end }}
@@ -121,13 +124,7 @@
             {{/*
                 Show the content types and description.
             */}}
-            {{ $mimes := slice }}
-            {{ $descriptions := slice }}
-            {{ range $mime, $body := $response.content }}
-                {{ $mimes = $mimes | append $mime }}
-                {{ $descriptions = $descriptions | append $body.schema.description }}
-            {{ end }}
-            {{ partial "openapi/render-content-type" (dict "content_types" $mimes "descriptions" $descriptions) }}
+            {{ partial "openapi/render-content-type" (dict "content_types" $response.content) }}
         {{ end }}
     {{ end }}
 {{ end }}

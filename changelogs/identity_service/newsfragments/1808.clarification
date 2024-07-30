@@ -1,1 +1,0 @@
-Deprecate authentication via a query string, as per [MSC4126](https://github.com/matrix-org/matrix-spec-proposals/issues/4126).

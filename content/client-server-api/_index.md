@@ -22,17 +22,23 @@ recommended outside test environments.
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
-All `POST` and `PUT` endpoints, with the exception of [`POST
-/_matrix/media/v3/upload`](#post_matrixmediav3upload) and [`PUT
-/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+All `POST` and `PUT` endpoints, with the exception of those listed below,
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
 
+The exceptions are:
+
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+  [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+  both of which take the uploaded media as the request body.
+- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
+  [`POST /_matrix/client/v3/logout/all`](#post_matrixclientv3logoutall),
+  which take an empty request body.
+
 Similarly, all endpoints require the server to return a JSON object,
-with the exception of 200 responses to
-[`GET /_matrix/media/v3/download/{serverName}/{mediaId}`](#get_matrixmediav3downloadservernamemediaid)
-and [`GET /_matrix/media/v3/thumbnail/{serverName}/{mediaId}`](#get_matrixmediav3thumbnailservernamemediaid).
+with the exception of 200 responses to the media download endpoints in the
+[Content Repository module](#content-repository).
 Servers must include a `Content-Type` header of `application/json` for all JSON responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.
@@ -227,7 +233,7 @@ return a standard error response of the form:
 ```
 
 Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
-for any response with a 429 status code.
+header for any response with a 429 status code.
 
 The `retry_after_ms` property MAY be included to tell the client how long
 they have to wait in milliseconds before they can try again. This property is
@@ -245,9 +251,10 @@ the request idempotent.
 
 The transaction ID should **only** be used for this purpose.
 
-From the client perspective, after the request has finished, the `{txnId}`
-value should be changed by for the next request (how is not specified; a
-monotonically increasing integer is recommended).
+After the request has finished, clients should change the `{txnId}` value for
+the next request. How this is achieved, is left as an implementation detail.
+It is recommended that clients use either version 4 UUIDs or a concatenation
+of the current timestamp and a monotonically increasing integer.
 
 The homeserver should identify a request as a retransmission if the
 transaction ID is the same as a previous request, and the path of the
@@ -349,9 +356,9 @@ as per the [CORS](#web-browser-clients) section in this specification.
 The `.well-known` method uses a JSON file at a predetermined location to
 specify parameter values. The flow for this method is as follows:
 
-1.  Extract the server name from the user's Matrix ID by splitting the
+1.  Extract the [server name](/appendices/#server-name) from the user's Matrix ID by splitting the
     Matrix ID at the first colon.
-2.  Extract the hostname from the server name.
+2.  Extract the hostname from the server name as described by the [grammar](/appendices/#server-name).
 3.  Make a GET request to `https://hostname/.well-known/matrix/client`.
     1.  If the returned status code is 404, then `IGNORE`.
     2.  If the returned status code is not 200, or the response body is
@@ -1394,7 +1401,10 @@ fallback login API:
 
 This returns an HTML and JavaScript page which can perform the entire
 login process. The page will attempt to call the JavaScript function
-`window.onLogin` when login has been successfully completed.
+`window.matrixLogin.onLogin(response)` when login has been successfully
+completed. The argument, `response`, is the JSON response body of
+[`POST /_matrix/client/v3/login`](#post_matrixclientv3login) parsed
+into a JavaScript object.
 
 {{% added-in v="1.1" %}} Non-credential parameters valid for the `/login`
 endpoint can be provided as query string parameters here. These are to be
@@ -1644,6 +1654,27 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.get_login_token` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to use [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token)
+to generate single-use, time-limited tokens to log unauthenticated clients
+into their account.
+
+When not listed, clients SHOULD assume the user is unable to generate tokens.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.get_login_token": {
+      "enabled": false
+    }
+  }
+}
+```
+
 ## Filtering
 
 Filters can be created on the server and can be passed as a parameter to
@@ -1842,16 +1873,15 @@ updates not being sent.
 
 The complete event MUST NOT be larger than 65536 bytes, when formatted
 with the [federation event format](#room-event-format), including any
-signatures, and encoded as [Canonical
-JSON](/appendices#canonical-json).
+signatures, and encoded as [Canonical JSON](/appendices#canonical-json).
 
 There are additional restrictions on sizes per key:
 
--   `sender` MUST NOT exceed 255 bytes (including domain).
--   `room_id` MUST NOT exceed 255 bytes.
+-   `sender` MUST NOT exceed the size limit for [user IDs](/appendices/#user-identifiers).
+-   `room_id` MUST NOT exceed the size limit for [room IDs](/appendices/#room-ids).
 -   `state_key` MUST NOT exceed 255 bytes.
 -   `type` MUST NOT exceed 255 bytes.
--   `event_id` MUST NOT exceed 255 bytes.
+-   `event_id` MUST NOT exceed the size limit for [event IDs](/appendices/#event-ids).
 
 Some event types have additional size restrictions which are specified
 in the description of the event. Additional keys have no limit other
@@ -2316,7 +2346,7 @@ following endpoint.
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
 
-When using the `recurse` parameter, note that there no way for a client to
+When using the `recurse` parameter, note that there is no way for a client to
 control how far the server recurses. If the client decides that the server's
 recursion level is insufficient, it could, for example, perform the recursion
 itself, or disable whatever feature requires more recursion.
@@ -2565,9 +2595,6 @@ join is happening over federation, the remote server will check the conditions
 before accepting the join. See the [Server-Server Spec](/server-server-api/#restricted-rooms)
 for more information.
 
-If the room is `restricted` but no valid conditions are presented then the
-room is effectively invite only.
-
 The user does not need to maintain the conditions in order to stay a member
 of the room: the conditions are only checked/evaluated during the join process.
 
@@ -2721,42 +2748,45 @@ that profile.
 
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
-| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
-| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
-| [Mentions](#user-and-room-mentions)                        | Required  | Required | Required | Optional | Optional |
+| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
+| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
 | [Push Notifications](#push-notifications)                  | Optional  | Required | Optional | Optional | Optional |
 | [Receipts](#receipts)                                      | Required  | Required | Required | Required | Optional |
-| [Fully read markers](#fully-read-markers)                  | Optional  | Optional | Optional | Optional | Optional |
-| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
-| [VoIP](#voice-over-ip)                                     | Required  | Required | Required | Optional | Optional |
-| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
-| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
-| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
-| [Managing History Visibility](#room-history-visibility)    | Required  | Required | Required | Required | Optional |
-| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Room History Visibility](#room-history-visibility)        | Required  | Required | Required | Required | Optional |
 | [Room Upgrades](#room-upgrades)                            | Required  | Required | Required | Required | Optional |
-| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
-| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
-| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Invites](#third-party-invites)                | Optional  | Required | Optional | Optional | Optional |
+| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
+| [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
+| [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
+| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
-| [Guest Accounts](#guest-access)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
-| [SSO Login](#sso-client-loginauthentication)               | Optional  | Optional | Optional | Optional | Optional |
-| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Stickers](#sticker-messages)                              | Optional  | Optional | Optional | Optional | Optional |
-| [Server ACLs](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
-| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
-| [Moderation policies](#moderation-policy-lists)            | Optional  | Optional | Optional | Optional | Optional |
-| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
-| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Read and Unread Markers](#read-and-unread-markers)        | Optional  | Optional | Optional | Optional | Optional |
+| [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
+| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
+| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Room Tagging](#room-tagging)                              | Optional  | Optional | Optional | Optional | Optional |
+| [SSO Client Login/Authentication](#sso-client-loginauthentication) | Optional  | Optional | Optional | Optional | Optional |
+| [Secrets](#secrets)                                        | Optional  | Optional | Optional | Optional | Optional |
+| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Server Access Control Lists (ACLs)](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
+| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
+| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
+| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
+| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -2805,42 +2835,42 @@ operations and run in a resource constrained environment. Like embedded
 applications, they are not intended to be fully-fledged communication
 systems.
 
-{{< cs-module name="instant_messaging" >}}
-{{< cs-module name="rich_replies" >}}
-{{< cs-module name="voip_events" >}}
-{{< cs-module name="typing_notifications" >}}
-{{< cs-module name="receipts" >}}
-{{< cs-module name="read_markers" >}}
-{{< cs-module name="presence" >}}
-{{< cs-module name="content_repo" >}}
-{{< cs-module name="send_to_device" >}}
-{{< cs-module name="device_management" >}}
-{{< cs-module name="end_to_end_encryption" >}}
-{{< cs-module name="secrets" >}}
-{{< cs-module name="history_visibility" >}}
-{{< cs-module name="push" >}}
-{{< cs-module name="third_party_invites" >}}
-{{< cs-module name="search" >}}
-{{< cs-module name="guest_access" >}}
-{{< cs-module name="room_previews" >}}
-{{< cs-module name="tags" >}}
-{{< cs-module name="account_data" >}}
-{{< cs-module name="admin" >}}
-{{< cs-module name="event_context" >}}
-{{< cs-module name="sso_login" >}}
-{{< cs-module name="dm" >}}
-{{< cs-module name="ignore_users" >}}
-{{< cs-module name="stickers" >}}
-{{< cs-module name="report_content" >}}
-{{< cs-module name="third_party_networks" >}}
-{{< cs-module name="openid" >}}
-{{< cs-module name="server_acls" >}}
-{{< cs-module name="mentions" >}}
-{{< cs-module name="room_upgrades" >}}
-{{< cs-module name="server_notices" >}}
-{{< cs-module name="moderation_policies" >}}
-{{< cs-module name="spaces" >}}
-{{< cs-module name="event_replacements" >}}
-{{< cs-module name="event_annotations" >}}
-{{< cs-module name="threading" >}}
-{{< cs-module name="reference_relations" >}}
+{{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
+{{% cs-module name="voip_events" %}}
+{{% cs-module name="typing_notifications" %}}
+{{% cs-module name="receipts" %}}
+{{% cs-module name="read_markers" %}}
+{{% cs-module name="presence" %}}
+{{% cs-module name="content_repo" %}}
+{{% cs-module name="send_to_device" %}}
+{{% cs-module name="device_management" %}}
+{{% cs-module name="end_to_end_encryption" %}}
+{{% cs-module name="secrets" %}}
+{{% cs-module name="history_visibility" %}}
+{{% cs-module name="push" %}}
+{{% cs-module name="third_party_invites" %}}
+{{% cs-module name="search" %}}
+{{% cs-module name="guest_access" %}}
+{{% cs-module name="room_previews" %}}
+{{% cs-module name="tags" %}}
+{{% cs-module name="account_data" %}}
+{{% cs-module name="admin" %}}
+{{% cs-module name="event_context" %}}
+{{% cs-module name="sso_login" %}}
+{{% cs-module name="dm" %}}
+{{% cs-module name="ignore_users" %}}
+{{% cs-module name="stickers" %}}
+{{% cs-module name="report_content" %}}
+{{% cs-module name="third_party_networks" %}}
+{{% cs-module name="openid" %}}
+{{% cs-module name="server_acls" %}}
+{{% cs-module name="mentions" %}}
+{{% cs-module name="room_upgrades" %}}
+{{% cs-module name="server_notices" %}}
+{{% cs-module name="moderation_policies" %}}
+{{% cs-module name="spaces" %}}
+{{% cs-module name="event_replacements" %}}
+{{% cs-module name="event_annotations" %}}
+{{% cs-module name="threading" %}}
+{{% cs-module name="reference_relations" %}}

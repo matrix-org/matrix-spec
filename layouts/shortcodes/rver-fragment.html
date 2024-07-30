@@ -19,7 +19,7 @@
 
 {{ with .Site.GetPage "rooms/fragments" }}
     {{ with .Resources.GetMatch (printf "%s%s" $name ".md") }}
-        {{ $content := .Content }}
+        {{ $content := .RenderShortcodes }}
         {{ if not $withVersioning }}
             {{ $content = (replace $content "[New in this version]" "") }}
             {{ $content = (replace $content "[Changed in this version]" "") }}

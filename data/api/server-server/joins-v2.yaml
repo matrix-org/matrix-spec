@@ -207,9 +207,9 @@ paths:
                     title: SignedMembershipEvent
                     x-addedInMatrixVersion: "1.2"
                     description: |-
-                      Required if the `content` of the event in the request contained the `join_authorised_via_users_server`
-                        field. The signed copy of the membership event sent to other servers by the resident server,
-                        including the resident server's signature.
+                      The membership event sent to other servers by the resident server including a signature
+                      from the resident server. Required if the room is [restricted](/client-server-api/#restricted-rooms)
+                      and the joining user is authorised by one of the conditions.
                   servers_in_room:
                     type: array
                     x-addedInMatrixVersion: "1.6"

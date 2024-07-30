@@ -1,0 +1,1 @@
+Clarify that `window.matrixLogin.onLogin` is called with the response body of `POST /_matrix/client/v3/login`.

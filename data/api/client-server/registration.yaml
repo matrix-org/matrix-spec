@@ -387,6 +387,7 @@ paths:
         access token provided in the request. Whether other access tokens for
         the user are revoked depends on the request parameters.
       security:
+        - {}
         - accessTokenQuery: []
         - accessTokenBearer: []
       operationId: changePassword
@@ -592,6 +593,7 @@ paths:
         parameter because the homeserver is expected to sign the request to the
         identity server instead.
       security:
+        - {}
         - accessTokenQuery: []
         - accessTokenBearer: []
       operationId: deactivateAccount
