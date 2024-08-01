@@ -20,10 +20,8 @@ paths:
     get:
       summary: Retrieve all push rulesets.
       description: |-
-        Retrieve all push rulesets for this user. Clients can "drill-down" on
-        the rulesets by suffixing a `scope` to this path e.g.
-        `/pushrules/global/`. This will return a subset of this data under the
-        specified key e.g. the `global` key.
+        Retrieve all push rulesets for this user. Currently the only push ruleset
+        defined is `global`.
       operationId: getPushRules
       security:
         - accessTokenQuery: []
@@ -44,200 +42,27 @@ paths:
                     title: Ruleset
                     allOf:
                       - $ref: definitions/push_ruleset.yaml
-              examples:
-                response:
-                  value: {
-                    "global": {
-                      "content": [
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "sound",
-                              "value": "default"
-                            },
-                            {
-                              "set_tweak": "highlight"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "pattern": "alice",
-                          "rule_id": ".m.rule.contains_user_name"
-                        }
-                      ],
-                      "override": [
-                        {
-                          "actions": [],
-                          "conditions": [],
-                          "default": true,
-                          "enabled": false,
-                          "rule_id": ".m.rule.master"
-                        },
-                        {
-                          "actions": [],
-                          "conditions": [
-                            {
-                              "key": "content.msgtype",
-                              "kind": "event_match",
-                              "pattern": "m.notice"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.suppress_notices"
-                        }
-                      ],
-                      "room": [],
-                      "sender": [],
-                      "underride": [
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "sound",
-                              "value": "ring"
-                            },
-                            {
-                              "set_tweak": "highlight",
-                              "value": false
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "key": "type",
-                              "kind": "event_match",
-                              "pattern": "m.call.invite"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.call"
-                        },
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "sound",
-                              "value": "default"
-                            },
-                            {
-                              "set_tweak": "highlight"
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "kind": "contains_display_name"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.contains_display_name"
-                        },
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "sound",
-                              "value": "default"
-                            },
-                            {
-                              "set_tweak": "highlight",
-                              "value": false
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "kind": "room_member_count",
-                              "is": "2"
-                            },
-                            {
-                              "kind": "event_match",
-                              "key": "type",
-                              "pattern": "m.room.message"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.room_one_to_one"
-                        },
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "sound",
-                              "value": "default"
-                            },
-                            {
-                              "set_tweak": "highlight",
-                              "value": false
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "key": "type",
-                              "kind": "event_match",
-                              "pattern": "m.room.member"
-                            },
-                            {
-                              "key": "content.membership",
-                              "kind": "event_match",
-                              "pattern": "invite"
-                            },
-                            {
-                              "key": "state_key",
-                              "kind": "event_match",
-                              "pattern": "@alice:example.com"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.invite_for_me"
-                        },
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "highlight",
-                              "value": false
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "key": "type",
-                              "kind": "event_match",
-                              "pattern": "m.room.member"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.member_event"
-                        },
-                        {
-                          "actions": [
-                            "notify",
-                            {
-                              "set_tweak": "highlight",
-                              "value": false
-                            }
-                          ],
-                          "conditions": [
-                            {
-                              "key": "type",
-                              "kind": "event_match",
-                              "pattern": "m.room.message"
-                            }
-                          ],
-                          "default": true,
-                          "enabled": true,
-                          "rule_id": ".m.rule.message"
-                        }
-                      ]
-                    }
-                  }
       tags:
         - Push notifications
-  "/pushrules/{scope}/{kind}/{ruleId}":
+  /pushrules/global/:
+    get:
+      summary: Retrieve all push rules.
+      description: |-
+        Retrieve all push rules for this user.
+      operationId: getPushRulesGlobal
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: All the push rules for this user.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/push_ruleset.yaml
+      tags:
+        - Push notifications
+  "/pushrules/global/{kind}/{ruleId}":
     get:
       summary: Retrieve a push rule.
       description: Retrieve a single specified push rule.
@@ -246,13 +71,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: "`global` to specify global rules."
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
@@ -318,13 +136,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: "`global` to specify global rules."
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
@@ -395,13 +206,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: "`global` to specify global rules."
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
@@ -523,7 +327,7 @@ paths:
                 $ref: definitions/errors/rate_limited.yaml
       tags:
         - Push notifications
-  "/pushrules/{scope}/{kind}/{ruleId}/enabled":
+  "/pushrules/global/{kind}/{ruleId}/enabled":
     get:
       summary: Get whether a push rule is enabled
       description: This endpoint gets whether the specified push rule is enabled.
@@ -532,15 +336,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: |-
-            Either `global` or `device/<profile_tag>` to specify global
-            rules or device rules for the given `profile_tag`.
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
@@ -605,13 +400,6 @@ paths:
         - accessTokenBearer: []
       parameters:
         - in: path
-          name: scope
-          required: true
-          description: "`global` to specify global rules."
-          example: global
-          schema:
-            type: string
-        - in: path
           name: kind
           required: true
           description: |
@@ -674,7 +462,7 @@ paths:
                   }
       tags:
         - Push notifications
-  "/pushrules/{scope}/{kind}/{ruleId}/actions":
+  "/pushrules/global/{kind}/{ruleId}/actions":
     get:
       summary: The actions for a push rule
       description: This endpoint get the actions for the specified push rule.
@@ -683,15 +471,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: |-
-            Either `global` or `device/<profile_tag>` to specify global
-            rules or device rules for the given `profile_tag`.
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
@@ -764,13 +543,6 @@ paths:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
-        - in: path
-          name: scope
-          required: true
-          description: "`global` to specify global rules."
-          example: global
-          schema:
-            type: string
         - in: path
           name: kind
           required: true
