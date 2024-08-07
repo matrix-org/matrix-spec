@@ -40,15 +40,18 @@ $table-bg: $secondary-lightest-background;
 $td-enable-google-fonts: false;
 
 /*
- * Replace the default font with Inter.
+ * The $font-family-sans-serif definition here overrides the default value set by docsy
+ * (https://github.com/matrix-org/docsy/blob/66a4e61d2d34edc7196b9df83a7d09cd4af14b47/assets/scss/_variables.scss#L68)
+ * and:
  *
- * The $font-family-sans-serif definition here overrides the default value set by docsy:
- * https://github.com/matrix-org/docsy/blob/66a4e61d2d34edc7196b9df83a7d09cd4af14b47/assets/scss/_variables.scss#L68
- * and adds "Inter" to the front.
+ * - Adds "Inter" to the front (making it the default)
+ * - Inserts "Arial Unicode MS" before "Arial" (because the former contains more mathematical glyphs)
  *
- * The font itself is loaded via stylesheet link layouts/partials/hooks/head-end.html.
+ * The Inter font itself is loaded via stylesheet links layouts/partials/hooks/head-end.html.
  */
-$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", Arial Unicode MS, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+  "Segoe UI Symbol";
 
 // Disable smooth scrolling as it makes TOC highlighting jump during the transition.
 $enable-smooth-scroll: false;
