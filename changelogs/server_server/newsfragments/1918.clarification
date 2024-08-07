@@ -1,0 +1,1 @@
+Remove `origin` field from PDU example because it doesn't exist in the schema anymore.
