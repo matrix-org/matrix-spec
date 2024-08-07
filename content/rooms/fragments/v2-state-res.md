@@ -50,7 +50,7 @@ chain for each state *S*<sub>*i*</sub>, that is the union of the auth
 chains for each event in *S*<sub>*i*</sub>, and then taking every event
 that doesn't appear in every auth chain. If *C*<sub>*i*</sub> is the
 full auth chain of *S*<sub>*i*</sub>, then the auth difference is
- ∪ *C*<sub>*i*</sub> −  ∩ *C*<sub>*i*</sub>.
+∪ *C*<sub>*i*</sub> − ∩ *C*<sub>*i*</sub>.
 
 **Full conflicted set.**
 The *full conflicted set* is the union of the conflicted state set and
