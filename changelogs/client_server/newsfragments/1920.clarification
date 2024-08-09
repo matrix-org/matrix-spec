@@ -1,0 +1,1 @@
+Additional properties in `.well-known/matrix/client` don't have to be objects.
