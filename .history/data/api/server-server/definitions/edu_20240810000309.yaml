@@ -19,7 +19,7 @@ properties:
   edu_type:
     type: string
     description: The type of ephemeral message.
-    example: "m.typing"
+    example: "m.presence"
   content:
     type: object
     description: The content of the ephemeral message.
