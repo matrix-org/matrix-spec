@@ -1,0 +1,1 @@
+In data/api/server-server/definitions/edu.yaml , edu type : content : "m.presence" is changed to "m.typing" as "m.presence" is useless here and not required 
