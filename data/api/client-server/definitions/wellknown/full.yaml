@@ -22,7 +22,6 @@ properties:
   "m.identity_server":
     $ref: "identity_server.yaml"
 additionalProperties:
-  type: object
   description: Application-dependent keys using Java package naming convention.
 required:
   - m.homeserver
