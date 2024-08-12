@@ -1,0 +1,1 @@
+Fixes issue #1912 by adding error response to /_matrix/federation/v1/state_ids/{roomId}
