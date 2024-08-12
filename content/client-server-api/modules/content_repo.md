@@ -49,8 +49,9 @@ mxc://<server-name>/<media-id>
 Clients can access the content repository using the following endpoints.
 
 {{% boxes/added-in-paragraph %}}
-{{< changed-in v="1.11" >}} Clients SHOULD NOT use the media endpoints marked as
-deprecated below. Instead, they SHOULD use the new endpoints which require authentication.
+{{< changed-in v="1.11" >}} A number of endpoints under the /_matrix/media hierarchy
+have been deprecated and replaced with new endpoints which require authentication.
+The deprecated endpoints are marked in the section below.
 {{% /boxes/added-in-paragraph %}}
 
 {{% boxes/warning %}}
