@@ -24,9 +24,21 @@ properties:
   as_token:
     type: string
     description: A secret token that the application service will use to authenticate requests to the homeserver.
+  as_token_path:
+    type: string
+    description: |-
+      A path to a file containing the secret token that the application service will use to authenticate requests to the homeserver.
+      If specified, the file contents will be used as the as_token. This file should contain only the token, and leading or trailing
+      whitespaces will be stripped before use.
   hs_token:
     type: string
-    description: A secret token that the homeserver will use authenticate requests to the application service.
+    description: A secret token that the homeserver will use to authenticate requests to the application service.
+  hs_token_path:
+    type: string
+    description: |-
+      A path to a file containing the secret token that the homeserver will use to authenticate requests to the application service.
+      If specified, the file contents will be used as the hs_token. This file should contain only the token, and leading or trailing
+      whitespaces will be stripped before use.
   sender_localpart:
     type: string
     description: |-
@@ -71,7 +83,6 @@ properties:
 required:
   - id
   - url
-  - as_token
-  - hs_token
   - sender_localpart
   - namespaces
+
