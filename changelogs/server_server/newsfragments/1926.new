@@ -1,0 +1,18 @@
+RESPONSE/server-server/edu.yaml
+
+Fixes issue #1912 by adding error response to /_matrix/federation/v1/state_ids/{roomId}
+
+CONTENT :
+ "403":
+          description: |-
+            The host is not in the room or the host is banned from the room via its ACL.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You do not have permission to access the state at the requested event."
+                  }
