@@ -98,4 +98,4 @@ properties:
       publishes a key which is valid for a significant amount of time without a way
       for the homeserver owner to revoke it.
     example: 1052262000000
-required: ["server_name", "verify_keys"]
+required: ["server_name", "verify_keys", "signatures", "valid_until_ts"]
