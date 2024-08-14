@@ -99,10 +99,7 @@ services - be that for instant messages, VoIP call setups, or any other
 objects that need to be reliably and persistently pushed from A to B in
 an interoperable and federated manner.
 
-### Bindingness of requirements
-
-As a standards document, the Matrix Spec needs to signify the bindingness of the
-individual features, APIs, procedures, or other requirements it describes.
+### Requirement levels
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" across all parts of the
@@ -110,10 +107,11 @@ specification are to be interpreted as described in
 [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
 
 Some entire sections of the specification might be optional depending on the
-circumstances, for example the
-[modules of the client-server API](/client-server-api/#modules) apply depending
-on the use case. The bindingness of the above key words appearing in such a
-section is only relevant if the section itself is applicable.
+circumstances. For example, the
+[modules of the client-server API](/client-server-api/#modules)
+apply depending on the use case. The requirement level expressed by the above
+key words appearing in such a section is only relevant if the section itself is
+applicable.
 
 ### Spec Change Proposals
 
