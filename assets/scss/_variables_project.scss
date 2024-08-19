@@ -42,16 +42,15 @@ $td-enable-google-fonts: false;
 /*
  * The $font-family-sans-serif definition here overrides the default value set by docsy
  * (https://github.com/matrix-org/docsy/blob/66a4e61d2d34edc7196b9df83a7d09cd4af14b47/assets/scss/_variables.scss#L68)
- * and:
- *
- * - Adds "Inter" to the front (making it the default)
- * - Inserts "Arial Unicode MS" before "Arial" (because the former contains more mathematical glyphs)
- *
- * The Inter font itself is loaded via stylesheet links layouts/partials/hooks/head-end.html.
  */
-$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-  "Helvetica Neue", Arial Unicode MS, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-  "Segoe UI Symbol";
+$font-family-sans-serif:
+  // Add "Inter" to the front, making it the default. The font itself is loaded via stylesheet
+  // links in layouts/partials/hooks/head-end.html.
+  "Inter",
+  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+  // Insert fonts suited for mathematical symbols on different platforms before "Arial"
+  "STIX Two Math", "Cambria Math", "Noto Sans Math", "Dejavu Sans",
+  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
 // Disable smooth scrolling as it makes TOC highlighting jump during the transition.
 $enable-smooth-scroll: false;
