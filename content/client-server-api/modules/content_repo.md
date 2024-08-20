@@ -168,3 +168,45 @@ Homeservers have additional content-specific concerns:
 -   Clients or remote homeservers may try to upload malicious files
     targeting vulnerabilities in either the homeserver thumbnailing or
     the client decoders.
+
+##### Serving inline content
+
+Clients with insecure configurations may be vulnerable to Cross-Site Scripting
+attacks when served media with a `Content-Disposition` of `inline`. Clients
+SHOULD NOT be hosted on the same domain as the media endpoints for the homeserver
+to mitigate most of this risk. Servers SHOULD restrict `Content-Type` headers to
+one of the following values when serving content with `Content-Disposition: inline`:
+
+* `text/css`
+* `text/plain`
+* `text/csv`
+* `application/json`
+* `application/ld+json`
+* `image/jpeg`
+* `image/gif`
+* `image/png`
+* `image/apng`
+* `image/webp`
+* `image/avif`
+* `video/mp4`
+* `video/webm`
+* `video/ogg`
+* `video/quicktime`
+* `audio/mp4`
+* `audio/webm`
+* `audio/aac`
+* `audio/mpeg`
+* `audio/ogg`
+* `audio/wave`
+* `audio/wav`
+* `audio/x-wav`
+* `audio/x-pn-wav`
+* `audio/flac`
+* `audio/x-flac`
+
+These types are unlikely to cause Cross-Site Scripting issues within clients.
+
+Clients SHOULD NOT rely on servers returning `inline` rather than `attachment`
+on `/download`. Server implementations might decide out of an abundance of
+caution that all downloads are responded to with `attachment`, regardless of
+content type - clients should not be surprised by this behaviour.
