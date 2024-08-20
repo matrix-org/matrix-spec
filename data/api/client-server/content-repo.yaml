@@ -693,7 +693,7 @@ components:
         Defaults to `application/octet-stream` if it is not set.
       x-changedInMatrixVersion:
         "1.12": |
-          This header became explicitely optional with a default value.
+          This header became explicitly optional with a default value.
       example: application/pdf
       schema:
         type: string
