@@ -1438,7 +1438,7 @@ Server administrators may apply locks to prevent users from usefully
 using their accounts, for instance, due to safety or security concerns.
 In contrast to account deactivation, locking is a non-destructive action
 that can be reversed. This specification describes the behaviour of clients
-and servers when an account is locked but delibaretely leaves the creation
+and servers when an account is locked but deliberately leaves the creation
 and removal of locks as a server implementation detail.
 
 When an account is locked, servers MUST return a `401 Unauthorized` error
