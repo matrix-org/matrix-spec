@@ -35,5 +35,10 @@ EOF
     sed -e "s/[ ]*$//" rendered.md
 } > ../content/changelog/$VERSION.md
 
+# Generate checklist
+sed -e "s/^- /- [ ] /g" ../content/changelog/$VERSION.md \
+    | sed "1s/---/---\noutputs: markdown/" \
+    > ../content/checklists/$VERSION.md
+
 # Cleanup
 rm -v rendered.md

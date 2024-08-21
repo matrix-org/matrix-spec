@@ -1,0 +1,1 @@
+{{ .RawContent | replaceRE "<!--(.|\\s)*?-->\n?" "" }}

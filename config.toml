@@ -138,3 +138,11 @@ sidebar_menu_compact = true
   [[module.imports]]
     path = "github.com/matrix-org/docsy"
     disable = false
+
+# custom output formats
+
+[outputFormats]
+  [outputFormats.Markdown]
+    mediaType = "text/markdown"
+    isPlainText = true
+    baseName = "index"
