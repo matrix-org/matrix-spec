@@ -22,6 +22,11 @@ towncrier --yes
     # to sort the changelogs at build time.
     cat <<EOF
 ---
+title: $VERSION
+type: docs
+outputs:
+  - html
+  - checklist
 date: $(date -Iseconds)
 ---
 EOF

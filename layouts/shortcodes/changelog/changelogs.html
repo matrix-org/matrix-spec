@@ -3,8 +3,6 @@
    "content/changelogs"
 */}}
 
-{{ with .Page.Resources.Match "*.md" }}
-{{ range ((sort . "Params.date" "desc")) }}
+{{ range .Page.RegularPages }}
 {{ .RenderShortcodes }}
-{{ end }}
 {{ end }}
