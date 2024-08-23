@@ -204,7 +204,12 @@ one of the following values when serving content with `Content-Disposition: inli
 * `audio/flac`
 * `audio/x-flac`
 
-These types are unlikely to cause Cross-Site Scripting issues within clients.
+These types are unlikely to cause Cross-Site Scripting issues when a `Content-Type`
+header is provided, as clients will only try to render the data using that content
+type. For example, if a HTML file is uploaded with a `Content-Type` of `image/png`,
+clients will just assume that the image is corrupted, and won't render it as a
+HTML page. Therefore, there is no risk in trusting the user-defined content type,
+as long as the `Content-Disposition` is calculated based on that type.
 
 Clients SHOULD NOT rely on servers returning `inline` rather than `attachment`
 on `/download`. Server implementations might decide out of an abundance of
