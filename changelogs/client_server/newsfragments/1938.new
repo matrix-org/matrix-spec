@@ -1,0 +1,1 @@
+Add `POST /_matrix/client/v3/rooms/{roomId}/report` as per MSC4151.
