@@ -1,0 +1,47 @@
+1. Typing notifications (which contain a single room_id)
+2. Read receipts (which can contain multiple room_ids)
+3. Presence updates (which do not contain room_ids)
+
+Typing Notification EDU Example:
+
+{
+  "edu_type": "m.typing",
+  "content": {
+    "room_id": "!roomid:example.com",
+    "user_id": "@user:example.com"
+  }
+}
+
+Read Receipt EDU Example:
+
+{
+  "edu_type": "m.receipt",
+  "content": {
+    "!roomid1:example.com": {
+      "$eventid:example.com": {
+        "@user:example.com": {
+          "ts": 1436451550453
+        }
+      }
+    },
+    "!roomid2:example.com": {
+      "$eventid:example.com": {
+        "@user:example.com": {
+          "ts": 1436451550453
+        }
+      }
+    }
+  }
+}
+
+Presence Update EDU Example (without room_id):
+
+{
+  "edu_type": "m.presence",
+  "content": {
+    "user_id": "@user:example.com",
+    "presence": "online",
+    "last_active_ago": 2478593,
+    "currently_active": true
+  }
+}
