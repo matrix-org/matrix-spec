@@ -14,5 +14,5 @@ CONTENT :
                 response:
                   value: {
                     "errcode": "M_FORBIDDEN",
-                    "error": "You do not have permission to access the state at the requested event."
+                    "error": "You do not have permission to access the state at the requested event or you have been banned."
                   }
