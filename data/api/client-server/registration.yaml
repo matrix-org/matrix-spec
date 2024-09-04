@@ -169,6 +169,7 @@ paths:
                     x-addedInMatrixVersion: "1.3"
                   home_server:
                     type: string
+                    deprecated: true
                     description: |-
                       The server_name of the homeserver on which the account has
                       been registered.
