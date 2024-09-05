@@ -1,1 +1,1 @@
-Add the deprecated field to properties of OpenAPI definitions and JSON Schemas.
+Add the `deprecated` field to properties of OpenAPI definitions and JSON Schemas.
