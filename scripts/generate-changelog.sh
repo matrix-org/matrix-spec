@@ -30,9 +30,7 @@ outputs:
 date: $(date -Iseconds)
 ---
 EOF
-    if [ "$VERSION" = "vUNSTABLE" ]; then
-        echo "## Changes since last release"
-    else
+    if [ "$VERSION" != "vUNSTABLE" ]; then
         sed -e "s/VERSION/$1/g" -e "s/DATE/$2/g" header.md
     fi
 
