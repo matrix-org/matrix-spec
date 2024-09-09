@@ -218,6 +218,9 @@ only read state (e.g.: `/sync`, get account data, etc).
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
 
+`M_THREEPID_MEDIUM_NOT_SUPPORTED`
+The homeserver does not support adding a third party identifier of the given medium.
+
 #### Rate limiting
 
 Homeservers SHOULD implement rate limiting to reduce the risk of being
