@@ -1434,6 +1434,8 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 #### Account locking
 
+{{% added-in v="1.12" %}}
+
 Server administrators may apply locks to prevent users from usefully
 using their accounts, for instance, due to safety or security concerns.
 In contrast to account deactivation, locking is a non-destructive action
