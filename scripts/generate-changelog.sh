@@ -22,7 +22,8 @@ towncrier --yes
     # to sort the changelogs at build time.
     cat <<EOF
 ---
-title: $VERSION
+title: $VERSION Changelog
+linkTitle: $VERSION
 type: docs
 outputs:
   - html
