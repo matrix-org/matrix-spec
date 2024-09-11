@@ -341,7 +341,7 @@ paths:
                       properties:
                         origin:
                           type: string
-                          description: The resident server's DNS name.
+                          description: The resident server's [server name](/appendices/#server-name).
                         auth_chain:
                           type: array
                           description: |-
