@@ -43,7 +43,9 @@ paths:
                       The custom capabilities the server supports, using the
                       Java package naming convention.
                     additionalProperties:
-                      type: object
+                      description: |-
+                        Application-dependent keys using the
+                        [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
                     properties:
                       m.change_password:
                         $ref: '#/components/schemas/booleanCapability'
