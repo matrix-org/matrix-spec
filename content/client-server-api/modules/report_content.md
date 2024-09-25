@@ -28,4 +28,4 @@ is in before accepting a report.
 {{< added-in v="1.12" >}} Contrarily, servers MUST NOT restrict room reports
 based on whether or not the reporting user is joined to the room. This is
 because users can be exposed to harmful content without being joined to a
-room, for instance, through room directories.
+room. For instance, through room directories or invites.
