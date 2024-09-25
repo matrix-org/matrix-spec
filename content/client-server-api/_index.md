@@ -1475,8 +1475,8 @@ Upon receiving an `M_USER_LOCKED` error, clients SHOULD retain session
 information including encryption state and inform the user that their account
 has been locked. While the lock is applied, clients SHOULD hide the normal UI
 from the user, preventing general use of their account. Clients SHOULD, however,
-continue to make rate-limited requests to `/sync` and other APIs to detect
-when the lock has been lifted.
+continue to make rate-limited requests to [`/sync`](#get_matrixclientv3sync)
+and other APIs to detect when the lock has been lifted.
 
 To enable users to appeal to a lock clients MAY use
 [server contact discovery](#getwell-knownmatrixsupport).
