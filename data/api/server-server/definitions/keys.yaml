@@ -19,7 +19,7 @@ example:
 properties:
   server_name:
     type: string
-    description: DNS name of the homeserver.
+    description: The homeserver's [server name](/appendices/#server-name).
     example: "example.org"
   verify_keys:
     type: object

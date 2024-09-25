@@ -162,7 +162,7 @@ paths:
                 properties:
                   origin:
                     type: string
-                    description: The resident server's DNS name.
+                    description: The resident server's [server name](/appendices/#server-name).
                   members_omitted:
                     type: boolean
                     description: "`true` if `m.room.member` events have been omitted from `state`."

@@ -45,7 +45,8 @@ paths:
       description: |-
         Performs a query to get the mapped room ID and list of resident homeservers in
         the room for a given room alias. Homeservers should only query room aliases
-        that belong to the target server (identified by the DNS Name in the alias).
+        that belong to the target server (identified by the [server name](/appendices/#server-name)
+        in the alias).
 
         Servers may wish to cache the response to this query to avoid requesting the
         information too often.
@@ -111,7 +112,8 @@ paths:
       description: |-
         Performs a query to get profile information, such as a display name or avatar,
         for a given user. Homeservers should only query profiles for users that belong
-        to the target server (identified by the DNS Name in the user ID).
+        to the target server (identified by the [server name](/appendices/#server-name)
+        in the user ID).
 
         Servers may wish to cache the response to this query to avoid requesting the
         information too often.
