@@ -1445,7 +1445,7 @@ for locking and unlocking accounts as a server implementation detail.
 
 When an account is locked, servers MUST return a `401 Unauthorized` error
 response with an `M_USER_LOCKED` error code and [`soft_logout`](#soft-logout)
-set to `true` on all but the following APIs:
+set to `true` on all but the following Client-Server APIs:
 
 - [`POST /logout`](#post_matrixclientv3logout)
 - [`POST /logout/all`](#post_matrixclientv3logoutall)
