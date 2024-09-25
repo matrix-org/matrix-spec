@@ -16,7 +16,7 @@ This may be a dedicated room to alert server administrators to the
 reported content or some other mechanism for notifying the appropriate
 people.
 
-Particularly during waves of a harmful content, users may report whole
+Particularly during waves of harmful content, users may report whole
 rooms instead of individual events. Server administrators and safety teams
 should, therefore, be cautious not to shut down rooms that might otherwise
 be legitimate.
