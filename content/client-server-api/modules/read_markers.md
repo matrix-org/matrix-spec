@@ -57,6 +57,8 @@ applicable filters are also satisfied.
 
 #### Unread markers
 
+{{% added-in v="1.12" %}}
+
 Clients may use "unread markers" to allow users to label rooms for later
 attention irrespective of [read receipts](#receipts) or
 [fully read markers](#fully-read-markers).

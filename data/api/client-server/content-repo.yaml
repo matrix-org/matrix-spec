@@ -248,9 +248,29 @@ paths:
             Content-Type:
               $ref: '#/components/headers/downloadContentType'
             Content-Disposition:
-              description: The name of the file that was previously uploaded, if set.
+              x-changedInMatrixVersion:
+                "1.12": This header became required.
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be one of `inline` or `attachment`,
+                and SHOULD contain a file name.
+
+                If the `Content-Type` is allowed in the [restrictions for serving
+                inline content](/client-server-api/#serving-inline-content),
+                servers SHOULD use `inline`, otherwise they SHOULD use
+                `attachment`.
+
+                If the upload was made with a `filename`, this header MUST
+                contain the same `filename`. Otherwise, `filename` is excluded
+                from the header. If the media being downloaded is remote, the
+                remote server's `filename` in the `Content-Disposition` header
+                is used as the `filename` instead. When the header is not
+                supplied, or does not supply a `filename`, the local download
+                response does not include a `filename`.
+              required: true
               schema:
                 type: string
+                example: "inline; filename=\"filename.jpg\""
           content:
             application/octet-stream:
               schema:
@@ -309,11 +329,21 @@ paths:
             Content-Type:
               $ref: '#/components/headers/downloadContentType'
             Content-Disposition:
-              description: |-
-                The `fileName` requested or the name of the file that was previously
-                uploaded, if set.
+              x-changedInMatrixVersion:
+                "1.12": This header became required.
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be one of `inline` or `attachment`,
+                and MUST contain the file name requested in the path.
+
+                If the `Content-Type` is allowed in the [restrictions for serving
+                inline content](/client-server-api/#serving-inline-content),
+                servers SHOULD use `inline`, otherwise they SHOULD use
+                `attachment`.
+              required: true
               schema:
                 type: string
+                example: "inline; filename=\"filename.jpg\""
           content:
             application/octet-stream:
               schema:
@@ -412,8 +442,24 @@ paths:
         "200":
           description: A thumbnail of the requested content.
           headers:
+            Content-Disposition:
+              x-addedInMatrixVersion: "1.12"
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be `inline`, and SHOULD contain a file name (e.g. `thumbnail.png`).
+
+                Servers should note the [Content-Type restrictions for serving inline content](/client-server-api/#serving-inline-content),
+                as these limitations imply which formats should be used for thumbnail generation.
+              required: true
+              schema:
+                type: string
+                example: "inline; filename=\"thumbnail.png\""
             Content-Type:
+              x-changedInMatrixVersion:
+                "1.12": |
+                  This header became required in order to support `Content-Disposition`.
               description: The content type of the thumbnail.
+              required: true
               schema:
                 type: string
                 enum:
@@ -639,7 +685,15 @@ components:
     contentType:
       in: header
       name: Content-Type
-      description: The content type of the file being uploaded
+      description: |
+        **Optional.** The content type of the file being uploaded.
+
+        Clients SHOULD always supply this header.
+
+        Defaults to `application/octet-stream` if it is not set.
+      x-changedInMatrixVersion:
+        "1.12": |
+          This header became explicitly optional with a default value.
       example: application/pdf
       schema:
         type: string
@@ -782,7 +836,29 @@ components:
             format: uri
   headers:
     downloadContentType:
-      description: The content type of the file that was previously uploaded.
+      description: |
+        The content type of the file that was previously uploaded.
+
+        The server MUST return a `Content-Type` which is either exactly the same
+        as the original upload, or reasonably close. The bounds of "reasonable"
+        are:
+
+        * Adding a charset to `text/*` content types.
+        * Detecting HTML and using `text/html` instead of `text/plain`.
+        * Using `application/octet-stream` when the server determines the
+          content type is obviously wrong. For example, an encrypted file being
+          claimed as `image/png`.
+        * Returning `application/octet-stream` when the media has an
+          unknown/unprovided `Content-Type`. For example, being uploaded before
+          the server tracked content types or when the remote server is
+          non-compliantly omitting the header entirely.
+        
+        Actions not in the spirit of the above are not considered "reasonable".
+      x-changedInMatrixVersion:
+        "1.12": |
+          This header became required in order to support `Content-Disposition`,
+          and the behaviour to compute its value was clarified.
+      required: true
       schema:
         type: string
 
