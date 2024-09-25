@@ -22,8 +22,9 @@ paths:
       summary: Report a room as inappropriate.
       description: |-
         Reports a room as inappropriate to the server, which may then notify
-        the appropriate people. The caller is not required to be joined to the
-        room to report it.
+        the appropriate people. How such information is delivered is left up to
+        implementations. The caller is not required to be joined to the room to
+        report it.
       operationId: reportRoom
       parameters:
         - in: path
