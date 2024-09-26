@@ -100,6 +100,9 @@ section](#soft-logout) for more information.
 `M_MISSING_TOKEN`
 No access token was specified for the request.
 
+`M_USER_LOCKED`
+The account has been [locked](#account-locking) and cannot be used at this time.
+
 `M_BAD_JSON`
 Request contained valid JSON, but it was malformed in some way, e.g.
 missing required keys, invalid values for keys.
@@ -515,6 +518,10 @@ information, must not be reused and must be discarded. If `soft_logout` is
 token available. If it does not have a refresh token available, or refreshing
 fails with `soft_logout: true`, the client can acquire a new access token by
 specifying the device ID it is already using to the login API.
+
+{{% changed-in v="1.12" %}} A client that receives such a response together
+with an `M_USER_LOCKED` error code, cannot obtain a new access token until
+the account has been [unlocked](#account-locking).
 
 ### User-Interactive Authentication API
 
@@ -1424,6 +1431,55 @@ The password SHOULD include a lower-case letter, an upper-case letter, a
 number and a symbol and be at a minimum 8 characters in length. Servers
 MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 {{% /boxes/warning %}}
+
+#### Account locking
+
+{{% added-in v="1.12" %}}
+
+Server administrators may apply locks to prevent users from usefully
+using their accounts, for instance, due to safety or security concerns.
+In contrast to account deactivation, locking is a non-destructive action
+that can be reversed. This specification describes the behaviour of clients
+and servers when an account is locked. It deliberately leaves the methods
+for locking and unlocking accounts as a server implementation detail.
+
+When an account is locked, servers MUST return a `401 Unauthorized` error
+response with an `M_USER_LOCKED` error code and [`soft_logout`](#soft-logout)
+set to `true` on all but the following Client-Server APIs:
+
+- [`POST /logout`](#post_matrixclientv3logout)
+- [`POST /logout/all`](#post_matrixclientv3logoutall)
+
+Servers MAY additionally include details of why the lock was applied in
+the `error` field.
+
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
+
+```json
+{
+  "errcode": "M_USER_LOCKED",
+  "error": "This account has been locked",
+  "soft_logout": true
+}
+```
+
+Servers SHOULD NOT invalidate access tokens on locked accounts unless the
+client requests a logout (using the above endpoints). This ensures that 
+users can retain their sessions without having to log back in if the account
+becomes unlocked.
+
+Upon receiving an `M_USER_LOCKED` error, clients SHOULD retain session
+information including encryption state and inform the user that their account
+has been locked. While the lock is applied, clients SHOULD hide the normal UI
+from the user, preventing general use of their account. Clients SHOULD, however,
+continue to make rate-limited requests to [`/sync`](#get_matrixclientv3sync)
+and other APIs to detect when the lock has been lifted.
+
+To enable users to appeal to a lock clients MAY use
+[server contact discovery](#getwell-knownmatrixsupport).
 
 ### Adding Account Administrative Contact Information
 
