@@ -6,11 +6,10 @@ Variables:
     DATE     = Replaced by the date (eg: April 01, 2021)
 -->
 
-## VERSION
-
 <table class="release-info">
 <tr><th>Git commit</th><td><a href="https://github.com/matrix-org/matrix-spec/tree/VERSION">https://github.com/matrix-org/matrix-spec/tree/VERSION</a></td>
 <tr><th>Release date</th><td>DATE</td>
+<tr><th>Checklist</th><td><a href="/changelog/VERSION/checklist.md">checklist.md</a></td>
 </table>
 
 <!-- Intentionally blank line to ensure headers work in the concatenated changelog -->

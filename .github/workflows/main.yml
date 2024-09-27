@@ -177,7 +177,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: changelog-artifact
-          path: content/changelog/vUNSTABLE.md
+          path: content/changelog/unstable.md
 
   build-spec:
     name: "📖 Build the spec"
