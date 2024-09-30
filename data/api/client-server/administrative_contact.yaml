@@ -488,9 +488,11 @@ paths:
         "400":
           description: |-
             The third-party identifier is already in use on the homeserver, or
-            the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
+            the request was invalid. Error codes that can be returned are:
+              * `M_SERVER_NOT_TRUSTED`: The server does not trust/support the identity server
+                provided in the request.
+              * `M_THREEPID_MEDIUM_NOT_SUPPORTED`: The homeserver does not support adding email addresses.
+              * `M_INVALID_PARAM`: The email address given was not valid.
           content:
             application/json:
               schema:
@@ -547,9 +549,10 @@ paths:
         "400":
           description: |-
             The third-party identifier is already in use on the homeserver, or
-            the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
+            the request was invalid. Error codes that can be returned are:
+              * `M_SERVER_NOT_TRUSTED`: The server does not trust/support the identity server
+              * `M_THREEPID_MEDIUM_NOT_SUPPORTED`: The homeserver does not support adding phone numbers.
+              * `M_INVALID_PARAM`: The phone number given was not valid.
           content:
             application/json:
               schema:

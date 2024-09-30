@@ -284,10 +284,6 @@ paths:
               has an account on the homeserver in question.
             * `M_SERVER_NOT_TRUSTED` : The `id_server` parameter refers to an identity server
               that is not trusted by this homeserver.
-            * `M_THREEPID_MEDIUM_NOT_SUPPORTED`
-              The homeserver does not support adding email addresses.
-            * `M_INVALID_PARAM`
-              The email address given was not valid.
           content:
             application/json:
               schema:
@@ -349,10 +345,6 @@ paths:
               has an account on the homeserver in question.
             * `M_SERVER_NOT_TRUSTED` : The `id_server` parameter refers to an identity server
               that is not trusted by this homeserver.
-            * `M_THREEPID_MEDIUM_NOT_SUPPORTED`
-              The homeserver does not support adding phone numbers.
-            * `M_INVALID_PARAM`
-              The phone number given was not valid.
           content:
             application/json:
               schema:
