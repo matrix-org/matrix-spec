@@ -146,3 +146,4 @@ sidebar_menu_compact = true
     mediaType = "text/markdown"
     isPlainText = true
     baseName = "checklist"
+    notAlternative = true
