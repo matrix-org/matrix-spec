@@ -33,7 +33,7 @@ rather than allowing all homeservers to enforce the rules on each other.
 #### Client behaviour
 
 The following API endpoints are allowed to be accessed by guest accounts
-for retrieving events:
+for retrieving events and associated media:
 
 * [GET /rooms/{roomId}/state](#get_matrixclientv3roomsroomidstate)
 * [GET /rooms/{roomId}/context/{eventId}](#get_matrixclientv3roomsroomidcontexteventid)
@@ -44,6 +44,9 @@ for retrieving events:
 * [GET /rooms/{roomId}/initialSync](#get_matrixclientv3roomsroomidinitialsync)
 * [GET /sync](#get_matrixclientv3sync)
 * [GET /events](#get_matrixclientv3events) as used for room previews.
+* {{< added-in v="1.12" >}} [GET /media/download/{serverName}/{mediaId}](#get_matrixclientv1mediadownloadservernamemediaid)
+* {{< added-in v="1.12" >}} [GET /media/download/{serverName}/{mediaId}/{fileName}](#get_matrixclientv1mediadownloadservernamemediaidfilename)
+* {{< added-in v="1.12" >}} [GET /media/thumbnail/{serverName}/{mediaId}](#get_matrixclientv1mediathumbnailservernamemediaid)
 
 The following API endpoints are allowed to be accessed by guest accounts
 for sending events:
