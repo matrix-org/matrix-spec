@@ -117,6 +117,9 @@ paths:
 
         Servers may wish to cache the response to this query to avoid requesting the
         information too often.
+
+        Servers MAY deny profile look-up over federation by responding with 403 and an
+        error code of `M_FORBIDDEN`.
       operationId: queryProfile
       security:
         - signedRequest: []
@@ -173,7 +176,7 @@ paths:
                     "avatar_url": "mxc://matrix.org/MyC00lAvatar"
                   }
         "403":
-          x-addedInMatrixVersion: "1.2"
+          x-addedInMatrixVersion: "1.12"
           description: The server is unwilling to disclose whether the user exists and/or
             has a display name.
           content:

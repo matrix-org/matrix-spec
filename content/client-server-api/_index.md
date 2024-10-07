@@ -2753,7 +2753,25 @@ re-invited.
 
 {{% http-api spec="client-server" api="profile" %}}
 
-#### Events on Change of Profile Information
+#### Server behaviour
+
+Homeservers MUST at a minimum allow profile look-up for:
+
+-   users that share a room with the requesting user
+-   users that reside in public rooms known to the homeserver
+
+In all other cases, homeservers MAY deny profile look-up by responding with
+403 and an error code of `M_FORBIDDEN`.
+
+When a remote user is queried and the query is not denied per the above,
+homeservers SHOULD query the remote server for the user's profile information.
+The remote server MAY itself deny profile queries over federation, however.
+
+When the requested user does not exist, homeservers MAY choose whether to
+respond with 403 or 404. If the server denies profile look-up in all but the
+required cases, 403 is RECOMMENDED.
+
+##### Events on Change of Profile Information
 
 Because the profile display name and avatar information are likely to be
 used in many places of a client's display, changes to these fields cause
