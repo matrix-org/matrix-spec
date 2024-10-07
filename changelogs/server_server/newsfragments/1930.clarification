@@ -1,1 +1,0 @@
-Fix required fields in `GET /_matrix/key/v2/server` response schema.

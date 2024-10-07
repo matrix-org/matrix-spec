@@ -1,1 +1,0 @@
-Additional properties in `GET /.well-known/matrix/client` don't have to be objects.
