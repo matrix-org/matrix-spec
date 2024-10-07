@@ -1,1 +1,1 @@
-Document the `m.get_login_token` capability as per [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882).
+Document the `m.get_login_token` capability, as per [MSC3882](https://github.com/matrix-org/matrix-spec-proposals/pull/3882).

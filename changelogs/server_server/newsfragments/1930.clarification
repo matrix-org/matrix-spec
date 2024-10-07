@@ -1,1 +1,1 @@
-Fix required fields in `/_matrix/key/v2/server` response schema.
+Fix required fields in `GET /_matrix/key/v2/server` response schema.

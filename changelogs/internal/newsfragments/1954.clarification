@@ -1,1 +1,1 @@
-Exclude markdown checklists from alternate output formats.
+Provide markdown checklists for changelogs under `/changelog/$VERSION/checklist.md`.

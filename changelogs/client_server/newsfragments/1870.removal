@@ -1,1 +1,1 @@
-Remove the deprecated name attribute on HTML anchor elements as per [MSC4159](https://github.com/matrix-org/matrix-spec-proposals/pull/4159).
+Remove the deprecated name attribute on HTML anchor elements, as per [MSC4159](https://github.com/matrix-org/matrix-spec-proposals/pull/4159).

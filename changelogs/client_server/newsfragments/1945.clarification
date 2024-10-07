@@ -1,1 +1,1 @@
-Additional keys in `GET /capabilities` don't have to be objects.
+Additional keys in `GET /_matrix/client/v3/capabilities` don't have to be objects.

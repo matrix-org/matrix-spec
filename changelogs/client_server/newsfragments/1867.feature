@@ -1,1 +1,1 @@
-Add 403 responses on `/profile/{userId}/avatar_url` and `/profile/{userId}/displayname` as per [MSC4170](https://github.com/matrix-org/matrix-spec-proposals/pull/4170).
+Add 403 responses on `GET /_matrix/client/v3/profile/{userId}/avatar_url` and `GET /_matrix/client/v3/profile/{userId}/displayname`, as per [MSC4170](https://github.com/matrix-org/matrix-spec-proposals/pull/4170).
