@@ -99,7 +99,7 @@ paths:
                     "displayname": "Alice Margatroid"
                   }
         "403":
-          x-addedInMatrixVersion: "1.13"
+          x-addedInMatrixVersion: "1.12"
           description: The server is unwilling to disclose whether the user exists and/or
             has a display name.
           content:
@@ -200,7 +200,7 @@ paths:
                     "avatar_url": "mxc://matrix.org/SDGdghriugerRg"
                   }
         "403":
-          x-addedInMatrixVersion: "1.13"
+          x-addedInMatrixVersion: "1.12"
           description: The server is unwilling to disclose whether the user exists and/or
             has an avatar URL.
           content:

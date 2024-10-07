@@ -178,7 +178,7 @@ paths:
         "403":
           x-addedInMatrixVersion: "1.12"
           description: The server is unwilling to disclose whether the user exists and/or
-            has a display name.
+            has profile information.
           content:
             application/json:
               schema:
