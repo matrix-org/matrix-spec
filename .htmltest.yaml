@@ -4,3 +4,4 @@
 IgnoreDirectoryMissingTrailingSlash: true
 DirectoryPath: spec
 CheckExternal: false
+IgnoreInternalEmptyHash: true

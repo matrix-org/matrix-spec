@@ -37,6 +37,10 @@ description = "Home of the Matrix specification for decentralised communication"
     weight = 30
 
 [markup]
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 6
+    ordered = true
   [markup.goldmark]
     [markup.goldmark.renderer]
       # Enables us to render raw HTML
@@ -66,8 +70,8 @@ current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec. CI will set these values here automatically when a release git tag (i.e `v1.5`) is created.
 # major = "1"
-# minor = "10"
-# release_date = "March 22, 2024"
+# minor = "11"
+# release_date = "June 20, 2024"
 
 # User interface configuration
 [params.ui]
@@ -130,7 +134,16 @@ sidebar_menu_compact = true
 [module]
   [module.hugoVersion]
     extended = true
-    min = "0.113.0"
+    min = "0.117.0"
   [[module.imports]]
     path = "github.com/matrix-org/docsy"
     disable = false
+
+# custom output formats
+
+[outputFormats]
+  [outputFormats.Checklist]
+    mediaType = "text/markdown"
+    isPlainText = true
+    baseName = "checklist"
+    notAlternative = true

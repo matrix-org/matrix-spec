@@ -1,10 +1,8 @@
 {{/*
-   This template is used to render all of the changelog sections under
-   "content/changelogs"
+   This template is used to redirect the changelog section under
+   "content/changelogs" to the latest version's changelog page.
 */}}
 
-{{ with .Page.Resources.Match "*.md" }}
-{{ range ((sort . "Params.date" "desc")) }}
-{{ .Content }}
-{{ end }}
+{{ with index .Page.RegularPages.ByDate.Reverse 0 }}
+   <meta http-equiv="refresh" content="0; url={{ .RelPermalink }}" />
 {{ end }}

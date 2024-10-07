@@ -1,6 +1,6 @@
 ---
 ---
-{{% added-in this=true %}} The event ID is the [reference
+{{% added-in v=4 %}} The event ID is the [reference
 hash](/server-server-api#calculating-the-reference-hash-for-an-event) of
 the event encoded using a variation of [Unpadded
 Base64](/appendices#unpadded-base64) which replaces the 62nd and

@@ -1,0 +1,1 @@
+Guest accounts can now download/thumbnail media from the new authenticated endpoints, as per [MSC4189](https://github.com/matrix-org/matrix-spec-proposals/pull/4189).

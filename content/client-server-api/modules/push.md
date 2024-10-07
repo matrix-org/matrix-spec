@@ -184,11 +184,13 @@ they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
 `{ "set_tweak": "sound", "value": "default" }`.
 
-{{% boxes/note %}}
+###### Historical Actions
+
 Older versions of the Matrix specification included the `dont_notify` and
-`coalesce` actions. These should both be considered no-ops (ignored, not
-rejected) if received from a client.
-{{% /boxes/note %}}
+`coalesce` actions. Clients and homeservers MUST ignore these actions, for
+instance, by stripping them from actions arrays they encounter. This means,
+for example, that a rule with `["dont_notify"]` actions MUST be equivalent
+to a rule with an empty actions array.
 
 ##### Conditions
 
@@ -521,7 +523,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_is_user_mention"/> **`.m.rule.is_user_mention`**
+<a id="_m_rule_is_user_mention"></a> **`.m.rule.is_user_mention`**
 
 {{< added-in v="1.7" >}}
 
@@ -555,7 +557,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
+<a id="_m_rule_contains_display_name"></a> **`.m.rule.contains_display_name`**
 
 {{% changed-in v="1.7" %}}
 
@@ -590,7 +592,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_is_room_mention"/> **`.m.rule.is_room_mention`**
+<a id="_m_rule_is_room_mention"></a> **`.m.rule.is_room_mention`**
 
 {{< added-in v="1.7" >}}
 
@@ -624,7 +626,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
+<a id="_m_rule_roomnotif"></a> **`.m.rule.roomnotif`**
 
 {{% changed-in v="1.7" %}}
 
@@ -662,7 +664,7 @@ Definition:
 }
 ```
 
-**<a name="mruletombstone"></a>`.m.rule.tombstone`**
+**<a id="mruletombstone"></a>`.m.rule.tombstone`**
 
 Matches any state event whose type is `m.room.tombstone`. This is
 intended to notify users of a room when it is upgraded, similar to what
@@ -696,7 +698,7 @@ Definition:
 }
 ```
 
-**<a name="mrulereaction"></a>`.m.rule.reaction`**
+**<a id="mrulereaction"></a>`.m.rule.reaction`**
 
 {{% added-in v="1.7" %}}
 
@@ -776,7 +778,7 @@ Definition:
 
 ##### Default Content Rules
 
-<a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
+<a id="_m_rule_contains_user_name"></a> **`.m.rule.contains_user_name`**
 
 {{% changed-in v="1.7" %}}
 

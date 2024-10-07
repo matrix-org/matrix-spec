@@ -155,6 +155,7 @@
     {{ if eq $this_object.type "array" }}
         /* Add any nested objects referenced in this object's `items` */
         {{ if $this_object.items.anyOf }}
+            {{ $updated_schemas := slice }}
             {{ range $idx, $item := $this_object.items.anyOf }}
                 {{ $res := partial "get-additional-objects" (dict
                     "this_object" $item
@@ -163,7 +164,10 @@
                     "name" (printf "%s.items[%d]" $name $idx)
                 ) }}
                 {{ $all_objects = $res.objects }}
+                {{ $updated_schemas = $updated_schemas | append $res.schema }}
             {{ end }}
+            /* Update the top-level schema with the updated subschemas for the items */
+            {{ $this_object = merge $this_object (dict "items" (dict "anyOf" $updated_schemas)) }}
         {{ else if reflect.IsMap $this_object.items}}
             {{ $res := partial "get-additional-objects" (dict
                  "this_object" $this_object.items

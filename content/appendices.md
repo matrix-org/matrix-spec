@@ -556,7 +556,7 @@ The `domain` of a user ID is the [server name](#server-name) of the
 homeserver which allocated the account.
 
 The length of a user ID, including the `@` sigil and the domain, MUST
-NOT exceed 255 characters.
+NOT exceed 255 bytes.
 
 The complete grammar for a legal user ID is:
 
@@ -663,6 +663,9 @@ Room IDs are case-sensitive. They are not meant to be
 human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
+The length of a room ID, including the `!` sigil and the domain, MUST
+NOT exceed 255 bytes.
+
 #### Room Aliases
 
 A room may have zero or more aliases. A room alias has the format:
@@ -673,8 +676,8 @@ The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
 
-Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
-domain).
+The length of a room alias, including the `#` sigil and the domain, MUST
+NOT exceed 255 bytes.
 
 #### Event IDs
 
@@ -686,9 +689,11 @@ However, the precise format depends upon the [room version
 specification](/rooms): early room versions included a `domain` component,
 whereas more recent versions omit the domain and use a base64-encoded hash instead.
 
+In addition to the requirements of the room version, the length of an event ID,
+including the `$` sigil and the domain where present, MUST NOT exceed 255 bytes.
+
 Event IDs are case-sensitive. They are not meant to be human-readable. They are
 intended to be treated as fully opaque strings by clients.
-
 
 ### URIs
 

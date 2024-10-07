@@ -53,6 +53,18 @@ properties:
           description: |-
             Optional `mxc://` URI to provide an image/icon representing the IdP.
             Intended to be shown alongside the `name` if provided.
+
+            {{% boxes/note %}}
+            Clients SHOULD use the deprecated [`/download`](/client-server-api/#get_matrixmediav3downloadservernamemediaid)
+            and [`/thumbnail`](/client-server-api/#get_matrixmediav3thumbnailservernamemediaid)
+            endpoints to retrieve this media item because clients will not have
+            an access token they can authenticate with yet. Servers SHOULD ensure
+            media used for IdP icons is excluded from the freeze described by the
+            [Content Repository module's Client Behaviour section](/client-server-api/#content-repo-client-behaviour).
+
+            This may be addressed in the future with proposals like [MSC4148](https://github.com/matrix-org/matrix-spec-proposals/pull/4148),
+            or removed entirely through the transition to OIDC.
+            {{% /boxes/note %}}
           example: "mxc://example.org/abc123"
         brand:
           type: string

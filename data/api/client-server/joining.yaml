@@ -139,6 +139,32 @@ paths:
             type: string
         - in: query
           name: server_name
+          deprecated: true
+          x-changedInMatrixVersion:
+            "1.12": |-
+              This parameter has been deprecated in favour of `via` and will be removed in
+              a future version of the spec.
+
+              Clients SHOULD use `via` when the homeserver they're talking to supports it.
+              To do this, they MAY either detect server support through the supported spec
+              versions in [`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+              or always include both parameters with identical values.
+
+              Homeservers MUST ignore all `server_name` parameters if any `via` parameters
+              are supplied.
+          description: |-
+            The servers to attempt to join the room through. One of the servers
+            must be participating in the room.
+          example:
+            - matrix.org
+            - elsewhere.ca
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: via
+          x-addedInMatrixVersion: "1.12"
           description: |-
             The servers to attempt to join the room through. One of the servers
             must be participating in the room.

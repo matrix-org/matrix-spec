@@ -119,15 +119,18 @@ paths:
                   $ref: definitions/user_identifier.yaml
                 user:
                   type: string
+                  deprecated: true
                   description: The fully qualified user ID or just local part of the user ID, to
                     log in.  Deprecated in favour of `identifier`.
                 medium:
                   type: string
+                  deprecated: true
                   description: When logging in using a third-party identifier, the medium of the
                     identifier. Must be 'email'.  Deprecated in favour of
                     `identifier`.
                 address:
                   type: string
+                  deprecated: true
                   description: Third-party identifier for the user.  Deprecated in favour of
                     `identifier`.
                 password:
@@ -194,6 +197,7 @@ paths:
                     x-addedInMatrixVersion: "1.3"
                   home_server:
                     type: string
+                    deprecated: true
                     description: |-
                       The server_name of the homeserver on which the account has
                       been registered.

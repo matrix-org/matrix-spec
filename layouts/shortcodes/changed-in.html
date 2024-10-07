@@ -1,8 +1,9 @@
-{{ $ver := .Params.v }}
-{{ $this := .Params.this }}
+{{- $ver := .Params.v -}}
 
-{{ if $this }}
-  <span><strong>[Changed in this version]</strong></span>
-{{ else }}
+{{- with page.Params.version -}}
+  {{- if eq $ver . -}}
+    <span><strong>[Changed in this version]</strong></span>
+  {{- end -}}
+{{- else -}}
   <span><strong>[Changed in <code>v{{ $ver }}</code>]</strong></span>
-{{ end }} {{/* Do not leave an empty line at the end of this file otherwise the inline behaviour breaks. */}}
+{{- end -}}

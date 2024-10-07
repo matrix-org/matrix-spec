@@ -15,7 +15,7 @@
 # TODO: Change userid to user_id as a breaking change
 properties:
   userid:
-    description: A Matrix User ID represting a third-party user.
+    description: A Matrix User ID representing a third-party user.
     type: string
     example: "@_gitter_jim:matrix.org"
   protocol:

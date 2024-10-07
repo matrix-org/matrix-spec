@@ -1,0 +1,1 @@
+Additional keys in `GET /capabilities` don't have to be objects.

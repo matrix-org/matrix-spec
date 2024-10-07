@@ -41,6 +41,7 @@ properties:
           Olm event. For more details, see [Messaging Algorithms](/client-server-api/#messaging-algorithms).
       sender_key:
         type: string
+        deprecated: true
         x-changedInMatrixVersion:
           "1.3": |-
             Previously this field was required, however given it offers no additional
@@ -56,6 +57,7 @@ properties:
           for more information.
       device_id:
         type: string
+        deprecated: true
         x-changedInMatrixVersion:
           "1.3": |-
             Previously this field was required for Megolm messages, however given it
