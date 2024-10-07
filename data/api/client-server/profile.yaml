@@ -98,6 +98,20 @@ paths:
                   value: {
                     "displayname": "Alice Margatroid"
                   }
+        "403":
+          x-addedInMatrixVersion: "1.12"
+          description: The server is unwilling to disclose whether the user exists and/or
+            has a display name.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Profile lookup is disabled on this homeserver"
+                  }
         "404":
           description: There is no display name for this user or this user does not exist.
       tags:
@@ -185,6 +199,20 @@ paths:
                   value: {
                     "avatar_url": "mxc://matrix.org/SDGdghriugerRg"
                   }
+        "403":
+          x-addedInMatrixVersion: "1.12"
+          description: The server is unwilling to disclose whether the user exists and/or
+            has an avatar URL.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Profile lookup is disabled on this homeserver"
+                  }
         "404":
           description: There is no avatar URL for this user or this user does not exist.
       tags:
@@ -239,7 +267,7 @@ paths:
                 response:
                   value: {
                     "errcode": "M_FORBIDDEN",
-                    "error": "Profile lookup over federation is disabled on this homeserver"
+                    "error": "Profile lookup is disabled on this homeserver"
                   }
         "404":
           description: There is no profile information for this user or this user does not
