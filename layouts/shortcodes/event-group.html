@@ -14,20 +14,24 @@
 
 {{ $base_path := "event-schemas/schema" }}
 
-{{ $events := index .Site.Data "event-schemas" "schema" }}
 {{ $group_name := .Params.group_name }}
 
-{{ range $event_name, $event_data := $events }}
-
+{{/* Filter events and prepare them for sorting */}}
+{{ $events := slice }}
+{{ range $event_name, $event_data := index .Site.Data "event-schemas" "schema" }}
     {{ $prefix := substr $event_name 0 (len $group_name) }}
     {{ if eq $prefix $group_name }}
-
-        {{ $path := delimit (slice $base_path $event_name) "/" }}
-        {{ $event_data = partial "json-schema/resolve-refs" (dict "schema" $event_data "path" $path) }}
-        {{ $event_data := partial "json-schema/resolve-allof" $event_data }}
-
-        {{ partial "events/render-event" (dict "event_name" $event_name "event_data" $event_data)}}
-
+        {{ $events = $events | append (dict "event_name" $event_name "event_data" $event_data) }}
     {{ end }}
+{{ end }}
+
+{{/* Render the events sorted by x-weight or otherwise their event name */}}
+{{ range sort $events "event_data.x-weight" "event_name" }}
+
+    {{ $path := delimit (slice $base_path .event_name) "/" }}
+    {{ $event_data := partial "json-schema/resolve-refs" (dict "schema" .event_data "path" $path) }}
+    {{ $event_data := partial "json-schema/resolve-allof" $event_data }}
+
+    {{ partial "events/render-event" (dict "event_name" .event_name "event_data" $event_data)}}
 
 {{ end }}
