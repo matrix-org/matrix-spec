@@ -16,6 +16,71 @@ info:
   title: Matrix Client-Server Report Content API
   version: 1.0.0
 paths:
+  "/rooms/{roomId}/report":
+    post:
+      x-addedInMatrixVersion: "1.12"
+      summary: Report a room as inappropriate.
+      description: |-
+        Reports a room as inappropriate to the server, which may then notify
+        the appropriate people. How such information is delivered is left up to
+        implementations. The caller is not required to be joined to the room to
+        report it.
+      operationId: reportRoom
+      parameters:
+        - in: path
+          name: roomId
+          description: The room being reported.
+          required: true
+          example: "!637q39766251:example.com"
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "reason": "this makes me sad"
+              }
+              properties:
+                reason:
+                  type: string
+                  description: The reason the room is being reported.
+        required: true
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: The room has been reported successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "404":
+          description: |-
+            The room was not found on the homeserver.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "The room was not found."
+                  }
+        "429":
+          description: This request was rate-limited.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/rate_limited.yaml
+      tags:
+        - Reporting content
   "/rooms/{roomId}/report/{eventId}":
     post:
       summary: Report an event in a joined room as inappropriate.
@@ -29,7 +94,7 @@ paths:
         will require the homeserver to check whether a user is joined to
         the room. To combat this, homeserver implementations should add
         a random delay when generating a response.
-      operationId: reportContent
+      operationId: reportEvent
       parameters:
         - in: path
           name: roomId
@@ -62,7 +127,7 @@ paths:
                     and 0 is inoffensive.
                 reason:
                   type: string
-                  description: The reason the content is being reported. May be blank.
+                  description: The reason the content is being reported.
         required: true
       security:
         - accessTokenQuery: []
