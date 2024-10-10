@@ -98,12 +98,14 @@ paths:
           schema:
             type: string
         - in: query
-          name: searchFields
+          name: fields
           description: |-
             One or more custom fields to help identify the third-party
             location.
           schema:
-            type: string
+            type: object
+            additionalProperties:
+              type: string
       responses:
         "200":
           description: At least one portal room was found.
