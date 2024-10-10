@@ -14,6 +14,7 @@ description: |
   Note that, unlike `m.call.hangup`, this event has no `reason` field: the rejection of
   a call is always implicitly because the user chose not to answer it.
 x-addedInMatrixVersion: "1.7"
+x-weight: 30
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
