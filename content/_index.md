@@ -56,9 +56,6 @@ The principles that Matrix attempts to follow are:
         the global Matrix network
     -   Fully open standard - publicly documented standard with no IP or
         patent licensing encumbrances
-    -   Fully open source reference implementation - liberally-licensed
-        example implementations with no IP or patent licensing
-        encumbrances
 -   Empowering the end-user
     -   The user should be able to choose the server and clients they
         use
