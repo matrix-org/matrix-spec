@@ -19,7 +19,7 @@ that the user had read all events *up to* the referenced event. See the
 [Receiving notifications](#receiving-notifications) section for more
 information on how read receipts affect notification counts.
 
-{{< added-in v="1.4" >}} Read receipts exist in three major forms:
+{{% added-in v="1.4" %}} Read receipts exist in three major forms:
 * Unthreaded: Denotes a read-up-to receipt regardless of threads. This is how
   pre-threading read receipts worked.
 * Threaded, main timeline: Denotes a read-up-to receipt for events not in a

@@ -148,7 +148,7 @@ to send. The process overall is as follows:
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
         present a valid certificate for `<delegated_hostname>`.
-    3.  {{< added-in v="1.8" >}} If `<delegated_hostname>` is not an IP literal and no
+    3.  {{% added-in v="1.8" %}} If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
         `_matrix-fed._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
@@ -171,7 +171,7 @@ to send. The process overall is as follows:
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
 
-4.  {{< added-in v="1.8" >}} If the `/.well-known` request resulted in an error response, a server is
+4.  {{% added-in v="1.8" %}} If the `/.well-known` request resulted in an error response, a server is
     found by resolving an SRV record for `_matrix-fed._tcp.<hostname>`. This may
     result in a hostname (to be resolved using AAAA or A records) and
     port. Requests are made to the resolved IP address and port, with a `Host`
@@ -375,7 +375,7 @@ The authorization parameters to include are:
 
 - `origin`: the server name of the sending server. This is the same as the
   `origin` field from JSON described in step 1.
-- `destination`: {{< added-in v="1.3" >}} the server name of the receiving
+- `destination`: {{% added-in v="1.3" %}} the server name of the receiving
   server. This is the same as the `destination` field from the JSON described
   in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but MUST always send it. If this property

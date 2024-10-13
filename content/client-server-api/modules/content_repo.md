@@ -16,7 +16,7 @@ When serving content, the server SHOULD provide a
 `Content-Security-Policy` header. The recommended policy is
 `sandbox; default-src 'none'; script-src 'none'; plugin-types application/pdf; style-src 'unsafe-inline'; object-src 'self';`.
 
-{{< added-in v="1.4" >}} The server SHOULD additionally provide
+{{% added-in v="1.4" %}} The server SHOULD additionally provide
 `Cross-Origin-Resource-Policy: cross-origin` when serving content to allow
 (web) clients to access restricted APIs such as `SharedArrayBuffer` when
 interacting with the media repository.

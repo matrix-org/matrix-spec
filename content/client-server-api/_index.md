@@ -436,7 +436,7 @@ could mean one of four things:
 1. the access token was never valid.
 2. the access token has been logged out.
 3. the access token has been [soft logged out](#soft-logout).
-4. {{< added-in v="1.3" >}} the access token [needs to be refreshed](#refreshing-access-tokens).
+4. {{% added-in v="1.3" %}} the access token [needs to be refreshed](#refreshing-access-tokens).
 
 When a client receives an error code of `M_UNKNOWN_TOKEN`, it should:
 
@@ -1350,7 +1350,7 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
-{{< added-in v="1.7" >}} Already-authenticated clients can additionally generate
+{{% added-in v="1.7" %}} Already-authenticated clients can additionally generate
 a token for their user ID if supported by the homeserver using
 [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
 
@@ -2342,7 +2342,7 @@ The endpoints where the server *should* include bundled aggregations are:
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
-* {{< added-in v="1.4" >}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
+* {{% added-in v="1.4" %}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
 
 {{% boxes/note %}}
 The server is **not** required to return bundled aggregations on deprecated endpoints
