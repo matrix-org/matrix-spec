@@ -21,7 +21,7 @@ When serving content, the server SHOULD provide a
 (web) clients to access restricted APIs such as `SharedArrayBuffer` when
 interacting with the media repository.
 
-{{< changed-in v="1.11" >}} The unauthenticated download endpoints have been
+{{% changed-in v="1.11" %}} The unauthenticated download endpoints have been
 deprecated in favour of newer, authenticated, ones. This change includes updating
 the paths of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
 with the exception of the `/upload` and `/create` endpoints. The upload/create
@@ -44,7 +44,7 @@ mxc://<server-name>/<media-id>
 
 Clients can access the content repository using the following endpoints.
 
-{{< changed-in v="1.11" >}} A number of endpoints under the /_matrix/media hierarchy
+{{% changed-in v="1.11" %}} A number of endpoints under the /_matrix/media hierarchy
 have been deprecated and replaced with new endpoints which require authentication.
 The deprecated endpoints are marked in the section below.
 

@@ -55,7 +55,7 @@ for sending events:
 * [POST /rooms/{roomId}/leave](#post_matrixclientv3roomsroomidleave)
 * [PUT /rooms/{roomId}/send/{eventType}/{txnId}](#put_matrixclientv3roomsroomidsendeventtypetxnid)
 
-    * {{< changed-in v="1.2" >}} Guests can now send *any* event type rather than just `m.room.message` events.
+    * {{% changed-in v="1.2" %}} Guests can now send *any* event type rather than just `m.room.message` events.
 
 * {{% added-in v="1.2" %}} [PUT /rooms/{roomId}/state/{eventType}/{stateKey}](#put_matrixclientv3roomsroomidstateeventtypestatekey)
 * [PUT /sendToDevice/{eventType}/{txnId}](#put_matrixclientv3sendtodeviceeventtypetxnid)

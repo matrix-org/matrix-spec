@@ -1,7 +1,7 @@
 
 ### Receipts
 
-{{< changed-in v="1.4" >}} Added private read receipts.
+{{% changed-in v="1.4" %}} Added private read receipts.
 
 This module adds in support for receipts. These receipts are a form of
 acknowledgement of an event. This module defines the `m.read` receipt
@@ -31,7 +31,7 @@ Threaded read receipts are discussed in further detail [below](#threaded-read-re
 
 #### Events
 
-{{< changed-in v="1.4" >}} Each `user_id`, `receipt_type`, and categorisation
+{{% changed-in v="1.4" %}} Each `user_id`, `receipt_type`, and categorisation
 (unthreaded, or `thread_id`) tuple must be associated with only a single
 `event_id`.
 
@@ -39,7 +39,7 @@ Threaded read receipts are discussed in further detail [below](#threaded-read-re
 
 #### Client behaviour
 
-{{< changed-in v="1.4" >}} Altered to support threaded read receipts.
+{{% changed-in v="1.4" %}} Altered to support threaded read receipts.
 
 In `/sync`, receipts are listed under the `ephemeral` array of events
 for a given room. New receipts that come down the event streams are

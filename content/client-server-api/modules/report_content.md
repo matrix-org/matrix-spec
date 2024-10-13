@@ -21,7 +21,7 @@ rooms instead of individual events. Server administrators and safety teams
 should, therefore, be cautious not to shut down rooms that might otherwise
 be legitimate.
 
-{{< changed-in v="1.8" >}} When processing event reports, servers MUST
+{{% changed-in v="1.8" %}} When processing event reports, servers MUST
 verify that the reporting user is currently joined to the room the event
 is in before accepting a report.
 

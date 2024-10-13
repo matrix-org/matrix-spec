@@ -389,7 +389,7 @@ The authorization parameters to include are:
 Unknown parameters are ignored.
 
 {{% boxes/note %}}
-{{< changed-in v="1.11" >}}
+{{% changed-in v="1.11" %}}
 This section used to reference [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
 and [RFC 7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
 were obsoleted by RFC 9110 without changes to the sections of interest here.
@@ -1204,7 +1204,7 @@ Servers MUST use the server described in the [Matrix Content URI](/client-server
 Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
 `ServerName` using the below endpoints.
 
-{{< changed-in v="1.11" >}} Servers were previously advised to use the `/_matrix/media/*`
+{{% changed-in v="1.11" %}} Servers were previously advised to use the `/_matrix/media/*`
 endpoints described by the [Content Repository module in the Client-Server API](/client-server-api/#content-repository),
 however, those endpoints have been deprecated. New endpoints are introduced which
 require authentication. Naturally, as a server is not a user, they cannot provide
