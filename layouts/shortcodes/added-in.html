@@ -2,8 +2,8 @@
 
 {{- with page.Params.version -}}
   {{- if eq $ver . -}}
-    <span><strong>[New in this version]</strong></span>
+    <strong>[New in this version]</strong>
   {{- end -}}
 {{- else -}}
-  <span><strong>[Added in <code>v{{ $ver }}</code>]</strong></span>
+  <strong>[Added in <code>v{{ $ver }}</code>]</strong>
 {{- end -}}
