@@ -387,6 +387,11 @@ footer {
       border-top: 1px $table-border-color solid;
     }
 
+    td > p:last-child {
+      // Avoid unnecessary space at the bottom of the cells.
+      margin-bottom: 0;
+    }
+
     &.object-table, &.response-table, &.content-type-table {
         border: 1px $table-border-color solid;
 
