@@ -1204,7 +1204,6 @@ Servers MUST use the server described in the [Matrix Content URI](/client-server
 Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
 `ServerName` using the below endpoints.
 
-{{% boxes/added-in-paragraph %}}
 {{< changed-in v="1.11" >}} Servers were previously advised to use the `/_matrix/media/*`
 endpoints described by the [Content Repository module in the Client-Server API](/client-server-api/#content-repository),
 however, those endpoints have been deprecated. New endpoints are introduced which
@@ -1213,7 +1212,6 @@ the required access token to those endpoints. Instead, servers MUST try the endp
 described below before falling back to the deprecated `/_matrix/media/*` endpoints
 when they receive a `404 M_UNRECOGNIZED` error. When falling back, servers MUST
 be sure to set `allow_remote` to `false`.
-{{% /boxes/added-in-paragraph %}}
 
 {{% http-api spec="server-server" api="content_repository" %}}
 
