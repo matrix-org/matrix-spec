@@ -25,8 +25,8 @@
     {{ end }}
 {{ end }}
 
-{{/* Render the events sorted by x-weight or otherwise their event name */}}
-{{ range sort $events "event_data.x-weight" "event_name" }}
+{{/* Render the events sorted by x-weight */}}
+{{ range sort $events "event_data.x-weight" }}
 
     {{ $path := delimit (slice $base_path .event_name) "/" }}
     {{ $event_data := partial "json-schema/resolve-refs" (dict "schema" .event_data "path" $path) }}

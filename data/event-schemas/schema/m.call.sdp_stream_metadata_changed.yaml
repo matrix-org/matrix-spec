@@ -1,6 +1,6 @@
 type: object
 x-addedInMatrixVersion: "1.11"
-x-weight: 60
+x-weight: 70
 description: |-
   This event is sent by callers when they wish to update a stream's metadata
   but no negotiation is required.

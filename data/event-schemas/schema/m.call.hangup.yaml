@@ -21,7 +21,7 @@ description: |
       the new call unless the user had specifically chosen to do so.
    * `unknown_error`: Some other failure occurred that meant the client was unable to continue the call
       rather than the user choosing to end it.
-x-weight: 70
+x-weight: 80
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
