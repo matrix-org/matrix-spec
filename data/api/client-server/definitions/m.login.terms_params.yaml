@@ -50,6 +50,7 @@ properties:
               arbitrary string with no specified maximum length.
           url:
             type: string
+            format: uri
             description: |
               A link to the text of this document, in the appropriate
               language. MUST be a valid URI with scheme `https://` or
