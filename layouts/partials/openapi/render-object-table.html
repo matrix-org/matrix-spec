@@ -157,7 +157,7 @@ resolve-additional-types.)
 
         {{/* If the string uses a known format, use it. */}}
         {{ with .format }}
-            {{ with partial "custom-format" . }}
+            {{ with partial "string-format" . }}
                 {{ $type = . }}
             {{ end }}
         {{ end }}
@@ -264,7 +264,7 @@ resolve-additional-types.)
         {{ range $formatId, $formatType := $formatMap.Values }}
             {{ $formatKey := "string" }}
             {{ if ne $formatId "string" }}
-                {{ with partial "custom-format" $formatId }}
+                {{ with partial "string-format" $formatId }}
                     {{ $formatKey = . }}
                 {{ else }}
                     {{ errorf "Unsupported value for `x-pattern-format`: %s" $formatId }}
@@ -319,12 +319,12 @@ resolve-additional-types.)
     Computes the type to display for a string format, given the identifier of
     the format as a string.
 */}} 
-{{ define "partials/custom-format" }}
-  {{ $customFormat := "" }}
+{{ define "partials/string-format" }}
+  {{ $stringFormat := "" }}
 
-  {{ with index site.Data "custom-formats" . }}
-    {{ $customFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
+  {{ with index site.Data "string-formats" . }}
+    {{ $stringFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
   {{ end }}
 
-  {{ return $customFormat }}
+  {{ return $stringFormat }}
 {{ end }}
