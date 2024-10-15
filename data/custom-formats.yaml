@@ -50,4 +50,7 @@ mx-mxc-uri:
 uri:
   title: URI
   url: http://tools.ietf.org/html/rfc3986
-  # no regex
+
+email:
+  title: Email Address
+  url: https://datatracker.ietf.org/doc/html/rfc5321#section-4.1.2
