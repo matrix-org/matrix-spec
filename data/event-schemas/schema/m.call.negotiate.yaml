@@ -34,6 +34,7 @@ description: |
   attempt to validate the `type` field, but simply pass the object into the
   WebRTC API.
 x-addedInMatrixVersion: "1.7"
+x-weight: 60
 allOf:
 - "$ref": core-event-schema/room_event.yaml
 properties:
