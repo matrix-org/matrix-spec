@@ -30,7 +30,7 @@ server:
 1.  Checks that the user has permission to send `m.room.tombstone`
     events in the room.
 
-2.  {{< changed-in v="1.4" >}} Creates a replacement room with a `m.room.create` event containing a
+2.  {{% changed-in v="1.4" %}} Creates a replacement room with a `m.room.create` event containing a
     `predecessor` field, the applicable `room_version`, and a `type` field
     which is copied from the `predecessor` room. If no `type` is set on the
     previous room, no `type` is specified on the new room's create event

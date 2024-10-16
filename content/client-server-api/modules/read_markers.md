@@ -29,7 +29,7 @@ The client cannot update fully read markers by directly modifying the
 `m.fully_read` account data event. Instead, the client must make use of
 the read markers API to change the values.
 
-{{< changed-in v="1.4" >}} `m.read.private` receipts can now be sent from
+{{% changed-in v="1.4" %}} `m.read.private` receipts can now be sent from
 `/read_markers`.
 
 The read markers API can additionally update the user's read receipt

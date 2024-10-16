@@ -525,7 +525,7 @@ Definition:
 
 <a id="_m_rule_is_user_mention"></a> **`.m.rule.is_user_mention`**
 
-{{< added-in v="1.7" >}}
+{{% added-in v="1.7" %}}
 
 Matches any message which contains the user's Matrix ID in the list of `user_ids`
 under the `m.mentions` property.
@@ -594,7 +594,7 @@ Definition:
 
 <a id="_m_rule_is_room_mention"></a> **`.m.rule.is_room_mention`**
 
-{{< added-in v="1.7" >}}
+{{% added-in v="1.7" %}}
 
 Matches any message from a sender with the proper power level with the `room`
 property of the `m.mentions` property set to `true`.
@@ -1072,7 +1072,7 @@ ahead), however if the `m.read.private` receipt were to be updated to
 event D then the user has read up to D (the `m.read` receipt is now
 behind the `m.read.private` receipt).
 
-{{< added-in v="1.4" >}} When handling threaded read receipts, the server is to
+{{% added-in v="1.4" %}} When handling threaded read receipts, the server is to
 partition the notification count to each thread (with the main timeline being
 its own thread). To determine if an event is part of a thread the server follows
 the [event relationship](#forming-relationships-between-events) until it finds a

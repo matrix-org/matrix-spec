@@ -229,7 +229,7 @@ paths:
         {{% /boxes/note %}}
 
         {{% boxes/warning %}}
-        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        {{% changed-in v="1.11" %}} This endpoint MAY return `404 M_NOT_FOUND`
         for media which exists, but is after the server froze unauthenticated
         media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
         information.
@@ -303,7 +303,7 @@ paths:
         provided by the caller.
 
         {{% boxes/warning %}}
-        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        {{% changed-in v="1.11" %}} This endpoint MAY return `404 M_NOT_FOUND`
         for media which exists, but is after the server froze unauthenticated
         media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
         information.
@@ -375,7 +375,7 @@ paths:
         See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
 
         {{% boxes/warning %}}
-        {{< changed-in v="1.11" >}} This endpoint MAY return `404 M_NOT_FOUND`
+        {{% changed-in v="1.11" %}} This endpoint MAY return `404 M_NOT_FOUND`
         for media which exists, but is after the server froze unauthenticated
         media access. See [Client Behaviour](/client-server-api/#content-repo-client-behaviour) for more
         information.
