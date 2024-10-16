@@ -172,6 +172,8 @@ paths:
                 properties:
                   user_id:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                     description: The fully-qualified Matrix ID for the account.
                   access_token:
                     type: string
@@ -197,6 +199,7 @@ paths:
                     x-addedInMatrixVersion: "1.3"
                   home_server:
                     type: string
+                    format: mx-server-name
                     deprecated: true
                     description: |-
                       The server_name of the homeserver on which the account has
