@@ -1,10 +1,6 @@
 baseURL = "/"
 title = "Matrix Specification"
 
-# Prepends absolute URLs with the baseURL. Useful when hosting on non-root
-# paths, such as /unstable.
-canonifyURLs = true
-
 enableRobotsTXT = true
 
 # We disable RSS, because (a) it's useless, (b) Hugo seems to generate broken
