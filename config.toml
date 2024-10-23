@@ -138,6 +138,15 @@ sidebar_menu_compact = true
   [[module.imports]]
     path = "github.com/matrix-org/docsy"
     disable = false
+  # Mounting /assets and /static as assets directories helps Hugo to generate
+  # the correct URL.
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    source = 'static'
+    target = 'assets'
+
 
 # custom output formats
 
