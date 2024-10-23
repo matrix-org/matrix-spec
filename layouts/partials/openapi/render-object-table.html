@@ -335,7 +335,7 @@ resolve-additional-types.)
   {{ $stringFormat := "" }}
 
   {{ with index site.Data "string-formats" . }}
-    {{ $stringFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url) (htmlEscape .title) }}
+    {{ $stringFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url | relURL) (htmlEscape .title) }}
   {{ end }}
 
   {{ return $stringFormat }}
