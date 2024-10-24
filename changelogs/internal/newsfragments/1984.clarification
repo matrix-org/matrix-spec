@@ -1,0 +1,1 @@
+Fix relative URLs when serving the specification with a custom `baseURL`.
