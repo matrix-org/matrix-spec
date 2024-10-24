@@ -1,4 +1,9 @@
 name: "Spec"
+
+env:
+  # Cannot build the spec with Hugo 0.125.0 and docsy < 0.10.0 because of https://github.com/google/docsy/issues/1930
+  HUGO_VERSION: 0.124.1
+
 on:
   push:
     branches:
@@ -193,7 +198,7 @@ jobs:
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
-          hugo-version: '0.117.0'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
@@ -270,8 +275,7 @@ jobs:
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
-          # Cannot build the spec with Hugo 0.125.0 because of https://github.com/google/docsy/issues/1930
-          hugo-version: '0.124.1'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
