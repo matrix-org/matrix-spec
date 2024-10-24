@@ -18,7 +18,8 @@ properties:
         type: string
       type:
         description: |-
-          Optional [room type](#types) to denote a room's intended function outside of traditional conversation.
+          Optional [room type](/client-server-api/#types) to denote a room's intended function outside of traditional
+          conversation.
 
           Unspecified room types are possible using [Namespaced Identifiers](/appendices/#common-namespaced-identifier-grammar).
         type: string

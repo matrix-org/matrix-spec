@@ -21,8 +21,8 @@ allOf:
       The format used to encode a Megolm session key for export.
 
       This is similar to the format before encryption used for the session keys
-      in [Server-side key backups](#server-side-key-backups) but adds the
-      `room_id` and `session_id` fields.
+      in [Server-side key backups](/client-server-api/#server-side-key-backups)
+      but adds the `room_id` and `session_id` fields.
     properties:
       room_id:
         type: string

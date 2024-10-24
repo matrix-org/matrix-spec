@@ -4,7 +4,7 @@ allOf:
 
 description: |-
   This event type is used to forward keys for end-to-end encryption.
-  It is encrypted as an `m.room.encrypted` event using [Olm](#molmv1curve25519-aes-sha2),
+  It is encrypted as an `m.room.encrypted` event using [Olm](/client-server-api/#molmv1curve25519-aes-sha2),
   then sent as a [to-device](/client-server-api/#send-to-device-messaging) event.
 properties:
   content:

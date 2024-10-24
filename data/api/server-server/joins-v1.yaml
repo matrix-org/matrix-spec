@@ -155,7 +155,7 @@ paths:
             The request is invalid, the room the server is attempting
             to join has a version that is not listed in the `ver`
             parameters, or the server was unable to validate
-            [restricted room conditions](#restricted-rooms).
+            [restricted room conditions](/server-server-api/#restricted-rooms).
 
             The error should be passed through to clients so that they
             may give better feedback to users.

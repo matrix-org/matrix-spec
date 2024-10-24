@@ -57,9 +57,9 @@ paths:
                     x-addedInMatrixVersion: "1.2"
                     type: boolean
                     description: |-
-                      When `true`, the user is a [Guest User](#guest-access). When
-                      not present or `false`, the user is presumed to be a non-guest
-                      user.
+                      When `true`, the user is a [Guest User](/client-server-api/#guest-access).
+                      When not present or `false`, the user is presumed to be a 
+                      non-guest user.
               examples:
                 response:
                   value: {

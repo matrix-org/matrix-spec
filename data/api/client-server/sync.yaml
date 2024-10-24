@@ -223,8 +223,8 @@ paths:
                                   The new ephemeral events in the room (events that
                                   aren't recorded in the timeline or state of the
                                   room). In this version of the spec, these are
-                                  [typing notification](#typing-notifications) and
-                                  [read receipt](#receipts) events.
+                                  [typing notification](/client-server-api/#typing-notifications)
+                                  and [read receipt](/client-server-api/#receipts) events.
                                 allOf:
                                   - $ref: definitions/event_batch.yaml
                               account_data:
@@ -245,7 +245,7 @@ paths:
 
                                   If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
                                   these counts will only be for the main timeline rather than all events in the room.
-                                  See the [threading module](#threading) for more information.
+                                  See the [threading module](/client-server-api/#threading) for more information.
                                 x-changedInMatrixVersion:
                                   "1.4": |
                                     Updated to reflect behaviour of having `unread_thread_notifications` as `true` in
@@ -265,8 +265,8 @@ paths:
                                 type: object
                                 description: |-
                                   If `unread_thread_notifications` was specified as `true` on the `RoomEventFilter`,
-                                  the notification counts for each [thread](#threading) in this room. The object is
-                                  keyed by thread root ID, with values matching `unread_notifications`.
+                                  the notification counts for each [thread](/client-server-api/#threading) in this room.
+                                  The object is keyed by thread root ID, with values matching `unread_notifications`.
 
                                   If a thread does not have any notifications it can be omitted from this object. If
                                   no threads have notification counts, this whole object can be omitted.
@@ -302,12 +302,13 @@ paths:
                                 title: InviteState
                                 type: object
                                 description: |-
-                                  The [stripped state](#stripped-state) of a room that the user has been invited
-                                  to.
+                                  The [stripped state](/client-server-api/#stripped-state) of a room that the user has
+                                  been invited to.
                                 properties:
                                   events:
-                                    description: The [stripped state events](#stripped-state) that form the invite
-                                      state.
+                                    description: |-
+                                      The [stripped state events](/client-server-api/#stripped-state) that form the
+                                      invite state.
                                     items:
                                       $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
                                     type: array
@@ -325,12 +326,14 @@ paths:
                               knock_state:
                                 title: KnockState
                                 type: object
-                                description: The [stripped state](#stripped-state) of a room that the user has
+                                description: |-
+                                  The [stripped state](/client-server-api/#stripped-state) of a room that the user has
                                   knocked upon.
                                 properties:
                                   events:
-                                    description: The [stripped state events](#stripped-state) that form the knock
-                                      state.
+                                    description: |-
+                                      The [stripped state events](/client-server-api/#stripped-state) that form the
+                                      knock state.
                                     items:
                                       $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
                                     type: array

@@ -216,8 +216,8 @@ paths:
         using the `origin_server_ts` property, whether the returned event is
         closer to the requested timestamp than the closest event that it could
         find locally.  If so, it should try to backfill this event via the
-        [`/event/{event_id}`](#get_matrixfederationv1eventeventid) endpoint so
-        that it is available to for a client to query.
+        [`/event/{event_id}`](/server-server-api/#get_matrixfederationv1eventeventid)
+        endpoint so that it is available to for a client to query.
       operationId: getEventByTimestamp
       security:
         - accessToken: []

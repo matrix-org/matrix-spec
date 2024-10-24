@@ -1,7 +1,7 @@
 ---
 allOf:
   - $ref: core-event-schema/state_event.yaml
-description: Defines the relationship of a child room to a space-room. Has no effect in rooms which are not [spaces](#spaces).
+description: Defines the relationship of a child room to a space-room. Has no effect in rooms which are not [spaces](/client-server-api/#spaces).
 properties:
   content:
     properties:

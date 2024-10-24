@@ -23,7 +23,7 @@ paths:
         connection works.
       description: |-
         This API asks the homeserver to call the
-        [`/_matrix/app/v1/ping`](#post_matrixappv1ping) endpoint on the
+        [`/_matrix/app/v1/ping`](/application-service-api/#post_matrixappv1ping) endpoint on the
         application service to ensure that the homeserver can communicate
         with the application service.
 
@@ -71,7 +71,7 @@ paths:
                     type: integer
                     description: |-
                       The duration in milliseconds that the
-                      [`/_matrix/app/v1/ping`](#post_matrixappv1ping)
+                      [`/_matrix/app/v1/ping`](/application-service-api/#post_matrixappv1ping)
                       request took from the homeserver's point of view.
                 required:
                   - duration_ms
