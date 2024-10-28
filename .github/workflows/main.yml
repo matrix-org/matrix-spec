@@ -255,7 +255,7 @@ jobs:
       - name: "Run htmltest"
         uses: wjdp/htmltest-action@master
         with:
-          config: .htmltest.yaml
+          config: .htmltest.yml
 
   build-historical-spec:
     name: "📖 Build the historical backup spec"
