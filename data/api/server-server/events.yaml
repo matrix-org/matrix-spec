@@ -142,7 +142,7 @@ paths:
                   - pdu_ids
         "403":
           description: |-
-            The host is not in the room or the host is banned from the room via its ACL.
+            The requesting host is not in the room, or is excluded from the room via `m.room.server_acl`.
           content:
             application/json:
               schema:
