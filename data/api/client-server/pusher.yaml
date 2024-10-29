@@ -215,7 +215,7 @@ paths:
                     If `kind` is `http`, this MUST contain `url` which is the URL
                     to use for sending notifications. Clients MAY use this object
                     to pass custom data to their push gateway. Servers MUST forward
-                    the entire content including any custom keys but excluding `url`
+                    the entire content including `format` and any custom keys but excluding `url`
                     when calling [`/_matrix/push/v1/notify`](/push-gateway-api/#post_matrixpushv1notify).
                   title: PusherData
                   properties:
