@@ -310,7 +310,7 @@ resolve-additional-types.)
     {{ $description := .property.description -}}
     {{ if .required -}}
         {{/*
-          Concatenate "Required:" to make it part of the first paragraph of the
+          Prepend "Required:" to make it part of the first paragraph of the
           description.
         */}}
         {{- $description = printf "<strong>Required: </strong>%s" $description -}}
