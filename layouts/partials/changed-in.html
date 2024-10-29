@@ -6,9 +6,10 @@
     version -> details pairs.
 */ -}}
 {{ range $ver, $details := .changes_dict -}}
-    <br><br>
+  <p>
     <strong>
       Changed in <code>v{{ $ver }}</code>:
     </strong>
     {{ $details | markdownify }}
-{{ end }}
+  </p>
+{{ end -}}

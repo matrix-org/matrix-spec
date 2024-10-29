@@ -306,9 +306,21 @@ resolve-additional-types.)
       * `x-changedInMatrixVersion`: optional string indicating in which Matrix
         spec version this property was last changed.
 */}}
-{{ define "partials/property-description" }}
-    {{ if .required }}<strong>Required: </strong>{{end -}}
-    {{ .property.description | markdownify -}}
+{{ define "partials/property-description" -}}
+    {{ $description := .property.description -}}
+    {{ if .required -}}
+        {{/*
+          Prepend "Required:" to make it part of the first paragraph of the
+          description.
+        */}}
+        {{- $description = printf "<strong>Required: </strong>%s" $description -}}
+    {{ end -}}
+    {{/*
+      Force the rendering as a block so the description is always inside a
+      paragraph. This allows to always keep the same spacing between paragraphs
+      when adding added-in and changed-in paragraphs.
+    */}}
+    {{ $description | page.RenderString (dict "display" "block") -}}
     {{ if .property.enum }}<p>One of: <code>[{{ delimit .property.enum ", " }}]</code>.</p>{{ end -}}
     {{ if (index .property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index .property "x-addedInMatrixVersion")) }}{{ end -}}
     {{ if (index .property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index .property "x-changedInMatrixVersion")) }}{{ end -}}
