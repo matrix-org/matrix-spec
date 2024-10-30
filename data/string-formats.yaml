@@ -13,8 +13,11 @@
 # limitations under the License.
 
 # This file contains the list of string formats supported for the `format` key
-# and the `x-pattern-format` extension (see `openapi_extensions.md` for more
-# details).
+# and the `x-pattern-format` extension within JSON Schema objects in the
+# OpenAPI documents within the Matrix Specification. See
+# `openapi_extensions.md` [1] for more details.
+#
+# [1]: https://github.com/matrix-org/matrix-spec/blob/main/openapi_extensions.md#custom-x-pattern-format-key-and-custom-formats
 #
 # Custom formats defined in the Matrix specification should always use the `mx-`
 # prefix. They should link to the section containing the definition of the
