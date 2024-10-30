@@ -1,1 +1,1 @@
-Always use `%` delimiter for `added-in` and `changed-in` shortcodes.
+Fix formatting of `added-in` and `changed-in` shortcodes by using `%` delimiter.
