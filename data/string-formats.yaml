@@ -12,15 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file contains the list of custom formats supported for the `format` key
-# and the `x-pattern-format` extension (see `openapi_extensions.md` for more
-# details).
+# This file contains the list of string formats supported for the `format` key
+# and the `x-pattern-format` extension within JSON Schema objects in the
+# OpenAPI documents within the Matrix Specification. See
+# `openapi_extensions.md` [1] for more details.
 #
-# Each entry must use the `mx-` prefix and have the form:
+# [1]: https://github.com/matrix-org/matrix-spec/blob/main/openapi_extensions.md#custom-x-pattern-format-key-and-custom-formats
 #
-# mx-custom-key:
+# Custom formats defined in the Matrix specification should always use the `mx-`
+# prefix. They should link to the section containing the definition of the
+# format in the spec.
+#
+# Formats that are already supported in the JSON Schema specification should
+# link to the RFC where they are defined, and should not use a regex to allow
+# tools that recognize the format to validate it properly.
+# See <https://json-schema.org/understanding-json-schema/reference/string#built-in-formats>.
+#
+# All entries have the form:
+#
+# key:
 #   title: The title rendered in the specification
 #   url: /url/to#definition
+#   # regex: A regex that can be used to validate the custom format if possible.
+#            It should be used as the `pattern` of the string.
 
 mx-user-id:
   title: User ID
@@ -49,5 +63,4 @@ mx-mxc-uri:
 
 uri:
   title: URI
-  url: http://tools.ietf.org/html/rfc3986
-  # no regex
+  url: https://datatracker.ietf.org/doc/html/rfc3986
