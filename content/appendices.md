@@ -761,7 +761,7 @@ wish to consider handling them as `u`, `r`, and `e` respectively.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-{{< changed-in v="1.11" >}}
+{{% changed-in v="1.11" %}}
 Referencing event IDs within a room identified by room alias (`r`) rather than room ID
 (`roomid`) is now deprecated.  We are not aware of these ever having been used in
 practice, and are nonsensical given room aliases are mutable.
@@ -858,7 +858,7 @@ Examples of matrix.to URIs are:
 * Link to `@alice:example.org`: `https://matrix.to/#/%40alice%3Aexample.org`
 
 {{% boxes/note %}}
-{{< changed-in v="1.11" >}}
+{{% changed-in v="1.11" %}}
 Referencing event IDs within a room identified by room alias rather than room ID
 is now deprecated.  We are not aware of these ever having been used in
 practice, and are nonsensical given room aliases are mutable.

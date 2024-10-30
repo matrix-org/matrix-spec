@@ -3,6 +3,7 @@ description: |-
   This event is sent by callers after sending an invite and by the callee after
   answering. Its purpose is to give the other party additional ICE candidates to
   try using to communicate.
+x-weight: 20
 allOf:
   - $ref: core-event-schema/room_event.yaml
 properties:
