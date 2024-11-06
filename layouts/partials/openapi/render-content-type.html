@@ -21,7 +21,12 @@
  <tr>
   <td><code>{{ $mime }}</code></td>
   <td>
-   {{ $body.schema.description | markdownify -}}
+   {{/*
+     Force the rendering as a block so the description is always inside a
+     paragraph. This allows to always keep the same spacing between paragraphs
+     when adding added-in and changed-in paragraphs.
+   */}}
+   {{ $body.schema.description | page.RenderString (dict "display" "block") -}}
    {{ if (index $body.schema "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $body.schema "x-addedInMatrixVersion")) }}{{ end -}}
    {{ if (index $body.schema "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $body.schema "x-changedInMatrixVersion")) }}{{ end -}}
   </td>

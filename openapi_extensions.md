@@ -39,5 +39,10 @@ is a property to convey semantic information about a schema. We define
 `x-pattern-format` as a key on the schemas under `patternProperties` with the
 same use as `format`, but that applies to the pattern of the property. We also
 define custom values for formats with the `mx-` prefix in
-`data/custom-formats.yaml`. Those values are recognized in the rendered
-specification and link to the definition of the format.
+`data/string-formats.yaml`. The values in this file are recognized in the
+rendered specification and link to the definition of the format.
+
+## Custom `x-weight` key
+
+This property allows controlling the display order of events rendered with the
+`event-group` shortcode.

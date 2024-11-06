@@ -1,0 +1,1 @@
+Add 403 error response to `/_matrix/federation/v1/state_ids/{roomId}`.
