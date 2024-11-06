@@ -1,0 +1,1 @@
+Fix formatting of `added-in` and `changed-in` shortcodes by using `%` delimiter.

@@ -1,0 +1,1 @@
+Clarify that servers must forward custom keys in `PusherData` when sending notifications to the push gateway.

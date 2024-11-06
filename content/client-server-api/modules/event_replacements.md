@@ -188,7 +188,7 @@ replacement event.
 
 ##### Server-side aggregation of `m.replace` relationships
 
-{{< changed-in v="1.7" >}}
+{{% changed-in v="1.7" %}}
 
 Note that there can be multiple events with an `m.replace` relationship to a
 given event (for example, if an event is edited multiple times). These should

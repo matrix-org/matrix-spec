@@ -140,6 +140,19 @@ paths:
                 required:
                   - auth_chain_ids
                   - pdu_ids
+        "403":
+          description: |-
+            The requesting host is not in the room, or is excluded from the room via `m.room.server_acl`.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You do not have permission to access the state at the requested event."
+                  }
         "404":
           description: |-
             The given `event_id` was not found or the server doesn't know about the state at
