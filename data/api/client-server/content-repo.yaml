@@ -126,6 +126,25 @@ paths:
                     "errcode": "M_FORBIDDEN",
                     "error": "Cannot upload this content"
                   }
+        "404":
+          description: |-
+            The user has provided an invalid MXC ID. Some reasons for this error include:
+
+            - The MXC ID was not created with [POST /_matrix/media/v1/create](/client-server-api/#post_matrixmediav1create).
+            - The MXC ID has expired.
+
+            A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_NOT_FOUND`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Unknown media ID"
+                  }
         "409":
           description: |-
             The endpoint was called with a media ID that already has content. A
