@@ -36,7 +36,7 @@ paths:
         therefore do not require duplicate suppression.
 
         Clients interested in receiving notifications via this endpoint MUST
-        configure its concrete URL when creating the associated pusher via
+        configure its full URI when creating the associated pusher via
         [`/_matrix/client/v3/pushers/set`](/client-server-api/#post_matrixclientv3pushersset).
       operationId: notify
       requestBody:
