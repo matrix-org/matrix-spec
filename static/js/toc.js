@@ -15,18 +15,122 @@ limitations under the License.
 */
 
 /*
-Set a new ToC entry.
-Clear any previously highlighted ToC items, set the new one,
-and adjust the ToC scroll position.
+  Only call the given function once every 250 milliseconds to avoid impacting
+  the performance of the browser.
+  Source: https://remysharp.com/2010/07/21/throttling-function-calls
 */
-function setTocEntry(newEntry) {
-  const activeEntries = document.querySelectorAll("#toc a.active");
+function throttle(fn) {
+  const threshold = 250;
+  let last = null;
+  let deferTimer = null;
+
+  return function (...args) {
+    const now = new Date();
+
+    if (last && now < last + threshold) {
+      // Hold on to it.
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(() => {
+        last = now;
+        fn.apply(this, args);
+      }, threshold);
+    } else {
+      last = now;
+      fn.apply(this, args);
+    }
+  }
+}
+
+/*
+  Get the list of headings that appear in the ToC.
+  This is not as simple as querying all the headings in the content, because
+  some headings are not rendered in the ToC (e.g. in the endpoint definitions).
+*/
+function getHeadings() {
+  let headings = [];
+
+  // First get the anchors in the ToC.
+  const toc_anchors = document.querySelectorAll("#toc nav a");
+
+  for (const anchor of toc_anchors) {
+    // Then get the heading from its selector in the anchor's href.
+    const selector = anchor.getAttribute("href");
+    if (!selector) {
+      console.error("Got ToC anchor without href");
+      continue;
+    }
+    
+    const heading = document.querySelector(selector);
+    if (!heading) {
+      console.error("Heading not found for selector:", selector);
+      continue;
+    }
+
+    headings.push(heading);
+  }
+
+  return headings;
+}
+
+/*
+  Get the heading of the text visible at the top of the viewport.
+  This is the first heading above or at the top of the viewport.
+*/
+function getCurrentHeading(headings, headerOffset) {
+  const scrollTop = document.documentElement.scrollTop;
+  let prevHeading = null;
+  let currentHeading = null;
+  let index = 0;
+
+  for (const heading of headings) {
+    // Compute the position compared to the viewport.
+    const rect = heading.getBoundingClientRect();
+
+    if (rect.top >= headerOffset && rect.top <= headerOffset + 30) {
+      // This heading is at the top of the viewport, this is the current heading.
+      currentHeading = heading;
+      break;
+    }
+    if (rect.top >= headerOffset) {
+      // This is in or below the viewport, the current heading should be the
+      // previous one.
+      if (prevHeading) {
+        currentHeading = prevHeading;
+      } else {
+        // The first heading does not have a prevHeading.
+        currentHeading = heading;
+      }
+      break;
+    }
+
+    prevHeading = heading;
+    index += 1;
+  }
+
+  return currentHeading;
+}
+
+/*
+  Select the ToC entry that points to the given ID.
+  Clear any previously highlighted ToC items, select the new one,
+  and adjust the ToC scroll position.
+*/
+function selectTocEntry(id) {
+  // Deselect previously selected entries.
+  const activeEntries = document.querySelectorAll("#toc nav a.active");
   for (const activeEntry of activeEntries) {
     activeEntry.classList.remove('active');
   }
 
+  // Find the new entry and select it.
+  const newEntry = document.querySelector(`#toc nav a[href="#${id}"]`);
+  if (!newEntry) {
+    console.error("ToC entry not found for ID:", id);
+    return;
+  }
   newEntry.classList.add('active');
-  // don't scroll the sidebar nav if the main content is not scrolled
+
+  // Don't scroll the sidebar nav if the main content is not scrolled
   const nav = document.querySelector("#td-section-nav");
   const content = document.querySelector("html");
   if (content.scrollTop !== 0) {
@@ -37,115 +141,24 @@ function setTocEntry(newEntry) {
 }
 
 /*
-Test whether a node is in the viewport
-*/
-function isInViewport(node) {
-  const rect = node.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-}
-
-/*
-The callback we pass to the IntersectionObserver constructor.
-
-Called when any of our observed nodes starts or stops intersecting
-with the viewport.
-*/
-function handleIntersectionUpdate(entries) {
-
-  /*
-  Special case: If the current URL hash matches a ToC entry, and
-  the corresponding heading is visible in the viewport, then that is
-  made the current ToC entry, and we don't even look at the intersection
-  observer data.
-  This means that if the user has clicked on a ToC entry,
-  we won't unselect it through the intersection observer.
-  */
-  const hash = document.location.hash;
-  if (hash) {
-    let tocEntryForHash = document.querySelector(`nav li a[href="${hash}"]`);
-    // if the hash isn't a direct match for a ToC item, check the data attributes
-    if (!tocEntryForHash) {
-      const fragment = hash.substring(1);
-      tocEntryForHash = document.querySelector(`nav li a[data-${fragment}]`);
-    }
-    if (tocEntryForHash) {
-      const headingForHash = document.querySelector(hash);
-      if (headingForHash && isInViewport(headingForHash)) {
-        setTocEntry(tocEntryForHash);
-        return;
-      }
-    }
-  }
-
-  let newEntry = null;
-
-  for (const entry of entries) {
-    if (entry.intersectionRatio > 0) {
-      const heading = entry.target;
-      /*
-      This sidebar nav consists of two sections:
-      * at the top, a sitenav containing links to other pages
-      * under that, the ToC for the current page
-
-      Since the sidebar scrolls to match the document position,
-      the sitenav will tend to scroll off the screen.
-
-      If the user has scrolled up to (or near) the top of the page,
-      we want to show the sitenav so.
-
-      So: if the H1 (title) for the current page has started
-      intersecting, then always scroll the sidebar back to the top.
-      */
-      if (heading.tagName === "H1" && heading.parentNode.tagName === "DIV") {
-        const nav = document.querySelector("#td-section-nav");
-        nav.scrollTop = 0;
-        return;
-      }
-      /*
-      Otherwise, get the ToC entry for the first entry that
-      entered the viewport, if there was one.
-      */
-      const id = entry.target.getAttribute('id');
-      let tocEntry = document.querySelector(`nav li a[href="#${id}"]`);
-      // if the id isn't a direct match for a ToC item,
-      // check the ToC entry's `data-*` attributes
-      if (!tocEntry) {
-        tocEntry = document.querySelector(`nav li a[data-${id}]`);
-      }
-      if (tocEntry && !newEntry) {
-        newEntry = tocEntry;
-      }
-    }
-  }
-
-  if (newEntry) {
-    setTocEntry(newEntry);
-    return;
-  }
-}
-
-/*
-Track when headings enter the viewport, and use this to update the highlight
-for the corresponding ToC entry.
+  Track when the view is scrolled, and use this to update the highlight for the
+  corresponding ToC entry.
 */
 window.addEventListener('DOMContentLoaded', () => {
+  // Part of the viewport is below the header so we should take it into account.
+  const headerOffset = document.querySelector("body > header > nav").clientHeight;
+  const headings = getHeadings();
 
-  const toc = document.querySelector("#toc");
-  toc.addEventListener("click", event => {
-    if (event.target.tagName === "A") {
-      setTocEntry(event.target);
-    }
+  const onScroll = throttle((_e) => {
+    // Update the ToC.
+    let heading = getCurrentHeading(headings, headerOffset);
+    selectTocEntry(heading.id);
   });
 
-  const observer = new IntersectionObserver(handleIntersectionUpdate);
+  // Initialize the state of the ToC.
+  onScroll();
 
-  document.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach((section) => {
-    observer.observe(section);
-  });
-
+  // Listen to scroll and resizing changes.
+  document.addEventListener('scroll', onScroll, false);
+  document.addEventListener('resize', onScroll, false);
 });
