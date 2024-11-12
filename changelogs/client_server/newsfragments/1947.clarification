@@ -1,0 +1,1 @@
+Correct OpenAPI specification for query parameters to `GET /_matrix/client/v3/thirdparty/location/{protocol}` endpoint.
