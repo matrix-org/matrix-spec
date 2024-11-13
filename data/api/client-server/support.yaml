@@ -54,6 +54,8 @@ paths:
                       properties:
                         matrix_id:
                           type: string
+                          format: mx-user-id
+                          pattern: "^@"
                           description: |-
                             A [Matrix User ID](/appendices/#user-identifiers)
                             representing the administrator.
@@ -66,6 +68,7 @@ paths:
                             required.
                         email_address:
                           type: string
+                          format: email
                           description: |-
                             An email address to reach the administrator.
 
@@ -95,6 +98,7 @@ paths:
                       }
                   support_page:
                     type: string
+                    format: uri
                     description: |-
                       The URL of a page to give users help specific to the
                       homeserver, like extra login/registration steps.

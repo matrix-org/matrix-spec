@@ -64,3 +64,7 @@ mx-mxc-uri:
 uri:
   title: URI
   url: https://datatracker.ietf.org/doc/html/rfc3986
+
+email:
+  title: Email Address
+  url: https://datatracker.ietf.org/doc/html/rfc5321#section-4.1.2

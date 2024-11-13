@@ -2,15 +2,8 @@
 
   This template is included at the end of each page's `<body>`.
 
-  We're using it here to:
-
-  1) include the JS that generates the table of contents. It would be better
-  to generate the table of contents as part of the Hugo build process, but
-  that doesn't work nicely with the way we want to author client-server modules
-  as separate files.
-
-  2) highlight and scroll the ToC in the sidebar to match the place we are at
-  in the document.
+  We're using it here to highlight and scroll the ToC in the sidebar to match
+  the place we are at in the document.
 
 */}}
 {{ $toc := resources.Get "js/toc.js" -}}
