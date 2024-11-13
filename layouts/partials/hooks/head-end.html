@@ -13,5 +13,6 @@
  Google Fonts manually via a script:
  https://github.com/matrix-org/matrix-spec/tree/main/static/css/fonts
 */}}
-<link rel="preload" href="{{ "css/fonts/Inter.css" | relURL }}" as="style">
-<link rel="stylesheet" href="{{ "css/fonts/Inter.css" | relURL }}">
+{{ $inter := resources.Get "css/fonts/Inter.css" -}}
+<link rel="preload" href="{{ $inter.RelPermalink }}" as="style">
+<link rel="stylesheet" href="{{ $inter.RelPermalink }}">
