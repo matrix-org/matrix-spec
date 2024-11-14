@@ -98,14 +98,11 @@ having appropriate closing tags, appropriate attributes (considering the
 custom ones defined in this specification), and generally valid
 structure.
 
-A special tag, `mx-reply`, may appear on rich replies (described below)
-and should be allowed if, and only if, the tag appears as the very first
-tag in the `formatted_body`. The tag cannot be nested and cannot be
-located after another tag in the tree. Because the tag contains HTML, an
-`mx-reply` is expected to have a partner closing tag and should be
-treated similar to a `div`. Clients that support rich replies will end
-up stripping the tag and its contents and therefore may wish to exclude
-the tag entirely.
+{{% boxes/note %}}
+{{% changed-in v="1.13" %}}
+In previous versions of the specification, [rich replies](#rich-replies) could
+use a special tag, `mx-reply`, this is no longer the case.
+{{% /boxes/note %}}
 
 {{% boxes/note %}}
 A future iteration of the specification will support more powerful and

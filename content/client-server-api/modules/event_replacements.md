@@ -362,43 +362,9 @@ property under `m.new_content`.
 
 #### Edits of replies
 
-Some particular constraints apply to events which replace a
-[reply](#rich-replies). In particular:
-
- * In contrast to the original reply, there should be no `m.in_reply_to`
-   property in the the `m.relates_to` object, since it would be redundant (see
-   [Applying `m.new_content`](#applying-mnew_content) above, which notes that
-   the original event's `m.relates_to` is preserved), as well as being contrary
-   to the spirit of the event relationships mechanism which expects only one
-   "parent" per event.
-
- * `m.new_content` should **not** contain any [reply
-   fallback](#fallbacks-for-rich-replies),
-   since it is assumed that any client which can handle edits can also display
-   replies natively. However, the `content` of the replacement event should provide
-   fallback content for clients which support neither rich replies nor edits.
-
-An example of an edit to a reply is as follows:
-
-```json
-{
-  "type": "m.room.message",
-  // irrelevant fields not shown
-  "content": {
-    "body": "> <@alice:example.org> question\n\n* reply",
-    "msgtype": "m.text",
-    "format": "org.matrix.custom.html",
-    "formatted_body": "<mx-reply><blockquote><a href=\"https://matrix.to/#/!somewhere:example.org/$event:example.org\">In reply to</a> <a href=\"https://matrix.to/#/@alice:example.org\">@alice:example.org</a><br />question</blockquote></mx-reply>* reply",
-    "m.new_content": {
-      "body": "reply",
-      "msgtype": "m.text",
-      "format": "org.matrix.custom.html",
-      "formatted_body": "reply"
-    },
-    "m.relates_to": {
-      "rel_type": "m.replace",
-      "event_id": "$original_reply_event"
-    }
-  }
-}
-```
+{{% boxes/note %}}
+{{% changed-in v="1.13" %}}
+In previous versions of the specification, events which replace a [reply](#rich-replies)
+could include a fallback in the `content`. They are now treated as any other
+relation.
+{{% /boxes/note %}}
