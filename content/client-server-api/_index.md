@@ -314,8 +314,11 @@ respond with the CORS headers for that route. The recommended CORS
 headers to be returned by servers on all requests are:
 
     Access-Control-Allow-Origin: *
-    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD
     Access-Control-Allow-Headers: X-Requested-With, Content-Type, Authorization
+
+{{% changed-in v="1.13" %}} `PATCH` and `HEAD` were added to the list for the
+`Access-Control-Allow-Methods` header.
 
 ## Server Discovery
 
