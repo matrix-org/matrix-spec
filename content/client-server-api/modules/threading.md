@@ -106,10 +106,6 @@ flag to `true`.
 }
 ```
 
-For `m.room.message` events represented this way, no [reply fallback](#fallbacks-for-rich-replies)
-is specified. This allows thread-aware clients to discard the `m.in_reply_to` object entirely
-when `is_falling_back` is `true`.
-
 {{% boxes/note %}}
 Clients which are acutely aware of threads (they do not render threads, but are otherwise
 aware of the feature existing in the spec) can treat rich replies to an event with a `rel_type`
