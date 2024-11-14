@@ -38,27 +38,27 @@
 
 mx-user-id:
   title: User ID
-  url: /appendices#user-identifiers
+  url: appendices#user-identifiers
   # regex: "^@"
 
 mx-event-id:
   title: Event ID
-  url: /appendices#event-ids
+  url: appendices#event-ids
   # regex: "^\\$"
 
 mx-room-id:
   title: Room ID
-  url: /appendices#room-ids
+  url: appendices#room-ids
   # regex: "^!"
 
 mx-server-name:
   title: Server Name
-  url: /appendices#server-name
+  url: appendices#server-name
   # no regex
 
 mx-mxc-uri:
   title: Matrix Content URI
-  url: /client-server-api#matrix-content-mxc-uris
+  url: client-server-api#matrix-content-mxc-uris
   # regex: "^mxc:\\/\\/"
 
 uri:

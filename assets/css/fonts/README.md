@@ -16,7 +16,7 @@ load them. Example call:
 ```sh
 python3 download_google_fonts_css.py \
   "https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i" \
-  ../../fonts \
+  ../../../static/fonts \
   ../../fonts 
 ```
   

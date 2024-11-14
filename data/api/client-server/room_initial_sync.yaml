@@ -54,7 +54,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the start of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve earlier events.
 
                           If no earlier events are available, this property may be omitted from
@@ -63,7 +63,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the end of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve later events.
                       chunk:
                         type: array

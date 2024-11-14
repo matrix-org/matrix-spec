@@ -28,7 +28,8 @@ properties:
     items:
       type: string
     description: |-
-      Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.
+      Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](/client-server-api/#mforwarded_room_key)
+      events.
   sender_key:
     type: string
     description: |-

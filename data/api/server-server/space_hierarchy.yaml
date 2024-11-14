@@ -75,7 +75,7 @@ paths:
                             items:
                               type: string
                             description: |-
-                              If the room is a [restricted room](#restricted-rooms), these are the room IDs which
+                              If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
                               are specified by the join rules. Empty or omitted otherwise.
                           children_state:
                             type: array
@@ -119,7 +119,7 @@ paths:
                               items:
                                 type: string
                               description: |-
-                                If the room is a [restricted room](#restricted-rooms), these are the room IDs which
+                                If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
                                 are specified by the join rules. Empty or omitted otherwise.
                   inaccessible_children:
                     type: array

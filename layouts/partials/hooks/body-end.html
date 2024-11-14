@@ -6,5 +6,5 @@
   the place we are at in the document.
 
 */}}
-
-<script defer language="javascript" type="text/javascript"  src="{{ "js/toc.js" | relURL }}"></script>
+{{ $toc := resources.Get "js/toc.js" -}}
+<script defer language="javascript" type="text/javascript"  src="{{ $toc.RelPermalink }}"></script>

@@ -64,7 +64,7 @@ properties:
         type: string
         description: |-
           Usually found on `join` events, this field is used to denote which homeserver (through representation of a user with sufficient power level)
-          authorised the user's join. More information about this field can be found in the [Restricted Rooms Specification](#restricted-rooms).
+          authorised the user's join. More information about this field can be found in the [Restricted Rooms Specification](/client-server-api/#restricted-rooms).
 
           Client and server implementations should be aware of the [signing implications](/rooms/v8/#authorization-rules) of including this
           field in further events: in particular, the event must be signed by the server which

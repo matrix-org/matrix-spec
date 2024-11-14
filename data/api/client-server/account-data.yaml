@@ -23,7 +23,7 @@ paths:
         Set some account data for the client. This config is only visible to the user
         that set the account data. The config will be available to clients through the
         top-level `account_data` field in the homeserver response to
-        [/sync](#get_matrixclientv3sync).
+        [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountData
       security:
         - accessTokenQuery: []
@@ -185,7 +185,7 @@ paths:
       description: |-
         Set some account data for the client on a given room. This config is only
         visible to the user that set the account data. The config will be delivered to
-        clients in the per-room entries via [/sync](#get_matrixclientv3sync).
+        clients in the per-room entries via [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountDataPerRoom
       security:
         - accessTokenQuery: []
