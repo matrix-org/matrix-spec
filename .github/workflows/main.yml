@@ -1,8 +1,7 @@
 name: "Spec"
 
 env:
-  # Cannot build the spec with Hugo 0.125.0 and docsy < 0.10.0 because of https://github.com/google/docsy/issues/1930
-  HUGO_VERSION: 0.124.1
+  HUGO_VERSION: 0.139.0
 
 on:
   push:
