@@ -103,8 +103,9 @@ for line in original_contents:
                 print("Writing font file:", font_filepath)
                 f.write(resp.content)
 
-            # Replace google URL with local URL
-            line = re.sub(r"url\(.+?\)", f"url({css_font_path + filename})", line)
+            # Replace google URL with local URL and allow the browser to load the
+            # local font if it exists.
+            line = re.sub(r"url\(.+?\)", f"local('{font_family}'), url({css_font_path + filename})", line)
         else:
             print("Warning: failed to download font file:", font_url)
 
