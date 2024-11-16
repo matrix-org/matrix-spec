@@ -84,7 +84,6 @@ new_css_file_lines = []
 font_lang = None
 font_family = None
 font_style = None
-font_weight = 0
 for line in original_contents:
     # Check if this line contains a font URL
     match = re.match(r".*url\((.*)\) format.*", line)
@@ -96,8 +95,8 @@ for line in original_contents:
         resp = requests.get(font_url)
         if resp.status_code == 200:
             # Save the font file
-            filename = "%s-%s-%s-%d.woff2" % (
-                font_family, font_lang, font_style, font_weight
+            filename = "%s-%s-%s.woff2" % (
+                font_family, font_lang, font_style
             )
             font_filepath = font_output_dir + filename
             with open(font_filepath, "wb") as f:
@@ -105,7 +104,7 @@ for line in original_contents:
                 f.write(resp.content)
 
             # Replace google URL with local URL
-            line = re.sub(r"url\(.+\)", f"url({css_font_path + filename})", line)
+            line = re.sub(r"url\(.+?\)", f"url({css_font_path + filename})", line)
         else:
             print("Warning: failed to download font file:", font_url)
 
@@ -121,9 +120,6 @@ for line in original_contents:
     font_style_match = re.match(r".*font-style: (.+);$", line)
     if font_style_match:
         font_style = font_style_match.group(1)
-    font_weight_match = re.match(r".*font-weight: (.+);$", line)
-    if font_weight_match:
-        font_weight = int(font_weight_match.group(1))
 
     # Append the potentially modified line to the new css file
     new_css_file_lines.append(line)
