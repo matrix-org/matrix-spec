@@ -1,0 +1,33 @@
+{{/*
+
+    This template is used to render an image representing a diagram.
+
+    It takes the following parameters:
+
+    * `name` (required): the file name without extension.
+    * `alt` (required): a textual replacement for the image, useful for
+      accessibility.
+    
+    Other requirements for diagrams:
+
+    * They must be located in `/assets/diagrams`.
+    * They must be PNG images, with a `.png` file extension.
+
+    Differences with loading a diagram as a regular markdown image:
+
+    * The diagram is lazy-loaded, which should speed up the loading of the spec.
+    * The dimensions of the diagram are added to the HTML, allowing the browser
+      to pre-allocate space before it is loaded.
+
+*/}}
+
+{{- $name := .Params.name -}}
+{{- $alt := .Params.alt -}}
+
+{{- $path := printf "/diagrams/%s.png" $name -}}
+
+{{- with resources.Get $path -}}
+<img src="{{ .RelPermalink }}" alt="{{ $alt }}" width="{{ .Width }}" height="{{ .Height }}" loading="lazy">
+{{- else -}}
+    {{- errorf "diagram %s not found" $path -}}
+{{- end -}}

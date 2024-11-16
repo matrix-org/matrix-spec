@@ -2572,7 +2572,7 @@ Note that this rule is only expected to work in room versions
 
 The allowable state transitions of membership are:
 
-![membership-flow-diagram](/diagrams/membership.png)
+{{% diagram name="membership" alt="Diagram presenting the possible membership state transitions" %}}
 
 {{% http-api spec="client-server" api="list_joined_rooms" %}}
 

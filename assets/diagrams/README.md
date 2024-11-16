@@ -13,5 +13,11 @@ Suggested settings for diagrams.net:
 * No transparent background, shadow, or grid.
 * Include a copy of the diagram.
 
-To reference a diagram, use the absolute path when compiled. For example,
-`![membership-flow-diagram](/diagrams/membership.png)`
+To reference a diagram, use the `diagram` shortcode. For example:
+
+```
+{{% diagram name="membership" alt="Diagram presenting the possible membership state transitions" %}}
+```
+
+Where `name` is the file name without extension, and `alt` is a textual
+replacement for the image, useful for accessibility.

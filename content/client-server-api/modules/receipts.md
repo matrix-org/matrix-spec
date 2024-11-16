@@ -155,12 +155,12 @@ related to a thread root via non-thread relations.
 The following is an example DAG for a room, with dotted lines showing event
 relationships and solid lines showing topological ordering.
 
-![threaded-dag](/diagrams/threaded-dag.png)
+{{% diagram name="threaded-dag" alt="Diagram presenting a DAG with thread relationships as a single timeline" %}}
 
 This DAG can be represented as 3 threaded timelines, with `A` and `B` being thread
 roots:
 
-![threaded-dag-threads](/diagrams/threaded-dag-threads.png)
+{{% diagram name="threaded-dag-threads" alt="Diagram presenting a DAG with thread relationships as 3 related timelines" %}}
 
 With this, we can demonstrate that:
 * A threaded read receipt on `I` would mark `A`, `B`, and `I` as read.
