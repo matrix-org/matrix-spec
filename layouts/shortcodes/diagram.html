@@ -1,4 +1,4 @@
-{{/*
+{{- /*
 
     This template is used to render an image representing a diagram.
 
@@ -11,23 +11,43 @@
     Other requirements for diagrams:
 
     * They must be located in `/assets/diagrams`.
-    * They must be PNG images, with a `.png` file extension.
+    * They must be WebP images, with a `.webp` file extension.
+    * They must be rendered at a 200% scale. 
 
     Differences with loading a diagram as a regular markdown image:
 
     * The diagram is lazy-loaded, which should speed up the loading of the spec.
     * The dimensions of the diagram are added to the HTML, allowing the browser
       to pre-allocate space before it is loaded.
+    * The diagram supports devices with high pixel density screens and a WebP
+      image is generated for the default resolution.
+    * A PNG fallback image is generated, for maximum browser compatiblity.
 
-*/}}
+*/ -}}
 
 {{- $name := .Params.name -}}
 {{- $alt := .Params.alt -}}
 
-{{- $path := printf "/diagrams/%s.png" $name -}}
+{{- $path := printf "/diagrams/%s.webp" $name -}}
 
 {{- with resources.Get $path -}}
-<img src="{{ .RelPermalink }}" alt="{{ $alt }}" width="{{ .Width }}" height="{{ .Height }}" loading="lazy">
+    {{- $highRes := . -}}
+
+    {{- /*
+        The high resolution image has a scale of 200% so we need to divide the
+        dimensions by 2 to get the real one.
+    */ -}}
+    {{- $width := div $highRes.Width 2 | string -}}
+    {{- $height := div $highRes.Width 2 | string -}}
+
+    {{- /* Generate a low resolution WebP and a fallback PNG. */ -}}
+    {{- $lowRes := $highRes.Resize (printf "%sx webp drawing" $width) -}}
+    {{- $fallback := $highRes.Resize (printf "%sx png" $width) -}}
+
+<picture>
+    <source srcset="{{ $lowRes.RelPermalink }}, {{ $highRes.RelPermalink }} 2x" type="image/webp" />
+    <img src="{{ $fallback.RelPermalink }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}" loading="lazy" />
+</picture>
 {{- else -}}
     {{- errorf "diagram %s not found" $path -}}
 {{- end -}}
