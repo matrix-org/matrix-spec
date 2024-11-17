@@ -1,0 +1,11 @@
+{{- /*
+
+  A modified version of the favicons.html partial in Docsy.
+
+*/ -}}
+
+{{- $ico := resources.Get "icons/favicon.ico" -}}
+{{- $svg := resources.Get "icons/favicon.svg" -}}
+
+<link rel="shortcut icon" href="{{ $ico.RelPermalink }}" >
+<link rel="icon" type="image/svg+xml" href="{{ $svg.RelPermalink }}" />
