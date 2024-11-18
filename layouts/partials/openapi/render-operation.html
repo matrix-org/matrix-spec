@@ -29,13 +29,13 @@
 {{ end }}
 {{ $anchor = printf "%s%s%s" $anchor (lower $method) (anchorize $endpoint) }}
 
-<section class="rendered-data http-api {{ $method }}">
+<section class="rendered-data">
 
 <details {{ if not site.Params.ui.rendered_data_collapsed }}open{{ end }}>
 <summary>
 
   <h1 id="{{ $anchor }}">
-   <span class="http-api-method {{ $method }}">{{ $method }}</span>
+   <span class="http-api-method">{{ $method }}</span>
    <span class="endpoint{{ if $operation_data.deprecated }} deprecated-inline{{ end }}">{{ $endpoint }}</span>
   </h1>
 </summary>
