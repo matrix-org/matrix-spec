@@ -55,7 +55,6 @@ description = "Home of the Matrix specification for decentralised communication"
 
 [params]
 copyright = "The Matrix.org Foundation CIC"
-privacy_policy = "https://matrix.org/legal/privacy-notice"
 
 [params.version]
 # must be one of "unstable", "current", "historical"
@@ -71,8 +70,6 @@ current_version_url = "https://spec.matrix.org/latest"
 
 # User interface configuration
 [params.ui]
-# Set to true to disable the About link in the site footer
-footer_about_disable = false
 # Collapse HTTP API and event <details> elements
 rendered_data_collapsed = false
 # Hide the search entry in the sidebar
@@ -88,22 +85,28 @@ sidebar_menu_compact = true
 # 	icon = "fa fa-envelope"
 #         desc = "Discussion and help from your fellow users"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
-[[params.links.developer]]
+# [[params.links.developer]]
+# 	name = "GitHub"
+# 	url = "https://github.com/matrix-org"
+# 	icon = "fab fa-github"
+#   desc = "Matrix on GitHub"
+# Custom links shown in the center of the footer. (Only supported by our fork of docsy's 'footer/central' partial.)
+[[params.links.bottom]]
 	name = "GitHub"
 	url = "https://github.com/matrix-org"
 	icon = "fab fa-github"
   desc = "Matrix on GitHub"
-[[params.links.developer]]
+[[params.links.bottom]]
 	name = "GitLab"
 	url = "https://gitlab.matrix.org/matrix-org"
 	icon = "fab fa-gitlab"
   desc = "Matrix on GitLab"
-[[params.links.developer]]
+[[params.links.bottom]]
 	name = "YouTube"
 	url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
 	icon = "fab fa-youtube"
   desc = "Matrix YouTube channel"
-[[params.links.developer]]
+[[params.links.bottom]]
 	name = "Twitter"
 	url = "https://twitter.com/matrixdotorg"
 	icon = "fab fa-twitter"
