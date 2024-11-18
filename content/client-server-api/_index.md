@@ -221,6 +221,10 @@ See the [Server Notices](#server-notices) module for more information.
 `M_THREEPID_MEDIUM_NOT_SUPPORTED`
 The homeserver does not support adding a third party identifier of the given medium.
 
+`M_THREEPID_IN_USE`
+The third party identifier specified by the client is not acceptable because it is
+already in use in some way.
+
 #### Rate limiting
 
 Homeservers SHOULD implement rate limiting to reduce the risk of being
