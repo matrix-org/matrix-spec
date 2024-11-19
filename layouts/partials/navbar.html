@@ -1,10 +1,10 @@
-{{/*
+{{- /*
 
   A version of the navbar.html partial in Docsy, only modified
 	to include the spec version, which is calculated using an
   inline `version-string` partial.
 
-*/}}
+*/ -}}
 
 {{ $cover := and
     (.HasShortcode "blocks/cover")
@@ -12,8 +12,8 @@
 -}}
 {{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
 
-<nav class="td-navbar navbar-light js-navbar-scroll
-            {{- if $cover }} td-navbar-cover {{- end }}">
+<nav class="td-navbar js-navbar-scroll
+            {{- if $cover }} td-navbar-cover {{- end }}" data-bs-theme="light">
 <div class="container-fluid flex-column flex-md-row">
   <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
     {{- /**/ -}}
@@ -26,10 +26,11 @@
     </span>
     {{- /**/ -}}
     <span class="navbar-brand__name">
-		specification
+      specification
     </span>
     {{- /**/ -}}
-	<span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
+	  <span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
+    {{- /**/ -}}
   </a>
   <div class="td-navbar-nav-scroll ms-md-auto" id="main_navbar">
     <ul class="navbar-nav">
@@ -64,6 +65,11 @@
       {{ if (gt (len .Site.Home.Translations) 0) -}}
       <li class="nav-item dropdown d-none d-lg-block">
         {{ partial "navbar-lang-selector.html" . -}}
+      </li>
+      {{ end -}}
+      {{ if .Site.Params.ui.showLightDarkModeMenu -}}
+      <li class="td-light-dark-menu nav-item dropdown">
+        {{ partial "theme-toggler" . }}
       </li>
       {{ end -}}
     </ul>

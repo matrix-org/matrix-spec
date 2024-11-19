@@ -122,8 +122,11 @@ Custom SCSS for the Matrix spec
 }
 
 /* Customise footer */
-footer {
+.td-footer {
   box-shadow: 0px 0px 8px rgba(179, 179, 179, 0.25);
+  padding-top: 2rem;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-color-bg);
 }
 
 /* Auto numbering for headings */
