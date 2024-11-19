@@ -1247,18 +1247,18 @@ The following endpoint prefixes MUST be protected:
 Additionally the [`/_matrix/federation/v1/send/{txnId}`](#put_matrixfederationv1sendtxnid)
 endpoint MUST be protected as follows:
 
--   ACLs MUST be applied on a per-PDU basis. If the `origin` server is
-    denied access to the room identified by `room_id`, the PDU MUST be
-    ignored with an appropriate error included in the response for the
-    respective event ID.
--   ACLs MUST be applied on a per-EDU basis to all EDUs that are local
-    to a specific room. This includes:
+-   ACLs MUST be applied to all PDUs on a per-PDU basis. If the `origin`
+    server is denied access to the room identified by `room_id`, the PDU
+    MUST be ignored with an appropriate error included in the response
+    for the respective event ID.
+-   ACLs MUST be applied to all EDUs that are local to a specific room:
 
-    -   [Typing notifications (m.typing)](#typing-notifications)
-    -   [Receipts (m.receipt)](#receipts)
-
-    If the `origin` server is denied access to the room identified by
-    `room_id`, the EDU MUST be ignored.
+    -   For [typing notifications (m.typing)](#typing-notifications), if
+        the `origin` server is denied access to the room identified by
+        `room_id`, the EDU MUST be ignored.
+    -   For [receipts (m.receipt)](#receipts), all receipts for a particular
+        room ID MUST be ignored if the `origin` server is denied access to
+        the room identified by that ID.
 
 ## Signing Events
 
