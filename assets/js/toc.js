@@ -107,6 +107,11 @@ function getCurrentHeading(headings, headerOffset) {
     index += 1;
   }
 
+  // At the bottom of the page we might not have a heading.
+  if (!currentHeading) {
+    currentHeading = prevHeading;
+  }
+
   return currentHeading;
 }
 
