@@ -3,7 +3,7 @@
 ## Inter.css
 
 `Inter.css` is a local copy of
-https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i, modified to pull
+https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap, modified to pull
 font files (`.woff2`) from local sources. It was created
 using `download_google_fonts_css.py`.
   
@@ -15,9 +15,9 @@ load them. Example call:
 
 ```sh
 python3 download_google_fonts_css.py \
-  "https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i" \
+  "https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" \
   ../../../static/fonts \
-  ../../fonts 
+  ../../fonts
 ```
   
 Which would pop out a `Inter.css` file that should be `@import url("Inter.css")`d
