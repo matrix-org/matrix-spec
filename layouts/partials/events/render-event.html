@@ -15,14 +15,16 @@
 {{ $event_name := .event_name }}
 {{ $desired_example_name := .desired_example_name }}
 {{ $event_data := .event_data }}
+{{ $anchor := anchorize $event_name }}
 
 <section class="rendered-data event">
 
 <details {{ if not .Site.Params.ui.rendered_data_collapsed }}open{{ end }}>
 <summary>
 
-  <h1 id="{{ anchorize $event_name }}">
+  <h1 id="{{ $anchor }}">
    {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
+   {{ template "_default/_markup/td-heading-self-link.html" $anchor }}
   </h1>
 
 </summary>

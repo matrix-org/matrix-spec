@@ -1,0 +1,11 @@
+{{- /*
+
+    A copy of the private "_default/_markup/_td-heading-self-link.html" template
+    in Docsy's "_default/_markup/_td-render-heading.html" partial to be able to
+    reuse it when the title has custom markup.
+
+    Takes a string which is the ID of the heading.
+
+*/ -}}
+
+<a class="td-heading-self-link" href="#{{ . | safeURL }}" aria-label="Heading self-link"></a>

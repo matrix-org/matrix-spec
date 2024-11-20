@@ -37,6 +37,7 @@
   <h1 id="{{ $anchor }}">
    <span class="http-api-method">{{ $method }}</span>
    <span class="endpoint{{ if $operation_data.deprecated }} deprecated-inline{{ end }}">{{ $endpoint }}</span>
+   {{ template "_default/_markup/td-heading-self-link.html" $anchor }}
   </h1>
 </summary>
 
