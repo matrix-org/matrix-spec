@@ -40,7 +40,7 @@
   </h1>
 </summary>
 
-  <hr/>
+  <hr>
 
 {{ if $operation_data.deprecated }}
     {{ partial "alert" (dict "type" "warning" "omit_title" "true" "content" "This API is deprecated and will be removed from a future release.") }}
@@ -84,9 +84,9 @@
  </tr>
 </table>
 
-<hr/>
+<hr>
 {{ partial "openapi/render-request"   (dict "parameters" $operation_data.parameters "request_body" $operation_data.requestBody "anchor_base" $anchor ) }}
-<hr/>
+<hr>
 {{ partial "openapi/render-responses" (dict "responses" $operation_data.responses "anchor_base" $anchor ) }}
 
 </details>
