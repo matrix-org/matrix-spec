@@ -1,3 +1,5 @@
+# Default settings.
+
 baseURL = "/"
 title = "Matrix Specification"
 
