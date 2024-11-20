@@ -60,7 +60,6 @@
             {{ end }}
             {{ $docs_links := delimit $docs_links_list ", " }}
 
-            {{ $authors_list := apply .authors "htmlEscape" "." }}
             {{ $authors_list := apply .authors "printf" "<a href=\"https://github.com/%s\">@%s</a>" "." "." }}
             {{ $authors := delimit $authors_list ", " }}
 
