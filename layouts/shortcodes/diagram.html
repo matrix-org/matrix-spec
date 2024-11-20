@@ -45,8 +45,8 @@
     {{- $fallback := $highRes.Resize (printf "%sx png" $width) -}}
 
 <picture>
-    <source srcset="{{ $lowRes.RelPermalink }}, {{ $highRes.RelPermalink }} 2x" type="image/webp" />
-    <img src="{{ $fallback.RelPermalink }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}" loading="lazy" />
+    <source srcset="{{ $lowRes.RelPermalink }}, {{ $highRes.RelPermalink }} 2x" type="image/webp">
+    <img src="{{ $fallback.RelPermalink }}" alt="{{ $alt }}" width="{{ $width }}" height="{{ $height }}" loading="lazy">
 </picture>
 {{- else -}}
     {{- errorf "diagram %s not found" $path -}}
