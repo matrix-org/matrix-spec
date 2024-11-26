@@ -1,15 +1,11 @@
-{{/*
+{{- /*
     Renders the "Changed in [version]:" blocks for x-changedInMatrixVersion
     annotations for openapi parameters
 
     Takes a single 'changes_dict' parameter, which should be a map of
     version -> details pairs.
 */ -}}
-{{ range $ver, $details := .changes_dict -}}
-  <p>
-    <strong>
-      Changed in <code>v{{ $ver }}</code>:
-    </strong>
-    {{ $details | markdownify }}
-  </p>
+{{- range $ver, $details := .changes_dict -}}
+    {{- $details = printf "**Changed in `v%s`:** %s" $ver (default "" $details) -}}
+    {{- $details | page.RenderString (dict "display" "block") -}}
 {{ end -}}
