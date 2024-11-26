@@ -29,7 +29,7 @@ JSON object.  Clients should supply a `Content-Type` header of
 
 The exceptions are:
 
-- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and
   [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
   both of which take the uploaded media as the request body.
 - [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
@@ -136,7 +136,7 @@ The request was not correctly authorized. Usually due to login failures.
 
 `M_USER_DEACTIVATED`
 The user ID associated with the request has been deactivated. Typically
-for endpoints that prove authentication, such as `/login`.
+for endpoints that prove authentication, such as [`/login`](#get_matrixclientv3login).
 
 `M_USER_IN_USE`
 Encountered when trying to register a user ID which has been taken.
@@ -215,7 +215,8 @@ much memory or disk space. The error MUST have an `admin_contact` field
 to provide the user receiving the error a place to reach out to.
 Typically, this error will appear on routes which attempt to modify
 state (e.g.: sending messages, account data, etc) and not routes which
-only read state (e.g.: `/sync`, get account data, etc).
+only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
+[`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
 
 `M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
 The user is unable to reject an invite to join the server notices room.
@@ -266,7 +267,7 @@ HTTP request is the same.
 
 Where a retransmission has been identified, the homeserver should return
 the same HTTP response code and content as the original request.
-For example, `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`
+For example, [`PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
 would return a `200 OK` with the `event_id` of the original request in
 the response body.
 
@@ -897,7 +898,7 @@ follows:
 ```
 
 Note that `id_server` (and therefore `id_access_token`) is optional if
-the `/requestToken` request did not include them.
+the [`/requestToken`](#post_matrixclientv3registeremailrequesttoken) request did not include them.
 
 ##### Phone number/MSISDN-based (identity / homeserver)
 
@@ -926,7 +927,7 @@ follows:
 ```
 
 Note that `id_server` (and therefore `id_access_token`) is optional if
-the `/requestToken` request did not include them.
+the [`/requestToken`](#post_matrixclientv3registermsisdnrequesttoken) request did not include them.
 
 ##### Dummy Auth
 
@@ -1296,7 +1297,7 @@ from.
 
 ### Login
 
-A client can obtain access tokens using the `/login` API.
+A client can obtain access tokens using the [`/login`](#post_matrixclientv3login) API.
 
 Note that this endpoint does <span class="title-ref">not</span>
 currently use the [User-Interactive Authentication
@@ -1471,7 +1472,7 @@ Content-Type: application/json
 ```
 
 Servers SHOULD NOT invalidate access tokens on locked accounts unless the
-client requests a logout (using the above endpoints). This ensures that 
+client requests a logout (using the above endpoints). This ensures that
 users can retain their sessions without having to log back in if the account
 becomes unlocked.
 
@@ -1554,7 +1555,7 @@ The capabilities advertised through this system are intended to
 advertise functionality which is optional in the API, or which depend in
 some way on the state of the user or server. This system should not be
 used to advertise unstable or experimental features - this is better
-done by the `/versions` endpoint.
+done by the [`/versions`](#get_matrixclientversions) endpoint.
 
 Some examples of what a reasonable capability could be are:
 
@@ -1583,7 +1584,7 @@ specification are defined later in this section.
 ### `m.change_password` capability
 
 This capability has a single flag, `enabled`, which indicates whether or
-not the user can use the `/account/password` API to change their
+not the user can use the [`/account/password`](#post_matrixclientv3accountpassword) API to change their
 password. If not present, the client should assume that password changes
 are possible via the API. When present, clients SHOULD respect the
 capability's `enabled` flag and indicate to the user if they are unable
@@ -1764,16 +1765,17 @@ request with lazy-loading enabled, the server will only return
 membership events for the `sender` of events in the timeline, not all
 members of a room.
 
-When processing a sequence of events (e.g. by looping on `/sync` or
-paginating `/messages`), it is common for blocks of events in the
-sequence to share a similar set of senders. Rather than responses in the
-sequence sending duplicate membership events for these senders to the
-client, the server MAY assume that clients will remember membership
-events they have already been sent, and choose to skip sending
-membership events for members whose membership has not changed. These
-are called 'redundant membership events'. Clients may request that
-redundant membership events are always included in responses by setting
-`include_redundant_members` to true in the filter.
+When processing a sequence of events (e.g. by looping on
+[`/sync`](#get_matrixclientv3sync) or paginating
+[`/messages`](#get_matrixclientv3roomsroomidmessages)), it is common for blocks
+of events in the sequence to share a similar set of senders. Rather than
+responses in the sequence sending duplicate membership events for these senders
+to the client, the server MAY assume that clients will remember membership
+events they have already been sent, and choose to skip sending membership
+events for members whose membership has not changed. These are called
+'redundant membership events'. Clients may request that redundant membership
+events are always included in responses by setting `include_redundant_members`
+to true in the filter.
 
 The expected pattern for using lazy-loading is currently:
 
@@ -1788,7 +1790,7 @@ The expected pattern for using lazy-loading is currently:
     incremental /sync responses.
 -   Clients which do not support tab-completion may instead pull in
     profiles for arbitrary users (e.g. read receipts, typing
-    notifications) on demand by querying the room state or `/profile`.
+    notifications) on demand by querying the room state or [`/profile`](#get_matrixclientv3profileuserid).
 
 The current endpoints which support lazy-loading room members are:
 
@@ -2350,7 +2352,7 @@ The endpoints where the server *should* include bundled aggregations are:
 
 {{% boxes/note %}}
 The server is **not** required to return bundled aggregations on deprecated endpoints
-such as `/initialSync`.
+such as [`/initialSync`](#get_matrixclientv3roomsroomidinitialsync).
 {{% /boxes/note %}}
 
 While this functionality allows the client to see what was known to the server at the
@@ -2603,9 +2605,10 @@ this will have been just the API definition and nothing more (like invites).
 
 If the join rules allow, external users to the room can `/knock` on it to
 request permission to join. Users with appropriate permissions within the
-room can then approve (`/invite`) or deny (`/kick`, `/ban`, or otherwise
+room can then approve ([`/invite`](#post_matrixclientv3roomsroomidinvite))
+or deny ([`/kick`](#post_matrixclientv3roomsroomidkick), [`/ban`](#post_matrixclientv3roomsroomidban), or otherwise
 set membership to `leave`) the knock. Knocks can be retracted by calling
-`/leave` or otherwise setting membership to `leave`.
+[`/leave`](#post_matrixclientv3roomsroomidleave) or otherwise setting membership to `leave`.
 
 Users who are currently in the room, already invited, or banned cannot
 knock on the room.
@@ -2724,12 +2727,12 @@ with:
   "user_id": "<user id to ban>",
   "reason": "string: <reason for the ban>"
 }
-````
+```
 
 Banning a user adjusts the banned member's membership state to `ban`.
 Like with other membership changes, a user can directly adjust the
 target member's state, by making a request to
-`/rooms/<room id>/state/m.room.member/<user id>`:
+[`/rooms/<room id>/state/m.room.member/<user id>`](#put_matrixclientv3roomsroomidstateeventtypestatekey):
 
 ```json
 {
