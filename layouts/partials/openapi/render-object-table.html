@@ -313,7 +313,7 @@ resolve-additional-types.)
           Prepend "Required:" to make it part of the first paragraph of the
           description.
         */}}
-        {{- $description = printf "<strong>Required: </strong>%s" $description -}}
+        {{- $description = printf "<strong>Required: </strong>%s" (default "" $description) -}}
     {{ end -}}
     {{/*
       Force the rendering as a block so the description is always inside a
