@@ -29,7 +29,7 @@ JSON object.  Clients should supply a `Content-Type` header of
 
 The exceptions are:
 
-- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and 
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and
   [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
   both of which take the uploaded media as the request body.
 - [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
@@ -1471,7 +1471,7 @@ Content-Type: application/json
 ```
 
 Servers SHOULD NOT invalidate access tokens on locked accounts unless the
-client requests a logout (using the above endpoints). This ensures that 
+client requests a logout (using the above endpoints). This ensures that
 users can retain their sessions without having to log back in if the account
 becomes unlocked.
 
@@ -1756,8 +1756,9 @@ events to the client to ease implementation, although such redundancy
 should be minimised where possible to conserve bandwidth.
 
 In terms of filters, lazy-loading is enabled by enabling
-`lazy_load_members` on a `RoomEventFilter` (or a `StateFilter` in the
-case of `/sync` only). When enabled, lazy-loading aware endpoints (see
+`lazy_load_members` on a
+[`RoomEventFilter`](#post_matrixclientv3useruseridfilter_request_roomeventfilter).
+When enabled, lazy-loading aware endpoints (see
 below) will only include membership events for the `sender` of events
 being included in the response. For example, if a client makes a `/sync`
 request with lazy-loading enabled, the server will only return

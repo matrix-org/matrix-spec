@@ -26,7 +26,8 @@ paths:
         incremental deltas to the state, and to receive new messages.
 
         *Note*: This endpoint supports lazy-loading. See [Filtering](/client-server-api/#filtering)
-        for more information. Lazy-loading members is only supported on a `StateFilter`
+        for more information. Lazy-loading members is only supported on the `state` part of a
+        [`RoomFilter`](#post_matrixclientv3useruseridfilter_request_roomfilter)
         for this endpoint. When lazy-loading is enabled, servers MUST include the
         syncing user's own membership event when they join a room, or when the
         full state of rooms is requested, to aid discovering the user's avatar &
