@@ -31,7 +31,7 @@ the `rel_type` and `event_id` properties of `m.relates_to` become *optional*.
 
 An example reply would be:
 
-```json5
+```json
 {
   "content": {
     "m.relates_to": {
@@ -187,7 +187,7 @@ of the replied to event and any users mentioned in that event. See
 
 An example including mentioning the original sender and other users:
 
-```json5
+```json
 {
   "content": {
     "m.relates_to": {
