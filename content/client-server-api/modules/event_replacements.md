@@ -362,9 +362,37 @@ property under `m.new_content`.
 
 #### Edits of replies
 
+A particular constraint applies to events which replace a [reply](#rich-replies):
+in contrast to the original reply, there should be no `m.in_reply_to` property
+in the the `m.relates_to` object, since it would be redundant (see
+[Applying `m.new_content`](#applying-mnew_content) above, which notes that the
+original event's `m.relates_to` is preserved), as well as being contrary to the
+spirit of the event relationships mechanism which expects only one "parent" per
+event.
+
 {{% boxes/note %}}
 {{% changed-in v="1.13" %}}
 In previous versions of the specification, events which replace a [reply](#rich-replies)
-could include a fallback in the `content`. They are now treated as any other
-relation.
+could include a fallback in the `content`. This is no longer the case.
 {{% /boxes/note %}}
+
+An example of an edit to a reply is as follows:
+
+```json
+{
+  "type": "m.room.message",
+  // irrelevant fields not shown
+  "content": {
+    "body": "* reply",
+    "msgtype": "m.text",
+    "m.new_content": {
+      "body": "reply",
+      "msgtype": "m.text",
+    },
+    "m.relates_to": {
+      "rel_type": "m.replace",
+      "event_id": "$original_reply_event"
+    }
+  }
+}
+```
