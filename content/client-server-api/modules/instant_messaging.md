@@ -101,8 +101,8 @@ structure.
 {{% boxes/note %}}
 {{% changed-in v="1.13" %}}
 In previous versions of the specification, [rich replies](#rich-replies) could
-use a special tag, `mx-reply`, this is no longer the case. Clients should strip
-this tag and its content.
+use a special tag, `mx-reply`. This is no longer the case. Clients SHOULD strip
+this tag and its content. See the "Rich replies" section for more information.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
