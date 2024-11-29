@@ -1,0 +1,1 @@
+Remove reply fallbacks, as per [MSC2781](https://github.com/matrix-org/matrix-spec-proposals/issues/2781).
