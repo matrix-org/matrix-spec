@@ -13,10 +13,10 @@ and servers can implement the ignoring of users.
 
 To ignore a user, effectively blocking them, the client should add the
 target user to the `m.ignored_user_list` event in their account data
-using [`/user/<user_id>/account_data/<type>`](/client-server-api/#put_matrixclientv3useruseridaccount_datatype). Once ignored, the client will no longer receive events sent by
+using [`/user/<user_id>/account_data/<type>`](#put_matrixclientv3useruseridaccount_datatype). Once ignored, the client will no longer receive events sent by
 that user, with the exception of state events. The client should either
 hide previous content sent by the newly ignored user or perform a new
-`/sync` with no previous token.
+[`/sync`](#get_matrixclientv3sync) with no previous token.
 
 Invites to new rooms by ignored users will not be sent to the client.
 The server may optionally reject the invite on behalf of the client.

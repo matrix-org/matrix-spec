@@ -5,7 +5,7 @@ This module adds in support for inviting new members to a room where
 their Matrix user ID is not known, instead addressing them by a third-party
 identifier such as an email address. There are two flows here; one
 if a Matrix user ID is known for the third-party identifier, and one if
-not. Either way, the client calls `/invite` with the details of the
+not. Either way, the client calls [`/invite`](#post_matrixclientv3roomsroomidinvite) with the details of the
 third-party identifier.
 
 The homeserver asks the identity server whether a Matrix user ID is
@@ -37,7 +37,7 @@ A client asks a server to invite a user by their third-party identifier.
 
 #### Server behaviour
 
-Upon receipt of an `/invite`, the server is expected to look up the
+Upon receipt of an [`/invite`](#post_matrixclientv3roomsroomidinvite), the server is expected to look up the
 third-party identifier with the provided identity server. If the lookup
 yields a result for a Matrix User ID then the normal invite process can
 be initiated. This process ends up looking like this:
@@ -186,9 +186,9 @@ residents of the room while H3 is attempting to join.
 
 Note that when H1 sends the `m.room.member` event to H2 and H3 it does
 not have to block on either server's receipt of the event. Likewise, H1
-may complete the `/exchange_third_party_invite/:roomId` request at the
+may complete the [`/exchange_third_party_invite`](/server-server-api/#put_matrixfederationv1exchange_third_party_inviteroomid) request at the
 same time as sending the `m.room.member` event to H2 and H3.
-Additionally, H3 may complete the `/3pid/onbind` request it got from IS
+Additionally, H3 may complete the [`/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind) request it got from IS
 at any time - the completion is not shown in the diagram.
 
 H1 MUST verify the request from H3 to ensure the `signed` property is

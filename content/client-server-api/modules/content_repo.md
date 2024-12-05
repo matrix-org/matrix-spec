@@ -206,6 +206,6 @@ HTML page. Therefore, there is no risk in trusting the user-defined content type
 as long as the `Content-Disposition` is calculated based on that type.
 
 Clients SHOULD NOT rely on servers returning `inline` rather than `attachment`
-on `/download`. Server implementations might decide out of an abundance of
+on [`/download`](#get_matrixclientv1mediadownloadservernamemediaid). Server implementations might decide out of an abundance of
 caution that all downloads are responded to with `attachment`, regardless of
 content type - clients should not be surprised by this behaviour.

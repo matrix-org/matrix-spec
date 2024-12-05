@@ -1044,7 +1044,7 @@ messages they have received.
 ##### Receiving notifications
 
 Servers MUST include the number of unread notifications in a client's
-`/sync` stream, and MUST update it as it changes. Notifications are
+[`/sync`](#get_matrixclientv3sync) stream, and MUST update it as it changes. Notifications are
 determined by the push rules which apply to an event.
 
 For encrypted events, the homeserver has limited access to the event content
@@ -1091,7 +1091,7 @@ users in the room (excluding the sender). This may result in:
 * Generating a new number of unread notifications for the user.
 * Making a request to the configured push gateway.
 
-The updated notification count from a new event MUST appear in the same `/sync`
+The updated notification count from a new event MUST appear in the same [`/sync`](#get_matrixclientv3sync)
 response as the event itself.
 
 #### Push Gateway behaviour
