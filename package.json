@@ -19,9 +19,10 @@
   },
   "homepage": "https://github.com/matrix-org/matrix-spec#readme",
   "devDependencies": {
-    "autoprefixer": "^10.4.2",
+    "@fullhuman/postcss-purgecss": "^6.0.0",
+    "autoprefixer": "^10.4.20",
     "node-fetch": "^2.6.7",
-    "postcss-cli": "^9.1.0",
-    "postcss": "^8.4.6"
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0"
   }
 }
