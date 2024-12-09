@@ -16,7 +16,7 @@ data with the same `type`.
 The client receives the account data as events in the `account_data`
 sections of a [`/sync`](#get_matrixclientv3sync) response.
 
-These events can also be received in a `/events` response or in the
+These events can also be received in a [`/events`](#get_matrixclientv3events) response or in the
 `account_data` section of a room in a `/sync` response. `m.tag` events appearing in
 `/events` will have a `room_id` with the room the tags are for.
 

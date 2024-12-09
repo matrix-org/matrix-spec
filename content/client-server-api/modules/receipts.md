@@ -41,7 +41,7 @@ Threaded read receipts are discussed in further detail [below](#threaded-read-re
 
 {{% changed-in v="1.4" %}} Altered to support threaded read receipts.
 
-In `/sync`, receipts are listed under the `ephemeral` array of events
+In [`/sync`](#get_matrixclientv3sync), receipts are listed under the `ephemeral` array of events
 for a given room. New receipts that come down the event streams are
 deltas which update existing mappings. Clients should replace older
 receipt acknowledgements based on `user_id`, `receipt_type`, and the
