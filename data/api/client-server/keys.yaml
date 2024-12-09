@@ -288,7 +288,17 @@ paths:
   /keys/claim:
     post:
       summary: Claim one-time encryption keys.
-      description: Claims one-time keys for use in pre-key messages.
+      description: |-
+        Claims one-time keys for use in pre-key messages.
+
+        The request contains the user ID, device ID and algorithm name of the
+        keys that are required. The response contains a key matching this -
+        either a one-time key, or if none are available, a fallback key.
+
+        One-time keys are given out in the order that they were uploaded via
+        [/keys/upload](/client-server-api/#post_matrixclientv3keysupload). (All
+        keys uploaded within a given call to `/keys/upload` are considered
+        equivalent in this regard; no ordering is specified within them.)
       operationId: claimKeys
       security:
         - accessTokenQuery: []
