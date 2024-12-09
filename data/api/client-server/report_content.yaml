@@ -18,7 +18,7 @@ info:
 paths:
   "/rooms/{roomId}/report":
     post:
-      x-addedInMatrixVersion: "1.12"
+      x-addedInMatrixVersion: "1.13"
       summary: Report a room as inappropriate.
       description: |-
         Reports a room as inappropriate to the server, which may then notify
