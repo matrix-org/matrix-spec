@@ -39,6 +39,11 @@ notification provider (e.g. APNS, GCM).
 
 ## API standards
 
+### Standard error response
+
+All push gateway API endpoints MUST return error responses conforming to the
+[standard error response](/appendices#standard-error-response) schema.
+
 ### Unsupported endpoints
 
 If a request for an unsupported (or unknown) endpoint is received then the server

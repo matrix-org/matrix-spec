@@ -54,26 +54,11 @@ All JSON data, in requests or responses, must be encoded using UTF-8.
 
 ### Standard error response
 
-Any errors which occur at the Matrix API level MUST return a "standard
-error response". This is a JSON object which looks like:
+All identity service API endpoints MUST return error responses conforming to
+the [standard error response](/appendices#standard-error-response) schema.
 
-```json
-{
-  "errcode": "<error code>",
-  "error": "<error message>"
-}
-```
-
-The `error` string will be a human-readable error message, usually a
-sentence explaining what went wrong. The `errcode` string will be a
-unique string which can be used to handle an error message e.g.
-`M_FORBIDDEN`. There may be additional keys depending on the error, but
-the keys `error` and `errcode` MUST always be present.
-
-Some standard error codes are below:
-
-`M_NOT_FOUND`
-The resource requested could not be located.
+In addition to the standard error codes listed in the appendix, the following
+standard error codes are specific to the the identity service API:
 
 `M_MISSING_PARAMS`
 The request was missing one or more parameters.
@@ -103,23 +88,6 @@ The provided third-party address was not valid.
 `M_SEND_ERROR`
 There was an error sending a notification. Typically seen when
 attempting to verify ownership of a given third-party address.
-
-`M_UNRECOGNIZED`
-The request contained an unrecognised value, such as an unknown token or
-medium.
-
-This is also used as the response if a server did not understand the request.
-This is expected to be returned with a 404 HTTP status code if the endpoint is
-not implemented or a 405 HTTP status code if the endpoint is implemented, but
-the incorrect HTTP method is used.
-
-`M_THREEPID_IN_USE`
-The third-party identifier is already in use by another user. Typically
-this error will have an additional `mxid` property to indicate who owns
-the third-party identifier.
-
-`M_UNKNOWN`
-An unknown error has occurred.
 
 ## Privacy
 

@@ -84,6 +84,11 @@ to be an IP address in which case SNI is not supported and should not be sent.
 Servers are encouraged to make use of the [Certificate
 Transparency](https://www.certificate-transparency.org/) project.
 
+### Standard error response
+
+All server-server API endpoints MUST return error responses conforming to the
+[standard error response](/appendices#standard-error-response) schema.
+
 ### Unsupported endpoints
 
 If a request for an unsupported (or unknown) endpoint is received then the server

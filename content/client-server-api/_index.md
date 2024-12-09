@@ -50,45 +50,13 @@ requirements for server responses.
 
 ### Standard error response
 
-Any errors which occur at the Matrix API level MUST return a "standard
-error response". This is a JSON object which looks like:
-
-```json
-{
-  "errcode": "<error code>",
-  "error": "<error message>"
-}
-```
-
-The `error` string will be a human-readable error message, usually a
-sentence explaining what went wrong.
-
-The `errcode` string will be a unique string which can be used to handle an
-error message e.g.  `M_FORBIDDEN`. Error codes should have their namespace
-first in ALL CAPS, followed by a single `_`. For example, if there was a custom
-namespace `com.mydomain.here`, and a `FORBIDDEN` code, the error code should
-look like `COM.MYDOMAIN.HERE_FORBIDDEN`. Error codes defined by this
-specification should start with `M_`.
-
-Some `errcode`s define additional keys which should be present in the error
-response object, but the keys `error` and `errcode` MUST always be present.
-
-Errors are generally best expressed by their error code rather than the
-HTTP status code returned. When encountering the error code `M_UNKNOWN`,
-clients should prefer the HTTP status code as a more reliable reference
-for what the issue was. For example, if the client receives an error
-code of `M_NOT_FOUND` but the request gave a 400 Bad Request status
-code, the client should treat the error as if the resource was not
-found. However, if the client were to receive an error code of
-`M_UNKNOWN` with a 400 Bad Request, the client should assume that the
-request being made was invalid.
+All client-server API endpoints MUST return error responses conforming to the
+[standard error response](/appendices#standard-error-response) schema.
 
 #### Common error codes
 
-These error codes can be returned by any API endpoint:
-
-`M_FORBIDDEN`
-Forbidden access, e.g. joining a room without permission, failed login.
+In addition to the standard error codes listed in the appendix, the following
+standard error codes can be returned by any client-server API endpoint:
 
 `M_UNKNOWN_TOKEN`
 The access or refresh token specified was not recognised.
@@ -107,36 +75,10 @@ The account has been [locked](#account-locking) and cannot be used at this time.
 The account has been [suspended](#account-suspension) and can only be used for
 limited actions at this time.
 
-`M_BAD_JSON`
-Request contained valid JSON, but it was malformed in some way, e.g.
-missing required keys, invalid values for keys.
-
-`M_NOT_JSON`
-Request did not contain valid JSON.
-
-`M_NOT_FOUND`
-No resource was found for this request.
-
-`M_LIMIT_EXCEEDED`
-Too many requests have been sent in a short period of time. Wait a while
-then try again. See [Rate limiting](#rate-limiting).
-
-`M_UNRECOGNIZED`
-The server did not understand the request. This is expected to be returned with
-a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
-code if the endpoint is implemented, but the incorrect HTTP method is used.
-
-`M_UNKNOWN`
-An unknown error has occurred.
-
 #### Other error codes
 
-The following error codes are specific to certain endpoints.
-
-<!-- TODO: move them to the endpoints that return them -->
-
-`M_UNAUTHORIZED`
-The request was not correctly authorized. Usually due to login failures.
+In addition to the standard error codes listed in the appendix, the following
+standard error codes can be returned by specific client-server API endpoints:
 
 `M_USER_DEACTIVATED`
 The user ID associated with the request has been deactivated. Typically
@@ -179,11 +121,6 @@ that this server does not trust.
 The client's request to create a room used a room version that the
 server does not support.
 
-`M_INCOMPATIBLE_ROOM_VERSION`
-The client attempted to join a room that has a version the server does
-not support. Inspect the `room_version` property of the error response
-for the room's version.
-
 `M_BAD_STATE`
 The state change requested cannot be performed, such as attempting to
 unban a user who is not banned.
@@ -197,60 +134,12 @@ A Captcha is required to complete the request.
 `M_CAPTCHA_INVALID`
 The Captcha provided did not match what was expected.
 
-`M_MISSING_PARAM`
-A required parameter was missing from the request.
-
-`M_INVALID_PARAM`
-A parameter that was specified has the wrong value. For example, the
-server expected an integer and instead received a string.
-
-`M_TOO_LARGE`
-The request or entity was too large.
-
-`M_EXCLUSIVE`
-The resource being requested is reserved by an application service, or
-the application service making the request has not created the resource.
-
-`M_RESOURCE_LIMIT_EXCEEDED`
-The request cannot be completed because the homeserver has reached a
-resource limit imposed on it. For example, a homeserver held in a shared
-hosting environment may reach a resource limit if it starts using too
-much memory or disk space. The error MUST have an `admin_contact` field
-to provide the user receiving the error a place to reach out to.
-Typically, this error will appear on routes which attempt to modify
-state (e.g.: sending messages, account data, etc) and not routes which
-only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
-[`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
-
 `M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
 
 `M_THREEPID_MEDIUM_NOT_SUPPORTED`
 The homeserver does not support adding a third party identifier of the given medium.
-
-#### Rate limiting
-
-Homeservers SHOULD implement rate limiting to reduce the risk of being
-overloaded. If a request is refused due to rate limiting, it should
-return a standard error response of the form:
-
-```json
-{
-  "errcode": "M_LIMIT_EXCEEDED",
-  "error": "string",
-  "retry_after_ms": integer (optional, deprecated)
-}
-```
-
-Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
-header for any response with a 429 status code.
-
-The `retry_after_ms` property MAY be included to tell the client how long
-they have to wait in milliseconds before they can try again. This property is
-deprecated, in favour of the `Retry-After` header.
-
-{{% changed-in v="1.10" %}}: `retry_after_ms` property deprecated in favour of `Retry-After` header.
 
 ### Transaction identifiers
 

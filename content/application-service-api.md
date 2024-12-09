@@ -12,6 +12,16 @@ Application Service API (AS API) defines a standard API to allow such
 extensible functionality to be implemented irrespective of the
 underlying homeserver implementation.
 
+## API standards
+
+### Standard error response
+
+All homeserver -> application service API endpoints MUST return error responses
+conforming to the [standard error response](/appendices#standard-error-response)
+schema. Similarly, all application service client-server API extension
+endpoints MUST return error responses conforming to the standard error response
+schema.
+
 ## Application Services
 
 Application services are passive and can only observe events from the
