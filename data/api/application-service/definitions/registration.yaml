@@ -32,6 +32,13 @@ properties:
     description: |-
       The localpart of the user associated with the application service. Events will be sent to the AS if this user is the target of the event, or
       is a joined member of the room where the event occurred.
+  receive_ephemeral:
+    type: boolean
+    x-addedInMatrixVersion: "1.13"
+    description: |-
+      Whether the application service wants to [receive ephemeral data](/application-service-api/#pushing-ephemeral-data).
+      
+      Defaults to `false` if not present.
   namespaces:
     type: object
     title: Namespaces
