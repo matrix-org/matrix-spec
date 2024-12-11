@@ -322,11 +322,17 @@ respond with the CORS headers for that route. The recommended CORS
 headers to be returned by servers on all requests are:
 
     Access-Control-Allow-Origin: *
-    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH, HEAD
+    Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
     Access-Control-Allow-Headers: X-Requested-With, Content-Type, Authorization
 
-{{% changed-in v="1.13" %}} `PATCH` and `HEAD` were added to the list for the
-`Access-Control-Allow-Methods` header.
+{{% boxes/note %}}
+{{% added-in v="1.13" %}} The recommended value of the `Access-Control-Allow-Methods`
+header only covers the existing endpoints in the specification. Servers which
+support additional endpoints or methods should add those methods as well.
+
+This section will be updated whenever a new method is supported by an endpoint.
+Examples of possible future-use methods include `PATCH` and `HEAD`.
+{{% /boxes/note %}}
 
 ## Server Discovery
 
