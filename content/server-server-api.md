@@ -1253,7 +1253,7 @@ endpoint MUST be protected as follows:
     for the respective event ID.
 -   ACLs MUST be applied to all EDUs that are local to a specific room:
 
-    -   For [typing notifications (m.typing)](#typing-notifications), if
+    -   For [typing notifications (`m.typing`)](#typing-notifications), if
         the `origin` server is denied access to the room identified by
         `room_id`, the EDU MUST be ignored.
     -   For [receipts (m.receipt)](#receipts), all receipts for a particular
