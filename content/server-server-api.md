@@ -1247,7 +1247,7 @@ The following endpoint prefixes MUST be protected:
 Additionally the [`/_matrix/federation/v1/send/{txnId}`](#put_matrixfederationv1sendtxnid)
 endpoint MUST be protected as follows:
 
--   ACLs MUST be applied to all PDUs on a per-PDU basis. If the `origin`
+-   ACLs MUST be applied to all PDUs on a per-PDU basis. If the sending
     server is denied access to the room identified by `room_id`, the PDU
     MUST be ignored with an appropriate error included in the response
     for the respective event ID.
