@@ -77,7 +77,7 @@ paths:
                     A list of ephemeral data, if the `receive_ephemeral` setting was enabled in the
                     [registration](/application-service-api/#registration) file.
 
-                    There are only three event types that can currently occur: `m.presence`,
+                    There are only three event types that can currently occur in this list: `m.presence`,
                     `m.typing`, and `m.receipt`. Room-scoped ephemeral data (`m.typing` and
                     `m.receipt`) MUST include a `room_id` property to identify the room that they
                     were sent in.
