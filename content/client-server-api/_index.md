@@ -1508,11 +1508,12 @@ following, however:
 * [Verify other devices](#device-verification) and write associated
   [cross-signing data](#cross-signing).
 * [Populate their key backup](#server-side-key-backups).
-* Leave rooms and reject invites.
-* Redact their own events.
-* Log out or delete any device of theirs, including the current session.
-* Deactivate their account, potentially with a time delay to discourage making
-  a new account right away.
+* [Leave rooms and reject invites](#post_matrixclientv3roomsroomidleave).
+* [Redact](#redactions) their own events.
+* [Log out](#post_matrixclientv3logout) or [delete](#delete_matrixclientv3devicesdeviceid)
+  any device of theirs, including the current session.
+* [Deactivate](#post_matrixclientv3accountdeactivate) their account, potentially
+  with a time delay to discourage making a new account right away.
 * Change or add [admin contacts](#adding-account-administrative-contact-information),
   but not remove. Servers are recommended to only permit this if they keep a
   changelog on contact information to prevent misuse.
@@ -1530,11 +1531,11 @@ instead.
 
 Otherwise, the recommended set of explicitly forbidden actions is:
 
-* Joining or knocking on rooms.
-* Accepting or sending invites.
-* Sending messages to rooms.
-* Changing profile data (display name and avatar, primarily).
-* Redacting other users' events, when permission is possible in a room.
+* [Joining](#joining-rooms) or [knocking](#knocking-on-rooms) on rooms.
+* Accepting or sending [invites](#room-membership).
+* [Sending messages](#put_matrixclientv3roomsroomidsendeventtypetxnid) to rooms.
+* Changing [profile data](#profiles) (display name and avatar, primarily).
+* [Redacting](#redactions) other users' events, when permission is possible in a room.
 
 When a client attempts to perform an action while suspended, the server MUST
 respond with a `403 Forbidden` error response with `M_USER_SUSPENDED` as the
