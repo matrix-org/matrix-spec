@@ -1493,8 +1493,8 @@ To enable users to appeal to a lock clients MAY use
 
 {{% added-in v="1.13" %}}
 
-Similar to [locking](#account-locking), a user's account MAY be suspended to
-prevent further activity from that account. A similar effect is achieved, though
+Server administrators MAY suspend a user's account to prevent further activity
+from that account. The effect is similar to [locking](#account-locking), though
 without risk of the client losing state from a logout. Suspensions are reversible,
 like locks and unlike deactivations.
 
@@ -1509,7 +1509,7 @@ following, however:
   [cross-signing data](#cross-signing).
 * [Populate their key backup](#server-side-key-backups).
 * Leave rooms and reject invites.
-* Redacting their own events.
+* Redact their own events.
 * Log out or delete any device of theirs, including the current session.
 * Deactivate their account, potentially with a time delay to discourage making
   a new account right away.
