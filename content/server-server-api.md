@@ -1257,7 +1257,7 @@ endpoint MUST be protected as follows:
         the sending server is denied access to the room identified by
         `room_id`, the EDU MUST be ignored.
     -   For [receipts (`m.receipt`)](#receipts), all receipts for a particular
-        room ID MUST be ignored if the `origin` server is denied access to
+        room ID MUST be ignored if the sending server is denied access to
         the room identified by that ID.
 
 ## Signing Events
