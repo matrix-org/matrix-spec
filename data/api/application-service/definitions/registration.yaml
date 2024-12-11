@@ -36,7 +36,7 @@ properties:
     type: boolean
     x-addedInMatrixVersion: "1.13"
     description: |-
-      Whether the application service wants to [receive EDUs](/application-service-api/#pushing-edus).
+      Whether the application service wants to [receive ephemeral data](/application-service-api/#pushing-ephemeral-data).
       
       Defaults to `false` if not present.
   namespaces:
