@@ -32,6 +32,10 @@ paths:
         [/keys/upload](/client-server-api/#post_matrixclientv3keysupload). (All
         keys uploaded within a given call to `/keys/upload` are considered
         equivalent in this regard; no ordering is specified within them.)
+
+        Servers must ensure that each one-time key is returned at most once,
+        so when a key has been returned, no other request will ever return
+        the same key.
       operationId: claimUserEncryptionKeys
       security:
         - signedRequest: []
