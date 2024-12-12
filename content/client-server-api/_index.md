@@ -103,6 +103,10 @@ No access token was specified for the request.
 `M_USER_LOCKED`
 The account has been [locked](#account-locking) and cannot be used at this time.
 
+`M_USER_SUSPENDED`
+The account has been [suspended](#account-suspension) and can only be used for
+limited actions at this time.
+
 `M_BAD_JSON`
 Request contained valid JSON, but it was malformed in some way, e.g.
 missing required keys, invalid values for keys.
@@ -1498,6 +1502,73 @@ and other APIs to detect when the lock has been lifted.
 
 To enable users to appeal to a lock clients MAY use
 [server contact discovery](#getwell-knownmatrixsupport).
+
+#### Account suspension
+
+{{% added-in v="1.13" %}}
+
+Server administrators MAY suspend a user's account to prevent further activity
+from that account. The effect is similar to [locking](#account-locking), though
+without risk of the client losing state from a logout. Suspensions are reversible,
+like locks and unlike deactivations.
+
+The actions a user can perform while suspended is deliberately left as an
+implementation detail. Servers SHOULD permit the user to perform at least the
+following, however:
+
+* Log in and create additional sessions (which are also suspended).
+* See and receive messages, particularly through [`/sync`](#get_matrixclientv3sync)
+  and [`/messages`](#get_matrixclientv3roomsroomidmessages).
+* [Verify other devices](#device-verification) and write associated
+  [cross-signing data](#cross-signing).
+* [Populate their key backup](#server-side-key-backups).
+* [Leave rooms and reject invites](#post_matrixclientv3roomsroomidleave).
+* [Redact](#redactions) their own events.
+* [Log out](#post_matrixclientv3logout) or [delete](#delete_matrixclientv3devicesdeviceid)
+  any device of theirs, including the current session.
+* [Deactivate](#post_matrixclientv3accountdeactivate) their account, potentially
+  with a time delay to discourage making a new account right away.
+* Change or add [admin contacts](#adding-account-administrative-contact-information),
+  but not remove. Servers are recommended to only permit this if they keep a
+  changelog on contact information to prevent misuse.
+
+General purpose endpoints like [`/send/{eventType}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+MAY return the error described below depending on the path parameters. For example,
+a user may be allowed to send `m.room.redaction` events but not `m.room.message`
+events through `/send`.
+
+Where a room is used to maintain communication between server administration
+teams and the suspended user, servers are recommended to allow the user to send
+events to that room specifically. Server administrators which do not want the
+user to continue receiving messages may be interested in [account locking](#account-locking)
+instead.
+
+Otherwise, the recommended set of explicitly forbidden actions is:
+
+* [Joining](#joining-rooms) or [knocking](#knocking-on-rooms) on rooms.
+* Accepting or sending [invites](#room-membership).
+* [Sending messages](#put_matrixclientv3roomsroomidsendeventtypetxnid) to rooms.
+* Changing [profile data](#profiles) (display name and avatar, primarily).
+* [Redacting](#redactions) other users' events, when permission is possible in a room.
+
+When a client attempts to perform an action while suspended, the server MUST
+respond with a `403 Forbidden` error response with `M_USER_SUSPENDED` as the
+error code, as shown below:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+```
+
+```json
+{
+  "errcode": "M_USER_SUSPENDED",
+  "error": "You cannot perform this action while suspended."
+}
+```
+
+APIs for initiating suspension or unsuspension are not included in this version
+of the specification, and left as an implementation detail.
 
 ### Adding Account Administrative Contact Information
 

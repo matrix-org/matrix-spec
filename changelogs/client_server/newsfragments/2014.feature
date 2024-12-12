@@ -1,0 +1,1 @@
+Add new `M_USER_SUSPENDED` error code behaviour, as per [MSC3823](https://github.com/matrix-org/matrix-spec-proposals/pull/3823).
