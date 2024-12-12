@@ -1,0 +1,1 @@
+Specify order that one-time keys are issued by `/keys/claim`, as per [MSC4225](https://github.com/matrix-org/matrix-spec-proposals/pull/4225).
