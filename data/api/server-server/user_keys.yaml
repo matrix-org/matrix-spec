@@ -24,8 +24,9 @@ paths:
         Claims one-time keys for use in pre-key messages.
 
         The request contains the user ID, device ID and algorithm name of the
-        keys that are required. The response contains a key matching this -
-        either a one-time key, or if none are available, a fallback key.
+        keys that are required. If a key matching these requirements can be
+        found, the response contains it. The returned key is a one-time key
+        if one is available, and otherwise a fallback key.
 
         One-time keys are given out in the order that they were uploaded via
         [/keys/upload](/client-server-api/#post_matrixclientv3keysupload). (All
