@@ -2927,7 +2927,7 @@ that profile.
 | [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
 | [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
 | [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
-| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Account Data](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
