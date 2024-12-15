@@ -1,0 +1,46 @@
+{{- /*
+
+    Template to render a page with a `changelog` layout or the `changelog`
+    section page. This conflation seems to be a limitation of Hugo currently, it
+    uses this template for both cases.
+
+    For the `changelog` section page, this redirects the page to the latest
+    version's changelog page.
+
+    For a page with a `changelog` layout, this adds a table at the top of the
+    page with informations about the release:
+
+    * A link to the matrix-spec repository at the time of the release, with the
+      version taken from the `linkTitle` in the frontmatter of the page, unless
+      it is the unstable changelog.
+    * The date of the release, taken from the `date` in the frontmatter of the
+      page, unless it is the unstable changelog.
+    * A link to the markdown checklist format of the changelog. The `outputs` in
+      the frontmatter of the page must include `checklist`.
+
+*/ -}}
+
+{{ define "main" }}
+{{ if .IsSection -}}
+    {{ with index .RegularPages.ByDate.Reverse 0 -}}
+    <meta http-equiv="refresh" content="0; url={{ .RelPermalink }}">
+    {{ end -}}
+{{ else -}}
+    {{ $version := lower .LinkTitle -}}
+<div class="td-content">
+	<h1>{{ .Title }}</h1>
+
+    <table class="release-info">
+        {{ if ne $version "unstable" -}}
+            {{ $commitLink := printf "https://github.com/matrix-org/matrix-spec/tree/%s" $version -}}
+        <tr><th>Git commit</th><td><a href="{{ $commitLink }}">{{ $commitLink }}</a></td>
+        <tr><th>Release date</th><td>{{ .Date | time.Format ":date_long" }}</td>
+        {{ end -}}
+        {{ $checklist := .OutputFormats.Get "checklist" -}}
+        <tr><th>Checklist</th><td><a href="{{ $checklist.RelPermalink }}">checklist.md</a></td>
+    </table>
+
+	{{ .Content }}
+</div>
+{{ end -}}
+{{ end }}
