@@ -8,13 +8,10 @@ set -e
 VERSION="$1"
 DATE="$2"
 
-cd `dirname $0`/../changelogs
-
-# Pre-cleanup just in case it wasn't done on the last run
-rm -f rendered.md
-
-# Generate changelog
-towncrier --yes
+if [ -z "$VERSION" ]; then
+    echo "ERROR: The version of the changelog must be provided"
+    exit 1
+fi
 
 if [ "$VERSION" = "vUNSTABLE" ]; then
     TITLE="Changes since last release"
@@ -25,7 +22,25 @@ else
     TITLE="$VERSION Changelog"
     LINKTITLE="$VERSION"
     FILENAME="$VERSION.md"
+
+    if [ -z "$DATE" ]; then
+        echo "ERROR: The date of the release must be provided for stable releases"
+        exit 1
+    fi
+
+    if [[ ! "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+        echo "ERROR: The date does not have the format YYYY-MM-DD"
+        exit 1
+    fi
 fi
+
+cd `dirname $0`/../changelogs
+
+# Pre-cleanup just in case it wasn't done on the last run
+rm -f rendered.md
+
+# Generate changelog
+towncrier --yes
 
 {
     # Prepare the header
