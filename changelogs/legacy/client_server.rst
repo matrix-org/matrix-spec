@@ -557,7 +557,7 @@ Since the draft stage, the following major changes have been made:
   - Invites based on third-party identifiers
   - Room tagging
   - Guest access
-  - Account Data
+  - Client config
 - The following APIs were added:
   - ``/sync``
   - ``/publicRooms``

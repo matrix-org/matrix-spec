@@ -15,7 +15,7 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Account Data API
+  title: Matrix Client-Server Key Management API
   version: 1.0.0
 paths:
   /keys/upload:
