@@ -1363,3 +1363,12 @@ following conventions.
    the tokens returned by `next_batch` and `prev_batch` should contain enough
    information for subsequent calls to the API to know which page of results
    they should return.
+
+## Best Current Practice for Mobile Clients
+
+In order to save bandwidth and battery mobile clients should:
+
+- Use [push notifications][/client-server-api##push-notifications] to get notified about new events
+- Disable continuous `/sync` calls
+- Fetch the events indicted in the push notifications via the ``GET /rooms/{roomId}/event/{eventId}`` API call
+- In case the event is encrypted and the necessary keys aren't present, invoke `/sync` to get the needed encryption keys
