@@ -13,7 +13,7 @@ Visibility](#room-history-visibility). setting, along with a special version of 
 
 A client wishing to view a room without joining it should call [GET
 /rooms/:room\_id/initialSync](#get_matrixclientv3roomsroomidinitialsync),
-followed by [GET /events](#get_matrixclientv3events). Clients will need to do
+followed by [GET /events](#peeking_get_matrixclientv3events). Clients will need to do
 this in parallel for each room they wish to view.
 
 Clients can of course also call other endpoints such as [GET
