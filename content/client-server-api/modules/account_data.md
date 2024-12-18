@@ -1,5 +1,5 @@
 
-### Client Config
+### Account Data
 
 Clients can store custom config data for their account on their
 homeserver. This account data will be synced between different devices
