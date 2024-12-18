@@ -21,7 +21,7 @@ sharing", "SSSS", or "4S".
 #### Storage
 
 When secrets are stored on the server, they are stored in the user's
-[account-data](#client-config), using an event type equal to the
+[account-data](#account-data), using an event type equal to the
 secret's identifier. The keys that secrets are encrypted with are
 described by data that is also stored in the user's account-data. Users
 can have multiple keys, allowing them to control what sets of secrets
