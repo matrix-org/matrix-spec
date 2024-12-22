@@ -79,8 +79,8 @@ release.
 3. Commit the changes.
 4. Generate the changelog.
    1. Activate your python virtual environment.
-   2. Run `./scripts/generate-changelog.sh v1.2 "October 01, 2021"` (using the correct
-      version number and same `release_date` format from the hugo config).
+   2. Run `./scripts/generate-changelog.sh v1.2 2021-10-01` (using the correct
+      version number and the `YYYY-MM-DD` format for the release date).
    3. Commit the result.
 5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
 6. Push the release branch and the tag.
