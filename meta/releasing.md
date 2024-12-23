@@ -80,8 +80,8 @@ release.
 4. Generate the changelog.
    1. Activate your python virtual environment.
    2. Run `./scripts/generate-changelog.sh v1.2` (using the correct version number).
-      The script while use the current date. If that date is wrong, correct it by using
-      the same `YYYY-MM-DD` date format.
+      The script will use the current date. If that date is wrong, correct the document
+      by using the same `YYYY-MM-DD` date format.
    3. Commit the result.
 5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
 6. Push the release branch and the tag.
