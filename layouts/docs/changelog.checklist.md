@@ -2,11 +2,11 @@
 
     Template to render a page with a `changelog` layout as a markdown checklist.
 
-    This transforms the markdown source of the changelog to change list items to
-    checklist items.
+    This transforms the markdown source of the changelog to change list items,
+    which in turn are them transformed into a rendered checklist.
 
-    If it is not the unstable changelog, this also adds a table at the top of
-    the page with information about the Matrix spec release:
+    Stable releases will additionally have a table at the top of the page with
+    information about the release, including:
 
     * A link to the matrix-spec repository at the time of the release, with the
       version taken from the `linkTitle` in the frontmatter of the page.
