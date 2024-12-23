@@ -28,7 +28,7 @@
 {{ else -}}
     {{ $version := lower .LinkTitle -}}
 <div class="td-content">
-	<h1>{{ .Title }}</h1>
+    <h1>{{ .Title }}</h1>
 
     <table class="release-info">
         {{ if ne $version "unstable" -}}
@@ -40,7 +40,7 @@
         <tr><th>Checklist</th><td><a href="{{ $checklist.RelPermalink }}">checklist.md</a></td>
     </table>
 
-	{{ .Content }}
+    {{ .Content }}
 </div>
 {{ end -}}
 {{ end }}
