@@ -1,1 +1,1 @@
-The `POST /_matrix/client/v3/rooms/{roomId}/initialSync` endpoint is not longer deprecated, as it is still used for peeking.
+The `POST /_matrix/client/v3/rooms/{roomId}/initialSync` endpoint is no longer deprecated, as it is still used for peeking.
