@@ -18,6 +18,7 @@ allOf:
   properties:
     id_server:
       type: string
+      format: mx-server-name
       description: |-
         The hostname of the identity server to communicate with. May optionally
         include a port. This parameter is ignored when the homeserver handles
