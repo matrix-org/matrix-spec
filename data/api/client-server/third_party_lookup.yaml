@@ -33,7 +33,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../application-service/definitions/protocol_metadata.yaml
+                $ref: definitions/protocol_metadata.yaml
       tags:
         - Third-party Lookup
   "/thirdparty/protocol/{protocol}":
@@ -59,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: ../application-service/definitions/protocol.yaml
+                $ref: definitions/protocol.yaml
         "404":
           description: The protocol is unknown.
           content:

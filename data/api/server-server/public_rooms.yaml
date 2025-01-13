@@ -54,7 +54,10 @@ paths:
           description: |-
             The specific third-party network/protocol to request from the homeserver.
             Can only be used if `include_all_networks` is false.
-          example: irc
+
+            This is the `instance_id` of a `Protocol Instance` returned by
+            [`GET /_matrix/client/v3/thirdparty/protocols`](/client-server-api/#get_matrixclientv3thirdpartyprotocols).
+          example: irc-freenode
           schema:
             type: string
       responses:
@@ -124,7 +127,10 @@ paths:
                   description: |-
                     The specific third-party network/protocol to request from the
                     homeserver. Can only be used if `include_all_networks` is false.
-                  example: irc
+
+                    This is the `instance_id` of a `Protocol Instance` returned by
+                    [`GET /_matrix/client/v3/thirdparty/protocols`](/client-server-api/#get_matrixclientv3thirdpartyprotocols).
+                  example: irc-freenode
               example: {
                 "limit": 10,
                 "filter": {
@@ -135,7 +141,7 @@ paths:
                   ]
                 },
                 "include_all_networks": false,
-                "third_party_instance_id": "irc"
+                "third_party_instance_id": "irc-freenode"
               }
         description: Options for which rooms to return, or empty object to use defaults.
         required: true
