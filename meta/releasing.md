@@ -72,9 +72,6 @@ release.
    # and `minor = "2"`
    major = "1"
    minor = "2"
-
-   # Today's date. Please use the format implied here for consistency.
-   release_date = "October 01, 2021"
    ```
 3. Commit the changes.
 4. Generate the changelog.
@@ -103,7 +100,6 @@ release.
     current_version_url = "https://spec.matrix.org/latest"
     # major = "1"
     # minor = "2"
-    # release_date = "October 01, 2021"
     ```
 11. Push pending commits and ensure the unstable spec updates accordingly from the
     GitHub Actions pipeline.
