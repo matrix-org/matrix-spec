@@ -504,8 +504,8 @@ For historical reference, the APIs were versioned as `rX.Y.Z` where `X`
 roughly represents a breaking change, `Y` a backwards-compatible change, and
 `Z` a patch or insignificant alteration to the API.
 
-`v1.0` of Matrix was released on June 10th, 2019 with the following API
-versions:
+`v1.0` of Matrix was a symbolic version released on June 10th, 2019 with the
+following minimum API versions:
 
 | API/Specification       | Version |
 |-------------------------|---------|
@@ -516,6 +516,9 @@ versions:
 | Push Gateway API        | r0.1.0  |
 | Room Version            | v5      |
 
+It is not used in this specification and should not be returned by servers in
+the [`GET /_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+endpoint. The first version using the current global versioning system was `v1.1`.
 
 ## License
 
