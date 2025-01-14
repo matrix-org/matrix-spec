@@ -1,0 +1,139 @@
+# Copyright 2024 Kévin Commaille
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Support Discovery API
+  version: 1.0.0
+paths:
+  /matrix/support:
+    get:
+      summary: Gets homeserver contacts and support details.
+      description: |-
+        Gets server admin contact and support page of the domain.
+
+        Like the [well-known discovery URI](/client-server-api/#well-known-uri),
+        this should be accessed with the hostname of the homeserver by making a
+        GET request to `https://hostname/.well-known/matrix/support`.
+
+        Note that this endpoint is not necessarily handled by the homeserver.
+        It may be served by another webserver, used for discovering support
+        information for the homeserver.
+      operationId: getWellknownSupport
+      x-addedInMatrixVersion: "1.10"
+      responses:
+        "200":
+          description: Server support information.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contacts:
+                    type: array
+                    description: |-
+                      Ways to contact the server administrator.
+
+                      At least one of `contacts` or `support_page` is required.
+                      If only `contacts` is set, it must contain at least one
+                      item.
+                    items:
+                      type: object
+                      title: Contact
+                      description: A way to contact the server administrator.
+                      properties:
+                        matrix_id:
+                          type: string
+                          format: mx-user-id
+                          pattern: "^@"
+                          description: |-
+                            A [Matrix User ID](/appendices/#user-identifiers)
+                            representing the administrator.
+
+                            It could be an account registered on a different
+                            homeserver so the administrator can be contacted
+                            when the homeserver is down.
+
+                            At least one of `matrix_id` or `email_address` is
+                            required.
+                        email_address:
+                          type: string
+                          format: email
+                          description: |-
+                            An email address to reach the administrator.
+
+                            At least one of `matrix_id` or `email_address` is
+                            required.
+                        role:
+                          type: string
+                          enum:
+                            - "m.role.admin"
+                            - "m.role.security"
+                          description: |-
+                            An informal description of what the contact methods
+                            are used for.
+
+                            `m.role.admin` is a catch-all role for any queries
+                            and `m.role.security` is intended for sensitive
+                            requests.
+
+                            Unspecified roles are permitted through the use of
+                            [Namespaced Identifiers](/appendices/#common-namespaced-identifier-grammar).
+                      required:
+                        - role
+                      example: {
+                        "matrix_id": "@admin:example.org",
+                        "email_address": "admin@example.org",
+                        "role": "m.role.admin"
+                      }
+                  support_page:
+                    type: string
+                    format: uri
+                    description: |-
+                      The URL of a page to give users help specific to the
+                      homeserver, like extra login/registration steps.
+
+                      At least one of `contacts` or `support_page` is required.
+                    example: "https://example.org/support.html"
+              examples:
+                response:
+                  value:
+                    {
+                      "contacts": [
+                        {
+                          "matrix_id": "@admin:example.org",
+                          "email_address": "admin@example.org",
+                          "role": "m.role.admin"
+                        },
+                        {
+                          "email_address": "security@example.org",
+                          "role": "m.role.security"
+                        }
+                      ],
+                      "support_page": "https://example.org/support.html"
+                    }
+        "404":
+          description: No server support information available.
+      tags:
+        - Server administration
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /.well-known

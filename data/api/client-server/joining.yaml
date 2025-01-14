@@ -18,12 +18,12 @@ info:
 paths:
   "/rooms/{roomId}/join":
     post:
-      summary: Start the requesting user participating in a particular room.
+      summary: Join the requesting user to a particular room.
       description: |-
         *Note that this API requires a room ID, not alias.*
         `/join/{roomIdOrAlias}` *exists if you have a room alias.*
 
-        This API starts a user participating in a particular room, if that user
+        This API starts a user's participation in a particular room, if that user
         is allowed to participate in that room. After this call, the client is
         allowed to see all current state events in the room, and all subsequent
         events associated with the room until the user leaves the room.
@@ -33,7 +33,8 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoomById
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -112,11 +113,11 @@ paths:
         - Room membership
   "/join/{roomIdOrAlias}":
     post:
-      summary: Start the requesting user participating in a particular room.
+      summary: Join the requesting user to a particular room.
       description: |-
         *Note that this API takes either a room ID or alias, unlike* `/rooms/{roomId}/join`.
 
-        This API starts a user participating in a particular room, if that user
+        This API starts a user's participation in a particular room, if that user
         is allowed to participate in that room. After this call, the client is
         allowed to see all current state events in the room, and all subsequent
         events associated with the room until the user leaves the room.
@@ -126,7 +127,8 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoom
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias
@@ -137,6 +139,32 @@ paths:
             type: string
         - in: query
           name: server_name
+          deprecated: true
+          x-changedInMatrixVersion:
+            "1.12": |-
+              This parameter has been deprecated in favour of `via` and will be removed in
+              a future version of the spec.
+
+              Clients SHOULD use `via` when the homeserver they're talking to supports it.
+              To do this, they MAY either detect server support through the supported spec
+              versions in [`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+              or always include both parameters with identical values.
+
+              Homeservers MUST ignore all `server_name` parameters if any `via` parameters
+              are supplied.
+          description: |-
+            The servers to attempt to join the room through. One of the servers
+            must be participating in the room.
+          example:
+            - matrix.org
+            - elsewhere.ca
+          schema:
+            type: array
+            items:
+              type: string
+        - in: query
+          name: via
+          x-addedInMatrixVersion: "1.12"
           description: |-
             The servers to attempt to join the room through. One of the servers
             must be participating in the room.
@@ -229,4 +257,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

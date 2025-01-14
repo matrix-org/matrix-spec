@@ -1,6 +1,7 @@
 {
     "type": "object",
     "description": "This event is sent by the caller when they wish to establish a call.",
+    "x-weight": 10,
     "allOf": [{
         "$ref": "core-event-schema/room_event.yaml"
     }],
@@ -35,7 +36,10 @@
                 "invitee": {
                     "type": "string",
                     "description": "The ID of the user being called. If omitted, any user in the room can answer.",
-                    "x-addedInMatrixVersion": "1.7",
+                    "x-addedInMatrixVersion": "1.7"
+                },
+                "sdp_stream_metadata": {
+                    "$ref": "components/sdp_stream_metadata.yaml"
                 }
             },
             "required": ["offer", "lifetime"]

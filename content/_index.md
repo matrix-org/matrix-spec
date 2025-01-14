@@ -56,9 +56,6 @@ The principles that Matrix attempts to follow are:
         the global Matrix network
     -   Fully open standard - publicly documented standard with no IP or
         patent licensing encumbrances
-    -   Fully open source reference implementation - liberally-licensed
-        example implementations with no IP or patent licensing
-        encumbrances
 -   Empowering the end-user
     -   The user should be able to choose the server and clients they
         use
@@ -98,6 +95,20 @@ synchronising arbitrary data between sets of people, devices and
 services - be that for instant messages, VoIP call setups, or any other
 objects that need to be reliably and persistently pushed from A to B in
 an interoperable and federated manner.
+
+### Requirement levels
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" across all parts of the
+specification are to be interpreted as described in
+[RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
+
+Some entire sections of the specification might be optional depending on the
+circumstances. For example, the
+[modules of the client-server API](/client-server-api/#modules)
+apply depending on the use case. The requirement level expressed by the above
+key words appearing in such a section is only relevant if the section itself is
+applicable.
 
 ### Spec Change Proposals
 
@@ -419,9 +430,16 @@ into the `m.` namespace.
 
 ### Timestamps
 
-Unless otherwise stated, timestamps are measured as milliseconds since
-the Unix epoch. Throughout the specification this may be referred to as
-POSIX, Unix, or just "time in milliseconds".
+Unless otherwise stated, timestamps are the number of milliseconds
+elapsed since the unix epoch (1970-01-01 00:00:00 UTC), but not counting
+leap seconds, so that each day is precisely 86,400,000 milliseconds.
+
+This means that timestamps can repeat during leap seconds. Most
+programming languages provide timestamps in that format natively, e.g.
+[ECMAScript](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-time-values-and-time-range).
+Throughout the specification this may be referred to as POSIX,
+[Unix](https://en.wikipedia.org/wiki/Unix_time), or just "time in
+milliseconds".
 
 ## Specification Versions
 

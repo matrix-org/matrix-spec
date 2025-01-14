@@ -24,7 +24,8 @@ paths:
         set this user's display name, e.g. you need to have their `access_token`.
       operationId: setDisplayName
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -97,6 +98,20 @@ paths:
                   value: {
                     "displayname": "Alice Margatroid"
                   }
+        "403":
+          x-addedInMatrixVersion: "1.12"
+          description: The server is unwilling to disclose whether the user exists and/or
+            has a display name.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Profile lookup is disabled on this homeserver"
+                  }
         "404":
           description: There is no display name for this user or this user does not exist.
       tags:
@@ -109,7 +124,8 @@ paths:
         set this user's avatar URL, e.g. you need to have their `access_token`.
       operationId: setAvatarUrl
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -183,6 +199,20 @@ paths:
                   value: {
                     "avatar_url": "mxc://matrix.org/SDGdghriugerRg"
                   }
+        "403":
+          x-addedInMatrixVersion: "1.12"
+          description: The server is unwilling to disclose whether the user exists and/or
+            has an avatar URL.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Profile lookup is disabled on this homeserver"
+                  }
         "404":
           description: There is no avatar URL for this user or this user does not exist.
       tags:
@@ -193,8 +223,7 @@ paths:
       description: |-
         Get the combined profile information for this user. This API may be used
         to fetch the user's own profile information or other users; either
-        locally or on remote homeservers. This API may return keys which are not
-        limited to `displayname` or `avatar_url`.
+        locally or on remote homeservers.
       operationId: getUserProfile
       parameters:
         - in: path
@@ -238,7 +267,7 @@ paths:
                 response:
                   value: {
                     "errcode": "M_FORBIDDEN",
-                    "error": "Profile lookup over federation is disabled on this homeserver"
+                    "error": "Profile lookup is disabled on this homeserver"
                   }
         "404":
           description: There is no profile information for this user or this user does not
@@ -269,4 +298,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

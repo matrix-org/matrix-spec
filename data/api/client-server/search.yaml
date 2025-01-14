@@ -22,7 +22,8 @@ paths:
       description: Performs a full text search across different categories.
       operationId: search
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: next_batch
@@ -224,19 +225,21 @@ paths:
                                         The historic profile information of the
                                         users that sent the events returned.
 
-                                        The `string` key is the user ID for which
+                                        The key is the user ID for which
                                         the profile belongs to.
-                                      additionalProperties:
-                                        type: object
-                                        title: User Profile
-                                        properties:
-                                          displayname:
-                                            type: string
-                                            title: Display name
-                                          avatar_url:
-                                            type: string
-                                            format: uri
-                                            title: Avatar Url
+                                      patternProperties:
+                                        "^@":
+                                          x-pattern-format: mx-user-id
+                                          type: object
+                                          title: User Profile
+                                          properties:
+                                            displayname:
+                                              type: string
+                                              title: Display name
+                                            avatar_url:
+                                              type: string
+                                              format: uri
+                                              title: Avatar Url
                                     events_before:
                                       type: array
                                       title: Events Before
@@ -261,13 +264,15 @@ paths:
                               This is included if the request had the
                               `include_state` key set with a value of `true`.
 
-                              The `string` key is the room ID for which the `State
+                              The key is the room ID for which the `State
                               Event` array belongs to.
-                            additionalProperties:
-                              type: array
-                              title: Room State
-                              items:
-                                $ref: definitions/client_event.yaml
+                            patternProperties:
+                              "^!":
+                                x-pattern-format: mx-room-id
+                                type: array
+                                title: Room State
+                                items:
+                                  $ref: definitions/client_event.yaml
                           groups:
                             type: object
                             title: Groups
@@ -374,4 +379,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

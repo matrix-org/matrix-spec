@@ -9,12 +9,16 @@ description: |-
   that user ID.
 properties:
   content:
-    additionalProperties:
-      type: array
-      title: User ID
-      items:
-        type: string
+    patternProperties:
+      "^@":
+        x-pattern-format: mx-user-id
+        type: array
+        items:
+          type: string
     type: object
+    description: |-
+      The mapping of user ID to a list of room IDs of the 'direct' rooms for
+      that user ID.
   type:
     enum:
       - m.direct

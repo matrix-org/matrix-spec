@@ -33,17 +33,20 @@ rather than allowing all homeservers to enforce the rules on each other.
 #### Client behaviour
 
 The following API endpoints are allowed to be accessed by guest accounts
-for retrieving events:
+for retrieving events and associated media:
 
 * [GET /rooms/{roomId}/state](#get_matrixclientv3roomsroomidstate)
 * [GET /rooms/{roomId}/context/{eventId}](#get_matrixclientv3roomsroomidcontexteventid)
 * [GET /rooms/{roomId}/event/{eventId}](#get_matrixclientv3roomsroomideventeventid)
 * [GET /rooms/{roomId}/state/{eventType}/{stateKey}](#get_matrixclientv3roomsroomidstateeventtypestatekey)
 * [GET /rooms/{roomId}/messages](#get_matrixclientv3roomsroomidmessages)
-* {{< added-in v="1.1" >}} [GET /rooms/{roomId}/members](#get_matrixclientv3roomsroomidmembers)
+* {{% added-in v="1.1" %}} [GET /rooms/{roomId}/members](#get_matrixclientv3roomsroomidmembers)
 * [GET /rooms/{roomId}/initialSync](#get_matrixclientv3roomsroomidinitialsync)
 * [GET /sync](#get_matrixclientv3sync)
 * [GET /events](#get_matrixclientv3events) as used for room previews.
+* {{% added-in v="1.12" %}} [GET /media/download/{serverName}/{mediaId}](#get_matrixclientv1mediadownloadservernamemediaid)
+* {{% added-in v="1.12" %}} [GET /media/download/{serverName}/{mediaId}/{fileName}](#get_matrixclientv1mediadownloadservernamemediaidfilename)
+* {{% added-in v="1.12" %}} [GET /media/thumbnail/{serverName}/{mediaId}](#get_matrixclientv1mediathumbnailservernamemediaid)
 
 The following API endpoints are allowed to be accessed by guest accounts
 for sending events:
@@ -52,9 +55,9 @@ for sending events:
 * [POST /rooms/{roomId}/leave](#post_matrixclientv3roomsroomidleave)
 * [PUT /rooms/{roomId}/send/{eventType}/{txnId}](#put_matrixclientv3roomsroomidsendeventtypetxnid)
 
-    * {{< changed-in v="1.2" >}} Guests can now send *any* event type rather than just `m.room.message` events.
+    * {{% changed-in v="1.2" %}} Guests can now send *any* event type rather than just `m.room.message` events.
 
-* {{< added-in v="1.2" >}} [PUT /rooms/{roomId}/state/{eventType}/{stateKey}](#put_matrixclientv3roomsroomidstateeventtypestatekey)
+* {{% added-in v="1.2" %}} [PUT /rooms/{roomId}/state/{eventType}/{stateKey}](#put_matrixclientv3roomsroomidstateeventtypestatekey)
 * [PUT /sendToDevice/{eventType}/{txnId}](#put_matrixclientv3sendtodeviceeventtypetxnid)
 
 The following API endpoints are allowed to be accessed by guest accounts
@@ -64,7 +67,7 @@ for their own account maintenance:
 * [GET /devices](#get_matrixclientv3devices)
 * [GET /devices/{deviceId}](#get_matrixclientv3devicesdeviceid)
 * [PUT /devices/{deviceId}](#put_matrixclientv3devicesdeviceid)
-* {{< added-in v="1.2" >}} [GET /account/whoami](#get_matrixclientv3accountwhoami)
+* {{% added-in v="1.2" %}} [GET /account/whoami](#get_matrixclientv3accountwhoami)
 
 The following API endpoints are allowed to be accessed by guest accounts
 for end-to-end encryption:

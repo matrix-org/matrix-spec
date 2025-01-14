@@ -40,7 +40,8 @@ paths:
         deprecated.
       operationId: msisdnRequestTokenV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -109,7 +110,8 @@ paths:
         deprecated.
       operationId: msisdnSubmitTokenPostV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -182,7 +184,8 @@ paths:
         used by end-users, and so the response should be human-readable.
       operationId: msisdnSubmitTokenGetV2
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: sid
@@ -243,4 +246,7 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

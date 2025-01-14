@@ -26,11 +26,12 @@ paths:
         Where a child room is unknown to the local server, federation is used to fill in the details.
         The servers listed in the `via` array should be contacted to attempt to fill in missing rooms.
 
-        Only [`m.space.child`](#mspacechild) state events of the room are considered. Invalid child
-        rooms and parent events are not covered by this endpoint.
+        Only [`m.space.child`](/client-server-api/#mspacechild) state events of the room are considered.
+        Invalid child rooms and parent events are not covered by this endpoint.
       operationId: getSpaceHierarchy
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -43,8 +44,8 @@ paths:
           name: suggested_only
           description: |-
             Optional (default `false`) flag to indicate whether or not the server should only consider
-            suggested rooms. Suggested rooms are annotated in their [`m.space.child`](#mspacechild) event
-            contents.
+            suggested rooms. Suggested rooms are annotated in their [`m.space.child`](/client-server-api/#mspacechild)
+            event contents.
           example: true
           schema:
             type: boolean
@@ -92,7 +93,7 @@ paths:
                       allOf:
                         - $ref: definitions/public_rooms_chunk.yaml
                         - type: object
-                          title: ChildRoomsChunk
+                          title: SpaceHierarchyRoomsChunk
                           properties:
                             room_type:
                               type: string
@@ -102,8 +103,8 @@ paths:
                             children_state:
                               type: array
                               description: |-
-                                The [`m.space.child`](#mspacechild) events of the space-room, represented
-                                as [Stripped State Events](#stripped-state) with an added `origin_server_ts` key.
+                                The [`m.space.child`](/client-server-api/#mspacechild) events of the space-room, represented
+                                as [Stripped State Events](/client-server-api/#stripped-state) with an added `origin_server_ts` key.
 
                                 If the room is not a space-room, this should be empty.
                               items:
@@ -216,4 +217,7 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

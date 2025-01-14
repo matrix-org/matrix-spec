@@ -74,17 +74,19 @@ paths:
                     description: |-
                       The PDUs from the original transaction. The string key represents the ID of the
                       PDU (event) that was processed.
-                    additionalProperties:
-                      type: object
-                      title: PDU Processing Result
-                      description: Information about how the PDU was handled.
-                      properties:
-                        error:
-                          type: string
-                          description: |-
-                            A human readable description about what went wrong in processing this PDU.
-                            If no error is present, the PDU can be considered successfully handled.
-                          example: You are not allowed to send a message to this room.
+                    patternProperties:
+                      "^\\$":
+                        x-pattern-format: mx-event-id
+                        type: object
+                        title: PDU Processing Result
+                        description: Information about how the PDU was handled.
+                        properties:
+                          error:
+                            type: string
+                            description: |-
+                              A human readable description about what went wrong in processing this PDU.
+                              If no error is present, the PDU can be considered successfully handled.
+                            example: You are not allowed to send a message to this room.
                 required:
                   - pdus
               examples:
@@ -111,4 +113,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

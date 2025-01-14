@@ -33,19 +33,19 @@ paths:
 
         Clients, both authenticated and unauthenticated, might wish to hide user interface which exposes
         this feature if the server is not offering it. Authenticated clients can check for support on
-        a per-user basis with the `m.get_login_token` [capability](/client-server-api/#capabilities-negotiation),
+        a per-user basis with the [`m.get_login_token`](/client-server-api/#mget_login_token-capability) capability,
         while unauthenticated clients can detect server support by looking for an `m.login.token` login
         flow with `get_login_token: true` on [`GET /login`](/client-server-api/#post_matrixclientv3login).
 
         In v1.7 of the specification, transmission of the generated token to an unauthenticated client is
         left as an implementation detail. Future MSCs such as [MSC3906](https://github.com/matrix-org/matrix-spec-proposals/pull/3906)
-        might standarise a way to transmit the token between clients.
+        might standardise a way to transmit the token between clients.
 
         The generated token MUST only be valid for a single login, enforced by the server. Clients which
         intend to log in multiple devices must generate a token for each.
 
         With other User-Interactive Authentication (UIA)-supporting endpoints, servers sometimes do not re-prompt
-        for verification if the session recently passed UIA. For this endpoint, servers should always re-prompt
+        for verification if the session recently passed UIA. For this endpoint, servers MUST always re-prompt
         the user for verification to ensure explicit consent is gained for each additional client.
 
         Servers are encouraged to apply stricter than normal rate limiting to this endpoint, such as maximum
@@ -53,7 +53,8 @@ paths:
       operationId: generateLoginToken
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -97,8 +98,8 @@ paths:
             The request was malformed, or the user does not have an ability to generate tokens for their devices,
             as implied by the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
 
-            Clients should verify whether the user has an ability to call this endpoint with the `m.get_login_token`
-            [capability](/client-server-api/#capabilities-negotiation).
+            Clients should verify whether the user has an ability to call this endpoint with the
+            [`m.get_login_token`](/client-server-api/#mget_login_token-capability) capability.
           content:
             application/json:
               schema:
@@ -131,4 +132,7 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -16,26 +16,69 @@ When serving content, the server SHOULD provide a
 `Content-Security-Policy` header. The recommended policy is
 `sandbox; default-src 'none'; script-src 'none'; plugin-types application/pdf; style-src 'unsafe-inline'; object-src 'self';`.
 
-{{% boxes/added-in-paragraph %}}
-{{< added-in v="1.4" >}} The server SHOULD additionally provide
+{{% added-in v="1.4" %}} The server SHOULD additionally provide
 `Cross-Origin-Resource-Policy: cross-origin` when serving content to allow
 (web) clients to access restricted APIs such as `SharedArrayBuffer` when
 interacting with the media repository.
-{{% /boxes/added-in-paragraph %}}
+
+{{% changed-in v="1.11" %}} The unauthenticated download endpoints have been
+deprecated in favour of newer, authenticated, ones. This change includes updating
+the paths of all media endpoints from `/_matrix/media/*` to `/_matrix/client/{version}/media/*`,
+with the exception of the `/upload` and `/create` endpoints. The upload/create
+endpoints are expected to undergo a similar transition in a later version of the
+specification.
 
 #### Matrix Content (`mxc://`) URIs
 
 Content locations are represented as Matrix Content (`mxc://`) URIs. They
 look like:
 
-    mxc://<server-name>/<media-id>
+```
+mxc://<server-name>/<media-id>
 
-    <server-name> : The name of the homeserver where this content originated, e.g. matrix.org
-    <media-id> : An opaque ID which identifies the content.
+<server-name> : The name of the homeserver where this content originated, e.g. matrix.org
+<media-id> : An opaque ID which identifies the content.
+```
 
-#### Client behaviour
+#### Client behaviour {id="content-repo-client-behaviour"}
 
-Clients can upload and download content using the following HTTP APIs.
+Clients can access the content repository using the following endpoints.
+
+{{% changed-in v="1.11" %}} A number of endpoints under the /_matrix/media hierarchy
+have been deprecated and replaced with new endpoints which require authentication.
+The deprecated endpoints are marked in the section below.
+
+{{% boxes/warning %}}
+By Matrix 1.12, servers SHOULD "freeze" the deprecated, unauthenticated, endpoints
+to prevent newly-uploaded media from being downloaded. This SHOULD mean that any
+media uploaded *before* the freeze remains accessible via the deprecated endpoints,
+and any media uploaded *after* (or *during*) the freeze SHOULD only be accessible
+through the new, authenticated, endpoints. For remote media, "newly-uploaded" is
+determined by the date the cache was populated. This may mean the media is older
+than the freeze, but because the server had to re-download it, it is now considered
+"new".
+
+Clients SHOULD update to support the authenticated endpoints before servers freeze
+unauthenticated access.
+
+Servers SHOULD consider their local ecosystem impact before enacting a freeze.
+This could mean ensuring their users' typical clients support the new endpoints
+when available, or updating bridges to start using media proxies.
+
+In addition to the above, servers SHOULD exclude [IdP icons used in the `m.login.sso` flow](/client-server-api/#definition-mloginsso-flow-schema)
+from the freeze. See the `m.login.sso` flow schema for details.
+
+An *example* timeline for a server may be:
+
+* Matrix 1.11 release: Clients begin supporting authenticated media.
+* Matrix 1.12 release: Servers freeze unauthenticated media access.
+  * Media uploaded prior to this point still works with the deprecated endpoints.
+  * Newly uploaded (or cached) media *only* works on the authenticated endpoints.
+
+Matrix 1.12 is expected to be released in the July-September 2024 calendar quarter.
+{{% /boxes/warning %}}
+
+{{% http-api spec="client-server" api="authed-content-repo" %}}
 
 {{% http-api spec="client-server" api="content-repo" %}}
 
@@ -119,3 +162,50 @@ Homeservers have additional content-specific concerns:
 -   Clients or remote homeservers may try to upload malicious files
     targeting vulnerabilities in either the homeserver thumbnailing or
     the client decoders.
+
+##### Serving inline content
+
+Clients with insecure configurations may be vulnerable to Cross-Site Scripting
+attacks when served media with a `Content-Disposition` of `inline`. Clients
+SHOULD NOT be hosted on the same domain as the media endpoints for the homeserver
+to mitigate most of this risk. Servers SHOULD restrict `Content-Type` headers to
+one of the following values when serving content with `Content-Disposition: inline`:
+
+* `text/css`
+* `text/plain`
+* `text/csv`
+* `application/json`
+* `application/ld+json`
+* `image/jpeg`
+* `image/gif`
+* `image/png`
+* `image/apng`
+* `image/webp`
+* `image/avif`
+* `video/mp4`
+* `video/webm`
+* `video/ogg`
+* `video/quicktime`
+* `audio/mp4`
+* `audio/webm`
+* `audio/aac`
+* `audio/mpeg`
+* `audio/ogg`
+* `audio/wave`
+* `audio/wav`
+* `audio/x-wav`
+* `audio/x-pn-wav`
+* `audio/flac`
+* `audio/x-flac`
+
+These types are unlikely to cause Cross-Site Scripting issues when a `Content-Type`
+header is provided, as clients will only try to render the data using that content
+type. For example, if a HTML file is uploaded with a `Content-Type` of `image/png`,
+clients will just assume that the image is corrupted, and won't render it as a
+HTML page. Therefore, there is no risk in trusting the user-defined content type,
+as long as the `Content-Disposition` is calculated based on that type.
+
+Clients SHOULD NOT rely on servers returning `inline` rather than `attachment`
+on [`/download`](#get_matrixclientv1mediadownloadservernamemediaid). Server implementations might decide out of an abundance of
+caution that all downloads are responded to with `attachment`, regardless of
+content type - clients should not be surprised by this behaviour.

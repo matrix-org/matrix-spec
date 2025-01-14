@@ -27,18 +27,41 @@ instead.
 
 Some message types support HTML in the event content that clients should
 prefer to display if available. Currently `m.text`, `m.emote`, `m.notice`,
-and `m.key.verification.request` support an additional `format` parameter of
-`org.matrix.custom.html`. When this field is present, a `formatted_body`
-with the HTML must be provided. The plain text version of the HTML
-should be provided in the `body`.
+`m.image`, `m.file`, `m.audio`, `m.video` and `m.key.verification.request`
+support an additional `format` parameter of `org.matrix.custom.html`. When this
+field is present, a `formatted_body` with the HTML must be provided. The plain
+text version of the HTML should be provided in the `body`.
+
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}}
+In previous versions of the specification, the `format` and `formatted` fields
+were limited to `m.text`, `m.emote`, `m.notice`, and
+`m.key.verification.request`. This list is expanded to include `m.image`,
+`m.file`, `m.audio` and `m.video` for [media captions](#media-captions).
+{{% /boxes/note %}}
 
 Clients should limit the HTML they render to avoid Cross-Site Scripting,
 HTML injection, and similar attacks. The strongly suggested set of HTML
 tags to permit, denying the use and rendering of anything else, is:
-`font`, `del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`,
-`a`, `ul`, `ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`,
-`strike`, `code`, `hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`,
-`th`, `td`, `caption`, `pre`, `span`, `img`, `details`, `summary`.
+`del`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `blockquote`, `p`, `a`, `ul`,
+`ol`, `sup`, `sub`, `li`, `b`, `i`, `u`, `strong`, `em`, `s`, `code`,
+`hr`, `br`, `div`, `table`, `thead`, `tbody`, `tr`, `th`, `td`,
+`caption`, `pre`, `span`, `img`, `details`, `summary`.
+
+{{% boxes/note %}}
+{{% added-in v="1.10" %}}
+HTML features MAY be deprecated and replaced by their modern equivalent without
+requiring a [Spec Change Proposal](/proposals) when they are deprecated in the
+[WHATWG HTML Living Standard](https://html.spec.whatwg.org/multipage/).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% changed-in v="1.10" %}}
+In previous versions of the specification, the `font` tag was suggested with the
+`data-mx-bg-color`, `data-mx-color` and `color` attributes. This tag is now
+deprecated in favor of the `span` tag with the `data-mx-bg-color` and
+`data-mx-color` attributes in new messages.
+{{% /boxes/note %}}
 
 Not all attributes on those tags should be permitted as they may be
 avenues for other disruption attempts, such as adding `onclick` handlers
@@ -50,12 +73,12 @@ the tag.
 
 | Tag    | Permitted Attributes                                                                                                                       |
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------|
-| `font` | `data-mx-bg-color`, `data-mx-color`, `color`                                                                                               |
-| `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages))                                         |
-| `a`    | `name`, `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`) |
+| `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages)), `data-mx-maths` (see [mathematical messages](#mathematical-messages)) |
+| `a`    | `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`)         |
 | `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
+| `div` | `data-mx-maths` (see [mathematical messages](#mathematical-messages))                                                                      |
 
 Additionally, web clients should ensure that *all* `a` tags get a
 `rel="noopener"` to prevent the target page from referencing the
@@ -75,14 +98,12 @@ having appropriate closing tags, appropriate attributes (considering the
 custom ones defined in this specification), and generally valid
 structure.
 
-A special tag, `mx-reply`, may appear on rich replies (described below)
-and should be allowed if, and only if, the tag appears as the very first
-tag in the `formatted_body`. The tag cannot be nested and cannot be
-located after another tag in the tree. Because the tag contains HTML, an
-`mx-reply` is expected to have a partner closing tag and should be
-treated similar to a `div`. Clients that support rich replies will end
-up stripping the tag and its contents and therefore may wish to exclude
-the tag entirely.
+{{% boxes/note %}}
+{{% changed-in v="1.13" %}}
+In previous versions of the specification, [rich replies](#rich-replies) could
+use a special tag, `mx-reply`. This is no longer the case. Clients SHOULD strip
+this tag and its content. See the "Rich replies" section for more information.
+{{% /boxes/note %}}
 
 {{% boxes/note %}}
 A future iteration of the specification will support more powerful and
@@ -319,6 +340,107 @@ to the media repository, then reference the `mxc://` URI in a markdown-style lin
 
 Clients SHOULD render spoilers differently with some sort of disclosure. For example, the
 client could blur the actual text and ask the user to click on it for it to be revealed.
+
+##### Media captions
+
+{{% added-in v="1.10" %}}
+
+Media messages, comprised of `m.image`, `m.file`, `m.audio` and `m.video`, can
+include a caption to convey additional information about the media.
+
+To send captions, clients MUST use the `filename` and the `body`, and optionally
+the `formatted_body` with the `org.matrix.custom.html` format, described above.
+
+If the `filename` is present, and its value is different than `body`, then
+`body` is considered to be a caption, otherwise `body` is a filename. `format`
+and `formatted_body` are only used for captions.
+
+{{% boxes/note %}}
+In previous versions of the specification, `body` was usually used to set the
+filename of the uploaded file, and `filename` was only present on `m.file` with
+the same purpose.
+{{% /boxes/note %}}
+
+An example of a media message with a caption is:
+
+```json
+{
+    "msgtype": "m.image",
+    "url": "mxc://example.org/abc123",
+    "filename": "dog.jpg",
+    "body": "this is a ~~cat~~ picture :3",
+    "format": "org.matrix.custom.html",
+    "formatted_body": "this is a <s>cat</s> picture :3",
+    "info": {
+        "w": 479,
+        "h": 640,
+        "mimetype": "image/jpeg",
+        "size": 27253
+    },
+    "m.mentions": {}
+}
+```
+
+Clients MUST render the caption alongside the media and SHOULD prefer its
+formatted representation.
+
+##### Mathematical messages
+
+{{% added-in v="1.11" %}}
+
+Users might want to send mathematical notations in their messages.
+
+To send mathematical notations clients MUST use the `formatted_body` and
+therefore the `org.matrix.custom.html` format, described above. This makes
+mathematical notations valid on any `msgtype` which can support this format
+appropriately.
+
+Mathematical notations themselves use the `span` or `div` tags, depending
+whether the notation should be presented inline or not. The mathematical
+notation is written in [LaTeX](https://www.latex-project.org/) format using the
+`data-mx-maths` attribute.
+
+The contents of the tag should be a fallback representation for clients that
+cannot render the LaTeX format. The fallback representation could be, for
+example, an image, or an HTML approximation, or the raw LaTeX source. When using
+an image as a fallback, the sending client should be aware of issues that may
+arise from the receiving client using a different background colour. The `body`
+should include a textual representation of the notation.
+
+An example of a mathematical notation is:
+
+```json
+{
+  "msgtype": "m.text",
+  "format": "org.matrix.custom.html",
+  "body": "This is an equation: sin(x)=a/b.",
+  "formatted_body": "This is an equation:
+      <span data-mx-maths=\"\\sin(x)=\\frac{a}{b}\">
+        sin(<i>x</i>)=<sup><i>a</i></sup>/<sub><i>b</i></sub>
+      </span>"
+}
+```
+
+The LaTeX format is poorly defined and has several extensions, so if a client
+encounters syntax that it cannot render, it SHOULD present the fallback
+representation instead. Clients SHOULD, however, aim to support, at minimum, the
+basic [LaTeX2e](https://www.latex-project.org/) maths commands and the
+[TeX](https://tug.org/) maths commands, with the possible exception of commands
+that could be security risks.
+
+{{% boxes/warning %}}
+In general, LaTeX places a heavy burden on client authors to ensure that it is
+processed safely. Certain commands, such as [those that can create macros](https://katex.org/docs/supported#macros),
+are potentially dangerous. Clients should either decline to process those
+commands, or should take care to ensure that they are handled in safe ways (such
+as by limiting recursion). In general, LaTeX commands should be filtered by
+allowing known-good commands rather than forbidding known-bad commands.
+
+Therefore, clients should not render mathematics by calling a LaTeX compiler
+without proper sandboxing, as those executables were not written to handle
+untrusted input. Some LaTeX rendering libraries are better suited for that by
+allowing only a subset of LaTeX and enforcing recursion limits.
+{{% /boxes/warning %}}
 
 #### Server behaviour
 

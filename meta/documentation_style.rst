@@ -91,12 +91,6 @@ current version is `v1.1` then annotate your changes with `v1.2`.
 * `{{% added-in v="1.2" %}}` or `{{% changed-in v="1.2" %}}` within Markdown documents.
 * `x-addedInMatrixVersion` and `x-changedInMatrixVersion` within OpenAPI.
 
-In rare cases, `this=true` can be used on the Markdown syntax to adjust the wording.
-This is most commonly used in room version specifications.
-
-**Tip**: If you're trying to inline the Markdown version and getting unexpected results,
-try replacing the `%` symbols with `<` and `>`, changing how Hugo renders the shortcode.
-
 OpenAPI
 ~~~~~~~
 
@@ -191,4 +185,4 @@ Describing grammar
 
 Use  `RFC5234-style ABNF <https://datatracker.ietf.org/doc/html/rfc5234>`_ when describing
 the grammar for something in the spec, such as user IDs or server names. Use lowercase
-and underscore-deliminated element names (`user_id`, not `UserID` or `user-id`).
+and underscore-delimited element names (`user_id`, not `UserID` or `user-id`).

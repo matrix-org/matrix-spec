@@ -1,7 +1,7 @@
 
 ### Receipts
 
-{{< changed-in v="1.4" >}} Added private read receipts.
+{{% changed-in v="1.4" %}} Added private read receipts.
 
 This module adds in support for receipts. These receipts are a form of
 acknowledgement of an event. This module defines the `m.read` receipt
@@ -19,7 +19,7 @@ that the user had read all events *up to* the referenced event. See the
 [Receiving notifications](#receiving-notifications) section for more
 information on how read receipts affect notification counts.
 
-{{< added-in v="1.4" >}} Read receipts exist in three major forms:
+{{% added-in v="1.4" %}} Read receipts exist in three major forms:
 * Unthreaded: Denotes a read-up-to receipt regardless of threads. This is how
   pre-threading read receipts worked.
 * Threaded, main timeline: Denotes a read-up-to receipt for events not in a
@@ -31,7 +31,7 @@ Threaded read receipts are discussed in further detail [below](#threaded-read-re
 
 #### Events
 
-{{< changed-in v="1.4" >}} Each `user_id`, `receipt_type`, and categorisation
+{{% changed-in v="1.4" %}} Each `user_id`, `receipt_type`, and categorisation
 (unthreaded, or `thread_id`) tuple must be associated with only a single
 `event_id`.
 
@@ -39,9 +39,9 @@ Threaded read receipts are discussed in further detail [below](#threaded-read-re
 
 #### Client behaviour
 
-{{< changed-in v="1.4" >}} Altered to support threaded read receipts.
+{{% changed-in v="1.4" %}} Altered to support threaded read receipts.
 
-In `/sync`, receipts are listed under the `ephemeral` array of events
+In [`/sync`](#get_matrixclientv3sync), receipts are listed under the `ephemeral` array of events
 for a given room. New receipts that come down the event streams are
 deltas which update existing mappings. Clients should replace older
 receipt acknowledgements based on `user_id`, `receipt_type`, and the
@@ -137,26 +137,30 @@ either a thread root's event ID or `main` for the main timeline.
 
 Threading introduces a concept of multiple conversations being held in the same
 room and thus deserve their own read receipts and notification counts. An event is
-considered to be "in a thread" if it meets any of the following criteria:
-* It has a `rel_type` of `m.thread`.
-* It has child events with a `rel_type` of `m.thread` (in which case it'd be the
-  thread root).
-* Following the event relationships, it has a parent event which qualifies for
-  one of the above. Implementations should not recurse infinitely, though: a
-  maximum of 3 hops is recommended to cover indirect relationships.
+considered to be "in a thread" if:
 
-Events not in a thread but still in the room are considered to be part of the
-"main timeline", or a special thread with an ID of `main`.
+* It has a `rel_type` of `m.thread`, or
+* Following the event relationships, it has a parent event which references
+  the thread root with a `rel_type` of `m.thread`. Implementations should
+  not recurse infinitely, though: a maximum of 3 hops is recommended to
+  cover indirect relationships.
+
+Events not in a thread but still in the room are considered to be in the "main
+timeline". When referring to the main timeline as a thread (e.g. in receipts
+and notifications counts) a special thread ID of `main` is used.
+
+Thread roots are considered to be in the main timeline, as are events that are
+related to a thread root via non-thread relations.
 
 The following is an example DAG for a room, with dotted lines showing event
 relationships and solid lines showing topological ordering.
 
-![threaded-dag](/diagrams/threaded-dag.png)
+{{% diagram name="threaded-dag" alt="Diagram presenting a DAG with thread relationships as a single timeline" %}}
 
 This DAG can be represented as 3 threaded timelines, with `A` and `B` being thread
 roots:
 
-![threaded-dag-threads](/diagrams/threaded-dag-threads.png)
+{{% diagram name="threaded-dag-threads" alt="Diagram presenting a DAG with thread relationships as 3 related timelines" %}}
 
 With this, we can demonstrate that:
 * A threaded read receipt on `I` would mark `A`, `B`, and `I` as read.
@@ -204,7 +208,7 @@ event when the user expands that thread.
 
 #### Server behaviour
 
-For efficiency, receipts SHOULD be batched into one event per room
+For efficiency, receipts SHOULD be batched into one event per room and thread
 before delivering them to clients.
 
 Some receipts are sent across federation as EDUs with type `m.receipt`. The

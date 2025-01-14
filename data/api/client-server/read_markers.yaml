@@ -25,7 +25,8 @@ paths:
         the read receipt's location.
       operationId: setReadMarker
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -96,4 +97,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

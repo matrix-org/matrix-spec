@@ -2,7 +2,7 @@
 
   Render the parameters of a given type, given:
 
-  * `parameters`: OpenAPI/Swagger data specifying the parameters
+  * `parameters`: OpenAPI data specifying the parameters
   * `type`: the type of parameters to render: "header, ""path", "query"
   * `caption`: caption to use for the table
 
@@ -32,5 +32,4 @@
 
     {{/* and render the parameters */}}
     {{ partial "openapi/render-object-table" (dict "title" $caption "properties" $param_dict) }}
-
 {{ end }}

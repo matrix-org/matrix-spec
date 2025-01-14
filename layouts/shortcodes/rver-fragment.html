@@ -7,23 +7,12 @@
 
     The `name` parameter is the file name without extension.
 
-    The `withVersioning` parameter is optional and defaults to false. When true, any
-    mentions of "New in this version" from the `added-in` shortcode are removed prior
-    to rendering. This is useful if needing to use a fragment where part of it describes
-    new functionality in a given room version but isn't new for subsequent versions.
-
 */}}
 
-{{ $name := .Params.name }}
-{{ $withVersioning := .Params.withVersioning }}
+{{ $name := .Params.name -}}
 
-{{ with .Site.GetPage "rooms/fragments" }}
-    {{ with .Resources.GetMatch (printf "%s%s" $name ".md") }}
-        {{ $content := .Content }}
-        {{ if not $withVersioning }}
-            {{ $content = (replace $content "[New in this version]" "") }}
-            {{ $content = (replace $content "[Changed in this version]" "") }}
-        {{ end }}
-{{ $content | safeHTML }}
-    {{ end }}
-{{ end }}
+{{ with .Site.GetPage "rooms/fragments" -}}
+    {{ with .Resources.GetMatch (printf "%s.md" $name) -}}
+        {{ .RenderShortcodes | safeHTML }}
+    {{ end -}}
+{{ end -}}

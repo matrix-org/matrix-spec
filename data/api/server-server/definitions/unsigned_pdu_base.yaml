@@ -60,17 +60,7 @@ properties:
           - type: string
             title: Event ID
             example: "$abc123:matrix.org"
-          - type: object
-            title: Event Hash
-            example: {
-              "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
-            }
-            properties:
-              sha256:
-                type: string
-                description: The event hash.
-                example: Base64EncodedSha256HashesShouldBe43BytesLong
-            required: ['sha256']
+          - $ref: "event_hash.yaml"
   depth:
     type: integer
     description: |-
@@ -96,21 +86,7 @@ properties:
           - type: string
             title: Event ID
             example: "$abc123:matrix.org"
-          - type: object
-            title: Event Hash
-            example: {
-              "sha256": "Base64EncodedSha256HashesShouldBe43BytesLong"
-            }
-            properties:
-              sha256:
-                type: string
-                description: The event hash.
-                example: Base64EncodedSha256HashesShouldBe43BytesLong
-            required: ['sha256']
-  redacts:
-    type: string
-    description: For redaction events, the ID of the event being redacted.
-    example: "$def456:matrix.org"
+          - $ref: "event_hash.yaml"
   unsigned:
     type: object
     title: UnsignedData

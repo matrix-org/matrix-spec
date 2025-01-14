@@ -1,0 +1,22 @@
+type: object
+x-addedInMatrixVersion: "1.11"
+x-weight: 70
+description: |-
+  This event is sent by callers when they wish to update a stream's metadata
+  but no negotiation is required.
+allOf:
+  - $ref: core-event-schema/room_event.yaml
+properties:
+  content:
+    type: object
+    allOf:
+    - $ref: core-event-schema/call_event.yaml
+    properties:
+      sdp_stream_metadata:
+        $ref: components/sdp_stream_metadata.yaml
+    required:
+    - sdp_stream_metadata
+  type:
+    type: string
+    enum:
+    - m.call.sdp_stream_metadata_changed

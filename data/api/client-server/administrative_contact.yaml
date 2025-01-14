@@ -31,7 +31,8 @@ paths:
         identifiers that it will accept to reset the user's account password.
       operationId: getAccount3PIDs
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The lookup was successful.
@@ -101,7 +102,8 @@ paths:
       operationId: post3PIDs
       deprecated: true
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -201,7 +203,8 @@ paths:
         already been added to another user's account on the homeserver.
       operationId: add3PID
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -263,7 +266,8 @@ paths:
         Homeservers should track successful binds so they can be unbound later.
       operationId: bind3PID
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -324,7 +328,8 @@ paths:
         identity server instead.
       operationId: delete3pidFromAccount
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -393,7 +398,8 @@ paths:
         identity server instead.
       operationId: unbind3pidFromAccount
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -482,9 +488,13 @@ paths:
         "400":
           description: |-
             The third-party identifier is already in use on the homeserver, or
-            the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
+            the request was invalid. Error codes that can be returned are:
+              * `M_THREEPID_IN_USE`: The email supplied cannot be bound because is is already
+                associated with a different Matrix ID.
+              * `M_SERVER_NOT_TRUSTED`: The server does not trust/support the identity server
+                provided in the request.
+              * `M_THREEPID_MEDIUM_NOT_SUPPORTED`: The homeserver does not support adding email addresses.
+              * `M_INVALID_PARAM`: The email address given was not valid.
           content:
             application/json:
               schema:
@@ -541,9 +551,12 @@ paths:
         "400":
           description: |-
             The third-party identifier is already in use on the homeserver, or
-            the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
+            the request was invalid. Error codes that can be returned are:
+              * `M_THREEPID_IN_USE`: The phone number supplied cannot be bound because is is already
+                associated with a different Matrix ID.
+              * `M_SERVER_NOT_TRUSTED`: The server does not trust/support the identity server
+              * `M_THREEPID_MEDIUM_NOT_SUPPORTED`: The homeserver does not support adding phone numbers.
+              * `M_INVALID_PARAM`: The phone number given was not valid.
           content:
             application/json:
               schema:
@@ -584,4 +597,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

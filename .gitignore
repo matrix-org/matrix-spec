@@ -2,7 +2,7 @@ node_modules
 /data/msc
 /env*
 /resources
-/scripts/swagger
+/scripts/openapi
 /scripts/tmp
 /hugo-config.toml
 /public
@@ -14,3 +14,4 @@ _rendered.rst
 /spec/
 changelogs/rendered.*
 .hugo_build.lock
+hugo_stats.json

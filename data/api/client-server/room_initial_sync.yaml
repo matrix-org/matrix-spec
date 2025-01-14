@@ -15,7 +15,8 @@ paths:
         [migration guide](https://matrix.org/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
       operationId: roomInitialSync
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -53,7 +54,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the start of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve earlier events.
 
                           If no earlier events are available, this property may be omitted from
@@ -62,7 +63,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the end of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve later events.
                       chunk:
                         type: array
@@ -175,4 +176,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

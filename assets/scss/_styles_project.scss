@@ -1,0 +1,551 @@
+/*
+Copyright 2020, 2021 The Matrix.org Foundation C.I.C.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+Custom SCSS for the Matrix spec
+*/
+
+/* Import the CSS classes for the syntax highlighter.
+ *
+ * This is generated with:
+ *
+ *    hugo gen chromastyles --style=tango > assets/scss/syntax.scss
+ */
+@import "syntax.scss";
+
+/* Overrides for the navbar */
+.td-navbar {
+  box-shadow: 0px 0px 8px rgba(179, 179, 179, 0.25);
+  min-height: 5rem;
+
+  .navbar-brand {
+    font-size: 1.1rem;
+
+    /* Allow the text to wrap if it is wider than the viewport */
+    text-align: center;
+    white-space: normal;
+
+    .navbar-version {
+      color: $secondary;
+    }
+  }
+
+  .nav-link {
+    font-weight: normal;
+  }
+
+  a {
+    color: $black;
+  }
+}
+
+/* Styles for the sidebar nav */
+.td-sidebar {
+    /* don't attempt to use the sidebar (or things in it) as a scroll anchor. */
+    overflow-anchor: none;
+}
+
+.td-sidebar-nav {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+
+  &>.td-sidebar-nav__section {
+    margin-top: 1rem;
+  }
+
+  .td-sidebar-nav__section .ul-1 ul {
+    padding-left: 0;
+  }
+
+  /* This is to make the width of the items that have sub-items (like room versions)
+  the same as the width of items that don't (like changelog) */
+  .pr-md-3, .px-md-3 {
+    padding-right: 0 !important;
+  }
+
+  .ul-1 > li > a {
+    padding-left: 1rem !important;
+  }
+
+  .ul-2 > li > a {
+    padding-left: 2rem !important;
+  }
+
+  a.td-sidebar-link.tree-root {
+    color: $gray-800;
+    font-weight: $font-weight-bold;
+    font-size: 1.3rem;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+
+  a, a.td-sidebar-link {
+    color: $gray-800;
+    font-weight: $font-weight-normal;
+    padding-top: .2rem;
+    padding-bottom: .2rem;
+
+    display: block;
+    transition: all 100ms ease-in-out;
+
+    &:hover {
+      background-color: $secondary-lighter-background;
+      color: $gray-800;
+    }
+
+    &.active, &active:hover {
+      background-color: $secondary-background;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  @supports (position: sticky) {
+    .td-sidebar-nav {
+      /* This overrides calc(100vh - 10rem);, which gives us a blank space at the bottom of the sidebar */
+      max-height: calc(100vh - 6rem);
+    }
+  }
+}
+
+/* Customise footer */
+.td-footer {
+  box-shadow: 0px 0px 8px rgba(179, 179, 179, 0.25);
+  padding-top: 2rem;
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-color-bg);
+}
+
+/* Auto numbering for headings */
+.td-content {
+
+  counter-reset: h2;
+
+  &> h2 {
+    counter-reset: h3
+  }
+
+  &> h3 {
+    counter-reset: h4
+  }
+
+  &> h4 {
+    counter-reset: h5
+  }
+
+  &> h5 {
+    counter-reset: h6
+  }
+
+  &> h2:not(.no-numbers):before {
+    display: inline; visibility: visible; counter-increment: h2; content: counter(h2) ". "
+  }
+
+  &> h3:not(.no-numbers):before {
+    display: inline; visibility: visible; counter-increment: h3; content: counter(h2) "." counter(h3) ". "
+  }
+
+  &> h4:not(.no-numbers):before {
+    display: inline; visibility: visible; counter-increment: h4; content: counter(h2) "." counter(h3) "." counter(h4) ". "
+  }
+
+  &> h5:not(.no-numbers):before {
+    display: inline; visibility: visible; counter-increment: h5; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". "
+  }
+
+  &> h6:not(.no-numbers):before {
+    display: inline; visibility: visible; counter-increment: h6; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "
+  }
+
+}
+
+/* Remove some padding before the main content, when the sidebar is disabled */
+.td-main main {
+  @include media-breakpoint-down(md) {
+    padding-top: 0;
+  }
+}
+
+/* Adjust the scroll margin for everything in the main content, so that
+ * it doesn't disappear behind the header bar */
+.td-content * {
+  scroll-margin-top: 5.5rem;
+}
+
+/* Styles for the table of contents */
+#toc {
+  padding-top: .5rem;
+  padding-left: 1.5rem;
+
+  ol {
+    padding-left: 1rem;
+    counter-reset: section;
+    list-style-type: none;
+  }
+
+  #TableOfContents {
+    &>ol>li {
+      margin-bottom: .5rem;
+
+      &>a {
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    ol {
+      padding-left: 0;
+    }
+
+    &>ol>li>a {
+      padding-left: 1rem;
+    }
+
+    &>ol>li>ol>li>a {
+      padding-left: 2rem;
+    }
+
+    &>ol>li>ol>li>ol>li>a {
+      padding-left: 3rem;
+    }
+
+    &>ol>li>ol>li>ol>li>ol>li>a {
+      padding-left: 4rem;
+    }
+
+    &>ol>li>ol>li>ol>li>ol>li>ol>li>a {
+      padding-left: 5rem;
+    }
+
+  }
+
+  li a:before {
+    counter-increment: section;
+    content: counters(section, ".") " ";
+  }
+
+  #toc-title {
+    font-weight: $font-weight-bold;
+    font-size: 1.3rem;
+  }
+
+}
+
+/* Styles for alert boxes */
+.alert {
+  &.note {
+    &:not(.omit-title):before {
+      content: "INFO: ";
+      font-weight: $font-weight-bold;
+    }
+    border: 2px solid $note;
+    border-left-width: 5px;
+    background: $note-background;
+  }
+
+  &.rationale {
+    &:not(.omit-title):before {
+      content: "RATIONALE: ";
+      font-weight: $font-weight-bold;
+    }
+    border: 2px solid $note;
+    border-left-width: 5px;
+    background: $note-background;
+  }
+
+  &.warning {
+    &:not(.omit-title):before {
+      content: "WARNING: ";
+      font-weight: $font-weight-bold;
+    }
+    border: 2px solid $warning;
+    border-left-width: 5px;
+    background: $warning-background;
+  }
+}
+
+/* Styles for sections that are rendered from data, such as HTTP APIs and event schemas */
+.td-content .rendered-data {
+  background-color: $secondary-lightest-background;
+  padding: 0.85rem;
+  margin: 0.85rem 0;
+
+  details {
+    summary {
+      h1 {
+        margin: 0;
+        /* Ensure the disclosure control is vertically centred with the header text. */
+        vertical-align: middle;
+      }
+    }
+    p {
+      max-width: 80%;
+    }
+  }
+
+  .deprecated-inline {
+
+    &:after {
+      content: " — DEPRECATED";
+      color: $warning;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  h1 {
+    display: inline-block;
+    font-size: 1.3rem;
+
+    .endpoint {
+      color: $secondary;
+    }
+  }
+
+  h2 {
+    font-weight: $font-weight-bold;
+    font-size: 1.3rem;
+    margin: 3rem 0 .5rem 0;
+  }
+
+  h3 {
+    font-weight: $font-weight-bold;
+    font-size: 1.1rem;
+    margin: 1.5rem 0 .75rem 0;
+  }
+
+  hr {
+    border-bottom: 2px solid $dark;
+    margin-bottom: 1.5rem;
+  }
+
+  p code, table code {
+    background-color: transparent;
+  }
+
+  table {
+    @media (max-width: 800px) {
+      /* Docsy by default applies `overflow-x: auto;` to tables, which
+       * results in annoying horizontal scrolling on mobile, so we instead
+       * switch to a fixed table layout on a narrow browser width.
+       * (On a wider width the default auto table-layout provides better readability.)
+       *
+       * Docsy makes all tables "responsive tables", which causes Bootstrap 4 to create
+       * tables with a "display" property of "block".
+       * However, for "table-layout: fixed" to be effective, an element must have a
+       * "display" property of "table".
+       *
+       * Thus, we override the "display" property here. This may no longer be necessary once
+       * Docsy updates to Bootstrap v5+: https://github.com/google/docsy/issues/470.
+       * For more details, see
+       * https://github.com/matrix-org/matrix-spec/pull/1295/files#r1010759688 */
+      display: table;
+      table-layout: fixed;
+      width: 100%;
+
+      .col-name, .col-type, .col-status {
+        width: 25%;
+      }
+
+      .col-description {
+        width: 50%;
+      }
+
+      .col-status-description {
+        width: 75%;
+      }
+    }
+
+    // add some space between two tables when they are right next to each other
+    & + table {
+        margin-top: 4rem;
+    }
+
+    caption {
+      caption-side: top;
+      color: $dark;
+      font-size: 1rem;
+      font-weight: $font-weight-bold;
+    }
+
+    th, td, caption {
+      padding: 1rem;
+      border-top: 1px $table-border-color solid;
+    }
+
+    td > p:last-child {
+      // Avoid unnecessary space at the bottom of the cells.
+      margin-bottom: 0;
+    }
+
+    &.object-table, &.response-table, &.content-type-table {
+        border: 1px $table-border-color solid;
+
+        caption {
+            // the caption is outside the table's border box,
+            // so we have to give it its own border.
+            border: 1px $table-border-color solid;
+
+            // ... but avoid double border between caption and table
+            border-bottom: 0;
+
+            background-color: $secondary-lighter-background;
+        }
+
+        tbody tr {
+            --bs-table-striped-bg: #{$secondary-lighter-background};
+        }
+    }
+
+    &.basic-info, &.basic-info th, &.basic-info td {
+      table-layout: fixed;
+      margin: 1rem 0 .5rem 0;
+    }
+
+    &.basic-info th {
+      width: 15rem;
+    }
+
+    /* Arrange rows vertically when horizontal space is constrained to avoid overflowing */
+    @include media-breakpoint-down(sm) {
+      /* Make cells full width without vertical margin */
+      &.basic-info th, &.basic-info td {
+        width: 100%;
+        display: inline-block;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      /* Remove border and padding between header & data cells to make them appear like a single cell */
+      &.basic-info td {
+        padding-top: 0;
+        border-top: none;
+      }
+      &.basic-info th {
+        border-bottom: none;
+      }
+
+      /* Remove top border on all but the first header cell to prevent double borders between rows */
+      &.basic-info tr + tr th {
+        border-top: none;
+      }
+    }
+  }
+
+  pre {
+    border: 0;
+    border-left: solid 5px $secondary;
+  }
+
+  .http-api-method {
+    font-weight: $font-weight-bold;
+  }
+
+}
+
+/* Miscellaneous custom bits */
+
+/* Update link colours for MAtrix style */
+a, a:hover {
+  color: $secondary;
+}
+
+/* This is needed to stop the bottom of the Matrix icon from getting snipped off. */
+.td-navbar .navbar-brand svg {
+  height: 32px;
+}
+
+/* Give code samples and pre elements full-width */
+.td-content > .highlight, .td-content > pre {
+  max-width: 100%;
+}
+
+/* The default CSS applies a style for blockquotes but only to immediate children
+of .td-content. This applies the same style to any blockquotes that descend from
+.td-content. */
+.td-content blockquote {
+  padding: 0 0 0 1rem;
+  margin-bottom: $spacer;
+  color: $gray-600;
+  border-left: 6px solid $secondary;
+}
+
+/*
+Make padding symmetrical (this selector is used in the default styles to apply padding-left: 3rem)
+*/
+.pl-md-5, .px-md-5 {
+  @include media-breakpoint-up(md) {
+    padding-right: 3rem;
+  }
+}
+
+/* Adjust default styles for info banner */
+.pageinfo-primary {
+  @include media-breakpoint-up(lg) {
+    max-width: 80%;
+  }
+  margin-top: 0;
+  margin-right: 0;
+  margin-left: 0;
+  border: 0;
+  border-left: solid 5px $secondary;
+  background-color: $gray-100;
+}
+
+.pageinfo-unstable {
+  background-image: url('../icons/unstable.png');
+  background-position: left 1rem center;
+  background-repeat: no-repeat;
+  padding-left: 100px;
+}
+
+/* Adjust the styling of definition lists. */
+
+/* Add a little spacing between the term and its definition. */
+dt {
+   margin-bottom: 0.15rem;
+}
+
+/* _reboot.scss deliberately sets margin-left to 0. Undo this. */
+dd {
+  margin-left: 2rem;
+}
+
+/* docsy's _code.scss does only styles <code> elements matching
+ * .td-content { p code, li > code, table code }.
+ * Copy those styles here to apply to code <elements> in definition terms too. */
+
+.td-content {
+  dt code {
+    color: inherit;
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 85%;
+    word-break: normal;
+    background-color: rgba($black, 0.05);
+    border-radius: 0.25rem;  // was $border-radius, but that var isn't accessible here.
+  }
+}
+
+/* Style for breadcrumbs */
+.td-breadcrumbs {
+  padding: .75rem 1rem;
+  background-color: #eee;
+  border-radius: .25rem;
+  margin-bottom: 1rem;
+
+  .breadcrumb {
+    margin: 0;
+  }
+}

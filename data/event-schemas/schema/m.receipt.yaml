@@ -9,22 +9,24 @@ allOf:
 properties:
     content:
         type: object
+        description: |-
+            The mapping of event ID to a collection of receipts for this
+            event ID. The event ID is the ID of the event being acknowledged
+            and *not* an ID for the receipt itself.
         patternProperties:
             "^\\$":
                 type: object
-                x-pattern: "$EVENT_ID"
-                title: Receipts
+                x-pattern-format: "mx-event-id"
+                title: Event Receipts
                 description: |-
-                    The mapping of event ID to a collection of receipts for this
-                    event ID. The event ID is the ID of the event being acknowledged
-                    and *not* an ID for the receipt itself.
+                    The collection of receipts for this event ID.
                 properties:
                     "m.read":
                         type: object
-                        title: Users
                         description: |-
                             A collection of users who have sent `m.read` receipts for
-                            this event.
+                            this event. The string key is the user ID the receipt 
+                            belongs to.
                         patternProperties:
                             "^@": &receiptUserMap
                                 type: object
@@ -32,7 +34,7 @@ properties:
                                 description: |-
                                     The mapping of user ID to receipt. The user ID is the
                                     entity who sent this receipt.
-                                x-pattern: "$USER_ID"
+                                x-pattern-format: "mx-user-id"
                                 properties:
                                     ts:
                                         type: integer
@@ -48,7 +50,6 @@ properties:
                                             (default).
                     "m.read.private":
                         type: object
-                        title: Own User
                         description: |-
                             Similar to `m.read`, the users who have sent `m.read.private`
                             receipts for this event. Due to the nature of private read

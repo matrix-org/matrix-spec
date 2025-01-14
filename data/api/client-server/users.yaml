@@ -32,7 +32,8 @@ paths:
         `Accept-Language` header provided in the request, if present.
       operationId: searchUserDirectory
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -122,4 +123,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

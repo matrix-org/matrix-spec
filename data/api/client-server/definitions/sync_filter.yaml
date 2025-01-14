@@ -69,7 +69,6 @@ properties:
         type: boolean
       state:
         type: object
-        title: StateFilter
         allOf:
         - $ref: room_event_filter.yaml
         description: The state events to include for rooms.

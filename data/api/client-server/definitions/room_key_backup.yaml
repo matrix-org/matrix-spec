@@ -20,8 +20,7 @@ properties:
     type: object
     description: "A map of session IDs to key data."
     additionalProperties:
-      allOf:
-        - $ref: "key_backup_data.yaml"
+      $ref: "key_backup_data.yaml"
     example: {
       "sessionid1": {
         "first_message_index": 1,

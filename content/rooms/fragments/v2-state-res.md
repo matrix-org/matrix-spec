@@ -50,7 +50,7 @@ chain for each state *S*<sub>*i*</sub>, that is the union of the auth
 chains for each event in *S*<sub>*i*</sub>, and then taking every event
 that doesn't appear in every auth chain. If *C*<sub>*i*</sub> is the
 full auth chain of *S*<sub>*i*</sub>, then the auth difference is
- ∪ *C*<sub>*i*</sub> −  ∩ *C*<sub>*i*</sub>.
+∪ *C*<sub>*i*</sub> − ∩ *C*<sub>*i*</sub>.
 
 **Full conflicted set.**
 The *full conflicted set* is the union of the conflicted state set and
@@ -138,7 +138,7 @@ The *resolution* of a set of states is obtained as follows:
 1.  Select the set *X* of all *power events* that appear in the *full
     conflicted set*. For each such power event *P*, enlarge *X* by adding
     the events in the auth chain of *P* which also belong to the full
-    conflicted set. Sort $X$ into a list using the *reverse topological
+    conflicted set. Sort *X* into a list using the *reverse topological
     power ordering*.
 2.  Apply the *iterative auth checks algorithm*, starting from the
     *unconflicted state map*, to the list of events from the previous

@@ -25,7 +25,8 @@ paths:
         required for queries against each protocol.
       operationId: getProtocols
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The protocols supported by the homeserver.
@@ -42,7 +43,8 @@ paths:
         third-party protocol.
       operationId: getProtocolMetadata
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: protocol
@@ -85,7 +87,8 @@ paths:
         as reasonably possible given the network type.
       operationId: queryLocationByProtocol
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: protocol
@@ -95,12 +98,14 @@ paths:
           schema:
             type: string
         - in: query
-          name: searchFields
+          name: fields
           description: |-
             One or more custom fields to help identify the third-party
             location.
           schema:
-            type: string
+            type: object
+            additionalProperties:
+              type: string
       responses:
         "200":
           description: At least one portal room was found.
@@ -129,7 +134,8 @@ paths:
         a set of user parameters.
       operationId: queryUserByProtocol
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: protocol
@@ -154,7 +160,7 @@ paths:
               schema:
                 $ref: ../application-service/definitions/user_batch.yaml
         "404":
-          description: The Matrix User ID was not found
+          description: The Matrix User ID was not found.
           content:
             application/json:
               schema:
@@ -174,7 +180,8 @@ paths:
         alias.
       operationId: queryLocationByAlias
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: alias
@@ -209,7 +216,8 @@ paths:
       description: Retrieve an array of third-party users from a Matrix User ID.
       operationId: queryUserByID
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: userid
@@ -226,7 +234,7 @@ paths:
               schema:
                 $ref: ../application-service/definitions/user_batch.yaml
         "404":
-          description: The Matrix User ID was not found
+          description: The Matrix User ID was not found.
           content:
             application/json:
               schema:
@@ -252,4 +260,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

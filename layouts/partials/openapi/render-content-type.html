@@ -1,27 +1,37 @@
 {{/*
 
-  Render a table showing content type and description, given:
+  Render a table showing content types and their descriptions, given:
 
-  * `content_type`: the content type as a string
-
-  * `description`: the description as a string
+  * `content_types`: OpenAPI data specifying the content types as a dictionary of the form {string: {"schema": JsonSchema}}
 
 */}}
 
-{{ $content_type := .content_type }}
-{{ $description := .description}}
+{{ $content_types := .content_types }}
 
-{{ if $content_type }}
+{{ if (gt (len $content_types) 0) }}
 
 <table class="content-type-table">
  <thead>
-  <th class="col-name">Content-Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-name">Content-Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
+ {{ range $mime, $body := $content_types }}
  <tr>
-  <td><code>{{ $content_type }}</code></td>
-  <td>{{ $description | markdownify -}}</td>
+  <td><code>{{ $mime }}</code></td>
+  <td>
+   {{/*
+     Force the rendering as a block so the description is always inside a
+     paragraph. This allows to always keep the same spacing between paragraphs
+     when adding added-in and changed-in paragraphs.
+   */}}
+   {{ $body.schema.description | page.RenderString (dict "display" "block") -}}
+   {{ if (index $body.schema "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $body.schema "x-addedInMatrixVersion")) }}{{ end -}}
+   {{ if (index $body.schema "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $body.schema "x-changedInMatrixVersion")) }}{{ end -}}
+  </td>
  </tr>
+ {{ end }}
 </table>
 
 {{ end }}

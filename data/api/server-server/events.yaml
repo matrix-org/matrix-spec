@@ -140,6 +140,19 @@ paths:
                 required:
                   - auth_chain_ids
                   - pdu_ids
+        "403":
+          description: |-
+            The requesting host is not in the room, or is excluded from the room via `m.room.server_acl`.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You do not have permission to access the state at the requested event."
+                  }
         "404":
           description: |-
             The given `event_id` was not found or the server doesn't know about the state at
@@ -203,8 +216,8 @@ paths:
         using the `origin_server_ts` property, whether the returned event is
         closer to the requested timestamp than the closest event that it could
         find locally.  If so, it should try to backfill this event via the
-        [`/event/{event_id}`](#get_matrixfederationv1eventeventid) endpoint so
-        that it is available to for a client to query.
+        [`/event/{event_id}`](/server-server-api/#get_matrixfederationv1eventeventid)
+        endpoint so that it is available to for a client to query.
       operationId: getEventByTimestamp
       security:
         - accessToken: []
@@ -285,4 +298,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

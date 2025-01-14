@@ -30,7 +30,8 @@ paths:
         body.
       operationId: getTokenOwner
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The token belongs to a known user.
@@ -56,9 +57,9 @@ paths:
                     x-addedInMatrixVersion: "1.2"
                     type: boolean
                     description: |-
-                      When `true`, the user is a [Guest User](#guest-access). When
-                      not present or `false`, the user is presumed to be a non-guest
-                      user.
+                      When `true`, the user is a [Guest User](/client-server-api/#guest-access).
+                      When not present or `false`, the user is presumed to be a 
+                      non-guest user.
               examples:
                 response:
                   value: {
@@ -112,4 +113,7 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

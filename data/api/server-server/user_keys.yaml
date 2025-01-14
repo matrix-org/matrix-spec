@@ -20,7 +20,22 @@ paths:
   /user/keys/claim:
     post:
       summary: Claims one-time encryption keys for a user.
-      description: Claims one-time keys for use in pre-key messages.
+      description: |-
+        Claims one-time keys for use in pre-key messages.
+
+        The request contains the user ID, device ID and algorithm name of the
+        keys that are required. If a key matching these requirements can be
+        found, the response contains it. The returned key is a one-time key
+        if one is available, and otherwise a fallback key.
+
+        One-time keys are given out in the order that they were uploaded via
+        [/keys/upload](/client-server-api/#post_matrixclientv3keysupload). (All
+        keys uploaded within a given call to `/keys/upload` are considered
+        equivalent in this regard; no ordering is specified within them.)
+
+        Servers must ensure that each one-time key is returned at most once,
+        so when a key has been returned, no other request will ever return
+        the same key.
       operationId: claimUserEncryptionKeys
       security:
         - signedRequest: []
@@ -34,13 +49,16 @@ paths:
                   type: object
                   description: |-
                     The keys to be claimed. A map from user ID, to a map from
-                    device ID to algorithm name.
-                  additionalProperties:
-                    type: object
-                    additionalProperties:
-                      type: string
-                      description: algorithm
-                      example: signed_curve25519
+                    device ID to algorithm name. Requested users must be local
+                    to the receiving homeserver.
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: object
+                      additionalProperties:
+                        type: string
+                        description: algorithm
+                        example: signed_curve25519
                   example:
                     "@alice:example.com":
                       JLAFKJWSCS: signed_curve25519
@@ -64,35 +82,37 @@ paths:
                       See the [Client-Server Key Algorithms](/client-server-api/#key-algorithms) section for more information on
                       the Key Object format.
                     # User
-                    additionalProperties:
-                      type: object
-                      # Device
-                      additionalProperties:
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
                         type: object
-                        # Key
+                        # Device
                         additionalProperties:
-                          oneOf:
-                            - type: string
-                            - type: object
-                              title: KeyObject
-                              properties:
-                                key:
-                                  type: string
-                                  description: The key, encoded using unpadded base64.
-                                signatures:
-                                  type: object
-                                  title: Signatures
-                                  additionalProperties:
+                          type: object
+                          # Key
+                          additionalProperties:
+                            oneOf:
+                              - type: string
+                              - type: object
+                                title: KeyObject
+                                properties:
+                                  key:
+                                    type: string
+                                    description: The key, encoded using unpadded base64.
+                                  signatures:
                                     type: object
+                                    title: Signatures
                                     additionalProperties:
-                                      type: string
-                                  description: |-
-                                    Signature of the key object.
+                                      type: object
+                                      additionalProperties:
+                                        type: string
+                                    description: |-
+                                      Signature of the key object.
 
-                                    The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json).
-                              required:
-                                - key
-                                - signatures
+                                      The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json).
+                                required:
+                                  - key
+                                  - signatures
                     example:
                       "@alice:example.com":
                         JLAFKJWSCS:
@@ -121,12 +141,15 @@ paths:
                   description: |-
                     The keys to be downloaded. A map from user ID, to a list of
                     device IDs, or to an empty list to indicate all devices for the
-                    corresponding user.
-                  additionalProperties:
-                    type: array
-                    items:
-                      type: string
-                      description: Device ID
+                    corresponding user.  Requested users must be local to the
+                    receiving homeserver.
+                  patternProperties:
+                    "^@":
+                      x-pattern-format: mx-user-id
+                      type: array
+                      items:
+                        type: string
+                        description: Device ID
                   example:
                     "@alice:example.com": []
               required:
@@ -148,23 +171,25 @@ paths:
                       the information returned will be the same as uploaded via
                       `/keys/upload`, with the addition of an `unsigned`
                       property.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
-                        allOf:
-                          - $ref: ../client-server/definitions/device_keys.yaml
-                        properties:
-                          unsigned:
-                            title: UnsignedDeviceInfo
-                            type: object
-                            description: |-
-                              Additional data added to the device key information
-                              by intermediate servers, and not covered by the
-                              signatures.
-                            properties:
-                              device_display_name:
-                                type: string
-                                description: The display name which the user set on the device.
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        type: object
+                        additionalProperties:
+                          allOf:
+                            - $ref: ../client-server/definitions/device_keys.yaml
+                          properties:
+                            unsigned:
+                              title: UnsignedDeviceInfo
+                              type: object
+                              description: |-
+                                Additional data added to the device key information
+                                by intermediate servers, and not covered by the
+                                signatures.
+                              properties:
+                                device_display_name:
+                                  type: string
+                                  description: The display name which the user set on the device.
                   master_keys:
                     x-addedInMatrixVersion: "1.1"
                     type: object
@@ -175,9 +200,11 @@ paths:
                       `/keys/device_signing/upload`, along with the signatures
                       uploaded via `/keys/signatures/upload` that the user is
                       allowed to see.
-                    additionalProperties:
-                      allOf:
-                        - $ref: ../client-server/definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: ../client-server/definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -193,9 +220,11 @@ paths:
                       from user ID, to self-signing key information.  For each key, the
                       information returned will be the same as uploaded via
                       `/keys/device_signing/upload`.
-                    additionalProperties:
-                      allOf:
-                        - $ref: ../client-server/definitions/cross_signing_key.yaml
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        allOf:
+                          - $ref: ../client-server/definitions/cross_signing_key.yaml
                     example:
                       "@alice:example.com":
                         user_id: "@alice:example.com"
@@ -250,4 +279,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

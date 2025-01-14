@@ -1,147 +1,251 @@
-{{/*
+/* Finds and returns all schema definitions for objects, including subschemas,
+ * in a JSON schema.
+ *
+ * The input should be a dict containing:
+ *
+ *   * `schema`: a dict containing a JSON schema.
+ *   * `anchor_base`: a prefix to add to the HTML anchors generated for each
+ *     object. If nil, no anchors are generated.
+ *   * `name`: optionally, a name to use for this schema in error/warning
+ *     messages. If left unset, the schema's `title` property is used (if
+ *     present).
+ *
+ * Assumes that "resolve-refs" and "resolve-allof" has already been called on
+ * the input schema.
+ *
+ * Returns an array of all the JSON schema definitions with `type: object` found
+ * by recursing through `schema` and inspecting any subschemas, and including
+ * `schema` itself.
+ *
+ * The returned entries are based on the JSON schema definitions found by
+ * recursing through the input `schema`, with the following differences:
+ *
+ *   * If `anchor_base` is set, each object with a `title` and `properties`
+ *     is given an `anchor`, which is a string suitable for using as an html
+ *     anchor for that object schema.
+ *
+ *   * With the *exception* of the top-level `schema` (if it is an object),
+ *     properties outside the following list are removed:
+ *
+ *     * title
+ *     * properties
+ *     * additionalProperties
+ *     * patternProperties
+ *     * required
+ *     * enum
+ *     * anchor
+ *
+ *     In particular, this means that examples are removed (typically examples
+ *     are not helpful for subschemas), which means that duplicate schemas can
+ *     be successfully eliminated.
+ *
+ * The returned array contains only unique objects (ie, if the same object is
+ * referenced twice within `schema`, it will only be returned once).
+ */
 
-  Finds and returns all nested objects, given a dict containing:
-   * `schema`: a JSON schema object
-   * `anchor_base`: a prefix to add to the HTML anchors generated for each object. If nil, no anchors are generated.
-   * `name`: optionally, a name to use for this object in error/warning messages. If left unset,
-      the object's `title` property is used (if present).
+{{ $res := partial "resolve-additional-types-inner" (dict
+    "schema" .schema
+    "anchor_base" .anchor_base
+    "name" (.name | default .schema.title | default "<untitled object>")
+    "top_level" true
+) }}
+{{ return $res.objects }}
 
-  This template finds all nested objects inside `schema`.
+/*
+ * A helper for the resolve-additional-types partial.
+ *
+ * Takes the same inputs as resolve-additional-types itself, except:
+ *   * `name` is mandatory.
+ *   * `top_level`, if set, indicates that this is the top-level object.
+ *
+ * Returns a dict containing:
+ *
+ *   * `objects`: The array of object schema definitions.
+ *
+ *   * `schema`: An updated copy of the `schema` input (eg, an `anchor` may be added).
+ *     If the input `schema` was itself an object that we should create a table for,
+ *     this will be the same as the first entry in `objects`.
+ */
+{{ define "partials/resolve-additional-types-inner" }}
+    {{ $this_object := .schema }}
+    {{ $anchor_base := .anchor_base }}
+    {{ $name := .name }}
+    {{ $top_level := .top_level }}
 
-  Assumes that "resolve-refs" and "resolve-allof" has already been called on the
-  input schema.
+    {{ $all_objects := slice }}
 
-  Returns an array of all the objects found. For each object, the following properties are returned:
-    * title
-    * properties
-    * required
-    * enum
-    * anchor: a string suitable for using as an html anchor for this object (if `anchor_base` was set, and the object has a title)
+    {{ if eq $this_object.type "object" }}
+        /* Give this object an anchor, if it has a name and properties */
+        {{ if (and $anchor_base $this_object.title $this_object.properties) }}
+            {{ $this_object = merge $this_object (dict "anchor" (printf "%s_%s" $anchor_base (anchorize $this_object.title))) }}
+        {{ end }}
 
-  Note that the returned array may contain duplicate objects.
+        /* Add any nested objects referenced in this object's `additionalProperties` */
+        {{ if $this_object.additionalProperties }}
+            {{ if reflect.IsMap $this_object.additionalProperties }}
+                {{ $res := partial "get-additional-objects" (dict
+                    "this_object" $this_object.additionalProperties
+                    "all_objects" $all_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.additional" $name)
+                ) }}
+                {{ $all_objects = $res.objects }}
 
-*/}}
+                /* Update the top-level schema with the updated subschemas for the additionalProperties */
+                {{ $this_object = merge $this_object (dict "additionalProperties" $res.schema) }}
+            {{ end }}
+        {{ end }}
 
-{{ $this_object := .schema }}
-{{ $anchor_base := .anchor_base }}
-{{ $additional_objects := slice }}
-{{ $name := .name | default $this_object.title | default "<untitled object>" }}
+        /* Add any nested objects referenced in this object's `patternProperties` */
+        {{ if $this_object.patternProperties }}
+            {{ $updated_pattern_properties := dict }}
+            {{ range $pattern, $object := $this_object.patternProperties}}
+                {{ $res := partial "get-additional-objects" (dict
+                    "this_object" $object
+                    "all_objects" $all_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.pattern.%s" $name $pattern)
+                ) }}
+                {{ $all_objects = $res.objects }}
+                {{ $updated_pattern_properties = merge $updated_pattern_properties (dict $pattern $res.schema) }}
+            {{ end }}
 
-{{ if eq $this_object.type "object" }}
-    {{/* give this object an anchor, if it has a name */}}
-    {{ if (and $anchor_base $this_object.title) }}
-        {{ $this_object = merge $this_object (dict "anchor" (printf "%s_%s" $anchor_base (anchorize $this_object.title))) }}
-    {{ end }}
+            /* Update the top-level schema with the updated subschemas for the patternProperties */
+            {{ $this_object = merge $this_object (dict "patternProperties" $updated_pattern_properties) }}
+        {{ end }}
 
-    {{/*
-      Add the object we were passed into the $additional_objects array
-    */}}
-    {{ $additional_objects = $additional_objects | append (partial "clean-object" $this_object) }}
+        /* Add any nested objects referenced in this object's `properties` */
+        {{ if $this_object.properties }}
+            {{ $updated_properties := dict }}
+            {{ range $key, $property := $this_object.properties}}
+                {{ $res := partial "get-additional-objects" (dict
+                    "this_object" $property
+                    "all_objects" $all_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.%s" $name $key)
+                ) }}
+                {{ $all_objects = $res.objects }}
+                {{ $updated_properties = merge $updated_properties (dict $key $res.schema) }}
+            {{ end }}
 
-    {{/*
-      Add any nested objects referenced in this object's `additionalProperties`
-    */}}
-    {{ if $this_object.additionalProperties }}
-        {{ if reflect.IsMap $this_object.additionalProperties }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
-                "this_object" $this_object.additionalProperties
-                "additional_objects" $additional_objects
-                "anchor_base" $anchor_base
-                "name" (printf "%s.additional" $name)
-            ) }}
+            /* Update the top-level schema with the updated subschemas for the regular properties */
+            {{ $this_object = merge $this_object (dict "properties" $updated_properties) }}
+        {{ end }}
+
+        /* We'll want to create a table for `$this_object` itself if either:
+         *
+         *  - The object has some regular properties (not just patternProperties or additionalProperties), or:
+         *  - It is the top-level object. (We use a special format of table for top-level objects that
+         *    only have patternProperties or additionalProperties)
+         *
+         * In those cases, prepend the updated schema for the top-level object onto the $all_objects array.
+         *
+         * We think about this last so that we can take advantage of any updates to the schema that happened
+         * above (in particular, addition of `anchor` attributes).
+         */
+        {{ if or $this_object.properties $top_level }}
+            {{ $tmp := slice $this_object }}
+            {{ if $all_objects }}
+                {{ $tmp = $tmp | append $all_objects }}
+            {{ end }}
+            {{ $all_objects = $tmp }}
         {{ end }}
     {{ end }}
 
-    {{/*
-      Add any nested objects referenced in this object's `properties`
-    */}}
-    {{ range $key, $property := $this_object.properties}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
-            "this_object" $property
-            "additional_objects" $additional_objects
-            "anchor_base" $anchor_base
-            "name" (printf "%s.%s" $name $key)
-        ) }}
+    {{ if eq $this_object.type "array" }}
+        /* Add any nested objects referenced in this object's `items` */
+        {{ if $this_object.items.anyOf }}
+            {{ $updated_schemas := slice }}
+            {{ range $idx, $item := $this_object.items.anyOf }}
+                {{ $res := partial "get-additional-objects" (dict
+                    "this_object" $item
+                    "all_objects" $all_objects
+                    "anchor_base" $anchor_base
+                    "name" (printf "%s.items[%d]" $name $idx)
+                ) }}
+                {{ $all_objects = $res.objects }}
+                {{ $updated_schemas = $updated_schemas | append $res.schema }}
+            {{ end }}
+            /* Update the top-level schema with the updated subschemas for the items */
+            {{ $this_object = merge $this_object (dict "items" (dict "anyOf" $updated_schemas)) }}
+        {{ else if reflect.IsMap $this_object.items}}
+            {{ $res := partial "get-additional-objects" (dict
+                 "this_object" $this_object.items
+                 "all_objects" $all_objects
+                 "anchor_base" $anchor_base
+                 "name" (printf "%s.items" $name)
+            ) }}
+            {{ $all_objects = $res.objects }}
+            /* Update the top-level schema with the updated subschema for the items */
+            {{ $this_object = merge $this_object (dict "items" $res.schema) }}
+        {{ else }}
+            {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
+        {{ end }}
     {{ end }}
 
-{{ end }}
-
-{{ if eq $this_object.type "array" }}
-    {{/*
-      Add any nested objects referenced in this object's `items`
-    */}}
-    {{ if $this_object.items.anyOf }}
-        {{ range $idx, $item := $this_object.items.anyOf }}
-            {{ $additional_objects = partial "get-additional-objects" (dict
+    /* Handle object schemas using the `oneOf` keyword
+     * (https://json-schema.org/understanding-json-schema/reference/combining.html#oneof)
+     */
+    {{ if $this_object.oneOf }}
+        {{ $updated_items := slice }}
+        {{ range $idx, $item := $this_object.oneOf }}
+            {{ $res := partial "get-additional-objects" (dict
                 "this_object" $item
-                "additional_objects" $additional_objects
+                "all_objects" $all_objects
                 "anchor_base" $anchor_base
-                "name" (printf "%s.items[%d]" $name $idx)
+                "name" (printf "%s.oneOf[%d]" $name $idx)
             ) }}
+            {{ $all_objects = $res.objects }}
+            {{ $updated_items = $updated_items | append $res.schema }}
         {{ end }}
-    {{ else if reflect.IsMap $this_object.items}}
-        {{ $additional_objects = partial "get-additional-objects" (dict
-             "this_object" $this_object.items
-             "additional_objects" $additional_objects
-             "anchor_base" $anchor_base
-             "name" (printf "%s.items" $name)
-        ) }}
-    {{ else }}
-        {{ errorf "%s is defined as an 'array' but lacks a valid 'items'" $name }}
+
+        /* Update the top-level schema with the updated subschemas for the items */
+        {{ $this_object = merge $this_object (dict "oneOf" $updated_items) }}
     {{ end }}
+
+    {{ return (dict
+        "objects" (uniq $all_objects)
+        "schema" $this_object
+    ) }}
 {{ end }}
 
-{{/*
-  Handle object schemas using the `oneOf` keyword
-  (https://json-schema.org/understanding-json-schema/reference/combining.html#oneof)
-*/}}
-{{ if $this_object.oneOf }}
-    {{ range $idx, $item := $this_object.oneOf }}
-        {{ $additional_objects = partial "get-additional-objects" (dict
-            "this_object" $item
-            "additional_objects" $additional_objects
-            "anchor_base" $anchor_base
-            "name" (printf "%s.oneOf[%d]" $name $idx)
-        ) }}
-    {{ end }}
-{{ end }}
-
-{{ return $additional_objects }}
-
-
-{{/*
-  This actually makes the recursive call and adds the returned objects to the array
-*/}}
+/* This actually makes the recursive call and adds the returned object schema definitions to the array.
+ *
+ * Input is a dict containing:
+ *   * `this_object`: a JSON schema object.
+ *   * `name`: a name to use for this object in error/warning messages.
+ *   * `anchor_base`: a prefix to add to the HTML anchors generated for each
+ *     object. If nil, no anchors are generated.
+ *   * `all_objects`: the array of object schema definitions so far.
+ *
+ * Returns a dict containing:
+ *   * `objects`: The array of object schema definitions.
+ *   * `schema`: An updated copy of the `schema` input (eg, an `anchor` may be added).
+ */
 {{ define "partials/get-additional-objects" }}
-    {{/* .name is the name of the object for logging purposes */}}
+    /* .name is the name of the object for logging purposes */
     {{ $name := .name }}
 
-    {{ $additional_objects := .additional_objects }}
+    {{ $all_objects := .all_objects }}
 
     {{ if not (reflect.IsMap .this_object) }}
       {{ errorf "Invalid call to partials/get-additional-objects: %s is not a map" $name .this_object }}
     {{ end }}
 
-    /* although we expect resolve-allof to be called on the input, resolve-allof does not recurse into
-     * nested objects, so we have to call it again.
-     */
-    {{ $this_object := partial "json-schema/resolve-allof" .this_object }}
-
-    {{ $more_objects := partial "json-schema/resolve-additional-types" (dict "schema" $this_object "anchor_base" .anchor_base "name" $name) }}
-    {{/*
-      As far as I know we don't have something like Array.concat(), so add them one at a time
-    */}}
-    {{ range $more_objects}}
-        {{ $additional_objects = $additional_objects | append (partial "clean-object" .) }}
+    {{ $res := partial "resolve-additional-types-inner" (dict "schema" .this_object "anchor_base" .anchor_base "name" $name "top_level" false) }}
+    {{ range $res.objects }}
+        {{ $all_objects = $all_objects | append (partial "clean-object" .) }}
     {{ end }}
-    {{ return $additional_objects }}
+    {{ return (dict
+        "objects" $all_objects
+        "schema" $res.schema
+    ) }}
 {{ end }}
 
-{{/*
-  Only copy the bits of the object that we actually care about.
-  This is needed for uniqify to work - otherwise objects that are the same
-  but with (for example) different examples will be considered different.
-*/}}
+/* Only copy the bits of the object that we actually care about.
+ * This is needed for uniqify to work - otherwise objects that are the same
+ * but with (for example) different examples will be considered different.
+ */
 {{ define "partials/clean-object" }}
-    {{ return (dict "title" .title "properties" .properties "required" .required "enum" .enum "anchor" .anchor) }}
+    {{ return (dict "title" .title "properties" .properties "additionalProperties" .additionalProperties "patternProperties" .patternProperties "required" .required "enum" .enum "anchor" .anchor) }}
 {{ end }}

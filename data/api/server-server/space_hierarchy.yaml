@@ -63,6 +63,7 @@ paths:
                     allOf:
                       - $ref: ../client-server/definitions/public_rooms_chunk.yaml
                       - type: object
+                        title: SpaceHierarchyParentRoom
                         properties:
                           room_type:
                             type: string
@@ -74,7 +75,7 @@ paths:
                             items:
                               type: string
                             description: |-
-                              If the room is a [restricted room](#restricted-rooms), these are the room IDs which
+                              If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
                               are specified by the join rules. Empty or omitted otherwise.
                           children_state:
                             type: array
@@ -106,6 +107,7 @@ paths:
                       allOf:
                         - $ref: ../client-server/definitions/public_rooms_chunk.yaml
                         - type: object
+                          title: SpaceHierarchyChildRoomsChunk
                           properties:
                             room_type:
                               type: string
@@ -117,12 +119,8 @@ paths:
                               items:
                                 type: string
                               description: |-
-                                If the room is a [restricted room](#restricted-rooms), these are the room IDs which
+                                If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
                                 are specified by the join rules. Empty or omitted otherwise.
-                          required:
-                            - room_type
-                            - allowed_room_ids
-                            - children_state
                   inaccessible_children:
                     type: array
                     items:
@@ -230,4 +228,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

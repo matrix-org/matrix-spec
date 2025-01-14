@@ -1,0 +1,41 @@
+type: object
+x-addedInMatrixVersion: "1.10"
+description: |-
+  Metadata describing the [streams](/client-server-api/#streams) that will be
+  sent.
+  
+  This is a map of stream ID to metadata about the stream.
+additionalProperties:
+  type: object
+  title: StreamMetadata
+  description: Metadata describing a stream.
+  properties:
+    purpose:
+      type: string
+      enum:
+      - m.usermedia
+      - m.screenshare
+      description: |-
+        The purpose of the stream.
+
+        The possible values are:
+
+        * `m.usermedia`: Stream that contains the webcam and/or microphone
+          tracks.
+        * `m.screenshare`: Stream with the screen-sharing tracks.
+    audio_muted:
+      type: boolean
+      description: |-
+        Whether the audio track in the stream is muted.
+
+        Defaults to `false` if not present.
+      x-addedInMatrixVersion: "1.11"        
+    video_muted:
+      type: boolean
+      description: |-
+        Whether the video track in the stream is muted.
+
+        Defaults to `false` if not present.
+      x-addedInMatrixVersion: "1.11"        
+  required:
+  - purpose

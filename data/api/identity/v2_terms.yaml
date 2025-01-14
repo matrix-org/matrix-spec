@@ -52,7 +52,6 @@ paths:
                             might be and could be "alpha", semantically versioned, or arbitrary.
                       required:
                         - version
-                      # TODO: TravisR - Make this render
                       additionalProperties:
                         type: object
                         title: Internationalised Policy
@@ -119,7 +118,8 @@ paths:
         may not be accepting all terms at once.
       operationId: agreeToTerms
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -159,4 +159,7 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

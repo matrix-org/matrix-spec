@@ -30,7 +30,7 @@ paths:
         to ask other servers for a suitable event.
 
         After calling this endpoint, clients can call
-        [`/rooms/{roomId}/context/{eventId}`](#get_matrixclientv3roomsroomidcontexteventid)
+        [`/rooms/{roomId}/context/{eventId}`](/client-server-api/#get_matrixclientv3roomsroomidcontexteventid)
         to obtain a pagination token to retrieve the events around the returned event.
 
         The event returned by this endpoint could be an event that the client
@@ -46,7 +46,8 @@ paths:
         found in that direction is outside of the expected range.
       operationId: getEventByTimestamp
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -136,4 +137,7 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

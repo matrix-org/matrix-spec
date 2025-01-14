@@ -1,6 +1,7 @@
 {
     "type": "object",
     "description": "This event is sent by the callee when they wish to answer the call.",
+    "x-weight": 40,
     "allOf": [{
         "$ref": "core-event-schema/room_event.yaml"
     }],
@@ -27,6 +28,9 @@
                         }
                     },
                     "required": ["type", "sdp"]
+                },
+                "sdp_stream_metadata": {
+                    "$ref": "components/sdp_stream_metadata.yaml"
                 }
             },
             "required": ["answer"]

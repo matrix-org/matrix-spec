@@ -23,7 +23,7 @@ allOf:
   - type: object
     properties:
       edu_type:
-        type: enum
+        type: string
         enum: ['m.signing_key_update']
         description: The string `m.signing_update`.
         example: "m.signing_key_update"

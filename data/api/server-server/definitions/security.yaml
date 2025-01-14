@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 signedRequest:
-  type: apiKey
+  type: http
   description: |-
-    The `Authorization` header defined in the [Authentication](/server-server-api/#authentication) section.
-  name: Authorization
-  in: header
+    The `Authorization: X-Matrix` header defined in the [Authentication](/server-server-api/#authentication) 
+    section.
+  scheme: X-Matrix

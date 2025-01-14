@@ -74,7 +74,8 @@ paths:
         the room creator or a server administrator.
       operationId: setRoomVisibilityOnDirectory
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -154,7 +155,7 @@ paths:
           name: server
           description: |-
             The server to fetch the public room lists from. Defaults to the
-            local server.
+            local server. Case sensitive.
           schema:
             type: string
       responses:
@@ -175,13 +176,14 @@ paths:
         of joined members, with the largest rooms first.
       operationId: queryPublicRooms
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: server
           description: |-
             The server to fetch the public room lists from. Defaults to the
-            local server.
+            local server. Case sensitive.
           schema:
             type: string
       requestBody:
@@ -267,3 +269,9 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v3
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

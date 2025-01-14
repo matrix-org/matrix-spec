@@ -1,0 +1,13 @@
+type: object
+title: Event Hash
+description: |-
+  Content hashes of the PDU, following the algorithm specified in [Signing Events](/server-server-api/#signing-events).
+example: {
+  "sha256": "ThisHashCoversAllFieldsInCaseThisIsRedacted"
+}
+properties:
+  sha256:
+    type: string
+    description: The hash.
+    example: ThisHashCoversAllFieldsInCaseThisIsRedacted
+required: ['sha256']

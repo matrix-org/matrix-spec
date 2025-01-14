@@ -33,7 +33,7 @@
 {{ $states := .Site.Data.msc.proposals }}
 
 {{ range $states }}
-<h3 id="{{.label}}" class="proposal-table-title">{{ .title }}</h3>
+### {{ .title }} {.proposal-table-title}
     {{ if .proposals }}
 <table class="msc-table table">
   <thead>
@@ -68,8 +68,8 @@
       <td>{{ .title }}</td>
       <td>{{ .created_at }}</td>
       <td>{{ .updated_at }}</td>
-      <td>{{ with $docs_links }}{{ $docs_links }}{{ end }}</td>
-      <td>{{ $authors }}</td>
+      <td>{{ with $docs_links }}{{ $docs_links | safeHTML }}{{ end }}</td>
+      <td>{{ $authors | safeHTML }}</td>
       <td>{{ with .shepherd }}<a href="https://github.com/{{ . }}">@{{ . }}</a>{{ end }}</td>
   </tr>
         {{ end }}

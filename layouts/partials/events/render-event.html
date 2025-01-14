@@ -15,19 +15,21 @@
 {{ $event_name := .event_name }}
 {{ $desired_example_name := .desired_example_name }}
 {{ $event_data := .event_data }}
+{{ $anchor := anchorize $event_name }}
 
 <section class="rendered-data event">
 
 <details {{ if not .Site.Params.ui.rendered_data_collapsed }}open{{ end }}>
 <summary>
 
-  <h1 id="{{ anchorize $event_name }}">
+  <h1 id="{{ $anchor }}">
    {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
+   {{ template "_default/_markup/td-heading-self-link.html" $anchor }}
   </h1>
 
 </summary>
 
-  <hr/>
+  <hr>
 
 {{ if (index $event_data "x-addedInMatrixVersion") }}
   {{ partial "added-in" (dict "v" (index $event_data "x-addedInMatrixVersion")) }}
@@ -56,7 +58,10 @@
 <h2>Content</h2>
 
 {{ $anchor_base := anchorize $event_name }}
-{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $event_data.properties.content "anchor_base" $anchor_base) }}
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict
+    "schema" $event_data.properties.content
+    "anchor_base" $anchor_base
+) }}
 
 {{ range $additional_types }}
     {{ partial "openapi/render-object-table" . }}
@@ -74,7 +79,7 @@
     */}}
     {{ if $desired_example_name }}
         {{ if eq $example_name $desired_example_name }}
-            {{ partial "events/example" $example }}
+            {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
         {{ end }}
     {{/*
       If `$desired_example_name` is not given, we will include any
@@ -83,7 +88,7 @@
       the event name includes a "$".
     */}}
     {{ else if eq $event_name $example_name }}
-        {{ partial "events/example" $example }}
+        {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
     {{/*
       If `$desired_example_name` is not given, we will include any
       examples whose first part (before "$") matches the event name
@@ -93,9 +98,11 @@
         {{ $pieces := split $example_name "$" }}
         {{ $example_base_name := index $pieces 0 }}
         {{ if eq $event_name $example_base_name }}
-             {{ partial "events/example" $example }}
+             {{ partial "events/example" (dict "schema" $example "name" $example_name) }}
         {{ end }}
     {{ end }}
 {{ end }}
+
+</details>
 
 </section>

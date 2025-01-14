@@ -1,0 +1,70 @@
+# Copyright 2024 Commaille Kévin
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# This file contains the list of string formats supported for the `format` key
+# and the `x-pattern-format` extension within JSON Schema objects in the
+# OpenAPI documents within the Matrix Specification. See
+# `openapi_extensions.md` [1] for more details.
+#
+# [1]: https://github.com/matrix-org/matrix-spec/blob/main/openapi_extensions.md#custom-x-pattern-format-key-and-custom-formats
+#
+# Custom formats defined in the Matrix specification should always use the `mx-`
+# prefix. They should link to the section containing the definition of the
+# format in the spec.
+#
+# Formats that are already supported in the JSON Schema specification should
+# link to the RFC where they are defined, and should not use a regex to allow
+# tools that recognize the format to validate it properly.
+# See <https://json-schema.org/understanding-json-schema/reference/string#built-in-formats>.
+#
+# All entries have the form:
+#
+# key:
+#   title: The title rendered in the specification
+#   url: /url/to#definition
+#   # regex: A regex that can be used to validate the custom format if possible.
+#            It should be used as the `pattern` of the string.
+
+mx-user-id:
+  title: User ID
+  url: appendices#user-identifiers
+  # regex: "^@"
+
+mx-event-id:
+  title: Event ID
+  url: appendices#event-ids
+  # regex: "^\\$"
+
+mx-room-id:
+  title: Room ID
+  url: appendices#room-ids
+  # regex: "^!"
+
+mx-server-name:
+  title: Server Name
+  url: appendices#server-name
+  # no regex
+
+mx-mxc-uri:
+  title: Matrix Content URI
+  url: client-server-api#matrix-content-mxc-uris
+  # regex: "^mxc:\\/\\/"
+
+uri:
+  title: URI
+  url: https://datatracker.ietf.org/doc/html/rfc3986
+
+email:
+  title: Email Address
+  url: https://datatracker.ietf.org/doc/html/rfc5321#section-4.1.2

@@ -77,6 +77,7 @@ algorithm is represented by an object with the following properties:
 |------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | key        | string     | **Required.** The unpadded Base64-encoded 32-byte Curve25519 public key.                                                                          |
 | signatures | Signatures | **Required.** Signatures of the key object. The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json). |
+| fallback   | boolean    | Indicates whether this is a [fallback key](#one-time-and-fallback-keys). Defaults to `false`.                                                     |
 
 Example:
 
@@ -150,7 +151,9 @@ JSON](/appendices/#signing-json).
 
 One-time and fallback keys are also uploaded to the homeserver using the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API. New
-one-time and fallback keys are uploaded as needed.
+one-time and fallback keys are uploaded as needed.  Fallback keys for key
+algorithms whose format is a signed JSON object should contain a property named
+`fallback` with a value of `true`.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
@@ -657,10 +660,12 @@ The process between Alice and Bob verifying each other would be:
 11. Alice's device receives Bob's message and verifies the commitment
     hash from earlier matches the hash of the key Bob's device just sent
     and the content of Alice's `m.key.verification.start` message.
-12. Both Alice and Bob's devices perform an Elliptic-curve
-    Diffie-Hellman
-    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)),
-    using the result as the shared secret.
+12. Both Alice's and Bob's devices perform an Elliptic-curve Diffie-Hellman using
+    their private ephemeral key, and the other device's ephemeral public key
+    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)
+    for Alice's device and
+    *ECDH(K<sub>B</sub><sup>private</sup>*, *K<sub>A</sub><sup>public</sup>*)
+    for Bob's device), using the result as the shared secret.
 13. Both Alice and Bob's devices display a SAS to their users, which is
     derived from the shared key using one of the methods in this
     section. If multiple SAS methods are available, clients should allow
@@ -669,7 +674,7 @@ The process between Alice and Bob verifying each other would be:
     their devices if they match or not.
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
-    * Each of the keys that they wish the other user to verify (usually their 
+    * Each of the keys that they wish the other user to verify (usually their
       device ed25519 key and their master cross-signing key).
     * The complete list of key IDs that they wish the other user to verify.
 
@@ -833,15 +838,15 @@ is the concatenation of:
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.start` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.start` message, encoded as
+    unpadded base64, followed by `|`.
 -   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.accept` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.accept` message, encoded as
+    unpadded base64, followed by `|`.
 -   The `transaction_id` being used.
 
 When the `key_agreement_protocol` is the deprecated method `curve25519`,
@@ -1174,10 +1179,16 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned using this format will encode binary
-strings in the general form:
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
 
-- the ASCII string `MATRIX`
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
 - one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
@@ -1189,22 +1200,23 @@ strings in the general form:
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00` or `0x01`, then the current user's own master cross-signing public key
-  - if `0x02`, then the current device's device key
+  - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
-    cross-signing key is
-  - if `0x01`, then what the device thinks the other device's device key is
-  - if `0x02`, then what the device thinks the user's master cross-signing key
-    is
-- a random shared secret, as a byte string.  It is suggested to use a secret
+    cross-signing public key is
+  - if `0x01`, then what the device thinks the other device's Ed25519 signing
+    public key is
+  - if `0x02`, then what the device thinks the user's master cross-signing public
+    key is
+- a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
-  binary string as the shared secret.
+  binary segment as the shared secret.
 
-For example, if Alice displays a QR code encoding the following binary string:
+For example, if Alice displays a QR code encoding the following binary data:
 
 ```
       "MATRIX"    |ver|mode| len   | event ID
@@ -1266,10 +1278,10 @@ tries to read a message that it does not have keys for, it may request
 the key from the server and decrypt it. Backups are per-user, and users
 may replace backups with new backups.
 
-In contrast with [Key requests](#key-requests), Server-side key backups
-do not require another device to be online from which to request keys.
-However, as the session keys are stored on the server encrypted, it
-requires users to enter a decryption key to decrypt the session keys.
+In contrast with [key requests](#key-requests), server-side key backups do not
+require another device to be online from which to request keys. However, as
+the session keys are stored on the server encrypted, the client requires a
+[decryption key](#decryption-key) to decrypt the session keys.
 
 To create a backup, a client will call [POST
 /\_matrix/client/v3/room\_keys/version](#post_matrixclientv3room_keysversion) and define how the keys are to
@@ -1290,7 +1302,7 @@ Clients must only store keys in backups after they have ensured that the
 
 - checking that it is signed by the user's [master cross-signing
   key](#cross-signing) or by a verified device belonging to the same user, or
-- by deriving the public key from a private key that it obtained from a trusted
+- deriving the public key from a private key that it obtained from a trusted
   source. Trusted sources for the private key include the user entering the
   key, retrieving the key stored in [secret storage](#secret-storage), or
   obtaining the key via [secret sharing](#sharing) from a verified device
@@ -1307,31 +1319,24 @@ replace it with the new key based on the key metadata as follows:
 -   and finally, if `is_verified` and `first_message_index` are equal,
     then it will keep the key with a lower `forwarded_count`.
 
-###### Recovery key
+###### Decryption key
 
-If the recovery key (the private half of the backup encryption key) is
-presented to the user to save, it is presented as a string constructed
-as follows:
+Normally, the decryption key (i.e. the secret part of the encryption key) is
+stored on the server or shared with other devices using the [Secrets](#secrets)
+module. When doing so, it is identified using the name `m.megolm_backup.v1`,
+and the key is base64-encoded before being encrypted.
 
-1.  The 256-bit curve25519 private key is prepended by the bytes `0x8B`
-    and `0x01`
-2.  All the bytes in the string above, including the two header bytes,
-    are XORed together to form a parity byte. This parity byte is
-    appended to the byte string.
-3.  The byte string is encoded using base58, using the same [mapping as
-    is used for Bitcoin
-    addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart),
-    that is, using the alphabet
-    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
-4.  A space should be added after every 4th character.
+If the backup decryption key is given directly to the user, the key should be
+presented as a string using the common [cryptographic key
+representation](/appendices/#cryptographic-key-representation).
 
-When reading in a recovery key, clients must disregard whitespace, and
-perform the reverse of steps 1 through 3.
-
-The recovery key can also be stored on the server or shared with other devices
-using the [Secrets](#secrets) module. When doing so, it is identified using the
-name `m.megolm_backup.v1`, and the key is base64-encoded before being
-encrypted.
+{{% boxes/note %}}
+The backup decryption key was previously referred to as a "recovery
+key". However, this conflicted with common practice in client user
+interfaces, which often use the term "recovery key" to refer to the [secret
+storage](#storage) key. The term "recovery key" is no longer used in this
+specification.
+{{% /boxes/note %}}
 
 ###### Backup algorithm: `m.megolm_backup.v1.curve25519-aes-sha2`
 
@@ -1344,7 +1349,7 @@ the following format:
 The `session_data` field in the backups is constructed as follows:
 
 1.  Encode the session key to be backed up as a JSON object using the
-    `SessionData` format defined below.
+    `BackedUpSessionData` format defined below.
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1361,10 +1366,18 @@ The `session_data` field in the backups is constructed as follows:
     PKCS\#7 padding. This encrypted data, encoded using unpadded base64,
     becomes the `ciphertext` property of the `session_data`.
 
-5.  Pass the raw encrypted data (prior to base64 encoding) through
-    HMAC-SHA-256 using the MAC key generated above. The first 8 bytes of
-    the resulting MAC are base64-encoded, and become the `mac` property
-    of the `session_data`.
+5.  Pass an empty string through HMAC-SHA-256 using the MAC key generated above.
+    The first 8 bytes of the resulting MAC are base64-encoded, and become the
+    `mac` property of the `session_data`.
+
+{{% boxes/warning %}}
+Step 5 was intended to pass the raw encrypted data, but due to a bug in libolm,
+all implementations have since passed an empty string instead.
+
+Future versions of the spec will fix this problem. See
+[MSC4048](https://github.com/matrix-org/matrix-spec-proposals/pull/4048) for a
+potential new key backup algorithm version that would fix this issue.
+{{% /boxes/warning %}}
 
 {{% definition path="api/client-server/definitions/key_backup_session_data" %}}
 
@@ -1414,7 +1427,7 @@ user-supplied passphrase, and is created as follows:
 
 ###### Key export format
 
-The exported sessions are formatted as a JSON array of `SessionData`
+The exported sessions are formatted as a JSON array of `ExportedSessionData`
 objects described as follows:
 
 {{% definition path="api/client-server/definitions/megolm_export_session_data" %}}
@@ -1523,9 +1536,11 @@ claiming to have sent messages which they didn't. `sender` must
 correspond to the user who sent the event, `recipient` to the local
 user, and `recipient_keys` to the local ed25519 key.
 
-Clients must confirm that the `sender_key` and the `ed25519` field value
-under the `keys` property match the keys returned by [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for
-the given user, and must also verify the signature of the keys from the
+Clients must confirm that the `sender_key` property in the cleartext
+`m.room.encrypted` event body, and the `keys.ed25519` property in the
+decrypted plaintext, match the keys returned by
+[`/keys/query`](#post_matrixclientv3keysquery) for
+the given user. Clients must also verify the signature of the keys from the
 `/keys/query` response. Without this check, a client cannot be sure that
 the sender device owns the private part of the ed25519 key it claims to
 have in the Olm payload. This is crucial when the ed25519 key corresponds
@@ -1765,9 +1780,9 @@ Example response:
     ],
   },
   "device_one_time_keys_count": {
-    "curve25519": 10,
     "signed_curve25519": 20
-  }
+  },
+  "device_unused_fallback_key_types": ["signed_curve25519"]
 }
 ```
 

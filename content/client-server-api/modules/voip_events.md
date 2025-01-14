@@ -96,13 +96,8 @@ Matrix clients can send DTMF as specified by WebRTC. The WebRTC standard as of A
 in the RTP payload.
 
 #### Grammar for VoIP IDs
-`call_id`s and `party_id` are explicitly defined to be between 1 and 255 characters long, consisting
-of the characters `[0-9a-zA-Z._~-]`.
 
-(Note that this matches the grammar of 'opaque IDs' from
-[MSC1597](https://github.com/matrix-org/matrix-spec-proposals/blob/rav/proposals/id_grammar/proposals/1597-id-grammar.md#opaque-ids),
-and that of the `id` property of the
- [`m.login.sso` flow schema](#definition-mloginsso-flow-schema).)
+`call_id`s and `party_id` must follow the [Opaque Identifier Grammar](/appendices#opaque-identifiers).
 
 #### Behaviour on Room Leave
 If the client sees the user it is in a call with leave the room, the client should treat this
@@ -171,18 +166,35 @@ In response to an incoming invite, a client may do one of several things:
 
 ##### Streams
 
-Clients are expected to send one stream with one track of kind `audio` (creating a
-voice call). They can optionally send a second track in the same stream of kind
-`video` (creating a video call).
+Clients may send more than one stream in a VoIP call. The streams should be
+differentiated by including metadata in the [`m.call.invite`](/client-server-api/#mcallinvite),
+[`m.call.answer`](/client-server-api/#mcallanswer) and [`m.call.negotiate`](/client-server-api/#mcallnegotiate)
+events, using the `sdp_stream_metadata` property. An [`m.call.sdp_stream_metadata_changed`](/client-server-api/#mcallsdp_stream_metadata_changed)
+event can be sent when the metadata changes but no negotiation is required.
 
-Clients implementing this specification use the first stream and will ignore
-any streamless tracks. Note that in the JavaScript WebRTC API, this means
-`addTrack()` must be passed two parameters: a track and a stream, not just a
-track, and in a video call the stream must be the same for both audio and video
-track.
+Clients are recommended to not mute the audio of WebRTC tracks locally when an
+incoming stream has the `audio_muted` field set to `true`. This is because when
+the other user unmutes themselves, there may be a slight delay between their
+client sending audio and the [`m.call.sdp_stream_metadata_changed`](/client-server-api/#mcallsdp_stream_metadata_changed)
+event arriving and any audio sent in between will not be heard. The other user
+will still stop transmitting audio once they mute on their side, so no audio is
+sent without the user's knowledge.
 
-A client may send other streams and tracks but the behaviour of the other party
-with respect to presenting such streams and tracks is undefined.
+The same suggestion does not apply to `video_muted`. Clients _should_ mute video
+locally, so that the receiving side doesn't see a black video.
+
+If `sdp_stream_metadata` is present and an incoming stream is not listed in it,
+the stream should be ignored. If a stream has a `purpose` of an unknown type, it
+should also be ignored.
+
+For backwards compatibility, if `sdp_stream_metadata` is not present in the
+initial [`m.call.invite`](/client-server-api/#mcallinvite) or [`m.call.answer`](/client-server-api/#mcallanswer)
+event sent by the other party, the client should assume that this property is
+not supported by the other party. It means that multiple streams cannot be
+differentiated: the client should only use the first incoming stream and
+shouldn't send more than one stream.
+
+Clients implementing this specification should ignore any streamless tracks.
 
 ##### Invitees
 The `invitee` field should be added whenever the call is intended for one

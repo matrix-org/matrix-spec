@@ -1,4 +1,4 @@
-# Copyright 2022 The Matrix.org Foundation C.I.C.
+# Copyright 2022,2024 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,71 +31,16 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEvents
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
-        - in: path
-          name: roomId
-          description: The ID of the room containing the parent event.
-          required: true
-          example: "!636q39766251:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The ID of the parent event whose child events are to be returned.
-          required: true
-          example: $asfDuShaf7Gafaw
-          schema:
-            type: string
-        - in: query
-          name: from
-          description: |-
-            The pagination token to start returning results from. If not supplied, results
-            start at the most recent topological event known to the server.
-
-            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
-            `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-            or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
-          required: false
-          example: page2_token
-          schema:
-            type: string
-        - in: query
-          name: to
-          description: |-
-            The pagination token to stop returning results at. If not supplied, results
-            continue up to `limit` or until there are no more events.
-
-            Like `from`, this can be a previous token from a prior call to this endpoint
-            or from `/messages` or `/sync`.
-          required: false
-          example: page3_token
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: |-
-            The maximum number of results to return in a single `chunk`. The server can
-            and should apply a maximum value to this parameter to avoid large responses.
-
-            Similarly, the server should apply a default value when not supplied.
-          required: false
-          example: 20
-          schema:
-            type: integer
-        - in: query
-          name: dir
-          x-addedInMatrixVersion: "1.4"
-          description: |-
-            Optional (default `b`) direction to return events from. If this is set to `f`, events
-            will be returned in chronological order starting at `from`. If it
-            is set to `b`, events will be returned in *reverse* chronological
-            order, again starting at `from`.
-          schema:
-            type: string
-            enum:
-              - b
-              - f
+        - $ref: '#/components/parameters/roomId'
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/dir'
+        - $ref: '#/components/parameters/recurse'
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -107,60 +52,24 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  chunk:
-                    title: ChildEventsChunk
-                    type: array
-                    description: The child events of the requested event, ordered topologically
-                      most-recent first.
-                    items:
-                      allOf:
-                        - $ref: definitions/client_event.yaml
-                  next_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means there are no more results to fetch and the client should stop paginating.
-                  prev_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means this is the start of the result set, i.e. this is the first batch/page.
-                required:
-                  - chunk
+                allOf:
+                  - $ref: '#/components/schemas/response'
+                  - type: object
+                    properties:
+                      chunk:
+                        title: ChildEventsChunk
+                        type: array
+                        description: The child events of the requested event, ordered topologically
+                          most-recent first.
+                        items:
+                          $ref: definitions/client_event.yaml
+                    required:
+                      - chunk
               examples:
                 response:
-                  value: {
-                    "chunk": [
-                      {
-                        "room_id": "!636q39766251:matrix.org",
-                        "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
-                        "content": {
-                          "m.relates_to": {
-                            "rel_type": "org.example.my_relation",
-                            "event_id": "$asfDuShaf7Gafaw"
-                          }
-                        }
-                      }
-                    ],
-                    "next_batch": "page2_token",
-                    "prev_batch": "page1_token"
-                  }
+                  $ref: '#/components/examples/response'
         "404":
-          description: |-
-            The parent event was not found or the user does not have permission to read
-            this event (it might be contained in history that is not accessible to the user).
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_FOUND",
-                    "error": "Event not found."
-                  }
+          $ref: '#/components/responses/404'
       tags:
         - Event relationships
   # The same as above, with added `/{relType}`
@@ -180,79 +89,17 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEventsWithRelType
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
-        - in: path
-          name: roomId
-          description: The ID of the room containing the parent event.
-          required: true
-          example: "!636q39766251:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The ID of the parent event whose child events are to be returned.
-          required: true
-          example: $asfDuShaf7Gafaw
-          schema:
-            type: string
-        - in: path
-          name: relType
-          description: The [relationship type](/client-server-api/#relationship-types) to
-            search for.
-          required: true
-          example: org.example.my_relation
-          schema:
-            type: string
-        - in: query
-          name: from
-          description: |-
-            The pagination token to start returning results from. If not supplied, results
-            start at the most recent topological event known to the server.
-
-            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
-            `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-            or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
-          required: false
-          example: page2_token
-          schema:
-            type: string
-        - in: query
-          name: to
-          description: |-
-            The pagination token to stop returning results at. If not supplied, results
-            continue up to `limit` or until there are no more events.
-
-            Like `from`, this can be a previous token from a prior call to this endpoint
-            or from `/messages` or `/sync`.
-          required: false
-          example: page3_token
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: |-
-            The maximum number of results to return in a single `chunk`. The server can
-            and should apply a maximum value to this parameter to avoid large responses.
-
-            Similarly, the server should apply a default value when not supplied.
-          required: false
-          example: 20
-          schema:
-            type: integer
-        - in: query
-          name: dir
-          x-addedInMatrixVersion: "1.4"
-          description: |-
-            Optional (default `b`) direction to return events from. If this is set to `f`, events
-            will be returned in chronological order starting at `from`. If it
-            is set to `b`, events will be returned in *reverse* chronological
-            order, again starting at `from`.
-          schema:
-            type: string
-            enum:
-              - b
-              - f
+        - $ref: '#/components/parameters/roomId'
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/relType'
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/dir'
+        - $ref: '#/components/parameters/recurse'
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -264,62 +111,26 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  chunk:
-                    title: ChildEventsChunk
-                    type: array
-                    description: |-
-                      The child events of the requested event, ordered topologically
-                      most-recent first. The events returned will match the `relType`
-                      supplied in the URL.
-                    items:
-                      allOf:
-                        - $ref: definitions/client_event.yaml
-                  next_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means there are no more results to fetch and the client should stop paginating.
-                  prev_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means this is the start of the result set, i.e. this is the first batch/page.
-                required:
-                  - chunk
+                allOf:
+                  - $ref: '#/components/schemas/response'
+                  - type: object
+                    properties:
+                      chunk:
+                        title: ChildEventsChunk
+                        type: array
+                        description: |-
+                          The child events of the requested event, ordered topologically
+                          most-recent first. The events returned will match the `relType`
+                          supplied in the URL.
+                        items:
+                          $ref: definitions/client_event.yaml
+                    required:
+                      - chunk
               examples:
                 response:
-                  value: {
-                    "chunk": [
-                      {
-                        "room_id": "!636q39766251:matrix.org",
-                        "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
-                        "content": {
-                          "m.relates_to": {
-                            "rel_type": "org.example.my_relation",
-                            "event_id": "$asfDuShaf7Gafaw"
-                          }
-                        }
-                      }
-                    ],
-                    "next_batch": "page2_token",
-                    "prev_batch": "page1_token"
-                  }
+                  $ref: '#/components/examples/response'
         "404":
-          description: |-
-            The parent event was not found or the user does not have permission to read
-            this event (it might be contained in history that is not accessible to the user).
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_FOUND",
-                    "error": "Event not found."
-                  }
+          $ref: '#/components/responses/404'
       tags:
         - Event relationships
   # The same as above, with added `/{eventType}`
@@ -340,30 +151,12 @@ paths:
         page 1 and a `to` token from page 2 to paginate over the same range, however.
       operationId: getRelatingEventsWithRelTypeAndEventType
       security:
-        - accessToken: []
+        - accessTokenQuery: []
+        - accessTokenBearer: []
       parameters:
-        - in: path
-          name: roomId
-          description: The ID of the room containing the parent event.
-          required: true
-          example: "!636q39766251:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The ID of the parent event whose child events are to be returned.
-          required: true
-          example: $asfDuShaf7Gafaw
-          schema:
-            type: string
-        - in: path
-          name: relType
-          description: The [relationship type](/client-server-api/#relationship-types) to
-            search for.
-          required: true
-          example: org.example.my_relation
-          schema:
-            type: string
+        - $ref: '#/components/parameters/roomId'
+        - $ref: '#/components/parameters/eventId'
+        - $ref: '#/components/parameters/relType'
         - in: path
           name: eventType
           description: |-
@@ -375,55 +168,11 @@ paths:
           example: m.room.message
           schema:
             type: string
-        - in: query
-          name: from
-          description: |-
-            The pagination token to start returning results from. If not supplied, results
-            start at the most recent topological event known to the server.
-
-            Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
-            `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-            or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
-          required: false
-          example: page2_token
-          schema:
-            type: string
-        - in: query
-          name: to
-          description: |-
-            The pagination token to stop returning results at. If not supplied, results
-            continue up to `limit` or until there are no more events.
-
-            Like `from`, this can be a previous token from a prior call to this endpoint
-            or from `/messages` or `/sync`.
-          required: false
-          example: page3_token
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: |-
-            The maximum number of results to return in a single `chunk`. The server can
-            and should apply a maximum value to this parameter to avoid large responses.
-
-            Similarly, the server should apply a default value when not supplied.
-          required: false
-          example: 20
-          schema:
-            type: integer
-        - in: query
-          name: dir
-          x-addedInMatrixVersion: "1.4"
-          description: |-
-            Optional (default `b`) direction to return events from. If this is set to `f`, events
-            will be returned in chronological order starting at `from`. If it
-            is set to `b`, events will be returned in *reverse* chronological
-            order, again starting at `from`.
-          schema:
-            type: string
-            enum:
-              - b
-              - f
+        - $ref: '#/components/parameters/from'
+        - $ref: '#/components/parameters/to'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/dir'
+        - $ref: '#/components/parameters/recurse'
       responses:
         # note: this endpoint deliberately does not support rate limiting, therefore a
         # 429 error response is not included.
@@ -435,62 +184,26 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  chunk:
-                    title: ChildEventsChunk
-                    type: array
-                    description: |-
-                      The child events of the requested event, ordered topologically most-recent
-                      first. The events returned will match the `relType` and `eventType` supplied
-                      in the URL.
-                    items:
-                      allOf:
-                        - $ref: definitions/client_event.yaml
-                  next_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means there are no more results to fetch and the client should stop paginating.
-                  prev_batch:
-                    type: string
-                    description: |-
-                      An opaque string representing a pagination token. The absence of this token
-                      means this is the start of the result set, i.e. this is the first batch/page.
-                required:
-                  - chunk
+                allOf:
+                  - $ref: '#/components/schemas/response'
+                  - type: object
+                    properties:
+                      chunk:
+                        title: ChildEventsChunk
+                        type: array
+                        description: |-
+                          The child events of the requested event, ordered topologically most-recent
+                          first. The events returned will match the `relType` and `eventType` supplied
+                          in the URL.
+                        items:
+                          $ref: definitions/client_event.yaml
+                    required:
+                      - chunk
               examples:
                 response:
-                  value: {
-                    "chunk": [
-                      {
-                        "room_id": "!636q39766251:matrix.org",
-                        "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
-                        "content": {
-                          "m.relates_to": {
-                            "rel_type": "org.example.my_relation",
-                            "event_id": "$asfDuShaf7Gafaw"
-                          }
-                        }
-                      }
-                    ],
-                    "next_batch": "page2_token",
-                    "prev_batch": "page1_token"
-                  }
+                  $ref: '#/components/examples/response'
         "404":
-          description: |-
-            The parent event was not found or the user does not have permission to read
-            this event (it might be contained in history that is not accessible to the user).
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_NOT_FOUND",
-                    "error": "Event not found."
-                  }
+          $ref: '#/components/responses/404'
       tags:
         - Event relationships
 servers:
@@ -507,4 +220,159 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  parameters:
+    roomId:
+      in: path
+      name: roomId
+      description: The ID of the room containing the parent event.
+      required: true
+      example: "!636q39766251:matrix.org"
+      schema:
+        type: string
+    eventId:
+      in: path
+      name: eventId
+      description: The ID of the parent event whose child events are to be returned.
+      required: true
+      example: $asfDuShaf7Gafaw
+      schema:
+        type: string
+    from:
+      in: query
+      name: from
+      description: |-
+        The pagination token to start returning results from. If not supplied, results
+        start at the most recent topological event known to the server.
+
+        Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
+        `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
+        or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+      required: false
+      example: page2_token
+      schema:
+        type: string
+    to:
+      in: query
+      name: to
+      description: |-
+        The pagination token to stop returning results at. If not supplied, results
+        continue up to `limit` or until there are no more events.
+
+        Like `from`, this can be a previous token from a prior call to this endpoint
+        or from `/messages` or `/sync`.
+      required: false
+      example: page3_token
+      schema:
+        type: string
+    limit:
+      in: query
+      name: limit
+      description: |-
+        The maximum number of results to return in a single `chunk`. The server can
+        and should apply a maximum value to this parameter to avoid large responses.
+
+        Similarly, the server should apply a default value when not supplied.
+      required: false
+      example: 20
+      schema:
+        type: integer
+    dir:
+      in: query
+      name: dir
+      x-addedInMatrixVersion: "1.4"
+      description: |-
+        Optional (default `b`) direction to return events from. If this is set to `f`, events
+        will be returned in chronological order starting at `from`. If it
+        is set to `b`, events will be returned in *reverse* chronological
+        order, again starting at `from`.
+      schema:
+        type: string
+        enum:
+          - b
+          - f
+    relType:
+      in: path
+      name: relType
+      description: The [relationship type](/client-server-api/#relationship-types) to
+        search for.
+      required: true
+      example: org.example.my_relation
+      schema:
+        type: string
+    recurse:
+      in: query
+      name: recurse
+      x-addedInMatrixVersion: "1.10"
+      required: false
+      description: |-
+        Whether to additionally include events which only relate indirectly to the
+        given event, i.e. events related to the given event via two or more direct relationships.
+
+        If set to `false`, only events which have a direct relation with the given
+        event will be included.
+
+        If set to `true`, events which have an indirect relation with the given event
+        will be included additionally up to a certain depth level. Homeservers SHOULD traverse
+        at least 3 levels of relationships. Implementations MAY perform more but MUST be careful
+        to not infinitely recurse.
+
+        The default value is `false`.
+      schema:
+        type: boolean
+  schemas:
+    response:
+      type: object
+      properties:
+        next_batch:
+          type: string
+          description: |-
+            An opaque string representing a pagination token. The absence of this token
+            means there are no more results to fetch and the client should stop paginating.
+        prev_batch:
+          type: string
+          description: |-
+            An opaque string representing a pagination token. The absence of this token
+            means this is the start of the result set, i.e. this is the first batch/page.
+        recursion_depth:
+          type: integer
+          description: |-
+            If the `recurse` parameter was supplied by the client, this response field is
+            mandatory and gives the actual depth to which the server recursed. If the client
+            did not specify the `recurse` parameter, this field must be absent.
+  responses:
+    "404":
+      description: |-
+        The parent event was not found or the user does not have permission to read
+        this event (it might be contained in history that is not accessible to the user).
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Event not found."
+              }
+  examples:
+    response:
+      value: {
+        "chunk": [
+          {
+            "room_id": "!636q39766251:matrix.org",
+            "$ref": "../../event-schemas/examples/m.room.message$m.text.yaml",
+            "content": {
+              "m.relates_to": {
+                "rel_type": "org.example.my_relation",
+                "event_id": "$asfDuShaf7Gafaw"
+              }
+            }
+          }
+        ],
+        "next_batch": "page2_token",
+        "prev_batch": "page1_token"
+      }

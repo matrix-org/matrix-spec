@@ -1,0 +1,586 @@
+# Copyright 2016 OpenMarket Ltd
+# Copyright 2019-2024 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server (Authenticated) Content Repository API
+  version: 1.0.0
+paths:
+  "/media/download/{serverName}/{mediaId}":
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Download content from the content repository.
+      description: |-
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
+      operationId: getContentAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - $ref: '#/components/parameters/timeout_ms'
+      responses:
+        "200":
+          description: The content that was previously uploaded.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/downloadContentType'
+            Content-Disposition:
+              x-changedInMatrixVersion:
+                "1.12": This header became required.
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be one of `inline` or `attachment`,
+                and SHOULD contain a file name.
+
+                If the `Content-Type` is allowed in the [restrictions for serving
+                inline content](/client-server-api/#serving-inline-content),
+                servers SHOULD use `inline`, otherwise they SHOULD use
+                `attachment`.
+
+                If the upload was made with a `filename`, this header MUST
+                contain the same `filename`. Otherwise, `filename` is excluded
+                from the header. If the media being downloaded is remote, the
+                remote server's `filename` in the `Content-Disposition` header
+                is used as the `filename` instead. When the header is not
+                supplied, or does not supply a `filename`, the local download
+                response does not include a `filename`.
+              required: true
+              schema:
+                type: string
+                example: "inline; filename=\"filename.jpg\""
+          content:
+            application/octet-stream:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the uploaded file."
+        "307":
+          $ref: '#/components/responses/downloadRedirect'
+        "308":
+          $ref: '#/components/responses/downloadRedirect'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          $ref: '#/components/responses/downloadTooLarge'
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  "/media/download/{serverName}/{mediaId}/{fileName}":
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Download content from the content repository overriding the file name.
+      description: |-
+        This will download content from the content repository (same as
+        the previous endpoint) but replaces the target file name with the one
+        provided by the caller.
+
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
+      operationId: getContentOverrideNameAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - in: path
+          name: fileName
+          required: true
+          description: A filename to give in the `Content-Disposition` header.
+          example: filename.jpg
+          schema:
+            type: string
+        - $ref: '#/components/parameters/timeout_ms'
+      responses:
+        "200":
+          description: The content that was previously uploaded.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/downloadContentType'
+            Content-Disposition:
+              x-changedInMatrixVersion:
+                "1.12": This header became required.
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be one of `inline` or `attachment`,
+                and MUST contain the file name requested in the path.
+
+                If the `Content-Type` is allowed in the [restrictions for serving
+                inline content](/client-server-api/#serving-inline-content),
+                servers SHOULD use `inline`, otherwise they SHOULD use
+                `attachment`.
+              required: true
+              schema:
+                type: string
+                example: "inline; filename=\"filename.jpg\""
+          content:
+            application/octet-stream:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the uploaded file."
+        "307":
+          $ref: '#/components/responses/downloadRedirect'
+        "308":
+          $ref: '#/components/responses/downloadRedirect'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          $ref: '#/components/responses/downloadTooLarge'
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  "/media/thumbnail/{serverName}/{mediaId}":
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Download a thumbnail of content from the content repository
+      description: |-
+        Download a thumbnail of content from the content repository.
+        See the [Thumbnails](/client-server-api/#thumbnails) section for more information.
+
+        {{% boxes/note %}}
+        Clients SHOULD NOT generate or use URLs which supply the access token in
+        the query string. These URLs may be copied by users verbatim and provided
+        in a chat message to another user, disclosing the sender's access token.
+        {{% /boxes/note %}}
+
+        Clients MAY be redirected using the 307/308 responses below to download
+        the request object. This is typical when the homeserver uses a Content
+        Delivery Network (CDN).
+      operationId: getContentThumbnailAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - $ref: '#/components/parameters/serverName'
+        - $ref: '#/components/parameters/mediaId'
+        - in: query
+          name: width
+          required: true
+          description: |-
+            The *desired* width of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: height
+          required: true
+          description: |-
+            The *desired* height of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: method
+          description: |-
+            The desired resizing method. See the [Thumbnails](/client-server-api/#thumbnails)
+            section for more information.
+          example: scale
+          schema:
+            type: string
+            enum:
+              - crop
+              - scale
+        - $ref: '#/components/parameters/timeout_ms'
+        - in: query
+          name: animated
+          x-addedInMatrixVersion: "1.11"
+          required: false
+          description: |
+            Indicates preference for an animated thumbnail from the server, if possible. Animated
+            thumbnails typically use the content types `image/gif`, `image/png` (with APNG format),
+            `image/apng`, and `image/webp` instead of the common static `image/png` or `image/jpeg`
+            content types.
+
+            When `true`, the server SHOULD return an animated thumbnail if possible and supported.
+            When `false`, the server MUST NOT return an animated thumbnail. For example, returning a
+            static `image/png` or `image/jpeg` thumbnail. When not provided, the server SHOULD NOT
+            return an animated thumbnail.
+
+            Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
+
+            When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
+            server SHOULD behave as though `animated` is `false`.
+          example: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: A thumbnail of the requested content.
+          headers:
+            Content-Disposition:
+              x-addedInMatrixVersion: "1.12"
+              description: |
+                The [disposition](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Disposition)
+                of the returned content. MUST be `inline`, and SHOULD contain a file name (e.g. `thumbnail.png`).
+
+                Servers should note the [Content-Type restrictions for serving inline content](/client-server-api/#serving-inline-content),
+                as these limitations imply which formats should be used for thumbnail generation.
+              required: true
+              schema:
+                type: string
+                example: "inline; filename=\"thumbnail.png\""
+            Content-Type:
+              x-changedInMatrixVersion:
+                "1.12": |
+                  This header became required in order to support `Content-Disposition`.
+              description: The content type of the thumbnail.
+              required: true
+              schema:
+                type: string
+                enum:
+                  - image/jpeg
+                  - image/png
+                  - image/apng
+                  - image/gif
+                  - image/webp
+          content:
+            image/jpeg:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: "**Required.** The bytes for the thumbnail."
+            image/png:
+              schema:
+                x-changedInMatrixVersion:
+                  "1.11": The PNG may be of the APNG variety if animation is supported and requested.
+                description: |
+                  **Required.** The bytes for the thumbnail. The thumbnail MAY use an animated
+                  format if `animated=true`.
+            image/apng:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/gif:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+            image/webp:
+              schema:
+                x-addedInMatrixVersion: "1.11"
+                description: "**Required.** The bytes for the *animated* thumbnail."
+        "307":
+          $ref: '#/components/responses/thumbnailRedirect'
+        "308":
+          $ref: '#/components/responses/thumbnailRedirect'
+        "400":
+          description: |-
+            The request does not make sense to the server, or the server cannot thumbnail
+            the content. For example, the client requested non-integer dimensions or asked
+            for negatively-sized images.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNKNOWN",
+                    "error": "Cannot generate thumbnails for the requested content"
+                  }
+        "413":
+          description: The local content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          description: The remote content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  /media/preview_url:
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Get information about a URL for a client
+      description: |-
+        Get information about a URL for the client. Typically this is called when a
+        client sees a URL in a message and wants to render a preview for the user.
+
+        {{% boxes/note %}}
+        Clients should consider avoiding this endpoint for URLs posted in encrypted
+        rooms. Encrypted rooms often contain more sensitive information the users
+        do not want to share with the homeserver, and this can mean that the URLs
+        being shared should also not be shared with the homeserver.
+        {{% /boxes/note %}}
+      operationId: getUrlPreviewAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - in: query
+          name: url
+          description: The URL to get a preview of.
+          required: true
+          example: https://matrix.org
+          schema:
+            type: string
+            format: uri
+        - in: query
+          name: ts
+          description: |-
+            The preferred point in time to return a preview for. The server may
+            return a newer version if it does not have the requested version
+            available.
+          example: 1510610716656
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: |-
+            The OpenGraph data for the URL, which may be empty. Some values are
+            replaced with matrix equivalents if they are provided in the response.
+            The differences from the OpenGraph protocol are described here.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  matrix:image:size:
+                    type: integer
+                    format: int64
+                    description: The byte-size of the image. Omitted if there is no image attached.
+                  og:image:
+                    type: string
+                    format: uri
+                    description: An [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
+                      the image. Omitted if there is no image.
+              examples:
+                response:
+                  value: {
+                    "og:title": "Matrix Blog Post",
+                    "og:description": "This is a really cool blog post from matrix.org",
+                    "og:image": "mxc://example.com/ascERGshawAWawugaAcauga",
+                    "og:image:type": "image/png",
+                    "og:image:height": 48,
+                    "og:image:width": 48,
+                    "matrix:image:size": 102400
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+  /media/config:
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Get the configuration for the content repository.
+      description: |-
+        This endpoint allows clients to retrieve the configuration of the content
+        repository, such as upload limitations.
+        Clients SHOULD use this as a guide when using content repository endpoints.
+        All values are intentionally left optional. Clients SHOULD follow
+        the advice given in the field description when the field is not available.
+
+        {{% boxes/note %}}
+        Both clients and server administrators should be aware that proxies
+        between the client and the server may affect the apparent behaviour of content
+        repository APIs, for example, proxies may enforce a lower upload size limit
+        than is advertised by the server on this endpoint.
+        {{% /boxes/note %}}
+      operationId: getConfigAuthed
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: The public content repository configuration for the matrix server.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  m.upload.size:
+                    type: integer
+                    format: int64
+                    description: |-
+                      The maximum size an upload can be in bytes.
+                      Clients SHOULD use this as a guide when uploading content.
+                      If not listed or null, the size limit should be treated as unknown.
+              examples:
+                response:
+                  value: {
+                    "m.upload.size": 50000000
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Media
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  parameters:
+    serverName:
+      in: path
+      name: serverName
+      required: true
+      description: |
+        The server name from the `mxc://` URI (the authority component).
+      example: matrix.org
+      schema:
+        type: string
+        format: mx-server-name
+    mediaId:
+      in: path
+      name: mediaId
+      required: true
+      description: |
+        The media ID from the `mxc://` URI (the path component).
+      example: ascERGshawAWawugaAcauga
+      schema:
+        type: string
+    timeout_ms:
+      in: query
+      name: timeout_ms
+      x-addedInMatrixVersion: "1.7"
+      description: |
+        The maximum number of milliseconds that the client is willing to wait to
+        start receiving data, in the case that the content has not yet been
+        uploaded. The default value is 20000 (20 seconds). The content
+        repository SHOULD impose a maximum value for this parameter. The
+        content repository MAY respond before the timeout.
+      example: 5000
+      schema:
+        type: integer
+        format: int64
+        default: 20000
+  responses:
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/rate_limited.yaml
+    notYetUploaded:
+      description: |-
+        The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_YET_UPLOADED",
+                "error": "Content has not yet been uploaded"
+              }
+    downloadRedirect:
+      description: A redirect to the requested content.
+      headers:
+        Location:
+          description: The URL of the content.
+          schema:
+            type: string
+            format: uri
+    downloadTooLarge:
+      description: The content is too large for the server to serve.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "Content is too large to serve"
+              }
+    thumbnailRedirect:
+      description: A redirect to the thumbnail of the requested content.
+      headers:
+        Location:
+          description: The URL of the thumbnail content.
+          schema:
+            type: string
+            format: uri
+  headers:
+    downloadContentType:
+      description: |
+        The content type of the file that was previously uploaded.
+
+        The server MUST return a `Content-Type` which is either exactly the same
+        as the original upload, or reasonably close. The bounds of "reasonable"
+        are:
+
+        * Adding a charset to `text/*` content types.
+        * Detecting HTML and using `text/html` instead of `text/plain`.
+        * Using `application/octet-stream` when the server determines the
+          content type is obviously wrong. For example, an encrypted file being
+          claimed as `image/png`.
+        * Returning `application/octet-stream` when the media has an
+          unknown/unprovided `Content-Type`. For example, being uploaded before
+          the server tracked content types or when the remote server is
+          non-compliantly omitting the header entirely.
+        
+        Actions not in the spirit of the above are not considered "reasonable".
+      x-changedInMatrixVersion:
+        "1.12": |
+          This header became required in order to support `Content-Disposition`,
+          and the behaviour to compute its value was clarified.
+      required: true
+      schema:
+        type: string
+

@@ -6,10 +6,16 @@
 
   * `anchor`: optional HTML element id for the table
 
-  * `properties`: dictionary of the properties to list, each given as:
+  * `properties`: optional dictionary of the properties to list, each given as:
     `property_name` : `property_data`
 
-  * `required`: array containing the names of required properties.
+  * `additionalProperties`: a JSON Schema for additional properties on the
+    object.
+
+  * `patternProperties`: optional dictionary for properties with names adhering
+    to a regex pattern. A map from regex pattern to JSON Schema.
+
+  * `required`: optional array containing the names of required properties.
     In some cases (such as response body specifications) this isn't used, and
     instead properties have a `required` boolean attribute. We support this too.
 
@@ -20,46 +26,19 @@
 {{ $required := .required}}
 
 {{ if $properties }}
-
 <table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
  {{ with $title }}
  <caption>{{ . }}</caption>
  {{ end }}
  <thead>
-  <th class="col-name">Name</th>
-  <th class="col-type">Type</th>
-  <th class="col-description">Description</th>
+  <tr>
+    <th class="col-name">Name</th>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
  </thead>
 
     {{ range $property_name, $property := $properties }}
-
-        {{ $property := partial "json-schema/resolve-allof" $property }}
-        {{ $type := $property.type }}
-
-        {{ if or (eq $property.type "object") (and $property.oneOf (reflect.IsSlice .oneOf)) }}
-            {{ $type = partial "type-or-title" $property }}
-        {{ end }}
-
-        {{/*
-            If the property is an array, indicate this with square brackets,
-            like `[type]`.
-        */}}
-        {{ if eq $property.type "array"}}
-            {{ $items := $property.items }}
-            {{ if $property.items }}
-                {{ $items = partial "json-schema/resolve-allof" $property.items }}
-            {{ end }}
-            {{ $inner_type := partial "type-or-title" $items }}
-            {{ $type = delimit (slice "[" $inner_type "]") "" }}
-        {{ end }}
-
-        {{/*
-            If the property is an enum, indicate this.
-        */}}
-        {{ if (and (eq $property.type "string") ($property.enum)) }}
-            {{ $type = "enum" }}
-        {{ end }}
-
         {{/*
           Handle two ways of indicating "required", one for simple parameters,
           the other for request and response body objects.
@@ -68,65 +47,296 @@
 
  <tr>
   <td><code>{{ $property_name }}</code></td>
-  <td><code>{{ $type }}</code></td>
-  <td>
-    {{ if $required }}<strong>Required: </strong>{{end -}}
-    {{ $property.description | markdownify -}}
-    {{ if eq $type "enum"}}<p>One of: <code>[{{ delimit $property.enum ", " }}]</code>.</p>{{ end -}}
-    {{ if (index $property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index $property "x-addedInMatrixVersion")) }}{{ end -}}
-    {{ if (index $property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index $property "x-changedInMatrixVersion")) }}{{ end -}}
-  </td>
+  <td><code>{{ partial "partials/property-type" $property | safeHTML }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" $property "required" $required) }}</td>
  </tr>
 
     {{ end }}
 
+    {{/*
+      If the object has additional properties *as well as* regular properties, we add a special row to the table.
+
+      Note that, per https://json-schema.org/draft/2020-12/json-schema-core#name-boolean-json-schemas, JSON schemas
+      can be a simple "true" or "false" as well as the more normal object.
+
+      `additionalProperties: true` is pretty much the default for Matrix (it means: "you're allowed to include random
+      unspecced properties in your object"), so nothing to do here.
+
+      `additionalProperties: false` means "you're not allowed to include any unspecced properties in your object". We
+      may want to consider how to display that; for now we just ignore it.
+
+      TODO: support `patternProperties` here.
+    */}}
+    {{ if reflect.IsMap .additionalProperties }}
+
+ <tr>
+  <td>&lt;Other properties&gt;</td>
+  <td><code>{{ partial "partials/property-type" .additionalProperties | safeHTML }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" .additionalProperties) }}</td>
+ </tr>
+    {{ end }}
+</table>
+
+{{ else if (or .additionalProperties .patternProperties) }}
+
+{{/*
+A special format of table for objects which only have additionalProperties or patternProperties.
+
+This is only ever used for top-level objects. Nested objects in this situation are just shown
+as rows within their parent object, and don't get their own table. (They are filtered out in
+resolve-additional-types.)
+*/}}
+
+<table{{ if .anchor }} id="{{ .anchor }}"{{ end }} class="object-table">
+ {{ with $title }}
+ <caption>{{ . }}</caption>
+ {{ end }}
+ <thead>
+  <tr>
+    <th class="col-type">Type</th>
+    <th class="col-description">Description</th>
+  </tr>
+ </thead>
+
+ {{ $property := . }}
+
+ <tr>
+  <td><code>{{ partial "partials/property-type" $property | safeHTML }}</code></td>
+  <td>{{ partial "partials/property-description" (dict "property" $property) }}</td>
+ </tr>
 </table>
 
 {{ end }}
 
 {{/*
-   Picks either the `title` of a property, or the `type`, to turn into the rendered type field.
-   Also handles `additionalProperties`, if no `title` is present.
+    Computes the type to display for a property's schema, given:
+
+    * `type`: optional string or array of strings for the type(s) of the property
+
+    * `title`: optional string for the title of the property
+
+    * `oneOf`: optional array of dictionaries describing the different formats
+      that the property can have
+    
+    * `anyOf`: optional array of dictionaries describing the different formats
+      that the property can have
+
+    * `properties`: if the type is an object, optional dictionary for
+      well-defined properties, each given as: `property_name` : `property_data`
+
+    * `additionalProperties`: if the type is an object, optional dictionary for
+      properties with undefined names
+
+    * `patternProperties`: if the type is an object, optional dictionary for
+      properties with names adhering to a regex pattern
+
+    * `items`: if the type is an array, array of dictionaries describing the
+      format of the array's items
+
+    * `anchor`: optional HTML element id for the target type, which will be used to link to it.
+
+    * `format`: optional string for the format of the type, used for strings.
+
 */}}
-{{ define "partials/type-or-title" }}
+{{ define "partials/property-type" }}
     {{ $type := "" }}
-    {{ if .title }}
+
+    {{ if eq .type "object" }}
+        {{/* Resolve the type or title of the object */}}
+        {{ $type = partial "object-type-or-title" . }}
+    {{ else if eq .type "array"}}
         {{/*
-            If the property has a `title`, use that rather than `type`.
-            This means we can write things like `EventFilter` rather than `object`.
+            If the property is an array, indicate this with square brackets,
+            like `[type]`.
         */}}
-        {{ $type = .title }}
+        {{ $items := .items }}
+        {{ $inner_type := partial "property-type" $items }}
+        {{ $type = delimit (slice "[" $inner_type "]") "" }}
+    {{ else if eq .type "string" }}
+        {{ $type = "string" }}
+
+        {{/* If the string uses a known format, use it. */}}
+        {{ with .format }}
+            {{ with partial "string-format" . }}
+                {{ $type = . }}
+            {{ end }}
+        {{ end }}
+    {{ else if or (reflect.IsSlice .type) .oneOf .anyOf }}
+        {{/*
+            It's legal to specify an array of types.
+
+            There are three ways to do that:
+              - Use an array of strings.
+              - Use oneOf, with items having a schema.
+              - Use anyOf, with items having a schema.
+
+            Join them together in that case, like `type|other_type`.
+        */}}
+        {{ $types := slice }}
+
+        {{ if .oneOf }}
+            {{ range .oneOf }}
+                {{ $types = $types | append (partial "property-type" .) }}
+            {{ end }}
+        {{ else if .anyOf }}
+            {{ range .anyOf }}
+                {{ $types = $types | append (partial "property-type" .) }}
+            {{ end }}
+        {{ else }}
+            {{ range .type }}
+                {{ $types = $types | append (htmlEscape .) }}
+            {{ end }}
+        {{ end }}
+
+        {{ $type = delimit $types "|" }}
+    {{ else }}
+        {{/* A simple type like integer or boolean */}}
+        {{ $type = (htmlEscape .type) }}
+    {{ end }}
+
+    {{ return $type }}
+{{ end }}
+
+{{/*
+    Computes the type to display for an object property's schema, given:
+
+    * `type`: string equal to "object"
+
+    * `title`: optional string for the title of the object property
+
+    * `properties`: optional dictionary for well-defined properties, each given
+      as: `property_name` : `property_data`
+
+    * `additionalProperties`: optional dictionary for properties with undefined
+      names
+
+    * `patternProperties`: optional dictionary for properties with names
+      adhering to a regex pattern
+
+    * `anchor`: optional HTML element id for the target type, which will be used to link to it.
+*/}}
+{{ define "partials/object-type-or-title" }}
+    {{ $type := "object" }}
+    {{ if .properties }}
+        {{/*
+            The object has its own (regular) properties, so we will make a
+            separate table for it. Refer to it using its title, if it has one.
+        */}}
+        {{ if .title }}
+          {{ $type = .title | htmlEscape }}
+          {{ if .anchor }}
+              {{ $type = printf "<a href=\"#%s\">%s</a>" (htmlEscape .anchor) $type }}
+          {{ end }}
+        {{ end }}
     {{ else if reflect.IsMap .additionalProperties }}
         {{/*
             If the property uses `additionalProperties` to describe its
             internal structure, handle this with a bit of recursion
         */}}
-        {{ $type = delimit (slice "{string: " (partial "type-or-title" .additionalProperties) "}" ) "" }}
-    {{ else if reflect.IsSlice .type }}
-        {{/* It's legal to specify an array of types. Join them together in that case */}}
-
-        {{ $types := slice }}
-
-        {{ range .type }}
-            {{ $types = $types | append . }}
-        {{ end }}
-
-        {{ $type = delimit $types "|" }}
-    {{ else if and .oneOf (reflect.IsSlice .oneOf) }}
+        {{ $type = delimit (slice "{string: " (partial "property-type" .additionalProperties) "}" ) "" }}
+    {{ else if reflect.IsMap .patternProperties }}
         {{/*
-            This is like an array of types except some of the types probably have a schema.
-            Join them together too.
+            If the property uses `patternProperties` to describe its
+            internal structure, handle this with a bit of recursion.
+            Types are grouped by pattern format. Note that we ignore
+            patterns without a format as the current definitions
+            always have a single pattern, but we might need to handle
+            them later to differentiate schemas according to patterns.
         */}}
 
-        {{ $types := slice }}
+        {{/*
+            Construct a map from format ID to the type string of the format.
+        */}}
+        {{ $formatMap := newScratch }}
 
-        {{ range .oneOf }}
-            {{ $types = $types | append (partial "type-or-title" .) }}
+        {{ range $pattern, $schema := .patternProperties }}
+            {{ $formatId := or (index $schema "x-pattern-format") "string" }}
+
+            {{ if $formatMap.Get $formatId }}
+                {{ errorf "'%s' pattern format is defined more than once for the same property" $formatId }}
+            {{ end }}
+
+            {{ $formatMap.Set $formatId (partial "property-type" $schema) }}
         {{ end }}
 
+        {{/* First generate the type string for each format. */}}
+        {{ $types := slice }}
+        {{ range $formatId, $formatType := $formatMap.Values }}
+            {{ $formatKey := "string" }}
+            {{ if ne $formatId "string" }}
+                {{ with partial "string-format" $formatId }}
+                    {{ $formatKey = . }}
+                {{ else }}
+                    {{ errorf "Unsupported value for `x-pattern-format`: %s" $formatId }}
+                {{ end }}
+            {{ end }}
+
+            {{ $formatString := printf "{%s: %s}" $formatKey $formatType }}
+            {{ $types = $types | append $formatString }}
+        {{ end }}
+
+        {{/* Then join all the formats. */}}
         {{ $type = delimit $types "|" }}
-    {{ else }}
-        {{ $type = .type }}
+    {{ else if .title }}
+        {{/*
+            No properties, so there won't be a separate table. We use the title
+            anyway, because showing the title (like `EventFilter`) is better
+            than showing `object`.
+        */}}
+        {{ $type = .title | htmlEscape }}
     {{ end }}
+
     {{ return $type }}
+{{ end }}
+
+{{/*
+    Computes the description to display for a property, given:
+
+    * `required`: boolean indicating whether this property is required.
+
+    * `property`: dictionary describing the property's data, with these fields:
+
+      * `description`: string describing the property
+
+      * `enum`: optional array indicating the accepted values for the property
+
+      * `x-addedInMatrixVersion`: optional string indicating in which Matrix
+        spec version this property was added.
+
+      * `x-changedInMatrixVersion`: optional string indicating in which Matrix
+        spec version this property was last changed.
+*/}}
+{{ define "partials/property-description" -}}
+    {{ $description := .property.description -}}
+    {{ if .required -}}
+        {{/*
+          Prepend "Required:" to make it part of the first paragraph of the
+          description.
+        */}}
+        {{- $description = printf "<strong>Required: </strong>%s" (default "" $description) -}}
+    {{ end -}}
+    {{/*
+      Force the rendering as a block so the description is always inside a
+      paragraph. This allows to always keep the same spacing between paragraphs
+      when adding added-in and changed-in paragraphs.
+    */}}
+    {{ $description | page.RenderString (dict "display" "block") -}}
+    {{ if .property.enum }}<p>One of: <code>[{{ delimit .property.enum ", " }}]</code>.</p>{{ end -}}
+    {{ if (index .property "x-addedInMatrixVersion") }}{{ partial "added-in" (dict "v" (index .property "x-addedInMatrixVersion")) }}{{ end -}}
+    {{ if (index .property "x-changedInMatrixVersion") }}{{ partial "changed-in" (dict "changes_dict" (index .property "x-changedInMatrixVersion")) }}{{ end -}}
+{{ end }}
+
+
+{{/*
+    Computes the type to display for a string format, given the identifier of
+    the format as a string.
+*/}} 
+{{ define "partials/string-format" }}
+  {{ $stringFormat := "" }}
+
+  {{ with index site.Data "string-formats" . }}
+    {{ $stringFormat = printf "<a href=\"%s\">%s</a>" (htmlEscape .url | relURL) (htmlEscape .title) }}
+  {{ end }}
+
+  {{ return $stringFormat }}
 {{ end }}

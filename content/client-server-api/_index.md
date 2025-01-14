@@ -22,17 +22,23 @@ recommended outside test environments.
 Clients are authenticated using opaque `access_token` strings (see [Client
 Authentication](#client-authentication) for details).
 
-All `POST` and `PUT` endpoints, with the exception of [`POST
-/_matrix/media/v3/upload`](#post_matrixmediav3upload) and [`PUT
-/_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+All `POST` and `PUT` endpoints, with the exception of those listed below,
 require the client to supply a request body containing a (potentially empty)
 JSON object.  Clients should supply a `Content-Type` header of
 `application/json` for all requests with JSON bodies, but this is not required.
 
+The exceptions are:
+
+- [`POST /_matrix/media/v3/upload`](#post_matrixmediav3upload) and
+  [`PUT /_matrix/media/v3/upload/{serverName}/{mediaId}`](#put_matrixmediav3uploadservernamemediaid),
+  both of which take the uploaded media as the request body.
+- [`POST /_matrix/client/v3/logout`](#post_matrixclientv3logout) and
+  [`POST /_matrix/client/v3/logout/all`](#post_matrixclientv3logoutall),
+  which take an empty request body.
+
 Similarly, all endpoints require the server to return a JSON object,
-with the exception of 200 responses to
-[`GET /_matrix/media/v3/download/{serverName}/{mediaId}`](#get_matrixmediav3downloadservernamemediaid)
-and [`GET /_matrix/media/v3/thumbnail/{serverName}/{mediaId}`](#get_matrixmediav3thumbnailservernamemediaid).
+with the exception of 200 responses to the media download endpoints in the
+[Content Repository module](#content-repository).
 Servers must include a `Content-Type` header of `application/json` for all JSON responses.
 
 All JSON data, in requests or responses, must be encoded using UTF-8.
@@ -94,6 +100,13 @@ section](#soft-logout) for more information.
 `M_MISSING_TOKEN`
 No access token was specified for the request.
 
+`M_USER_LOCKED`
+The account has been [locked](#account-locking) and cannot be used at this time.
+
+`M_USER_SUSPENDED`
+The account has been [suspended](#account-suspension) and can only be used for
+limited actions at this time.
+
 `M_BAD_JSON`
 Request contained valid JSON, but it was malformed in some way, e.g.
 missing required keys, invalid values for keys.
@@ -106,7 +119,7 @@ No resource was found for this request.
 
 `M_LIMIT_EXCEEDED`
 Too many requests have been sent in a short period of time. Wait a while
-then try again.
+then try again. See [Rate limiting](#rate-limiting).
 
 `M_UNRECOGNIZED`
 The server did not understand the request. This is expected to be returned with
@@ -127,7 +140,7 @@ The request was not correctly authorized. Usually due to login failures.
 
 `M_USER_DEACTIVATED`
 The user ID associated with the request has been deactivated. Typically
-for endpoints that prove authentication, such as `/login`.
+for endpoints that prove authentication, such as [`/login`](#get_matrixclientv3login).
 
 `M_USER_IN_USE`
 Encountered when trying to register a user ID which has been taken.
@@ -206,11 +219,42 @@ much memory or disk space. The error MUST have an `admin_contact` field
 to provide the user receiving the error a place to reach out to.
 Typically, this error will appear on routes which attempt to modify
 state (e.g.: sending messages, account data, etc) and not routes which
-only read state (e.g.: `/sync`, get account data, etc).
+only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
+[`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
 
 `M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
 The user is unable to reject an invite to join the server notices room.
 See the [Server Notices](#server-notices) module for more information.
+
+`M_THREEPID_MEDIUM_NOT_SUPPORTED`
+The homeserver does not support adding a third party identifier of the given medium.
+
+`M_THREEPID_IN_USE`
+The third party identifier specified by the client is not acceptable because it is
+already in use in some way.
+
+#### Rate limiting
+
+Homeservers SHOULD implement rate limiting to reduce the risk of being
+overloaded. If a request is refused due to rate limiting, it should
+return a standard error response of the form:
+
+```json
+{
+  "errcode": "M_LIMIT_EXCEEDED",
+  "error": "string",
+  "retry_after_ms": integer (optional, deprecated)
+}
+```
+
+Homeservers SHOULD include a [`Retry-After`](https://www.rfc-editor.org/rfc/rfc9110#field.retry-after)
+header for any response with a 429 status code.
+
+The `retry_after_ms` property MAY be included to tell the client how long
+they have to wait in milliseconds before they can try again. This property is
+deprecated, in favour of the `Retry-After` header.
+
+{{% changed-in v="1.10" %}}: `retry_after_ms` property deprecated in favour of `Retry-After` header.
 
 ### Transaction identifiers
 
@@ -223,9 +267,10 @@ the request idempotent.
 
 The transaction ID should **only** be used for this purpose.
 
-From the client perspective, after the request has finished, the `{txnId}`
-value should be changed by for the next request (how is not specified; a
-monotonically increasing integer is recommended).
+After the request has finished, clients should change the `{txnId}` value for
+the next request. How this is achieved, is left as an implementation detail.
+It is recommended that clients use either version 4 UUIDs or a concatenation
+of the current timestamp and a monotonically increasing integer.
 
 The homeserver should identify a request as a retransmission if the
 transaction ID is the same as a previous request, and the path of the
@@ -233,7 +278,7 @@ HTTP request is the same.
 
 Where a retransmission has been identified, the homeserver should return
 the same HTTP response code and content as the original request.
-For example, `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`
+For example, [`PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
 would return a `200 OK` with the `event_id` of the original request in
 the response body.
 
@@ -284,6 +329,15 @@ headers to be returned by servers on all requests are:
     Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
     Access-Control-Allow-Headers: X-Requested-With, Content-Type, Authorization
 
+{{% boxes/note %}}
+{{% added-in v="1.13" %}} The recommended value of the `Access-Control-Allow-Methods`
+header only covers the existing endpoints in the specification. Servers which
+support additional endpoints or methods should add those methods as well.
+
+This section will be updated whenever a new method is supported by an endpoint.
+Examples of possible future-use methods include `PATCH` and `HEAD`.
+{{% /boxes/note %}}
+
 ## Server Discovery
 
 In order to allow users to connect to a Matrix server without needing to
@@ -327,9 +381,9 @@ as per the [CORS](#web-browser-clients) section in this specification.
 The `.well-known` method uses a JSON file at a predetermined location to
 specify parameter values. The flow for this method is as follows:
 
-1.  Extract the server name from the user's Matrix ID by splitting the
+1.  Extract the [server name](/appendices/#server-name) from the user's Matrix ID by splitting the
     Matrix ID at the first colon.
-2.  Extract the hostname from the server name.
+2.  Extract the hostname from the server name as described by the [grammar](/appendices/#server-name).
 3.  Make a GET request to `https://hostname/.well-known/matrix/client`.
     1.  If the returned status code is 404, then `IGNORE`.
     2.  If the returned status code is not 200, or the response body is
@@ -363,11 +417,12 @@ specify parameter values. The flow for this method is as follows:
 
 {{% http-api spec="client-server" api="versions" %}}
 
+{{% http-api spec="client-server" api="support" %}}
+
 ## Client Authentication
 
 Most API endpoints require the user to identify themselves by presenting
-previously obtained credentials in the form of an `access_token` query
-parameter or through an Authorization Header of `Bearer $access_token`.
+previously obtained credentials in the form of an access token.
 An access token is typically obtained via the [Login](#login) or
 [Registration](#account-registration-and-management) processes. Access tokens
 can expire; a new access token can be generated by using a refresh token.
@@ -381,16 +436,19 @@ investigate [macaroons](http://research.google.com/pubs/pub41892.html).
 
 ### Using access tokens
 
-Access tokens may be provided in two ways, both of which the homeserver
-MUST support:
+Access tokens may be provided via a request header, using the Authentication
+Bearer scheme: `Authorization: Bearer TheTokenHere`.
 
-1.  Via a query string parameter, `access_token=TheTokenHere`.
-2.  Via a request header, `Authorization: Bearer TheTokenHere`.
+Clients may alternatively provide the access token via a query string parameter:
+`access_token=TheTokenHere`. This method is deprecated to prevent the access
+token being leaked in access/HTTP logs and SHOULD NOT be used by clients.
 
-Clients are encouraged to use the `Authorization` header where possible
-to prevent the access token being leaked in access/HTTP logs. The query
-string should only be used in cases where the `Authorization` header is
-inaccessible for the client.
+Homeservers MUST support both methods.
+
+{{% boxes/note %}}
+{{% changed-in v="1.11" %}}
+Sending the access token as a query string parameter is now deprecated.
+{{% /boxes/note %}}
 
 When credentials are required but missing or invalid, the HTTP call will
 return with a status of 401 and the error code, `M_MISSING_TOKEN` or
@@ -400,7 +458,7 @@ could mean one of four things:
 1. the access token was never valid.
 2. the access token has been logged out.
 3. the access token has been [soft logged out](#soft-logout).
-4. {{< added-in v="1.3" >}} the access token [needs to be refreshed](#refreshing-access-tokens).
+4. {{% added-in v="1.3" %}} the access token [needs to be refreshed](#refreshing-access-tokens).
 
 When a client receives an error code of `M_UNKNOWN_TOKEN`, it should:
 
@@ -483,6 +541,10 @@ token available. If it does not have a refresh token available, or refreshing
 fails with `soft_logout: true`, the client can acquire a new access token by
 specifying the device ID it is already using to the login API.
 
+{{% changed-in v="1.12" %}} A client that receives such a response together
+with an `M_USER_LOCKED` error code, cannot obtain a new access token until
+the account has been [unlocked](#account-locking).
+
 ### User-Interactive Authentication API
 
 #### Overview
@@ -520,8 +582,10 @@ request parameter.
 A client should first make a request with no `auth` parameter.
 The homeserver returns an HTTP 401 response, with a JSON body, as follows:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -564,8 +628,10 @@ given. It also contains other keys dependent on the auth type being
 attempted. For example, if the client is attempting to complete auth
 type `example.type.foo`, it might submit something like this:
 
-    POST /_matrix/client/v3/endpoint HTTP/1.1
-    Content-Type: application/json
+```
+POST /_matrix/client/v3/endpoint HTTP/1.1
+Content-Type: application/json
+```
 
 ```json
 {
@@ -585,8 +651,10 @@ along with the same object as when no authentication was attempted, with
 the addition of the `completed` key which is an array of auth types the
 client has completed successfully:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -617,8 +685,10 @@ but the client may make a second attempt, it returns the same HTTP
 status 401 response as above, with the addition of the standard
 `errcode` and `error` fields describing the error. For example:
 
-    HTTP/1.1 401 Unauthorized
-    Content-Type: application/json
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
 
 ```json
 {
@@ -645,8 +715,10 @@ status 401 response as above, with the addition of the standard
 If the request fails for a reason other than authentication, the server
 returns an error message in the standard format. For example:
 
-    HTTP/1.1 400 Bad request
-    Content-Type: application/json
+```
+HTTP/1.1 400 Bad request
+Content-Type: application/json
+```
 
 ```json
 {
@@ -843,7 +915,7 @@ follows:
 ```
 
 Note that `id_server` (and therefore `id_access_token`) is optional if
-the `/requestToken` request did not include them.
+the [`/requestToken`](#post_matrixclientv3registeremailrequesttoken) request did not include them.
 
 ##### Phone number/MSISDN-based (identity / homeserver)
 
@@ -872,7 +944,7 @@ follows:
 ```
 
 Note that `id_server` (and therefore `id_access_token`) is optional if
-the `/requestToken` request did not include them.
+the [`/requestToken`](#post_matrixclientv3registermsisdnrequesttoken) request did not include them.
 
 ##### Dummy Auth
 
@@ -919,11 +991,12 @@ or completely closed registration (where the homeserver administrators create
 and distribute accounts).
 
 The token required for this authentication type is shared out of band from
-Matrix and is an opaque string with maximum length of 64 characters in the
-range `[A-Za-z0-9._~-]`. The server can keep any number of tokens for any
-length of time/validity. Such cases might be a token limited to 100 uses or
-for the next 2 hours - after the tokens expire, they can no longer be used
-to create accounts.
+Matrix and is an opaque string using the [Opaque Identifier
+Grammar](/appendices#opaque-identifiers), with maximum length of 64
+characters. The server can keep any number of tokens for any length of
+time/validity. Such cases might be a token limited to 100 uses or for the next
+2 hours - after the tokens expire, they can no longer be used to create
+accounts.
 
 To use this authentication type, clients should submit an auth dict with just
 the type, token, and session:
@@ -942,6 +1015,129 @@ will be valid when used, but does avoid cases where the user finds out late
 in the registration process that their token has expired.
 
 {{% http-api spec="client-server" api="registration_tokens" %}}
+
+##### Terms of service at registration
+
+{{% added-in v="1.11" %}}
+
+| Type                     | Description                                                              |
+|--------------------------|--------------------------------------------------------------------------|
+| `m.login.terms`          | Authentication requires the user to accept a set of policy documents. |
+
+{{% boxes/note %}}
+The `m.login.terms` authentication type is only valid on the
+[`/register`](#post_matrixclientv3register) endpoint.
+{{% /boxes/note %}}
+
+This authentication type is used when the homeserver requires new users to
+accept a given set of policy documents, such as a terms of service and a privacy
+policy. There may be many different types of documents, all of which are
+versioned and presented in (potentially) multiple languages.
+
+When the server requires the user to accept some terms, it does so by returning
+a 401 response to the `/register` request, where the response body includes
+`m.login.terms` in the `flows` list, and the `m.login.terms` property in the
+`params` object has the structure [shown below](#definition-mloginterms-params).
+
+If a client encounters an invalid parameter, registration should stop with an
+error presented to the user.
+
+The client should present the user with a checkbox to accept each policy,
+including a link to the provided URL. Once the user has done so, the client
+submits an `auth` dict with just the `type` and `session`, as follows, to
+indicate that all of the policies have been accepted:
+
+```json
+{
+  "type": "m.login.terms",
+  "session": "<session ID>"
+}
+```
+
+The server is expected to track which document versions it presented to the
+user during registration, if applicable.
+
+
+**Example**
+
+1. A client might submit a registration request as follows:
+
+   ```
+   POST /_matrix/client/v3/register
+   ```
+   ```json
+   {
+     "username": "cheeky_monkey",
+     "password": "ilovebananas"
+   }
+   ```
+
+2. The server requires the user to accept some terms of service before
+   registration, so returns the following response:
+
+   ```
+   HTTP/1.1 401 Unauthorized
+   Content-Type: application/json
+   ```
+   ```json
+   {
+     "flows": [
+       { "stages": [ "m.login.terms" ] }
+     ],
+     "params": {
+       "m.login.terms": {
+         "policies": {
+           "terms_of_service": {
+             "version": "1.2",
+             "en": {
+                 "name": "Terms of Service",
+                 "url": "https://example.org/somewhere/terms-1.2-en.html"
+             },
+             "fr": {
+                 "name": "Conditions d'utilisation",
+                 "url": "https://example.org/somewhere/terms-1.2-fr.html"
+             }
+           }
+         }
+       }
+     },
+     "session": "kasgjaelkgj"
+   }
+   ```
+
+3. The client presents the list of documents to the user, inviting them to
+   accept the polices.
+
+4. The client repeats the registration request, confirming that the user has
+   accepted the documents:
+   ```
+   POST /_matrix/client/v3/register
+   ```
+   ```json
+   {
+     "username": "cheeky_monkey",
+     "password": "ilovebananas",
+     "auth": {
+       "type": "m.login.terms",
+       "session": "kasgjaelkgj"
+     }
+   }
+   ```
+
+5. All authentication steps have now completed, so the request is successful:
+   ```
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+   ```
+   ```json
+   {
+     "access_token": "abc123",
+     "device_id": "GHTYAJCE",
+     "user_id": "@cheeky_monkey:matrix.org"
+   }
+   ```
+
+{{% definition path="api/client-server/definitions/m.login.terms_params" %}}
 
 #### Fallback
 
@@ -1118,7 +1314,7 @@ from.
 
 ### Login
 
-A client can obtain access tokens using the `/login` API.
+A client can obtain access tokens using the [`/login`](#post_matrixclientv3login) API.
 
 Note that this endpoint does <span class="title-ref">not</span>
 currently use the [User-Interactive Authentication
@@ -1176,8 +1372,8 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
-{{< added-in v="1.7" >}} Already-authenticated clients can additionally generate
-a token for their user ID if supported by the homeserver using 
+{{% added-in v="1.7" %}} Already-authenticated clients can additionally generate
+a token for their user ID if supported by the homeserver using
 [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
 
 {{% http-api spec="client-server" api="login" %}}
@@ -1234,7 +1430,10 @@ fallback login API:
 
 This returns an HTML and JavaScript page which can perform the entire
 login process. The page will attempt to call the JavaScript function
-`window.onLogin` when login has been successfully completed.
+`window.matrixLogin.onLogin(response)` when login has been successfully
+completed. The argument, `response`, is the JSON response body of
+[`POST /_matrix/client/v3/login`](#post_matrixclientv3login) parsed
+into a JavaScript object.
 
 {{% added-in v="1.1" %}} Non-credential parameters valid for the `/login`
 endpoint can be provided as query string parameters here. These are to be
@@ -1254,6 +1453,122 @@ The password SHOULD include a lower-case letter, an upper-case letter, a
 number and a symbol and be at a minimum 8 characters in length. Servers
 MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 {{% /boxes/warning %}}
+
+#### Account locking
+
+{{% added-in v="1.12" %}}
+
+Server administrators may apply locks to prevent users from usefully
+using their accounts, for instance, due to safety or security concerns.
+In contrast to account deactivation, locking is a non-destructive action
+that can be reversed. This specification describes the behaviour of clients
+and servers when an account is locked. It deliberately leaves the methods
+for locking and unlocking accounts as a server implementation detail.
+
+When an account is locked, servers MUST return a `401 Unauthorized` error
+response with an `M_USER_LOCKED` error code and [`soft_logout`](#soft-logout)
+set to `true` on all but the following Client-Server APIs:
+
+- [`POST /logout`](#post_matrixclientv3logout)
+- [`POST /logout/all`](#post_matrixclientv3logoutall)
+
+Servers MAY additionally include details of why the lock was applied in
+the `error` field.
+
+```
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+```
+
+```json
+{
+  "errcode": "M_USER_LOCKED",
+  "error": "This account has been locked",
+  "soft_logout": true
+}
+```
+
+Servers SHOULD NOT invalidate access tokens on locked accounts unless the
+client requests a logout (using the above endpoints). This ensures that
+users can retain their sessions without having to log back in if the account
+becomes unlocked.
+
+Upon receiving an `M_USER_LOCKED` error, clients SHOULD retain session
+information including encryption state and inform the user that their account
+has been locked. While the lock is applied, clients SHOULD hide the normal UI
+from the user, preventing general use of their account. Clients SHOULD, however,
+continue to make rate-limited requests to [`/sync`](#get_matrixclientv3sync)
+and other APIs to detect when the lock has been lifted.
+
+To enable users to appeal to a lock clients MAY use
+[server contact discovery](#getwell-knownmatrixsupport).
+
+#### Account suspension
+
+{{% added-in v="1.13" %}}
+
+Server administrators MAY suspend a user's account to prevent further activity
+from that account. The effect is similar to [locking](#account-locking), though
+without risk of the client losing state from a logout. Suspensions are reversible,
+like locks and unlike deactivations.
+
+The actions a user can perform while suspended is deliberately left as an
+implementation detail. Servers SHOULD permit the user to perform at least the
+following, however:
+
+* Log in and create additional sessions (which are also suspended).
+* See and receive messages, particularly through [`/sync`](#get_matrixclientv3sync)
+  and [`/messages`](#get_matrixclientv3roomsroomidmessages).
+* [Verify other devices](#device-verification) and write associated
+  [cross-signing data](#cross-signing).
+* [Populate their key backup](#server-side-key-backups).
+* [Leave rooms and reject invites](#post_matrixclientv3roomsroomidleave).
+* [Redact](#redactions) their own events.
+* [Log out](#post_matrixclientv3logout) or [delete](#delete_matrixclientv3devicesdeviceid)
+  any device of theirs, including the current session.
+* [Deactivate](#post_matrixclientv3accountdeactivate) their account, potentially
+  with a time delay to discourage making a new account right away.
+* Change or add [admin contacts](#adding-account-administrative-contact-information),
+  but not remove. Servers are recommended to only permit this if they keep a
+  changelog on contact information to prevent misuse.
+
+General purpose endpoints like [`/send/{eventType}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+MAY return the error described below depending on the path parameters. For example,
+a user may be allowed to send `m.room.redaction` events but not `m.room.message`
+events through `/send`.
+
+Where a room is used to maintain communication between server administration
+teams and the suspended user, servers are recommended to allow the user to send
+events to that room specifically. Server administrators which do not want the
+user to continue receiving messages may be interested in [account locking](#account-locking)
+instead.
+
+Otherwise, the recommended set of explicitly forbidden actions is:
+
+* [Joining](#joining-rooms) or [knocking](#knocking-on-rooms) on rooms.
+* Accepting or sending [invites](#room-membership).
+* [Sending messages](#put_matrixclientv3roomsroomidsendeventtypetxnid) to rooms.
+* Changing [profile data](#profiles) (display name and avatar, primarily).
+* [Redacting](#redactions) other users' events, when permission is possible in a room.
+
+When a client attempts to perform an action while suspended, the server MUST
+respond with a `403 Forbidden` error response with `M_USER_SUSPENDED` as the
+error code, as shown below:
+
+```
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+```
+
+```json
+{
+  "errcode": "M_USER_SUSPENDED",
+  "error": "You cannot perform this action while suspended."
+}
+```
+
+APIs for initiating suspension or unsuspension are not included in this version
+of the specification, and left as an implementation detail.
 
 ### Adding Account Administrative Contact Information
 
@@ -1324,7 +1639,7 @@ The capabilities advertised through this system are intended to
 advertise functionality which is optional in the API, or which depend in
 some way on the state of the user or server. This system should not be
 used to advertise unstable or experimental features - this is better
-done by the `/versions` endpoint.
+done by the [`/versions`](#get_matrixclientversions) endpoint.
 
 Some examples of what a reasonable capability could be are:
 
@@ -1353,7 +1668,7 @@ specification are defined later in this section.
 ### `m.change_password` capability
 
 This capability has a single flag, `enabled`, which indicates whether or
-not the user can use the `/account/password` API to change their
+not the user can use the [`/account/password`](#post_matrixclientv3accountpassword) API to change their
 password. If not present, the client should assume that password changes
 are possible via the API. When present, clients SHOULD respect the
 capability's `enabled` flag and indicate to the user if they are unable
@@ -1484,6 +1799,27 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.get_login_token` capability
+
+This capability has a single flag, `enabled`, to denote whether the user
+is able to use [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token)
+to generate single-use, time-limited tokens to log unauthenticated clients
+into their account.
+
+When not listed, clients SHOULD assume the user is unable to generate tokens.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.get_login_token": {
+      "enabled": false
+    }
+  }
+}
+```
+
 ## Filtering
 
 Filters can be created on the server and can be passed as a parameter to
@@ -1505,24 +1841,26 @@ events to the client to ease implementation, although such redundancy
 should be minimised where possible to conserve bandwidth.
 
 In terms of filters, lazy-loading is enabled by enabling
-`lazy_load_members` on a `RoomEventFilter` (or a `StateFilter` in the
-case of `/sync` only). When enabled, lazy-loading aware endpoints (see
+`lazy_load_members` on a
+[`RoomEventFilter`](#post_matrixclientv3useruseridfilter_request_roomeventfilter).
+When enabled, lazy-loading aware endpoints (see
 below) will only include membership events for the `sender` of events
 being included in the response. For example, if a client makes a `/sync`
 request with lazy-loading enabled, the server will only return
 membership events for the `sender` of events in the timeline, not all
 members of a room.
 
-When processing a sequence of events (e.g. by looping on `/sync` or
-paginating `/messages`), it is common for blocks of events in the
-sequence to share a similar set of senders. Rather than responses in the
-sequence sending duplicate membership events for these senders to the
-client, the server MAY assume that clients will remember membership
-events they have already been sent, and choose to skip sending
-membership events for members whose membership has not changed. These
-are called 'redundant membership events'. Clients may request that
-redundant membership events are always included in responses by setting
-`include_redundant_members` to true in the filter.
+When processing a sequence of events (e.g. by looping on
+[`/sync`](#get_matrixclientv3sync) or paginating
+[`/messages`](#get_matrixclientv3roomsroomidmessages)), it is common for blocks
+of events in the sequence to share a similar set of senders. Rather than
+responses in the sequence sending duplicate membership events for these senders
+to the client, the server MAY assume that clients will remember membership
+events they have already been sent, and choose to skip sending membership
+events for members whose membership has not changed. These are called
+'redundant membership events'. Clients may request that redundant membership
+events are always included in responses by setting `include_redundant_members`
+to true in the filter.
 
 The expected pattern for using lazy-loading is currently:
 
@@ -1537,7 +1875,7 @@ The expected pattern for using lazy-loading is currently:
     incremental /sync responses.
 -   Clients which do not support tab-completion may instead pull in
     profiles for arbitrary users (e.g. read receipts, typing
-    notifications) on demand by querying the room state or `/profile`.
+    notifications) on demand by querying the room state or [`/profile`](#get_matrixclientv3profileuserid).
 
 The current endpoints which support lazy-loading room members are:
 
@@ -1682,16 +2020,15 @@ updates not being sent.
 
 The complete event MUST NOT be larger than 65536 bytes, when formatted
 with the [federation event format](#room-event-format), including any
-signatures, and encoded as [Canonical
-JSON](/appendices#canonical-json).
+signatures, and encoded as [Canonical JSON](/appendices#canonical-json).
 
 There are additional restrictions on sizes per key:
 
--   `sender` MUST NOT exceed 255 bytes (including domain).
--   `room_id` MUST NOT exceed 255 bytes.
+-   `sender` MUST NOT exceed the size limit for [user IDs](/appendices/#user-identifiers).
+-   `room_id` MUST NOT exceed the size limit for [room IDs](/appendices/#room-ids).
 -   `state_key` MUST NOT exceed 255 bytes.
 -   `type` MUST NOT exceed 255 bytes.
--   `event_id` MUST NOT exceed 255 bytes.
+-   `event_id` MUST NOT exceed the size limit for [event IDs](/appendices/#event-ids).
 
 Some event types have additional size restrictions which are specified
 in the description of the event. Additional keys have no limit other
@@ -2096,11 +2433,11 @@ The endpoints where the server *should* include bundled aggregations are:
 * [`GET /sync`](#get_matrixclientv3sync) when the relevant section has a `limited` value
   of `true`.
 * [`POST /search`](#post_matrixclientv3search) for any matching events under `room_events`.
-* {{< added-in v="1.4" >}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
+* {{% added-in v="1.4" %}} [`GET /rooms/{roomId}/threads`](#get_matrixclientv1roomsroomidthreads)
 
 {{% boxes/note %}}
 The server is **not** required to return bundled aggregations on deprecated endpoints
-such as `/initialSync`.
+such as [`/initialSync`](#get_matrixclientv3roomsroomidinitialsync).
 {{% /boxes/note %}}
 
 While this functionality allows the client to see what was known to the server at the
@@ -2155,6 +2492,19 @@ following endpoint.
 
 This endpoint is particularly useful if the client has lost context on the aggregation for
 a parent event and needs to rebuild/verify it.
+
+When using the `recurse` parameter, note that there is no way for a client to
+control how far the server recurses. If the client decides that the server's
+recursion level is insufficient, it could, for example, perform the recursion
+itself, or disable whatever feature requires more recursion.
+
+Filters specified via `event_type` or `rel_type` will be applied to all events
+returned, whether direct or indirect relations. Events that would match the filter,
+but whose only relation to the original given event is through a non-matching
+intermediate event, will not be included. This means that supplying a `rel_type`
+parameter of `m.thread` is not appropriate for fetching all events in a thread since
+relations to the threaded events would be filtered out. For this purpose, clients should
+omit the `rel_type` parameter and perform any necessary filtering on the client side.
 
 {{% boxes/note %}}
 Because replies do not use `rel_type`, they will not be accessible via this API.
@@ -2309,7 +2659,7 @@ Note that this rule is only expected to work in room versions
 
 The allowable state transitions of membership are:
 
-![membership-flow-diagram](/diagrams/membership.png)
+{{% diagram name="membership" alt="Diagram presenting the possible membership state transitions" %}}
 
 {{% http-api spec="client-server" api="list_joined_rooms" %}}
 
@@ -2340,9 +2690,10 @@ this will have been just the API definition and nothing more (like invites).
 
 If the join rules allow, external users to the room can `/knock` on it to
 request permission to join. Users with appropriate permissions within the
-room can then approve (`/invite`) or deny (`/kick`, `/ban`, or otherwise
+room can then approve ([`/invite`](#post_matrixclientv3roomsroomidinvite))
+or deny ([`/kick`](#post_matrixclientv3roomsroomidkick), [`/ban`](#post_matrixclientv3roomsroomidban), or otherwise
 set membership to `leave`) the knock. Knocks can be retracted by calling
-`/leave` or otherwise setting membership to `leave`.
+[`/leave`](#post_matrixclientv3roomsroomidleave) or otherwise setting membership to `leave`.
 
 Users who are currently in the room, already invited, or banned cannot
 knock on the room.
@@ -2391,9 +2742,6 @@ or no conditions are satisfied, the user will not be able to join. When the
 join is happening over federation, the remote server will check the conditions
 before accepting the join. See the [Server-Server Spec](/server-server-api/#restricted-rooms)
 for more information.
-
-If the room is `restricted` but no valid conditions are presented then the
-room is effectively invite only.
 
 The user does not need to maintain the conditions in order to stay a member
 of the room: the conditions are only checked/evaluated during the join process.
@@ -2464,12 +2812,12 @@ with:
   "user_id": "<user id to ban>",
   "reason": "string: <reason for the ban>"
 }
-````
+```
 
 Banning a user adjusts the banned member's membership state to `ban`.
 Like with other membership changes, a user can directly adjust the
 target member's state, by making a request to
-`/rooms/<room id>/state/m.room.member/<user id>`:
+[`/rooms/<room id>/state/m.room.member/<user id>`](#put_matrixclientv3roomsroomidstateeventtypestatekey):
 
 ```json
 {
@@ -2497,7 +2845,25 @@ re-invited.
 
 {{% http-api spec="client-server" api="profile" %}}
 
-#### Events on Change of Profile Information
+#### Server behaviour
+
+Homeservers MUST at a minimum allow profile look-up for:
+
+-   users that share a room with the requesting user
+-   users that reside in public rooms known to the homeserver
+
+In all other cases, homeservers MAY deny profile look-up by responding with
+403 and an error code of `M_FORBIDDEN`.
+
+When a remote user is queried and the query is not denied per the above,
+homeservers SHOULD query the remote server for the user's profile information.
+The remote server MAY itself deny profile queries over federation, however.
+
+When the requested user does not exist, homeservers MAY choose whether to
+respond with 403 or 404. If the server denies profile look-up in all but the
+required cases, 403 is RECOMMENDED.
+
+##### Events on Change of Profile Information
 
 Because the profile display name and avatar information are likely to be
 used in many places of a client's display, changes to these fields cause
@@ -2520,25 +2886,6 @@ Additionally, when homeservers emit room membership events for their own
 users, they should include the display name and avatar URL fields in
 these events so that clients already have these details to hand, and do
 not have to perform extra round trips to query it.
-
-## Security
-
-### Rate limiting
-
-Homeservers SHOULD implement rate limiting to reduce the risk of being
-overloaded. If a request is refused due to rate limiting, it should
-return a standard error response of the form:
-
-```json
-{
-  "errcode": "M_LIMIT_EXCEEDED",
-  "error": "string",
-  "retry_after_ms": integer (optional)
-}
-```
-
-The `retry_after_ms` key SHOULD be included to tell the client how long
-they have to wait in milliseconds before they can try again.
 
 ## Modules
 
@@ -2567,42 +2914,45 @@ that profile.
 
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
-| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
-| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
-| [Mentions](#user-and-room-mentions)                        | Required  | Required | Required | Optional | Optional |
+| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
+| [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
 | [Presence](#presence)                                      | Required  | Required | Required | Required | Optional |
 | [Push Notifications](#push-notifications)                  | Optional  | Required | Optional | Optional | Optional |
 | [Receipts](#receipts)                                      | Required  | Required | Required | Required | Optional |
-| [Fully read markers](#fully-read-markers)                  | Optional  | Optional | Optional | Optional | Optional |
-| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
-| [VoIP](#voice-over-ip)                                     | Required  | Required | Required | Optional | Optional |
-| [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
-| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
-| [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
-| [Managing History Visibility](#room-history-visibility)    | Required  | Required | Required | Required | Optional |
-| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Room History Visibility](#room-history-visibility)        | Required  | Required | Required | Required | Optional |
 | [Room Upgrades](#room-upgrades)                            | Required  | Required | Required | Required | Optional |
-| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
-| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
-| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Invites](#third-party-invites)                | Optional  | Required | Optional | Optional | Optional |
+| [Typing Notifications](#typing-notifications)              | Required  | Required | Required | Required | Optional |
+| [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
+| [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
+| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
-| [Guest Accounts](#guest-access)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
-| [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
-| [SSO Login](#sso-client-loginauthentication)               | Optional  | Optional | Optional | Optional | Optional |
-| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Stickers](#sticker-messages)                              | Optional  | Optional | Optional | Optional | Optional |
-| [Server ACLs](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
-| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
-| [Moderation policies](#moderation-policy-lists)            | Optional  | Optional | Optional | Optional | Optional |
-| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
-| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
-| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Event Context](#event-context)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Read and Unread Markers](#read-and-unread-markers)        | Optional  | Optional | Optional | Optional | Optional |
+| [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
+| [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
+| [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
+| [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Room Previews](#room-previews)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Room Tagging](#room-tagging)                              | Optional  | Optional | Optional | Optional | Optional |
+| [SSO Client Login/Authentication](#sso-client-loginauthentication) | Optional  | Optional | Optional | Optional | Optional |
+| [Secrets](#secrets)                                        | Optional  | Optional | Optional | Optional | Optional |
+| [Send-to-Device Messaging](#send-to-device-messaging)      | Optional  | Optional | Optional | Optional | Optional |
+| [Server Access Control Lists (ACLs)](#server-access-control-lists-acls-for-rooms) | Optional  | Optional | Optional | Optional | Optional |
+| [Server Administration](#server-administration)            | Optional  | Optional | Optional | Optional | Optional |
+| [Server Notices](#server-notices)                          | Optional  | Optional | Optional | Optional | Optional |
+| [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
+| [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
+| [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
+| [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -2651,42 +3001,42 @@ operations and run in a resource constrained environment. Like embedded
 applications, they are not intended to be fully-fledged communication
 systems.
 
-{{< cs-module name="instant_messaging" >}}
-{{< cs-module name="rich_replies" >}}
-{{< cs-module name="voip_events" >}}
-{{< cs-module name="typing_notifications" >}}
-{{< cs-module name="receipts" >}}
-{{< cs-module name="read_markers" >}}
-{{< cs-module name="presence" >}}
-{{< cs-module name="content_repo" >}}
-{{< cs-module name="send_to_device" >}}
-{{< cs-module name="device_management" >}}
-{{< cs-module name="end_to_end_encryption" >}}
-{{< cs-module name="secrets" >}}
-{{< cs-module name="history_visibility" >}}
-{{< cs-module name="push" >}}
-{{< cs-module name="third_party_invites" >}}
-{{< cs-module name="search" >}}
-{{< cs-module name="guest_access" >}}
-{{< cs-module name="room_previews" >}}
-{{< cs-module name="tags" >}}
-{{< cs-module name="account_data" >}}
-{{< cs-module name="admin" >}}
-{{< cs-module name="event_context" >}}
-{{< cs-module name="sso_login" >}}
-{{< cs-module name="dm" >}}
-{{< cs-module name="ignore_users" >}}
-{{< cs-module name="stickers" >}}
-{{< cs-module name="report_content" >}}
-{{< cs-module name="third_party_networks" >}}
-{{< cs-module name="openid" >}}
-{{< cs-module name="server_acls" >}}
-{{< cs-module name="mentions" >}}
-{{< cs-module name="room_upgrades" >}}
-{{< cs-module name="server_notices" >}}
-{{< cs-module name="moderation_policies" >}}
-{{< cs-module name="spaces" >}}
-{{< cs-module name="event_replacements" >}}
-{{< cs-module name="event_annotations" >}}
-{{< cs-module name="threading" >}}
-{{< cs-module name="reference_relations" >}}
+{{% cs-module name="instant_messaging" %}}
+{{% cs-module name="rich_replies" %}}
+{{% cs-module name="voip_events" %}}
+{{% cs-module name="typing_notifications" %}}
+{{% cs-module name="receipts" %}}
+{{% cs-module name="read_markers" %}}
+{{% cs-module name="presence" %}}
+{{% cs-module name="content_repo" %}}
+{{% cs-module name="send_to_device" %}}
+{{% cs-module name="device_management" %}}
+{{% cs-module name="end_to_end_encryption" %}}
+{{% cs-module name="secrets" %}}
+{{% cs-module name="history_visibility" %}}
+{{% cs-module name="push" %}}
+{{% cs-module name="third_party_invites" %}}
+{{% cs-module name="search" %}}
+{{% cs-module name="guest_access" %}}
+{{% cs-module name="room_previews" %}}
+{{% cs-module name="tags" %}}
+{{% cs-module name="account_data" %}}
+{{% cs-module name="admin" %}}
+{{% cs-module name="event_context" %}}
+{{% cs-module name="sso_login" %}}
+{{% cs-module name="dm" %}}
+{{% cs-module name="ignore_users" %}}
+{{% cs-module name="stickers" %}}
+{{% cs-module name="report_content" %}}
+{{% cs-module name="third_party_networks" %}}
+{{% cs-module name="openid" %}}
+{{% cs-module name="server_acls" %}}
+{{% cs-module name="mentions" %}}
+{{% cs-module name="room_upgrades" %}}
+{{% cs-module name="server_notices" %}}
+{{% cs-module name="moderation_policies" %}}
+{{% cs-module name="spaces" %}}
+{{% cs-module name="event_replacements" %}}
+{{% cs-module name="event_annotations" %}}
+{{% cs-module name="threading" %}}
+{{% cs-module name="reference_relations" %}}

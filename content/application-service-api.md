@@ -207,6 +207,39 @@ processed the events.
 
 {{% http-api spec="application-service" api="transactions" %}}
 
+##### Pushing ephemeral data
+
+{{% added-in v="1.13" %}}
+
+If the `receive_ephemeral` settings is enabled in the [registration](#registration)
+file, homeservers MUST send ephemeral data that is relevant to the application
+service via the transaction API, using the `ephemeral` property of the request's
+body. This property is an array that is effectively a combination of the
+`presence` and `ephemeral` sections of the client-server [`/sync`](/client-server-api/#get_matrixclientv3sync)
+API.
+
+There are currently three event types that can be delivered to an application
+service:
+
+- **[`m.presence`](/client-server-api/#mpresence)**: MUST be sent to the
+application service if the data would apply contextually. For example, a
+presence update for a user an application service shares a room with, or
+matching one of the application service's namespaces.
+- **[`m.typing`](/client-server-api/#mtyping)**: MUST be sent to the application
+service under the same rules as regular events, meaning that the application
+service must have registered interest in the room itself, or in a user that is
+in the room. The data MUST use the same format as the client-server API, with
+the addition of a `room_id` property at the top level to identify the room that
+they were sent in.
+- **[`m.receipt`](/client-server-api/#mreceipt)**: MUST be sent to the
+application service under the same rules as regular events, meaning that the
+application service must have registered interest in the room itself, or in a
+user that is in the room. The data MUST use the same format as the client-server
+API, with the addition of a `room_id` property at the top level to identify the
+room that they were sent in. [Private read receipts](/client-server-api/#private-read-receipts)
+MUST only be sent for users matching one of the application service's
+namespaces. Normal read receipts and threaded read receipts are always sent.
+
 #### Pinging
 
 {{% added-in v="1.7" %}}
@@ -435,6 +468,12 @@ Similarly, normal users who attempt to create users or aliases *inside*
 an application service-defined namespace will receive the same
 `M_EXCLUSIVE` error code, but only if the application service has
 defined the namespace as `exclusive`.
+
+If `/register` or `/login` is called with the `m.login.application_service`
+login type, but without a valid `as_token`, the endpoints will return an error
+with the `M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` error code and 401 as the HTTP
+status code. This is the same behavior as invalid auth in the client-server API
+(see [Using access tokens](/client-server-api/#using-access-tokens)).
 
 #### Pinging
 

@@ -1,0 +1,303 @@
+# Copyright 2024 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Federation Content Repository API
+  version: 1.0.0
+paths:
+  "/media/download/{mediaId}":
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Download content from the content repository.
+      operationId: getContent
+      security:
+        - signedRequest: []
+      parameters:
+        - $ref: '#/components/parameters/mediaId'
+        - $ref: '#/components/parameters/timeout_ms'
+      responses:
+        "200":
+          description: The content that was previously uploaded.
+          headers:
+            Content-Type:
+              $ref: '#/components/headers/downloadContentType'
+          content:
+            multipart/mixed:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: |-
+                  **Required.** MUST contain a `boundary` (per [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046#section-5.1))
+                  delineating exactly two parts:
+
+                  The first part has a `Content-Type` header of `application/json`
+                  and describes the media's metadata, if any. Currently, this will
+                  always be an empty object.
+
+                  The second part is either:
+
+                  1. the bytes of the media itself, using `Content-Type` and
+                     `Content-Disposition` headers as appropriate;
+                  2. or a `Location` header to redirect the caller to where the media
+                     can be retrieved. The URL at `Location` SHOULD have appropriate
+                     `Content-Type` and `Content-Disposition` headers which describe
+                     the media.
+
+                     When `Location` is present, servers SHOULD NOT cache the URL.
+                     The remote server may have applied time limits on its validity.
+                     If the caller requires an up-to-date URL, it SHOULD re-request
+                     the media download.
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          description: The content is too large for the server to serve.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to serve"
+                  }
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+  "/media/thumbnail/{mediaId}":
+    get:
+      x-addedInMatrixVersion: "1.11"
+      summary: Download a thumbnail of content from the content repository
+      description: |-
+        Download a thumbnail of content from the content repository.
+        See the [Client-Server API Thumbnails](/client-server-api/#thumbnails)
+        section for more information.
+      operationId: getContentThumbnail
+      security:
+        - signedRequest: []
+      parameters:
+        - $ref: '#/components/parameters/mediaId'
+        - in: query
+          name: width
+          required: true
+          description: |-
+            The *desired* width of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: height
+          required: true
+          description: |-
+            The *desired* height of the thumbnail. The actual thumbnail may be
+            larger than the size specified.
+          example: 64
+          schema:
+            type: integer
+        - in: query
+          name: method
+          description: |-
+            The desired resizing method. See the [Client-Server API Thumbnails](/client-server-api/#thumbnails)
+            section for more information.
+          example: scale
+          schema:
+            type: string
+            enum:
+              - crop
+              - scale
+        - $ref: '#/components/parameters/timeout_ms'
+        - in: query
+          name: animated
+          x-addedInMatrixVersion: "1.11"
+          required: false
+          description: |
+            Indicates preference for an animated thumbnail from the server, if possible. Animated
+            thumbnails typically use the content types `image/gif`, `image/png` (with APNG format),
+            `image/apng`, and `image/webp` instead of the common static `image/png` or `image/jpeg`
+            content types.
+
+            When `true`, the server SHOULD return an animated thumbnail if possible and supported.
+            When `false`, the server MUST NOT return an animated thumbnail. For example, returning a
+            static `image/png` or `image/jpeg` thumbnail. When not provided, the server SHOULD NOT
+            return an animated thumbnail.
+
+            Servers SHOULD prefer to return `image/webp` thumbnails when supporting animation.
+
+            When `true` and the media cannot be animated, such as in the case of a JPEG or PDF, the
+            server SHOULD behave as though `animated` is `false`.
+          example: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: A thumbnail of the requested content.
+          headers:
+            Content-Type:
+              description: Must be `multipart/mixed`.
+              schema:
+                type: string
+          content:
+            multipart/mixed:
+              schema:
+                # This is a workaround for us not being able to say the response is required.
+                description: |-
+                  **Required.** MUST contain a `boundary` (per [RFC 2046](https://datatracker.ietf.org/doc/html/rfc2046#section-5.1))
+                  delineating exactly two parts:
+
+                  The first part has a `Content-Type` header of `application/json`
+                  and describes the media's metadata, if any. Currently, this will
+                  always be an empty object.
+
+                  The second part is either:
+
+                  1. the bytes of the media itself, using `Content-Type` and
+                     `Content-Disposition` headers as appropriate;
+                  2. or a `Location` header to redirect the caller to where the media
+                     can be retrieved. The URL at `Location` SHOULD have appropriate
+                     `Content-Type` and `Content-Disposition` headers which describe
+                     the media.
+
+                     When `Location` is present, servers SHOULD NOT cache the URL.
+                     The remote server may have applied time limits on its validity.
+                     If the caller requires an up-to-date URL, it SHOULD re-request
+                     the media download.
+
+                  {{% boxes/note %}}
+                  The `Content-Type` for the second part SHOULD be one of:
+                  * `image/png` (possibly of the APNG variety)
+                  * `image/apng`
+                  * `image/jpeg`
+                  * `image/gif`
+                  * `image/webp`
+                  {{% /boxes/note %}}
+        "400":
+          description: |-
+            The request does not make sense to the server, or the server cannot thumbnail
+            the content. For example, the caller requested non-integer dimensions or asked
+            for negatively-sized images.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNKNOWN",
+                    "error": "Cannot generate thumbnails for the requested content"
+                  }
+        "413":
+          description: The local content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "502":
+          description: The remote content is too large for the server to thumbnail.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "Content is too large to thumbnail"
+                  }
+        "504":
+          $ref: '#/components/responses/notYetUploaded'
+      tags:
+        - Media
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8448
+      basePath:
+        default: /_matrix/federation/v1
+components:
+  securitySchemes:
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest
+  parameters:
+    mediaId:
+      in: path
+      name: mediaId
+      required: true
+      description: |
+        The media ID from the `mxc://` URI (the path component).
+      example: ascERGshawAWawugaAcauga
+      schema:
+        type: string
+    timeout_ms:
+      in: query
+      name: timeout_ms
+      x-addedInMatrixVersion: "1.7"
+      description: |
+        The maximum number of milliseconds that the client is willing to wait to
+        start receiving data, in the case that the content has not yet been
+        uploaded. The default value is 20000 (20 seconds). The content
+        repository SHOULD impose a maximum value for this parameter. The
+        content repository MAY respond before the timeout.
+      example: 5000
+      schema:
+        type: integer
+        format: int64
+        default: 20000
+  responses:
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            # XXX: We should move error definitions into a more generic place.
+            $ref: ../client-server/definitions/errors/rate_limited.yaml
+    notYetUploaded:
+      description: |-
+        The content is not yet available. A [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_NOT_YET_UPLOADED`.
+      content:
+        application/json:
+          schema:
+            # XXX: We should move error definitions into a more generic place.
+            $ref: ../client-server/definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_YET_UPLOADED",
+                "error": "Content has not yet been uploaded"
+              }
+  headers:
+    downloadContentType:
+      description: |-
+        Must be `multipart/mixed`.
+      schema:
+        type: string

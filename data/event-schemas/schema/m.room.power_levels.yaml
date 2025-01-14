@@ -67,8 +67,10 @@ properties:
             by the `events` key. Defaults to 50 if unspecified.
         type: integer
       users:
-        additionalProperties:
-          type: integer
+        patternProperties:
+          "^@":
+            x-pattern-format: mx-user-id
+            type: integer
         description: The power levels for specific users. This is a mapping from `user_id` to power level for that user.
         title: User power levels
         type: object

@@ -15,6 +15,6 @@
 {{ $content := .content}}
 {{ $omit_title := .omit_title }}
 
-<div class="alert {{ $type }} {{ if $omit_title }}omit-title{{end}}" role="alert">
-{{ $content | markdownify }}
+<div class="alert {{ $type }} {{ if $omit_title }}omit-title{{end}}" role="note">
+{{ $content }}
 </div>
