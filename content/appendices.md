@@ -615,10 +615,11 @@ and servers MUST accept user IDs with localparts consisting of any legal
 unicode codepoint except for `:` and `NUL` (U+0000), including other control
 characters and the empty string. Localparts MUST be valid UTF-8 sequences.
 
-Servers SHOULD NOT produce user IDs with localparts outside of the following
-character set, and SHOULD NOT forward such user IDs to clients when referenced
-outside the context of an event. For example, device list updates from "invalid"
-user IDs would be dropped by the receiving server.
+User IDs with localparts containing characters outside the range U+0021 to U+007E, or with
+an empty localpart, are considered non-compliant. For current room versions, servers must
+still accept events using such user IDs over federation; however they SHOULD NOT forward
+such user IDs to clients when referenced outside the context of an event. For example,
+device list updates from non-compliant user IDs would be dropped by the receiving server.
 
     extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
 
