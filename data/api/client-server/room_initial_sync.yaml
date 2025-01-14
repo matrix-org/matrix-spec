@@ -7,12 +7,11 @@ paths:
     get:
       summary: Snapshot the current state of a room and its most recent messages.
       description: |-
-        {{% boxes/note %}}
-        This api should now exclusively be used for "peeking" into publicly viewable rooms you're not a member of ([Room Previews](/client-server-api/#room-previews))
-        {{% /boxes/note %}}
+        This api should now exclusively be used for "peeking" into viewable rooms you're not a member of ([Room Previews](/client-server-api/#room-previews))
+
         Get a copy of the current state and the most recent messages in a room.
 
-        Using this endpoint for something other than peeking was deprecated in r0 of this specification. \
+        Using this endpoint for something other than peeking was deprecated in r0 of this specification.
         The relevant information for syncing is now returned by the
         [`/sync`](/client-server-api/#get_matrixclientv3sync) API. See the
         [migration guide](https://matrix.org/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
