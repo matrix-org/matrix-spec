@@ -2783,7 +2783,7 @@ Whether or not they actually joined the room, if the room is an
 re-join the room.
 
 A user can also forget a room which they have left. Rooms which have
-been forgotten will never appear the response to the [`/sync`](/client-server-api/#get_matrixclientv3sync) API,
+been forgotten will never appear in the response to the [`/sync`](/client-server-api/#get_matrixclientv3sync) API,
 until the user re-joins, is re-invited, or knocks.
 
 A user may wish to force another user to leave a room. This can be done
