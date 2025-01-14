@@ -1,20 +1,16 @@
 # /bin/bash
 
-# Usage: ./scripts/generate-changelog.sh v1.2 "April 01, 2021"
-# or: ./scripts/generate-changelog.sh vUNSTABLE
+# Usage: ./scripts/generate-changelog.sh v1.2 for changelogs of stable releases
+# or: ./scripts/generate-changelog.sh vUNSTABLE for the unstable changelog.
 
 set -e
 
 VERSION="$1"
-DATE="$2"
 
-cd `dirname $0`/../changelogs
-
-# Pre-cleanup just in case it wasn't done on the last run
-rm -f rendered.md
-
-# Generate changelog
-towncrier --yes
+if [ -z "$VERSION" ]; then
+    echo "ERROR: The version of the changelog must be provided"
+    exit 1
+fi
 
 if [ "$VERSION" = "vUNSTABLE" ]; then
     TITLE="Changes since last release"
@@ -26,6 +22,14 @@ else
     FILENAME="$VERSION.md"
 fi
 
+cd `dirname $0`/../changelogs
+
+# Pre-cleanup just in case it wasn't done on the last run
+rm -f rendered.md
+
+# Generate changelog
+towncrier --yes
+
 {
     # Prepare the header
     # We include the generation date in the front matter so that we can use it
@@ -35,16 +39,13 @@ fi
 title: $TITLE
 linkTitle: $LINKTITLE
 type: docs
+layout: changelog
 outputs:
   - html
   - checklist
-date: $(date -Iseconds)
+date: $(date -Idate)
 ---
 EOF
-    if [ "$VERSION" != "vUNSTABLE" ]; then
-        sed -e "s/VERSION/$1/g" -e "s/DATE/$2/g" header.md
-    fi
-
     # Remove trailing whitespace (such as our intentionally blank RST headings)
     sed -e "s/[ ]*$//" rendered.md
 } > ../content/changelog/$FILENAME

@@ -1,1 +1,0 @@
-Clarify that the async upload endpoint will return 404 in some cases.

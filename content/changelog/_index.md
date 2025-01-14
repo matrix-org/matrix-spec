@@ -4,4 +4,4 @@ type: docs
 weight: 1000
 ---
 
-{{% changelog/changelogs %}}
+<!-- This page will be redirected to the latest version's changelog -->

@@ -62,7 +62,7 @@ Assuming the preparation work is complete, all that remains is the actual specif
 release.
 
 1. Create a `release/v1.2` branch where `v1.2` is the version you're about to release.
-2. Update the `params.version` section of `config.toml` to use the following template:
+2. Update the `params.version` section of `./config/_default/hugo.toml` to use the following template:
    ```toml
    [params.version]
    status = "stable"
@@ -79,8 +79,9 @@ release.
 3. Commit the changes.
 4. Generate the changelog.
    1. Activate your python virtual environment.
-   2. Run `./scripts/generate-changelog.sh v1.2 "October 01, 2021"` (using the correct
-      version number and same `release_date` format from the hugo config).
+   2. Run `./scripts/generate-changelog.sh v1.2` (using the correct version number).
+      The script will use the current date. If that date is wrong, correct the document
+      by using the same `YYYY-MM-DD` date format.
    3. Commit the result.
 5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
 6. Push the release branch and the tag.
@@ -95,7 +96,7 @@ release.
    * Upload the artifacts of the GitHub Actions build for the release to the GitHub
      release as artifacts themselves. This should be the tarball that will be deployed
      to spec.matrix.org.
-10. Commit a reversion to `params.version` of `config.toml` on `main`:
+10. Commit a reversion to `params.version` of `./config/_default/hugo.toml` on `main`:
     ```toml
     [params.version]
     status = "unstable"
