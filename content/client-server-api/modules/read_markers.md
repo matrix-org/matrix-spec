@@ -12,7 +12,7 @@ read receipt marks the last event of the second section.
 ##### Events
 
 The user's fully read marker is kept as an event in the room's [account
-data](#client-config). The event may be read to determine the user's
+data](#account-data). The event may be read to determine the user's
 current fully read marker location in the room, and just like other
 account data events the event will be pushed down the event stream when
 updated.
@@ -66,7 +66,7 @@ attention irrespective of [read receipts](#receipts) or
 ##### Events
 
 The user's unread marker in a room is kept under an `m.marked_unread`
-event in the room's [account data](#client-config). The event may be read
+event in the room's [account data](#account-data). The event may be read
 to determine the user's current unread marker state in the room. Just
 like other account data events, the event will be pushed down the event
 stream when updated.
