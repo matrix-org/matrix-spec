@@ -339,9 +339,6 @@ paths:
                       title: Room State
                       description: The state for the room.
                       properties:
-                        origin:
-                          type: string
-                          description: The resident server's [server name](/appendices/#server-name).
                         auth_chain:
                           type: array
                           description: |-
@@ -371,13 +368,11 @@ paths:
                       required:
                         - auth_chain
                         - state
-                        - origin
               examples:
                 response:
                   value: [
                     200,
                     {
-                      "origin": "matrix.org",
                       "auth_chain": [
                         {
                           "$ref": "examples/minimal_pdu.json"

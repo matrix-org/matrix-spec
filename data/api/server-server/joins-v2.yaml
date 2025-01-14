@@ -160,9 +160,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  origin:
-                    type: string
-                    description: The resident server's [server name](/appendices/#server-name).
                   members_omitted:
                     type: boolean
                     description: "`true` if `m.room.member` events have been omitted from `state`."
@@ -222,11 +219,9 @@ paths:
                 required:
                   - auth_chain
                   - state
-                  - origin
               examples:
                 response:
                   value: {
-                    "origin": "matrix.org",
                     "auth_chain": [
                       {
                         "$ref": "examples/minimal_pdu.json"

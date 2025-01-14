@@ -1,0 +1,1 @@
+Remove the `origin` field in `PUT /send_join` responses, because it was never sent in the first place.
