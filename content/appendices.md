@@ -621,8 +621,6 @@ still accept events using such user IDs over federation; however they SHOULD NOT
 such user IDs to clients when referenced outside the context of an event. For example,
 device list updates from non-compliant user IDs would be dropped by the receiving server.
 
-    extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
-
 A future room version may prevent users using a historical character set
 from participating. Use of the historical character set is *deprecated*.
 
