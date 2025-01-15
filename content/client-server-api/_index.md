@@ -2280,7 +2280,7 @@ version specification](/rooms), as are the criteria homeservers should
 use when deciding whether to accept a redaction event from a remote
 homeserver.
 
-When a client receives an `m.room.redaction` event, it should change
+When a client receives an `m.room.redaction` event, it SHOULD change
 the affected event in the same way a server does.
 
 {{% boxes/note %}}
