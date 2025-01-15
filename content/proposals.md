@@ -243,7 +243,8 @@ is as follows:
 -   A concern can be raised by a Spec Core Team member at any time,
     which will block an FCP from beginning. An FCP will only begin when
     75% of the members of the Spec Core Team agree on its outcome, and
-    all existing concerns have been resolved.
+    all existing concerns have been resolved. A concern raised during FCP will
+    cancel the FCP. The FCP will restart upon resolving the concern.
 -   The FCP will then begin and last for 5 days, giving anyone else some
     time to speak up before it concludes. If sufficient reasoning
     against the disposition is provided, a member of the Spec Core Team can
