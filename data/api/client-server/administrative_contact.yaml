@@ -120,7 +120,6 @@ paths:
                       description: The client secret used in the session with the identity server.
                     id_server:
                       type: string
-                      format: mx-server-name
                       description: The identity server to use.
                     id_access_token:
                       type: string
@@ -280,7 +279,6 @@ paths:
                   description: The client secret used in the session with the identity server.
                 id_server:
                   type: string
-                  format: mx-server-name
                   description: The identity server to use.
                 id_access_token:
                   type: string
@@ -340,7 +338,6 @@ paths:
               properties:
                 id_server:
                   type: string
-                  format: mx-server-name
                   description: |-
                     The identity server to unbind from. If not provided, the homeserver
                     MUST use the `id_server` the identifier was added through. If the
@@ -411,7 +408,6 @@ paths:
               properties:
                 id_server:
                   type: string
-                  format: mx-server-name
                   description: |-
                     The identity server to unbind from. If not provided, the homeserver
                     MUST use the `id_server` the identifier was added through. If the
