@@ -44,6 +44,8 @@ paths:
                 properties:
                   user_id:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                     description: The user ID that owns the access token.
                   device_id:
                     x-addedInMatrixVersion: "1.1"

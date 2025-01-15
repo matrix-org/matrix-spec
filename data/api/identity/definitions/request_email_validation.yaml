@@ -23,6 +23,7 @@ properties:
     example: "monkeys_are_GREAT"
   email:
     type: string
+    format: email
     description: The email address to validate.
     example: "alice@example.org"
   send_attempt:
@@ -39,6 +40,7 @@ properties:
     example: 1
   next_link:
     type: string
+    format: uri
     description: |-
       Optional. When the validation is completed, the identity server will
       redirect the user to this URL. This option is ignored when submitting
