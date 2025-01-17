@@ -9,7 +9,10 @@ properties:
     type: object
     properties:
       base_url:
-        type: string
+        anyOf:
+          - type: string
+            format: uri
+          - type: "null"
         description: |-
           The URL of the identity server the user prefers to use, or `null`
           if the user does not want to use an identity server. This value is
