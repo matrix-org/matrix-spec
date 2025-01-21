@@ -900,8 +900,8 @@ A room (or room permalink) which isn't using a room alias should supply
 at least one server using `via` in the URI's query string. Multiple servers
 can be specified by including multuple `via` parameters.
 
-The values of `via` are intended to be passed along as the `server_name`
-parameters on the [Client Server `/join/{roomIdOrAlias}` API](/client-server-api/#post_matrixclientv3joinroomidoralias).
+The values of `via` are intended to be passed along on the
+[Client Server `/join/{roomIdOrAlias}` API](/client-server-api/#post_matrixclientv3joinroomidoralias).
 
 When generating room links and permalinks, the application should pick
 servers which have a high probability of being in the room in the
