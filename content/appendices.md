@@ -611,10 +611,18 @@ characters permitted in user ID localparts. There are currently active
 users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
-and servers MUST accept user IDs with localparts from the expanded
-character set:
+and servers MUST accept user IDs with localparts consisting of any legal
+non-surrogate Unicode code points except for `:` and `NUL` (U+0000), including other control
+characters and the empty string.
 
-    extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
+User IDs with localparts containing characters outside the range U+0021 to U+007E, or with
+an empty localpart, are considered non-compliant. For current room versions, servers must
+still accept events using such user IDs over federation; however they SHOULD NOT forward
+such user IDs to clients when referenced outside the context of an event. For example,
+device list updates from non-compliant user IDs would be dropped by the receiving server.
+
+A future room version may prevent users using a historical character set
+from participating. Use of the historical character set is *deprecated*.
 
 ##### Mapping from other character sets
 
@@ -663,6 +671,11 @@ Room IDs are case-sensitive. They are not meant to be
 human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
+The localpart of a room ID (`opaque_id` above) may contain any valid
+non-surrogate Unicode code points, including control characters, except `:` and `NUL`
+(U+0000), but it is recommended to only include ASCII letters and
+digits (`A-Z`, `a-z`, `0-9`) when generating them.
+
 The length of a room ID, including the `!` sigil and the domain, MUST
 NOT exceed 255 bytes.
 
@@ -675,6 +688,9 @@ A room may have zero or more aliases. A room alias has the format:
 The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
+
+The localpart of a room alias may contain any valid non-surrogate Unicode codepoints
+except `:` and `NUL`.
 
 The length of a room alias, including the `#` sigil and the domain, MUST
 NOT exceed 255 bytes.
