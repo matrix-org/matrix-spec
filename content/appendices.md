@@ -612,8 +612,8 @@ users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
 and servers MUST accept user IDs with localparts consisting of any legal
-unicode codepoint except for `:` and `NUL` (U+0000), including other control
-characters and the empty string. Localparts MUST be valid UTF-8 sequences.
+non-surrogate Unicode code points except for `:` and `NUL` (U+0000), including other control
+characters and the empty string.
 
 User IDs with localparts containing characters outside the range U+0021 to U+007E, or with
 an empty localpart, are considered non-compliant. For current room versions, servers must
@@ -672,7 +672,7 @@ human-readable. They are intended to be treated as fully opaque strings
 by clients.
 
 The localpart of a room ID (`opaque_id` above) may contain any valid
-unicode codepoints, including control characters, except `:` and `NUL`
+non-surrogate Unicode code points, including control characters, except `:` and `NUL`
 (U+0000), but it is recommended to only include ASCII letters and
 digits (`A-Z`, `a-z`, `0-9`) when generating them.
 
@@ -689,8 +689,8 @@ The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
 
-The localpart of a room alias may contain any valid unicode codepoints
-except `:`.
+The localpart of a room alias may contain any valid non-surrogate Unicode codepoints
+except `:` and `NUL`.
 
 The length of a room alias, including the `#` sigil and the domain, MUST
 NOT exceed 255 bytes.
