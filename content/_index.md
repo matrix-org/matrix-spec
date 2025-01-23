@@ -505,7 +505,7 @@ roughly represents a breaking change, `Y` a backwards-compatible change, and
 `Z` a patch or insignificant alteration to the API.
 
 The current global versioning system was introduced with `v1.1`.
-[Matrix 1.0][https://matrix.org/blog/2019/06/11/introducing-matrix-1-0-and-the-matrix-org-foundation/]
+[Matrix 1.0](https://matrix.org/blog/2019/06/11/introducing-matrix-1-0-and-the-matrix-org-foundation/)
 did not correspond directly to a specification version; instead, it was based on
 the following versions for the individual APIs:
 
