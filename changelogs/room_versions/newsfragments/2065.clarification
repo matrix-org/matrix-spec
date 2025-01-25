@@ -1,0 +1,1 @@
+Clarify that events with rejected auth events must be rejected for room versions 6 and 7.
