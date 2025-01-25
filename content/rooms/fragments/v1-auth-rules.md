@@ -39,7 +39,7 @@ The rules are as follows:
    does not match the `sender` domain of the create event, reject.
 4.  If type is `m.room.aliases`:
     1.  If event has no `state_key`, reject.
-    2.  If sender's domain doesn't matches `state_key`, reject.
+    2.  If sender's domain doesn't match `state_key`, reject.
     3.  Otherwise, allow.
 5.  If type is `m.room.member`:
     1.  If there is no `state_key` property, or no `membership` property in
