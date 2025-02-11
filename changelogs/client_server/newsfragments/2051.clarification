@@ -1,1 +1,2 @@
-Document the `instance_id` field of `Protocol Instance` in the responses of the third-party protocol endpoints.
+Document the `instance_id` field of `Protocol Instance` in the responses to
+`GET /_matrix/client/v3/thirdparty/protocols` and `GET /_matrix/client/v3/thirdparty/protocol/{protocol}`.
