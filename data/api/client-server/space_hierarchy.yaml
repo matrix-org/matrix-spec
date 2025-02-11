@@ -91,13 +91,15 @@ paths:
                     description: |-
                        The rooms for the current page, with the current filters.
 
-                       Rooms which the requesting user can request the [stripped state](#) of are returned, this includes:
-
-                       * Any rooms where the requesting user's [room membership](#room-membership) is `join` or `invite`
-                       * Any rooms the user can join:
-                         * Rooms with [join rules](#mroomjoin_rules) set to `join`, `knock`, or `knock_restricted`
-                         * Rooms with a join rule of [`restricted`](#restricted-rooms) if the user meets one of the specified conditions
-                       * Any rooms with [`m.room.history_visibility`](#room-history-visibility) set to `world_readable`.
+                       The server should return any rooms where at least one of the following conditions is true:
+                       
+                       * The requesting user is currently a member (their [room membership](#room-membership) is `join`).
+                       * The requesting user already has permission to join, i.e. one of the following:
+                         * The user's room membership is `invite`.
+                         * The room's [join rules](#mroomjoin_rules) are set to `public`.
+                         * The room's join rules are set to [`restricted`](#restricted-rooms), provided the user meets one of the specified conditions.
+                       * The room is "knockable" (the room's join rules are set to `knock`, or `knock_restricted`, in a room version that supports those settings).
+                       * The room's [`m.room.history_visibility`](#room-history-visibility) is set to `world_readable`.
                     items:
                       allOf:
                         - $ref: definitions/public_rooms_chunk.yaml
