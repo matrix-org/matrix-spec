@@ -33,7 +33,65 @@ paths:
           content:
             application/json:
               schema:
-                $ref: definitions/protocol_metadata.yaml
+                type: object
+                description: Dictionary of supported third-party protocols.
+                additionalProperties:
+                  $ref: definitions/protocol.yaml
+                example: {
+                  "irc": {
+                    "user_fields": ["network", "nickname"],
+                    "location_fields": ["network", "channel"],
+                    "icon": "mxc://example.org/aBcDeFgH",
+                    "field_types": {
+                      "network": {
+                        "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
+                        "placeholder": "irc.example.org"
+                      },
+                      "nickname": {
+                        "regexp": "[^\\s]+",
+                        "placeholder": "username"
+                      },
+                      "channel": {
+                        "regexp": "#[^\\s]+",
+                        "placeholder": "#foobar"
+                      }
+                    },
+                    "instances": [
+                      {
+                        "network_id": "freenode",
+                        "desc": "Freenode",
+                        "icon": "mxc://example.org/JkLmNoPq",
+                        "instance_id": "irc-freenode",
+                        "fields": {
+                          "network": "freenode.net"
+                        }
+                      }
+                    ]
+                  },
+                  "gitter": {
+                    "user_fields": ["username"],
+                    "location_fields": ["room"],
+                    "field_types": {
+                      "username": {
+                        "regexp": "@[^\\s]+",
+                        "placeholder": "@username"
+                      },
+                      "room": {
+                        "regexp": "[^\\s]+\\/[^\\s]+",
+                        "placeholder": "matrix-org/matrix-doc"
+                      }
+                    },
+                    "instances": [
+                      {
+                        "network_id": "gitter",
+                        "desc": "Gitter",
+                        "icon": "mxc://example.org/zXyWvUt",
+                        "instance_id": "gitter-gitter",
+                        "fields": {}
+                      }
+                    ]
+                  }
+                }
       tags:
         - Third-party Lookup
   "/thirdparty/protocol/{protocol}":
