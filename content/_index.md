@@ -514,7 +514,7 @@ the following versions for the individual APIs:
 | Client-Server API        | r0.5.0        |
 | Server-Server API        | r0.1.2        |
 | Application Service API  | r0.1.1        |
-| Identity Service API     | r0.1.1        |
+| Identity Service API     | r0.2.0        |
 | Push Gateway API         | r0.1.0        |
 | Room Versions            | 1, 2, 3, 4, 5 |
 
