@@ -41,4 +41,3 @@ allOf:
                   This is the identifier to use as the `third_party_instance_id` in a request to
                   [`POST /_matrix/client/v3/publicRooms`](/client-server-api/#post_matrixclientv3publicrooms).
                 example: "irc-freenode"
-            required: ['desc', 'fields', 'network_id', 'instance_id']
