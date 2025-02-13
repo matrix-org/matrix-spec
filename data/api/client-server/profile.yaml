@@ -16,48 +16,85 @@ info:
   title: Matrix Client-Server Profile API
   version: 1.0.0
 paths:
-  "/profile/{userId}/displayname":
+  "/profile/{userId}/{key_name}":
     put:
-      summary: Set the user's display name.
+      summary: Set the user's profile field.
       description: |-
-        This API sets the given user's display name. You must have permission to
-        set this user's display name, e.g. you need to have their `access_token`.
-      operationId: setDisplayName
+        This API sets or updates a specified profile field in a user's profile. You must have the
+        appropriate permissions (i.e. an access token) to modify the profile field. Note that setting
+        a `null` value SHOULD NOT delete the field.
+      operationId: setProfileField
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
-          description: The user whose display name to set.
+          description: The user whose profile field to set.
           required: true
           example: "@alice:example.com"
           schema:
             type: string
+        - in: path
+          name: key_name
+          description: The profile field key name to set.
+          required: true
+          example: "displayname"
+          schema:
+            oneOf:
+              - type: string
+                enum: ["displayname", "avatar_url"]
+              - type: string
+                description: Must follow the [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
+        description: The new profile field value. The JSON object must contain the "key_name" specified in the URL.
+        required: true
         content:
           application/json:
             schema:
               type: object
-              example: {
-                "displayname": "Alice Margatroid"
-              }
-              properties:
-                displayname:
-                  type: string
-                  description: The new display name for this user.
-        description: The new display name information.
-        required: true
+              additionalProperties:
+                type: string
+              example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
-          description: The display name was set.
+          description: The profile field was set.
           content:
             application/json:
               schema:
-                type: object  # empty json object
+                type: object # empty JSON object
               examples:
                 response:
                   value: {}
+        "400":
+          description: >
+            The request is malformed, missing a required parameter, or the profile data exceeds allowed limits.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                bad_request:
+                  value:
+                    {
+                      "errcode": "M_BAD_JSON",
+                      "error": "Malformed JSON payload.",
+                    }
+        "403":
+          description: >
+            The server is unwilling to perform the operation—either due to insufficient permissions
+            or because profile modifications are disabled.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                forbidden:
+                  value:
+                    {
+                      "errcode": "M_FORBIDDEN",
+                      "error": "Profile modification is not permitted.",
+                    }
         "429":
           description: This request was rate-limited.
           content:
@@ -67,163 +104,140 @@ paths:
       tags:
         - User data
     get:
-      summary: Get the user's display name.
+      summary: Get the user's profile field.
       description: |-
-        Get the user's display name. This API may be used to fetch the user's
-        own displayname or to query the name of other users; either locally or
-        on remote homeservers.
-      operationId: getDisplayName
+        Get the value of a user's profile field. This API can retrieve the profile fields of the user
+        or other users, either locally or on remote homeservers. It supports both standard fields
+        (e.g. "displayname" and "avatar_url") and custom keys.
+      operationId: getProfileField
       parameters:
         - in: path
           name: userId
-          description: The user whose display name to get.
+          description: The user whose profile field to get.
           required: true
           example: "@alice:example.com"
           schema:
             type: string
+        - in: path
+          name: key_name
+          description: The profile field key name to retrieve (e.g. "displayname", "avatar_url", or custom).
+          required: true
+          example: "displayname"
+          schema:
+            oneOf:
+              - type: string
+                enum: ["displayname", "avatar_url"]
+              - type: string
+                description: Must follow the
+                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       responses:
         "200":
-          description: The display name for this user.
+          description: The profile field value was retrieved.
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  displayname:
-                    type: string
-                    description: The user's display name if they have set one, otherwise not
-                      present.
+                additionalProperties:
+                  type: string
               examples:
                 response:
-                  value: {
-                    "displayname": "Alice Margatroid"
-                  }
+                  value: { "displayname": "Alice" }
         "403":
           x-addedInMatrixVersion: "1.12"
-          description: The server is unwilling to disclose whether the user exists and/or
-            has a display name.
+          description:
+            The server is unwilling to disclose whether the user exists and/or
+            has the specified profile field.
           content:
             application/json:
               schema:
                 $ref: definitions/errors/error.yaml
               examples:
                 response:
-                  value: {
-                    "errcode": "M_FORBIDDEN",
-                    "error": "Profile lookup is disabled on this homeserver"
-                  }
+                  value:
+                    {
+                      "errcode": "M_FORBIDDEN",
+                      "error": "Profile lookup is disabled on this homeserver",
+                    }
         "404":
-          description: There is no display name for this user or this user does not exist.
+          description: There is no profile field with this key for this user, or the user does not exist.
       tags:
         - User data
-  "/profile/{userId}/avatar_url":
-    put:
-      summary: Set the user's avatar URL.
-      description: |-
-        This API sets the given user's avatar URL. You must have permission to
-        set this user's avatar URL, e.g. you need to have their `access_token`.
-      operationId: setAvatarUrl
+    delete:
+      summary: Delete a profile field.
+      description: Delete the specified profile field from a user's profile.
+      operationId: deleteProfileField
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
-          description: The user whose avatar URL to set.
+          description: The user whose profile field to delete.
           required: true
           example: "@alice:example.com"
           schema:
             type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              example: {
-                "avatar_url": "mxc://matrix.org/wefh34uihSDRGhw34"
-              }
-              properties:
-                avatar_url:
-                  type: string
-                  format: uri
-                  description: The new avatar URL for this user.
-        description: The new avatar information.
-        required: true
+        - in: path
+          name: key_name
+          description: The profile field key name to delete.
+          required: true
+          example: "displayname"
+          schema:
+            oneOf:
+              - type: string
+                enum: ["displayname", "avatar_url"]
+              - type: string
+                description: Must follow the
+                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       responses:
         "200":
-          description: The avatar URL was set.
+          description: The profile field was deleted.
           content:
             application/json:
               schema:
-                type: object  # empty json object
+                type: object
               examples:
                 response:
                   value: {}
+        "400":
+          description: >
+            The request is malformed or specifies an invalid key.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                bad_request:
+                  value:
+                    { "errcode": "M_BAD_JSON", "error": "Malformed request." }
+        "403":
+          description: >
+            The user is not authorised to delete this profile field.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                forbidden:
+                  value:
+                    {
+                      "errcode": "M_FORBIDDEN",
+                      "error": "Profile deletion is not permitted.",
+                    }
         "429":
           description: This request was rate-limited.
           content:
             application/json:
               schema:
                 $ref: definitions/errors/rate_limited.yaml
-      tags:
-        - User data
-    get:
-      summary: Get the user's avatar URL.
-      description: |-
-        Get the user's avatar URL. This API may be used to fetch the user's
-        own avatar URL or to query the URL of other users; either locally or
-        on remote homeservers.
-      operationId: getAvatarUrl
-      parameters:
-        - in: path
-          name: userId
-          description: The user whose avatar URL to get.
-          required: true
-          example: "@alice:example.com"
-          schema:
-            type: string
-      responses:
-        "200":
-          description: The avatar URL for this user.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  avatar_url:
-                    type: string
-                    format: uri
-                    description: The user's avatar URL if they have set one, otherwise not present.
-              examples:
-                response:
-                  value: {
-                    "avatar_url": "mxc://matrix.org/SDGdghriugerRg"
-                  }
-        "403":
-          x-addedInMatrixVersion: "1.12"
-          description: The server is unwilling to disclose whether the user exists and/or
-            has an avatar URL.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_FORBIDDEN",
-                    "error": "Profile lookup is disabled on this homeserver"
-                  }
-        "404":
-          description: There is no avatar URL for this user or this user does not exist.
       tags:
         - User data
   "/profile/{userId}":
     get:
       summary: Get this user's profile information.
       description: |-
-        Get the combined profile information for this user. This API may be used
-        to fetch the user's own profile information or other users; either
-        locally or on remote homeservers.
+        Retrieve the combined profile information for a user. In addition to the standard fields,
+        this API may include extended custom profile fields as defined in MSC4133.
       operationId: getUserProfile
       parameters:
         - in: path
@@ -241,23 +255,27 @@ paths:
               schema:
                 type: object
                 properties:
-                  avatar_url:
+                  "avatar_url":
                     type: string
                     format: uri
-                    description: The user's avatar URL if they have set one, otherwise not present.
-                  displayname:
+                    description: The user's avatar URL if set.
+                  "displayname":
                     type: string
-                    description: The user's display name if they have set one, otherwise not
-                      present.
-              examples:
-                response:
-                  value: {
-                    "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
-                    "displayname": "Alice Margatroid"
-                  }
+                    description: The user's display name if set.
+                additionalProperties:
+                  type: string
+                examples:
+                  response:
+                    value:
+                      {
+                        "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
+                        "displayname": "Alice Margatroid",
+                        "m.example_field": "custom_value",
+                      }
         "403":
           x-addedInMatrixVersion: "1.2"
-          description: The server is unwilling to disclose whether the user exists and/or
+          description:
+            The server is unwilling to disclose whether the user exists and/or
             has profile information.
           content:
             application/json:
@@ -265,12 +283,14 @@ paths:
                 $ref: definitions/errors/error.yaml
               examples:
                 response:
-                  value: {
-                    "errcode": "M_FORBIDDEN",
-                    "error": "Profile lookup is disabled on this homeserver"
-                  }
+                  value:
+                    {
+                      "errcode": "M_FORBIDDEN",
+                      "error": "Profile lookup is disabled on this homeserver",
+                    }
         "404":
-          description: There is no profile information for this user or this user does not
+          description:
+            There is no profile information for this user or this user does not
             exist.
           content:
             application/json:
@@ -278,10 +298,8 @@ paths:
                 $ref: definitions/errors/error.yaml
               examples:
                 response:
-                  value: {
-                    "errcode": "M_NOT_FOUND",
-                    "error": "Profile not found"
-                  }
+                  value:
+                    { "errcode": "M_NOT_FOUND", "error": "Profile not found" }
       tags:
         - User data
 servers:
