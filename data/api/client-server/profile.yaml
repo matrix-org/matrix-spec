@@ -22,7 +22,8 @@ paths:
       description: |-
         This API sets or updates a specified profile field in a user's profile. You must have the
         appropriate permissions (i.e. an access token) to modify the profile field. Note that setting
-        a `null` value SHOULD NOT delete the field.
+        a `null` value SHOULD NOT delete the field. For more details, see
+        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -108,7 +109,8 @@ paths:
       description: |-
         Get the value of a user's profile field. This API can retrieve the profile fields of the user
         or other users, either locally or on remote homeservers. It supports both standard fields
-        (e.g. "displayname" and "avatar_url") and custom keys.
+        (e.g. "displayname" and "avatar_url") and custom keys. For more details, see
+        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: getProfileField
       parameters:
         - in: path
@@ -164,7 +166,9 @@ paths:
         - User data
     delete:
       summary: Delete a profile field.
-      description: Delete the specified profile field from a user's profile.
+      description: |-
+        Delete the specified profile field from a user's profile. For more details, see
+        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: deleteProfileField
       security:
         - accessTokenQuery: []
@@ -237,7 +241,8 @@ paths:
       summary: Get this user's profile information.
       description: |-
         Retrieve the combined profile information for a user. In addition to the standard fields,
-        this API may include extended custom profile fields as defined in MSC4133.
+        this API may include extended custom profile fields as defined in
+        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: getUserProfile
       parameters:
         - in: path
