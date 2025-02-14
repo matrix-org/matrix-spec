@@ -86,6 +86,10 @@ paths:
                         $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can generate tokens to log further
                           clients into their account.
+                      m.profile_fields:
+                        $ref: "#/components/schemas/profileFieldsCapability"
+                        description: Capability to indicate if the user can set or modify extended profile fields.
+                          If absent, clients SHOULD assume extended profiles are supported in the correct spec version.
               examples:
                 response:
                   value: {
@@ -142,5 +146,30 @@ components:
           type: boolean
           description: True if the user can perform the action, false otherwise.
           example: false
+      required:
+        - enabled
+    profileFieldsCapability:
+      type: object
+      title: ProfileFieldsCapability
+      properties:
+        enabled:
+          type: boolean
+          description: True if the user can set or modify any extended profile fields, false otherwise.
+          example: true
+        allowed:
+          type: array
+          description: List of allowed custom profile field keys. This takes precedence over disallowed if both are provided.
+          items:
+            type: string
+          example:
+            - "m.example_field"
+            - "org.example.job_title"
+        disallowed:
+          type: array
+          description: List of disallowed custom profile field keys. Ignored if allowed is provided.
+          items:
+            type: string
+          example:
+            - "org.example.secret_field"
       required:
         - enabled
