@@ -154,13 +154,10 @@ components:
       type: object
       title: ProfileFieldsCapability
       properties:
-        enabled:
-          type: boolean
-          description: True if the user can set or modify any extended profile fields, false otherwise.
-          example: true
         allowed:
           type: array
-          description: List of allowed custom profile field keys. This takes precedence over disallowed if both are provided.
+          description: List of allowed custom profile field keys,
+            supporting `glob.*` wildcard format. Takes precedence over disallowed if both are provided.
           items:
             type: string
           example:
@@ -168,10 +165,15 @@ components:
             - "org.example.job_title"
         disallowed:
           type: array
-          description: List of disallowed custom profile field keys. Ignored if allowed is provided.
+          description: List of disallowed custom profile field keys,
+            supporting `glob.*` wildcard format. Ignored if allowed is provided.
           items:
             type: string
           example:
             - "org.example.secret_field"
+        enabled:
+          type: boolean
+          description: True if the user can set or modify any extended profile fields, false otherwise.
+          example: true
       required:
         - enabled
