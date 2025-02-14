@@ -1,1 +1,1 @@
-Feature: Update profile endpoints to become generic to support MSC4133 extended fields. Stabilised keys are explicitly enumerated, and custom keys must conform to the Common Namespaced Identifier Grammar.
+Feature: Update profile endpoints to become generic to support [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133) extended fields. Stabilised keys are explicitly enumerated, and custom keys must conform to the Common Namespaced Identifier Grammar.
