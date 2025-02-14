@@ -16,7 +16,7 @@ info:
   title: Matrix Client-Server Profile API
   version: 1.0.0
 paths:
-  "/profile/{userId}/{key_name}":
+  "/profile/{userId}/{keyName}":
     put:
       summary: Set the user's profile field.
       description: |-
@@ -40,7 +40,7 @@ paths:
           schema:
             type: string
         - in: path
-          name: key_name
+          name: keyName
           description: The profile field key name to set.
           required: true
           example: "displayname"
@@ -54,7 +54,7 @@ paths:
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
         description: >
-          The new profile field value. The JSON object must contain the "key_name" specified in the URL.
+          The new profile field value. The JSON object must contain the `keyName` specified in the URL.
           For custom keys, the value may be any valid JSON type. However, if the key is "displayname"
           or "avatar_url", the value MUST be a string.
         required: true
@@ -140,7 +140,7 @@ paths:
           schema:
             type: string
         - in: path
-          name: key_name
+          name: keyName
           description: The profile field key name to retrieve.
           required: true
           example: "displayname"
@@ -208,7 +208,7 @@ paths:
           schema:
             type: string
         - in: path
-          name: key_name
+          name: keyName
           description: The profile field key name to delete.
           required: true
           example: "displayname"
