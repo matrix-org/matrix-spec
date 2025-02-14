@@ -21,9 +21,11 @@ paths:
       summary: Set the user's profile field.
       description: |-
         This API sets or updates a specified profile field in a user's profile. You must have the
-        appropriate permissions (i.e. an access token) to modify the profile field. Note that setting
-        a `null` value SHOULD NOT delete the field. For more details, see
-        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
+        appropriate permissions (i.e. an access token) to modify the profile field.
+
+        **Note:** Setting a `null` value SHOULD NOT delete the field. However, servers MAY reject
+        requests to store `null` values if they do not allow keys to exist with a `null` value.
+        For more details, see [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -190,7 +192,10 @@ paths:
     delete:
       summary: Delete a profile field.
       description: |-
-        Delete the specified profile field from a user's profile. For more details, see
+        Delete the specified profile field from a user's profile.
+
+        **Note:** Setting a null value using the `PUT` endpoint retains the key with a null value.
+        Use this `DELETE` endpoint to fully remove the key if required. For more details, see
         [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: deleteProfileField
       security:
