@@ -269,8 +269,8 @@ paths:
     get:
       summary: Get this user's profile information.
       description: |-
-        Retrieve the combined profile information for a user. In addition to the standard fields,
-        this API may include extended custom profile fields as defined in
+        Retrieve the combined profile information for a user. In addition to the
+        stabilised fields, this API may include custom profile fields as defined in
         [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: getUserProfile
       parameters:
