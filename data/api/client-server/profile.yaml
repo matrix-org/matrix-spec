@@ -23,9 +23,10 @@ paths:
         This API sets or updates a specified profile field in a user's profile. You must have the
         appropriate permissions (i.e. an access token) to modify the profile field.
 
-        **Note:** Setting a `null` value SHOULD NOT delete the field. However, servers MAY reject
-        requests to store `null` values if they do not allow keys to exist with a `null` value.
-        For more details, see [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
+        Setting a `null` value SHOULD NOT delete the field. Instead, it retains the key with a `null`
+        value, unless the server rejects the request due to lack of support for `null` values.
+        To fully remove a profile field, use the `DELETE` endpoint. Servers may impose an upper limit
+        on value length, and profile data is subject to a total size limit of 64 KiB.
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -48,7 +49,8 @@ paths:
               - type: string
                 enum: ["avatar_url", "displayname"]
               - type: string
-                description: Must follow the [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+                description: Must follow the
+                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
         description: >
           The new profile field value. The JSON object must contain the "key_name" specified in the URL.
@@ -125,9 +127,8 @@ paths:
     get:
       summary: Get the user's profile field.
       description: |-
-        Get the value of a user's profile field. This API can retrieve the profile fields of the user
-        or other users, either locally or on remote homeservers. For more details, see
-        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
+        Get the value of a user's profile field. This API retrieves stabilised fields and custom
+        profile fields. Profile data is subject to a total size limit of 64 KiB.
       operationId: getProfileField
       parameters:
         - in: path
@@ -190,11 +191,8 @@ paths:
     delete:
       summary: Delete a profile field.
       description: |-
-        Delete the specified profile field from a user's profile.
-
-        **Note:** Setting a null value using the `PUT` endpoint retains the key with a null value.
-        Use this `DELETE` endpoint to fully remove the key if required. For more details, see
-        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
+        Delete the specified profile field from a user's profile. Note that setting a `null` value with the `PUT`
+        endpoint retains the key with a null value; use this `DELETE` endpoint to fully remove a profile field.
       operationId: deleteProfileField
       security:
         - accessTokenQuery: []
@@ -272,9 +270,9 @@ paths:
     get:
       summary: Get this user's profile information.
       description: |-
-        Retrieve the combined profile information for a user. In addition to the
-        stabilised fields, this API may include custom profile fields as defined in
-        [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
+        Retrieve the global profile information for a user. In addition to stabilised fields such as
+        "avatar_url" and "displayname", this API may include custom profile fields.
+        The overall profile data is limited to a maximum of 64 KiB.
       operationId: getUserProfile
       parameters:
         - in: path
