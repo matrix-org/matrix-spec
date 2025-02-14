@@ -1,0 +1,1 @@
+Fix parsing of nested slices in `resolve-refs` and `resolve-allof` partials.

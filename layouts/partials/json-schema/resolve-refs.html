@@ -69,6 +69,14 @@
 
     {{ range $schema }}
         {{ $resolved := partial "json-schema/resolve-refs" (dict "schema" . "path" $path) }}
+        {{ if reflect.IsSlice $resolved }}
+            {{/*
+                If $resolved is a slice, `append` will add the items of $resolved to
+                $result_slice, but we want to add $resolved itself to $result_slice,
+                so we wrap it into another slice.
+            */}}
+            {{ $resolved = slice $resolved }}
+        {{ end }}
         {{ $result_slice = $result_slice | append $resolved }}
     {{ end }}
 

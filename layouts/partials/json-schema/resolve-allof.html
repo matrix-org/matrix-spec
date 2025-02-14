@@ -24,6 +24,14 @@
 
     {{ range $original }}
         {{ $resolved := partial "json-schema/resolve-allof" . }}
+        {{ if reflect.IsSlice $resolved }}
+          {{/*
+              If $resolved is a slice, `append` will add the items of $resolved to
+              $ret, but we want to add $resolved itself to $ret, so we always wrap
+              it into another slice.
+          */}}
+          {{ $resolved = slice $resolved }}
+        {{ end }}
         {{ $ret = $ret | append $resolved }}
     {{ end }}
 {{ else if reflect.IsMap $original }}
