@@ -1,8 +1,5 @@
 {
-    "$ref": "unsigned_pdu_base.json",
-    "hashes": {
-        "sha256": "thishashcoversallfieldsincasethisisredacted"
-    },
+    "$ref": "components/pdu_base.json",
     "signatures": {
         "example.com": {
             "ed25519:key_version": "these86bytesofbase64signaturecoveressentialfieldsincludinghashessocancheckredactedpdus"
