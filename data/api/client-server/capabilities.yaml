@@ -91,7 +91,7 @@ paths:
                       m.profile_fields:
                         $ref: "#/components/schemas/profileFieldsCapability"
                         description: Capability to indicate if the user can set or modify extended profile fields.
-                          If absent, clients SHOULD assume extended profiles are supported in the correct spec version.
+                          If absent, clients should assume custom profile fields are supported.
               examples:
                 response:
                   value: {
