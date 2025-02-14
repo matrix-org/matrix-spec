@@ -46,26 +46,25 @@ paths:
           schema:
             oneOf:
               - type: string
-                enum: ["displayname", "avatar_url"]
+                enum: ["avatar_url", "displayname"]
               - type: string
                 description: Must follow the [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
         description: >
           The new profile field value. The JSON object must contain the "key_name" specified in the URL.
           For custom keys, the value may be any valid JSON type. However, if the key is "displayname"
-          or "avatar_url", the value MUST be a string as per the stabilised spec requirements.
+          or "avatar_url", the value MUST be a string.
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                displayname:
-                  type: string
-                  description: "Spec-conformant displayname value; must be a string."
                 avatar_url:
                   type: string
-                  description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
+                  description: "Avatar URL value (MXC URI format)."
+                displayname:
+                  type: string
               additionalProperties:
                 description: "Any additional profile field value; may be any valid JSON type."
               example: { "displayname": "Alice Wonderland" }
@@ -146,7 +145,7 @@ paths:
           schema:
             oneOf:
               - type: string
-                enum: ["displayname", "avatar_url"]
+                enum: ["avatar_url", "displayname"]
               - type: string
                 description: Must follow the
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
@@ -158,12 +157,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  displayname:
-                    type: string
-                    description: "Spec-conformant displayname value; must be a string."
                   avatar_url:
                     type: string
-                    description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
+                    description: "Avatar URL value (MXC URI format)."
+                  displayname:
+                    type: string
                 additionalProperties:
                   description: "Any additional profile field value; may be any valid JSON type."
               examples:
@@ -217,7 +215,7 @@ paths:
           schema:
             oneOf:
               - type: string
-                enum: ["displayname", "avatar_url"]
+                enum: ["avatar_url", "displayname"]
               - type: string
                 description: Must follow the
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
@@ -297,10 +295,9 @@ paths:
                   avatar_url:
                     type: string
                     format: uri
-                    description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
+                    description: "Avatar URL value (MXC URI format)."
                   displayname:
                     type: string
-                    description: "Spec-conformant displayname value; must be a string."
                 additionalProperties:
                   description: "Any additional profile field value; may be any valid JSON type."
               examples:
