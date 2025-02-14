@@ -48,14 +48,24 @@ paths:
               - type: string
                 description: Must follow the [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
-        description: The new profile field value. The JSON object must contain the "key_name" specified in the URL.
+        description: >
+          The new profile field value. The JSON object must contain the "key_name" specified in the URL.
+          For custom keys, the value may be any valid JSON type. However, if the key is "displayname"
+          or "avatar_url", the value MUST be a string as per the stabilised spec requirements.
         required: true
         content:
           application/json:
             schema:
               type: object
+              properties:
+                displayname:
+                  type: string
+                  description: "Spec-conformant displayname value; must be a string."
+                avatar_url:
+                  type: string
+                  description: "Spec-conformant avatar URL value; must be a string."
               additionalProperties:
-                type: string
+                description: "Any additional profile field value; may be any valid JSON type."
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -69,17 +79,24 @@ paths:
                   value: {}
         "400":
           description: >
-            The request is malformed, missing a required parameter, or the profile data exceeds allowed limits.
+            The request is malformed, missing a required parameter, contains invalid JSON (for the value),
+            or specifies an invalid key, or the profile data exceeds allowed limits.
           content:
             application/json:
               schema:
                 $ref: definitions/errors/error.yaml
               examples:
-                bad_request:
+                bad_json:
                   value:
                     {
                       "errcode": "M_BAD_JSON",
                       "error": "Malformed JSON payload.",
+                    }
+                invalid_key:
+                  value:
+                    {
+                      "errcode": "M_INVALID_PARAM",
+                      "error": "Invalid profile key.",
                     }
         "403":
           description: >
@@ -108,8 +125,7 @@ paths:
       summary: Get the user's profile field.
       description: |-
         Get the value of a user's profile field. This API can retrieve the profile fields of the user
-        or other users, either locally or on remote homeservers. It supports both standard fields
-        (e.g. "displayname" and "avatar_url") and custom keys. For more details, see
+        or other users, either locally or on remote homeservers. For more details, see
         [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
       operationId: getProfileField
       parameters:
@@ -122,7 +138,7 @@ paths:
             type: string
         - in: path
           name: key_name
-          description: The profile field key name to retrieve (e.g. "displayname", "avatar_url", or custom).
+          description: The profile field key name to retrieve.
           required: true
           example: "displayname"
           schema:
@@ -139,8 +155,15 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  displayname:
+                    type: string
+                    description: "Spec-conformant displayname value; must be a string."
+                  avatar_url:
+                    type: string
+                    description: "Spec-conformant avatar URL value; must be a string."
                 additionalProperties:
-                  type: string
+                  description: "Any additional profile field value; may be any valid JSON type."
               examples:
                 response:
                   value: { "displayname": "Alice" }
@@ -205,15 +228,21 @@ paths:
                   value: {}
         "400":
           description: >
-            The request is malformed or specifies an invalid key.
+            The request is malformed, contains invalid JSON, or specifies an invalid key.
           content:
             application/json:
               schema:
                 $ref: definitions/errors/error.yaml
               examples:
-                bad_request:
+                bad_json:
                   value:
                     { "errcode": "M_BAD_JSON", "error": "Malformed request." }
+                invalid_key:
+                  value:
+                    {
+                      "errcode": "M_INVALID_PARAM",
+                      "error": "Invalid profile key.",
+                    }
         "403":
           description: >
             The user is not authorised to delete this profile field.
@@ -260,23 +289,23 @@ paths:
               schema:
                 type: object
                 properties:
-                  "avatar_url":
+                  avatar_url:
                     type: string
                     format: uri
-                    description: The user's avatar URL if set.
-                  "displayname":
+                    description: "Spec-conformant avatar URL value; must be a string."
+                  displayname:
                     type: string
-                    description: The user's display name if set.
+                    description: "Spec-conformant displayname value; must be a string."
                 additionalProperties:
-                  type: string
-                examples:
-                  response:
-                    value:
-                      {
-                        "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
-                        "displayname": "Alice Margatroid",
-                        "m.example_field": "custom_value",
-                      }
+                  description: "Any additional profile field value; may be any valid JSON type."
+              examples:
+                response:
+                  value:
+                    {
+                      "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
+                      "displayname": "Alice Margatroid",
+                      "m.example_field": "custom_value",
+                    }
         "403":
           x-addedInMatrixVersion: "1.2"
           description:
