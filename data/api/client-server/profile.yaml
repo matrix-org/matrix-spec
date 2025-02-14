@@ -63,7 +63,7 @@ paths:
                   description: "Spec-conformant displayname value; must be a string."
                 avatar_url:
                   type: string
-                  description: "Spec-conformant avatar URL value; must be a string."
+                  description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
               additionalProperties:
                 description: "Any additional profile field value; may be any valid JSON type."
               example: { "displayname": "Alice Wonderland" }
@@ -161,7 +161,7 @@ paths:
                     description: "Spec-conformant displayname value; must be a string."
                   avatar_url:
                     type: string
-                    description: "Spec-conformant avatar URL value; must be a string."
+                    description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
                 additionalProperties:
                   description: "Any additional profile field value; may be any valid JSON type."
               examples:
@@ -292,7 +292,7 @@ paths:
                   avatar_url:
                     type: string
                     format: uri
-                    description: "Spec-conformant avatar URL value; must be a string."
+                    description: "Spec-conformant avatar URL value (MXC URI format); must be a string."
                   displayname:
                     type: string
                     description: "Spec-conformant displayname value; must be a string."
