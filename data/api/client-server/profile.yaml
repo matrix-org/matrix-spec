@@ -49,6 +49,7 @@ paths:
               - type: string
                 enum: ["avatar_url", "displayname"]
               - type: string
+                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
                 description: Must follow the
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       requestBody:
@@ -148,6 +149,7 @@ paths:
               - type: string
                 enum: ["avatar_url", "displayname"]
               - type: string
+                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
                 description: Must follow the
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       responses:
@@ -215,6 +217,7 @@ paths:
               - type: string
                 enum: ["avatar_url", "displayname"]
               - type: string
+                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
                 description: Must follow the
                   [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
       responses:
