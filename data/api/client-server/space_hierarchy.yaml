@@ -88,7 +88,18 @@ paths:
                 properties:
                   rooms:
                     type: array
-                    description: The rooms for the current page, with the current filters.
+                    description: |-
+                       The rooms for the current page, with the current filters.
+
+                       The server should return any rooms where at least one of the following conditions is true:
+                       
+                       * The requesting user is currently a member (their [room membership](#room-membership) is `join`).
+                       * The requesting user already has permission to join, i.e. one of the following:
+                         * The user's room membership is `invite`.
+                         * The room's [join rules](#mroomjoin_rules) are set to `public`.
+                         * The room's join rules are set to [`restricted`](#restricted-rooms), provided the user meets one of the specified conditions.
+                       * The room is "knockable" (the room's join rules are set to `knock`, or `knock_restricted`, in a room version that supports those settings).
+                       * The room's [`m.room.history_visibility`](#room-history-visibility) is set to `world_readable`.
                     items:
                       allOf:
                         - $ref: definitions/public_rooms_chunk.yaml
