@@ -18,15 +18,14 @@ info:
 paths:
   "/profile/{userId}/{keyName}":
     put:
-      summary: Set the user's profile field.
+      summary: Set a profile field for a user.
       description: |-
-        This API sets or updates a specified profile field in a user's profile. You must have the
-        appropriate permissions (i.e. an access token) to modify the profile field.
+        Set or update a profile field for a user.
+        Must be authenticated with an access token authorised to make changes.
+        Servers may impose size limits on individual fields, and the total profile must be under 64 KiB.
 
-        Setting a `null` value SHOULD NOT delete the field. Instead, it retains the key with a `null`
-        value, unless the server rejects the request due to lack of support for `null` values.
-        To fully remove a profile field, use the `DELETE` endpoint. Servers may impose an upper limit
-        on value length, and profile data is subject to a total size limit of 64 KiB.
+        **Note**: Setting a field to `null` keeps the key but with a `null` value, which some servers may reject.
+        To remove a field completely, use the `DELETE` endpoint instead.
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -42,21 +41,18 @@ paths:
         - in: path
           name: keyName
           description: The profile field key name to set.
+            It must be either `avatar_url`, `displayname`, or a custom field following the
+            [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
           schema:
-            oneOf:
-              - type: string
-                enum: ["avatar_url", "displayname"]
-              - type: string
-                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
-                description: Must follow the
-                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+            type: string
+            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       requestBody:
-        description: >
-          The new profile field value. The JSON object must contain the `keyName` specified in the URL.
-          For custom keys, the value may be any valid JSON type. However, if the key is "displayname"
-          or "avatar_url", the value MUST be a string.
+        description:
+          A JSON object that must contain the `keyName` specified in the URL.
+          For custom keys, the value may be any valid JSON type,
+          but if the key is `avatar_url` or `displayname`, the value MUST be a string.
         required: true
         content:
           application/json:
@@ -65,11 +61,11 @@ paths:
               properties:
                 avatar_url:
                   type: string
-                  description: "Avatar URL value (MXC URI format)."
+                  description: Avatar URL value (MXC URI format).
                 displayname:
                   type: string
               additionalProperties:
-                description: "Any additional profile field value; may be any valid JSON type."
+                description: Any additional profile field value; may be any valid JSON type.
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -82,9 +78,8 @@ paths:
                 response:
                   value: {}
         "400":
-          description: >
-            The request is malformed, missing a required parameter, contains invalid JSON (for the value),
-            or specifies an invalid key, or the profile data exceeds allowed limits.
+          description: The request is malformed, contains invalid JSON,
+            missing a required parameter, specifies an invalid key, or exceeds allowed size limits.
           content:
             application/json:
               schema:
@@ -103,9 +98,8 @@ paths:
                       "error": "Invalid profile key.",
                     }
         "403":
-          description: >
-            The server is unwilling to perform the operation—either due to insufficient permissions
-            or because profile modifications are disabled.
+          description: The server is unwilling to perform the operation,
+            either due to insufficient permissions or because profile modifications are disabled.
           content:
             application/json:
               schema:
@@ -126,10 +120,9 @@ paths:
       tags:
         - User data
     get:
-      summary: Get the user's profile field.
+      summary: Get a profile field for a user.
       description: |-
-        Get the value of a user's profile field. This API retrieves stabilised fields and custom
-        profile fields. Profile data is subject to a total size limit of 64 KiB.
+        Get the value of a profile field for a user. Any individual field must be within the total profile limit of 64 KiB.
       operationId: getProfileField
       parameters:
         - in: path
@@ -142,16 +135,13 @@ paths:
         - in: path
           name: keyName
           description: The profile field key name to retrieve.
+            It must be either `avatar_url`, `displayname`, or a custom field following the
+            [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
           schema:
-            oneOf:
-              - type: string
-                enum: ["avatar_url", "displayname"]
-              - type: string
-                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
-                description: Must follow the
-                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+            type: string
+            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       responses:
         "200":
           description: The profile field value was retrieved.
@@ -162,19 +152,17 @@ paths:
                 properties:
                   avatar_url:
                     type: string
-                    description: "Avatar URL value (MXC URI format)."
+                    description: Avatar URL value (MXC URI format).
                   displayname:
                     type: string
                 additionalProperties:
-                  description: "Any additional profile field value; may be any valid JSON type."
+                  description: Any additional profile field value, of any valid JSON type.
               examples:
                 response:
                   value: { "displayname": "Alice" }
         "403":
           x-addedInMatrixVersion: "1.12"
-          description:
-            The server is unwilling to disclose whether the user exists and/or
-            has the specified profile field.
+          description: The server is unwilling to disclose whether the user exists and/or has the specified profile field.
           content:
             application/json:
               schema:
@@ -191,10 +179,8 @@ paths:
       tags:
         - User data
     delete:
-      summary: Delete a profile field.
-      description: |-
-        Delete the specified profile field from a user's profile. Note that setting a `null` value with the `PUT`
-        endpoint retains the key with a null value; use this `DELETE` endpoint to fully remove a profile field.
+      summary: Remove a profile field from a user.
+      description: Remove a specific field from a user's profile.
       operationId: deleteProfileField
       security:
         - accessTokenQuery: []
@@ -210,16 +196,13 @@ paths:
         - in: path
           name: keyName
           description: The profile field key name to delete.
+            It must be either `avatar_url`, `displayname`, or a custom field following the
+            [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
           schema:
-            oneOf:
-              - type: string
-                enum: ["avatar_url", "displayname"]
-              - type: string
-                pattern: '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$'
-                description: Must follow the
-                  [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+            type: string
+            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       responses:
         "200":
           description: The profile field was deleted.
@@ -231,8 +214,7 @@ paths:
                 response:
                   value: {}
         "400":
-          description: >
-            The request is malformed, contains invalid JSON, or specifies an invalid key.
+          description: The request is malformed, contains invalid JSON, or specifies an invalid key.
           content:
             application/json:
               schema:
@@ -248,8 +230,7 @@ paths:
                       "error": "Invalid profile key.",
                     }
         "403":
-          description: >
-            The user is not authorised to delete this profile field.
+          description: The user is not authorised to delete this profile field.
           content:
             application/json:
               schema:
@@ -271,11 +252,12 @@ paths:
         - User data
   "/profile/{userId}":
     get:
-      summary: Get this user's profile information.
+      summary: Get all profile information for a user.
       description: |-
-        Retrieve the global profile information for a user. In addition to stabilised fields such as
-        "avatar_url" and "displayname", this API may include custom profile fields.
-        The overall profile data is limited to a maximum of 64 KiB.
+        Get the complete profile for a user. The response includes `avatar_url` and `displayname`
+        (unless set to `null`) plus any custom profile fields.
+
+        **Note**: The complete profile must be under 64 KiB.
       operationId: getUserProfile
       parameters:
         - in: path
@@ -300,7 +282,9 @@ paths:
                   displayname:
                     type: string
                 additionalProperties:
-                  description: "Any additional profile field value; may be any valid JSON type."
+                  description:
+                    Any additional profile field value; may be any valid JSON type, with keys following the
+                    [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
               examples:
                 response:
                   value:
@@ -311,9 +295,7 @@ paths:
                     }
         "403":
           x-addedInMatrixVersion: "1.2"
-          description:
-            The server is unwilling to disclose whether the user exists and/or
-            has profile information.
+          description: The server is unwilling to disclose whether the user exists and/or has profile information.
           content:
             application/json:
               schema:
@@ -326,9 +308,7 @@ paths:
                       "error": "Profile lookup is disabled on this homeserver",
                     }
         "404":
-          description:
-            There is no profile information for this user or this user does not
-            exist.
+          description: There is no profile information for this user or this user does not exist.
           content:
             application/json:
               schema:
