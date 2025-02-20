@@ -278,6 +278,7 @@ paths:
                   displayname:
                     type: string
                 additionalProperties:
+                  x-addedInMatrixVersion: "1.14"
                   description:
                     Any additional profile field value; may be any valid JSON type, with keys following the
                     [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
