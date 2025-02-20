@@ -53,16 +53,16 @@ paths:
       requestBody:
         description:
           A JSON object that must contain the `keyName` specified in the URL.
-          For custom keys, the value may be any valid JSON type,
-          but if the key is `avatar_url` or `displayname`, the value MUST be a string.
+          For custom keys, the value may be any valid JSON type, but if the key is
+          `avatar_url` or `displayname`, the value MUST be a string.
         required: true
         content:
           application/json:
             schema:
               type: object
-              properties:
-                "<keyName>":
-                  description: The field value to set; may be any valid JSON type.
+              minProperties: 1
+              additionalProperties:
+                description: The field value to set; may be any valid JSON type. For `avatar_url` and `displayname`, the value MUST be a string.
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -148,10 +148,9 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
-                  "<keyName>":
-                    description: The field value to set; may be any valid JSON type.
-                additionalProperties: false
+                minProperties: 1
+                additionalProperties:
+                  description: The profile field value; may be any valid JSON type.
               examples:
                 response:
                   value: { "displayname": "Alice" }
