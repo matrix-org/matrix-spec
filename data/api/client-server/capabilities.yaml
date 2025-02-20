@@ -89,9 +89,32 @@ paths:
                         description: Capability to indicate if the user can generate tokens to log further
                           clients into their account.
                       m.profile_fields:
-                        $ref: "#/components/schemas/profileFieldsCapability"
+                        type: object
+                        title: ProfileFieldsCapability
                         description: Capability to indicate if the user can set or modify extended profile fields.
                           If absent, clients should assume custom profile fields are supported.
+                        properties:
+                          allowed:
+                            type: array
+                            description: List of allowed custom profile field keys, supporting `glob.*` wildcard format. Takes precedence over disallowed if both are provided.
+                            items:
+                              type: string
+                            example:
+                              - "m.example_field"
+                              - "org.example/job_title"
+                          disallowed:
+                            type: array
+                            description: List of disallowed custom profile field keys, supporting `glob.*` wildcard format. Ignored if allowed is provided.
+                            items:
+                              type: string
+                            example:
+                              - "org.example.secret_field"
+                          enabled:
+                            type: boolean
+                            description: True if the user can set or modify any extended profile fields, false otherwise.
+                            example: true
+                        required:
+                          - enabled
               examples:
                 response:
                   value: {
@@ -148,32 +171,5 @@ components:
           type: boolean
           description: True if the user can perform the action, false otherwise.
           example: false
-      required:
-        - enabled
-    profileFieldsCapability:
-      type: object
-      title: ProfileFieldsCapability
-      properties:
-        allowed:
-          type: array
-          description: List of allowed custom profile field keys,
-            supporting `glob.*` wildcard format. Takes precedence over disallowed if both are provided.
-          items:
-            type: string
-          example:
-            - "m.example_field"
-            - "org.example.job_title"
-        disallowed:
-          type: array
-          description: List of disallowed custom profile field keys,
-            supporting `glob.*` wildcard format. Ignored if allowed is provided.
-          items:
-            type: string
-          example:
-            - "org.example.secret_field"
-        enabled:
-          type: boolean
-          description: True if the user can set or modify any extended profile fields, false otherwise.
-          example: true
       required:
         - enabled
