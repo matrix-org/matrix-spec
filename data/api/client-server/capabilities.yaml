@@ -100,7 +100,9 @@ paths:
                         properties:
                           allowed:
                             type: array
-                            description: List of allowed custom profile field keys, supporting `glob.*` wildcard format. Takes precedence over disallowed if both are provided.
+                            description: List of allowed additional custom profile field keys. A `*` can be used as a
+                              wildcard to match any sequence of characters. This list takes precedence over the
+                              disallowed list if both are provided.
                             items:
                               type: string
                             example:
@@ -108,7 +110,8 @@ paths:
                               - "org.example/job_title"
                           disallowed:
                             type: array
-                            description: List of disallowed custom profile field keys, supporting `glob.*` wildcard format. Ignored if allowed is provided.
+                            description: List of disallowed additional custom profile field keys. A `*` can be used as
+                              a wildcard to match any sequence of characters. Ignored if an allowed list is provided.
                             items:
                               type: string
                             example:
