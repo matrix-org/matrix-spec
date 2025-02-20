@@ -59,13 +59,8 @@ paths:
             schema:
               type: object
               properties:
-                avatar_url:
-                  type: string
-                  description: Avatar URL value (MXC URI format).
-                displayname:
-                  type: string
-              additionalProperties:
-                description: Any additional profile field value; may be any valid JSON type.
+                "<keyName>":
+                  description: The field value to set; may be any valid JSON type.
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -150,13 +145,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  avatar_url:
-                    type: string
-                    description: Avatar URL value (MXC URI format).
-                  displayname:
-                    type: string
-                additionalProperties:
-                  description: Any additional profile field value, of any valid JSON type.
+                  "<keyName>":
+                    description: The field value to set; may be any valid JSON type.
+                additionalProperties: false
               examples:
                 response:
                   value: { "displayname": "Alice" }
