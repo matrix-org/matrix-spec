@@ -18,6 +18,8 @@ info:
 paths:
   "/profile/{userId}/{keyName}":
     put:
+      x-changedInMatrixVersion:
+        "1.14": Endpoint now accepts variable `keyName` parameter.
       summary: Set a profile field for a user.
       description: |-
         Set or update a profile field for a user.
@@ -115,6 +117,8 @@ paths:
       tags:
         - User data
     get:
+      x-changedInMatrixVersion:
+        "1.14": Endpoint now accepts variable `keyName` parameter.
       summary: Get a profile field for a user.
       description: |-
         Get the value of a profile field for a user. Any individual field must be within the total profile limit of 64 KiB.
