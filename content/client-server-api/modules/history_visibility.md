@@ -43,11 +43,8 @@ setting at that time was more restrictive.
 
 #### Client behaviour
 
-Clients that implement this module MUST present to the user the possible
-options for setting history visibility when creating a room.
-
-Clients may want to display a notice that their events may be read by
-non-joined people if the value is set to `world_readable`.
+Clients may want to display a notice that events may be read by
+non-joined people if the history visibility is set to `world_readable`.
 
 #### Server behaviour
 
