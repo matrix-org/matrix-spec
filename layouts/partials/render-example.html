@@ -1,0 +1,40 @@
+{{/*
+
+    Renders an example to be included in HTML, with support for pretty-printing
+    JSON.
+
+    Parameters:
+
+    * `example`: the example
+    * `mime`: the mime type of the example. Used to pretty-print JSON and for
+      syntax highlighting. If it is not provided, it is assumed to be
+      `application/json`.
+
+*/}}
+
+{{ $example := .example }}
+
+{{/*
+    We need to convert the mime type to a recognized language.
+    For simplicity we only support JSON, which is also the default. Other mime
+    types are not highlighted.
+*/}}
+{{ $language := "json" }}
+
+{{ if (and .mime (ne .mime "application/json")) }}
+    {{/*
+        `no-highlight` treats the value as plain text, but still styles the code
+        block like the ones with proper syntax highlighting.
+    */}}
+    {{ $language = "no-highlight" }}
+{{ end }}
+
+{{ if eq $language "json" }}
+    {{ $example = jsonify (dict "indent" "  ") $example }}
+    {{ $example = replace $example "\\u003c" "<" }}
+    {{ $example = replace $example "\\u003e" ">" }}
+{{ end }}
+
+```{{ $language }}
+{{ $example | safeHTML }}
+```

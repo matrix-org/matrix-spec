@@ -1,0 +1,98 @@
+{{/*
+
+  Render a map of [Media Type Objects](https://spec.openapis.org/oas/v3.1.1#media-type-object).
+  This map can be found as the `content` field of requests and responses.
+
+  Parameters:
+
+  * `content`: A map of MIME type to Media Type Object
+  * `kind`: the kind of object that is rendered, either `request` or `response`.
+  * `anchor_base`: a prefix to add to the HTML anchors generated for each object
+
+  This template renders:
+
+  * Object tables if the map contains an `application/json` MIME type, or a
+    table with the MIME types and the corresponding description of the object.
+  * The examples of the Media Type Objects.
+
+*/}}
+
+{{ $json_body := index .content "application/json" }}
+{{ if $json_body }}
+    {{/*
+        Display the JSON schemas
+    */}}
+
+    {{ $schema := $json_body.schema }}
+
+    {{/*
+        All this is to work out how to express the content of the response
+        in the case where it is an array.
+    */}}
+    {{ if eq $schema.type "array" }}
+        {{ $type_of := "" }}
+        {{ if $schema.items.anyOf }}
+            {{ $types := slice }}
+            {{ range $schema.items.anyOf }}
+                {{ if .title }}
+                    {{ $types = $types | append .title}}
+                {{ else }}
+                    {{ $types = $types | append .type }}
+                {{ end }}
+            {{ end }}
+            {{ $type_of = delimit $types ", "}}
+        {{ else }}
+            {{ $type_of = $schema.items.title }}
+        {{ end }}
+<p>Array of <code>{{ $type_of }}</code>.</p>
+    {{ end }}
+
+    {{/*
+        Render object tables for any objects referenced in the response.
+        
+        This will be a no-op for response types which aren't objects or arrays.
+    */}}
+    {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" .anchor_base) }}
+    {{ range $additional_types }}
+        {{ partial "openapi/render-object-table" . }}
+    {{ end }}
+{{  else }}
+    {{/*
+        Show the content types and description.
+    */}}
+    {{ partial "openapi/render-content-type" (dict "content_types" .content) }}
+{{ end }}
+
+{{/*
+    Show all the examples.
+*/}}
+{{ if eq .kind "request" }}
+<h3>Request body example</h3>
+{{ end }}
+
+{{ range $mime, $body := .content }}
+    {{ $examples := slice }}
+
+    {{/*
+        Find the examples to display, with the following priority:
+
+        1. The `examples` field
+        2. The `example` field
+        3. The examples in the `schema` field
+    */}}
+    {{ if $body.examples }}
+        {{/* This is a map of string to Example Object */}}
+        {{ range $key, $example := $body.examples }}
+            {{/* The example is in the `value` field of the object */}}
+            {{ $examples = $examples | append (slice $example.value) }}
+        {{ end }}
+    {{ else if $body.example }}
+        {{ $examples = slice $body.example }}
+    {{ else if $body.schema }}
+        {{ $examples = partial "json-schema/resolve-examples" $body.schema }}
+    {{ end }}
+
+    {{ range $examples }}
+        {{ partial "render-example" (dict "example" . "mime" $mime) }}
+    {{ end }}
+{{ end }}

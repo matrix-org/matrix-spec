@@ -58,13 +58,14 @@
     {{ partial "openapi/render-object-table" . }}
 {{end}}
 
+{{ $examples := partial "json-schema/resolve-examples" $definition }}
+{{ if $examples }}
 <h2>Examples</h2>
 
-{{ $example := partial "json-schema/resolve-example" $definition }}
-
-```json
-{{ jsonify (dict "indent" "  ") $example }}
-```
+    {{ range $examples }}
+        {{ partial "render-example" (dict "example" .) }}
+    {{ end }}
+{{ end }}
 
 </details>
 
