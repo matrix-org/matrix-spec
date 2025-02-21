@@ -60,8 +60,10 @@
 
 <h2>Examples</h2>
 
-{{ $example := partial "json-schema/resolve-example" $definition }}
-{{ partial "render-example" (dict "example" $example) }}
+{{ $examples := partial "json-schema/resolve-examples" $definition }}
+{{ range $examples }}
+    {{ partial "render-example" (dict "example" .) }}
+{{ end }}
 
 </details>
 

@@ -59,21 +59,23 @@
             Show all the examples.
         */}}
         {{ range $mime, $body := $request_body.content }}
-            {{ $example := dict }}
+            {{ $examples := slice }}
 
             {{ if $body.schema }}
-                {{ $example = partial "json-schema/resolve-example" $body.schema }}
+                {{ $examples = partial "json-schema/resolve-examples" $body.schema }}
             {{ end }}
 
-            {{ if and (eq ($example | len) 0) $body.example }}
+            {{ if and (eq ($examples | len) 0) $body.example }}
                 {{/*
-                    If no example was generated from the schema, fallback to the
+                    If no examples were generated from the schema, fallback to the
                     main example.
                 */}}
-                {{ $example = $body.example }}
+                {{ $examples = slice $body.example }}
             {{ end }}
 
-            {{ partial "render-example" (dict "example" $example "mime" $mime) }}
+            {{ range $examples }}
+                {{ partial "render-example" (dict "example" . "mime" $mime) }}
+            {{ end }}
         {{ end }}
     {{ end }}
 

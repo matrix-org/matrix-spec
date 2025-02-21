@@ -104,15 +104,20 @@
             {{ end }}
 
             {{/*
-            render an example. currently this is only supported for arrays and objects.
+                Render the examples. Currently this is only supported for arrays
+                and objects.
             */}}
             {{ if or (eq $schema.type "object") (eq $schema.type "array") }}
-                {{ $example := partial "json-schema/resolve-example" $schema }}
+                {{ $examples := slice }}
                 {{ if $json_body.examples }}
-                    {{ $example = $json_body.examples.response.value }}
+                    {{ $examples = slice $json_body.examples.response.value }}
+                {{ else }}
+                    {{ $examples = partial "json-schema/resolve-examples" $schema }}
                 {{ end }}
 
-                {{ partial "render-example" (dict "example" $example) }}
+                {{ range $examples }}
+                    {{ partial "render-example" (dict "example" .) }}
+                {{ end }}
             {{ end }}
         {{  else }}
             {{/*
