@@ -63,9 +63,11 @@ paths:
               minProperties: 1
               additionalProperties:
                 description: The JSON object must include a property whose key
-                  matches the `keyName` specified in the URL. Its value is the new
-                  profile field value and may be any valid JSON type. However, if the
-                  key is `avatar_url` or `displayname`, the value must be a string.
+                  matches the `keyName` specified in the URL. For `avatar_url`,
+                  the value must be an MXC URI string. For `displayname`, the value
+                  must be a string. For custom keys, any JSON type is allowed -
+                  servers may not validate these values, but clients should follow
+                  the format defined for that key.
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -155,11 +157,11 @@ paths:
                 type: object
                 minProperties: 1
                 additionalProperties:
-                  description: The JSON response must include a property whose
-                    key matches the `keyName` specified in the URL. Its value is
-                    the profile field value and may be any valid JSON type.
-                    However, if the key is `avatar_url` or `displayname`, the
-                    value must be a string.
+                  description: The JSON response includes a property whose key
+                    matches the `keyName` specified in the URL. For `avatar_url`,
+                    the value will be an MXC URI string. For `displayname`, the
+                    value will be a string. For custom keys, any JSON type is
+                    possible - clients should expect the format defined for that key.
               examples:
                 response:
                   value: { "displayname": "Alice" }
