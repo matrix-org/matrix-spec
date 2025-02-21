@@ -37,7 +37,9 @@
             {{ end }}
         {{ end }}
 
-        {{ $examples = slice $example }}
+        {{ if (or $example (not $this_object.properties)) }}
+            {{ $examples = slice $example }}
+        {{ end }}
 
     {{ else if eq $this_object.type "array" }}
 
