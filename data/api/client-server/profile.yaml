@@ -22,12 +22,13 @@ paths:
         "1.14": Endpoint now accepts variable `keyName` parameter.
       summary: Set a profile field for a user.
       description: |-
-        Set or update a profile field for a user.
-        Must be authenticated with an access token authorised to make changes.
-        Servers may impose size limits on individual fields, and the total profile must be under 64 KiB.
+        Set or update a profile field for a user. Must be authenticated with an
+        access token authorised to make changes. Servers may impose size limits
+        on individual fields, and the total profile must be under 64 KiB.
 
-        **Note**: Setting a field to `null` keeps the key but with a `null` value, which some servers may reject.
-        To remove a field completely, use the `DELETE` endpoint instead.
+        **Note**: Setting a field to `null` keeps the key but with a `null` value,
+        which some servers may reject. To remove a field completely, use the
+        `DELETE` endpoint instead.
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -42,8 +43,8 @@ paths:
             type: string
         - in: path
           name: keyName
-          description: The profile field key name to set.
-            It must be either `avatar_url`, `displayname`, or a custom field following the
+          description: The profile field key name to set. It must be either
+            `avatar_url`, `displayname`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
@@ -51,10 +52,9 @@ paths:
             type: string
             pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       requestBody:
-        description:
-          A JSON object that must contain the `keyName` specified in the URL.
-          For custom keys, the value may be any valid JSON type, but if the key is
-          `avatar_url` or `displayname`, the value MUST be a string.
+        description: A JSON object containing the property whose name matches
+          the `keyName` specified in the URL. See `additionalProperties` for
+          further details.
         required: true
         content:
           application/json:
@@ -62,7 +62,10 @@ paths:
               type: object
               minProperties: 1
               additionalProperties:
-                description: The field value to set; may be any valid JSON type. For `avatar_url` and `displayname`, the value MUST be a string.
+                description: The JSON object must include a property whose key
+                  matches the `keyName` specified in the URL. Its value is the new
+                  profile field value and may be any valid JSON type. However, if the
+                  key is `avatar_url` or `displayname`, the value must be a string.
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
@@ -75,8 +78,9 @@ paths:
                 response:
                   value: {}
         "400":
-          description: The request is malformed, contains invalid JSON,
-            missing a required parameter, specifies an invalid key, or exceeds allowed size limits.
+          description: The request is malformed, contains invalid JSON, missing
+            a required parameter, specifies an invalid key, or exceeds allowed
+            size limits.
           content:
             application/json:
               schema:
@@ -95,8 +99,9 @@ paths:
                       "error": "Invalid profile key.",
                     }
         "403":
-          description: The server is unwilling to perform the operation,
-            either due to insufficient permissions or because profile modifications are disabled.
+          description: The server is unwilling to perform the operation, either
+            due to insufficient permissions or because profile modifications
+            are disabled.
           content:
             application/json:
               schema:
@@ -120,8 +125,8 @@ paths:
       x-changedInMatrixVersion:
         "1.14": Endpoint now accepts variable `keyName` parameter.
       summary: Get a profile field for a user.
-      description: |-
-        Get the value of a profile field for a user. Any individual field must be within the total profile limit of 64 KiB.
+      description: Get the value of a profile field for a user. Any individual
+        field must be within the total profile limit of 64 KiB.
       operationId: getProfileField
       parameters:
         - in: path
@@ -133,8 +138,8 @@ paths:
             type: string
         - in: path
           name: keyName
-          description: The profile field key name to retrieve.
-            It must be either `avatar_url`, `displayname`, or a custom field following the
+          description: The profile field key name to retrieve. It must be either
+            `avatar_url`, `displayname`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
@@ -150,13 +155,18 @@ paths:
                 type: object
                 minProperties: 1
                 additionalProperties:
-                  description: The profile field value; may be any valid JSON type.
+                  description: The JSON response must include a property whose
+                    key matches the `keyName` specified in the URL. Its value is
+                    the profile field value and may be any valid JSON type.
+                    However, if the key is `avatar_url` or `displayname`, the
+                    value must be a string.
               examples:
                 response:
                   value: { "displayname": "Alice" }
         "403":
           x-addedInMatrixVersion: "1.12"
-          description: The server is unwilling to disclose whether the user exists and/or has the specified profile field.
+          description: The server is unwilling to disclose whether the user
+            exists and/or has the specified profile field.
           content:
             application/json:
               schema:
@@ -169,7 +179,8 @@ paths:
                       "error": "Profile lookup is disabled on this homeserver",
                     }
         "404":
-          description: There is no profile field with this key for this user, or the user does not exist.
+          description: There is no profile field with this key for this user, or
+            the user does not exist.
       tags:
         - User data
     delete:
@@ -190,8 +201,8 @@ paths:
             type: string
         - in: path
           name: keyName
-          description: The profile field key name to delete.
-            It must be either `avatar_url`, `displayname`, or a custom field following the
+          description: The profile field key name to delete. It must be either
+            `avatar_url`, `displayname`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
@@ -209,7 +220,8 @@ paths:
                 response:
                   value: {}
         "400":
-          description: The request is malformed, contains invalid JSON, or specifies an invalid key.
+          description: The request is malformed, contains invalid JSON, or
+            specifies an invalid key.
           content:
             application/json:
               schema:
@@ -249,8 +261,8 @@ paths:
     get:
       summary: Get all profile information for a user.
       description: |-
-        Get the complete profile for a user. The response includes `avatar_url` and `displayname`
-        (unless set to `null`) plus any custom profile fields.
+        Get the complete profile for a user. The response includes `avatar_url`
+        and `displayname` (unless set to `null`) plus any custom profile fields.
 
         **Note**: The complete profile must be under 64 KiB.
       operationId: getUserProfile
@@ -272,14 +284,14 @@ paths:
                 properties:
                   avatar_url:
                     type: string
-                    format: uri
+                    format: mx-mxc-uri
                     description: "Avatar URL value (MXC URI format)."
                   displayname:
                     type: string
                 additionalProperties:
                   x-addedInMatrixVersion: "1.14"
-                  description:
-                    Any additional profile field value; may be any valid JSON type, with keys following the
+                  description: Any additional profile field value; may be any
+                    valid JSON type, with keys following the
                     [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
               examples:
                 response:
@@ -291,7 +303,8 @@ paths:
                     }
         "403":
           x-addedInMatrixVersion: "1.2"
-          description: The server is unwilling to disclose whether the user exists and/or has profile information.
+          description: The server is unwilling to disclose whether the user
+            exists and/or has profile information.
           content:
             application/json:
               schema:
@@ -304,7 +317,8 @@ paths:
                       "error": "Profile lookup is disabled on this homeserver",
                     }
         "404":
-          description: There is no profile information for this user or this user does not exist.
+          description: There is no profile information for this user or this
+            user does not exist.
           content:
             application/json:
               schema:
