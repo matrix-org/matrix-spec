@@ -61,10 +61,7 @@
 <h2>Examples</h2>
 
 {{ $example := partial "json-schema/resolve-example" $definition }}
-
-```json
-{{ jsonify (dict "indent" "  ") $example }}
-```
+{{ partial "render-example" (dict "example" $example) }}
 
 </details>
 
