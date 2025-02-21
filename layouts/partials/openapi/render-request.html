@@ -33,50 +33,8 @@
 
     {{ if $request_body }}
 <h3>Request body</h3>
-        {{/*
-            A request can have several content types.
-        */}}
-        {{ $json_body := index $request_body.content "application/json" }}
-        {{ if $json_body }}
-            {{/*
-                Display the JSON schemas
-            */}}
-            {{ $schema := $json_body.schema }}
 
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor) }}
-            {{ range $additional_types }}
-                {{ partial "openapi/render-object-table" . }}
-            {{ end }}
-        {{ else }}
-            {{/*
-                Show the content types and description.
-            */}}
-            {{ partial "openapi/render-content-type" (dict "content_types" $request_body.content) }}
-        {{ end }}
-
-<h3>Request body example</h3>
-        {{/*
-            Show all the examples.
-        */}}
-        {{ range $mime, $body := $request_body.content }}
-            {{ $examples := slice }}
-
-            {{ if $body.schema }}
-                {{ $examples = partial "json-schema/resolve-examples" $body.schema }}
-            {{ end }}
-
-            {{ if and (eq ($examples | len) 0) $body.example }}
-                {{/*
-                    If no examples were generated from the schema, fallback to the
-                    main example.
-                */}}
-                {{ $examples = slice $body.example }}
-            {{ end }}
-
-            {{ range $examples }}
-                {{ partial "render-example" (dict "example" . "mime" $mime) }}
-            {{ end }}
-        {{ end }}
+        {{ partial "openapi/render-media-type-objects" (dict "content" $request_body.content "kind" "request" "anchor_base" $anchor) }}
     {{ end }}
 
 {{ else }}
