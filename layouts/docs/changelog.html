@@ -31,9 +31,13 @@
     <h1>{{ .Title }}</h1>
 
     <table class="release-info">
-        {{ if ne $version "unstable" -}}
-            {{ $commitLink := printf "https://github.com/matrix-org/matrix-spec/tree/%s" $version -}}
+        {{ $rev := $version }}
+        {{ if eq $version "unstable" -}}
+            {{ $rev = .Params.commit -}}
+        {{ end -}}
+        {{ $commitLink := printf "https://github.com/matrix-org/matrix-spec/tree/%s" $rev -}}
         <tr><th>Git commit</th><td><a href="{{ $commitLink }}">{{ $commitLink }}</a></td>
+        {{ if ne $version "unstable" }}
         <tr><th>Release date</th><td>{{ .Date | time.Format ":date_long" }}</td>
         {{ end -}}
         {{ $checklist := .OutputFormats.Get "checklist" -}}
