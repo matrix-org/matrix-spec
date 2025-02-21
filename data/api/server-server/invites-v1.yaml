@@ -76,7 +76,6 @@ paths:
                             $ref: ../../event-schemas/examples/invite_room_state.json
               type: object
             example: {
-              "room_id": "!somewhere:example.org",
               "type": "m.room.member",
               "state_key": "@joe:elsewhere.com",
               "origin": "example.org",

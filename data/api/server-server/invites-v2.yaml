@@ -81,7 +81,6 @@ paths:
             example: {
               "room_version": "2",
               "event": {
-                "room_id": "!somewhere:example.org",
                 "type": "m.room.member",
                 "state_key": "@joe:elsewhere.com",
                 "origin": "example.org",
