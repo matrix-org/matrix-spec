@@ -262,7 +262,8 @@ paths:
       summary: Get all profile information for a user.
       description: |-
         Get the complete profile for a user. The response includes `avatar_url`
-        and `displayname` (unless set to `null`) plus any custom profile fields.
+        and `displayname` (unless set to `null`, as they can only be strings)
+        plus any custom profile fields.
 
         **Note**: The complete profile must be under 64 KiB.
       operationId: getUserProfile
