@@ -35,6 +35,8 @@ paths:
           example: "!abc123:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -50,16 +52,22 @@ paths:
                   description: |-
                     The room ID the event is for. Must match the ID given in
                     the path.
+                    format: mx-room-id
+                    pattern: "^!"
                   example: "!abc123:matrix.org"
                 sender:
                   type: string
                   description: |-
                     The user ID of the user who sent the original `m.room.third_party_invite`
                     event.
+                  format: mx-user-id
+                  pattern: "^@"
                   example: "@joe:matrix.org"
                 state_key:
                   type: string
                   description: The user ID of the invited user
+                  format: mx-user-id
+                  pattern: "^@"
                   example: "@someone:example.org"
                 content:
                   type: object
@@ -177,6 +185,8 @@ paths:
                 mxid:
                   type: string
                   description: The user that is now bound to the third-party identifier.
+                  format: mx-user-id
+                  pattern: "^@"
                   example: "@alice:matrix.org"
                 invites:
                   type: array
@@ -199,14 +209,20 @@ paths:
                       mxid:
                         type: string
                         description: The now-bound user ID that received the invite.
+                        format: mx-user-id
+                        pattern: "^@"
                         example: "@alice:matrix.org"
                       room_id:
                         type: string
                         description: The room ID the invite is valid for.
+                        format: mx-room-id
+                        pattern: "^!"
                         example: "!somewhere:example.org"
                       sender:
                         type: string
                         description: The user ID that sent the invite.
+                        format: mx-user-id
+                        pattern: "^@"
                         example: "@bob:matrix.org"
                       signed:
                         $ref: ../../event-schemas/schema/components/signed_third_party_invite.yaml
