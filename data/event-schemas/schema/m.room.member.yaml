@@ -99,7 +99,7 @@ properties:
           recommended.
       third_party_invite:
         title: ThirdPartyInvite
-        decription: |-
+        description: |-
           A third-party invite, if this `m.room.member` is the successor to an
           [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite)
           event.
