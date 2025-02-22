@@ -43,7 +43,7 @@ paths:
                 properties:
                   public_key:
                     type: string
-                    description: Unpadded Base64 encoded public key.
+                    description: Public key using standard or URL-safe base64 encoding.
                 required:
                   - public_key
               examples:
@@ -74,7 +74,7 @@ paths:
         - in: query
           name: public_key
           required: true
-          description: The unpadded base64-encoded public key to check.
+          description: The unpadded standard or URL-safe base64-encoded public key to check.
           example: VXuGitF39UH5iRfvbIknlvlAVKgD1BsLDMvBf0pmp7c
           schema:
             type: string
@@ -105,7 +105,7 @@ paths:
         - in: query
           name: public_key
           required: true
-          description: The unpadded base64-encoded public key to check.
+          description: The unpadded standard or URL-safe base64-encoded public key to check.
           example: VXuGitF39UH5iRfvbIknlvlAVKgD1BsLDMvBf0pmp7c
           schema:
             type: string
