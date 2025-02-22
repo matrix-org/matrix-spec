@@ -2,17 +2,27 @@
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: |-
-  Adjusts the membership state for a user in a room. It is preferable to use the membership APIs (`/rooms/<room id>/invite` etc) when performing membership actions rather than adjusting the state directly as there are a restricted set of valid transformations. For example, user A cannot force user B to join a room, and trying to force this state change directly will fail.
+  Adjusts the membership state for a user in a room. It is preferable to use the membership APIs
+  (`/rooms/<room id>/invite` etc) when performing membership actions rather than adjusting the
+  state directly as there are a restricted set of valid transformations. For example, user A cannot
+  force user B to join a room, and trying to force this state change directly will fail.
 
   The following membership states are specified:
 
-  - `invite` - The user has been invited to join a room, but has not yet joined it. They may not participate in the room until they join.
-  - `join` - The user has joined the room (possibly after accepting an invite), and may participate in it.
-  - `leave` - The user was once joined to the room, but has since left (possibly by choice, or possibly by being kicked).
-  - `ban` - The user has been banned from the room, and is no longer allowed to join it until they are un-banned from the room (by having their membership state set to a value other than `ban`).
-  - `knock` - The user has knocked on the room, requesting permission to participate. They may not participate in the room until they join.
+  - `invite` - The user has been invited to join a room, but has not yet joined it. They may not
+    participate in the room until they join.
+  - `join` - The user has joined the room (possibly after accepting an invite), and may participate
+    in it.
+  - `leave` - The user was once joined to the room, but has since left (possibly by choice, or
+    possibly by being kicked).
+  - `ban` - The user has been banned from the room, and is no longer allowed to join it until they
+    are un-banned from the room (by having their membership state set to a value other than `ban`).
+  - `knock` - The user has knocked on the room, requesting permission to participate. They may not
+    participate in the room until they join.
 
-  The `third_party_invite` property will be set if this invite is an `invite` event and is the successor of an `m.room.third_party_invite` event, and absent otherwise.
+  The `third_party_invite` property will be set if this invite is an `invite` event and is the
+  successor of an [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite) event,
+  and absent otherwise.
 
   This event may also include an `invite_room_state` key inside the event's `unsigned` data.
   If present, this contains an array of [stripped state events](/client-server-api/#stripped-state)
@@ -57,63 +67,54 @@ properties:
           - ban
         type: string
       is_direct:
-        description: Flag indicating if the room containing this event was created with the intention of being a direct chat. See [Direct Messaging](/client-server-api/#direct-messaging).
+        description: |-
+          Flag indicating if the room containing this event was created with the intention of being
+          a direct chat. See [Direct Messaging](/client-server-api/#direct-messaging).
         type: boolean
       join_authorised_via_users_server:
         x-addedInMatrixVersion: "1.2"
         type: string
         description: |-
-          Usually found on `join` events, this field is used to denote which homeserver (through representation of a user with sufficient power level)
-          authorised the user's join. More information about this field can be found in the [Restricted Rooms Specification](/client-server-api/#restricted-rooms).
+          Usually found on `join` events, this field is used to denote which homeserver (through
+          representation of a user with sufficient power level) authorised the user's join. More
+          information about this field can be found in the [Restricted Rooms Specification](/client-server-api/#restricted-rooms).
 
-          Client and server implementations should be aware of the [signing implications](/rooms/v8/#authorization-rules) of including this
-          field in further events: in particular, the event must be signed by the server which
-          owns the user ID in the field. When copying the membership event's `content`
-          (for profile updates and similar) it is therefore encouraged to exclude this
-          field in the copy, as otherwise the event might fail event authorization.
+          Client and server implementations should be aware of the [signing implications](/rooms/v8/#authorization-rules)
+          of including this field in further events: in particular, the event must be signed by the
+          server which owns the user ID in the field. When copying the membership event's `content`
+          (for profile updates and similar) it is therefore encouraged to exclude this field in the
+          copy, as otherwise the event might fail event authorization.
       reason:
         x-addedInMatrixVersion: "1.1"
         type: string
         description: |-
-          Optional user-supplied text for why their membership has changed. For kicks and bans, this is typically the reason for the kick or ban.
-          For other membership changes, this is a way for the user to communicate their intent without having to send a message to the room, such
-          as in a case where Bob rejects an invite from Alice about an upcoming concert, but can't make it that day.
+          Optional user-supplied text for why their membership has changed. For kicks and bans,
+          this is typically the reason for the kick or ban. For other membership changes, this is a
+          way for the user to communicate their intent without having to send a message to the
+          room, such as in a case where Bob rejects an invite from Alice about an upcoming concert,
+          but can't make it that day.
 
-          Clients are not recommended to show this reason to users when receiving an invite due to the potential for spam and abuse. Hiding the
-          reason behind a button or other component is recommended.
+          Clients are not recommended to show this reason to users when receiving an invite due to
+          the potential for spam and abuse. Hiding the reason behind a button or other component is
+          recommended.
       third_party_invite:
+        title: ThirdPartyInvite
+        description: |-
+          A third-party invite, if this `m.room.member` is the successor to an
+          [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite)
+          event.
+        type: object
         properties:
           display_name:
-            description: A name which can be displayed to represent the user instead of their third-party identifier
+            description: |-
+              A name which can be displayed to represent the user instead of their
+              third-party identifier
             type: string
           signed:
-            description: 'A block of content which has been signed, which servers can use to verify the event. Clients should ignore this.'
-            properties:
-              mxid:
-                description: The invited matrix user ID. Must be equal to the user_id property of the event.
-                type: string
-              signatures:
-                description: 'A single signature from the verifying server, in the format specified by the Signing Events section of the server-server API.'
-                title: Signatures
-                type: object
-                additionalProperties:
-                  type: object
-                  additionalProperties:
-                    type: string
-              token:
-                description: The token property of the containing third_party_invite object.
-                type: string
-            required:
-              - mxid
-              - signatures
-              - token
-            title: signed
-            type: object
+            $ref: components/signed_third_party_invite.yaml
         required:
           - display_name
           - signed
-        title: Invite
-        type: object
     required:
       - membership
     title: EventContent
