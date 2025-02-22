@@ -57,9 +57,6 @@ paths:
         - A signature of the token, signed with the identity server's private key
 
         - The matrix user ID who invited them to the room
-
-        If a token is requested from the identity server, the homeserver will
-        append a `m.room.third_party_invite` event to the room.
       operationId: inviteBy3PID
       security:
         - accessTokenQuery: []
