@@ -367,11 +367,6 @@ Custom SCSS for the Matrix spec
       }
     }
 
-    // add some space between two tables when they are right next to each other
-    & + table {
-        margin-top: 4rem;
-    }
-
     caption {
       caption-side: top;
       color: $dark;
@@ -441,6 +436,17 @@ Custom SCSS for the Matrix spec
         border-top: none;
       }
     }
+  }
+
+  /* Have consistent spacing around tables and examples */
+  table, .highlight {
+    margin-top: 0;
+    margin-bottom: 2rem;
+
+    /* We don't need the margin on the last child of the .rendered-data block */
+    &:last-child {
+      margin-bottom: 0;
+    } 
   }
 
   pre {
