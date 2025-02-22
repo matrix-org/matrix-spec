@@ -69,6 +69,8 @@ paths:
           example: "!d41d8cd:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -117,7 +119,9 @@ paths:
                   value: {}
         "403":
           description: |-
-            You do not have permission to invite the user to the room. A meaningful `errcode` and description error text will be returned. Example reasons for rejections are:
+            You do not have permission to invite the user to the room. A
+            meaningful `errcode` and description error text will be returned.
+            Example reasons for rejections are:
 
             - The invitee has been banned from the room.
             - The invitee is already a member of the room.
