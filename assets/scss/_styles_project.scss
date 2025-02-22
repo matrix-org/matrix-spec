@@ -316,13 +316,19 @@ Custom SCSS for the Matrix spec
   h2 {
     font-weight: $font-weight-bold;
     font-size: 1.3rem;
-    margin: 3rem 0 .5rem 0;
+    margin: 1.5rem 0 1rem 0;
   }
 
   h3 {
     font-weight: $font-weight-bold;
     font-size: 1.1rem;
-    margin: 1.5rem 0 .75rem 0;
+    margin: 1.5rem 0 1rem 0;
+
+  }
+
+  /* Reduce top margin of h3 if previous sibling is a h2 */
+  h2 + h3 {
+    margin-top: 1rem;
   }
 
   hr {
