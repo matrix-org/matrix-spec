@@ -22,11 +22,16 @@ properties:
           validate whether the key has been revoked. The URL must return a JSON
           object containing a boolean property named 'valid'.
         type: string
+        format: uri
       public_key:
         description: |-
-          A base64-encoded ed25519 key with which token must be signed (though a
-          signature from any entry in public_keys is also sufficient). This
-          exists for backwards compatibility.
+          A base64-encoded ed25519 key with which the token must be signed
+          (though a signature from any entry in public_keys is also sufficient).
+
+          The key is encoded using unpadded standard or URL-safe base64
+          encoding.
+
+          This exists for backwards compatibility.
         type: string
       public_keys:
         description: Keys with which the token may be signed.
@@ -35,14 +40,17 @@ properties:
             key_validity_url:
               description: |-
                 An optional URL which can be fetched, with querystring
-                public_key=public_key, to validate whether the key has been
+                `public_key=<public_key>`, to validate whether the key has been
                 revoked. The URL must return a JSON object containing a boolean
-                property named 'valid'. If this URL is absent, the key must be
+                property named `valid`. If this URL is absent, the key must be
                 considered valid indefinitely.
               type: string
             public_key:
               description: |-
                 A base-64 encoded ed25519 key with which token may be signed.
+
+                The key is encoded using unpadded standard or URL-safe base64
+                encoding.
               type: string
           required:
             - public_key
