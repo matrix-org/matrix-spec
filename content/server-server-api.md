@@ -537,7 +537,7 @@ the following subset of the room state:
 - If type is `m.room.member`:
 
     - The target's current `m.room.member` event, if any.
-    - If `membership` is `join` or `invite`, the current
+    - If `membership` is `join`, `invite` or `knock`, the current
       `m.room.join_rules` event, if any.
     - If membership is `invite` and `content` contains a
       `third_party_invite` property, the current
