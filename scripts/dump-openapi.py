@@ -32,6 +32,29 @@ import yaml
 scripts_dir = os.path.dirname(os.path.abspath(__file__))
 api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
 
+# Finds a Hugo shortcode in a string.
+#
+# A shortcode is defined as (newlines and whitespaces for presentation purpose):
+#
+# {{%
+#     <one or more whitespaces>
+#     <name of shortcode>
+#     <one or more whitespaces>
+#     (optional <list of parameters><one or more whitespaces>)
+# %}}
+#
+# With:
+#
+# * <name of shortcode>: any word character and `-` and `/`.
+# * <list of parameters>: any character except `}`, must not start or end with a
+#   whitespace.
+shortcode_regex = re.compile(r"\{\{\%\s+(?P<name>[\w\/-]+)\s+(?:(?P<params>[^\s\}][^\}]+[^\s\}])\s+)?\%\}\}", re.ASCII)
+
+# Parses the parameters of a Hugo shortcode. 
+#
+# For simplicity, this currently only supports the `key="value"` format.
+shortcode_params_regex = re.compile(r"(?P<key>\w+)=\"(?P<value>[^\"]+)\"", re.ASCII)
+
 def prefix_absolute_path_references(text, base_url):
     """Adds base_url to absolute-path references.
 
@@ -44,17 +67,95 @@ def prefix_absolute_path_references(text, base_url):
     """
     return text.replace("](/", "]({}/".format(base_url))
 
-def edit_links(node, base_url):
-    """Finds description nodes and makes any links in them absolute."""
+def replace_match(text, match, replacement):
+    """Replaces the regex match by the replacement in the text."""
+    return text[:match.start()] + replacement + text[match.end():]
+
+def replace_shortcode(text, shortcode):
+    """Replaces the shortcode by a Markdown fallback in the text.
+    
+    The supported shortcodes are:
+
+    * boxes/note, boxes/rationale, boxes/warning
+    * added-in, changed-in
+    """
+
+    if shortcode['name'].startswith("/"):
+        # This is the end of the shortcode, just remove it.
+        return replace_match(text, shortcode['match'], "")
+    
+    match shortcode['name']:
+        case "boxes/note":
+            text = replace_match(text, shortcode['match'], "**NOTE:** ")
+        case "boxes/rationale":
+            text = replace_match(text, shortcode['match'], "**RATIONALE:** ")
+        case "boxes/warning":
+            text = replace_match(text, shortcode['match'], "**WARNING:** ")
+        case "added-in":
+            version = shortcode['params']['v']
+            if not version:
+                raise ValueError("Missing parameter `v` for `added-in` shortcode")
+        
+            text = replace_match(text, shortcode['match'], f"**[Added in `v{version}`]** ")
+        case "changed-in":
+            version = shortcode['params']['v']
+            if not version:
+                raise ValueError("Missing parameter `v` for `changed-in` shortcode")
+        
+            text = replace_match(text, shortcode['match'], f"**[Changed in `v{version}`]** ")
+        case _:
+            raise ValueError("Unknown shortcode", shortcode['name'])
+
+    return text
+
+
+def find_and_replace_shortcodes(text):
+    """Finds Hugo shortcodes and replaces them by a Markdown fallback.
+    
+    The supported shortcodes are:
+
+    * boxes/note, boxes/rationale, boxes/warning
+    * added-in, changed-in
+    """
+    # We use a `while` loop with `search` instead of a `for` loop with
+    # `finditer`, because as soon as we start replacing text, the
+    # indices of the match are invalid.
+    while match := shortcode_regex.search(text):
+        # Parse the parameters of the shortcode
+        params = {}
+        if match['params']:
+            for param in shortcode_params_regex.finditer(match['params']):
+                if param['key']:
+                    params[param['key']] = param['value']
+        
+        shortcode = {
+            'name': match['name'],
+            'params': params,
+            'match': match,
+        }
+        text = replace_shortcode(text, shortcode)
+
+    return text
+
+def edit_descriptions(node, base_url):
+    """Finds description nodes and apply fixes to them.
+    
+    The fixes that are applied are:
+
+    * Make links absolute
+    * Replace shortcodes
+    """
     if isinstance(node, dict):
         for key in node:
             if isinstance(node[key], str):
                 node[key] = prefix_absolute_path_references(node[key], base_url)
+                node[key] = find_and_replace_shortcodes(node[key])
             else:
-                edit_links(node[key], base_url)
+                edit_descriptions(node[key], base_url)
     elif isinstance(node, list):
         for item in node:
-            edit_links(item, base_url)
+            edit_descriptions(item, base_url)
+
 
 parser = argparse.ArgumentParser(
     "dump-openapi.py - assemble the OpenAPI specs into a single JSON file"
@@ -164,7 +265,7 @@ for filename in os.listdir(selected_api_dir):
 if untagged != 0:
     print("{} untagged operations, you may want to look into fixing that.".format(untagged))
 
-edit_links(output, base_url)
+edit_descriptions(output, base_url)
 
 print("Generating %s" % output_file)
 
