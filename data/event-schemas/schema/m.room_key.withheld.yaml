@@ -48,8 +48,8 @@ properties:
       session_id:
         type: string
         description: |-
-          Required of `code` is not `m.no_olm`.  The session ID of the key
-          that this event is aboutis for.
+          Required if `code` is not `m.no_olm`.  The session ID of the key
+          that this event is about.
       sender_key:
         type: string
         description: |-
