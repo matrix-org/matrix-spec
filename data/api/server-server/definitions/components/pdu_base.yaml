@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: object
-title: Unsigned Persistent Data Unit
-description: An unsigned persistent data unit (event)
-example:
-  $ref: "../examples/unsigned_pdu_base.json"
+description: Common fields for all PDU versions
 properties:
   room_id:
     type: string
@@ -44,23 +41,6 @@ properties:
     type: object
     description: The content of the event.
     example: {"key": "value"}
-  prev_events:
-    type: array
-    description: |-
-      Event IDs and reference hashes for the most recent events in the room
-      that the homeserver was aware of when it made this event.
-
-      Must contain less than or equal to 20 events.
-    items:
-      type: array
-      maxItems: 2
-      minItems: 2
-      items:
-        anyOf:
-          - type: string
-            title: Event ID
-            example: "$abc123:matrix.org"
-          - $ref: "event_hash.yaml"
   depth:
     type: integer
     description: |-
@@ -68,25 +48,22 @@ properties:
       maximum value for an integer (2^63 - 1). If the room's depth is already at
       the limit, the depth must be set to the limit.
     example: 12
-  auth_events:
-    type: array
+  hashes:
+    $ref: "event_hash.yaml"
+  signatures:
+    type: object
     description: |-
-      Event IDs and reference hashes for the authorization events that would
-      allow this event to be in the room.
-
-      Must contain less than or equal to 10 events. Note that if the relevant
-      auth event selection rules are used, this restriction should never be
-      encountered.
-    items:
-      type: array
-      maxItems: 2
-      minItems: 2
-      items:
-        anyOf:
-          - type: string
-            title: Event ID
-            example: "$abc123:matrix.org"
-          - $ref: "event_hash.yaml"
+      Signatures for the PDU, following the algorithm specified in [Signing Events](/server-server-api/#signing-events).
+    example: {
+      "example.com": {
+        "ed25519:key_version:": "86BytesOfSignatureOfTheRedactedEvent"
+      }
+    }
+    additionalProperties:
+      type: object
+      title: Server Signatures
+      additionalProperties:
+        type: string
   unsigned:
     type: object
     title: UnsignedData
@@ -99,12 +76,11 @@ properties:
         description: The number of milliseconds that have passed since this message was sent.
         example: 4612
 required:
-  - event_id
   - room_id
   - sender
   - origin_server_ts
   - type
   - content
-  - prev_events
   - depth
-  - auth_events
+  - hashes
+  - signatures
