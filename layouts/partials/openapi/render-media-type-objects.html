@@ -17,6 +17,11 @@
 
 */}}
 
+{{/*
+    Request and response bodies can have several content types. If there is a
+    JSON type, we display that; otherwise we just show the content types and
+    descriptions.
+*/}}
 {{ $json_body := index .content "application/json" }}
 {{ if $json_body }}
     {{/*
@@ -48,9 +53,10 @@
     {{ end }}
 
     {{/*
-        Render object tables for any objects referenced in the response.
+        Render object tables for any objects referenced in the request/response.
         
-        This will be a no-op for response types which aren't objects or arrays.
+        This will be a no-op for request/response body types which aren't
+        objects or arrays.
     */}}
     {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" .anchor_base) }}
     {{ range $additional_types }}

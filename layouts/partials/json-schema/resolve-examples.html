@@ -37,6 +37,11 @@
             {{ end }}
         {{ end }}
 
+        {{/*
+            Add the assembled example to the list if either (a) the example is
+            non-empty, or (b) the object itself is meant to be empty (so an
+            empty example is correct).
+        */}}
         {{ if (or $example (not $this_object.properties)) }}
             {{ $examples = slice $example }}
         {{ end }}
