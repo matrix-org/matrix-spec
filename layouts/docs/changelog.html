@@ -33,6 +33,10 @@
     <table class="release-info">
         {{ $rev := $version }}
         {{ if eq $version "unstable" -}}
+            {{- /*
+                Extract the git SHA from the frontmatter of the changelog, where
+                it was stashed by `generate-changelog.sh`.
+            */ -}}
             {{ $rev = .Params.commit -}}
         {{ end -}}
         {{ $commitLink := printf "https://github.com/matrix-org/matrix-spec/tree/%s" $rev -}}
