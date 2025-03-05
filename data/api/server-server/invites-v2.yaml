@@ -78,25 +78,6 @@ paths:
               required:
                 - room_version
                 - event
-            example: {
-              "room_version": "2",
-              "event": {
-                "room_id": "!somewhere:example.org",
-                "type": "m.room.member",
-                "state_key": "@joe:elsewhere.com",
-                "origin": "example.org",
-                "origin_server_ts": 1549041175876,
-                "sender": "@someone:example.org",
-                "content": {
-                    "membership": "invite"
-                },
-                "signatures": {
-                  "example.com": {
-                    "ed25519:key_version": "SomeSignatureHere"
-                  },
-                }
-              }
-            }
         required: true
       responses:
         "200":

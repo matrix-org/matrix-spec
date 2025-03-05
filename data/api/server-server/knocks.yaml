@@ -270,7 +270,6 @@ paths:
                 - type
                 - content
             example: {
-              "room_id": "!somewhere:example.org",
               "type": "m.room.member",
               "state_key": "@someone:example.org",
               "origin": "example.org",
