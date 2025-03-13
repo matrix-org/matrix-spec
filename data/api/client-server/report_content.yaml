@@ -178,6 +178,8 @@ paths:
           example: "@someguy:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
       requestBody:
         content:
           application/json:
