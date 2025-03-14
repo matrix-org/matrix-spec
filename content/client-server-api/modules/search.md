@@ -26,9 +26,10 @@ on certain keys of certain event types.
 
 The supported keys to search over are:
 
--   `content.body` in `m.room.message`
--   `content.name` in `m.room.name`
--   `content.topic` in `m.room.topic`
+-   `content.body` in [`m.room.message`](#mroommessage)
+-   `content.name` in [`m.room.name`](#mroomname)
+-   `content.topic` as well as the `body` of the `text/plain` representation
+     in [`m.room.topic`](#mroomtopic)
 
 The search will *not* include rooms that are end to end encrypted.
 

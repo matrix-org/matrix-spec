@@ -3,6 +3,14 @@
   "type": "m.room.topic",
   "state_key": "",
   "content": {
-    "topic": "A room topic"
+    "m.topic": {
+      "m.text": [ {
+        "mimetype": "text/html",
+        "body": "An <em>html</em> topic"
+      }, {
+        "body": "A plain text topic"
+      }]
+    },
+    "topic": "A plain text topic"
   }
 }
