@@ -543,8 +543,8 @@ the following subset of the room state:
       `third_party_invite` property, the current
       `m.room.third_party_invite` event with `state_key` matching
       `content.third_party_invite.signed.token`, if any.
-    - If `content.join_authorised_via_users_server` is present,
-      and the [room version supports restricted rooms](/rooms/#feature-matrix),
+    - If `membership` is `join`, `content.join_authorised_via_users_server`
+      is present, and the [room version supports restricted rooms](/rooms/#feature-matrix),
       then the `m.room.member` event with `state_key` matching
       `content.join_authorised_via_users_server`.
 
