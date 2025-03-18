@@ -2847,10 +2847,15 @@ re-invited.
 
 #### Server behaviour
 
-Homeservers MUST at a minimum allow profile look-up for:
+Homeservers MUST at a minimum allow profile look-up for users who are
+visible to the requester based on their membership in rooms known to the
+homeserver. This means:
 
 -   users that share a room with the requesting user
--   users that reside in public rooms known to the homeserver
+-   users who are joined to rooms known to the homeserver that have a
+    `public` [join rule](#mroomjoin_rules)
+-   users who are joined to rooms known to the homeserver that have a
+    `world_readable` [history visibility](#room-history-visibility)
 
 In all other cases, homeservers MAY deny profile look-up by responding with
 403 and an error code of `M_FORBIDDEN`.
