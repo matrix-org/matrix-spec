@@ -87,12 +87,8 @@ paths:
                     - public
                     - private
                   description: |-
-                    A `public` visibility indicates that the room will be shown
-                    in the published room list. A `private` visibility will hide
-                    the room from the published room list. Rooms default to
-                    `private` visibility if this key is not included. NB: This
-                    should not be confused with `join_rules` which also uses the
-                    word `public`.
+                    The room's visibility in the server's [room directory](#room-directory).
+                    Defaults to `private`.
                 room_alias_name:
                   type: string
                   description: |-

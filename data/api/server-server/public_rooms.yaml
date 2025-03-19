@@ -13,16 +13,20 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Federation Public Rooms API
+  title: Matrix Federation Room Directory API
   version: 1.0.0
 paths:
   /publicRooms:
     get:
-      summary: Get all the public rooms for a homeserver
+      summary: Lists the server's published room directory.
       description: |-
-        Gets all the public rooms for the homeserver. This should not return
-        rooms that are listed on another homeserver's directory, just those
-        listed on the receiving homeserver's directory.
+        Lists the server's published room directory.
+
+        This API returns paginated responses. The rooms are ordered by the number
+        of joined members, with the largest rooms first.
+
+        This should not return rooms that are listed on another homeserver's directory,
+        just those listed on the receiving homeserver's directory.
       operationId: getPublicRooms
       security:
         - signedRequest: []
@@ -62,21 +66,18 @@ paths:
             type: string
       responses:
         "200":
-          description: The public room list for the homeserver.
+          description: A list of the published rooms on the server.
           content:
             application/json:
               schema:
                 $ref: ../client-server/definitions/public_rooms_response.yaml
     post:
-      summary: Gets the public rooms on the server with optional filter.
+      summary: Lists the server's published room directory with an optional filter
       description: |-
-        Lists the public rooms on the server, with optional filter.
+        Lists the server's published room directory with an optional filter.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
-
-        Note that this endpoint receives and returns the same format that is seen
-        in the Client-Server API's `POST /publicRooms` endpoint.
       operationId: queryPublicRooms
       security:
         - signedRequest: []
@@ -147,69 +148,11 @@ paths:
         required: true
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A filtered list of the published rooms on the server.
           content:
             application/json:
               schema:
-                type: object
-                description: A list of the rooms on the server.
-                required:
-                  - chunk
-                properties:
-                  chunk:
-                    title: PublicRoomsChunks
-                    type: array
-                    description: A paginated chunk of public rooms.
-                    items:
-                      allOf:
-                        - $ref: ../client-server/definitions/public_rooms_chunk.yaml
-                        - type: object
-                          properties:
-                            # Override description of join_rule
-                            join_rule:
-                              type: string
-                              description: |-
-                                The room's join rule. When not present, the room is assumed to
-                                be `public`. Note that rooms with `invite` join rules are not
-                                expected here, but rooms with `knock` rules are given their
-                                near-public nature.
-                  next_batch:
-                    type: string
-                    description: |-
-                      A pagination token for the response. The absence of this token
-                      means there are no more results to fetch and the client should
-                      stop paginating.
-                  prev_batch:
-                    type: string
-                    description: |-
-                      A pagination token that allows fetching previous results. The
-                      absence of this token means there are no results before this
-                      batch, i.e. this is the first batch.
-                  total_room_count_estimate:
-                    type: integer
-                    description: |-
-                      An estimate on the total number of public rooms, if the
-                      server has an estimate.
-              examples:
-                response:
-                  value: {
-                    "chunk": [
-                      {
-                        "avatar_url": "mxc://bleecker.street/CHEDDARandBRIE",
-                        "guest_can_join": false,
-                        "name": "CHEESE",
-                        "num_joined_members": 37,
-                        "room_id": "!ol19s:bleecker.street",
-                        "topic": "Tasty tasty cheese",
-                        "world_readable": true,
-                        "join_rule": "public",
-                        "room_type": "m.space"
-                      }
-                    ],
-                    "next_batch": "p190q",
-                    "prev_batch": "p1902",
-                    "total_room_count_estimate": 115
-                  }
+                $ref: ../client-server/definitions/public_rooms_response.yaml
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 type: object
-title: "PublicRoomsChunk"
+title: "PublishedRoomsChunk"
 properties:
   canonical_alias:
     type: string

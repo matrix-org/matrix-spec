@@ -2831,7 +2831,27 @@ re-invited.
 
 {{% http-api spec="client-server" api="banning" %}}
 
-### Listing rooms
+### Room directory
+
+Homeservers MAY publish a room directory to allow users to discover rooms. A room
+can have one of two visibility settings in the directory:
+
+`public`
+The room will be shown in the published room directory.
+
+`private`
+The room will be hidden from the published room directory.
+
+Clients can define a room's initial visibility in the directory via the `visibility`
+parameter in [`/createRoom`](#post_matrixclientv3createroom). Irrespective of room
+creation, clients can query and change a room's visibility in the directory through
+the endpoints listed below, provided that the server permits this.
+
+{{% boxes/warning %}}
+A visibility setting of `public` should not be confused with a `public` [join rule](#mroomjoin_rules)
+or a `world_readable` [history visibility](#room-history-visibility). The visibility merely defines
+whether a room is included in the published room directory or not.
+{{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
 
