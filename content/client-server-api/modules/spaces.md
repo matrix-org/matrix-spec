@@ -2,8 +2,8 @@
 
 {{% added-in v="1.2" %}}
 
-Often used to group rooms of similar subject matter (such as a public "Official
-matrix.org rooms" space or personal "Work stuff" space), spaces are a way to
+Often used to group rooms of similar subject matter (such as an "Official
+matrix.org rooms" space or a "Work stuff" space), spaces are a way to
 organise rooms while being represented as rooms themselves.
 
 A space is defined by the [`m.space` room type](#types), making it known as a
@@ -19,10 +19,10 @@ go a step further and explicitly ignore notification counts on space-rooms.
 
 Membership of a space is defined and controlled by the existing mechanisms which
 govern a room: [`m.room.member`](#mroommember), [`m.room.history_visibility`](#mroomhistory_visibility),
-and [`m.room.join_rules`](#mroomjoin_rules). Public spaces are encouraged to have
-a similar setup to public rooms: `world_readable` history visibility, published
-canonical alias, and suitably public `join_rule`. Invites, including third-party
-invites, still work just as they do in normal rooms as well.
+and [`m.room.join_rules`](#mroomjoin_rules). Canonical aliases and invites, including
+third-party invites, still work just as they do in normal rooms as well. Furthermore,
+spaces can also be published in the [room directory](#room-directory) to make them
+discoverable.
 
 All other aspects of regular rooms are additionally carried over, such as the
 ability to set arbitrary state events, hold room account data, etc. Spaces are
@@ -87,10 +87,9 @@ the state of `#space:example.org` would consist of:
 }
 ```
 
-No state events in the child rooms themselves would be required (though they
-can also be present). This allows for users
-to define personal/private spaces to organise their own rooms without needing explicit
-permission from the room moderators/admins.
+No state events in the child rooms themselves would be required (though they can also
+be present). This allows for users to define spaces without needing explicit permission
+from the room moderators/admins.
 
 Child rooms can be removed from a space by omitting the `via` key of `content` on the
 relevant state event, such as through redaction or otherwise clearing the `content`.
