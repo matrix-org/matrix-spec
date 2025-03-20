@@ -6,11 +6,11 @@
     "m.topic": {
       "m.text": [ {
         "mimetype": "text/html",
-        "body": "An <em>html</em> topic"
+        "body": "An <em>interesting</em> room topic"
       }, {
-        "body": "A plain text topic"
+        "body": "An interesting room topic"
       }]
     },
-    "topic": "A plain text topic"
+    "topic": "An interesting room topic"
   }
 }
