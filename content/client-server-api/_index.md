@@ -2848,9 +2848,16 @@ creation, clients can query and change a room's visibility in the directory thro
 the endpoints listed below, provided that the server permits this.
 
 {{% boxes/warning %}}
-A visibility setting of `public` should not be confused with a `public` [join rule](#mroomjoin_rules)
-or a `world_readable` [history visibility](#room-history-visibility). The visibility merely defines
-whether a room is included in the published room directory or not.
+The visibility setting merely defines whether a room is included in the published
+room directory or not. It doesn't make any guarantees about the room's
+[join rule](#mroomjoin_rules) or [history visibility](#room-history-visibility).
+
+In particular, a visibility setting of `public` should not be confused with a `public`
+join rule. Rooms with a join rule of `knock`, for instance, could reasonably be published
+in the directory, too.
+
+Similarly, a visibility setting of `public` does not necessarily imply a `world_readable`
+history visibility.
 {{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
