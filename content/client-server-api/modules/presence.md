@@ -71,4 +71,4 @@ will cause the server to automatically set their presence to `online`.
 Presence information is published to all users who share a room with the
 target user. If the target user is a member of a room with a `public`
 [join rule](#mroomjoin_rules), any other user in the federation is
-able to access the target user's presence. This could be undesirable.
+able to gain access to the target user's presence. This could be undesirable.
