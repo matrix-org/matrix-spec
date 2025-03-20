@@ -68,5 +68,7 @@ will cause the server to automatically set their presence to `online`.
 
 #### Security considerations
 
-Presence information is shared with all users who share a room with the
-target user. In large public rooms this could be undesirable.
+Presence information is published to all users who share a room with the
+target user. If the target user is a member of a room with a `public`
+[join rule](#mroomjoin_rules), any other user in the federation is
+able to access the target user's presence. This could be undesirable.
