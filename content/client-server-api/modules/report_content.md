@@ -35,9 +35,3 @@ based on whether or not the reporting user is joined to any rooms that the
 reported user is joined to. This is because users can be exposed to harmful
 content without being joined to a room. For instance, through user
 directories or invites.
-
-Furthermore, it might be possible for clients to deduce whether a reported
-event, room or user exists by timing the response. This is because only a
-report for an existing subject will require the homeserver to do further
-processing. To combat this, homeserver implementations MAY add a random
-delay when generating a response.

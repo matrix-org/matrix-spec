@@ -88,6 +88,11 @@ paths:
         Reports an event as inappropriate to the server, which may then notify
         the appropriate people. The caller must be joined to the room to report
         it.
+
+        Furthermore, it might be possible for clients to deduce whether a reported
+        event exists by timing the response. This is because only a report for an
+        existing event will require the homeserver to do further processing. To
+        combat this, homeservers MAY add a random delay when generating a response.
       operationId: reportEvent
       parameters:
         - in: path
@@ -173,6 +178,11 @@ paths:
         Clients could infer whether a reported user exists based on the 404 response.
         Homeservers that wish to conceal this information MAY return 200 responses
         regardless of the existence of the reported user.
+
+        Furthermore, it might be possible for clients to deduce whether a reported
+        user exists by timing the response. This is because only a report for an
+        existing user will require the homeserver to do further processing. To
+        combat this, homeservers MAY add a random delay when generating a response.
       operationId: reportUser
       parameters:
         - in: path
