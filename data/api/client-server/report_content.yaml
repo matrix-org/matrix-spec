@@ -46,7 +46,8 @@ paths:
                 reason:
                   type: string
                   description: The reason the room is being reported. May be blank.
-                  required: true
+              required:
+                - reason
         required: true
       security:
         - accessTokenQuery: []
@@ -207,7 +208,8 @@ paths:
                 reason:
                   type: string
                   description: The reason the room is being reported. May be blank.
-                  required: true
+              required:
+                - reason
         required: true
       security:
         - accessTokenQuery: []
