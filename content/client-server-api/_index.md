@@ -2858,6 +2858,10 @@ in the directory, too.
 
 Similarly, a visibility setting of `public` does not necessarily imply a `world_readable`
 history visibility.
+
+To increase performance, servers MAY apply additional filters when listing the
+directory, for instance, by automatically excluding rooms with `invite` join rules
+that are not `world_readable` regarless of their visibility.
 {{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
