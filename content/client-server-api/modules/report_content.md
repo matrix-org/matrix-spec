@@ -36,11 +36,6 @@ reported user is joined to. This is because users can be exposed to harmful
 content without being joined to a room. For instance, through user
 directories or invites.
 
-Clients can infer whether a reported event, room or user exists based on the
-404 responses of the reporting endpoints. Homeservers that wish to conceal
-this information MAY return 200 responses regardless of the existence of the
-reported subject.
-
 Furthermore, it might be possible for clients to deduce whether a reported
 event, room or user exists by timing the response. This is because only a
 report for an existing subject will require the homeserver to do further

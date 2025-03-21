@@ -169,6 +169,10 @@ paths:
         that the reported user is joined to.
 
         Clients may wish to [ignore](#ignoring-users) users after reporting them.
+
+        Clients could infer whether a reported user exists based on the 404 response.
+        Homeservers that wish to conceal this information MAY return 200 responses
+        regardless of the existence of the reported user.
       operationId: reportUser
       parameters:
         - in: path
@@ -198,7 +202,9 @@ paths:
         - accessTokenBearer: []
       responses:
         "200":
-          description: The user has been reported successfully.
+          description: |
+            The user has been reported successfully or the server chose
+            to not disclose whether the users exists.
           content:
             application/json:
               schema:
