@@ -1,1 +1,1 @@
-Add `POST /_matrix/client/v3/users/{userId}/report` as per [MSC4260](https://github.com/matrix-org/matrix-spec-proposals/pull/4260).
+Add `POST /_matrix/client/v3/users/{userId}/report`, as per [MSC4260](https://github.com/matrix-org/matrix-spec-proposals/pull/4260).
