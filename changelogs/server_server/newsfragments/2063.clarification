@@ -1,1 +1,0 @@
-Clarify that `m.join_rules` should be in the `auth_events` of an `m.room.member` event with a `membership` of `knock`.

@@ -1,1 +1,0 @@
-Remove `server_name` parameter from `/_matrix/client/v3/join/{roomIdOrAlias}` and `/_matrix/client/v3/knock/{roomIdOrAlias}`, as per [MSC4213](https://github.com/matrix-org/matrix-spec-proposals/pull/4213).
