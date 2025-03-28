@@ -27,7 +27,7 @@ properties:
       m.topic:
         type: object
         title: TopicContentBlock
-        x-addedInMatrixVersion: "1.14"
+        x-addedInMatrixVersion: "1.15"
         description: |-
           Textual representation of the room topic in different mimetypes.
         properties:
