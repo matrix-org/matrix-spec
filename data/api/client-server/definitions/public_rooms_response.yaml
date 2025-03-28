@@ -13,28 +13,15 @@
 # limitations under the License.
 
 type: object
-description: A list of the rooms on the server.
+description: A list of the published rooms on the server.
 required: ["chunk"]
 properties:
   chunk:
     type: array
     description: |-
-      A paginated chunk of public rooms.
+      A paginated chunk of published rooms.
     items:
-      allOf:
-        - $ref: "public_rooms_chunk.yaml"
-        - type: object
-          title: PublicRoomsChunk
-          properties:
-            # Override description of join_rule
-            join_rule:
-              type: string
-              description: |-
-                The room's join rule. When not present, the room is assumed to
-                be `public`. Note that rooms with `invite` join rules are not
-                expected here, but rooms with `knock` rules are given their
-                near-public nature.
-              example: "public"
+      $ref: "public_rooms_chunk.yaml"
   next_batch:
     type: string
     description: |-
@@ -50,7 +37,7 @@ properties:
   total_room_count_estimate:
     type: integer
     description: |-
-        An estimate on the total number of public rooms, if the
+        An estimate on the total number of published rooms, if the
         server has an estimate.
 example: {
   "chunk": [
