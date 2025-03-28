@@ -1,0 +1,2 @@
+Clarify the format of third-party invites, including the fact that identity
+server public keys can be encoded using standard or URL-safe base64.
