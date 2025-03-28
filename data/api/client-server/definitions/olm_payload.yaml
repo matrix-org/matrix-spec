@@ -39,6 +39,7 @@ properties:
   sender_device_keys:
     $ref: device_keys.yaml 
     description: The sender's device keys.
+    x-addedInMatrixVersion: "1.15"
 required:
   - type
   - content
