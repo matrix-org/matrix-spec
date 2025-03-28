@@ -1,0 +1,1 @@
+Add a note to the invite endpoints that invites to local users may be received twice over federation if the homeserver is already in the room.
