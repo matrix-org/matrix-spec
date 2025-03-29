@@ -265,7 +265,7 @@ jobs:
     name: "📖 Build the historical backup spec"
     runs-on: ubuntu-latest
     needs: [build-openapi]
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    # if: ${{ startsWith(github.ref, 'refs/tags/') }}
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
@@ -283,10 +283,11 @@ jobs:
           npm i
           npm run get-proposals
       - name: "⚙️ hugo"
+        env:
+          HUGO_PARAMS_VERSION_STATUS: "historical"
         # Create a baseURL like `/v1.2` out of the `v1.2` tag
         run: |
-          echo -e '[params.version]\nstatus="historical"' > historical.toml
-          hugo --config config.toml,historical.toml --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
+          hugo --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
 
       - name: "📥 Spec definition download"
         uses: actions/download-artifact@v4
