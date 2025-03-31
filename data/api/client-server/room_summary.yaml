@@ -102,7 +102,7 @@ paths:
                     join_rule: "public",
                     room_type: "m.space",
                     membership: "invite",
-                    encryption: "m.megolm.v100",
+                    encryption: "m.megolm.v1.aes-sha2",
                     room_version: "9001",
                   }
         "404":
