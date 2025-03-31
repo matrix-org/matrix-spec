@@ -2861,7 +2861,7 @@ history visibility.
 
 To increase performance, servers MAY apply additional filters when listing the
 directory, for instance, by automatically excluding rooms with `invite` join rules
-that are not `world_readable` regarless of their visibility.
+that are not `world_readable` regardless of their visibility.
 {{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
