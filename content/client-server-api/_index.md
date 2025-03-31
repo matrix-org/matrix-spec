@@ -2878,6 +2878,10 @@ that are not `world_readable` regardless of their visibility.
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
 
+### Room Summaries
+
+{{% http-api spec="client-server" api="room_summary" %}}
+
 ## User Data
 
 ### User Directory
