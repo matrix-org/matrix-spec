@@ -19,10 +19,13 @@ items:
   properties:
     regex:
       type: string
-      description: A POSIX regular expression defining which values this namespace includes.
+      description: >-
+        A POSIX regular expression defining which values this namespace includes.
     exclusive:
       type: boolean
-      description: A true or false value stating whether this application service has exclusive access to events within this namespace.
+      description: >-
+        A true or false value stating whether this application service has
+        exclusive access to events within this namespace.
   required:
     - regex
     - exclusive

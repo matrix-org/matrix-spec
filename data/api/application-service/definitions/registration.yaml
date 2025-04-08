@@ -17,27 +17,37 @@ title: Registration
 properties:
   id:
     type: string
-    description: A unique, user-defined ID of the application service which will never change.
+    description: >-
+      A unique, user-defined ID of the application service which will never change.
   url:
     type: string
-    description: The URL for the application service. May include a path after the domain name. Optionally set to null if no traffic is required.
+    description: >-
+      The URL for the application service. May include a path after the domain
+      name. Optionally set to null if no traffic is required.
   as_token:
     type: string
-    description: A secret token that the application service will use to authenticate requests to the homeserver.
+    description: >-
+      A secret token that the application service will use to authenticate
+      requests to the homeserver.
   hs_token:
     type: string
-    description: A secret token that the homeserver will use authenticate requests to the application service.
+    description: >-
+      A secret token that the homeserver will use authenticate requests to the
+      application service.
   sender_localpart:
     type: string
-    description: |-
-      The localpart of the user associated with the application service. Events will be sent to the AS if this user is the target of the event, or
-      is a joined member of the room where the event occurred.
+    description: >-
+      The localpart of the user associated with the application service. Events
+      will be sent to the AS if this user is the target of the event, or is a
+      joined member of the room where the event occurred.
   receive_ephemeral:
     type: boolean
     x-addedInMatrixVersion: "1.13"
-    description: |-
-      Whether the application service wants to [receive ephemeral data](/application-service-api/#pushing-ephemeral-data).
-      
+    description: >-
+      Whether the application service wants to [receive ephemeral
+      data](/application-service-api/#pushing-ephemeral-data).
+
+
       Defaults to `false` if not present.
   namespaces:
     type: object
@@ -47,7 +57,7 @@ properties:
       users:
         allOf:
           - $ref: namespace_list.yaml
-          - description: |-
+          - description: >-
               A list of namespaces defining the user IDs that the application
               service is interested in, in addition to its `sender_localpart`.
               Events will be sent to the AS if a local user matching one of the
@@ -56,23 +66,26 @@ properties:
       rooms:
         allOf:
           - $ref: namespace_list.yaml
-          - description: |-
+          - description: >-
               A list of namespaces defining the room IDs that the application
               service is interested in. All events sent in a room with an ID
               which matches one of the namespaces will be sent to the AS.
       aliases:
         allOf:
           - $ref: namespace_list.yaml
-          - description: |-
-              A list of namespaces defining the room aliases that the application
-              service is interested in. All events sent in a room with an alias
-              which matches one of the namespaces will be sent to the AS.
+          - description: >-
+              A list of namespaces defining the room aliases that the
+              application service is interested in. All events sent in a room
+              with an alias which matches one of the namespaces will be sent to
+              the AS.
   rate_limited:
     type: boolean
-    description: Whether requests from masqueraded users are rate-limited. The sender is excluded.
+    description: >-
+      Whether requests from masqueraded users are rate-limited. The sender is excluded.
   protocols:
     type: array
-    description: The external protocols which the application service provides (e.g. IRC).
+    description: >-
+      The external protocols which the application service provides (e.g. IRC).
     items:
       type: string
 required:

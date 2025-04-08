@@ -20,9 +20,9 @@ properties:
     example: "Freenode"
   icon:
     type: string
-    description: |-
-      An optional content URI representing the protocol. Overrides the one provided
-      at the higher level Protocol object.
+    description: >-
+      An optional content URI representing the protocol. Overrides the one
+      provided at the higher level Protocol object.
     example: "mxc://example.org/JkLmNoPq"
   fields:
     type: object

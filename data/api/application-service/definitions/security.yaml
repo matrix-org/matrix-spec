@@ -15,4 +15,5 @@
 homeserverAccessToken:
   type: http
   scheme: bearer
-  description: The `Bearer` `hs_token` provided by the application service's registration.
+  description: >-
+    The `Bearer` `hs_token` provided by the application service's registration.
