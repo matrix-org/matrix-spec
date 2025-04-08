@@ -33,7 +33,9 @@ properties:
     example: "!abcdefg:example.org"
   topic:
     type: string
-    description: The topic of the room, if any.
+    description: |-
+      The plaintext topic of the room. Omitted if no `text/plain` mimetype
+      exists in [`m.room.topic`](/client-server-api/#mroomtopic).
     example: "All things general"
   world_readable:
     type: boolean
