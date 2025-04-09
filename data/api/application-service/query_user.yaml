@@ -20,12 +20,13 @@ paths:
   "/users/{userId}":
     get:
       summary: Query if a user should exist on the application service.
-      description: |-
-        This endpoint is invoked by the homeserver on an application service to query
-        the existence of a given user ID. The homeserver will only query user IDs
-        inside the application service's `users` namespace. The homeserver will
-        send this request when it receives an event for an unknown user ID in
-        the application service's namespace, such as a room invite.
+      description: >-
+        This endpoint is invoked by the homeserver on an application service to
+        query the existence of a given user ID. The homeserver will only query
+        user IDs inside the application service's `users` namespace. The
+        homeserver will send this request when it receives an event for an
+        unknown user ID in the application service's namespace, such as a room
+        invite.
       operationId: queryUserById
       security:
         - homeserverAccessToken: []
@@ -39,9 +40,9 @@ paths:
             type: string
       responses:
         "200":
-          description: |-
-            The application service indicates that this user exists. The application
-            service MUST create the user using the client-server API.
+          description: >-
+            The application service indicates that this user exists. The
+            application service MUST create the user using the client-server API.
           content:
             application/json:
               schema:
@@ -50,9 +51,10 @@ paths:
                 response:
                   value: {}
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -74,9 +76,10 @@ paths:
                     "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
                   }
         "404":
-          description: |-
+          description: >-
             The application service indicates that this user does not exist.
-            Optional error information can be included in the body of this response.
+            Optional error information can be included in the body of this
+            response.
           content:
             application/json:
               schema:

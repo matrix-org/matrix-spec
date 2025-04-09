@@ -20,10 +20,10 @@ paths:
     get:
       summary: Retrieve metadata about a specific protocol that the application
         service supports.
-      description: |-
+      description: >-
         This API is called by the homeserver when it wants to present clients
-        with specific information about the various third-party networks that
-        an application service supports.
+        with specific information about the various third-party networks that an
+        application service supports.
       operationId: getProtocolMetadata
       security:
         - homeserverAccessToken: []
@@ -43,9 +43,10 @@ paths:
               schema:
                 $ref: definitions/protocol.yaml
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -80,10 +81,10 @@ paths:
   "/thirdparty/user/{protocol}":
     get:
       summary: Retrieve the Matrix User ID of a corresponding third-party user.
-      description: |-
-        This API is called by the homeserver in order to retrieve a Matrix
-        User ID linked to a user on the third-party network, given a set of
-        user parameters.
+      description: >-
+        This API is called by the homeserver in order to retrieve a Matrix User
+        ID linked to a user on the third-party network, given a set of user
+        parameters.
       operationId: queryUserByProtocol
       security:
         - homeserverAccessToken: []
@@ -97,9 +98,9 @@ paths:
             type: string
         - in: query
           name: fields
-          description: |-
-            One or more custom fields that are passed to the application
-            service to help identify the user.
+          description: >-
+            One or more custom fields that are passed to the application service
+            to help identify the user.
           schema:
             type: object
             additionalProperties:
@@ -112,9 +113,10 @@ paths:
               schema:
                 $ref: definitions/user_batch.yaml
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -149,7 +151,8 @@ paths:
   "/thirdparty/location/{protocol}":
     get:
       summary: Retrieve Matrix-side portal rooms leading to a third-party location.
-      description: Retrieve a list of Matrix portal rooms that lead to the matched
+      description: >-
+        Retrieve a list of Matrix portal rooms that lead to the matched
         third-party location.
       operationId: queryLocationByProtocol
       security:
@@ -164,9 +167,9 @@ paths:
             type: string
         - in: query
           name: fields
-          description: |-
-            One or more custom fields that are passed to the application
-            service to help identify the third-party location.
+          description: >-
+            One or more custom fields that are passed to the application service
+            to help identify the third-party location.
           schema:
             type: object
             additionalProperties:
@@ -179,9 +182,10 @@ paths:
               schema:
                 $ref: definitions/location_batch.yaml
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -216,9 +220,8 @@ paths:
   /thirdparty/location:
     get:
       summary: Reverse-lookup third-party locations given a Matrix room alias.
-      description: |-
-        Retrieve an array of third-party network locations from a Matrix room
-        alias.
+      description: >-
+        Retrieve an array of third-party network locations from a Matrix room alias.
       operationId: queryLocationByAlias
       security:
         - homeserverAccessToken: []
@@ -236,9 +239,10 @@ paths:
               schema:
                 $ref: definitions/location_batch.yaml
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -291,9 +295,10 @@ paths:
               schema:
                 $ref: definitions/user_batch.yaml
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:

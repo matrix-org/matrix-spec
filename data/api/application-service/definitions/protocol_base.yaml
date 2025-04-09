@@ -15,7 +15,7 @@ title: Protocol
 type: object
 properties:
   user_fields:
-    description: |-
+    description: >-
       Fields which may be used to identify a third-party user. These should be
       ordered to suggest the way that entities may be grouped, where higher
       groupings are ordered first. For example, the name of a network should be
@@ -26,9 +26,9 @@ properties:
       description: Field used to identify a third-party user.
     example: ["network", "nickname"]
   location_fields:
-    description: |-
-      Fields which may be used to identify a third-party location. These should be
-      ordered to suggest the way that entities may be grouped, where higher
+    description: >-
+      Fields which may be used to identify a third-party location. These should
+      be ordered to suggest the way that entities may be grouped, where higher
       groupings are ordered first. For example, the name of a network should be
       searched before the name of a channel.
     type: array
@@ -41,10 +41,11 @@ properties:
     type: string
     example: "mxc://example.org/aBcDeFgH"
   field_types:
-    description: |-
+    description: >-
       The type definitions for the fields defined in `user_fields` and
-      `location_fields`. Each entry in those arrays MUST have an entry here.
-      The `string` key for this object is the field name itself.
+      `location_fields`. Each entry in those arrays MUST have an entry here. The
+      `string` key for this object is the field name itself.
+
 
       May be an empty object if no fields are defined.
     type: object
@@ -54,10 +55,11 @@ properties:
       type: object
       properties:
         regexp:
-          description: |-
-            A regular expression for validation of a field's value. This may be relatively
-            coarse to verify the value as the application service providing this protocol
-            may apply additional validation or filtering.
+          description: >-
+            A regular expression for validation of a field's value. This may be
+            relatively coarse to verify the value as the application service
+            providing this protocol may apply additional validation or
+            filtering.
           type: string
         placeholder:
           description: A placeholder serving as a valid example of the field value.
