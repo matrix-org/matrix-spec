@@ -129,9 +129,9 @@ paths:
         - Room discovery
   /publicRooms:
     get:
-      summary: Lists the public rooms on the server.
+      summary: Lists the published rooms on the server.
       description: |-
-        Lists the public rooms on the server.
+        Lists the rooms published to the room directory on the server.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
@@ -154,7 +154,7 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
+            The server to fetch the published rooms list from. Defaults to the
             local server. Case sensitive.
           schema:
             type: string
@@ -168,9 +168,9 @@ paths:
       tags:
         - Room discovery
     post:
-      summary: Lists the public rooms on the server with optional filter.
+      summary: Lists the published rooms on the server with optional filter.
       description: |-
-        Lists the public rooms on the server, with optional filter.
+        Lists the rooms published to the room directory on the server, with optional filter.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
@@ -182,7 +182,7 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
+            The server to fetch the published rooms list from. Defaults to the
             local server. Case sensitive.
           schema:
             type: string
