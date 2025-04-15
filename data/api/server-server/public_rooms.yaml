@@ -18,11 +18,11 @@ info:
 paths:
   /publicRooms:
     get:
-      summary: Get all the public rooms for a homeserver
+      summary: Get all the published rooms for a homeserver
       description: |-
-        Gets all the public rooms for the homeserver. This should not return
-        rooms that are listed on another homeserver's directory, just those
-        listed on the receiving homeserver's directory.
+        Gets all the rooms published to the room directory of the homeserver.
+        This should not return rooms that are listed on another homeserver's directory,
+        just those listed on the receiving homeserver's directory.
       operationId: getPublicRooms
       security:
         - signedRequest: []
@@ -62,15 +62,15 @@ paths:
             type: string
       responses:
         "200":
-          description: The public room list for the homeserver.
+          description: The published rooms list for the homeserver.
           content:
             application/json:
               schema:
                 $ref: ../client-server/definitions/public_rooms_response.yaml
     post:
-      summary: Gets the public rooms on the server with optional filter.
+      summary: Gets the published rooms on the server with optional filter.
       description: |-
-        Lists the public rooms on the server, with optional filter.
+        Gets all the rooms published to the room directory of the homeserver, with optional filter.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
@@ -147,19 +147,19 @@ paths:
         required: true
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A list of the published rooms on the server.
           content:
             application/json:
               schema:
                 type: object
-                description: A list of the rooms on the server.
+                description: A list of the published rooms on the server.
                 required:
                   - chunk
                 properties:
                   chunk:
                     title: PublicRoomsChunks
                     type: array
-                    description: A paginated chunk of public rooms.
+                    description: A paginated chunk of published rooms.
                     items:
                       allOf:
                         - $ref: ../client-server/definitions/public_rooms_chunk.yaml
@@ -188,8 +188,8 @@ paths:
                   total_room_count_estimate:
                     type: integer
                     description: |-
-                      An estimate on the total number of public rooms, if the
-                      server has an estimate.
+                      An estimate on the total number of rooms published in the room directory,
+                      if the server has an estimate.
               examples:
                 response:
                   value: {
