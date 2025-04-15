@@ -537,7 +537,7 @@ the following subset of the room state:
 - If type is `m.room.member`:
 
     - The target's current `m.room.member` event, if any.
-    - If `membership` is `join` or `invite`, the current
+    - If `membership` is `join`, `invite` or `knock`, the current
       `m.room.join_rules` event, if any.
     - If membership is `invite` and `content` contains a
       `third_party_invite` property, the current
@@ -1337,7 +1337,7 @@ calculated as follows.
 The *content hash* of an event covers the complete event including the
 *unredacted* contents. It is calculated as follows.
 
-First, any existing `unsigned`, `signature`, and `hashes` members are
+First, any existing `unsigned`, `signatures`, and `hashes` properties are
 removed. The resulting object is then encoded as [Canonical
 JSON](/appendices#canonical-json), and the JSON is hashed using
 SHA-256.

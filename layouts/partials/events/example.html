@@ -13,10 +13,4 @@
 {{ $path := delimit (slice "event-schemas/examples" .name) "/" }}
 
 {{ $example_content := partial "json-schema/resolve-refs" (dict "schema" .schema "path" $path) }}
-{{ $example_json := jsonify (dict "indent" "  ") $example_content }}
-{{ $example_json = replace $example_json "\\u003c" "<" }}
-{{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
-
-```json
-{{ $example_json }}
-```
+{{ partial "render-example" (dict "example" $example_content) }}

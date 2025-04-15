@@ -33,65 +33,8 @@
 
     {{ if $request_body }}
 <h3>Request body</h3>
-        {{/*
-            A request can have several content types.
-        */}}
-        {{ $json_body := index $request_body.content "application/json" }}
-        {{ if $json_body }}
-            {{/*
-                Display the JSON schemas
-            */}}
-            {{ $schema := $json_body.schema }}
 
-            {{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema "anchor_base" $anchor) }}
-            {{ range $additional_types }}
-                {{ partial "openapi/render-object-table" . }}
-            {{ end }}
-        {{ else }}
-            {{/*
-                Show the content types and description.
-            */}}
-            {{ partial "openapi/render-content-type" (dict "content_types" $request_body.content) }}
-        {{ end }}
-
-<h3>Request body example</h3>
-        {{/*
-            Show all the examples.
-        */}}
-        {{ range $mime, $body := $request_body.content }}
-            {{ $example := dict }}
-
-            {{ if $body.schema }}
-                {{ $example = partial "json-schema/resolve-example" $body.schema }}
-            {{ end }}
-
-            {{ if and (eq ($example | len) 0) $body.example }}
-                {{/*
-                    If no example was generated from the schema, fallback to the
-                    main example.
-                */}}
-                {{ $example = $body.example }}
-            {{ end }}
-
-            {{ if eq $mime "application/json" }}
-                {{ $example_json := jsonify (dict "indent" "  ") $example }}
-                {{ $example_json = replace $example_json "\\u003c" "<" }}
-                {{ $example_json = replace $example_json "\\u003e" ">" | safeHTML }}
-```json
-{{ $example_json }}
-```
-            {{ else }}
-                {{ $example = $example | safeHTML }}
-                {{/*
-                    We need to set a language for the code otherwise the styling
-                    is different than other examples.
-                */}}
-```json
-{{ $example }}
-```
-            {{ end }}
-
-        {{ end }}
+        {{ partial "openapi/render-media-type-objects" (dict "content" $request_body.content "kind" "request" "anchor_base" $anchor) }}
     {{ end }}
 
 {{ else }}

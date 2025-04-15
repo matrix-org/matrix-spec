@@ -44,8 +44,18 @@ outputs:
   - html
   - checklist
 date: $(date -Idate)
----
 EOF
+
+    # Add the commit hash for the unstable versions. It is used to generate a
+    # link to the commit on the repository.
+    if [ "$VERSION" == "vUNSTABLE" ]; then
+        echo "params:"
+        echo "  commit: $(git rev-parse --short HEAD)"
+    fi
+
+    # Close the frontmatter.
+    echo "---"
+
     # Remove trailing whitespace (such as our intentionally blank RST headings)
     sed -e "s/[ ]*$//" rendered.md
 } > ../content/changelog/$FILENAME
