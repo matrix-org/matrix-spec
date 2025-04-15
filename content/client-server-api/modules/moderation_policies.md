@@ -18,8 +18,9 @@ the entity making the decisions on filtering is best positioned to
 interpret the rules how it sees fit.
 
 Moderation policy lists are stored as room state events. There are no
-restrictions on how the rooms can be configured (they could be public,
-private, encrypted, etc).
+restrictions on how the rooms can be configured in terms of
+[join rules](#mroomjoin_rules), [history visibility](#room-history-visibility),
+encryption, etc.
 
 There are currently 3 kinds of entities which can be affected by rules:
 `user`, `server`, and `room`. All 3 are described with
