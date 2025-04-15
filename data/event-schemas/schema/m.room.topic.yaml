@@ -7,8 +7,8 @@ description: |-
     be suitable for the room name.
     The room topic can also be set when creating a room using `/createRoom` with the `topic` key.'
     
-    If a room has an `m.room.topic` event with an absent, null, or empty `topic`
-    field, it should be treated the same as a room with no `m.room.topic` event.
+    If the `topic` property is absent, null, or empty then the topic is unset. In other words,
+    an empty `topic` property effectively resets the room to having no topic.
 properties:
   content:
     properties:
