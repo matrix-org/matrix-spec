@@ -1,0 +1,1 @@
+Clarify behaviour when the `topic` key of a `m.room.topic` event is absent, null, or empty.
