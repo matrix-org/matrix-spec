@@ -1512,20 +1512,7 @@ message.
 
 The plaintext payload is of the form:
 
-```json
-{
-  "type": "<type of the plaintext event>",
-  "content": "<content for the plaintext event>",
-  "sender": "<sender_user_id>",
-  "recipient": "<recipient_user_id>",
-  "recipient_keys": {
-    "ed25519": "<our_ed25519_key>"
-  },
-  "keys": {
-    "ed25519": "<sender_ed25519_key>"
-  }
-}
-```
+{{% definition path="api/client-server/definitions/olm_payload" %}}
 
 The type and content of the plaintext message event are given in the
 payload.
@@ -1536,15 +1523,19 @@ claiming to have sent messages which they didn't. `sender` must
 correspond to the user who sent the event, `recipient` to the local
 user, and `recipient_keys` to the local ed25519 key.
 
-Clients must confirm that the `sender_key` property in the cleartext
-`m.room.encrypted` event body, and the `keys.ed25519` property in the
-decrypted plaintext, match the keys returned by
-[`/keys/query`](#post_matrixclientv3keysquery) for
-the given user. Clients must also verify the signature of the keys from the
-`/keys/query` response. Without this check, a client cannot be sure that
-the sender device owns the private part of the ed25519 key it claims to
-have in the Olm payload. This is crucial when the ed25519 key corresponds
-to a verified device.
+Clients must ensure that the sending device owns the private part of
+the ed25519 key it claims to have in the Olm payload. This is crucial
+when the ed25519 key corresponds to a verified device. To perform
+this check, clients MUST confirm that the `sender_key` property in the
+cleartext `m.room.encrypted` event body, and the `keys.ed25519` property
+in the decrypted plaintext, match the keys under the `sender_device_keys`
+property. Additionally, clients MUST also verify the signature of the keys.
+If `sender_device_keys` is absent, clients MUST retrieve the sender's
+keys from [`/keys/query`](#post_matrixclientv3keysquery) instead. This
+will not allow them to verify key ownership if the sending device was
+logged out or had its keys reset since sending the event. Therefore,
+clients MUST populate the `sender_device_keys` property when sending
+events themselves.
 
 If a client has multiple sessions established with another device, it
 should use the session from which it last received and successfully
