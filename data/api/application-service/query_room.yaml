@@ -20,12 +20,12 @@ paths:
   "/rooms/{roomAlias}":
     get:
       summary: Query if a room alias should exist on the application service.
-      description: |-
-        This endpoint is invoked by the homeserver on an application service to query
-        the existence of a given room alias. The homeserver will only query room
-        aliases inside the application service's `aliases` namespace. The
-        homeserver will send this request when it receives a request to join a
-        room alias within the application service's namespace.
+      description: >-
+        This endpoint is invoked by the homeserver on an application service to
+        query the existence of a given room alias. The homeserver will only
+        query room aliases inside the application service's `aliases` namespace.
+        The homeserver will send this request when it receives a request to join
+        a room alias within the application service's namespace.
       operationId: queryRoomByAlias
       security:
         - homeserverAccessToken: []
@@ -39,7 +39,7 @@ paths:
             type: string
       responses:
         "200":
-          description: |-
+          description: >-
             The application service indicates that this room alias exists. The
             application service MUST have created a room and associated it with
             the queried room alias using the client-server API. Additional
@@ -53,9 +53,10 @@ paths:
                 response:
                   value: {}
         "401":
-          description: |-
-            The homeserver has not supplied credentials to the application service.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The homeserver has not supplied credentials to the application
+            service. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:
@@ -77,9 +78,10 @@ paths:
                     "errcode": "COM.EXAMPLE.MYAPPSERVICE_FORBIDDEN"
                   }
         "404":
-          description: |-
-            The application service indicates that this room alias does not exist.
-            Optional error information can be included in the body of this response.
+          description: >-
+            The application service indicates that this room alias does not
+            exist. Optional error information can be included in the body of
+            this response.
           content:
             application/json:
               schema:

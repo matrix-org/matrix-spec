@@ -20,13 +20,18 @@ paths:
     post:
       x-addedInMatrixVersion: "1.7"
       summary: Ping the application service
-      description: |-
+      description: >-
         This API is called by the homeserver to ensure that the connection works
         and the `hs_token` the homeserver has is correct.
 
+
         Currently this is only called by the homeserver as a direct result of
         the application service calling
-        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`](#post_matrixclientv1appserviceappserviceidping).
+        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`].
+
+
+        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`]:
+          <#post_matrixclientv1appserviceappserviceidping>
       operationId: ping
       security:
         - homeserverAccessToken: []
@@ -41,13 +46,14 @@ paths:
               properties:
                 transaction_id:
                   type: string
-                  description: |-
+                  description: >-
                     A transaction ID for the ping, copied directly from the
                     `POST /_matrix/client/v1/appservice/{appserviceId}/ping` call.
         description: Ping body with optional transaction ID.
       responses:
         "200":
-          description: The provided `hs_token` is valid and the ping request was successful.
+          description: >-
+            The provided `hs_token` is valid and the ping request was successful.
           content:
             application/json:
               schema:
