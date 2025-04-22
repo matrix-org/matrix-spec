@@ -16,7 +16,7 @@ allOf:
 - type: object
   properties:
     instances:
-      description: |-
+      description: >-
         A list of objects representing independent instances of configuration.
         For example, multiple networks on IRC if multiple are provided by the
         same application service.
