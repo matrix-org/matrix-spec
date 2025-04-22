@@ -43,7 +43,8 @@ paths:
                 properties:
                   public_key:
                     type: string
-                    description: Public key using standard or URL-safe base64 encoding.
+                    description: |-
+                      [Unpadded Base64](/appendices/#unpadded-base64)-encoded public key.
                 required:
                   - public_key
               examples:
@@ -74,7 +75,8 @@ paths:
         - in: query
           name: public_key
           required: true
-          description: The unpadded standard or URL-safe base64-encoded public key to check.
+          description: |-
+            The [unpadded Base64](/appendices/#unpadded-base64)-encoded public key to check.
           example: VXuGitF39UH5iRfvbIknlvlAVKgD1BsLDMvBf0pmp7c
           schema:
             type: string
@@ -105,7 +107,14 @@ paths:
         - in: query
           name: public_key
           required: true
-          description: The unpadded standard or URL-safe base64-encoded public key to check.
+          description: |-
+            The [unpadded Base64](/appendices/#unpadded-base64)-encoded public
+            key to check.
+
+            This MUST be the exact same encoded string returned in the response
+            of the [`/store-invite`](/identity-service-api/#post_matrixidentityv2store-invite)
+            endpoint, or found in the corresponding [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite)
+            event, so it may use the standard or URL-safe alphabets.
           example: VXuGitF39UH5iRfvbIknlvlAVKgD1BsLDMvBf0pmp7c
           schema:
             type: string
