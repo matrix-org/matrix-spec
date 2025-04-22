@@ -39,7 +39,7 @@ A client asks a server to invite a user by their third-party identifier.
 
 Upon receipt of an [`/invite`](#thirdparty_post_matrixclientv3roomsroomidinvite),
 the server is expected to look up the third-party identifier with the provided
-identity server byt making a call to [`/lookup`](/identity-service-api/#post_matrixidentityv2lookup).
+identity server by making a call to [`/_matrix/identity/v2/lookup`](/identity-service-api/#post_matrixidentityv2lookup).
 If the lookup yields a result for a Matrix User ID then the normal [invite
 process](/server-server-api/#inviting-to-a-room) can be initiated. This process
 ends up looking like this:
@@ -69,7 +69,8 @@ ends up looking like this:
 ```
 
 However, if the lookup does not yield a bound User ID, the homeserver must store
-the invite on the identity server with a call to [`/store-invite`](/identity-service-api/#post_matrixidentityv2store-invite)
+the invite on the identity server with a call to
+[`/_matrix/identity/v2/store-invite`](/identity-service-api/#post_matrixidentityv2store-invite)
 and emit a valid [`m.room.third_party_invite`](#mroomthird_party_invite) event
 to the room. This process ends up looking like this:
 
@@ -104,14 +105,14 @@ to the room. This process ends up looking like this:
 ```
 
 The third-party user will then need to verify their identity, which results in a
-request to [`/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind)
+request to [`/_matrix/federation/v1/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind)
 from the identity server to the homeserver that bound the third-party identifier
 to a user. The homeserver then exchanges the `m.room.third_party_invite` event
-in the room for a complete `m.room.member` event with
+in the room for a complete [`m.room.member`](#mroommember) event with
 `content.membership: invite` and a `content.third_party_invite` property for the
 user that has bound the third-party identifier. If the invitee is on a different
 homeserver than the inviting user, the invitee's homeserver makes a request to
-[`/exchange_third_party_invite`](/server-server-api/#put_matrixfederationv1exchange_third_party_inviteroomid).
+[`/_matrix/federation/v1/exchange_third_party_invite/{roomId}`](/server-server-api/#put_matrixfederationv1exchange_third_party_inviteroomid).
 
 All homeservers MUST verify the signature in the `m.room.member` event's
 `content.third_party_invite.signed` object.
