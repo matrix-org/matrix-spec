@@ -25,7 +25,7 @@ paths:
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
 
-        This should not return rooms that are listed on another homeserver's directory,
+        This SHOULD not return rooms that are listed on another homeserver's directory,
         just those listed on the receiving homeserver's directory.
       operationId: getPublicRooms
       security:
