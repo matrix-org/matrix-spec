@@ -25,11 +25,11 @@ properties:
         format: uri
       public_key:
         description: |-
-          A base64-encoded ed25519 key with which the token must be signed
-          (though a signature from any entry in public_keys is also sufficient).
+          An Ed25519 key with which the token must be signed (though a signature
+          from any entry in `public_keys` is also sufficient).
 
-          The key is encoded using unpadded standard or URL-safe base64
-          encoding.
+          The key is encoded using [Unpadded Base64](/appendices/#unpadded-base64),
+          using the standard or URL-safe alphabets.
 
           This exists for backwards compatibility.
         type: string
@@ -47,10 +47,10 @@ properties:
               type: string
             public_key:
               description: |-
-                A base-64 encoded ed25519 key with which token may be signed.
+                An Ed25519 key with which the token may be signed.
 
-                The key is encoded using unpadded standard or URL-safe base64
-                encoding.
+                The key is encoded using [Unpadded Base64](/appendices/#unpadded-base64),
+                using the standard or URL-safe alphabets.
               type: string
           required:
             - public_key
