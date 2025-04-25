@@ -23,15 +23,15 @@ description = "Home of the Matrix specification for decentralised communication"
 [menus]
 [[menus.main]]
     name = 'Foundation'
-    url = 'https://matrix.org/foundation/'
+    url = 'https://matrix.org/foundation/about/'
     weight = 10
 [[menus.main]]
-    name = 'FAQs'
-    url = 'https://matrix.org/faq'
+    name = 'User Docs'
+    url = 'https://matrix.org/docs/'
     weight = 20
 [[menus.main]]
     name = 'Blog'
-    url = 'https://matrix.org/blog/posts'
+    url = 'https://matrix.org/blog/'
     weight = 30
 
 [markup]
