@@ -1,6 +1,7 @@
 {
   "$ref": "core/state_event.json",
   "state_key": "@alice:example.org",
+  "sender": "@alice:example.org",
   "type": "m.room.member",
   "content": {
     "membership": "join",

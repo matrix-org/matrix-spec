@@ -1,4 +1,4 @@
-# Copyright 2019 The Matrix.org Foundation C.I.C.
+# Copyright 2025 The Matrix.org Foundation C.I.C.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +26,11 @@ allOf:
         type: string
         description: For redaction events, the ID of the event being redacted.
         example: "$def_456-oldevent"
+      # v6 enforces Canonical JSON and therefore needs a depth limit change
       depth:
         type: integer
         description: |-
           The maximum depth of the `prev_events`, plus one. Must be less than the
-          maximum value for an integer (2^63 - 1). If the room's depth is already at
+          maximum value for an integer (2^53 - 1). If the room's depth is already at
           the limit, the depth must be set to the limit.
         example: 12

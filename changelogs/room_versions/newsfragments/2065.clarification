@@ -1,1 +1,0 @@
-For room versions 6 and 7, clarify in the authorization rules that `m.federate` must be checked and that events with rejected auth events must be rejected, for parity with all the other room versions.

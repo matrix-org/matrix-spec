@@ -29,3 +29,9 @@ is in before accepting a report.
 based on whether or not the reporting user is joined to the room. This is
 because users can be exposed to harmful content without being joined to a
 room. For instance, through room directories or invites.
+
+{{% added-in v="1.14" %}} Similarly, servers MUST NOT restrict user reports
+based on whether or not the reporting user is joined to any rooms that the
+reported user is joined to. This is because users can be exposed to harmful
+content without being joined to a room. For instance, through user
+directories or invites.

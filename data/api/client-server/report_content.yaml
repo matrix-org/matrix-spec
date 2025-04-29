@@ -45,7 +45,9 @@ paths:
               properties:
                 reason:
                   type: string
-                  description: The reason the room is being reported.
+                  description: The reason the room is being reported. May be blank.
+              required:
+                - reason
         required: true
       security:
         - accessTokenQuery: []
@@ -88,12 +90,11 @@ paths:
         Reports an event as inappropriate to the server, which may then notify
         the appropriate people. The caller must be joined to the room to report
         it.
-        
-        It might be possible for clients to deduce whether an event exists by
-        timing the response, as only a report for an event that does exist
-        will require the homeserver to check whether a user is joined to
-        the room. To combat this, homeserver implementations should add
-        a random delay when generating a response.
+
+        Furthermore, it might be possible for clients to deduce whether a reported
+        event exists by timing the response. This is because only a report for an
+        existing event will require the homeserver to do further processing. To
+        combat this, homeservers MAY add a random delay when generating a response.
       operationId: reportEvent
       parameters:
         - in: path
@@ -162,6 +163,88 @@ paths:
                     "errcode": "M_NOT_FOUND",
                     "error": "The event was not found or you are not joined to the room."
                   }
+      tags:
+        - Reporting content
+  "/users/{userId}/report":
+    post:
+      x-addedInMatrixVersion: "1.14"
+      summary: Report a user as inappropriate.
+      description: |-
+        Reports a user as inappropriate to the server, which may then notify
+        the appropriate people. How such information is delivered is left up to
+        implementations. The caller is not required to be joined to any rooms
+        that the reported user is joined to.
+
+        Clients may wish to [ignore](#ignoring-users) users after reporting them.
+
+        Clients could infer whether a reported user exists based on the 404 response.
+        Homeservers that wish to conceal this information MAY return 200 responses
+        regardless of the existence of the reported user.
+
+        Furthermore, it might be possible for clients to deduce whether a reported
+        user exists by timing the response. This is because only a report for an
+        existing user will require the homeserver to do further processing. To
+        combat this, homeservers MAY add a random delay when generating a response.
+      operationId: reportUser
+      parameters:
+        - in: path
+          name: userId
+          description: The user being reported.
+          required: true
+          example: "@someguy:example.com"
+          schema:
+            type: string
+            format: mx-user-id
+            pattern: "^@"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {
+                "reason": "this makes me sad"
+              }
+              properties:
+                reason:
+                  type: string
+                  description: The reason the room is being reported. May be blank.
+              required:
+                - reason
+        required: true
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: |
+            The user has been reported successfully or the server chose
+            to not disclose whether the users exists.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "404":
+          description: |-
+            The user was not found on the homeserver.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "The user was not found."
+                  }
+        "429":
+          description: This request was rate-limited.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/rate_limited.yaml
       tags:
         - Reporting content
 servers:
