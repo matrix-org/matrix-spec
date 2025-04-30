@@ -22,7 +22,7 @@ items:
         The string content.
 
         Clients SHOULD validate and sanitize the content as they do
-        for rich content associated with [`msgtype`](#mroommessage-msgtypes)
-        of [`m.room.message`](#mroommessage).
+        for rich content associated with [`msgtype`](/client-server-api/#mroommessage-msgtypes)
+        of [`m.room.message`](/client-server-api/#mroommessage).
   required:
   - body
