@@ -26,8 +26,8 @@ on certain keys of certain event types.
 
 The supported keys to search over are:
 
--   `content.body` in [`m.room.message`](#mroommessage)
--   `content.name` in [`m.room.name`](#mroomname)
+-   `content.body` in [`m.room.message`](/client-server-api/#mroommessage)
+-   `content.name` in [`m.room.name`](/client-server-api/#mroomname)
 -   In [`m.room.topic`](/client-server-api/#mroomtopic), `content.topic`
     as well as the `body` of the `text/plain` representation in `content['m.topic']`.
 
