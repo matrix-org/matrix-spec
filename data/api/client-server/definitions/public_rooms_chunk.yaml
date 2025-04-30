@@ -34,7 +34,7 @@ properties:
   topic:
     type: string
     description: |-
-      The plaintext topic of the room. Omitted if no `text/plain` mimetype
+      The plain text topic of the room. Omitted if no `text/plain` mimetype
       exists in [`m.room.topic`](/client-server-api/#mroomtopic).
     example: "All things general"
   world_readable:
