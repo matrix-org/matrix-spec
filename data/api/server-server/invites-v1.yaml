@@ -35,7 +35,7 @@ paths:
 
         Also note that if the remote homeserver is already in the room, it will receive the
         invite event twice; once through this endpoint, and again through a [federation
-        transaction](https://spec.matrix.org/v1.13/server-server-api/#transactions).
+        transaction](/server-server-api/#transactions).
       operationId: sendInviteV1
       security:
         - signedRequest: []
