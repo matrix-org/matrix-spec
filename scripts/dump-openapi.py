@@ -72,11 +72,11 @@ def prefix_absolute_path_references(text, base_url):
     """
     return text.replace("](/", "]({}/".format(base_url))
 
-def replace_match(text, match, replacement):
+def replace_match(match, replacement):
     """Replaces the regex match by the replacement in the text."""
-    return text[:match.start()] + replacement + text[match.end():]
+    return match.string[:match.start()] + replacement + match.string[match.end():]
 
-def replace_shortcode(text, shortcode):
+def replace_shortcode(shortcode):
     """Replaces the shortcode by a Markdown fallback in the text.
 
     The supported shortcodes are:
@@ -87,31 +87,36 @@ def replace_shortcode(text, shortcode):
 
     if shortcode['name'].startswith("/"):
         # This is the end of the shortcode, just remove it.
-        return replace_match(text, shortcode['match'], "")
+        return replace_match(shortcode, "")
+
+    # Parse the parameters of the shortcode
+    params = {}
+    if shortcode['params']:
+        for param in shortcode_params_regex.finditer(shortcode['params']):
+            if param['key']:
+                params[param['key']] = param['value']
 
     match shortcode['name']:
         case "boxes/note":
-            text = replace_match(text, shortcode['match'], "**NOTE:** ")
+            return replace_match(shortcode, "**NOTE:** ")
         case "boxes/rationale":
-            text = replace_match(text, shortcode['match'], "**RATIONALE:** ")
+            return replace_match(shortcode, "**RATIONALE:** ")
         case "boxes/warning":
-            text = replace_match(text, shortcode['match'], "**WARNING:** ")
+            return replace_match(shortcode, "**WARNING:** ")
         case "added-in":
-            version = shortcode['params']['v']
+            version = params['v']
             if not version:
                 raise ValueError("Missing parameter `v` for `added-in` shortcode")
 
-            text = replace_match(text, shortcode['match'], f"**[Added in `v{version}`]** ")
+            return replace_match(shortcode, f"**[Added in `v{version}`]** ")
         case "changed-in":
-            version = shortcode['params']['v']
+            version = params['v']
             if not version:
                 raise ValueError("Missing parameter `v` for `changed-in` shortcode")
 
-            text = replace_match(text, shortcode['match'], f"**[Changed in `v{version}`]** ")
+            return replace_match(shortcode, f"**[Changed in `v{version}`]** ")
         case _:
             raise ValueError("Unknown shortcode", shortcode['name'])
-
-    return text
 
 
 def find_and_replace_shortcodes(text):
@@ -125,20 +130,8 @@ def find_and_replace_shortcodes(text):
     # We use a `while` loop with `search` instead of a `for` loop with
     # `finditer`, because as soon as we start replacing text, the
     # indices of the match are invalid.
-    while match := shortcode_regex.search(text):
-        # Parse the parameters of the shortcode
-        params = {}
-        if match['params']:
-            for param in shortcode_params_regex.finditer(match['params']):
-                if param['key']:
-                    params[param['key']] = param['value']
-
-        shortcode = {
-            'name': match['name'],
-            'params': params,
-            'match': match,
-        }
-        text = replace_shortcode(text, shortcode)
+    while shortcode := shortcode_regex.search(text):
+        text = replace_shortcode(shortcode)
 
     return text
 
