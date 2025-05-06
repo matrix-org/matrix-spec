@@ -37,10 +37,10 @@ api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
 # A shortcode is defined as (newlines and whitespaces for presentation purpose):
 #
 # {{%
-#     <one or more whitespaces>
+#     <zero or more whitespaces>
 #     <name of shortcode>
-#     <one or more whitespaces>
-#     (optional <list of parameters><one or more whitespaces>)
+#     (optional <one or more whitespaces><list of parameters>)
+#     <zero or more whitespaces>
 # %}}
 #
 # With:
@@ -48,7 +48,12 @@ api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
 # * <name of shortcode>: any word character and `-` and `/`.
 # * <list of parameters>: any character except `}`, must not start or end with a
 #   whitespace.
-shortcode_regex = re.compile(r"\{\{\%\s+(?P<name>[\w\/-]+)\s+(?:(?P<params>[^\s\}][^\}]+[^\s\}])\s+)?\%\}\}", re.ASCII)
+shortcode_regex = re.compile(r"""\{\{\%                                   # {{%
+                                 \s*                                      # zero or more whitespaces
+                                 (?P<name>[\w/-]+)                        # name of shortcode
+                                 (?:\s+(?P<params>[^\s\}][^\}]+[^\s\}]))? # optional list of parameters
+                                 \s*                                      # zero or more whitespaces
+                                 \%\}\}                                   # %}}""", re.ASCII | re.VERBOSE)
 
 # Parses the parameters of a Hugo shortcode.
 #
