@@ -50,7 +50,7 @@ api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
 #   whitespace.
 shortcode_regex = re.compile(r"\{\{\%\s+(?P<name>[\w\/-]+)\s+(?:(?P<params>[^\s\}][^\}]+[^\s\}])\s+)?\%\}\}", re.ASCII)
 
-# Parses the parameters of a Hugo shortcode. 
+# Parses the parameters of a Hugo shortcode.
 #
 # For simplicity, this currently only supports the `key="value"` format.
 shortcode_params_regex = re.compile(r"(?P<key>\w+)=\"(?P<value>[^\"]+)\"", re.ASCII)
@@ -73,7 +73,7 @@ def replace_match(text, match, replacement):
 
 def replace_shortcode(text, shortcode):
     """Replaces the shortcode by a Markdown fallback in the text.
-    
+
     The supported shortcodes are:
 
     * boxes/note, boxes/rationale, boxes/warning
@@ -83,7 +83,7 @@ def replace_shortcode(text, shortcode):
     if shortcode['name'].startswith("/"):
         # This is the end of the shortcode, just remove it.
         return replace_match(text, shortcode['match'], "")
-    
+
     match shortcode['name']:
         case "boxes/note":
             text = replace_match(text, shortcode['match'], "**NOTE:** ")
@@ -95,13 +95,13 @@ def replace_shortcode(text, shortcode):
             version = shortcode['params']['v']
             if not version:
                 raise ValueError("Missing parameter `v` for `added-in` shortcode")
-        
+
             text = replace_match(text, shortcode['match'], f"**[Added in `v{version}`]** ")
         case "changed-in":
             version = shortcode['params']['v']
             if not version:
                 raise ValueError("Missing parameter `v` for `changed-in` shortcode")
-        
+
             text = replace_match(text, shortcode['match'], f"**[Changed in `v{version}`]** ")
         case _:
             raise ValueError("Unknown shortcode", shortcode['name'])
@@ -111,7 +111,7 @@ def replace_shortcode(text, shortcode):
 
 def find_and_replace_shortcodes(text):
     """Finds Hugo shortcodes and replaces them by a Markdown fallback.
-    
+
     The supported shortcodes are:
 
     * boxes/note, boxes/rationale, boxes/warning
@@ -127,7 +127,7 @@ def find_and_replace_shortcodes(text):
             for param in shortcode_params_regex.finditer(match['params']):
                 if param['key']:
                     params[param['key']] = param['value']
-        
+
         shortcode = {
             'name': match['name'],
             'params': params,
@@ -139,7 +139,7 @@ def find_and_replace_shortcodes(text):
 
 def edit_descriptions(node, base_url):
     """Finds description nodes and apply fixes to them.
-    
+
     The fixes that are applied are:
 
     * Make links absolute
