@@ -119,7 +119,8 @@ to send. The process overall is as follows:
     server must present a valid certificate for the hostname.
 
 3.  If the hostname is not an IP literal, a regular HTTPS request is
-    made to `https://<hostname>/.well-known/matrix/server`, expecting
+    made to `https://<hostname>/.well-known/matrix/server` (according to 
+    [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615)), expecting
     the schema defined later in this section. 30x redirects should be
     followed, however redirection loops should be avoided. Responses
     (successful or otherwise) to the `/.well-known` endpoint should be
