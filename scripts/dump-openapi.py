@@ -143,7 +143,7 @@ def edit_descriptions(node, base_url):
     The fixes that are applied are:
 
     * Make links absolute
-    * Replace shortcodes
+    * Replace Hugo shortcodes
     """
     if isinstance(node, dict):
         for key in node:
