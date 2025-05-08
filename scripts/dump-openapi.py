@@ -45,7 +45,8 @@ api_dir = os.path.join(os.path.dirname(scripts_dir), "data", "api")
 #
 # With:
 #
-# * <name of shortcode>: any word character and `-` and `/`.
+# * <name of shortcode>: any word character and `-` and `/`. `re.ASCII` is used to only match
+#   ASCII characters in the name.
 # * <list of parameters>: any character except `}`, must not start or end with a
 #   whitespace.
 shortcode_regex = re.compile(r"""\{\{\%                                   # {{%
@@ -83,6 +84,8 @@ def replace_shortcode(shortcode):
 
     * boxes/note, boxes/rationale, boxes/warning
     * added-in, changed-in
+    
+    All closing tags (`{{ /shortcode }}`) are replaced with the empty string.
     """
 
     if shortcode['name'].startswith("/"):
