@@ -24,6 +24,12 @@ paths:
         Gets information about the delegated server for server-server communication
         between Matrix homeservers. Servers should follow 30x redirects, carefully
         avoiding redirect loops, and use normal X.509 certificate validation.
+
+        {{% boxes/note %}}
+        This endpoint should be accessed with the hostname of the homeserver's
+        [server name](/appendices/#server-name) by making a
+        GET request to `https://hostname/.well-known/matrix/server`.
+        {{% /boxes/note %}}
       operationId: getWellKnown
       responses:
         "200":
