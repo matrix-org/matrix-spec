@@ -1,20 +1,41 @@
 ---
 allOf:
   - $ref: core-event-schema/state_event.yaml
-description: |- 
-    A topic is a short message detailing what is currently being discussed in the room.
-    It can also be used as a way to display extra information about the room, which may not
-    be suitable for the room name.
-    The room topic can also be set when creating a room using `/createRoom` with the `topic` key.'
-    
+description: |-
+    A topic is a short message detailing what is currently being discussed
+    in the room.  It can also be used as a way to display extra information
+    about the room, which may not be suitable for the room name. The room
+    topic can also be set when creating a room using
+    [`/createRoom`](client-server-api/#post_matrixclientv3createroom), either
+    with the `topic` key or by specifying a full event in `initial_state`.
+  
     If the `topic` property is absent, null, or empty then the topic is unset. In other words,
     an empty `topic` property effectively resets the room to having no topic.
+
+    In order to prevent formatting abuse in room topics, clients SHOULD
+    limit the length of topics during both entry and display, for instance,
+    by capping the number of displayed lines. Additionally, clients SHOULD
+    ignore things like headings and enumerations (or format them as regular
+    text).
 properties:
   content:
     properties:
       topic:
-        description: The topic text.
+        description: |-
+          The topic in plain text.
+
+          This SHOULD duplicate the content of the `text/plain`
+          representation in `m.topic` if any exists.
         type: string
+      m.topic:
+        type: object
+        title: TopicContentBlock
+        x-addedInMatrixVersion: "1.15"
+        description: |-
+          Textual representation of the room topic in different mimetypes.
+        properties:
+          m.text:
+            $ref: components/m_text_content_block.yaml
     required:
       - topic
     type: object
