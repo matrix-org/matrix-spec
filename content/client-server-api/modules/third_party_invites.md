@@ -5,8 +5,8 @@ This module adds in support for inviting new members to a room where
 their Matrix user ID is not known, instead addressing them by a third-party
 identifier such as an email address. There are two flows here; one
 if a Matrix user ID is known for the third-party identifier, and one if
-not. Either way, the client calls [`/invite`](#post_matrixclientv3roomsroomidinvite) with the details of the
-third-party identifier.
+not. Either way, the client calls [`/invite`](#thirdparty_post_matrixclientv3roomsroomidinvite)
+with the details of the third-party identifier.
 
 The homeserver asks the identity server whether a Matrix user ID is
 known for that identifier:
@@ -37,10 +37,12 @@ A client asks a server to invite a user by their third-party identifier.
 
 #### Server behaviour
 
-Upon receipt of an [`/invite`](#post_matrixclientv3roomsroomidinvite), the server is expected to look up the
-third-party identifier with the provided identity server. If the lookup
-yields a result for a Matrix User ID then the normal invite process can
-be initiated. This process ends up looking like this:
+Upon receipt of an [`/invite`](#thirdparty_post_matrixclientv3roomsroomidinvite),
+the server is expected to look up the third-party identifier with the provided
+identity server by making a call to [`/_matrix/identity/v2/lookup`](/identity-service-api/#post_matrixidentityv2lookup).
+If the lookup yields a result for a Matrix User ID then the normal [invite
+process](/server-server-api/#inviting-to-a-room) can be initiated. This process
+ends up looking like this:
 
 ```
     +---------+                         +-------------+                                    +-----------------+
@@ -66,10 +68,11 @@ be initiated. This process ends up looking like this:
         |                                     |                                                    |
 ```
 
-However, if the lookup does not yield a bound User ID, the homeserver
-must store the invite on the identity server and emit a valid
-`m.room.third_party_invite` event to the room. This process ends up
-looking like this:
+However, if the lookup does not yield a bound User ID, the homeserver must store
+the invite on the identity server with a call to
+[`/_matrix/identity/v2/store-invite`](/identity-service-api/#post_matrixidentityv2store-invite)
+and emit a valid [`m.room.third_party_invite`](#mroomthird_party_invite) event
+to the room. This process ends up looking like this:
 
 ```
     +---------+                         +-------------+                                               +-----------------+
@@ -101,15 +104,18 @@ looking like this:
         |                                     |                                                               |
 ```
 
-All homeservers MUST verify the signature in the event's
-`content.third_party_invite.signed` object.
+The third-party user will then need to verify their identity, which results in a
+request to [`/_matrix/federation/v1/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind)
+from the identity server to the homeserver that bound the third-party identifier
+to a user. The homeserver then exchanges the `m.room.third_party_invite` event
+in the room for a complete [`m.room.member`](#mroommember) event with
+`content.membership: invite` and a `content.third_party_invite` property for the
+user that has bound the third-party identifier. If the invitee is on a different
+homeserver than the inviting user, the invitee's homeserver makes a request to
+[`/_matrix/federation/v1/exchange_third_party_invite/{roomId}`](/server-server-api/#put_matrixfederationv1exchange_third_party_inviteroomid).
 
-The third-party user will then need to verify their identity, which
-results in a call from the identity server to the homeserver that bound
-the third-party identifier to a user. The homeserver then exchanges the
-`m.room.third_party_invite` event in the room for a complete
-`m.room.member` event for `membership: invite` for the user that has
-bound the third-party identifier.
+All homeservers MUST verify the signature in the `m.room.member` event's
+`content.third_party_invite.signed` object.
 
 If a homeserver is joining a room for the first time because of an
 `m.room.third_party_invite`, the server which is already participating
@@ -193,8 +199,8 @@ at any time - the completion is not shown in the diagram.
 
 H1 MUST verify the request from H3 to ensure the `signed` property is
 correct as well as the `key_validity_url` as still being valid. This is
-done by making a request to the [identity server
-/isvalid](/identity-service-api/#get_matrixidentityv2pubkeyisvalid)
+done by making a request to the identity server's
+[`/pubkey/isvalid`](/identity-service-api/#get_matrixidentityv2pubkeyisvalid)
 endpoint, using the provided URL rather than constructing a new one. The
 query string and response for the provided URL must match the Identity
 Service Specification.

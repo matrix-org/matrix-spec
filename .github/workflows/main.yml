@@ -2,6 +2,7 @@ name: "Spec"
 
 env:
   HUGO_VERSION: 0.139.0
+  PYTHON_VERSION: 3.13
 
 on:
   push:
@@ -40,7 +41,7 @@ jobs:
       - name: "➕ Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -59,7 +60,7 @@ jobs:
       - name: "➕ Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -78,7 +79,7 @@ jobs:
       - name: "➕ Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -120,7 +121,7 @@ jobs:
       - name: "➕ Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -172,7 +173,7 @@ jobs:
       - name: "➕ Setup Python"
         uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: "➕ Install towncrier"
         run: "pip install 'towncrier'"
       - name: "Generate changelog"
@@ -283,10 +284,11 @@ jobs:
           npm i
           npm run get-proposals
       - name: "⚙️ hugo"
+        env:
+          HUGO_PARAMS_VERSION_STATUS: "historical"
         # Create a baseURL like `/v1.2` out of the `v1.2` tag
         run: |
-          echo -e '[params.version]\nstatus="historical"' > historical.toml
-          hugo --config config.toml,historical.toml --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
+          hugo --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
 
       - name: "📥 Spec definition download"
         uses: actions/download-artifact@v4

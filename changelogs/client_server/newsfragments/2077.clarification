@@ -1,0 +1,1 @@
+Fix the example of the `GET /sync` endpoint and the `m.room.member` example used in several places.

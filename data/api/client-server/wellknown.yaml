@@ -26,6 +26,12 @@ paths:
         suitably namespaced for each application and reduces the risk of
         clashes.
 
+        {{% boxes/note %}}
+        This endpoint should be accessed with the hostname of the homeserver's
+        [server name](/appendices/#server-name) by making a
+        GET request to `https://hostname/.well-known/matrix/client`.
+        {{% /boxes/note %}}
+
         Note that this endpoint is not necessarily handled by the homeserver,
         but by another webserver, to be used for discovering the homeserver URL.
       operationId: getWellknown

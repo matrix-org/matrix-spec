@@ -20,7 +20,7 @@ paths:
     put:
       summary: Invites a remote user to a room
       description: |-
-        Invites a remote user to a room. Once the event has been  signed by both the inviting
+        Invites a remote user to a room. Once the event has been signed by both the inviting
         homeserver and the invited homeserver, it can be sent to all of the servers in the
         room by the inviting homeserver.
 
@@ -32,6 +32,10 @@ paths:
         [room version specification](/rooms) for precise event formats. **The request and response
         bodies here describe the common event fields in more detail and may be missing other
         required fields for a PDU.**
+
+        Also note that if the remote homeserver is already in the room, it will receive the
+        invite event twice; once through this endpoint, and again through a [federation
+        transaction](/server-server-api/#transactions).
       operationId: sendInviteV1
       security:
         - signedRequest: []
