@@ -79,6 +79,19 @@ Please [see
 MSC1779](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/1779-open-governance.md)
 for full details of the project's Guiding Principles.
 
+For the purposes of transparency and to underpin the "greater benefit"
+principle, proposals MUST disclose possible conflicts of interest where
+they might reasonably exist. Authors MAY do this by filling out the
+following checklist and publishing it together with their proposal.
+
+```
+- [ ] I am being paid for working on this proposal by <ORGANIZATION>
+- [ ] I am an employee or member of <ORGANIZATION> which is involved in the Matrix ecosystem
+- [ ] I have another relationship that might appear to be a conflict of interest: <DETAILS>
+- [ ] I have some other type of financial interest in Matrix or this proposal: <DETAILS>
+- [ ] None of the above
+```
+
 ## Technical notes
 
 Proposals **must** develop Matrix as a layered protocol: with new
@@ -193,7 +206,8 @@ is as follows:
         filename that follows the format `1234-my-new-proposal.md` where
         `1234` is the MSC ID.
     -   Your PR description must include a link to the rendered Markdown
-        document and a summary of the proposal.
+        document and a disclosure of potential conflicts of interest where
+        they might reasonably apply.
     -   It is often very helpful to link any related MSCs or [matrix-spec
         issues](https://github.com/matrix-org/matrix-spec/issues) to give
         context for the proposal.
