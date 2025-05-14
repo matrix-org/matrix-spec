@@ -1456,11 +1456,13 @@ forwarded to the login endpoint during the login process. For example:
 
     GET /_matrix/static/client/login/?device_id=GHTYAJCE
 
-### Account registration and management
+### Account registration
 
 {{% http-api spec="client-server" api="registration" %}}
 
-#### Notes on password management
+### Account management
+
+#### Password management
 
 {{% boxes/warning %}}
 Clients SHOULD enforce that the password provided is suitably complex.
@@ -1468,6 +1470,14 @@ The password SHOULD include a lower-case letter, an upper-case letter, a
 number and a symbol and be at a minimum 8 characters in length. Servers
 MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 {{% /boxes/warning %}}
+
+{{% http-api spec="client-server" api="password_management" %}}
+
+#### Account deactivation
+
+{{% http-api spec="client-server" api="account_deactivation" %}}
+
+### Account moderation
 
 #### Account locking
 
