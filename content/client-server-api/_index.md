@@ -1456,11 +1456,11 @@ forwarded to the login endpoint during the login process. For example:
 
     GET /_matrix/static/client/login/?device_id=GHTYAJCE
 
-### Account registration
+### Account registration and management
+
+#### Registration
 
 {{% http-api spec="client-server" api="registration" %}}
-
-### Account management
 
 #### Password management
 
