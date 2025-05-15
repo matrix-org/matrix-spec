@@ -1458,7 +1458,7 @@ forwarded to the login endpoint during the login process. For example:
 
 ### Account registration and management
 
-#### Registration
+#### Account Registration
 
 {{% http-api spec="client-server" api="registration" %}}
 
