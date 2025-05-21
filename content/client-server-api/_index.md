@@ -2856,7 +2856,7 @@ in the directory, too.
 Similarly, a visibility setting of `public` does not necessarily imply a `world_readable`
 history visibility.
 
-To increase performance, servers MAY apply additional filters when listing the
+To increase performance or by preference, servers MAY apply additional filters when listing the
 directory, for instance, by automatically excluding rooms with `invite` join rules
 that are not `world_readable` regardless of their visibility.
 {{% /boxes/warning %}}
