@@ -1048,11 +1048,10 @@ user's Matrix ID and the token delivered when the invite was stored,
 this verification will prove that the `m.room.member` invite event comes
 from the user owning the invited third-party identifier.
 
-## Public Room Directory
+## Published Room Directory
 
-To complement the [Client-Server
-API](/client-server-api)'s room directory,
-homeservers need a way to query the public rooms for another server.
+To complement the [room directory in the Client-Server API](/client-server-api#published-room-directory), 
+homeservers need a way to query the published rooms of another server.
 This can be done by making a request to the `/publicRooms` endpoint for
 the server the room directory should be retrieved for.
 
