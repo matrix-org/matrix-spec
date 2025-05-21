@@ -2846,7 +2846,7 @@ re-invited.
 
 {{% http-api spec="client-server" api="banning" %}}
 
-### Room directory
+### Published room directory
 
 Homeservers MAY publish a room directory to allow users to discover rooms. A room
 can have one of two visibility settings in the directory:

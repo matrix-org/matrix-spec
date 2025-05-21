@@ -13,13 +13,15 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Room Directory API
+  title: Matrix Client-Server Published Room Directory API
   version: 1.0.0
 paths:
   "/directory/list/room/{roomId}":
     get:
       summary: Gets the visibility of a room in the directory
-      description: Gets the visibility of a given room in the server's room directory.
+      description: |-
+        Gets the visibility of a given room in the server's
+        published room directory.
       operationId: getRoomVisibilityOnDirectory
       parameters:
         - in: path
@@ -63,9 +65,9 @@ paths:
       tags:
         - Room discovery
     put:
-      summary: Sets the visibility of a room in the room directory
+      summary: Sets the visibility of a room in the directory
       description: |-
-        Sets the visibility of a given room in the server's room directory.
+        Sets the visibility of a given room in the server's published room directory.
 
         Servers MAY implement additional access control checks, for instance,
         to ensure that a room's visibility can only be changed by the room creator
@@ -99,7 +101,7 @@ paths:
               example: {
                 "visibility": "public"
               }
-        description: The new visibility for the room on the room directory.
+        description: The new visibility for the room in the published room directory.
         required: true
       responses:
         "200":
@@ -152,8 +154,8 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the room directory from. Defaults to the
-            local server. Case sensitive.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
       responses:
@@ -180,8 +182,8 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the room directory from. Defaults to the
-            local server. Case sensitive.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
       requestBody:

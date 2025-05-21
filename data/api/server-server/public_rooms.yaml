@@ -13,12 +13,12 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Federation Room Directory API
+  title: Matrix Federation Published Room Directory API
   version: 1.0.0
 paths:
   /publicRooms:
     get:
-      summary: Lists the server's published room directory.
+      summary: Lists the server's published room directory
       description: |-
         Lists the server's published room directory.
 
