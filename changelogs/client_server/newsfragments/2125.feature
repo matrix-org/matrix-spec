@@ -1,0 +1,1 @@
+Add `/_matrix/client/v1/room_summary/{roomIdOrAlias}` and extend `/_matrix/client/v1/rooms/{roomId}/hierarchy` with the new optional properties `allowed_room_ids`, `encryption` and `room_version` as per [MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266).
