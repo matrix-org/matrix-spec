@@ -119,7 +119,8 @@ to send. The process overall is as follows:
     server must present a valid certificate for the hostname.
 
 3.  If the hostname is not an IP literal, a regular HTTPS request is
-    made to `https://<hostname>/.well-known/matrix/server`, expecting
+    made to `https://<hostname>/.well-known/matrix/server` (according to 
+    [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615)), expecting
     the schema defined later in this section. 30x redirects should be
     followed, however redirection loops should be avoided. Responses
     (successful or otherwise) to the `/.well-known` endpoint should be
@@ -543,8 +544,8 @@ the following subset of the room state:
       `third_party_invite` property, the current
       `m.room.third_party_invite` event with `state_key` matching
       `content.third_party_invite.signed.token`, if any.
-    - If `content.join_authorised_via_users_server` is present,
-      and the [room version supports restricted rooms](/rooms/#feature-matrix),
+    - If `membership` is `join`, `content.join_authorised_via_users_server`
+      is present, and the [room version supports restricted rooms](/rooms/#feature-matrix),
       then the `m.room.member` event with `state_key` matching
       `content.join_authorised_via_users_server`.
 
@@ -970,9 +971,8 @@ the event to other servers in the room.
 ## Third-party invites
 
 {{% boxes/note %}}
-More information about third-party invites is available in the
-[Client-Server API](/client-server-api) under
-the Third-party Invites module.
+More information about third-party invites is available in the Client-Server API
+under the [Third-party invites](/client-server-api/#third-party-invites) module.
 {{% /boxes/note %}}
 
 When a user wants to invite another user in a room but doesn't know the
@@ -985,38 +985,41 @@ API](/identity-service-api).
 
 ### Cases where an association exists for a third-party identifier
 
-If the third-party identifier is already bound to a Matrix ID, a lookup
-request on the identity server will return it. The invite is then
-processed by the inviting homeserver as a standard `m.room.member`
-invite event. This is the simplest case.
+If the third-party identifier is already bound to a Matrix ID, a [lookup
+request](/identity-service-api/#post_matrixidentityv2lookup) on the identity
+server will return it. The invite is then processed by the inviting homeserver
+as a [standard `m.room.member` invite event](#inviting-to-a-room). This is the
+simplest case.
 
 ### Cases where an association doesn't exist for a third-party identifier
 
 If the third-party identifier isn't bound to any Matrix ID, the inviting
-homeserver will request the identity server to store an invite for this
-identifier and to deliver it to whoever binds it to its Matrix ID. It
-will also send an `m.room.third_party_invite` event in the room to
-specify a display name, a token and public keys the identity server
-provided as a response to the invite storage request.
+homeserver will request the identity server to [store an invite](/identity-service-api/#invitation-storage)
+for this identifier and to deliver it to whoever binds it to its Matrix ID. It
+will also send an [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite)
+event in the room to specify a display name, a token and public keys the
+identity server provided as a response to the invite storage request.
 
-When a third-party identifier with pending invites gets bound to a
-Matrix ID, the identity server will send a POST request to the ID's
-homeserver as described in the [Invitation
-Storage](/identity-service-api#invitation-storage)
-section of the Identity Service API.
+When a third-party identifier with pending invites gets bound to a Matrix ID,
+the identity server will send a request to the [`/3pid/onbind`](#put_matrixfederationv13pidonbind)
+endpoint of the the ID's homeserver as described in the [Invitation
+Storage](/identity-service-api#invitation-storage) section of the Identity
+Service API.
 
 The following process applies for each invite sent by the identity
 server:
 
-The invited homeserver will create an `m.room.member` invite event
-containing a special `third_party_invite` section containing the token
-and a signed object, both provided by the identity server.
+The invited homeserver will create an [`m.room.member`](/client-server-api/#mroommember)
+invite event containing a special `third_party_invite` section containing the
+token and a `signed` object, both provided by the identity server.
 
 If the invited homeserver is in the room the invite came from, it can
 auth the event and send it.
 
 However, if the invited homeserver isn't in the room the invite came
-from, it will need to request the room's homeserver to auth the event.
+from, it will need to request the inviting homeserver to auth the event
+at the [`/exchange_third_party_invite`](#put_matrixfederationv1exchange_third_party_inviteroomid)
+endpoint.
 
 {{% http-api spec="server-server" api="third_party_invite" %}}
 
@@ -1045,11 +1048,10 @@ user's Matrix ID and the token delivered when the invite was stored,
 this verification will prove that the `m.room.member` invite event comes
 from the user owning the invited third-party identifier.
 
-## Public Room Directory
+## Published Room Directory
 
-To complement the [Client-Server
-API](/client-server-api)'s room directory,
-homeservers need a way to query the public rooms for another server.
+To complement the [room directory in the Client-Server API](/client-server-api#published-room-directory), 
+homeservers need a way to query the published rooms of another server.
 This can be done by making a request to the `/publicRooms` endpoint for
 the server the room directory should be retrieved for.
 
@@ -1337,7 +1339,7 @@ calculated as follows.
 The *content hash* of an event covers the complete event including the
 *unredacted* contents. It is calculated as follows.
 
-First, any existing `unsigned`, `signature`, and `hashes` members are
+First, any existing `unsigned`, `signatures`, and `hashes` properties are
 removed. The resulting object is then encoded as [Canonical
 JSON](/appendices#canonical-json), and the JSON is hashed using
 SHA-256.

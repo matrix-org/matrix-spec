@@ -371,15 +371,23 @@ valid data was obtained, but no server is available to serve the client.
 No further guess should be attempted and the user should make a
 conscientious decision what to do next.
 
-### Well-known URI
+### Well-known URIs
+
+Matrix facilitates automatic discovery for the Client-Server API base URL and more via the
+[RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) "Well-Known URI" method.
+This method uses JSON files at a predetermined location on the root path `/.well-known/` to
+specify parameter values.
 
 {{% boxes/note %}}
+Diverging from the rest of the endpoints in the Client-Server spec, these files can not be provided
+on the base URL that the Client-Server API is reachable on, as it is yet to be discovered.
+Instead, they can be reached via HTTPS on the [server name](/appendices/#server-name)'s hostname as domain.
+
 Servers hosting the `.well-known` JSON file SHOULD offer CORS headers,
 as per the [CORS](#web-browser-clients) section in this specification.
 {{% /boxes/note %}}
 
-The `.well-known` method uses a JSON file at a predetermined location to
-specify parameter values. The flow for this method is as follows:
+The flow for auto-discovery is as follows:
 
 1.  Extract the [server name](/appendices/#server-name) from the user's Matrix ID by splitting the
     Matrix ID at the first colon.
@@ -415,9 +423,16 @@ specify parameter values. The flow for this method is as follows:
 
 {{% http-api spec="client-server" api="wellknown" %}}
 
-{{% http-api spec="client-server" api="versions" %}}
-
 {{% http-api spec="client-server" api="support" %}}
+
+### API Versions
+
+Upon connecting, the Matrix client and server need to negotiate which version of the specification
+they commonly support, as the API evolves over time. The server advertises its supported versions
+and optionally unstable features to the client, which can then go on to make requests to the
+endpoints it supports.
+
+{{% http-api spec="client-server" api="versions" %}}
 
 ## Client Authentication
 
@@ -2831,7 +2846,35 @@ re-invited.
 
 {{% http-api spec="client-server" api="banning" %}}
 
-### Listing rooms
+### Published room directory
+
+Homeservers MAY publish a room directory to allow users to discover rooms. A room
+can have one of two visibility settings in the directory:
+
+-   `public`: The room will be shown in the published room directory.
+-   `private`: The room will be hidden from the published room directory.
+
+Clients can define a room's initial visibility in the directory via the `visibility`
+parameter in [`/createRoom`](#post_matrixclientv3createroom). Irrespective of room
+creation, clients can query and change a room's visibility in the directory through
+the endpoints listed below, provided that the server permits this.
+
+{{% boxes/warning %}}
+The visibility setting merely defines whether a room is included in the published
+room directory or not. It doesn't make any guarantees about the room's
+[join rule](#mroomjoin_rules) or [history visibility](#room-history-visibility).
+
+In particular, a visibility setting of `public` should not be confused with a `public`
+join rule. Rooms with a join rule of `knock`, for instance, could reasonably be published
+in the directory, too.
+
+Similarly, a visibility setting of `public` does not necessarily imply a `world_readable`
+history visibility.
+
+To increase performance or by preference, servers MAY apply additional filters when listing the
+directory, for instance, by automatically excluding rooms with `invite` join rules
+that are not `world_readable` regardless of their visibility.
+{{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
 
@@ -2847,10 +2890,15 @@ re-invited.
 
 #### Server behaviour
 
-Homeservers MUST at a minimum allow profile look-up for:
+Homeservers MUST at a minimum allow profile look-up for users who are
+visible to the requester based on their membership in rooms known to the
+homeserver. This means:
 
 -   users that share a room with the requesting user
--   users that reside in public rooms known to the homeserver
+-   users who are joined to rooms known to the homeserver that have a
+    `public` [join rule](#mroomjoin_rules)
+-   users who are joined to rooms known to the homeserver that have a
+    `world_readable` [history visibility](#room-history-visibility)
 
 In all other cases, homeservers MAY deny profile look-up by responding with
 403 and an error code of `M_FORBIDDEN`.

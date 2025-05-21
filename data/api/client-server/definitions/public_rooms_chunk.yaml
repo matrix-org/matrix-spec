@@ -13,7 +13,7 @@
 # limitations under the License.
 
 type: object
-title: "PublicRoomsChunk"
+title: "PublishedRoomsChunk"
 properties:
   canonical_alias:
     type: string
@@ -33,7 +33,9 @@ properties:
     example: "!abcdefg:example.org"
   topic:
     type: string
-    description: The topic of the room, if any.
+    description: |-
+      The plain text topic of the room. Omitted if no `text/plain` mimetype
+      exists in [`m.room.topic`](/client-server-api/#mroomtopic).
     example: "All things general"
   world_readable:
     type: boolean
