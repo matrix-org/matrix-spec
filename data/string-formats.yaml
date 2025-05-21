@@ -51,6 +51,11 @@ mx-room-id:
   url: appendices#room-ids
   # regex: "^!"
 
+mx-room-alias:
+  title: Room Alias
+  url: appendices#room-aliases
+  # regex: "^#"
+
 mx-server-name:
   title: Server Name
   url: appendices#server-name

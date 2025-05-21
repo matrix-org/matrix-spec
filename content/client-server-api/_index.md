@@ -371,15 +371,23 @@ valid data was obtained, but no server is available to serve the client.
 No further guess should be attempted and the user should make a
 conscientious decision what to do next.
 
-### Well-known URI
+### Well-known URIs
+
+Matrix facilitates automatic discovery for the Client-Server API base URL and more via the
+[RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) "Well-Known URI" method.
+This method uses JSON files at a predetermined location on the root path `/.well-known/` to
+specify parameter values.
 
 {{% boxes/note %}}
+Diverging from the rest of the endpoints in the Client-Server spec, these files can not be provided
+on the base URL that the Client-Server API is reachable on, as it is yet to be discovered.
+Instead, they can be reached via HTTPS on the [server name](/appendices/#server-name)'s hostname as domain.
+
 Servers hosting the `.well-known` JSON file SHOULD offer CORS headers,
 as per the [CORS](#web-browser-clients) section in this specification.
 {{% /boxes/note %}}
 
-The `.well-known` method uses a JSON file at a predetermined location to
-specify parameter values. The flow for this method is as follows:
+The flow for auto-discovery is as follows:
 
 1.  Extract the [server name](/appendices/#server-name) from the user's Matrix ID by splitting the
     Matrix ID at the first colon.
@@ -415,9 +423,16 @@ specify parameter values. The flow for this method is as follows:
 
 {{% http-api spec="client-server" api="wellknown" %}}
 
-{{% http-api spec="client-server" api="versions" %}}
-
 {{% http-api spec="client-server" api="support" %}}
+
+### API Versions
+
+Upon connecting, the Matrix client and server need to negotiate which version of the specification
+they commonly support, as the API evolves over time. The server advertises its supported versions
+and optionally unstable features to the client, which can then go on to make requests to the
+endpoints it supports.
+
+{{% http-api spec="client-server" api="versions" %}}
 
 ## Client Authentication
 
@@ -2875,10 +2890,15 @@ that are not `world_readable` regardless of their visibility.
 
 #### Server behaviour
 
-Homeservers MUST at a minimum allow profile look-up for:
+Homeservers MUST at a minimum allow profile look-up for users who are
+visible to the requester based on their membership in rooms known to the
+homeserver. This means:
 
 -   users that share a room with the requesting user
--   users that reside in public rooms known to the homeserver
+-   users who are joined to rooms known to the homeserver that have a
+    `public` [join rule](#mroomjoin_rules)
+-   users who are joined to rooms known to the homeserver that have a
+    `world_readable` [history visibility](#room-history-visibility)
 
 In all other cases, homeservers MAY deny profile look-up by responding with
 403 and an error code of `M_FORBIDDEN`.

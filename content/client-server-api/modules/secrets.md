@@ -58,7 +58,7 @@ available on all their clients. Unless the user specifies otherwise,
 clients will try to use the default key to decrypt secrets.
 
 Clients that want to present a simplified interface to users by not supporting
-multiple keys should use the default key if one is specified. If not default
+multiple keys should use the default key if one is specified. If no default
 key is specified, the client may behave as if there is no key is present at
 all. When such a client creates a key, it should mark that key as being the
 default key.
