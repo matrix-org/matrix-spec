@@ -2836,11 +2836,8 @@ re-invited.
 Homeservers MAY publish a room directory to allow users to discover rooms. A room
 can have one of two visibility settings in the directory:
 
-`public`
-The room will be shown in the published room directory.
-
-`private`
-The room will be hidden from the published room directory.
+-   `public`: The room will be shown in the published room directory.
+-   `private`: The room will be hidden from the published room directory.
 
 Clients can define a room's initial visibility in the directory via the `visibility`
 parameter in [`/createRoom`](#post_matrixclientv3createroom). Irrespective of room
