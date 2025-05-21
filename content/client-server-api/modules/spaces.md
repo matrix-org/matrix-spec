@@ -18,7 +18,7 @@ In the default power level structure, this would be `100`. Clients might wish to
 go a step further and explicitly ignore notification counts on space-rooms.
 
 Membership of a space is defined and controlled by the existing mechanisms which
-govern a room: [`m.room.member`](#mroommember), [`m.room.history_visibility`](#mroomhistory_visibility),
+govern a room: [`m.room.member`](/client-server-api#mroommember), [`m.room.history_visibility`](/client-server-api#mroomhistory_visibility),
 and [`m.room.join_rules`](/client-server-api##mroomjoin_rules). Canonical aliases and invites, including
 third-party invites, still work just as they do in normal rooms as well. Furthermore,
 spaces can also be published in the [room directory](/client-server-api#published-room-directory) to make them
