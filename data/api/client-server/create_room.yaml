@@ -88,7 +88,7 @@ paths:
                     - private
                   description: |-
                     The room's visibility in the server's
-                    [published room directory](#published-room-directory).
+                    [published room directory](/client-server-api#published-room-directory).
                     Defaults to `private`.
                 room_alias_name:
                   type: string
