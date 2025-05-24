@@ -560,9 +560,11 @@ specifying the device ID it is already using to the login API.
 with an `M_USER_LOCKED` error code, cannot obtain a new access token until
 the account has been [unlocked](#account-locking).
 
-### User-Interactive Authentication API
+### Legacy API
 
-#### Overview
+#### User-Interactive Authentication API
+
+##### Overview
 
 Some API endpoints require authentication that interacts with the user.
 The homeserver may provide many different ways of authenticating, such
@@ -586,7 +588,7 @@ the flows in order must result in an HTTP 401 response, as defined
 below. When all stages in a flow are complete, authentication is
 complete and the API call succeeds.
 
-#### User-interactive API in the REST API
+##### User-interactive API in the REST API
 
 In the REST API described in this specification, authentication works by
 the client and server exchanging JSON dictionaries. The server indicates
@@ -764,7 +766,7 @@ auth by offering a stage with only the `m.login.dummy` auth type, but they
 must still give a 401 response to requests with no auth data.
 {{% /boxes/note %}}
 
-#### Example
+**Example**
 
 At a high level, the requests made for an API call completing an auth
 flow with three stages will resemble the following diagram:
@@ -806,7 +808,7 @@ flow with three stages will resemble the following diagram:
     |_______________________|
 ```
 
-#### Authentication types
+##### Authentication types
 
 This specification defines the following auth types:
 -   `m.login.password`
@@ -817,7 +819,7 @@ This specification defines the following auth types:
 -   `m.login.dummy`
 -   `m.login.registration_token`
 
-##### Password-based
+###### Password-based
 
 
 | Type               | Description                                                                    |
@@ -876,7 +878,7 @@ explicitly as follows:
 In the case that the homeserver does not know about the supplied 3PID,
 the homeserver must respond with 403 Forbidden.
 
-##### Google ReCaptcha
+###### Google ReCaptcha
 
 | Type                | Description                                          |
 |---------------------|------------------------------------------------------|
@@ -893,7 +895,7 @@ follows:
 }
 ```
 
-##### Single Sign-On
+###### Single Sign-On
 
 | Type          | Description                                                                          |
 |---------------|--------------------------------------------------------------------------------------|
@@ -903,7 +905,7 @@ A client wanting to complete authentication using SSO should use the
 [Fallback](#fallback) mechanism. See [SSO during User-Interactive
 Authentication](#sso-during-user-interactive-authentication) for more information.
 
-##### Email-based (identity / homeserver)
+###### Email-based (identity / homeserver)
 
 | Type                     | Description                                                                                                      |
 |--------------------------|------------------------------------------------------------------------------------------------------------------|
@@ -932,7 +934,7 @@ follows:
 Note that `id_server` (and therefore `id_access_token`) is optional if
 the [`/requestToken`](#post_matrixclientv3registeremailrequesttoken) request did not include them.
 
-##### Phone number/MSISDN-based (identity / homeserver)
+###### Phone number/MSISDN-based (identity / homeserver)
 
 | Type             | Description                                                                                                    |
 |------------------|----------------------------------------------------------------------------------------------------------------|
@@ -961,7 +963,7 @@ follows:
 Note that `id_server` (and therefore `id_access_token`) is optional if
 the [`/requestToken`](#post_matrixclientv3registermsisdnrequesttoken) request did not include them.
 
-##### Dummy Auth
+###### Dummy Auth
 
 | Type             | Description                                                            |
 |------------------|------------------------------------------------------------------------|
@@ -987,7 +989,7 @@ just the type and session, if provided:
 }
 ```
 
-##### Token-authenticated registration
+###### Token-authenticated registration
 
 {{% added-in v="1.2" %}}
 
@@ -1031,7 +1033,7 @@ in the registration process that their token has expired.
 
 {{% http-api spec="client-server" api="registration_tokens" %}}
 
-##### Terms of service at registration
+###### Terms of service at registration
 
 {{% added-in v="1.11" %}}
 
@@ -1154,7 +1156,7 @@ user during registration, if applicable.
 
 {{% definition path="api/client-server/definitions/m.login.terms_params" %}}
 
-#### Fallback
+##### Fallback
 
 Clients cannot be expected to be able to know how to process every
 single login type. If a client does not know how to handle a given login
@@ -1195,7 +1197,7 @@ with just the session ID:
 }
 ```
 
-##### Example
+**Example**
 
 A client webapp might use the following JavaScript to open a popup
 window which will handle unknown login types:
@@ -1251,7 +1253,7 @@ function unknownLoginType(homeserverUrl, apiEndpoint, loginType, sessionID, onCo
 }
 ```
 
-#### Identifier types
+##### Identifier types
 
 Some authentication mechanisms use a user identifier object to identify
 a user. The user identifier object has a `type` field to indicate the
@@ -1264,7 +1266,7 @@ This specification defines the following identifier types:
 -   `m.id.thirdparty`
 -   `m.id.phone`
 
-##### Matrix User ID
+###### Matrix User ID
 
 | Type        | Description                                |
 |-------------|--------------------------------------------|
@@ -1281,7 +1283,7 @@ ID.
 }
 ```
 
-##### Third-party ID
+###### Third-party ID
 
 | Type              | Description                                                               |
 |-------------------|---------------------------------------------------------------------------|
@@ -1301,7 +1303,7 @@ ID media.
 }
 ```
 
-##### Phone number
+###### Phone number
 
 | Type         | Description                               |
 |--------------|-------------------------------------------|
@@ -1327,7 +1329,7 @@ The `country` is the two-letter uppercase ISO-3166-1 alpha-2 country
 code that the number in `phone` should be parsed as if it were dialled
 from.
 
-### Login
+#### Login
 
 A client can obtain access tokens using the [`/login`](#post_matrixclientv3login) API.
 
@@ -1399,7 +1401,7 @@ a token for their user ID if supported by the homeserver using
 
 {{% http-api spec="client-server" api="logout" %}}
 
-#### Appservice Login
+##### Appservice Login
 
 {{% added-in v="1.2" %}}
 
@@ -1436,7 +1438,7 @@ If the access token does correspond to an appservice, but the user id does
 not lie within its namespace then the homeserver will respond with an
 errcode of `M_EXCLUSIVE`.
 
-#### Login Fallback
+##### Login Fallback
 
 If a client does not recognize any or all login flows it can use the
 fallback login API:
@@ -1456,13 +1458,13 @@ forwarded to the login endpoint during the login process. For example:
 
     GET /_matrix/static/client/login/?device_id=GHTYAJCE
 
-### Account registration
+#### Account registration
 
 {{% http-api spec="client-server" api="registration" %}}
 
-### Account management
+#### Account management
 
-#### Password management
+##### Password management
 
 {{% boxes/warning %}}
 Clients SHOULD enforce that the password provided is suitably complex.
@@ -1473,9 +1475,11 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 {{% http-api spec="client-server" api="password_management" %}}
 
-#### Account deactivation
+##### Account deactivation
 
 {{% http-api spec="client-server" api="account_deactivation" %}}
+
+### OAuth 2.0 API
 
 ### Account moderation
 
