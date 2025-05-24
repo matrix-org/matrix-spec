@@ -1,0 +1,140 @@
+# Copyright 2025 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+title: OAuth 2.0 Client Server Metadata
+type: object
+description: |-
+  This definition of the metadata specifies only the fields that are meaningful
+  in the context of the Matrix specification. All the possible values are
+  registered in the [OAuth Dynamic Client Registration Metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#client-metadata),
+  and normative definitions of them are available in their respective RFCs.
+properties:
+  client_uri:
+    type: string
+    format: uri
+    description: |-
+      A URL to a valid web page that SHOULD give the user more information about
+      the client.
+
+      This URL MUST use the `https` scheme and SHOULD NOT require authentication
+      to access. It MUST NOT use a user or password in the authority component
+      of the URI.
+
+      The server MAY reject client registrations if this field is invalid or
+      missing.
+
+      This URI is a common base for all the other URIs in the metadata: those
+      MUST be either on the same host or on a subdomain of the host of the
+      `client_uri`. The port number, path and query components MAY be different.
+
+      For example, if the `client_uri` is `https://example.com/`, then one of
+      the `redirect_uris` can be `https://example.com/callback` or
+      `https://app.example.com/callback`, but not `https://app.com/callback`.
+  client_name:
+    type: string
+    description: |-
+      Human-readable name of the client to be presented to the user.
+
+      This field can be [localized](/client-server-api/#metadata-localization).
+  logo_uri:
+    type: string
+    format: uri
+    description: |-
+      URL that references a logo for the client.
+
+      This URL MUST use the `https` scheme.
+
+      This field can be [localized](/client-server-api/#metadata-localization).
+  tos_uri:
+    type: string
+    format: uri
+    description: |-
+      URL that points to a human-readable terms of service document for the
+      client.
+
+      This URL MUST use the `https` scheme and SHOULD NOT require authentication
+      to access. It MUST NOT use a user or password in the authority component
+      of the URI.
+
+      If this field is set, the server SHOULD show or link to this URL.
+
+      This field can be [localized](/client-server-api/#metadata-localization).
+  policy_uri:
+    type: string
+    format: uri
+    description: |-
+      URL that points to a human-readable policy document for the client.
+
+      This URL MUST use the `https` scheme and SHOULD NOT require authentication
+      to access. It MUST NOT use a user or password in the authority component
+      of the URI.
+
+      If this field is set, the server SHOULD show or link to this URL.
+
+      This field can be [localized](/client-server-api/#metadata-localization).
+  redirect_uris:
+    type: array
+    description: |-
+      Array of redirection URIs for use in redirect-based flows.
+
+      At least one URI is required to use the authorization code grant.
+
+      The server MUST perform [validation on redirect URIs](/client-server-api/#redirect-uri-validation).
+    items:
+      type: string
+      format: uri
+      description: A redirection URI.
+  response_types:
+    type: array
+    description: |-
+      Array of the OAuth 2.0 response types that the client may use.
+
+      This MUST include the `code` value to use the authorization code grant.
+
+      The server MUST ignore values that it does not understand.
+    items:
+      type: string
+      description: A response type that the client may use.
+  grant_types:
+    type: array
+    description: |-
+      Array of the OAuth 2.0 grant types that the client may use.
+
+      This MUST include:
+      - the `authorization_code` value to use the authorization code grant,
+      - the `refresh_token` value to use the refresh token grant.
+
+      The server MUST ignore values that it does not understand.
+    items:
+      type: string
+      description: A grant type that the client may use.
+  token_endpoint_auth_method:
+    type: string
+    description: |-
+      String indicator of the requested authentication method for the token
+      endpoint.
+
+      The homeserver MUST support the `none` value, as most Matrix clients are
+      client-side only, do not have a server component, and therefore are public
+      clients.
+  application_type:
+    type: string
+    description: |-
+      Kind of the application.
+
+      The homeserver MUST support the `web` and `native` values to be able to
+      perform [redirect URI validation](/client-server-api/#redirect-uri-validation).
+
+      Defaults to `web` if omitted.
+required:
+  - client_uri
