@@ -1481,6 +1481,244 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Grant types
+
+OAuth 2.0 defines several ways in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+and other RFCs to obtain an access token at the token endpoint, these are called
+grants.
+
+All these grants require the client to know the following authorization server
+metadata:
+- `token_endpoint`
+- `grant_types_supported`
+
+The client must also have obtained a `client_id` by registering with the server.
+
+This specification supports the following grant types:
+- [Authorization code grant](#authorization-code-grant)
+- [Refresh token grant](#refresh-token-grant)
+
+{{% boxes/note %}}
+Other MSCs might add support for more grant types in the future, like [MSC4108](https://github.com/matrix-org/matrix-spec-proposals/pull/4108)
+which makes use of the device code grant.
+{{% /boxes/note %}}
+
+##### Authorization code grant
+
+As per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),
+the authorization code grant lets the client obtain an access token through a
+browser redirect.
+
+This grant requires the client to know the following authorization server
+metadata:
+- `authorization_endpoint`
+- `response_types_supported`
+- `response_mode_supported`
+
+To use this grant, homeservers and clients MUST:
+- support the authorization code grant as per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1)
+- support the [refresh token grant](#refresh-token-grant)
+- support PKCE using the `S256` code challenge method as per [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
+- use pre-registered, strict redirect URIs
+- use the `fragment` response mode as per [OAuth 2.0 Multiple Response Type
+  Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
+  for clients with an HTTPS redirect URI
+
+###### Login flow with the authorization code grant
+
+Logging in with the OAuth 2.0 authorization code grant in the context of the
+Matrix specification means to request a scope including full client-server API
+read/write access and allocating a device ID.
+
+First, the client needs to generate the following values:
+
+- a random value for the `device_id`
+- a random value for the `state`
+- a cryptographically random value for the `code_verifier`
+
+**Authorization request**
+
+It then constructs the authorization request URL using the
+`authorization_endpoint` value, with the following query parameters:
+
+- The `response_type` value set to `code`
+- The `client_id` value obtained by registering the client metadata with the
+  server
+- The `redirect_uri` value that MUST match one of the values registered in the
+  client metadata
+- The `scope` value set to `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously
+- The `state` value
+- The `response_mode` value
+- The `code_challenge` computed from the `code_verifier` value using the SHA-256
+  algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
+- The `code_challenge_method` set to `S256`
+
+This authorization request URL must be opened in the user's browser:
+
+- For web-based clients, this can be done through a redirection or by opening
+  the URL in a new tab
+- For native clients, this can be done by opening the URL:
+  - using the system browser
+  - through platform-specific APIs when available, such as
+    [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
+    on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs)
+    on Android
+
+Sample authorization request, with extra whitespaces for readability:
+
+```
+https://account.example.com/oauth2/auth?
+    client_id     = s6BhdRkqt3 &
+    response_type = code &
+    response_mode = fragment &
+    redirect_uri  = https://app.example.com/oauth2-callback &
+    scope         = urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD &
+    state         = ewubooN9weezeewah9fol4oothohroh3 &
+    code_challenge        = 72xySjpngTcCxgbPfFmkPHjMvVDl2jW1aWP7-J6rmwU &
+    code_challenge_method = S256
+```
+
+**Callback**
+
+Once completed, the user is redirected to the `redirect_uri`, with either a
+successful or failed authorization in the URL fragment or query parameters.
+Whether the parameters are in the URL fragment or query parameters is determined
+by the `response_mode` value:
+
+- if set to `fragment`, the parameters will be placed in the URL fragment, like
+  `https://example.com/callback#param1=value1&param2=value2`
+- if set to `query`, the parameters will be in placed the query string, like
+  `com.example.app:/callback?param1=value1&param2=value2`
+
+To avoid disclosing the parameters to the web server hosting the `redirect_uri`,
+clients should use the `fragment` response mode if the `redirect_uri` is an
+HTTPS URI with a remote host.
+
+In both success and failure cases, the parameters will have the `state` value
+used in the authorization request.
+
+A successful authorization will have a `code` value, for example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+```
+
+A failed authorization will have the following values:
+
+- `error`: the error code
+- `error_description`: the error description (optional)
+- `error_uri`: the URI where the user can find more information about the error (optional)
+
+For example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request.&error_uri=https%3A%2F%2Ferrors.example.com%2F
+```
+
+**Token request**
+
+The client then exchanges the authorization code to obtain an access token using
+the token endpoint.
+
+This is done by making a POST request to the `token_endpoint` with the following
+parameters, encoded as `application/x-www-form-urlencoded` in the body:
+
+- The `grant_type` set to `authorization_code`
+- The `code` obtained from the callback
+- The `redirect_uri` used in the authorization request
+- The `client_id` value
+- The `code_verifier` value generated at the start of the authorization flow
+
+The server replies with a JSON object containing the access token, the token
+type, the expiration time, and the refresh token.
+
+Sample token request:
+
+```
+POST /oauth2/token HTTP/1.1
+Host: account.example.com
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+  &code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+  &redirect_uri=https://app.example.com/oauth2-callback
+  &client_id=s6BhdRkqt3
+  &code_verifier=ogie4iVaeteeKeeLaid0aizuimairaCh
+```
+
+Sample response:
+
+```json
+{
+  "access_token": "2YotnFZFEjr1zCsicMWpAA",
+  "token_type": "Bearer",
+  "expires_in": 299,
+  "refresh_token": "tGz3JOkF0XG5Qx2TlKWIA",
+  "scope": "urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD"
+}
+```
+
+Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
+endpoint to get the user ID that owns the access token.
+
+###### User registration
+
+Clients can signal to the server that the user desires to register a new account
+by initiating the authorization code grant with the `prompt=create` parameter
+set in the authorization request as defined in [Initiating User Registration via
+OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+
+Whether the homeserver supports this parameter is advertised by the
+`prompt_values_supported` authorization server metadata.
+
+Servers that support this parameter SHOULD show the account registration UI in
+the browser.
+
+##### Refresh token grant
+
+As per [RFC 6749 section 6](https://datatracker.ietf.org/doc/html/rfc6749#section-6),
+the refresh token grant lets the client exchange a refresh token for an access
+token.
+
+When authorization is granted to a client, the homeserver MUST issue a refresh
+token to the client in addition to the access token.
+
+The access token MUST be short-lived and SHOULD be refreshed using the
+`refresh_token` when expired.
+
+The homeserver SHOULD issue a new refresh token each time one is used, and
+invalidate the old one. It should do this only if it can guarantee that in case
+a response with a new refresh token is not received and stored by the client,
+retrying the request with the old refresh token will succeed.
+
+The homeserver SHOULD consider that the session is compromised if an old,
+invalidated refresh token is being used, and SHOULD revoke the session.
+
+The client MUST handle access token refresh failures as follows:
+
+ - If the refresh fails due to network issues or a `5xx` HTTP status code from
+   the server, the client should retry the request with the old refresh token
+   later.
+ - If the refresh fails due to a `4xx` HTTP status code from the server, the
+   client should consider the session logged out.
+
+###### Token refresh flow with the refresh token grant
+
+When the access token expires, the client must refresh it by making a `POST`
+request to the `token_endpoint` with the following parameters, encoded as
+`application/x-www-form-urlencoded` in the body:
+
+- The `grant_type` set to `refresh_token`
+- The `refresh_token` obtained from the token response during the authorization
+  flow
+- The `client_id` value obtained by registering the client metadata with the
+  server
+
+The server replies with a JSON object containing the new access token, the token
+type, the expiration time, and a new refresh token, like in the authorization
+flow.
+
 ### Account moderation
 
 #### Account locking
