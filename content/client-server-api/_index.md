@@ -1481,6 +1481,55 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Token revocation
+
+When a user wants to log out from a client, the client SHOULD use OAuth 2.0
+token revocation as defined in [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
+
+The client makes a `POST` request to the `revocation_endpoint` that can be found
+in the authorization server metadata.
+
+The body of the request includes the following parameters, encoded as
+`application/x-www-form-urlencoded`:
+
+- `token`: This parameter MUST contain either the access token or the refresh
+  token to be revoked.
+- `token_type_hint`: This parameter is OPTIONAL, and if present, MUST have a
+  value of either `access_token` or `refresh_token`. The server MAY use this
+  value to optimize the token lookup process.
+- `client_id`: The client identifier obtained during client registration. This
+  parameter is OPTIONAL.
+
+  If the `client_id` is not provided, or does not match the client associated
+  with the token, the server SHOULD still revoke the token. This behavior is
+  meant to help good actors like secret scanning tools to proactively revoke
+  leaked tokens. The server MAY also warn the user that one of their sessions
+  may be compromised in this scenario.
+
+For example, revoking using the access token:
+
+```
+POST /oauth2/revoke HTTP/1.1
+Host: auth.example.com
+Content-Type: application/x-www-form-urlencoded
+
+token=mat_ooreiPhei2wequu9fohkai3AeBaec9oo&
+token_type_hint=access_token&
+client_id=s6BhdRkqt3
+```
+
+The server MUST revoke both the access token and refresh token associated with
+the token provided in the request.
+
+The server SHOULD return one of the following responses:
+
+- If the token is already revoked or invalid, the server returns a `200 OK`
+  response
+- If the client is not authorized to revoke the token, the server returns a
+  `401 Unauthorized` response
+- For other errors, the server returns a `400 Bad Request` response with error
+  details
+
 ### Account moderation
 
 #### Account locking
