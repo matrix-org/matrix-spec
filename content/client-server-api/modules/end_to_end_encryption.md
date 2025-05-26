@@ -528,7 +528,7 @@ messages, Alice only sends one request event (an event with type
 `m.room.message` with `msgtype: m.key.verification.request`, rather than an
 event with type `m.key.verification.request`), to the room. In addition, Alice
 does not send an `m.key.verification.cancel` event to tell Bob's other devices
-that the request as already been accepted; instead, when Bob's other devices
+that the request has already been accepted; instead, when Bob's other devices
 see his `m.key.verification.ready` event, they will know that the request has
 already been accepted, and that they should ignore the request.
 

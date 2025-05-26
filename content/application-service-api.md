@@ -492,10 +492,10 @@ via the query string). It is expected that the application service use
 the transactions pushed to it to handle events rather than syncing with
 the user implied by `sender_localpart`.
 
-#### Application service room directories
+#### Published room directories
 
-Application services can maintain their own room directories for their
-defined third-party protocols. These room directories may be accessed by
+Application services can maintain their own published room directories for
+their defined third-party protocols. These directories may be accessed by
 clients through additional parameters on the `/publicRooms`
 client-server endpoint.
 
