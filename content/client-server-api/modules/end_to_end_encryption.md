@@ -1517,25 +1517,63 @@ The plaintext payload is of the form:
 The type and content of the plaintext message event are given in the
 payload.
 
-Other properties are included in order to prevent an attacker from
-publishing someone else's curve25519 keys as their own and subsequently
-claiming to have sent messages which they didn't. `sender` must
-correspond to the user who sent the event, `recipient` to the local
-user, and `recipient_keys` to the local ed25519 key.
+###### Validation of incoming decrypted events
 
-Clients must ensure that the sending device owns the private part of
-the ed25519 key it claims to have in the Olm payload. This is crucial
-when the ed25519 key corresponds to a verified device. To perform
-this check, clients MUST confirm that the `sender_key` property in the
-cleartext `m.room.encrypted` event body, and the `keys.ed25519` property
-in the decrypted plaintext, match the keys under the `sender_device_keys`
-property. Additionally, clients MUST also verify the signature of the keys.
-If `sender_device_keys` is absent, clients MUST retrieve the sender's
-keys from [`/keys/query`](#post_matrixclientv3keysquery) instead. This
-will not allow them to verify key ownership if the sending device was
-logged out or had its keys reset since sending the event. Therefore,
-clients MUST populate the `sender_device_keys` property when sending
-events themselves.
+After decrypting an incoming encrypted event, clients MUST apply the
+following checks:
+
+1.  The `sender` property in the decrypted content must match the
+    `sender` of the event.
+2.  The `keys.ed25519` property in the decrypted content must match
+    the `sender_key` property in the cleartext `m.room.encrypted`
+    event body.
+3.  The `recipient` property in the decrypted content must match
+    the user ID of the local user.
+4.  The `recipient_keys.ed25519` property in the decrypted content
+    must match the client device's [Ed25519 signing key](#device-keys).
+5.  Where `sender_device_keys` is present in the decrypted content:
+    1.  `sender_device_keys.user_id` must also match the `sender`
+        of the event.
+    2.  `sender_device_keys.keys.ed25519:<device_id>` must also match
+        the `sender_key` property in the cleartext `m.room.encrypted`
+        event body.
+    3.  `sender_device_keys.keys.curve25519:<device_id>` must match
+        the Curve25519 key used to establish the Olm session.
+    4.  The `sender_device_keys` structure must have a valid signature
+        from the key with ID `ed25519:<device_id>` (i.e., the sending
+        device's Ed25519 key).
+
+Any event that does not comply with these checks MUST be discarded.
+
+###### Verification of the sending user for incoming events
+
+In addition, for each Olm session, clients MUST verify that the
+Curve25519 key used to establish the Olm session does indeed belong
+to the claimed `sender`. This requires a signed "device keys" structure
+for that Curve25519 key, which can be obtained in one of two ways:
+
+1.  An Olm message may be received with a `sender_device_keys` property
+    in the decrypted content.
+2.  The keys are returned via a [`/keys/query`](#post_matrixclientv3keysquery)
+    request. Note that both the Curve25519 key **and** the Ed25519 key in
+    the returned device keys structure must match those used in an
+    Olm-encrypted event as above. (In particular, the Ed25519 key must
+    be present in the **encrypted** content of an Olm-encrypted event
+    to prevent an attacker from claiming another user's Curve25519 key
+    as their own.)
+
+Ownership of the Curve25519 key is then established in one of two ways:
+
+1.  Via [cross-signing](#cross-signing). For this to be sufficient, the
+    device keys structure must be signed by the sender's self-signing key,
+    and that self-signing key must itself have been validated (either via
+    [explicit verification](#device-verification) or a TOFU mechanism).
+2.  Via explicit verification of the device's Ed25519 signing key, as
+    contained in the device keys structure. This is no longer recommended.
+
+A failure to complete these verifications does not necessarily mean that
+the session is bogus; however it is the case that there is no proof that
+the claimed sender is accurate, and the user should be warned accordingly.
 
 If a client has multiple sessions established with another device, it
 should use the session from which it last received and successfully
