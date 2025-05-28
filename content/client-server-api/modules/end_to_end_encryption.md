@@ -1549,6 +1549,8 @@ Any event that does not comply with these checks MUST be discarded.
 
 ###### Verification of the sending user for incoming events
 
+{{% added-in v="1.15" %}}
+
 In addition, for each Olm session, clients MUST verify that the
 Curve25519 key used to establish the Olm session does indeed belong
 to the claimed `sender`. This requires a signed "device keys" structure
