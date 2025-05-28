@@ -1567,7 +1567,7 @@ Ownership of the Curve25519 key is then established in one of two ways:
 1.  Via [cross-signing](#cross-signing). For this to be sufficient, the
     device keys structure must be signed by the sender's self-signing key,
     and that self-signing key must itself have been validated (either via
-    [explicit verification](#device-verification) or a TOFU mechanism).
+    [explicit verification](#device-verification) or a "trust on first use" (TOFU) mechanism).
 2.  Via explicit verification of the device's Ed25519 signing key, as
     contained in the device keys structure. This is no longer recommended.
 
