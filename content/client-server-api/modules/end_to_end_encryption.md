@@ -1519,6 +1519,8 @@ payload.
 
 ###### Validation of incoming decrypted events
 
+{{% changed-in v="1.15" %}} Existing checks made more explicit, and checks for `sender_device_keys` added.
+
 After decrypting an incoming encrypted event, clients MUST apply the
 following checks:
 
