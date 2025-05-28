@@ -1517,6 +1517,15 @@ The plaintext payload is of the form:
 The type and content of the plaintext message event are given in the
 payload.
 
+If a client has multiple sessions established with another device, it
+should use the session from which it last received and successfully
+decrypted a message. For these purposes, a session that has not received
+any messages should use its creation time as the time that it last
+received a message. A client may expire old sessions by defining a
+maximum number of olm sessions that it will maintain for each device,
+and expiring sessions on a Least Recently Used basis. The maximum number
+of olm sessions maintained per device should be at least 4.
+
 ###### Validation of incoming decrypted events
 
 {{% changed-in v="1.15" %}} Existing checks made more explicit, and checks for `sender_device_keys` added.
