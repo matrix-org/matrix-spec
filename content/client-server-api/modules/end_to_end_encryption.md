@@ -1588,15 +1588,6 @@ A failure to complete these verifications does not necessarily mean that
 the session is bogus; however it is the case that there is no proof that
 the claimed sender is accurate, and the user should be warned accordingly.
 
-If a client has multiple sessions established with another device, it
-should use the session from which it last received and successfully
-decrypted a message. For these purposes, a session that has not received
-any messages should use its creation time as the time that it last
-received a message. A client may expire old sessions by defining a
-maximum number of olm sessions that it will maintain for each device,
-and expiring sessions on a Least Recently Used basis. The maximum number
-of olm sessions maintained per device should be at least 4.
-
 ###### Recovering from undecryptable messages
 
 Occasionally messages may be undecryptable by clients due to a variety
