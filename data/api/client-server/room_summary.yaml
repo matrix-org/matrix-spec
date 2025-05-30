@@ -34,8 +34,7 @@ paths:
           `knock_restricted`.
         - The room has a `world_readable` [history visibility](#room-history-visibility).
 
-        Servers should consider rate limiting federation requests more heavily,
-        if the client is unauthenticated.
+        Servers should consider rate limiting requests that require a federation request more heavily if the client is unauthenticated.
       operationId: getRoomSummary
       security:
         - signedRequest: []
