@@ -71,8 +71,6 @@ paths:
                   - $ref: ../client-server/definitions/room_summary.yaml
                   - type: object
                     properties:
-                      room_type:
-                        x-addedInMatrixVersion: # Overrides room_summary.yaml
                       membership:
                         description: |-
                           The membership state of the user if the user is joined to the room. Absent

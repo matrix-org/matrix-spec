@@ -125,6 +125,8 @@ paths:
                                         description: The `origin_server_ts` for the event.
                                     required:
                                       - origin_server_ts
+                            room_type:
+                              x-addedInMatrixVersion: "1.4" # Extends room_summary.yaml
                             allowed_room_ids:
                               x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
                             encryption:

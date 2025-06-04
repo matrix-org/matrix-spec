@@ -84,6 +84,8 @@ paths:
                                       description: The `origin_server_ts` for the event.
                                   required:
                                     - origin_server_ts
+                          room_type:
+                            x-addedInMatrixVersion: "1.4" # Extends room_summary.yaml
                           encryption:
                             x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
                           room_version:
@@ -101,6 +103,8 @@ paths:
                         - type: object
                           title: SpaceHierarchyChildRoomsChunk
                           properties:
+                            room_type:
+                              x-addedInMatrixVersion: "1.4" # Extends room_summary.yaml
                             encryption:
                               x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
                             room_version:

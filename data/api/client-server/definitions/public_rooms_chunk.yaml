@@ -61,7 +61,6 @@ properties:
     example: "public"
   room_type:
     type: string
-    x-addedInMatrixVersion: "1.4"
     description: |-
       The `type` of room (from [`m.room.create`](/client-server-api/#mroomcreate)), if any.
 required:

@@ -23,7 +23,6 @@ allOf:
         description: The `type` of room (from
           [`m.room.create`](/client-server-api/#mroomcreate)),
           if any.
-        x-addedInMatrixVersion: "1.4"
       allowed_room_ids:
         type: array
         items:
