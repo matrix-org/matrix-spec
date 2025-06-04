@@ -1,0 +1,48 @@
+# Copyright 2025 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+type: object
+title: RoomSummary
+allOf:
+  - $ref: public_rooms_chunk.yaml
+  - type: object
+    properties:
+      room_type:
+        type: string
+        description: The `type` of room (from
+          [`m.room.create`](/client-server-api/#mroomcreate)),
+          if any.
+      allowed_room_ids:
+        type: array
+        items:
+          type: string
+        description: |-
+          If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
+          are specified by the join rules. Empty or omitted otherwise.
+      encryption:
+        type: string
+        enum:
+          - "m.megolm.v1.aes-sha2"
+        description: |-
+          The encryption algorithm to be used to encrypt messages sent in the
+          room.
+      room_version:
+        description: The version of the room.
+        type: string
+
+required:
+  - room_id
+  - num_joined_members
+  - world_readable
+  - guest_can_join
