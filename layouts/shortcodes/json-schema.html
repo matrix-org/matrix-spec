@@ -1,0 +1,46 @@
+{{/*
+
+    This template is used to render the fields of a JSON schema that is not an
+    event.
+
+    It expects to be passed a `name` parameter, which is the name of a file
+    under /data/schemas. The file extension is omitted.
+    
+    For example:
+
+        {{% json-schema name="oauth2-client-metadata" %}}
+
+*/}}
+
+{{ $schema := index .Site.Data "schemas" .Params.name }}
+{{ $path := delimit (slice "schemas" .Params.name) "/" }}
+
+{{ $schema = partial "json-schema/resolve-refs" (dict "schema" $schema "path" $path) }}
+{{ $schema = partial "json-schema/resolve-allof" $schema }}
+
+<section class="rendered-data event">
+
+<details {{ if not .Site.Params.ui.rendered_data_collapsed }}open{{ end }}>
+<summary>
+
+<h1>
+ <code>{{ $schema.title }}</code>
+</h1>
+</summary>
+
+<hr>
+
+{{ if $schema.description -}}
+    {{ $schema.description | markdownify -}}
+{{ end -}}
+
+{{ $schema = merge $schema (dict "title" "") -}}
+
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict "schema" $schema) -}}
+{{ range $additional_types -}}
+    {{ partial "openapi/render-object-table" . -}}
+{{ end -}}
+
+</details>
+
+</section>
