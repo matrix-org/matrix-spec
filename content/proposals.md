@@ -185,6 +185,10 @@ is as follows:
     -   Take care in creating your proposal. Specify your intended
         changes, and give reasoning to back them up. Changes without
         justification will likely be poorly received by the community.
+    -   At the time of creating your draft there is no PR ID, so you
+        should use a placeholder number to name your file and edit that
+        after PR submission, the suggested steps are described in
+        detail [in the proposals guide](https://github.com/matrix-org/matrix-spec-proposals#1-writing-the-proposal).
 -   Fork and make a PR to the
     [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repository.
     The ID of your PR will become the MSC ID for the lifetime of your
