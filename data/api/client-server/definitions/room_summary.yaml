@@ -27,6 +27,8 @@ allOf:
         type: array
         items:
           type: string
+          format: mx-room-id
+          pattern: "^!"
         description: |-
           If the room is a [restricted room](/server-server-api/#restricted-rooms), these are the room IDs which
           are specified by the join rules. Empty or omitted otherwise.

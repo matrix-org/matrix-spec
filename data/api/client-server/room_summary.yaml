@@ -46,7 +46,13 @@ paths:
           required: true
           example: "#monkeys:matrix.org"
           schema:
-            type: string
+            oneOf:
+              - type: string
+                format: mx-room-id
+                pattern: "^!"
+              - type: string
+                format: mx-room-alias
+                pattern: "^#"
         - in: query
           name: via
           description: |-
@@ -60,6 +66,7 @@ paths:
             type: array
             items:
               type: string
+              format: mx-server-name
       responses:
         "200":
           description: A summary of the room.
