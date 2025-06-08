@@ -1481,6 +1481,43 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+{{% added-in v="1.15" %}}
+
+Contrary to the legacy API that uses custom endpoints and UIA, this
+authentication API is based on the [OAuth 2.0](https://oauth.net/2/) industry
+standard introduced in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+and extended by other RFCs, with a few features from [OpenID Connect](https://openid.net/connect/).
+This allows us to benefit from its experience and from any further enhancements
+or best practice recommendations.
+
+The main change for end users with this API is that all the account management
+occurs in their browser on the homeserver's web UI. This is where they will
+register a new account or log into an existing account and authorize a client to
+access their Matrix account. This means that the homeserver has complete control
+over the requirements to create a new account and is not limited by the steps
+defined in this specification. It also means that less trust is given to clients
+because they don't have access to the user's credentials anymore.
+
+{{% boxes/warning %}}
+The [User-Interactive Authentication API](#user-interactive-authentication-api)
+is not compatible with the OAuth 2.0 API, so the endpoints that depend on it for
+authentication can't be used when an access token is obtained with this API.
+
+Homeservers may provide alternatives to those endpoints in their web UI (like
+[MSC4191](https://github.com/matrix-org/matrix-spec-proposals/pull/4191) for
+account management), or disable UIA in certain circumstances (like
+[MSC4190](https://github.com/matrix-org/matrix-spec-proposals/pull/4190) for
+managing devices for application services).
+{{% /boxes/warning %}}
+
+**Sample flow**
+
+1. [Discover the OAuth 2.0 server metadata](#server-metadata-discovery).
+2. [Register the client with the homeserver](#client-registration).
+3. Obtain an access token by authorizing a [scope](#scope) for the client with the [authorization code grant](#authorization-code-grant).
+4. Refresh the access token with the [refresh token grant](#refresh-token-grant) when it expires.
+5. [Revoke the tokens](#token-revocation) when the users wants to log out of the client.
+
 ### Account moderation
 
 #### Account locking
