@@ -562,6 +562,14 @@ the account has been [unlocked](#account-locking).
 
 ### Legacy API
 
+{{% changed-in v="1.15" %}}
+
+This is the first authentication API that was introduced since the first version
+of the Client-Server specification and uses custom APIs. Contrary to the OAuth
+2.0 API, account management is primarily done in the client's interface and as
+such it might not require the end user to be redirected to a web UI in their
+browser.
+
 #### User-Interactive Authentication API
 
 ##### Overview
