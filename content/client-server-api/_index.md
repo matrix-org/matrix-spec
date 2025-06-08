@@ -292,9 +292,8 @@ and the two requests would be considered distinct because the two are
 considered separate endpoints. Similarly, if a client logs out and back in
 between two requests using the same transaction ID, the requests are distinct
 because the act of logging in and out creates a new device (unless an existing
-`device_id` is passed to [`POST
-/_matrix/client/v3/login`](#post_matrixclientv3login)). On the other hand, if a
-client re-uses a transaction ID for the same endpoint after
+`device_id` is passed during the [login](#login) process). On the other hand, if
+a client re-uses a transaction ID for the same endpoint after
 [refreshing](#refreshing-access-tokens) an access token, it will be assumed to
 be a duplicate request and ignored. See also
 [Relationship between access tokens and devices](#relationship-between-access-tokens-and-devices).
@@ -436,6 +435,8 @@ endpoints it supports.
 
 ## Client Authentication
 
+{{% changed-in v="1.15" %}}
+
 Most API endpoints require the user to identify themselves by presenting
 previously obtained credentials in the form of an access token.
 An access token is typically obtained via the [Login](#login) or
@@ -448,6 +449,68 @@ token. Clients should treat it as an opaque byte sequence. Servers are
 free to choose an appropriate format. Server implementors may like to
 investigate [macaroons](http://research.google.com/pubs/pub41892.html).
 {{% /boxes/note %}}
+
+Since Matrix 1.15, the Client-Server specification supports two authentication
+APIs:
+
+* The [legacy API](#legacy-api)
+* The [OAuth 2.0 API](#oauth-20-api)
+
+The legacy API has existed since the first version of the Matrix specification,
+while the OAuth 2.0 API has been introduced to rely on a industry standard and
+its experience rather than implementing a custom protocol that might not follow
+the best practices.
+
+A homeserver may support one of those two APIs, or both. Both APIs are
+incompatible, which means that after logging in, clients MUST only use the API
+that was used to obtain their current access token.
+
+{{% boxes/note %}}
+Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
+like ones that don't rely on a web browser for automation or for endpoints used
+by application services that depend on the [UIA API](#user-interactive-authentication-api).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+[MSC3824](https://github.com/matrix-org/matrix-spec-proposals/pull/3824)
+specifies a way for servers to implement the OAuth 2.0 API while staying
+backwards-compatible with existing clients by using the [`m.login.sso`](#sso-client-loginauthentication)
+method, and for clients to improve their compatibility with the OAuth 2.0 API
+with minimal changes.
+{{% /boxes/note %}}
+
+### Authentication API discovery
+
+To discover if a homeserver supports the legacy API, the [`GET /login`](#get_matrixclientv3login)
+endpoint can be used.
+
+To discover if a homeserver supports the OAuth 2.0 API, the
+[`GET /auth_metadata`](#get_matrixclientv1auth_metadata) endpoint can be used.
+
+In both cases, the server SHOULD respond with 404 and an `M_UNRECOGNIZED` error
+code if the corresponding API is not supported.
+
+### Account registration
+
+With the legacy API, a client can register a new account with the
+[`/register`](#post_matrixclientv3register) endpoint.
+
+With the OAuth 2.0 API, a client can't register a new account directly. The end
+user must do that directly in the homeserver's web UI. However, the client can
+signal to the homeserver that the user wishes to create a new account with the
+[`prompt=create`](#user-registration) parameter during authorization.
+
+### Login
+
+With the legacy API, a client can obtain an access token by using one of the
+[login](#legacy-login) methods supported by the homeserver at the [`POST /login`](#post_matrixclientv3login)
+endpoint. To invalidate the access token the client must call the [`/logout`](#post_matrixclientv3logout)
+endpoint.
+
+With the OAuth 2.0 API, a client can obtain an access token by using one of the
+[grant types](#grant-types) supported by the homeserver and authorizing the
+proper [scope](#scope). To invalidate the access token the client must use
+[token revocation](#token-revocation).
 
 ### Using access tokens
 
@@ -494,12 +557,14 @@ used to generate a new access token and refresh token, the new access
 and refresh tokens are now bound to the device associated with the
 initial refresh token.
 
-By default, the [Login](#login) and [Registration](#account-registration)
-processes auto-generate a new `device_id`. A client is also free to
-generate its own `device_id` or, provided the user remains the same,
-reuse a device: in either case the client should pass the `device_id` in
-the request body. If the client sets the `device_id`, the server will
-invalidate any access and refresh tokens previously assigned to that device.
+During login or registration, the access token should be associated to a
+`device_id`. The legacy [Login](#legacy-login) and [Registration](#legacy-account-registration)
+processes auto-generate a new `device_id`, but a client is also free to provide
+its own `device_id`. With the OAuth 2.0 API, the `device_id` is always provided
+by the client. The client can generate a new `device_id` or, provided the user
+remains the same, reuse an existing device. If the client sets the `device_id`,
+the server will invalidate any access and refresh tokens previously assigned to
+that device.
 
 ### Refreshing access tokens
 
@@ -508,14 +573,13 @@ invalidate any access and refresh tokens previously assigned to that device.
 Access tokens can expire after a certain amount of time. Any HTTP calls that
 use an expired access token will return with an error code `M_UNKNOWN_TOKEN`,
 preferably with `soft_logout: true`. When a client receives this error and it
-has a refresh token, it should attempt to refresh the access token by calling
-[`/refresh`](#post_matrixclientv3refresh). Clients can also refresh their
-access token at any time, even if it has not yet expired. If the token refresh
-succeeds, the client should use the new token for future requests, and can
-re-try previously-failed requests with the new token. When an access token is
-refreshed, a new refresh token may be returned; if a new refresh token is
-given, the old refresh token will be invalidated, and the new refresh token
-should be used when the access token needs to be refreshed.
+has a refresh token, it should attempt to refresh the access token. Clients can
+also refresh their access token at any time, even if it has not yet expired. If
+the token refresh succeeds, the client should use the new token for future
+requests, and can re-try previously-failed requests with the new token. When an
+access token is refreshed, a new refresh token may be returned; if a new refresh
+token is given, the old refresh token will be invalidated, and the new refresh
+token should be used when the access token needs to be refreshed.
 
 The old refresh token remains valid until the new access token or refresh token
 is used, at which point the old refresh token is revoked. This ensures that if
@@ -528,6 +592,7 @@ and attempt to obtain a new access token by re-logging in. If the error
 response does not include a `soft_logout: true` property, the client should
 consider the user as being logged out.
 
+With the legacy API, refreshing access tokens is done by calling [`/refresh`](#post_matrixclientv3refresh).
 Handling of clients that do not support refresh tokens is up to the homeserver;
 clients indicate their support for refresh tokens by including a
 `refresh_token: true` property in the request body of the
@@ -536,6 +601,10 @@ clients indicate their support for refresh tokens by including a
 may allow the use of non-expiring access tokens, or may expire access tokens
 anyways and rely on soft logout behaviour on clients that don't support
 refreshing.
+
+With the OAuth 2.0 API, refreshing access tokens is done with the [refresh token
+grant type](#refresh-token-grant-type). Support for refreshing access tokens is
+mandatory with this API.
 
 ### Soft logout
 
@@ -559,6 +628,23 @@ specifying the device ID it is already using to the login API.
 {{% changed-in v="1.12" %}} A client that receives such a response together
 with an `M_USER_LOCKED` error code, cannot obtain a new access token until
 the account has been [unlocked](#account-locking).
+
+### Account management
+
+With the legacy API, a client can use several endpoints to allow the user to
+manage their account like [changing their password](#password-management),
+[managing their devices](#device-management) or
+[deactivating their account](#account-deactivation).
+
+With the OAuth 2.0 API, all account management is done via the homeserver's web
+UI.
+
+{{% boxes/note %}}
+[MSC4191](https://github.com/matrix-org/matrix-spec-proposals/pull/4191)
+provides a way for homeservers to provide the URL of their account management UI,
+which can be used by clients to redirect the users to the relevant part of the
+interface depending on the action that the user wishes to take.
+{{% /boxes/note %}}
 
 ### Legacy API
 
@@ -1337,7 +1423,7 @@ The `country` is the two-letter uppercase ISO-3166-1 alpha-2 country
 code that the number in `phone` should be parsed as if it were dialled
 from.
 
-#### Login
+#### Login {id="legacy-login"}
 
 A client can obtain access tokens using the [`/login`](#post_matrixclientv3login) API.
 
@@ -1466,11 +1552,11 @@ forwarded to the login endpoint during the login process. For example:
 
     GET /_matrix/static/client/login/?device_id=GHTYAJCE
 
-#### Account registration
+#### Account registration {id="legacy-account-registration"}
 
 {{% http-api spec="client-server" api="registration" %}}
 
-#### Account management
+#### Account management {id="legacy-account-management"}
 
 ##### Password management
 
