@@ -134,7 +134,7 @@ sidebar_menu_compact = true
 [module]
   [module.hugoVersion]
     extended = true
-    min = "0.123.1"
+    min = "0.146.0"
   [[module.imports]]
     path = "github.com/matrix-org/docsy"
     disable = false
