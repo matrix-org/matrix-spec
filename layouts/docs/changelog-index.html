@@ -1,0 +1,13 @@
+{{- /*
+
+    Template to the `changelog` section page.
+
+    This redirects the page to the latest version's changelog page.
+
+*/ -}}
+
+{{ define "main" }}
+    {{ with index .RegularPages.ByDate.Reverse 0 -}}
+    <meta http-equiv="refresh" content="0; url={{ .RelPermalink }}">
+    {{ end -}}
+{{ end }}

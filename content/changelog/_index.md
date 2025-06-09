@@ -1,6 +1,7 @@
 ---
 title: Changelog
 type: docs
+layout: changelog-index
 weight: 1000
 ---
 
