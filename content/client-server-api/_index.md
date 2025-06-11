@@ -1525,7 +1525,7 @@ This specification defines the following scope tokens:
 
 | Scope                     | Purpose                                     |
 |---------------------------|---------------------------------------------|
-| `urn:matrix:client:api:*` | Grants full access to the Client-Server API |
+| `urn:matrix:client:api:*` | Grants full access to the Client-Server API. |
 
 {{% boxes/note %}}
 This token matches the behavior of the legacy authentication API. Future MSCs
@@ -1537,7 +1537,7 @@ could introduce more fine-grained scope tokens like
 
 | Scope                                  | Purpose                                                                                      |
 |----------------------------------------|----------------------------------------------------------------------------------------------|
-| `urn:matrix:client:device:<device_id>` | Allocates the given `device_id` and associates it to the generated access and refresh tokens |
+| `urn:matrix:client:device:<device_id>` | Allocates the given `device_id` and associates it to the generated access and refresh tokens. |
 
 Contrary to the legacy login and registration APIs where the homeserver is
 typically the one generating a `device_id` and providing it to the client, with
