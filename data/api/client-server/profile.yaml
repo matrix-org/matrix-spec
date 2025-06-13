@@ -23,8 +23,8 @@ paths:
       summary: Set a profile field for a user.
       description: |-
         Set or update a profile field for a user. Must be authenticated with an
-        access token authorised to make changes. Servers may impose size limits
-        on individual fields, and the total profile must be under 64 KiB.
+        access token authorised to make changes. Servers MAY impose size limits
+        on individual fields, and the total profile MUST be under 64 KiB.
 
         **Note**: Setting a field to `null` keeps the key but with a `null` value,
         which some servers may reject. To remove a field completely, use the
@@ -36,7 +36,7 @@ paths:
       parameters:
         - in: path
           name: userId
-          description: The user whose profile field to set.
+          description: The user whose profile field should be set.
           required: true
           example: "@alice:example.com"
           schema:
@@ -133,7 +133,7 @@ paths:
       parameters:
         - in: path
           name: userId
-          description: The user whose profile field to get.
+          description: The user whose profile field should be returned.
           required: true
           example: "@alice:example.com"
           schema:
@@ -196,14 +196,14 @@ paths:
       parameters:
         - in: path
           name: userId
-          description: The user whose profile field to delete.
+          description: The user whose profile field should be deleted.
           required: true
           example: "@alice:example.com"
           schema:
             type: string
         - in: path
           name: keyName
-          description: The profile field key name to delete. It must be either
+          description: The key name of the profile field to delete. It must be either
             `avatar_url`, `displayname`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true

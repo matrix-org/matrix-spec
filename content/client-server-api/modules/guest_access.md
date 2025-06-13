@@ -63,7 +63,7 @@ for sending events:
 The following API endpoints are allowed to be accessed by guest accounts
 for their own account maintenance:
 
-* [PUT /profile/{userId}/{key_name}](#put_matrixclientv3profileuseridkeyname)
+* [PUT /profile/{userId}/{keyName}](#put_matrixclientv3profileuseridkeyname)
 * [GET /devices](#get_matrixclientv3devices)
 * [GET /devices/{deviceId}](#get_matrixclientv3devicesdeviceid)
 * [PUT /devices/{deviceId}](#put_matrixclientv3devicesdeviceid)
