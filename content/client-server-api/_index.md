@@ -1519,10 +1519,51 @@ To use this grant, homeservers and clients MUST:
   Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
   for clients with an HTTPS redirect URI.
 
-###### Login flow with the authorization code grant
+###### User registration
 
-Logging in with the OAuth 2.0 authorization code grant in the context of the
-Matrix specification means to request a scope including full client-server API
+Clients can signal to the server that the user desires to register a new account
+by initiating the authorization code grant with the `prompt=create` parameter
+set in the authorization request as defined in [Initiating User Registration via
+OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+
+Whether the homeserver supports this parameter is advertised by the
+`prompt_values_supported` authorization server metadata.
+
+Servers that support this parameter SHOULD show the account registration UI in
+the browser.
+
+##### Refresh token grant
+
+As per [RFC 6749 section 6](https://datatracker.ietf.org/doc/html/rfc6749#section-6),
+the refresh token grant lets the client exchange a refresh token for an access
+token.
+
+When authorization is granted to a client, the homeserver MUST issue a refresh
+token to the client in addition to the access token.
+
+The access token MUST be short-lived and SHOULD be refreshed using the
+`refresh_token` when expired.
+
+The homeserver SHOULD issue a new refresh token each time an old one is used,
+and invalidate the old one. However, it MUST ensure that the client is able to
+retry the refresh request in the case that the response to the request is lost.
+
+The homeserver SHOULD consider that the session is compromised if an old,
+invalidated refresh token is used, and SHOULD revoke the session.
+
+The client MUST handle access token refresh failures as follows:
+
+ - If the refresh fails due to network issues or a `5xx` HTTP status code from
+   the server, the client should retry the request with the old refresh token
+   later.
+ - If the refresh fails due to a `4xx` HTTP status code from the server, the
+   client should consider the session logged out.
+
+#### Login flow
+
+Logging in with the OAuth 2.0 API should be done with the [authorization code
+grant](#authorization-code-grant). In the context of the Matrix specification,
+this means requesting a [scope](#scope) including full client-server API
 read/write access and allocating a device ID.
 
 First, the client needs to generate the following values:
@@ -1666,57 +1707,20 @@ Sample response:
 Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
 endpoint to get the user ID that owns the access token.
 
-###### User registration
+#### Token refresh flow
 
-Clients can signal to the server that the user desires to register a new account
-by initiating the authorization code grant with the `prompt=create` parameter
-set in the authorization request as defined in [Initiating User Registration via
-OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
-
-Whether the homeserver supports this parameter is advertised by the
-`prompt_values_supported` authorization server metadata.
-
-Servers that support this parameter SHOULD show the account registration UI in
-the browser.
-
-##### Refresh token grant
-
-As per [RFC 6749 section 6](https://datatracker.ietf.org/doc/html/rfc6749#section-6),
-the refresh token grant lets the client exchange a refresh token for an access
-token.
-
-When authorization is granted to a client, the homeserver MUST issue a refresh
-token to the client in addition to the access token.
-
-The access token MUST be short-lived and SHOULD be refreshed using the
-`refresh_token` when expired.
-
-The homeserver SHOULD issue a new refresh token each time an old one is used,
-and invalidate the old one. However, it MUST ensure that the client is able to
-retry the refresh request in the case that the response to the request is lost.
-
-The homeserver SHOULD consider that the session is compromised if an old,
-invalidated refresh token is used, and SHOULD revoke the session.
-
-The client MUST handle access token refresh failures as follows:
-
- - If the refresh fails due to network issues or a `5xx` HTTP status code from
-   the server, the client should retry the request with the old refresh token
-   later.
- - If the refresh fails due to a `4xx` HTTP status code from the server, the
-   client should consider the session logged out.
-
-###### Token refresh flow with the refresh token grant
+Refreshing a token with the OAuth 2.0 API should be done with the [refresh token
+grant](#refresh-token-grant).
 
 When the access token expires, the client must refresh it by making a `POST`
 request to the `token_endpoint` with the following parameters, encoded as
 `application/x-www-form-urlencoded` in the body:
 
-- The `grant_type` set to `refresh_token`
-- The `refresh_token` obtained from the token response during the authorization
-  flow
-- The `client_id` value obtained by registering the client metadata with the
-  server
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `refresh_token`                                            |
+| `refresh_token` | The `refresh_token` obtained from the token response during the last token request. |
+| `client_id`     | The client ID returned from client registration.           |
 
 The server replies with a JSON object containing the new access token, the token
 type, the expiration time, and a new refresh token, like in the authorization
