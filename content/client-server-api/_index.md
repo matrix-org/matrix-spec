@@ -1496,7 +1496,7 @@ server, which associates it with a newly generated `client_id`. These values are
 used to describe the client to the user and define how the client interacts with
 the server.
 
-{{% json-schema name="oauth2-client-metadata" %}}
+{{% definition path="schemas/oauth2-client-metadata" %}}
 
 ###### Metadata localization
 
