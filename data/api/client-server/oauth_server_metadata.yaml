@@ -25,9 +25,9 @@ paths:
         endpoint URLs and the supported parameters that can be used by the
         clients.
 
-        The definition of this endpoint includes only the fields that are
-        meaningful in the context of the Matrix specification. The full list of
-        possible fields is available in the [OAuth Authorization Server Metadata
+        This endpoint definition includes only the fields that are meaningful in
+        the context of the Matrix specification. The full list of possible
+        fields is available in the [OAuth Authorization Server Metadata
         registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata),
         and normative definitions of them are available in their respective
         RFCs.
@@ -121,7 +121,7 @@ paths:
                       List of OAuth 2.0 Proof Key for Code Exchange (PKCE) code challenge methods
                       that the server supports at the authorization endpoint.
 
-                      This array MUST contain at least the `s256` value, for improved security in
+                      This array MUST contain at least the `S256` value, for improved security in
                       the authorization code grant.
                     items:
                       type: string
