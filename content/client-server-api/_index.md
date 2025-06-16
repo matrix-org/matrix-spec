@@ -1486,13 +1486,13 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 Before being able to use the authorization flow to obtain an access token, a
 client needs to obtain a `client_id` by registering itself with the server.
 
-One way to do that is to leverage OAuth 2.0 Dynamic Client Registration as
-defined in [RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591).
+This should be done via OAuth 2.0 Dynamic Client Registration as defined in
+[RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591).
 
 ##### Client metadata
 
 In OAuth 2.0, clients register a set of metadata values with the authorization
-server which associates it to a newly generated `client_id`. These values are
+server, which associates it with a newly generated `client_id`. These values are
 used to describe the client to the user and define how the client interacts with
 the server.
 
@@ -1539,20 +1539,19 @@ In all cases, the redirect URI MUST NOT have a fragment component.
 
 `web` clients can use redirect URIs that:
 
-- MUST use the `https` scheme
-- MUST NOT use a user or password in the authority component of the URI
+- MUST use the `https` scheme.
+- MUST NOT use a user or password in the authority component of the URI.
 - MUST use the client URI as a common base for the authority component, as
-  defined previously
-- MAY include an `application/x-www-form-urlencoded` formatted query component
+  defined previously.
+- MAY include an `application/x-www-form-urlencoded` formatted query component.
 
-For example, with `https://example.com/` as the client URI,
-
-These are valid redirect URIs:
+For example, with `https://example.com/` as the client URI, the following are
+valid redirect URIs:
 - `https://example.com/callback`
 - `https://app.example.com/callback`
 - `https://example.com:5173/?query=value`
 
-These are invalid redirect URIs:
+With the same client URI, the following are invalid redirect URIs:
 - `https://example.com/callback#fragment`
 - `http://example.com/callback`
 - `http://localhost/`
@@ -1561,23 +1560,25 @@ These are invalid redirect URIs:
 
 `native` clients can use three types of redirect URIs:
 
-1. Private-Use URI Scheme:
-  - the scheme MUST be prefixed with the client URI hostname in reverse-DNS
-    notation. For example, if the client URI is `https://example.com/`, then a
-    valid custom URI scheme would be `com.example.app:/`.
-  - the URI MUST NOT have an authority component. This means that it MUST have
-    either a single slash or none immediately following the scheme, with no
-    hostname, username, or port.
-2. `http` URI on the loopback interface:
-  - it MUST use the `http` scheme
-  - the host part MUST be `localhost`, `127.0.0.1`, or `[::1]`
-  - it MUST have no port. The homeserver MUST then accept any port number during
-    the authorization flow.
-3. Claimed `https` Scheme URI: some operating systems allow apps to claim
-  `https` scheme URIs in the domains they control. When the browser encounters a
-  claimed URI, instead of the page being loaded in the browser, the native app
-  is launched with the URI supplied as a launch parameter. The same rules as for
-  `web` clients apply.
+1. **Private-Use URI Scheme**
+    - The scheme MUST be prefixed with the client URI hostname in reverse-DNS
+      notation. For example, if the client URI is `https://example.com/`, then a
+      valid custom URI scheme would be `com.example.app:/`.
+    - There MUST NOT be an authority component. This means that the URI MUST have
+      either a single slash or none immediately following the scheme, with no
+      hostname, username, or port.
+2. **`http` URI on the loopback interface**
+    - The scheme MUST be `http`.
+    - The host part MUST be `localhost`, `127.0.0.1`, or `[::1]`.
+    - There MUST NOT be a port. The homeserver MUST then accept any port number
+      during the authorization flow.
+3. **Claimed `https` Scheme URI**
+
+    Some operating systems allow apps to claim `https` scheme URIs in the
+    domains they control. When the browser encounters a claimed URI, instead of
+    the page being loaded in the browser, the native app is launched with the
+    URI supplied as a launch parameter. The same rules as for `web` clients
+    apply.
 
 These restrictions are the same as defined by [RFC 8252 section 7](https://tools.ietf.org/html/rfc8252#section-7).
 
@@ -1601,7 +1602,7 @@ These are invalid redirect URIs:
 
 To register, the client sends an HTTP `POST` request to the
 `registration_endpoint`, which can be found in the server metadata. The body of
-the request is the JSON client metadata.
+the request is the JSON-encoded [`OAuthClientMetadata`](#client-metadata).
 
 For example, the client could send the following registration request:
 
@@ -1638,7 +1639,7 @@ Upon successful registration, the server replies with an `HTTP 201 Created`
 response, with a JSON object containing the allocated `client_id` and all the
 registered metadata values.
 
-With the previous registration request, the server would reply with:
+With the registration request above, the server might reply with:
 
 ```json
 {
