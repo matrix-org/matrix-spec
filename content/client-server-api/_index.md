@@ -1483,12 +1483,11 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 #### Grant types
 
-OAuth 2.0 defines several ways in [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
-and other RFCs to obtain an access token at the token endpoint, these are called
-grants.
+[RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) and other RFCs define
+several "grant types": ways to obtain an ["access token"](#using-access-tokens).
 
-All these grants require the client to know the following authorization server
-metadata:
+All these grants types require the client to know the following authorization
+server metadata:
 - `token_endpoint`
 - `grant_types_supported`
 
@@ -1497,11 +1496,6 @@ The client must also have obtained a `client_id` by registering with the server.
 This specification supports the following grant types:
 - [Authorization code grant](#authorization-code-grant)
 - [Refresh token grant](#refresh-token-grant)
-
-{{% boxes/note %}}
-Other MSCs might add support for more grant types in the future, like [MSC4108](https://github.com/matrix-org/matrix-spec-proposals/pull/4108)
-which makes use of the device code grant.
-{{% /boxes/note %}}
 
 ##### Authorization code grant
 
@@ -1516,13 +1510,14 @@ metadata:
 - `response_mode_supported`
 
 To use this grant, homeservers and clients MUST:
-- support the authorization code grant as per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1)
-- support the [refresh token grant](#refresh-token-grant)
-- support PKCE using the `S256` code challenge method as per [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
-- use pre-registered, strict redirect URIs
-- use the `fragment` response mode as per [OAuth 2.0 Multiple Response Type
+
+- Support the authorization code grant as per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1).
+- Support the [refresh token grant](#refresh-token-grant).
+- Support PKCE using the `S256` code challenge method as per [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636).
+- Use pre-registered, strict redirect URIs.
+- Use the `fragment` response mode as per [OAuth 2.0 Multiple Response Type
   Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
-  for clients with an HTTPS redirect URI
+  for clients with an HTTPS redirect URI.
 
 ###### Login flow with the authorization code grant
 
@@ -1532,37 +1527,44 @@ read/write access and allocating a device ID.
 
 First, the client needs to generate the following values:
 
-- a random value for the `device_id`
-- a random value for the `state`
-- a cryptographically random value for the `code_verifier`
+- `device_id`: a unique identifier for this device; see the
+  [`urn:matrix:client:device:<device_id>`] scope.
+- `state`: a unique opaque identifier, like a [transaction ID](#transaction-identifiers),
+  that will allow the client to maintain state between the authorization request
+  and the callback.
+- `code_verifier`: a cryptographically random value that will allow to make sure
+  that the client that makes the token request for a given `code` is the same
+  one that made the authorization request.
+
+  It is defined in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) as
+  a high-entropy cryptographic random string using the characters `[A-Z]`,
+  `[a-z]`, `[0-9]`, `-`, `.`, `_` and `~` with a minimum length of 43 characters
+  and a maximum length of 128 characters.
 
 **Authorization request**
 
-It then constructs the authorization request URL using the
+The client then constructs the authorization request URL using the
 `authorization_endpoint` value, with the following query parameters:
 
-- The `response_type` value set to `code`
-- The `client_id` value obtained by registering the client metadata with the
-  server
-- The `redirect_uri` value that MUST match one of the values registered in the
-  client metadata
-- The `scope` value set to `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously
-- The `state` value
-- The `response_mode` value
-- The `code_challenge` computed from the `code_verifier` value using the SHA-256
-  algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636)
-- The `code_challenge_method` set to `S256`
+| Parameter               | Value                                              |
+|-------------------------|----------------------------------------------------|
+| `response_type`         | `code`                                             |
+| `client_id`             | The client ID returned from client registration.   |
+| `redirect_uri`          | The redirect URI that MUST match one of the values registered in the client metadata |
+| `scope`                 | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
+| `state`                 | The `state` value generated previously.            |
+| `response_mode`         | `fragment` or `query` (see "[Callback](#callback)" below). |
+| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) |
+| `code_challenge_method` | `S256`                                             |
 
 This authorization request URL must be opened in the user's browser:
 
 - For web-based clients, this can be done through a redirection or by opening
-  the URL in a new tab
-- For native clients, this can be done by opening the URL:
-  - using the system browser
-  - through platform-specific APIs when available, such as
-    [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
-    on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs)
-    on Android
+  the URL in a new tab.
+- For native clients, this can be done by opening the URL using the system
+  browser, or, when available, through platform-specific APIs such as
+  [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
+  on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs).
 
 Sample authorization request, with extra whitespaces for readability:
 
@@ -1578,23 +1580,23 @@ https://account.example.com/oauth2/auth?
     code_challenge_method = S256
 ```
 
-**Callback**
+<a id="callback"></a> **Callback**
 
 Once completed, the user is redirected to the `redirect_uri`, with either a
 successful or failed authorization in the URL fragment or query parameters.
 Whether the parameters are in the URL fragment or query parameters is determined
 by the `response_mode` value:
 
-- if set to `fragment`, the parameters will be placed in the URL fragment, like
-  `https://example.com/callback#param1=value1&param2=value2`
-- if set to `query`, the parameters will be in placed the query string, like
-  `com.example.app:/callback?param1=value1&param2=value2`
+- If set to `fragment`, the parameters will be placed in the URL fragment, like
+  `https://example.com/callback#param1=value1&param2=value2`.
+- If set to `query`, the parameters will be in placed the query string, like
+  `com.example.app:/callback?param1=value1&param2=value2`.
 
 To avoid disclosing the parameters to the web server hosting the `redirect_uri`,
-clients should use the `fragment` response mode if the `redirect_uri` is an
+clients SHOULD use the `fragment` response mode if the `redirect_uri` is an
 HTTPS URI with a remote host.
 
-In both success and failure cases, the parameters will have the `state` value
+In both success and failure cases, the parameters will include the `state` value
 used in the authorization request.
 
 A successful authorization will have a `code` value, for example:
@@ -1623,11 +1625,13 @@ the token endpoint.
 This is done by making a POST request to the `token_endpoint` with the following
 parameters, encoded as `application/x-www-form-urlencoded` in the body:
 
-- The `grant_type` set to `authorization_code`
-- The `code` obtained from the callback
-- The `redirect_uri` used in the authorization request
-- The `client_id` value
-- The `code_verifier` value generated at the start of the authorization flow
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `authorization_code`                                       |
+| `code`          | The value of `code` obtained from the callback.            |
+| `redirect_uri`  | The same `redirect_uri` used in the authorization request. |
+| `client_id`     | The client ID returned from client registration.           |
+| `code_verifier` | The value generated at the start of the authorization flow. |
 
 The server replies with a JSON object containing the access token, the token
 type, the expiration time, and the refresh token.
@@ -1687,13 +1691,12 @@ token to the client in addition to the access token.
 The access token MUST be short-lived and SHOULD be refreshed using the
 `refresh_token` when expired.
 
-The homeserver SHOULD issue a new refresh token each time one is used, and
-invalidate the old one. It should do this only if it can guarantee that in case
-a response with a new refresh token is not received and stored by the client,
-retrying the request with the old refresh token will succeed.
+The homeserver SHOULD issue a new refresh token each time an old one is used,
+and invalidate the old one. However, it MUST ensure that the client is able to
+retry the refresh request in the case that the response to the request is lost.
 
 The homeserver SHOULD consider that the session is compromised if an old,
-invalidated refresh token is being used, and SHOULD revoke the session.
+invalidated refresh token is used, and SHOULD revoke the session.
 
 The client MUST handle access token refresh failures as follows:
 
