@@ -1481,6 +1481,10 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Server metadata discovery
+
+{{% http-api spec="client-server" api="oauth_server_metadata" %}}
+
 #### Scope
 
 The client requests a scope in the OAuth 2.0 authorization flow, which is then

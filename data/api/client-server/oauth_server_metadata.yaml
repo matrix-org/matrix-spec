@@ -1,0 +1,176 @@
+# Copyright 2025 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server OAuth 2.0 Server Metadata Discovery API
+  version: 1.0.0
+paths:
+  "/auth_metadata":
+    get:
+      summary: Get the OAuth 2.0 authorization server metadata.
+      description: |-
+        Gets the OAuth 2.0 authorization server metadata, as defined in
+        [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414), including the
+        endpoint URLs and the supported parameters that can be used by the
+        clients.
+
+        This endpoint definition includes only the fields that are meaningful in
+        the context of the Matrix specification. The full list of possible
+        fields is available in the [OAuth Authorization Server Metadata
+        registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata),
+        and normative definitions of them are available in their respective
+        RFCs.
+
+        {{% boxes/note %}}
+        The authorization server metadata is relatively large and may change
+        over time. Clients should:
+
+        - Cache the metadata appropriately based on HTTP caching headers
+        - Refetch the metadata if it is stale
+        {{% /boxes/note %}}
+      operationId: getAuthMetadata
+      responses:
+        "200":
+          description: The OAuth 2.0 authorization server metadata.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  issuer:
+                    type: string
+                    format: uri
+                    description: |-
+                      The authorization server's issuer identifier, which is a URL that uses the
+                      `https` scheme and has no query or fragment components.
+
+                      This is not used in the context of the Matrix specification, but is required
+                      by [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414).
+                  authorization_endpoint:
+                    type: string
+                    format: uri
+                    description: |-
+                      URL of the authorization endpoint, necessary to use the authorization code
+                      grant.
+                  token_endpoint:
+                    type: string
+                    format: uri
+                    description: |-
+                      URL of the token endpoint, necessary to use the authorization code grant and
+                      the refresh token grant.
+                  revocation_endpoint:
+                    type: string
+                    format: uri
+                    description: |-
+                      URL of the revocation endpoint, necessary to log out a client by invalidating
+                      its access and refresh tokens.
+                  registration_endpoint:
+                    type: string
+                    format: uri
+                    description: |-
+                      URL of the client registration endpoint, necessary to perform dynamic
+                      registration of a client.
+                  response_types_supported:
+                    type: array
+                    description: |-
+                      List of OAuth 2.0 response type strings that the server supports at the
+                      authorization endpoint.
+
+                      This array MUST contain at least the `code` value, for clients to be able to
+                      use the authorization code grant.
+                    items:
+                      type: string
+                      description: A response type that the server supports.
+                  grant_types_supported:
+                    type: array
+                    description: |-
+                      List of OAuth 2.0 grant type strings that the server supports at the token
+                      endpoint.
+
+                      This array MUST contain at least the `authorization_code` and `refresh_token`
+                      values, for clients to be able to use the authorization code grant and refresh
+                      token grant, respectively.
+                    items:
+                      type: string
+                      description: A grant type that the server supports.
+                  response_modes_supported:
+                    type: array
+                    description: |-
+                      List of OAuth 2.0 response mode strings that the server supports at the
+                      authorization endpoint.
+
+                      This array MUST contain at least the `query` and `fragment` values, for
+                      improved security in the authorization code grant.
+                    items:
+                      type: string
+                      description: A response mode that the server supports.
+                  code_challenge_methods_supported:
+                    type: array
+                    description: |-
+                      List of OAuth 2.0 Proof Key for Code Exchange (PKCE) code challenge methods
+                      that the server supports at the authorization endpoint.
+
+                      This array MUST contain at least the `S256` value, for improved security in
+                      the authorization code grant.
+                    items:
+                      type: string
+                      description: A PKCE code challenge method that the server supports.
+                  prompt_values_supported:
+                    type: array
+                    description: |-
+                      List of OpenID Connect prompt values that the server supports at the
+                      authorization endpoint.
+
+                      Only the `create` value defined in [Initiating User Registration via OpenID
+                      Connect](https://openid.net/specs/openid-connect-prompt-create-1_0.html) is
+                      supported, for a client to signal to the server that the user desires to
+                      register a new account.
+                    items:
+                      type: string
+                      description: A prompt value that the server supports.
+                required:
+                  - issuer
+                  - authorization_endpoint
+                  - token_endpoint
+                  - revocation_endpoint
+                  - registration_endpoint
+                  - response_types_supported
+                  - grant_types_supported
+                  - response_modes_supported
+                  - code_challenge_methods_supported
+                example: {
+                  "issuer": "https://account.example.com/",
+                  "authorization_endpoint": "https://account.example.com/oauth2/auth",
+                  "token_endpoint": "https://account.example.com/oauth2/token",
+                  "registration_endpoint": "https://account.example.com/oauth2/clients/register",
+                  "revocation_endpoint": "https://account.example.com/oauth2/revoke",
+                  "response_types_supported": ["code"],
+                  "grant_types_supported": ["authorization_code", "refresh_token"],
+                  "response_modes_supported": ["query", "fragment"],
+                  "code_challenge_methods_supported": ["S256"],
+                }
+      tags:
+        - Session management
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
