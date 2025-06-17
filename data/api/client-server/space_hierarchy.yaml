@@ -102,15 +102,10 @@ paths:
                        * The room's [`m.room.history_visibility`](#room-history-visibility) is set to `world_readable`.
                     items:
                       allOf:
-                        - $ref: definitions/public_rooms_chunk.yaml
+                        - $ref: definitions/room_summary.yaml
                         - type: object
                           title: SpaceHierarchyRoomsChunk
                           properties:
-                            room_type:
-                              type: string
-                              description: The `type` of room (from
-                                [`m.room.create`](/client-server-api/#mroomcreate)),
-                                if any.
                             children_state:
                               type: array
                               description: |-
@@ -130,6 +125,14 @@ paths:
                                         description: The `origin_server_ts` for the event.
                                     required:
                                       - origin_server_ts
+                            room_type:
+                              x-addedInMatrixVersion: "1.4" # Extends room_summary.yaml
+                            allowed_room_ids:
+                              x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
+                            encryption:
+                              x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
+                            room_version:
+                              x-addedInMatrixVersion: "1.15" # Extends room_summary.yaml
                           required:
                             - children_state
                   next_batch:
