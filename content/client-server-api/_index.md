@@ -1481,6 +1481,10 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Server metadata discovery
+
+{{% http-api spec="client-server" api="oauth_server_metadata" %}}
+
 #### Client registration
 
 Before being able to use the authorization flow to obtain an access token, a
@@ -1683,6 +1687,96 @@ metadata. By doing so, different users on different devices using the same
 client can share a single `client_id`, reducing the overall number of
 registrations.
 {{% /boxes/note %}}
+
+#### Scope
+
+The client requests a scope in the OAuth 2.0 authorization flow, which is then
+associated to the generated access and refresh tokens. This provides a framework
+for obtaining user consent.
+
+A scope is defined in [RFC 6749 section 3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3)
+as a string containing a list of space-separated scope tokens.
+
+{{% boxes/note %}}
+The framework encourages the practice of obtaining additional user consent when
+a client asks for a new scope that was not granted previously. This could be
+used by future MSCs to replace the legacy [User-Interactive Authentication API](#user-interactive-authentication-api).
+{{% /boxes/note %}}
+
+##### Scope token format
+
+All scope tokens related to Matrix should start with `urn:matrix:` and use the
+`:` delimiter for further sub-division.
+
+Scope tokens related to mapping of Client-Server API access levels should start
+with `urn:matrix:client:`.
+
+{{% boxes/note %}}
+For MSCs that build on this namespace, unstable subdivisions should be used
+whilst in development. For example, if MSCXXXX wants to introduce the
+`urn:matrix:client:foo` scope, it could use
+`urn:matrix:client:com.example.mscXXXX.foo` during development.
+If it needs to introduce multiple scopes, like `urn:matrix:client:foo` and
+`urn:matrix:client:bar`, it could use
+`urn:matrix:client:com.example.mscXXXX:foo` and
+`urn:matrix:client:com.example.mscXXXX:bar`.
+{{% /boxes/note %}}
+
+##### Allocated scope tokens
+
+This specification defines the following scope tokens:
+- [`urn:matrix:client:api:*`](#full-client-server-api-readwrite-access)
+- [`urn:matrix:client:device:<device_id>`](#device-id-allocation)
+
+###### Full client-server API read/write access
+
+| Scope                     | Purpose                                     |
+|---------------------------|---------------------------------------------|
+| `urn:matrix:client:api:*` | Grants full access to the Client-Server API. |
+
+{{% boxes/note %}}
+This token matches the behavior of the legacy authentication API. Future MSCs
+could introduce more fine-grained scope tokens like
+`urn:matrix:client:api:read:*` for read-only access.
+{{% /boxes/note %}}
+
+###### Device ID allocation
+
+| Scope                                  | Purpose                                                                                      |
+|----------------------------------------|----------------------------------------------------------------------------------------------|
+| `urn:matrix:client:device:<device_id>` | Allocates the given `device_id` and associates it to the generated access and refresh tokens. |
+
+Contrary to the legacy login and registration APIs where the homeserver is
+typically the one generating a `device_id` and providing it to the client, with
+the OAuth 2.0 API, the client is responsible for allocating the `device_id`.
+
+There MUST be exactly one `urn:matrix:client:device:<device_id>` token in the
+requested scope in the login flow.
+
+When generating a new `device_id`, the client SHOULD generate a random string
+with enough entropy. It SHOULD only use characters from the unreserved character
+list defined by [RFC 3986 section 2.3](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3):
+
+```
+unreserved = a-z / A-Z / 0-9 / "-" / "." / "_" / "~"
+```
+
+Using this alphabet, a 10 character string is enough to stand a sufficient
+chance of being unique per user. The homeserver MAY reject a request for a
+`device_id` that is not long enough or contains characters outside the
+unreserved list.
+
+In any case it MUST only use characters allowed by the OAuth 2.0 scope
+definition in [RFC 6749 section 3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3),
+which is defined as the following ASCII ranges:
+
+```
+%x21 / %x23-5B / %x5D-7E
+```
+
+This definition matches:
+- alphanumeric characters: `A-Z`, `a-z`, `0-9`
+- the following characters: ``! # $ % & ' ( ) * + , - . / : ; < = > ? @ [ ] ^ _ ` { | } ~``
 
 ### Account moderation
 
@@ -3094,6 +3188,10 @@ that are not `world_readable` regardless of their visibility.
 {{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
+
+### Room Summaries
+
+{{% http-api spec="client-server" api="room_summary" %}}
 
 ## User Data
 
