@@ -292,7 +292,7 @@ and the two requests would be considered distinct because the two are
 considered separate endpoints. Similarly, if a client logs out and back in
 between two requests using the same transaction ID, the requests are distinct
 because the act of logging in and out creates a new device (unless an existing
-`device_id` is passed during the [login](#login) process). On the other hand, if
+`device_id` is given during the [login](#login) process). On the other hand, if
 a client re-uses a transaction ID for the same endpoint after
 [refreshing](#refreshing-access-tokens) an access token, it will be assumed to
 be a duplicate request and ignored. See also
@@ -435,7 +435,7 @@ endpoints it supports.
 
 ## Client Authentication
 
-{{% changed-in v="1.15" %}}
+{{% changed-in v="1.15" %}} OAuth 2.0 API added to the specification.
 
 Most API endpoints require the user to identify themselves by presenting
 previously obtained credentials in the form of an access token.
@@ -461,22 +461,14 @@ while the OAuth 2.0 API has been introduced to rely on a industry standard and
 its experience rather than implementing a custom protocol that might not follow
 the best practices.
 
-A homeserver may support one of those two APIs, or both. Both APIs are
-incompatible, which means that after logging in, clients MUST only use the API
-that was used to obtain their current access token.
+A homeserver may support one of those two APIs, or both. The two APIs are
+mutually incompatible, which means that after logging in, clients MUST only use
+the API that was used to obtain their current access token.
 
 {{% boxes/note %}}
 Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
 like ones that don't rely on a web browser for automation or for endpoints used
 by application services that depend on the [UIA API](#user-interactive-authentication-api).
-{{% /boxes/note %}}
-
-{{% boxes/note %}}
-[MSC3824](https://github.com/matrix-org/matrix-spec-proposals/pull/3824)
-specifies a way for servers to implement the OAuth 2.0 API while staying
-backwards-compatible with existing clients by using the [`m.login.sso`](#sso-client-loginauthentication)
-method, and for clients to improve their compatibility with the OAuth 2.0 API
-with minimal changes.
 {{% /boxes/note %}}
 
 ### Authentication API discovery
@@ -509,8 +501,8 @@ endpoint.
 
 With the OAuth 2.0 API, a client can obtain an access token by using one of the
 [grant types](#grant-types) supported by the homeserver and authorizing the
-proper [scope](#scope). To invalidate the access token the client must use
-[token revocation](#token-revocation).
+proper [scope](#scope), as demonstrated in the [login flow](#login-flow). To
+invalidate the access token the client must use [token revocation](#token-revocation).
 
 ### Using access tokens
 
@@ -557,8 +549,8 @@ used to generate a new access token and refresh token, the new access
 and refresh tokens are now bound to the device associated with the
 initial refresh token.
 
-During login or registration, the access token should be associated to a
-`device_id`. The legacy [Login](#legacy-login) and [Registration](#legacy-account-registration)
+During login or registration, the generated access token should be associated
+with a `device_id`. The legacy [Login](#legacy-login) and [Registration](#legacy-account-registration)
 processes auto-generate a new `device_id`, but a client is also free to provide
 its own `device_id`. With the OAuth 2.0 API, the `device_id` is always provided
 by the client. The client can generate a new `device_id` or, provided the user
@@ -603,8 +595,9 @@ anyways and rely on soft logout behaviour on clients that don't support
 refreshing.
 
 With the OAuth 2.0 API, refreshing access tokens is done with the [refresh token
-grant type](#refresh-token-grant-type). Support for refreshing access tokens is
-mandatory with this API.
+grant type](#refresh-token-grant-type), as demonstrated in the [token refresh
+flow](#token-refresh-flow). Support for refreshing access tokens is mandatory
+with this API.
 
 ### Soft logout
 
@@ -639,22 +632,13 @@ manage their account like [changing their password](#password-management),
 With the OAuth 2.0 API, all account management is done via the homeserver's web
 UI.
 
-{{% boxes/note %}}
-[MSC4191](https://github.com/matrix-org/matrix-spec-proposals/pull/4191)
-provides a way for homeservers to provide the URL of their account management UI,
-which can be used by clients to redirect the users to the relevant part of the
-interface depending on the action that the user wishes to take.
-{{% /boxes/note %}}
-
 ### Legacy API
 
-{{% changed-in v="1.15" %}}
-
-This is the first authentication API that was introduced since the first version
+This is the original authentication API that was introduced in the first version
 of the Client-Server specification and uses custom APIs. Contrary to the OAuth
 2.0 API, account management is primarily done in the client's interface and as
-such it might not require the end user to be redirected to a web UI in their
-browser.
+such it does not usually require the end user to be redirected to a web UI in
+their browser.
 
 #### User-Interactive Authentication API
 
@@ -1596,20 +1580,14 @@ because they don't have access to the user's credentials anymore.
 The [User-Interactive Authentication API](#user-interactive-authentication-api)
 is not compatible with the OAuth 2.0 API, so the endpoints that depend on it for
 authentication can't be used when an access token is obtained with this API.
-
-Homeservers may provide alternatives to those endpoints in their web UI (like
-[MSC4191](https://github.com/matrix-org/matrix-spec-proposals/pull/4191) for
-account management), or disable UIA in certain circumstances (like
-[MSC4190](https://github.com/matrix-org/matrix-spec-proposals/pull/4190) for
-managing devices for application services).
 {{% /boxes/warning %}}
 
 **Sample flow**
 
 1. [Discover the OAuth 2.0 server metadata](#server-metadata-discovery).
 2. [Register the client with the homeserver](#client-registration).
-3. Obtain an access token by authorizing a [scope](#scope) for the client with the [authorization code grant](#authorization-code-grant).
-4. Refresh the access token with the [refresh token grant](#refresh-token-grant) when it expires.
+3. [Obtain an access token](#login-flow) by authorizing a [scope](#scope) for the client with the [authorization code grant](#authorization-code-grant).
+4. [Refresh the access token](#token-refresh-flow) with the [refresh token grant](#refresh-token-grant) when it expires.
 5. [Revoke the tokens](#token-revocation) when the users wants to log out of the client.
 
 #### Server metadata discovery
