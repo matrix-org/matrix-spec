@@ -1580,12 +1580,12 @@ This definition matches:
 [RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) and other RFCs define
 several "grant types": ways to obtain an ["access token"](#using-access-tokens).
 
-All these grants types require the client to know the following authorization
-server metadata:
+All these grants types require the client to know the following [authorization
+server metadata](#server-metadata-discovery):
 - `token_endpoint`
 - `grant_types_supported`
 
-The client must also have obtained a `client_id` by registering with the server.
+The client must also have obtained a `client_id` by [registering with the server](#client-registration).
 
 This specification supports the following grant types:
 - [Authorization code grant](#authorization-code-grant)
@@ -1597,8 +1597,8 @@ As per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#sect
 the authorization code grant lets the client obtain an access token through a
 browser redirect.
 
-This grant requires the client to know the following authorization server
-metadata:
+This grant requires the client to know the following [authorization server
+metadata](#server-metadata-discovery):
 - `authorization_endpoint`
 - `response_types_supported`
 - `response_mode_supported`
@@ -1660,10 +1660,11 @@ grant](#authorization-code-grant). In the context of the Matrix specification,
 this means requesting a [scope](#scope) including full client-server API
 read/write access and allocating a device ID.
 
-First, the client needs to generate the following values:
+Once the client has retrieved the [server metadata](#server-metadata-discovery),
+it needs to generate the following values:
 
 - `device_id`: a unique identifier for this device; see the
-  [`urn:matrix:client:device:<device_id>`] scope.
+  [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
 - `state`: a unique opaque identifier, like a [transaction ID](#transaction-identifiers),
   that will allow the client to maintain state between the authorization request
   and the callback.
@@ -1689,7 +1690,7 @@ The client then constructs the authorization request URL using the
 | `scope`                 | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
 | `state`                 | The `state` value generated previously.            |
 | `response_mode`         | `fragment` or `query` (see "[Callback](#callback)" below). |
-| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) |
+| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636). |
 | `code_challenge_method` | `S256`                                             |
 
 This authorization request URL must be opened in the user's browser:
