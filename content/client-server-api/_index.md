@@ -1485,6 +1485,209 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 {{% http-api spec="client-server" api="oauth_server_metadata" %}}
 
+#### Client registration
+
+Before being able to use the authorization flow to obtain an access token, a
+client needs to obtain a `client_id` by registering itself with the server.
+
+This should be done via OAuth 2.0 Dynamic Client Registration as defined in
+[RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591).
+
+##### Client metadata
+
+In OAuth 2.0, clients register a set of metadata values with the authorization
+server, which associates it with a newly generated `client_id`. These values are
+used to describe the client to the user and define how the client interacts with
+the server.
+
+{{% definition path="schemas/oauth2-client-metadata" %}}
+
+###### Metadata localization
+
+As per [RFC 7591 section 2.2](https://tools.ietf.org/html/rfc7591#section-2.2),
+all the human-readable metadata values MAY be localized.
+
+The human-readable values include:
+- `client_name`
+- `logo_uri`
+- `tos_uri`
+- `policy-uri`
+
+For example:
+
+```json
+{
+  "client_name": "Digital mailbox",
+  "client_name#en-US": "Digital mailbox",
+  "client_name#en-GB": "Digital postbox",
+  "client_name#fr": "Boîte aux lettres numérique",
+  "tos_uri": "https://example.com/tos.html",
+  "tos_uri#fr": "https://example.com/fr/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "policy_uri#fr": "https://example.com/fr/policy.html"
+}
+```
+
+###### Redirect URI validation
+
+The redirect URI plays a critical role in validating the authenticity of the
+client. The client "proves" its identity by demonstrating that it controls the
+redirect URI. This is why it is critical to have strict validation of the
+redirect URI.
+
+The `application_type` metadata is used to determine the type of client.
+
+In all cases, the redirect URI MUST NOT have a fragment component.
+
+**Web clients**
+
+`web` clients can use redirect URIs that:
+
+- MUST use the `https` scheme.
+- MUST NOT use a user or password in the authority component of the URI.
+- MUST use the client URI as a common base for the authority component, as
+  defined previously.
+- MAY include an `application/x-www-form-urlencoded` formatted query component.
+
+For example, with `https://example.com/` as the client URI, the following are
+valid redirect URIs:
+- `https://example.com/callback`
+- `https://app.example.com/callback`
+- `https://example.com:5173/?query=value`
+
+With the same client URI, the following are invalid redirect URIs:
+- `https://example.com/callback#fragment`
+- `http://example.com/callback`
+- `http://localhost/`
+
+**Native clients**
+
+`native` clients can use three types of redirect URIs:
+
+1. **Private-Use URI Scheme**
+    - The scheme MUST be prefixed with the client URI hostname in reverse-DNS
+      notation. For example, if the client URI is `https://example.com/`, then a
+      valid custom URI scheme would be `com.example.app:/`.
+    - There MUST NOT be an authority component. This means that the URI MUST have
+      either a single slash or none immediately following the scheme, with no
+      hostname, username, or port.
+2. **`http` URI on the loopback interface**
+    - The scheme MUST be `http`.
+    - The host part MUST be `localhost`, `127.0.0.1`, or `[::1]`.
+    - There MUST NOT be a port. The homeserver MUST then accept any port number
+      during the authorization flow.
+3. **Claimed `https` Scheme URI**
+
+    Some operating systems allow apps to claim `https` scheme URIs in the
+    domains they control. When the browser encounters a claimed URI, instead of
+    the page being loaded in the browser, the native app is launched with the
+    URI supplied as a launch parameter. The same rules as for `web` clients
+    apply.
+
+These restrictions are the same as defined by [RFC 8252 section 7](https://tools.ietf.org/html/rfc8252#section-7).
+
+For example, with `https://example.com/` as the client URI,
+
+These are valid redirect URIs:
+- `com.example.app:/callback`
+- `com.example:/`
+- `com.example:callback`
+- `http://localhost/callback`
+- `http://127.0.0.1/callback`
+- `http://[::1]/callback`
+
+These are invalid redirect URIs:
+- `example:/callback`
+- `com.example.app://callback`
+- `https://localhost/callback`
+- `http://localhost:1234/callback`
+
+##### Dynamic client registration flow
+
+To register, the client sends an HTTP `POST` request to the
+`registration_endpoint`, which can be found in the [server metadata](#server-metadata-discovery).
+The body of the request is the JSON-encoded [`OAuthClientMetadata`](#client-metadata).
+
+For example, the client could send the following registration request:
+
+```http
+POST /register HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Server: auth.example.com
+```
+
+```json
+{
+  "client_name": "My App",
+  "client_name#fr": "Mon application",
+  "client_uri": "https://example.com/",
+  "logo_uri": "https://example.com/logo.png",
+  "tos_uri": "https://example.com/tos.html",
+  "tos_uri#fr": "https://example.com/fr/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "policy_uri#fr": "https://example.com/fr/policy.html",
+  "redirect_uris": ["https://app.example.com/callback"],
+  "token_endpoint_auth_method": "none",
+  "response_types": ["code"],
+  "grant_types": [
+    "authorization_code",
+    "refresh_token",
+    "urn:ietf:params:oauth:grant-type:token-exchange"
+  ],
+  "application_type": "web"
+}
+```
+
+Upon successful registration, the server replies with an `HTTP 201 Created`
+response, with a JSON object containing the allocated `client_id` and all the
+registered metadata values.
+
+With the registration request above, the server might reply with:
+
+```json
+{
+  "client_id": "s6BhdRkqt3",
+  "client_name": "My App",
+  "client_uri": "https://example.com/",
+  "logo_uri": "https://example.com/logo.png",
+  "tos_uri": "https://example.com/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "redirect_uris": ["https://app.example.com/callback"],
+  "token_endpoint_auth_method": "none",
+  "response_types": ["code"],
+  "grant_types": ["authorization_code", "refresh_token"],
+  "application_type": "web"
+}
+```
+
+In this example, the server has not registered the locale-specific values for
+`client_name`, `tos_uri`, and `policy_uri`, which is why they are not present in
+the response. The server also does not support the
+`urn:ietf:params:oauth:grant-type:token-exchange` grant type, which is why it is
+not present in the response.
+
+The client MUST store the `client_id` for future use.
+
+To avoid the number of client registrations growing over time, the server MAY
+choose to delete client registrations that don't have an active session. The
+server MUST NOT delete client registrations that have an active session.
+
+Clients MUST perform a new client registration at the start of each
+authorization flow.
+
+{{% boxes/note %}}
+Because each client on each user device will do its own registration, they may
+all have different `client_id`s. This means that the server may store the same
+client registration multiple times, which could lead to a large number of client
+registrations.
+
+This can be mitigated by de-duplicating client registrations that have identical
+metadata. By doing so, different users on different devices using the same
+client can share a single `client_id`, reducing the overall number of
+registrations.
+{{% /boxes/note %}}
+
 #### Scope
 
 The client requests a scope in the OAuth 2.0 authorization flow, which is then
