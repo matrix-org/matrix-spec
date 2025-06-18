@@ -1487,24 +1487,53 @@ When a user wants to log out from a client, the client SHOULD use OAuth 2.0
 token revocation as defined in [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
 
 The client makes a `POST` request to the `revocation_endpoint` that can be found
-in the authorization server metadata.
+in the [authorization server metadata](#server-metadata-discovery).
 
 The body of the request includes the following parameters, encoded as
 `application/x-www-form-urlencoded`:
 
-- `token`: This parameter MUST contain either the access token or the refresh
-  token to be revoked.
-- `token_type_hint`: This parameter is OPTIONAL, and if present, MUST have a
-  value of either `access_token` or `refresh_token`. The server MAY use this
-  value to optimize the token lookup process.
-- `client_id`: The client identifier obtained during client registration. This
-  parameter is OPTIONAL.
-
-  If the `client_id` is not provided, or does not match the client associated
-  with the token, the server SHOULD still revoke the token. This behavior is
-  meant to help good actors like secret scanning tools to proactively revoke
-  leaked tokens. The server MAY also warn the user that one of their sessions
-  may be compromised in this scenario.
+<table>
+  <thead>
+    <tr>
+       <th>Parameter</th>
+       <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>token</code></td>
+      <td>
+        <strong>Required.</strong> MUST contain either the access token or the
+        refresh token to be revoked.
+      </td>
+    </tr>
+    <tr>
+      <td><code>token_type_hint</code></td>
+      <td>
+        <strong>Optional.</strong> If present, MUST have a value of either
+        <code>access_token</code> or <code>refresh_token</code>. The server MAY
+        use this value to optimize the token lookup process.
+      </td>
+    </tr>
+    <tr>
+      <td><code>client_id</code></td>
+      <td>
+        <p>
+          <strong>Optional.</strong> The client identifier obtained during
+          <a href="#client-registration">client registration</a>.
+        </p>
+        <p>
+          If the <code>client_id</code> is not provided, or does not match the
+          client associated with the token, the server SHOULD still revoke the
+          token. This behavior is meant to help good actors like secret scanning
+          tools to proactively revoke leaked tokens. The server MAY also warn
+          the user that one of their sessions may be compromised in this
+          scenario.
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 For example, revoking using the access token:
 
