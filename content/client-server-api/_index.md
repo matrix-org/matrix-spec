@@ -1605,8 +1605,8 @@ These are invalid redirect URIs:
 ##### Dynamic client registration flow
 
 To register, the client sends an HTTP `POST` request to the
-`registration_endpoint`, which can be found in the server metadata. The body of
-the request is the JSON-encoded [`OAuthClientMetadata`](#client-metadata).
+`registration_endpoint`, which can be found in the [server metadata](#server-metadata-discovery).
+The body of the request is the JSON-encoded [`OAuthClientMetadata`](#client-metadata).
 
 For example, the client could send the following registration request:
 
