@@ -1776,7 +1776,7 @@ To use this grant, homeservers and clients MUST:
 - Support the authorization code grant as per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1).
 - Support the [refresh token grant](#refresh-token-grant).
 - Support PKCE using the `S256` code challenge method as per [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636).
-- Use pre-registered, strict redirect URIs.
+- Use [pre-registered](#client-registration), strict redirect URIs.
 - Use the `fragment` response mode as per [OAuth 2.0 Multiple Response Type
   Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
   for clients with an HTTPS redirect URI.
