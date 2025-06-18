@@ -1481,6 +1481,174 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Login flow
+
+Logging in with the OAuth 2.0 API should be done with the [authorization code
+grant](#authorization-code-grant). In the context of the Matrix specification,
+this means requesting a [scope](#scope) including full client-server API
+read/write access and allocating a device ID.
+
+Once the client has retrieved the [server metadata](#server-metadata-discovery),
+it needs to generate the following values:
+
+- `device_id`: a unique identifier for this device; see the
+  [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
+- `state`: a unique opaque identifier, like a [transaction ID](#transaction-identifiers),
+  that will allow the client to maintain state between the authorization request
+  and the callback.
+- `code_verifier`: a cryptographically random value that will allow to make sure
+  that the client that makes the token request for a given `code` is the same
+  one that made the authorization request.
+
+  It is defined in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) as
+  a high-entropy cryptographic random string using the characters `[A-Z]`,
+  `[a-z]`, `[0-9]`, `-`, `.`, `_` and `~` with a minimum length of 43 characters
+  and a maximum length of 128 characters.
+
+**Authorization request**
+
+The client then constructs the authorization request URL using the
+`authorization_endpoint` value, with the following query parameters:
+
+| Parameter               | Value                                              |
+|-------------------------|----------------------------------------------------|
+| `response_type`         | `code`                                             |
+| `client_id`             | The client ID returned from client registration.   |
+| `redirect_uri`          | The redirect URI that MUST match one of the values registered in the client metadata |
+| `scope`                 | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
+| `state`                 | The `state` value generated previously.            |
+| `response_mode`         | `fragment` or `query` (see "[Callback](#callback)" below). |
+| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636). |
+| `code_challenge_method` | `S256`                                             |
+
+This authorization request URL must be opened in the user's browser:
+
+- For web-based clients, this can be done through a redirection or by opening
+  the URL in a new tab.
+- For native clients, this can be done by opening the URL using the system
+  browser, or, when available, through platform-specific APIs such as
+  [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
+  on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs).
+
+Sample authorization request, with extra whitespaces for readability:
+
+```
+https://account.example.com/oauth2/auth?
+    client_id     = s6BhdRkqt3 &
+    response_type = code &
+    response_mode = fragment &
+    redirect_uri  = https://app.example.com/oauth2-callback &
+    scope         = urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD &
+    state         = ewubooN9weezeewah9fol4oothohroh3 &
+    code_challenge        = 72xySjpngTcCxgbPfFmkPHjMvVDl2jW1aWP7-J6rmwU &
+    code_challenge_method = S256
+```
+
+<a id="callback"></a> **Callback**
+
+Once completed, the user is redirected to the `redirect_uri`, with either a
+successful or failed authorization in the URL fragment or query parameters.
+Whether the parameters are in the URL fragment or query parameters is determined
+by the `response_mode` value:
+
+- If set to `fragment`, the parameters will be placed in the URL fragment, like
+  `https://example.com/callback#param1=value1&param2=value2`.
+- If set to `query`, the parameters will be in placed the query string, like
+  `com.example.app:/callback?param1=value1&param2=value2`.
+
+To avoid disclosing the parameters to the web server hosting the `redirect_uri`,
+clients SHOULD use the `fragment` response mode if the `redirect_uri` is an
+HTTPS URI with a remote host.
+
+In both success and failure cases, the parameters will include the `state` value
+used in the authorization request.
+
+A successful authorization will have a `code` value, for example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+```
+
+A failed authorization will have the following values:
+
+- `error`: the error code
+- `error_description`: the error description (optional)
+- `error_uri`: the URI where the user can find more information about the error (optional)
+
+For example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request.&error_uri=https%3A%2F%2Ferrors.example.com%2F
+```
+
+**Token request**
+
+The client then exchanges the authorization code to obtain an access token using
+the token endpoint.
+
+This is done by making a POST request to the `token_endpoint` with the following
+parameters, encoded as `application/x-www-form-urlencoded` in the body:
+
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `authorization_code`                                       |
+| `code`          | The value of `code` obtained from the callback.            |
+| `redirect_uri`  | The same `redirect_uri` used in the authorization request. |
+| `client_id`     | The client ID returned from client registration.           |
+| `code_verifier` | The value generated at the start of the authorization flow. |
+
+The server replies with a JSON object containing the access token, the token
+type, the expiration time, and the refresh token.
+
+Sample token request:
+
+```
+POST /oauth2/token HTTP/1.1
+Host: account.example.com
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+  &code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+  &redirect_uri=https://app.example.com/oauth2-callback
+  &client_id=s6BhdRkqt3
+  &code_verifier=ogie4iVaeteeKeeLaid0aizuimairaCh
+```
+
+Sample response:
+
+```json
+{
+  "access_token": "2YotnFZFEjr1zCsicMWpAA",
+  "token_type": "Bearer",
+  "expires_in": 299,
+  "refresh_token": "tGz3JOkF0XG5Qx2TlKWIA",
+  "scope": "urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD"
+}
+```
+
+Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
+endpoint to get the user ID that owns the access token.
+
+#### Token refresh flow
+
+Refreshing a token with the OAuth 2.0 API should be done with the [refresh token
+grant](#refresh-token-grant).
+
+When the access token expires, the client must refresh it by making a `POST`
+request to the `token_endpoint` with the following parameters, encoded as
+`application/x-www-form-urlencoded` in the body:
+
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `refresh_token`                                            |
+| `refresh_token` | The `refresh_token` obtained from the token response during the last token request. |
+| `client_id`     | The client ID returned from client registration.           |
+
+The server replies with a JSON object containing the new access token, the token
+type, the expiration time, and a new refresh token, like in the authorization
+flow.
+
 #### Server metadata discovery
 
 {{% http-api spec="client-server" api="oauth_server_metadata" %}}
@@ -1652,174 +1820,6 @@ The client MUST handle access token refresh failures as follows:
    later.
  - If the refresh fails due to a `4xx` HTTP status code from the server, the
    client should consider the session logged out.
-
-#### Login flow
-
-Logging in with the OAuth 2.0 API should be done with the [authorization code
-grant](#authorization-code-grant). In the context of the Matrix specification,
-this means requesting a [scope](#scope) including full client-server API
-read/write access and allocating a device ID.
-
-Once the client has retrieved the [server metadata](#server-metadata-discovery),
-it needs to generate the following values:
-
-- `device_id`: a unique identifier for this device; see the
-  [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
-- `state`: a unique opaque identifier, like a [transaction ID](#transaction-identifiers),
-  that will allow the client to maintain state between the authorization request
-  and the callback.
-- `code_verifier`: a cryptographically random value that will allow to make sure
-  that the client that makes the token request for a given `code` is the same
-  one that made the authorization request.
-
-  It is defined in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) as
-  a high-entropy cryptographic random string using the characters `[A-Z]`,
-  `[a-z]`, `[0-9]`, `-`, `.`, `_` and `~` with a minimum length of 43 characters
-  and a maximum length of 128 characters.
-
-**Authorization request**
-
-The client then constructs the authorization request URL using the
-`authorization_endpoint` value, with the following query parameters:
-
-| Parameter               | Value                                              |
-|-------------------------|----------------------------------------------------|
-| `response_type`         | `code`                                             |
-| `client_id`             | The client ID returned from client registration.   |
-| `redirect_uri`          | The redirect URI that MUST match one of the values registered in the client metadata |
-| `scope`                 | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
-| `state`                 | The `state` value generated previously.            |
-| `response_mode`         | `fragment` or `query` (see "[Callback](#callback)" below). |
-| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636). |
-| `code_challenge_method` | `S256`                                             |
-
-This authorization request URL must be opened in the user's browser:
-
-- For web-based clients, this can be done through a redirection or by opening
-  the URL in a new tab.
-- For native clients, this can be done by opening the URL using the system
-  browser, or, when available, through platform-specific APIs such as
-  [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
-  on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs).
-
-Sample authorization request, with extra whitespaces for readability:
-
-```
-https://account.example.com/oauth2/auth?
-    client_id     = s6BhdRkqt3 &
-    response_type = code &
-    response_mode = fragment &
-    redirect_uri  = https://app.example.com/oauth2-callback &
-    scope         = urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD &
-    state         = ewubooN9weezeewah9fol4oothohroh3 &
-    code_challenge        = 72xySjpngTcCxgbPfFmkPHjMvVDl2jW1aWP7-J6rmwU &
-    code_challenge_method = S256
-```
-
-<a id="callback"></a> **Callback**
-
-Once completed, the user is redirected to the `redirect_uri`, with either a
-successful or failed authorization in the URL fragment or query parameters.
-Whether the parameters are in the URL fragment or query parameters is determined
-by the `response_mode` value:
-
-- If set to `fragment`, the parameters will be placed in the URL fragment, like
-  `https://example.com/callback#param1=value1&param2=value2`.
-- If set to `query`, the parameters will be in placed the query string, like
-  `com.example.app:/callback?param1=value1&param2=value2`.
-
-To avoid disclosing the parameters to the web server hosting the `redirect_uri`,
-clients SHOULD use the `fragment` response mode if the `redirect_uri` is an
-HTTPS URI with a remote host.
-
-In both success and failure cases, the parameters will include the `state` value
-used in the authorization request.
-
-A successful authorization will have a `code` value, for example:
-
-```
-https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
-```
-
-A failed authorization will have the following values:
-
-- `error`: the error code
-- `error_description`: the error description (optional)
-- `error_uri`: the URI where the user can find more information about the error (optional)
-
-For example:
-
-```
-https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request.&error_uri=https%3A%2F%2Ferrors.example.com%2F
-```
-
-**Token request**
-
-The client then exchanges the authorization code to obtain an access token using
-the token endpoint.
-
-This is done by making a POST request to the `token_endpoint` with the following
-parameters, encoded as `application/x-www-form-urlencoded` in the body:
-
-| Parameter       | Value                                                      |
-|-----------------|------------------------------------------------------------|
-| `grant_type`    | `authorization_code`                                       |
-| `code`          | The value of `code` obtained from the callback.            |
-| `redirect_uri`  | The same `redirect_uri` used in the authorization request. |
-| `client_id`     | The client ID returned from client registration.           |
-| `code_verifier` | The value generated at the start of the authorization flow. |
-
-The server replies with a JSON object containing the access token, the token
-type, the expiration time, and the refresh token.
-
-Sample token request:
-
-```
-POST /oauth2/token HTTP/1.1
-Host: account.example.com
-Content-Type: application/x-www-form-urlencoded
-Accept: application/json
-
-grant_type=authorization_code
-  &code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
-  &redirect_uri=https://app.example.com/oauth2-callback
-  &client_id=s6BhdRkqt3
-  &code_verifier=ogie4iVaeteeKeeLaid0aizuimairaCh
-```
-
-Sample response:
-
-```json
-{
-  "access_token": "2YotnFZFEjr1zCsicMWpAA",
-  "token_type": "Bearer",
-  "expires_in": 299,
-  "refresh_token": "tGz3JOkF0XG5Qx2TlKWIA",
-  "scope": "urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD"
-}
-```
-
-Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
-endpoint to get the user ID that owns the access token.
-
-#### Token refresh flow
-
-Refreshing a token with the OAuth 2.0 API should be done with the [refresh token
-grant](#refresh-token-grant).
-
-When the access token expires, the client must refresh it by making a `POST`
-request to the `token_endpoint` with the following parameters, encoded as
-`application/x-www-form-urlencoded` in the body:
-
-| Parameter       | Value                                                      |
-|-----------------|------------------------------------------------------------|
-| `grant_type`    | `refresh_token`                                            |
-| `refresh_token` | The `refresh_token` obtained from the token response during the last token request. |
-| `client_id`     | The client ID returned from client registration.           |
-
-The server replies with a JSON object containing the new access token, the token
-type, the expiration time, and a new refresh token, like in the authorization
-flow.
 
 ### Account moderation
 
