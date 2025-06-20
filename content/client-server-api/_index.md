@@ -595,7 +595,7 @@ anyways and rely on soft logout behaviour on clients that don't support
 refreshing.
 
 With the OAuth 2.0 API, refreshing access tokens is done with the [refresh token
-grant type](#refresh-token-grant-type), as demonstrated in the [token refresh
+grant type](#refresh-token-grant), as demonstrated in the [token refresh
 flow](#token-refresh-flow). Support for refreshing access tokens is mandatory
 with this API.
 
