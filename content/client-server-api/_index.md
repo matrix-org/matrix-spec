@@ -2024,6 +2024,84 @@ The client MUST handle access token refresh failures as follows:
  - If the refresh fails due to a `4xx` HTTP status code from the server, the
    client should consider the session logged out.
 
+#### Token revocation
+
+When a user wants to log out from a client, the client SHOULD use OAuth 2.0
+token revocation as defined in [RFC 7009](https://datatracker.ietf.org/doc/html/rfc7009).
+
+The client makes a `POST` request to the `revocation_endpoint` that can be found
+in the [authorization server metadata](#server-metadata-discovery).
+
+The body of the request includes the following parameters, encoded as
+`application/x-www-form-urlencoded`:
+
+<table>
+  <thead>
+    <tr>
+       <th>Parameter</th>
+       <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>token</code></td>
+      <td>
+        <strong>Required.</strong> MUST contain either the access token or the
+        refresh token to be revoked.
+      </td>
+    </tr>
+    <tr>
+      <td><code>token_type_hint</code></td>
+      <td>
+        <strong>Optional.</strong> If present, MUST have a value of either
+        <code>access_token</code> or <code>refresh_token</code>. The server MAY
+        use this value to optimize the token lookup process.
+      </td>
+    </tr>
+    <tr>
+      <td><code>client_id</code></td>
+      <td>
+        <p>
+          <strong>Optional.</strong> The client identifier obtained during
+          <a href="#client-registration">client registration</a>.
+        </p>
+        <p>
+          If the <code>client_id</code> is not provided, or does not match the
+          client associated with the token, the server SHOULD still revoke the
+          token. This behavior is meant to help good actors like secret scanning
+          tools to proactively revoke leaked tokens. The server MAY also warn
+          the user that one of their sessions may be compromised in this
+          scenario.
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+For example, revoking using the access token:
+
+```
+POST /oauth2/revoke HTTP/1.1
+Host: auth.example.com
+Content-Type: application/x-www-form-urlencoded
+
+token=mat_ooreiPhei2wequu9fohkai3AeBaec9oo&
+token_type_hint=access_token&
+client_id=s6BhdRkqt3
+```
+
+The server MUST revoke both the access token and refresh token associated with
+the token provided in the request.
+
+The server SHOULD return one of the following responses:
+
+- If the token is already revoked or invalid, the server returns a `200 OK`
+  response
+- If the client is not authorized to revoke the token, the server returns a
+  `401 Unauthorized` response
+- For other errors, the server returns a `400 Bad Request` response with error
+  details
+
 ### Account moderation
 
 #### Account locking
