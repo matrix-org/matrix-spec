@@ -493,6 +493,34 @@ In summary:
     a small table at the bottom mapping the various values from stable
     to unstable.
 
+### Placeholder MSCs
+
+Some proposals may contain security-sensitive or private context which can't be
+publicly disclosed until a later stage in the idea or solution process. Typically,
+the initial idea is validated using some amount of implementation or experimentation
+and may require an MSC number to make that implementation easier.
+
+Placeholder MSCs are used to represent proposals in a state where implementation
+is ongoing, but the MSC details can't yet be disclosed. Authors which feel as
+though their MSC could be highly sensitive MUST get in contact with the Spec Core
+Team or Security Team prior to opening their MSC. If either team determines that
+a placeholder MSC is required, it may be opened as such.
+
+There are a few expectations attached to placeholder MSCs:
+
+* They are tagged as WIP drafts ahead of receiving real content.
+* They are relatively short-lived (ideally less than 6-12 months in placeholder).
+* They propose solutions which are reasonably likely to be accepted. If a placeholder
+  needs to be closed because the idea won't work, isn't needed, etc, then the MSC's
+  content MUST be published ahead of that closure.
+* When they are updated to receive real content, the following happens:
+  1. The Spec Core Team or the author leaves a comment to cause a notification
+     that the MSC has been replaced with real content.
+  2. The `proposal` label (or its equivalent) is removed and re-applied to trigger
+     chat notifications in the public Matrix rooms.
+* The Spec Core Team is aware of the intended MSC's title and purpose. This is
+  especially important if the Security Team approved the use of a placeholder MSC.
+
 ## Proposal Tracking
 
 This is a living document generated from the list of proposals on the
