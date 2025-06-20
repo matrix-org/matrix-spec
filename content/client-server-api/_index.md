@@ -1481,6 +1481,549 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 ### OAuth 2.0 API
 
+#### Login flow
+
+Logging in with the OAuth 2.0 API should be done with the [authorization code
+grant](#authorization-code-grant). In the context of the Matrix specification,
+this means requesting a [scope](#scope) including full client-server API
+read/write access and allocating a device ID.
+
+Once the client has retrieved the [server metadata](#server-metadata-discovery),
+it needs to generate the following values:
+
+- `device_id`: a unique identifier for this device; see the
+  [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
+- `state`: a unique opaque identifier, like a [transaction ID](#transaction-identifiers),
+  that will allow the client to maintain state between the authorization request
+  and the callback.
+- `code_verifier`: a cryptographically random value that will allow to make sure
+  that the client that makes the token request for a given `code` is the same
+  one that made the authorization request.
+
+  It is defined in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636) as
+  a high-entropy cryptographic random string using the characters `[A-Z]`,
+  `[a-z]`, `[0-9]`, `-`, `.`, `_` and `~` with a minimum length of 43 characters
+  and a maximum length of 128 characters.
+
+**Authorization request**
+
+The client then constructs the authorization request URL using the
+`authorization_endpoint` value, with the following query parameters:
+
+| Parameter               | Value                                              |
+|-------------------------|----------------------------------------------------|
+| `response_type`         | `code`                                             |
+| `client_id`             | The client ID returned from client registration.   |
+| `redirect_uri`          | The redirect URI that MUST match one of the values registered in the client metadata |
+| `scope`                 | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
+| `state`                 | The `state` value generated previously.            |
+| `response_mode`         | `fragment` or `query` (see "[Callback](#callback)" below). |
+| `code_challenge`        | Computed from the `code_verifier` value generated previously using the SHA-256 algorithm, as described in [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636). |
+| `code_challenge_method` | `S256`                                             |
+
+This authorization request URL must be opened in the user's browser:
+
+- For web-based clients, this can be done through a redirection or by opening
+  the URL in a new tab.
+- For native clients, this can be done by opening the URL using the system
+  browser, or, when available, through platform-specific APIs such as
+  [`ASWebAuthenticationSession`](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession)
+  on iOS or [Android Custom Tabs](https://developer.chrome.com/docs/android/custom-tabs).
+
+Sample authorization request, with extra whitespaces for readability:
+
+```
+https://account.example.com/oauth2/auth?
+    client_id     = s6BhdRkqt3 &
+    response_type = code &
+    response_mode = fragment &
+    redirect_uri  = https://app.example.com/oauth2-callback &
+    scope         = urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD &
+    state         = ewubooN9weezeewah9fol4oothohroh3 &
+    code_challenge        = 72xySjpngTcCxgbPfFmkPHjMvVDl2jW1aWP7-J6rmwU &
+    code_challenge_method = S256
+```
+
+<a id="callback"></a> **Callback**
+
+Once completed, the user is redirected to the `redirect_uri`, with either a
+successful or failed authorization in the URL fragment or query parameters.
+Whether the parameters are in the URL fragment or query parameters is determined
+by the `response_mode` value:
+
+- If set to `fragment`, the parameters will be placed in the URL fragment, like
+  `https://example.com/callback#param1=value1&param2=value2`.
+- If set to `query`, the parameters will be in placed the query string, like
+  `com.example.app:/callback?param1=value1&param2=value2`.
+
+To avoid disclosing the parameters to the web server hosting the `redirect_uri`,
+clients SHOULD use the `fragment` response mode if the `redirect_uri` is an
+HTTPS URI with a remote host.
+
+In both success and failure cases, the parameters will include the `state` value
+used in the authorization request.
+
+A successful authorization will have a `code` value, for example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+```
+
+A failed authorization will have the following values:
+
+- `error`: the error code
+- `error_description`: the error description (optional)
+- `error_uri`: the URI where the user can find more information about the error (optional)
+
+For example:
+
+```
+https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request.&error_uri=https%3A%2F%2Ferrors.example.com%2F
+```
+
+**Token request**
+
+The client then exchanges the authorization code to obtain an access token using
+the token endpoint.
+
+This is done by making a POST request to the `token_endpoint` with the following
+parameters, encoded as `application/x-www-form-urlencoded` in the body:
+
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `authorization_code`                                       |
+| `code`          | The value of `code` obtained from the callback.            |
+| `redirect_uri`  | The same `redirect_uri` used in the authorization request. |
+| `client_id`     | The client ID returned from client registration.           |
+| `code_verifier` | The value generated at the start of the authorization flow. |
+
+The server replies with a JSON object containing the access token, the token
+type, the expiration time, and the refresh token.
+
+Sample token request:
+
+```
+POST /oauth2/token HTTP/1.1
+Host: account.example.com
+Content-Type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+  &code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
+  &redirect_uri=https://app.example.com/oauth2-callback
+  &client_id=s6BhdRkqt3
+  &code_verifier=ogie4iVaeteeKeeLaid0aizuimairaCh
+```
+
+Sample response:
+
+```json
+{
+  "access_token": "2YotnFZFEjr1zCsicMWpAA",
+  "token_type": "Bearer",
+  "expires_in": 299,
+  "refresh_token": "tGz3JOkF0XG5Qx2TlKWIA",
+  "scope": "urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD"
+}
+```
+
+Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
+endpoint to get the user ID that owns the access token.
+
+#### Token refresh flow
+
+Refreshing a token with the OAuth 2.0 API should be done with the [refresh token
+grant](#refresh-token-grant).
+
+When the access token expires, the client must refresh it by making a `POST`
+request to the `token_endpoint` with the following parameters, encoded as
+`application/x-www-form-urlencoded` in the body:
+
+| Parameter       | Value                                                      |
+|-----------------|------------------------------------------------------------|
+| `grant_type`    | `refresh_token`                                            |
+| `refresh_token` | The `refresh_token` obtained from the token response during the last token request. |
+| `client_id`     | The client ID returned from client registration.           |
+
+The server replies with a JSON object containing the new access token, the token
+type, the expiration time, and a new refresh token, like in the authorization
+flow.
+
+#### Server metadata discovery
+
+{{% http-api spec="client-server" api="oauth_server_metadata" %}}
+
+#### Client registration
+
+Before being able to use the authorization flow to obtain an access token, a
+client needs to obtain a `client_id` by registering itself with the server.
+
+This should be done via OAuth 2.0 Dynamic Client Registration as defined in
+[RFC 7591](https://datatracker.ietf.org/doc/html/rfc7591).
+
+##### Client metadata
+
+In OAuth 2.0, clients register a set of metadata values with the authorization
+server, which associates it with a newly generated `client_id`. These values are
+used to describe the client to the user and define how the client interacts with
+the server.
+
+{{% definition path="schemas/oauth2-client-metadata" %}}
+
+###### Metadata localization
+
+As per [RFC 7591 section 2.2](https://tools.ietf.org/html/rfc7591#section-2.2),
+all the human-readable metadata values MAY be localized.
+
+The human-readable values include:
+- `client_name`
+- `logo_uri`
+- `tos_uri`
+- `policy-uri`
+
+For example:
+
+```json
+{
+  "client_name": "Digital mailbox",
+  "client_name#en-US": "Digital mailbox",
+  "client_name#en-GB": "Digital postbox",
+  "client_name#fr": "Boîte aux lettres numérique",
+  "tos_uri": "https://example.com/tos.html",
+  "tos_uri#fr": "https://example.com/fr/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "policy_uri#fr": "https://example.com/fr/policy.html"
+}
+```
+
+###### Redirect URI validation
+
+The redirect URI plays a critical role in validating the authenticity of the
+client. The client "proves" its identity by demonstrating that it controls the
+redirect URI. This is why it is critical to have strict validation of the
+redirect URI.
+
+The `application_type` metadata is used to determine the type of client.
+
+In all cases, the redirect URI MUST NOT have a fragment component.
+
+**Web clients**
+
+`web` clients can use redirect URIs that:
+
+- MUST use the `https` scheme.
+- MUST NOT use a user or password in the authority component of the URI.
+- MUST use the client URI as a common base for the authority component, as
+  defined previously.
+- MAY include an `application/x-www-form-urlencoded` formatted query component.
+
+For example, with `https://example.com/` as the client URI, the following are
+valid redirect URIs:
+- `https://example.com/callback`
+- `https://app.example.com/callback`
+- `https://example.com:5173/?query=value`
+
+With the same client URI, the following are invalid redirect URIs:
+- `https://example.com/callback#fragment`
+- `http://example.com/callback`
+- `http://localhost/`
+
+**Native clients**
+
+`native` clients can use three types of redirect URIs:
+
+1. **Private-Use URI Scheme**
+    - The scheme MUST be prefixed with the client URI hostname in reverse-DNS
+      notation. For example, if the client URI is `https://example.com/`, then a
+      valid custom URI scheme would be `com.example.app:/`.
+    - There MUST NOT be an authority component. This means that the URI MUST have
+      either a single slash or none immediately following the scheme, with no
+      hostname, username, or port.
+2. **`http` URI on the loopback interface**
+    - The scheme MUST be `http`.
+    - The host part MUST be `localhost`, `127.0.0.1`, or `[::1]`.
+    - There MUST NOT be a port. The homeserver MUST then accept any port number
+      during the authorization flow.
+3. **Claimed `https` Scheme URI**
+
+    Some operating systems allow apps to claim `https` scheme URIs in the
+    domains they control. When the browser encounters a claimed URI, instead of
+    the page being loaded in the browser, the native app is launched with the
+    URI supplied as a launch parameter. The same rules as for `web` clients
+    apply.
+
+These restrictions are the same as defined by [RFC 8252 section 7](https://tools.ietf.org/html/rfc8252#section-7).
+
+For example, with `https://example.com/` as the client URI,
+
+These are valid redirect URIs:
+- `com.example.app:/callback`
+- `com.example:/`
+- `com.example:callback`
+- `http://localhost/callback`
+- `http://127.0.0.1/callback`
+- `http://[::1]/callback`
+
+These are invalid redirect URIs:
+- `example:/callback`
+- `com.example.app://callback`
+- `https://localhost/callback`
+- `http://localhost:1234/callback`
+
+##### Dynamic client registration flow
+
+To register, the client sends an HTTP `POST` request to the
+`registration_endpoint`, which can be found in the [server metadata](#server-metadata-discovery).
+The body of the request is the JSON-encoded [`OAuthClientMetadata`](#client-metadata).
+
+For example, the client could send the following registration request:
+
+```http
+POST /register HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Server: auth.example.com
+```
+
+```json
+{
+  "client_name": "My App",
+  "client_name#fr": "Mon application",
+  "client_uri": "https://example.com/",
+  "logo_uri": "https://example.com/logo.png",
+  "tos_uri": "https://example.com/tos.html",
+  "tos_uri#fr": "https://example.com/fr/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "policy_uri#fr": "https://example.com/fr/policy.html",
+  "redirect_uris": ["https://app.example.com/callback"],
+  "token_endpoint_auth_method": "none",
+  "response_types": ["code"],
+  "grant_types": [
+    "authorization_code",
+    "refresh_token",
+    "urn:ietf:params:oauth:grant-type:token-exchange"
+  ],
+  "application_type": "web"
+}
+```
+
+Upon successful registration, the server replies with an `HTTP 201 Created`
+response, with a JSON object containing the allocated `client_id` and all the
+registered metadata values.
+
+With the registration request above, the server might reply with:
+
+```json
+{
+  "client_id": "s6BhdRkqt3",
+  "client_name": "My App",
+  "client_uri": "https://example.com/",
+  "logo_uri": "https://example.com/logo.png",
+  "tos_uri": "https://example.com/tos.html",
+  "policy_uri": "https://example.com/policy.html",
+  "redirect_uris": ["https://app.example.com/callback"],
+  "token_endpoint_auth_method": "none",
+  "response_types": ["code"],
+  "grant_types": ["authorization_code", "refresh_token"],
+  "application_type": "web"
+}
+```
+
+In this example, the server has not registered the locale-specific values for
+`client_name`, `tos_uri`, and `policy_uri`, which is why they are not present in
+the response. The server also does not support the
+`urn:ietf:params:oauth:grant-type:token-exchange` grant type, which is why it is
+not present in the response.
+
+The client MUST store the `client_id` for future use.
+
+To avoid the number of client registrations growing over time, the server MAY
+choose to delete client registrations that don't have an active session. The
+server MUST NOT delete client registrations that have an active session.
+
+Clients MUST perform a new client registration at the start of each
+authorization flow.
+
+{{% boxes/note %}}
+Because each client on each user device will do its own registration, they may
+all have different `client_id`s. This means that the server may store the same
+client registration multiple times, which could lead to a large number of client
+registrations.
+
+This can be mitigated by de-duplicating client registrations that have identical
+metadata. By doing so, different users on different devices using the same
+client can share a single `client_id`, reducing the overall number of
+registrations.
+{{% /boxes/note %}}
+
+#### Scope
+
+The client requests a scope in the OAuth 2.0 authorization flow, which is then
+associated to the generated access and refresh tokens. This provides a framework
+for obtaining user consent.
+
+A scope is defined in [RFC 6749 section 3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3)
+as a string containing a list of space-separated scope tokens.
+
+{{% boxes/note %}}
+The framework encourages the practice of obtaining additional user consent when
+a client asks for a new scope that was not granted previously. This could be
+used by future MSCs to replace the legacy [User-Interactive Authentication API](#user-interactive-authentication-api).
+{{% /boxes/note %}}
+
+##### Scope token format
+
+All scope tokens related to Matrix should start with `urn:matrix:` and use the
+`:` delimiter for further sub-division.
+
+Scope tokens related to mapping of Client-Server API access levels should start
+with `urn:matrix:client:`.
+
+{{% boxes/note %}}
+For MSCs that build on this namespace, unstable subdivisions should be used
+whilst in development. For example, if MSCXXXX wants to introduce the
+`urn:matrix:client:foo` scope, it could use
+`urn:matrix:client:com.example.mscXXXX.foo` during development.
+If it needs to introduce multiple scopes, like `urn:matrix:client:foo` and
+`urn:matrix:client:bar`, it could use
+`urn:matrix:client:com.example.mscXXXX:foo` and
+`urn:matrix:client:com.example.mscXXXX:bar`.
+{{% /boxes/note %}}
+
+##### Allocated scope tokens
+
+This specification defines the following scope tokens:
+- [`urn:matrix:client:api:*`](#full-client-server-api-readwrite-access)
+- [`urn:matrix:client:device:<device_id>`](#device-id-allocation)
+
+###### Full client-server API read/write access
+
+| Scope                     | Purpose                                     |
+|---------------------------|---------------------------------------------|
+| `urn:matrix:client:api:*` | Grants full access to the Client-Server API. |
+
+{{% boxes/note %}}
+This token matches the behavior of the legacy authentication API. Future MSCs
+could introduce more fine-grained scope tokens like
+`urn:matrix:client:api:read:*` for read-only access.
+{{% /boxes/note %}}
+
+###### Device ID allocation
+
+| Scope                                  | Purpose                                                                                      |
+|----------------------------------------|----------------------------------------------------------------------------------------------|
+| `urn:matrix:client:device:<device_id>` | Allocates the given `device_id` and associates it to the generated access and refresh tokens. |
+
+Contrary to the legacy login and registration APIs where the homeserver is
+typically the one generating a `device_id` and providing it to the client, with
+the OAuth 2.0 API, the client is responsible for allocating the `device_id`.
+
+There MUST be exactly one `urn:matrix:client:device:<device_id>` token in the
+requested scope in the login flow.
+
+When generating a new `device_id`, the client SHOULD generate a random string
+with enough entropy. It SHOULD only use characters from the unreserved character
+list defined by [RFC 3986 section 2.3](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3):
+
+```
+unreserved = a-z / A-Z / 0-9 / "-" / "." / "_" / "~"
+```
+
+Using this alphabet, a 10 character string is enough to stand a sufficient
+chance of being unique per user. The homeserver MAY reject a request for a
+`device_id` that is not long enough or contains characters outside the
+unreserved list.
+
+In any case it MUST only use characters allowed by the OAuth 2.0 scope
+definition in [RFC 6749 section 3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3),
+which is defined as the following ASCII ranges:
+
+```
+%x21 / %x23-5B / %x5D-7E
+```
+
+This definition matches:
+- alphanumeric characters: `A-Z`, `a-z`, `0-9`
+- the following characters: ``! # $ % & ' ( ) * + , - . / : ; < = > ? @ [ ] ^ _ ` { | } ~``
+
+#### Grant types
+
+[RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749) and other RFCs define
+several "grant types": ways to obtain an ["access token"](#using-access-tokens).
+
+All these grants types require the client to know the following [authorization
+server metadata](#server-metadata-discovery):
+- `token_endpoint`
+- `grant_types_supported`
+
+The client must also have obtained a `client_id` by [registering with the server](#client-registration).
+
+This specification supports the following grant types:
+- [Authorization code grant](#authorization-code-grant)
+- [Refresh token grant](#refresh-token-grant)
+
+##### Authorization code grant
+
+As per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),
+the authorization code grant lets the client obtain an access token through a
+browser redirect.
+
+This grant requires the client to know the following [authorization server
+metadata](#server-metadata-discovery):
+- `authorization_endpoint`
+- `response_types_supported`
+- `response_mode_supported`
+
+To use this grant, homeservers and clients MUST:
+
+- Support the authorization code grant as per [RFC 6749 section 4.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1).
+- Support the [refresh token grant](#refresh-token-grant).
+- Support PKCE using the `S256` code challenge method as per [RFC 7636](https://datatracker.ietf.org/doc/html/rfc7636).
+- Use [pre-registered](#client-registration), strict redirect URIs.
+- Use the `fragment` response mode as per [OAuth 2.0 Multiple Response Type
+  Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
+  for clients with an HTTPS redirect URI.
+
+###### User registration
+
+Clients can signal to the server that the user desires to register a new account
+by initiating the authorization code grant with the `prompt=create` parameter
+set in the authorization request as defined in [Initiating User Registration via
+OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+
+Whether the homeserver supports this parameter is advertised by the
+`prompt_values_supported` authorization server metadata.
+
+Servers that support this parameter SHOULD show the account registration UI in
+the browser.
+
+##### Refresh token grant
+
+As per [RFC 6749 section 6](https://datatracker.ietf.org/doc/html/rfc6749#section-6),
+the refresh token grant lets the client exchange a refresh token for an access
+token.
+
+When authorization is granted to a client, the homeserver MUST issue a refresh
+token to the client in addition to the access token.
+
+The access token MUST be short-lived and SHOULD be refreshed using the
+`refresh_token` when expired.
+
+The homeserver SHOULD issue a new refresh token each time an old one is used,
+and invalidate the old one. However, it MUST ensure that the client is able to
+retry the refresh request in the case that the response to the request is lost.
+
+The homeserver SHOULD consider that the session is compromised if an old,
+invalidated refresh token is used, and SHOULD revoke the session.
+
+The client MUST handle access token refresh failures as follows:
+
+ - If the refresh fails due to network issues or a `5xx` HTTP status code from
+   the server, the client should retry the request with the old refresh token
+   later.
+ - If the refresh fails due to a `4xx` HTTP status code from the server, the
+   client should consider the session logged out.
+
 #### Token revocation
 
 When a user wants to log out from a client, the client SHOULD use OAuth 2.0
@@ -2969,6 +3512,10 @@ that are not `world_readable` regardless of their visibility.
 {{% /boxes/warning %}}
 
 {{% http-api spec="client-server" api="list_public_rooms" %}}
+
+### Room Summaries
+
+{{% http-api spec="client-server" api="room_summary" %}}
 
 ## User Data
 
