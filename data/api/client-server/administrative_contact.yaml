@@ -201,6 +201,11 @@ paths:
 
         Homeservers should prevent the caller from adding a 3PID to their account if it has
         already been added to another user's account on the homeserver.
+
+        {{% boxes/warning %}}
+        Since this endpoint uses UIA, it cannot be used when the access token was obtained
+        via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        {{% /boxes/warning %}}
       operationId: add3PID
       security:
         - accessTokenQuery: []
