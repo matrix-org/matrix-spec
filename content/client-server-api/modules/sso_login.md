@@ -6,9 +6,10 @@ allow users to log into applications via a single web-based
 authentication portal. Examples include OpenID Connect, "Central
 Authentication Service" (CAS) and SAML.
 
-This module allows a Matrix homeserver to delegate user authentication
-to an external authentication server supporting one of these protocols.
-In this process, there are three systems involved:
+This module allows a Matrix homeserver that supports the [legacy authentication
+API](#legacy-api) to delegate user authentication to an external authentication
+server supporting one of these protocols. In this process, there are three
+systems involved:
 
 -   A Matrix client, using the APIs defined in this specification, which
     is seeking to authenticate a user to a Matrix homeserver.
@@ -24,7 +25,7 @@ used to communicate with the authentication server. Different Matrix
 homeserver implementations might support different SSO protocols.
 
 Clients and homeservers implementing the SSO flow will need to consider
-both [login](#login) and [user-interactive authentication](#user-interactive-authentication-api). The flow is
+both [login](#legacy-login) and [user-interactive authentication](#user-interactive-authentication-api). The flow is
 similar in both cases, but there are slight differences.
 
 Typically, SSO systems require a single "callback" URI to be configured

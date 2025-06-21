@@ -14,8 +14,8 @@
 accessTokenQuery:
   type: apiKey
   description: |-
-    **Deprecated.** The `access_token` returned by a call to `/login` or `/register`, as a query
-    parameter.
+    **Deprecated.** The `access_token` obtained during [account registration](/client-server-api/#account-registration)
+    or [login](/client-server-api/#login), as a query parameter.
 
     It can also be the `as_token` of an application service.
   name: access_token
@@ -23,11 +23,11 @@ accessTokenQuery:
 accessTokenBearer:
   type: http
   description: |-
-    The `access_token` returned by a call to `/login` or `/register`, using the
-    `Authorization: Bearer` header.
+    The `access_token` obtained during [account registration](/client-server-api/#account-registration)
+    or [login](/client-server-api/#login), using the `Authorization: Bearer` header.
 
     It can also be the `as_token` of an application service.
-    
+
     This is the preferred method.
   scheme: bearer
 appserviceAccessTokenQuery:
@@ -42,6 +42,6 @@ appserviceAccessTokenBearer:
   description: |-
     The `as_token` of an application service, using the `Authorization: Bearer`
     header.
-    
+
     This is the preferred method.
   scheme: bearer
