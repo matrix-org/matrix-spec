@@ -12,6 +12,12 @@ clients which maintain a full local persistent copy of server state.
 
 ## API Standards
 
+{{% boxes/note %}}
+These standards only apply to the APIs defined in the Matrix specification. APIs
+used by this specification but defined in other specifications, like the [OAuth
+2.0 API](#oauth-20-api), use their own rules.
+{{% /boxes/note %}}
+
 The mandatory baseline for client-server communication in Matrix is
 exchanging JSON objects over HTTP APIs. More efficient transports may be
 specified in future as optional extensions.
