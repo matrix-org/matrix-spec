@@ -1,0 +1,1 @@
+Clarify that `format` is required if `formatted_body` is specifed.
