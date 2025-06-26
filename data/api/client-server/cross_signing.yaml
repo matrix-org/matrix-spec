@@ -26,7 +26,7 @@ paths:
         Publishes cross-signing keys for the user.
 
         This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
-        
+
         User-Interactive Authentication MUST be performed, except in these cases:
         - there is no existing cross-signing master key uploaded to the homeserver, OR
         - there is an existing cross-signing master key and it exactly matches the
@@ -34,11 +34,16 @@ paths:
           keys provided in the request (self-signing key, user-signing key) they MUST also
           match the existing keys stored on the server. In other words, the request contains
           no new keys.
-        
+
         This allows clients to freely upload one set of keys, but not modify/overwrite keys if
-        they already exist. Allowing clients to upload the same set of keys more than once 
+        they already exist. Allowing clients to upload the same set of keys more than once
         makes this endpoint idempotent in the case where the response is lost over the network,
         which would otherwise cause a UIA challenge upon retry.
+
+        {{% boxes/warning %}}
+        When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
+        via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        {{% /boxes/warning %}}
       operationId: uploadCrossSigningKeys
       security:
         - accessTokenQuery: []
