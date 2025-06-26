@@ -1,1 +1,0 @@
-Rooms published in `/publicRooms` don't necessarily have `public` join rules or `world_readable` history visibility.

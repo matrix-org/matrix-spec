@@ -1,1 +1,0 @@
-Clarify that auth event of `content.join_authorised_via_users_server` is only necessary for `m.room.member` with a `membership` of `join`.

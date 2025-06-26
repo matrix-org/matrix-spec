@@ -1,1 +1,0 @@
-Add `GET /_matrix/client/v1/room_summary/{roomIdOrAlias}`, as per [MSC3266](https://github.com/matrix-org/matrix-spec-proposals/pull/3266).
