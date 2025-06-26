@@ -61,13 +61,13 @@ copyright = "The Matrix.org Foundation CIC"
 [params.version]
 # must be one of "unstable", "current", "historical"
 # this is used to decide whether to show a banner pointing to the current release
-status = "stable"
+status = "unstable"
 # A URL pointing to the latest, stable release of the spec. To be shown in the unstable version warning banner.
 current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec.
-major = "1"
-minor = "15"
+# major = "1"
+# minor = "15"
 
 # User interface configuration
 [params.ui]
