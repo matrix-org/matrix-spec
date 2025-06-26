@@ -139,7 +139,7 @@ paths:
         Deletes the given device, and invalidates any access token associated with it.
 
         {{% boxes/warning %}}
-        Since this endpoint uses UIA, it cannot be used when the access token was obtained
+        Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
       operationId: deleteDevice
@@ -196,7 +196,7 @@ paths:
         Deletes the given devices, and invalidates any access token associated with them.
 
         {{% boxes/warning %}}
-        Since this endpoint uses UIA, it cannot be used when the access token was obtained
+        Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
       operationId: deleteDevices

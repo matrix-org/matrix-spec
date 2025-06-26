@@ -41,7 +41,7 @@ paths:
         which would otherwise cause a UIA challenge upon retry.
 
         {{% boxes/warning %}}
-        When this endpoint requires UIA, it cannot be used when the access token was obtained
+        When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
       operationId: uploadCrossSigningKeys
