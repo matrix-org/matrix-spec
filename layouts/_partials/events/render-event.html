@@ -24,7 +24,7 @@
 
   <h1 id="{{ $anchor }}">
    {{ with .title }}{{ . | markdownify }}{{ else }}<code>{{ $event_name }}</code>{{ end }}
-   {{ template "_default/_markup/td-heading-self-link.html" $anchor }}
+   {{ partial "td/heading-self-link.html" (dict "Anchor" $anchor) }}
   </h1>
 
 </summary>
