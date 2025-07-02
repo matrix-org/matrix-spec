@@ -364,7 +364,7 @@ property under `m.new_content`.
 
 A particular constraint applies to events which replace a [reply](#rich-replies):
 in contrast to the original reply, there should be no `m.in_reply_to` property
-in the the `m.relates_to` object, since it would be redundant (see
+in the `m.relates_to` object, since it would be redundant (see
 [Applying `m.new_content`](#applying-mnew_content) above, which notes that the
 original event's `m.relates_to` is preserved), as well as being contrary to the
 spirit of the event relationships mechanism which expects only one "parent" per
