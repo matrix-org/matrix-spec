@@ -516,6 +516,9 @@ There are a few expectations attached to placeholder MSCs:
 * They propose solutions which are reasonably likely to be accepted. If a placeholder
   needs to be closed because the idea won't work, isn't needed, etc, then the MSC's
   content MUST be published ahead of that closure.
+  * Note: the MSC's publication (and therefore closure) may be delayed until an
+    appropriate point in the security disclosure cycle. For example, an alternative
+    MSC being published, or a stream of work being completed.
 * When they are updated to receive real content, the following happens:
   1. The Spec Core Team or the author leaves a comment to cause a notification
      that the MSC has been replaced with real content.
