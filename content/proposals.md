@@ -503,8 +503,9 @@ and may require an MSC number to make that implementation easier.
 Placeholder MSCs are used to represent proposals in a state where implementation
 is ongoing, but the MSC details can't yet be disclosed. Authors which feel as
 though their MSC could be highly sensitive MUST get in contact with the Spec Core
-Team or Security Team prior to opening their MSC. If either team determines that
-a placeholder MSC is required, it may be opened as such.
+Team or [Security Team](https://matrix.org/security-disclosure-policy/) prior to
+opening their MSC. If either team determines that a placeholder MSC is required,
+it may be opened as such.
 
 There are a few expectations attached to placeholder MSCs:
 
