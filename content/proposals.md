@@ -497,6 +497,42 @@ In summary:
     a small table at the bottom mapping the various values from stable
     to unstable.
 
+### Placeholder MSCs
+
+Some proposals may contain security-sensitive or private context which can't be
+publicly disclosed until a later stage in the idea or solution process. Typically,
+the initial idea is validated using some amount of implementation or experimentation
+and may require an MSC number to make that implementation easier.
+
+Placeholder MSCs are used to represent proposals in a state where implementation
+is ongoing, but the MSC details can't yet be disclosed. Authors which feel as
+though their MSC could be highly sensitive MUST get in contact with the Spec Core
+Team or [Security Team](https://matrix.org/security-disclosure-policy/) prior to
+opening their MSC. If either team determines that a placeholder MSC is required,
+it may be opened as such.
+
+There are a few expectations attached to placeholder MSCs:
+
+* They have a title which marks them WIP, and are in the "draft" state.
+* They have the following labels: `[proposal-placeholder, action-required, needs-implementation]`.
+  * Notably, *not* `proposal`.
+* They are relatively short-lived (ideally less than 6-12 months in placeholder).
+* They propose solutions which are reasonably likely to be accepted. If a placeholder
+  needs to be closed because the idea won't work, isn't needed, etc, then the MSC's
+  content MUST be published ahead of that closure.
+  * Note: the MSC's publication (and therefore closure) may be delayed until an
+    appropriate point in the security disclosure cycle. For example, an alternative
+    MSC being published, or a stream of work being completed.
+* When they are updated to receive real content, the following happens:
+  1. The Spec Core Team or the author leaves a comment to cause a notification
+     that the MSC has been replaced with real content.
+  2. The `proposal` label (or its equivalent) is added to trigger chat notifications
+     in the public Matrix rooms. The `proposal-placeholder` and `action-required`
+     labels should be removed at this stage as well. Other labels are removed/applied
+     per normal process.
+* The Spec Core Team is aware of the intended MSC's title and purpose. This is
+  especially important if the Security Team approved the use of a placeholder MSC.
+
 ## Proposal Tracking
 
 This is a living document generated from the list of proposals on the
