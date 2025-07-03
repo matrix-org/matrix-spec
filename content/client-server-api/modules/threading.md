@@ -185,7 +185,7 @@ included under the `m.relations` property in `unsigned` for the thread root. For
 ```
 
 `latest_event` is the most recent event (topologically to the server) in the thread sent by an
-un-[ignored user](#ignoring-users).
+un-[ignored user](#ignoring-users). It should be serialized in the same form as the event itself.
 
 Note that, as in the example above, child events of the `latest_event` should
 themselves be aggregated and included under `m.relations` for that event. The
