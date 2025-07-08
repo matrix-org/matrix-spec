@@ -159,7 +159,7 @@ jobs:
               --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
               --api identity \
               -r "$RELEASE" \
-              -o spec/identity-api/api.json
+              -o spec/identity-service-api/api.json
           tar -czf openapi.tar.gz spec
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v4
