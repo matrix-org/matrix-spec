@@ -126,7 +126,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
+                oneOf:
+                  - type: object
+                  - $ref: "../../event-schemas/core-event-schema/state_event.yaml
               examples:
                 response:
                   value: {
