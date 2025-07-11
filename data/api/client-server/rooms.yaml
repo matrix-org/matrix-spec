@@ -105,9 +105,24 @@ paths:
           example: ""
           schema:
             type: string
+        - in: query
+          name: format
+          description: |-
+            The format to use for the returned data. `content` (the default) will
+            return only the content of the state event. `event` will return the entire
+            event in the usual format suitable for clients, including fields like event
+            ID, sender and timestamp.
+          example: event
+          schema:
+            type: string
+            enum:
+            - content
+            - event
       responses:
         "200":
-          description: The content of the state event.
+          description: |-
+            The content of the state event, or the entire client-formatted event
+            if `?format=event` was used.
           content:
             application/json:
               schema:
