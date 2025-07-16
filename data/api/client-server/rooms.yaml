@@ -107,6 +107,7 @@ paths:
             type: string
         - in: query
           name: format
+          x-addedInMatrixVersion: "1.16"
           description: |-
             The format to use for the returned data. `content` (the default) will
             return only the content of the state event. `event` will return the entire
