@@ -1124,7 +1124,7 @@ The process between Alice and Bob verifying each other would be:
    framework as described above.
 3. Alice's client displays a QR code that Bob is able to scan if Bob's client
    indicated the ability to scan, an option to scan Bob's QR code if her client
-   is able to scan.  Bob's client prompts displays a QR code that Alice can
+   is able to scan. Bob's client displays a QR code that Alice can
    scan if Alice's client indicated the ability to scan, and an option to scan
    Alice's QR code if his client is able to scan. The format for the QR code
    is described below. Other options, like starting SAS Emoji verification,
