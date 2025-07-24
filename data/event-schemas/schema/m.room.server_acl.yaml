@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 title: Server ACL
 description: |-
   An event to indicate which servers are permitted to participate in the

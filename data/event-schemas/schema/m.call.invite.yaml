@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "description": "This event is sent by the caller when they wish to establish a call.",
     "x-weight": 10,

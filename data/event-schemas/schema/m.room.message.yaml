@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/room_event.yaml
 description: 'This event is used when sending messages in a room. Messages are not limited to be text. The `msgtype` key outlines the type of message, e.g. text, audio, image, video, etc. The `body` key is text and MUST be used with every kind of `msgtype` as a fallback mechanism for when a client cannot render a message. This allows clients to display *something* even if it is just plain text.'

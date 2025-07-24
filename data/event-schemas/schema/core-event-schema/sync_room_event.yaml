@@ -17,6 +17,8 @@
 # be on events, so we give it a whole event structure as a base for room_event.
 # This base doesn't declare a room_id, which instead appears in the room_event.
 
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
 - $ref: event.yaml
 description: In addition to the Event fields, Room Events have the following additional

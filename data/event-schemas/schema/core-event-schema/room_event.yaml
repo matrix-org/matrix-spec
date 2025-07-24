@@ -1,3 +1,5 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
 - $ref: sync_room_event.yaml
 description: Room Events have the following fields.

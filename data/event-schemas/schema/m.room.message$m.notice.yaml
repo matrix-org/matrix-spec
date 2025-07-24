@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/room_event.yaml
 description: 'The `m.notice` type is primarily intended for responses from automated clients. An `m.notice` message must be treated the same way as a regular `m.text` message with two exceptions. Firstly, clients should present `m.notice` messages to users in a distinct manner, and secondly, `m.notice` messages must never be automatically responded to. This helps to prevent infinite-loop situations where two automated clients continuously exchange messages.'

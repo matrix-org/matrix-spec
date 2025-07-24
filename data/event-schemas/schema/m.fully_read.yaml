@@ -1,4 +1,5 @@
 {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "title": "Read Marker Location Event",
     "description": "The current location of the user's read marker in a room. This event appears in the user's room account data for the room the marker is applicable for.",
