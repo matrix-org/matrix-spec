@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: 'This event controls whether guest users are allowed to join rooms. If this event is absent, servers should act as if it is present and has the guest_access value "forbidden".'

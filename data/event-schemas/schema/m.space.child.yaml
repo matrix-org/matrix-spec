@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: Defines the relationship of a child room to a space-room. Has no effect in rooms which are not [spaces](/client-server-api/#spaces).
