@@ -37,7 +37,8 @@ allOf:
                   A unique identifier for this instance on the homeserver. This field is added
                   to the response of [`GET /_matrix/app/v1/thirdparty/protocol/{protocol}`](/application-service-api/#get_matrixappv1thirdpartyprotocolprotocol)
                   by the homeserver.
-                  
+
                   This is the identifier to use as the `third_party_instance_id` in a request to
                   [`POST /_matrix/client/v3/publicRooms`](/client-server-api/#post_matrixclientv3publicrooms).
                 example: "irc-freenode"
+  required: ['instances']

@@ -89,11 +89,6 @@ paths:
                           - leave
                           - ban
                         type: string
-                required:
-                  - guest_can_join
-                  - num_joined_members
-                  - room_id
-                  - world_readable
               examples:
                 response:
                   value: {
