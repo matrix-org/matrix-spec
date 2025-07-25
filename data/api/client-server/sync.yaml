@@ -310,8 +310,14 @@ paths:
                                     description: |-
                                       The [stripped state events](/client-server-api/#stripped-state) that form the
                                       invite state.
+
+                                      MUST also include the `m.room.member` event of the user with a membership of
+                                      `invite`, and using the same event format as joined rooms with the `event_id`
+                                      and `origin_server_ts` fields.
                                     items:
-                                      $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                      anyOf:
+                                        - $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                        - $ref: definitions/client_event_without_room_id.yaml
                                     type: array
                       knock:
                         title: Knocked rooms
@@ -335,8 +341,14 @@ paths:
                                     description: |-
                                       The [stripped state events](/client-server-api/#stripped-state) that form the
                                       knock state.
+
+                                      MUST also include the `m.room.member` event of the user with a membership of
+                                      `knock`, and using the same event format as joined rooms with the `event_id` and
+                                      `origin_server_ts` fields.
                                     items:
-                                      $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                      anyOf:
+                                        - $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                                        - $ref: definitions/client_event_without_room_id.yaml
                                     type: array
                       leave:
                         title: Left rooms
@@ -548,6 +560,8 @@ paths:
                                 "sender": "@alice:example.com",
                                 "type": "m.room.member",
                                 "state_key": "@bob:example.com",
+                                "event_id": "$19dl9d3848dJLle:example.com",
+                                "origin_server_ts": 1432735439654,
                                 "content": {
                                   "membership": "invite"
                                 }
@@ -572,6 +586,8 @@ paths:
                                 "sender": "@bob:example.com",
                                 "type": "m.room.member",
                                 "state_key": "@bob:example.com",
+                                "event_id": "$Fg83Kl3764di23a:example.com",
+                                "origin_server_ts": 143273039402,
                                 "content": {
                                   "membership": "knock"
                                 }
