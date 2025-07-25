@@ -2506,7 +2506,7 @@ and the client is not permitted to make any changes.
 
 When `enabled` is `true`, clients are permitted to modify profile fields,
 subject to the restrictions implied by the OPTIONAL lists `allowed` and
-`disallowed`. 
+`disallowed`.
 
 If `allowed` is present, clients can modify only the fields
 listed. They SHOULD assume all other fields to be managed by
@@ -2546,7 +2546,7 @@ This capability is now deprecated. Clients SHOULD use the
 [`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
 capability instead.
 
-For backwards compatibility, servers that forbid setting the 
+For backwards compatibility, servers that forbid setting the
 `displayname` profile field in the `m.profile_fields` capability
 MUST still present this capability with `"enabled": false`.
 {{% /boxes/note %}}
@@ -2581,7 +2581,7 @@ This capability is now deprecated. Clients SHOULD use the
 [`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
 capability instead.
 
-For backwards compatibility, servers that forbid setting the 
+For backwards compatibility, servers that forbid setting the
 `avatar_url` profile field in the `m.profile_fields` capability
 MUST still present this capability with `"enabled": false`.
 {{% /boxes/note %}}
@@ -3414,27 +3414,49 @@ request.
 
 ### Permissions
 
-{{% boxes/note %}}
-This section is a work in progress.
-{{% /boxes/note %}}
+{{% changed-in v="1.16" %}} Updated section to discuss creator power level
+in room version 12 and beyond.
 
 Permissions for rooms are done via the concept of power levels - to do
 any action in a room a user must have a suitable power level. Power
 levels are stored as state events in a given room. The power levels
-required for operations and the power levels for users are defined in
-`m.room.power_levels`, where both a default and specific users' power
-levels can be set. By default all users have a power level of 0, other
-than the room creator whose power level defaults to 100. Users can grant
-other users increased power levels up to their own power level. For
-example, user A with a power level of 50 could increase the power level
-of user B to a maximum of level 50. Power levels for users are tracked
-per-room even if the user is not present in the room. The keys contained
-in `m.room.power_levels` determine the levels required for certain
-operations such as kicking, banning and sending state events. See
-[m.room.power\_levels](#room-events) for more information.
+required for operations and the power levels assigned to specific users
+are defined in the `m.room.power_levels` state event. The `m.room.power_levels`
+state event additionally defines some defaults, though room creators
+are special in that:
 
-Clients may wish to assign names to particular power levels. A suggested
-mapping is as follows: - 0 User - 50 Moderator - 100 Admin
+* In [room versions](/rooms) 1 through 11, room creators by default
+  have power level 100 but still can have that level changed by power level
+  events, by the same rules as other members.
+* In [room version 12](/rooms/v12) (and beyond), room creators are
+  *not* specified in the power levels event and have an infinitely high
+  power level that is immutable. After room creation, users
+  cannot be given this same infinitely high power level.
+
+Users can grant other users increased power levels up to their own
+power level (or the maximum allowable integer for the room when their
+power level is infinitely high). For example, user A with a power level
+of 50 could increase the power level of user B to a maximum of level 50.
+Power levels for users are tracked per-room even if the user is not
+present in the room. The keys contained in `m.room.power_levels` determine
+the levels required for certain operations such as kicking, banning, and
+sending state events. See [`m.room.power_levels`](#mroompower_levels) for more
+information.
+
+Clients may wish to assign names to particular power levels. Most rooms
+will use the default power level hierarchy assigned during room creation,
+but rooms may still deviate slightly.
+
+A suggested mapping is as follows:
+
+* 0 to `state_default-1` (typically 49): User
+* `state_default` to the level required to send `m.room.power_levels` events
+  minus 1 (typically 99): Moderator
+* The level required send `m.room.power_levels` events and above: Administrator
+* Creators of the room, in room version 12 and beyond: Creator
+
+Clients may also wish to distinguish "above admin" power levels based on the
+level required to send `m.room.tombstone` events.
 
 ### Room membership
 

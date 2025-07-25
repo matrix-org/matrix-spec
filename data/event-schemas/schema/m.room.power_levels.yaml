@@ -44,7 +44,15 @@ properties:
       events:
         additionalProperties:
           type: integer
-        description: The level required to send specific event types. This is a mapping from event type to power level required.
+        description: |-
+          The level required to send specific event types. This is a mapping from event type to power level required.
+
+          Though not a default, when the server sends the initial power levels event during [room creation](/client-server-api#creation)
+          in [room versions](/rooms) 12 and higher, the `m.room.tombstone` event MUST be explicitly defined and given
+          a power level higher than `state_default`. For example, power level 150. Clients may override this using the
+          described `power_level_content_override` field.
+        x-changedInMatrixVersion:
+          "1.16": Described `m.room.tombstone` defaults during creation of a room version 12 or higher room.
         title: Event power levels
         type: object
       events_default:
@@ -71,16 +79,28 @@ properties:
           "^@":
             x-pattern-format: mx-user-id
             type: integer
-        description: The power levels for specific users. This is a mapping from `user_id` to power level for that user.
+        description: |-
+          The power levels for specific users. This is a mapping from `user_id` to power level for that user.
+
+          **Note**: In [room versions](/rooms) 12 and higher it is not permitted to specify the room creators here.
+        x-changedInMatrixVersion:
+          "1.16": Added a note that room creators cannot be specified here in room versions 12 and higher.
         title: User power levels
         type: object
       users_default:
+        x-changedInMatrixVersion:
+          "1.16": The room creator power level now changes depending on room version.
         description: |-
             The power level for users in the room whose `user_id` is not mentioned in the `users` key. Defaults to 0 if
             unspecified.
 
-            **Note**: When there is no `m.room.power_levels` event in the room, the room creator has
-            a power level of 100, and all other users have a power level of 0.     
+            **Note**: In [room versions](/rooms) 1 through 11, when there is no `m.room.power_levels`
+            event in the room, the room creator has a power level of 100, and all other users have a
+            power level of 0.
+
+            **Note**: In room versions 12 and higher, room creators have infinite power level regardless
+            of the existence of `m.room.power_levels` in the room. When `m.room.power_levels` is not
+            in the room however, all other users have a power level of 0.
         type: integer
       notifications:
         properties:

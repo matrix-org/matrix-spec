@@ -14,10 +14,6 @@
 type: object
 description: Common fields for all PDU versions
 properties:
-  room_id:
-    type: string
-    description: Room identifier.
-    example: "!abc123:matrix.org"
   sender:
     type: string
     description: The ID of the user sending the event.
@@ -69,7 +65,6 @@ properties:
         description: The number of milliseconds that have passed since this message was sent.
         example: 4612
 required:
-  - room_id
   - sender
   - origin_server_ts
   - type

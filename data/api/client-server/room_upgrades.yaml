@@ -41,6 +41,23 @@ paths:
                 new_version:
                   type: string
                   description: The new version for the room.
+                additional_creators:
+                  type: array
+                  items:
+                    type: string
+                    description: Additional user ID to consider a room creator, if the room version supports it.
+                  x-addedInMatrixVersion: "1.16"
+                  description: |-
+                    When upgrading to a [room version](/rooms) which supports additional creators,
+                    the [user IDs](/appendices#user-identifiers) which should be considered room
+                    creators in addition to the user performing the upgrade.
+
+                    If the room being upgraded has additional creators, they are *not* automatically
+                    copied to the new room. The full set of additional creators needs to be set to
+                    retain (or add/remove) more room creators.
+
+                    When upgrading to a room version which doesn't support additional creators, this
+                    field is ignored and has no effect during the upgrade process.
               example: {
                 "new_version": "2"
               }
