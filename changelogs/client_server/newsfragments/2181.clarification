@@ -1,0 +1,2 @@
+Clarify that the stripped state in `invite_state` and `knock_state` in `GET /sync` response must
+include the full `m.room.member` event of the user.
