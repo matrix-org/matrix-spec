@@ -42,9 +42,3 @@ allOf:
       room_version:
         description: The version of the room.
         type: string
-
-required:
-  - room_id
-  - num_joined_members
-  - world_readable
-  - guest_can_join

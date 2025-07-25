@@ -77,4 +77,4 @@ properties:
         "placeholder": "#foobar"
       }
     }
-required: ['user_fields', 'location_fields', 'icon', 'field_types', 'instances']
+required: ['user_fields', 'location_fields', 'icon', 'field_types']
