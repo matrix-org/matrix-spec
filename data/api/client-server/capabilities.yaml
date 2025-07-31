@@ -78,6 +78,10 @@ paths:
                         description: |
                           **Deprecated:** Capability to indicate if the user can change their display name.
                           Refer to `m.profile_fields` for extended profile management.
+                          
+                          For backwards compatibility, servers that directly or indirectly include the
+                          `displayname` profile field in the `m.profile_fields` capability MUST also
+                          set this capability accordingly.
                       m.set_avatar_url:
                         deprecated: true
                         $ref: '#/components/schemas/booleanCapability'
