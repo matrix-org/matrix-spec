@@ -80,9 +80,16 @@ paths:
                 response:
                   value: {}
         "400":
-          description: The request is malformed, contains invalid JSON, missing
-            a required parameter, specifies an invalid key, or exceeds allowed
-            size limits.
+          description: The input was invalid in some way. This can include one
+            of the following error codes:
+            
+            - `M_BAD_JSON`: The provided value is not valid JSON.
+            - `M_MISSING_PARAM`: The required `{keyName}` property is
+              missing from the request body.
+            - `M_PROFILE_TOO_LARGE`: Storing the supplied value would
+              make the profile exceed its maximum allowed size of 64 KiB.
+            - `M_KEY_TOO_LARGE`: The supplied profile key exceeds the
+              maximum allowed key length of 255 bytes.
           content:
             application/json:
               schema:
