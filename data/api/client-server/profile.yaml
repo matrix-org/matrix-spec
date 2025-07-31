@@ -156,12 +156,13 @@ paths:
               schema:
                 type: object
                 minProperties: 1
-                additionalProperties:
-                  description: The JSON response includes a property whose key
-                    matches the `keyName` specified in the URL. For `avatar_url`,
-                    the value will be an MXC URI string. For `displayname`, the
-                    value will be a string. For custom keys, any JSON type is
-                    possible - clients should expect the format defined for that key.
+                description: If a value is stored for `keyName`, the JSON response
+                  includes a property whose key matches the `keyName` specified
+                  in the URL. For `avatar_url`, the value will be an MXC URI string.
+                  For `displayname`, the value will be a string. For custom keys, any
+                  JSON type is possible - clients should expect the format defined
+                  for that key.
+                additionalProperties: true
               examples:
                 response:
                   value: { "displayname": "Alice" }
