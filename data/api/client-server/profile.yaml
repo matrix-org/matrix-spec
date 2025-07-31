@@ -155,7 +155,6 @@ paths:
             application/json:
               schema:
                 type: object
-                minProperties: 1
                 description: If a value is stored for `keyName`, the JSON response
                   includes a property whose key matches the `keyName` specified
                   in the URL. For `avatar_url`, the value will be an MXC URI string.
