@@ -61,13 +61,13 @@ paths:
             schema:
               type: object
               minProperties: 1
-              additionalProperties:
-                description: The JSON object must include a property whose key
-                  matches the `keyName` specified in the URL. For `avatar_url`,
-                  the value must be an MXC URI string. For `displayname`, the value
-                  must be a string. For custom keys, any JSON type is allowed -
-                  servers may not validate these values, but clients should follow
-                  the format defined for that key.
+              description: The JSON object must include a property whose key
+                matches the `keyName` specified in the URL. For `avatar_url`,
+                the value must be an MXC URI string. For `displayname`, the value
+                must be a string. For custom keys, any JSON type is allowed -
+                servers may not validate these values, but clients should follow
+                the format defined for that key.
+              additionalProperties: true
               example: { "displayname": "Alice Wonderland" }
       responses:
         "200":
