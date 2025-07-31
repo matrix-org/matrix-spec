@@ -101,10 +101,10 @@ paths:
                         type: object
                         title: ProfileFieldsCapability
                         description: Capability to indicate if the user can set or modify extended profile fields via
-                            [`PUT /_matrix/client/v3/profile/{userId}/{keyName}`](/client-server-api/#put_matrixclientv3profileuseridkeyname).
-                          If absent, clients should assume custom profile fields are supported, provided the
-                          response from [`/versions`](/client-server-api/#get_matrixclientversions) indicates
-                          support for a sufficiently recent spec version.
+                          [`PUT /_matrix/client/v3/profile/{userId}/{keyName}`](/client-server-api/#put_matrixclientv3profileuseridkeyname).
+                          If absent, clients SHOULD assume custom profile fields are supported, provided the
+                          homeserver advertises a specification version that includes `m.profile_fields` in the
+                          [`/versions`](/client-server-api/#get_matrixclientversions) response.
                         properties:
                           allowed:
                             type: array
