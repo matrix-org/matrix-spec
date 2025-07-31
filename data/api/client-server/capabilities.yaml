@@ -130,7 +130,7 @@ paths:
                             items:
                               type: string
                             example:
-                              - "org.example.secret_field"
+                              - "org.example.managed_field"
                           enabled:
                             type: boolean
                             description: "`true` if the user can create, update or delete any profile fields, `false` otherwise."
