@@ -115,7 +115,7 @@ paths:
                               type: string
                             example:
                               - "m.example_field"
-                              - "org.example/job_title"
+                              - "org.example.job_title"
                           disallowed:
                             type: array
                             description: If `enabled` is `true`, a list of profile fields that clients are _not_ allowed to
