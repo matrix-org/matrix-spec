@@ -125,7 +125,7 @@ paths:
                               - "org.example.secret_field"
                           enabled:
                             type: boolean
-                            description: `true` if the user can set or modify any extended profile fields, `false` otherwise.
+                            description: "`true` if the user can create, update or delete any profile fields, `false` otherwise."
                             example: true
                         required:
                           - enabled
