@@ -19,7 +19,7 @@ paths:
   "/profile/{userId}/{keyName}":
     put:
       x-changedInMatrixVersion:
-        "1.14": Endpoint now accepts variable `keyName` parameter.
+        "1.16": This endpoint now accepts a variable `keyName` parameter.
       summary: Set a profile field for a user.
       description: |-
         Set or update a profile field for a user. Must be authenticated with an
