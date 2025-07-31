@@ -97,7 +97,7 @@ paths:
                         description: Capability to indicate if the user can generate tokens to log further
                           clients into their account.
                       m.profile_fields:
-                        x-addedInMatrixVersion: "1.14"
+                        x-addedInMatrixVersion: "1.16"
                         type: object
                         title: ProfileFieldsCapability
                         description: Capability to indicate if the user can set or modify extended profile fields via
