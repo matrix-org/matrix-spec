@@ -26,9 +26,9 @@ paths:
         access token authorised to make changes. Servers MAY impose size limits
         on individual fields, and the total profile MUST be under 64 KiB.
 
-        **Note**: Setting a field to `null` keeps the key but with a `null` value,
-        which some servers may reject. To remove a field completely, use the
-        `DELETE` endpoint instead.
+        Servers MAY reject `null` values. Servers that accept `null` values SHOULD store
+        them rather than treating `null` as a deletion request. Clients that want to delete a
+        field, including its key and value, SHOULD use the `DELETE` endpoint instead.
       operationId: setProfileField
       security:
         - accessTokenQuery: []
