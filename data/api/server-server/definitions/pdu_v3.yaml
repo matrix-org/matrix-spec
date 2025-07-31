@@ -13,17 +13,24 @@
 # limitations under the License.
 type: object
 title: Persistent Data Unit
-description: A persistent data unit (event) for room version 3 and beyond.
+description: A persistent data unit (event) for room version 3.
 example:
   $ref: "../examples/pdu_v3.json"
 allOf:
-  - $ref: "unsigned_pdu_base.yaml"
+  - $ref: "components/pdu_base.yaml"
   - type: object
     properties:
       redacts:
         type: string
         description: For redaction events, the ID of the event being redacted.
         example: "$def/456+oldevent"
+      depth:
+        type: integer
+        description: |-
+          The maximum depth of the `prev_events`, plus one. Must be less than the
+          maximum value for an integer (2^63 - 1). If the room's depth is already at
+          the limit, the depth must be set to the limit.
+        example: 12
       auth_events:
         type: array
         items:
@@ -48,24 +55,6 @@ allOf:
 
           Must contain less than or equal to 20 events.
         example: ["$base64EncodedHash", "$AnotherEvent"]
-      hashes:
-        $ref: "event_hash.yaml"
-      signatures:
-        type: object
-        description: |-
-          Signatures for the PDU, following the algorithm specified in [Signing Events](/server-server-api/#signing-events).
-        example: {
-          "example.com": {
-            "ed25519:key_version:": "86BytesOfSignatureOfTheRedactedEvent"
-          }
-        }
-        additionalProperties:
-          type: object
-          title: Server Signatures
-          additionalProperties:
-            type: string
     required:
       - auth_events
       - prev_events
-      - hashes
-      - signatures

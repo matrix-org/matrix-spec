@@ -87,12 +87,9 @@ paths:
                     - public
                     - private
                   description: |-
-                    A `public` visibility indicates that the room will be shown
-                    in the published room list. A `private` visibility will hide
-                    the room from the published room list. Rooms default to
-                    `private` visibility if this key is not included. NB: This
-                    should not be confused with `join_rules` which also uses the
-                    word `public`.
+                    The room's visibility in the server's
+                    [published room directory](/client-server-api#published-room-directory).
+                    Defaults to `private`.
                 room_alias_name:
                   type: string
                   description: |-
@@ -109,15 +106,17 @@ paths:
                 name:
                   type: string
                   description: |-
-                    If this is included, an `m.room.name` event will be sent
-                    into the room to indicate the name of the room. See Room
-                    Events for more information on `m.room.name`.
+                    If this is included, an [`m.room.name`](/client-server-api/#mroomname) event
+                    will be sent into the room to indicate the name for the room.
+                    This overwrites any [`m.room.name`](/client-server-api/#mroomname)
+                    event in `initial_state`.
                 topic:
                   type: string
                   description: |-
-                    If this is included, an `m.room.topic` event will be sent
-                    into the room to indicate the topic for the room. See Room
-                    Events for more information on `m.room.topic`.
+                    If this is included, an [`m.room.topic`](/client-server-api/#mroomtopic)
+                    event with a `text/plain` mimetype will be sent into the room
+                    to indicate the topic for the room. This overwrites any
+                    [`m.room.topic`](/client-server-api/#mroomtopic) event in `initial_state`.
                 invite:
                   type: array
                   description: |-
@@ -131,32 +130,7 @@ paths:
                     A list of objects representing third-party IDs to invite into
                     the room.
                   items:
-                    type: object
-                    title: Invite3pid
-                    properties:
-                      id_server:
-                        type: string
-                        description: The hostname+port of the identity server which should be used for
-                          third-party identifier lookups.
-                      id_access_token:
-                        type: string
-                        description: |-
-                          An access token previously registered with the identity server. Servers
-                          can treat this as optional to distinguish between r0.5-compatible clients
-                          and this specification version.
-                      medium:
-                        type: string
-                        description: |-
-                          The kind of address being passed in the address field, for example `email`
-                          (see [the list of recognised values](/appendices/#3pid-types)).
-                      address:
-                        type: string
-                        description: The invitee's third-party identifier.
-                    required:
-                      - id_server
-                      - id_access_token
-                      - medium
-                      - address
+                    $ref: definitions/invite_3pid.yaml
                 room_version:
                   type: string
                   description: |-

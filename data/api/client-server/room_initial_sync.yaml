@@ -96,7 +96,7 @@ paths:
                       - public
                     description: |-
                       Whether this room is visible to the `/publicRooms` API
-                      or not."
+                      or not.
                   account_data:
                     type: array
                     description: The private data that this user has attached to this room.

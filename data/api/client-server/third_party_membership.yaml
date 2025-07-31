@@ -57,9 +57,6 @@ paths:
         - A signature of the token, signed with the identity server's private key
 
         - The matrix user ID who invited them to the room
-
-        If a token is requested from the identity server, the homeserver will
-        append a `m.room.third_party_invite` event to the room.
       operationId: inviteBy3PID
       security:
         - accessTokenQuery: []
@@ -72,41 +69,13 @@ paths:
           example: "!d41d8cd:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              example: {
-                "id_server": "matrix.org",
-                "id_access_token": "abc123_OpaqueString",
-                "medium": "email",
-                "address": "cheeky@monkey.com"
-              }
-              properties:
-                id_server:
-                  type: string
-                  description: The hostname+port of the identity server which should be used for
-                    third-party identifier lookups.
-                id_access_token:
-                  type: string
-                  description: |-
-                    An access token previously registered with the identity server. Servers
-                    can treat this as optional to distinguish between r0.5-compatible clients
-                    and this specification version.
-                medium:
-                  type: string
-                  description: |-
-                    The kind of address being passed in the address field, for example
-                    `email` (see [the list of recognised values](/appendices/#3pid-types)).
-                address:
-                  type: string
-                  description: The invitee's third-party identifier.
-              required:
-                - id_server
-                - id_access_token
-                - medium
-                - address
+              $ref: definitions/invite_3pid.yaml
         required: true
       responses:
         "200":
@@ -120,7 +89,9 @@ paths:
                   value: {}
         "403":
           description: |-
-            You do not have permission to invite the user to the room. A meaningful `errcode` and description error text will be returned. Example reasons for rejections are:
+            You do not have permission to invite the user to the room. A
+            meaningful `errcode` and description error text will be returned.
+            Example reasons for rejections are:
 
             - The invitee has been banned from the room.
             - The invitee is already a member of the room.
