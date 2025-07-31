@@ -2491,7 +2491,58 @@ using an `unstable` version.
 When this capability is not listed, clients should use `"1"` as the
 default and only stable `available` room version.
 
+### `m.profile_fields` capability
+
+This capability has a flag, `enabled`, and two lists, `allowed` and
+`disallowed`, that together denote which fields the user is able to
+change via the profile endpoints.
+
+When `enabled` is `false`, all profile fields are managed by the server
+and the client is not permitted to make any changes.
+
+When `enabled` is `true`, clients are permitted to modify profile fields,
+subject to the restrictions implied by the OPTIONAL lists `allowed` and
+`disallowed`. If only `allowed` is present, clients can modify all
+contained fields but SHOULD assume all other fields to be managed by
+the server. Contrarily, if only `disallowed` is present, clients are
+unable to modify any contained fields but SHOULD assume all other fields
+to be unmanaged. If both `allowed` and `disallowed` are specified,
+`allowed` takes precendece. This means clients can modify all fields
+in `allowed` but none of the fields in `disallowed` unless they also
+occur in `allowed`. If neither `allowed` nor `disallowed` is present,
+clients can modify all fields without restrictions.
+
+When not listed, clients SHOULD assume the user is able to change
+profile fields without any restrictions, provided the homeserver
+advertises a specification version that includes the `m.profile_fields`
+capability in the [`/versions`](/client-server-api/#get_matrixclientversions)
+response.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.profile_fields": {
+      "enabled": true,
+      "disallowed": ["displayname"]
+    }
+  }
+}
+```
+
 ### `m.set_displayname` capability
+
+{{% boxes/note %}}
+{{% changed-in v="1.16" %}}
+This capability is now deprecated. Clients SHOULD use the
+[`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
+capability instead.
+
+For backwards compatibility, servers that directly or indirectly include
+the `displayname` profile field in the `m.profile_fields` capability
+MUST still set this capability accordingly.
+{{% /boxes/note %}}
 
 This capability has a single flag, `enabled`, to denote whether the user
 is able to change their own display name via profile endpoints. Cases for
@@ -2516,6 +2567,17 @@ An example of the capability API's response for this capability is:
 ```
 
 ### `m.set_avatar_url` capability
+
+{{% boxes/note %}}
+{{% changed-in v="1.16" %}}
+This capability is now deprecated. Clients SHOULD use the
+[`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
+capability instead.
+
+For backwards compatibility, servers that directly or indirectly include
+the `avatar_url` profile field in the `m.profile_fields` capability
+MUST still set this capability accordingly.
+{{% /boxes/note %}}
 
 This capability has a single flag, `enabled`, to denote whether the user
 is able to change their own avatar via profile endpoints. Cases for
