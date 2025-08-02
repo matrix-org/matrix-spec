@@ -382,6 +382,9 @@ The following `alt_aliases` values will NOT match:
 
 **`contains_display_name`**
 
+{{% changed-in v="1.16" %}}: this rule is deprecated and **should not be used in
+new push rules**.
+
 This matches messages where `content.body` contains the owner's display name in
 that room. This is a separate condition because display names may change and as such
 it would be hard to maintain a rule that matched the user's display name. This
@@ -412,6 +415,9 @@ Parameters:
     the `notifications` object in the power level event content.
 
 #### Predefined Rules
+
+{{% changed-in v="1.16" %}}: the legacy default push rules that looked for
+mentions in the `body` of the event were removed.
 
 Homeservers can specify "server-default rules". They operate at a lower
 priority than "user-defined rules", except for the `.m.rule.master` rule
@@ -557,41 +563,6 @@ Definition:
 }
 ```
 
-<a id="_m_rule_contains_display_name"></a> **`.m.rule.contains_display_name`**
-
-{{% changed-in v="1.7" %}}
-
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message whose content contains the user's current display name
-in the room in which it was sent.
-
-Definition:
-
-```json
-{
-    "rule_id": ".m.rule.contains_display_name",
-    "default": true,
-    "enabled": true,
-    "conditions": [
-        {
-            "kind": "contains_display_name"
-        }
-    ],
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "sound",
-            "value": "default"
-        },
-        {
-            "set_tweak": "highlight"
-        }
-    ]
-}
-```
-
 <a id="_m_rule_is_room_mention"></a> **`.m.rule.is_room_mention`**
 
 {{% added-in v="1.7" %}}
@@ -611,44 +582,6 @@ Definition:
             "kind": "event_property_is",
             "key": "content.m\\.mentions.room",
             "value": true
-        },
-        {
-            "kind": "sender_notification_permission",
-            "key": "room"
-        }
-    ],
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "highlight"
-        }
-    ]
-}
-```
-
-<a id="_m_rule_roomnotif"></a> **`.m.rule.roomnotif`**
-
-{{% changed-in v="1.7" %}}
-
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message from a sender with the proper power level whose content
-contains the text `@room`, signifying the whole room should be notified of
-the event.
-
-Definition:
-
-```json
-{
-    "rule_id": ".m.rule.roomnotif",
-    "default": true,
-    "enabled": true,
-    "conditions": [
-        {
-            "kind": "event_match",
-            "key": "content.body",
-            "pattern": "@room"
         },
         {
             "kind": "sender_notification_permission",
@@ -773,39 +706,6 @@ Definition:
         }
     ],
     "actions": []
-}
-```
-
-##### Default Content Rules
-
-<a id="_m_rule_contains_user_name"></a> **`.m.rule.contains_user_name`**
-
-{{% changed-in v="1.7" %}}
-
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message whose content contains the local part of the user's
-Matrix ID, separated by word boundaries.
-
-Definition (as a `content` rule):
-
-```json
-{
-    "rule_id": ".m.rule.contains_user_name",
-    "default": true,
-    "enabled": true,
-    "pattern": "[the local part of the user's Matrix ID]",
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "sound",
-            "value": "default"
-        },
-        {
-            "set_tweak": "highlight"
-        }
-    ]
 }
 ```
 
