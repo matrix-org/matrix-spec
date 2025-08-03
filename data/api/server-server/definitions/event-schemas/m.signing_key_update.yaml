@@ -17,7 +17,7 @@ type: object
 title: m.signing_key_update
 description: |-
   An EDU that lets servers push details to each other when one of their users
-  updates their cross-signing keys.
+  updates their keys used for cross-signing.
 allOf:
   - $ref: ../edu.yaml
   - type: object
@@ -34,7 +34,7 @@ allOf:
         properties:
           user_id:
             type: string
-            description: The user ID whose cross-signing keys have changed.
+            description: The user ID whose keys have changed.
             example: "@alice:example.com"
           master_key:
             allOf:
