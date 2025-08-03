@@ -135,7 +135,8 @@ paths:
 
             Even if this is set to `true`, clients MUST update their local state
             with events in `state` and `timeline` if `state_after` is missing in
-            the response, for servers that don't support this parameter.
+            the response, for compatibility with servers that don't support this
+            parameter.
 
             By default, this is `false`.
           example: false
