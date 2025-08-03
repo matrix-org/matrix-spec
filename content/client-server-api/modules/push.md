@@ -382,8 +382,8 @@ The following `alt_aliases` values will NOT match:
 
 **`contains_display_name`**
 
-{{% changed-in v="1.16" %}}: this rule is deprecated and **should not be used in
-new push rules**.
+{{% changed-in v="1.16" %}}: this condition is deprecated and **should not be
+used in new push rules**.
 
 This matches messages where `content.body` contains the owner's display name in
 that room. This is a separate condition because display names may change and as such
