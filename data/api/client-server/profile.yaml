@@ -80,7 +80,8 @@ paths:
                 response:
                   value: {}
         "400":
-          description: The input was invalid in some way. This can include one
+          description: |
+            The input was invalid in some way. This can include one
             of the following error codes:
             
             - `M_BAD_JSON`: The provided value is not valid JSON.
