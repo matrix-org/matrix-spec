@@ -60,6 +60,11 @@ General
      you have at home. "identity server" is clear, whereas "identityserver" is
      horrible.
 
+* When talking about a user's "display name", it is spelt as two words. In
+  identifiers such as within the content of an `m.room.member` event, it is
+  spelt as a single word, `displayname`. (There are some historical exceptions
+  to this where the identifier is spelt `display_name`.)
+
 * Lists should:
 
   * Be introduced with a colon.
