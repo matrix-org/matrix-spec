@@ -217,7 +217,7 @@ paths:
             pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       responses:
         "200":
-          description: The profile field was deleted.
+          description: The profile field was deleted or it doesn't exist.
           content:
             application/json:
               schema:
