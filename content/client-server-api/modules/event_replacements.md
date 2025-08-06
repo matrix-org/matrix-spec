@@ -195,7 +195,7 @@ given event (for example, if an event is edited multiple times). These should
 be [aggregated](#aggregations-of-child-events) by the homeserver.
 
 The aggregation format of `m.replace` relationships gives the **most recent**
-replacement event, formatted [as normal](#room-event-format).
+valid replacement event, formatted [as normal](#room-event-format).
 
 The most recent event is determined by comparing `origin_server_ts`; if two or
 more replacement events have identical `origin_server_ts`, the event with the
