@@ -296,6 +296,8 @@ paths:
                     description: "Avatar URL value (MXC URI format)."
                   displayname:
                     type: string
+                    description: The user's display name if they have set one, otherwise not
+                      present.
                 additionalProperties:
                   x-addedInMatrixVersion: "1.16"
                   description: Additional profile fields.
