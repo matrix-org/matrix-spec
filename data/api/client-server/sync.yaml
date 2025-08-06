@@ -117,6 +117,31 @@ paths:
           example: 30000
           schema:
             type: integer
+        - in: query
+          name: use_state_after
+          x-addedInMatrixVersion: "1.16"
+          description: |-
+            Controls whether to receive state changes between the previous sync
+            and the **start** of the timeline, or between the previous sync and
+            the **end** of the timeline.
+
+            If this is set to `true`, servers MUST respond with the state
+            between the previous sync and the **end** of the timeline in
+            `state_after` and MUST omit `state`.
+
+            If `false`, servers MUST respond with the state between the previous
+            sync and the **start** of the timeline in `state` and MUST omit
+            `state_after`.
+
+            Even if this is set to `true`, clients MUST update their local state
+            with events in `state` and `timeline` if `state_after` is missing in
+            the response, for compatibility with servers that don't support this
+            parameter.
+
+            By default, this is `false`.
+          example: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: The initial snapshot or delta for the client to use to update their
@@ -197,16 +222,50 @@ paths:
                                 type: object
                                 description: |-
                                   Updates to the state, between the time indicated by
-                                  the `since` parameter, and the start of the
-                                  `timeline` (or all state up to the start of the
+                                  the `since` parameter, and the **start** of the
+                                  `timeline` (or all state up to the **start** of the
                                   `timeline`, if `since` is not given, or
                                   `full_state` is true).
 
-                                  N.B. state updates for `m.room.member` events will
+                                  {{% boxes/note %}}
+                                  State updates for `m.room.member` events will
                                   be incomplete if `lazy_load_members` is enabled in
                                   the `/sync` filter, and only return the member events
                                   required to display the senders of the timeline events
                                   in this response.
+                                  {{% /boxes/note %}}
+
+                                  MUST be omitted if `use_state_after` was set to `true`
+                                  in the request.
+                                allOf:
+                                  - $ref: definitions/state_event_batch.yaml
+                              state_after:
+                                title: State
+                                type: object
+                                x-addedInMatrixVersion: "1.16"
+                                description: |-
+                                  Updates to the state, between the time indicated by
+                                  the `since` parameter, and the **end** of the
+                                  `timeline` (or all state up to the **end** of the
+                                  `timeline`, if `since` is not given, or
+                                  `full_state` is true).
+
+                                  {{% boxes/note %}}
+                                  State updates for `m.room.member` events will
+                                  be incomplete if `lazy_load_members` is enabled in
+                                  the `/sync` filter, and only return the member events
+                                  required to display the senders of the timeline events
+                                  in this response.
+                                  {{% /boxes/note %}}
+
+                                  If this field is set, even if it is empty, clients MUST
+                                  only update their local state with events in this list,
+                                  and MUST NOT update their local state with events in
+                                  `timeline`. If this field is not set, clients MUST update
+                                  their local state with events in `state` and `timeline`.
+
+                                  **Required** if `use_state_after` was set to `true` in the
+                                  request, even if it is empty.
                                 allOf:
                                   - $ref: definitions/state_event_batch.yaml
                               timeline:
@@ -353,7 +412,28 @@ paths:
                               state:
                                 title: State
                                 type: object
-                                description: The state updates for the room up to the start of the timeline.
+                                description: |-
+                                  The state updates for the room up to the **start** of the timeline.
+
+                                  MUST be omitted if `use_state_after` was set to `true` in the
+                                  request.
+                                allOf:
+                                  - $ref: definitions/state_event_batch.yaml
+                              state_after:
+                                title: State
+                                type: object
+                                x-addedInMatrixVersion: "1.16"
+                                description: |-
+                                  The state updates for the room up to the **end** of the timeline.
+
+                                  If this field is set, even if it is empty, clients MUST only
+                                  update their local state with events in this list, and MUST NOT
+                                  update their local state with events in `timeline`. If this field
+                                  is not set, clients MUST update their local state with events in
+                                  `state` and `timeline`.
+
+                                  **Required** if `use_state_after` was set to `true` in the
+                                  request, even if it is empty.
                                 allOf:
                                   - $ref: definitions/state_event_batch.yaml
                               timeline:
