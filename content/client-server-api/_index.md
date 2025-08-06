@@ -2495,9 +2495,11 @@ default and only stable `available` room version.
 
 {{% added-in v="1.16" %}}
 
-This capability has a flag, `enabled`, and two lists, `allowed` and
-`disallowed`, that together denote which fields the user is able to
-change via the profile endpoints.
+This capability defines which [profile](#profiles) fields the user is
+able to change.
+
+The capability value has a required flag, `enabled`, and two optional lists, `allowed` and
+`disallowed`.
 
 When `enabled` is `false`, all profile fields are managed by the server
 and the client is not permitted to make any changes.
