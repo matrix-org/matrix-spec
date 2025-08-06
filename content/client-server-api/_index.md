@@ -2546,9 +2546,9 @@ This capability is now deprecated. Clients SHOULD use the
 [`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
 capability instead.
 
-For backwards compatibility, servers that directly or indirectly include
-the `displayname` profile field in the `m.profile_fields` capability
-MUST still set this capability accordingly.
+For backwards compatibility, servers that forbid setting the 
+`displayname` profile field in the `m.profile_fields` capability
+MUST still present this capability with `"enabled": false`.
 {{% /boxes/note %}}
 
 This capability has a single flag, `enabled`, to denote whether the user
