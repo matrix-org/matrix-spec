@@ -122,11 +122,12 @@ paths:
                               - "org.example.job_title"
                           disallowed:
                             type: array
-                            description: If `enabled` is `true`, a list of profile fields that clients are _not_ allowed to
-                              create, modify or delete. Clients SHOULD assume all fields not in this list to be unmanaged
-                              and available for their use.
+                            description:  |
+                              This property has no meaning if `allowed` is also specified.
                               
-                              Only one of `allowed` and `disallowed` is permitted at the same time.
+                              Otherwise, if present, a list of profile fields that clients are _not_ allowed to create, modify or delete.
+                              Provided `enabled` is `true`, clients MAY assume that they can set any profile field which is not
+                              included in this list.
                             items:
                               type: string
                             example:
