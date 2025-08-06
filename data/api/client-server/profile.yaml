@@ -43,7 +43,7 @@ paths:
             type: string
         - in: path
           name: keyName
-          description: The profile field key name to set. This MUST be either
+          description: The name of the profile field to set. This MUST be either
             `avatar_url`, `displayname`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
