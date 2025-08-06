@@ -2519,7 +2519,7 @@ fields that are *not* listed, provided `enabled` is `true`.
 If neither `allowed` nor `disallowed` is present, clients can modify all fields
 without restrictions, provided `enabled` is `true`.
 
-When not listed, clients SHOULD assume the user is able to change
+When this capability is not listed, clients SHOULD assume the user is able to change
 profile fields without any restrictions, provided the homeserver
 advertises a specification version that includes the `m.profile_fields`
 capability in the [`/versions`](/client-server-api/#get_matrixclientversions)
