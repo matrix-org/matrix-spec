@@ -209,9 +209,7 @@ paths:
             type: string
         - in: path
           name: keyName
-          description: The key name of the profile field to delete. It must be either
-            `avatar_url`, `displayname`, or a custom field following the
-            [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
+          description: The name of the profile field to delete.
           required: true
           example: "displayname"
           schema:
