@@ -270,9 +270,7 @@ paths:
     get:
       summary: Get all profile information for a user.
       description: |-
-        Get the complete profile for a user. The response includes `avatar_url`
-        and `displayname` (unless set to `null`, as they can only be strings)
-        plus any custom profile fields.
+        Get the complete profile for a user.
       operationId: getUserProfile
       parameters:
         - in: path
