@@ -2512,7 +2512,7 @@ If `allowed` is present, clients can modify only the fields
 listed. They SHOULD assume all other fields to be managed by
 the server. In this case, `disallowed` has no meaning and should be ignored.
 
-If `disallowed` is present (and `allowed` is not), clients should assume
+If `disallowed` is present (and `allowed` is not), clients SHOULD assume
 that the listed fields are managed by the server. Clients may modify any
 fields that are *not* listed, provided `enabled` is `true`.
 
