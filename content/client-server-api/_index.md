@@ -2506,15 +2506,18 @@ and the client is not permitted to make any changes.
 
 When `enabled` is `true`, clients are permitted to modify profile fields,
 subject to the restrictions implied by the OPTIONAL lists `allowed` and
-`disallowed`. If only `allowed` is present, clients can modify all
-contained fields but SHOULD assume all other fields to be managed by
-the server. Contrarily, if only `disallowed` is present, clients are
-unable to modify any contained fields but SHOULD assume all other fields
-to be unmanaged. If both `allowed` and `disallowed` are specified,
-`allowed` takes precendece. This means clients can modify all fields
-in `allowed` but none of the fields in `disallowed` unless they also
-occur in `allowed`. If neither `allowed` nor `disallowed` is present,
-clients can modify all fields without restrictions.
+`disallowed`. 
+
+If `allowed` is present, clients can modify only the fields
+listed. They SHOULD assume all other fields to be managed by
+the server. In this case, `disallowed` has no meaning and should be ignored.
+
+If `disallowed` is present (and `allowed` is not), clients should assume
+that the listed fields are managed by the server. Clients may modify any
+fields that are *not* listed, provided `enabled` is `true`.
+
+If neither `allowed` nor `disallowed` is present, clients can modify all fields
+without restrictions, provided `enabled` is `true`.
 
 When not listed, clients SHOULD assume the user is able to change
 profile fields without any restrictions, provided the homeserver
