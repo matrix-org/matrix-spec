@@ -137,7 +137,7 @@ paths:
         - User data
     get:
       x-changedInMatrixVersion:
-        "1.16": This endpoint now accepts a variable `keyName` parameter.
+        "1.16": This endpoint now accepts a variable `keyName` parameter. Previously only `displayname` and `avatar_url` were accepted.
       summary: Get a profile field for a user.
       description: Get the value of a profile field for a user.
       operationId: getProfileField
