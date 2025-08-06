@@ -60,6 +60,11 @@ General
      you have at home. "identity server" is clear, whereas "identityserver" is
      horrible.
 
+* When talking about a user's "display name", it is spelt as two words. In
+  identifiers such as within the content of an ``m.room.member`` event, it is
+  spelt as a single word, ``displayname``. (There are some historical exceptions
+  to this where the identifier is spelt ``display_name``.)
+
 * Lists should:
 
   * Be introduced with a colon.
@@ -84,12 +89,12 @@ Changes between spec versions
 Sections should reference the Matrix spec version they were added/changed in. This
 is often a guess at what the next version will be - please use the currently released
 version with a minor version bump as the referenced version. For example, if the
-current version is `v1.1` then annotate your changes with `v1.2`.
+current version is ``v1.1`` then annotate your changes with ``v1.2``.
 
 "Added/changed in" tags can be documented as the following:
 
-* `{{% added-in v="1.2" %}}` or `{{% changed-in v="1.2" %}}` within Markdown documents.
-* `x-addedInMatrixVersion` and `x-changedInMatrixVersion` within OpenAPI.
+* ``{{% added-in v="1.2" %}}`` or ``{{% changed-in v="1.2" %}}`` within Markdown documents.
+* ``x-addedInMatrixVersion`` and ``x-changedInMatrixVersion`` within OpenAPI.
 
 OpenAPI
 ~~~~~~~
@@ -185,4 +190,4 @@ Describing grammar
 
 Use  `RFC5234-style ABNF <https://datatracker.ietf.org/doc/html/rfc5234>`_ when describing
 the grammar for something in the spec, such as user IDs or server names. Use lowercase
-and underscore-delimited element names (`user_id`, not `UserID` or `user-id`).
+and underscore-delimited element names (``user_id``, not ``UserID`` or ``user-id``).
