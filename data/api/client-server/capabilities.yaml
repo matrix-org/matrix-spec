@@ -112,9 +112,12 @@ paths:
                         properties:
                           allowed:
                             type: array
-                            description: List of allowed additional custom profile field keys. A `*` can be used as a
-                              wildcard to match any sequence of characters. This list takes precedence over the
-                              disallowed list if both are provided.
+                            description: |
+                              If present, a list of profile fields that clients are allowed to create, modify or delete,
+                              provided `enabled` is `true`; no other profile fields may be changed.
+                              
+                              If absent, clients may set all profile fields except those forbidden by the `disallowed`
+                              list, where present.
                             items:
                               type: string
                             example:
