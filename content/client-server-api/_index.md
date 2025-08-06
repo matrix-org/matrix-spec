@@ -2493,6 +2493,8 @@ default and only stable `available` room version.
 
 ### `m.profile_fields` capability
 
+{{% added-in v="1.16" %}}
+
 This capability has a flag, `enabled`, and two lists, `allowed` and
 `disallowed`, that together denote which fields the user is able to
 change via the profile endpoints.
