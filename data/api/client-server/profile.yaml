@@ -293,7 +293,7 @@ paths:
                   avatar_url:
                     type: string
                     format: mx-mxc-uri
-                    description: "Avatar URL value (MXC URI format)."
+                    description: The user's avatar URL if they have set one, otherwise not present.
                   displayname:
                     type: string
                     description: The user's display name if they have set one, otherwise not
