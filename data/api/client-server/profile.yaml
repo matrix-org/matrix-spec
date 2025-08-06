@@ -164,12 +164,9 @@ paths:
             application/json:
               schema:
                 type: object
-                description: If a value is stored for `keyName`, the JSON response
-                  includes a property whose key matches the `keyName` specified
-                  in the URL. For `avatar_url`, the value will be an MXC URI string.
-                  For `displayname`, the value will be a string. For custom keys, any
-                  JSON type is possible - clients should expect the format defined
-                  for that key.
+                description: |
+                  An object with one property, whose key matches the `keyName` specified
+                  in the URL, and whose value is the current setting of that profile field.
                 additionalProperties: true
               examples:
                 response:
