@@ -1,0 +1,1 @@
+Deprecate `m.set_avatar_url` and `m.set_displayname` capabilities, as per [MSC4133](https://github.com/matrix-org/matrix-spec-proposals/pull/4133).
