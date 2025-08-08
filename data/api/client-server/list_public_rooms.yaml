@@ -13,14 +13,15 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Room Directory API
+  title: Matrix Client-Server Published Room Directory API
   version: 1.0.0
 paths:
   "/directory/list/room/{roomId}":
     get:
       summary: Gets the visibility of a room in the directory
-      description: Gets the visibility of a given room on the server's public room
-        directory.
+      description: |-
+        Gets the visibility of a given room in the server's
+        published room directory.
       operationId: getRoomVisibilityOnDirectory
       parameters:
         - in: path
@@ -32,7 +33,7 @@ paths:
             type: string
       responses:
         "200":
-          description: The visibility of the room in the directory
+          description: The visibility of the room in the directory.
           content:
             application/json:
               schema:
@@ -50,7 +51,7 @@ paths:
                     "visibility": "public"
                   }
         "404":
-          description: The room is not known to the server
+          description: The room is not known to the server.
           content:
             application/json:
               schema:
@@ -64,14 +65,13 @@ paths:
       tags:
         - Room discovery
     put:
-      summary: Sets the visibility of a room in the room directory
+      summary: Sets the visibility of a room in the directory
       description: |-
-        Sets the visibility of a given room in the server's public room
-        directory.
+        Sets the visibility of a given room in the server's published room directory.
 
-        Servers may choose to implement additional access control checks
-        here, for instance that room visibility can only be changed by
-        the room creator or a server administrator.
+        Servers MAY implement additional access control checks, for instance,
+        to ensure that a room's visibility can only be changed by the room creator
+        or a server administrator.
       operationId: setRoomVisibilityOnDirectory
       security:
         - accessTokenQuery: []
@@ -97,11 +97,11 @@ paths:
                     - public
                   description: |-
                     The new visibility setting for the room.
-                    Defaults to 'public'.
+                    Defaults to `public`.
               example: {
                 "visibility": "public"
               }
-        description: The new visibility for the room on the room directory.
+        description: The new visibility for the room in the published room directory.
         required: true
       responses:
         "200":
@@ -114,7 +114,7 @@ paths:
                 response:
                   value: {}
         "404":
-          description: The room is not known to the server
+          description: The room is not known to the server.
           content:
             application/json:
               schema:
@@ -129,9 +129,9 @@ paths:
         - Room discovery
   /publicRooms:
     get:
-      summary: Lists the public rooms on the server.
+      summary: Lists a server's published room directory
       description: |-
-        Lists the public rooms on the server.
+        Lists a server's published room directory.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
@@ -154,13 +154,13 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
-            local server. Case sensitive.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A list of the published rooms on the server.
           content:
             application/json:
               schema:
@@ -168,9 +168,9 @@ paths:
       tags:
         - Room discovery
     post:
-      summary: Lists the public rooms on the server with optional filter.
+      summary: Lists a server's published room directory with an optional filter
       description: |-
-        Lists the public rooms on the server, with optional filter.
+        Lists a server's published room directory with an optional filter.
 
         This API returns paginated responses. The rooms are ordered by the number
         of joined members, with the largest rooms first.
@@ -182,8 +182,8 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
-            local server. Case sensitive.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
       requestBody:
@@ -253,7 +253,7 @@ paths:
         required: true
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A filtered list of the published rooms on the server.
           content:
             application/json:
               schema:

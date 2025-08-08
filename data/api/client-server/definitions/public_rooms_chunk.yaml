@@ -13,10 +13,12 @@
 # limitations under the License.
 
 type: object
-title: "PublicRoomsChunk"
+title: "PublishedRoomsChunk"
 properties:
   canonical_alias:
     type: string
+    format: mx-room-alias
+    pattern: "^#"
     description: The canonical alias of the room, if any.
     example: "#general:example.org"
   name:
@@ -29,11 +31,15 @@ properties:
     example: 42
   room_id:
     type: string
+    format: mx-room-id
+    pattern: "^!"
     description: The ID of the room.
     example: "!abcdefg:example.org"
   topic:
     type: string
-    description: The topic of the room, if any.
+    description: |-
+      The plain text topic of the room. Omitted if no `text/plain` mimetype
+      exists in [`m.room.topic`](/client-server-api/#mroomtopic).
     example: "All things general"
   world_readable:
     type: boolean
@@ -59,7 +65,6 @@ properties:
     example: "public"
   room_type:
     type: string
-    x-addedInMatrixVersion: "1.4"
     description: |-
       The `type` of room (from [`m.room.create`](/client-server-api/#mroomcreate)), if any.
 required:

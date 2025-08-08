@@ -17,8 +17,8 @@ properties:
           "1.10": This property can act as a caption for the audio.
       format:
         description: |-
-          The format used in the `formatted_body`. Currently only
-          `org.matrix.custom.html` is supported.
+          The format used in the `formatted_body`. This is required if `formatted_body`
+          is specified. Currently only `org.matrix.custom.html` is supported.
         type: string
         x-addedInMatrixVersion: "1.10"
       formatted_body:

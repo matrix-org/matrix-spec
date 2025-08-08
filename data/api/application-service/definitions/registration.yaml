@@ -20,7 +20,7 @@ properties:
     type: string
     description: A unique, user-defined ID of the application service which will never change.
   url:
-    type: string
+    type: ["null", "string"]
     description: The URL for the application service. May include a path after the domain name. Optionally set to null if no traffic is required.
   as_token:
     type: string

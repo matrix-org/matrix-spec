@@ -195,7 +195,7 @@ given event (for example, if an event is edited multiple times). These should
 be [aggregated](#aggregations-of-child-events) by the homeserver.
 
 The aggregation format of `m.replace` relationships gives the **most recent**
-replacement event, formatted [as normal](#room-event-format).
+valid replacement event, formatted [as normal](#room-event-format).
 
 The most recent event is determined by comparing `origin_server_ts`; if two or
 more replacement events have identical `origin_server_ts`, the event with the
@@ -267,6 +267,11 @@ replacement whenever possible and appropriate.
 Client authors are reminded to take note of the requirements for [Validity of
 replacement events](#validity-of-replacement-events), and to ignore any
 invalid replacement events that are received.
+
+Clients should render the content of the **most recent** valid replacement event. The
+most recent event is determined by comparing `origin_server_ts`; if two or more
+replacement events have identical `origin_server_ts`, the event with the
+lexicographically largest `event_id` is treated as more recent.
 
 ##### Permalinks
 
@@ -364,7 +369,7 @@ property under `m.new_content`.
 
 A particular constraint applies to events which replace a [reply](#rich-replies):
 in contrast to the original reply, there should be no `m.in_reply_to` property
-in the the `m.relates_to` object, since it would be redundant (see
+in the `m.relates_to` object, since it would be redundant (see
 [Applying `m.new_content`](#applying-mnew_content) above, which notes that the
 original event's `m.relates_to` is preserved), as well as being contrary to the
 spirit of the event relationships mechanism which expects only one "parent" per

@@ -1,0 +1,138 @@
+# Copyright 2025 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Room Summary API
+  version: 1.0.0
+paths:
+  "/room_summary/{roomIdOrAlias}":
+    get:
+      x-addedInMatrixVersion: "1.15"
+      summary: Retrieves a summary for a room.
+      description: |-
+        Retrieves a summary for a room.
+
+        Clients should note that requests for rooms where the user's membership
+        is `invite` or `knock` might yield outdated, partial or even no data
+        since the server may not have access to the current state of the room.
+
+        Servers MAY allow unauthenticated access to this API if at least one of
+        the following conditions holds true:
+
+        - The room has a [join rule](#mroomjoin_rules) of `public`, `knock` or
+          `knock_restricted`.
+        - The room has a `world_readable` [history visibility](#room-history-visibility).
+
+        Servers should consider rate limiting requests that require a federation
+        request more heavily if the client is unauthenticated.
+      operationId: getRoomSummary
+      security:
+        - signedRequest: []
+      parameters:
+        - in: path
+          name: roomIdOrAlias
+          description: The room identifier or alias to summarise.
+          required: true
+          example: "#monkeys:matrix.org"
+          schema:
+            oneOf:
+              - type: string
+                format: mx-room-id
+                pattern: "^!"
+              - type: string
+                format: mx-room-alias
+                pattern: "^#"
+        - in: query
+          name: via
+          description: |-
+            The servers to attempt to request the summary from when
+            the local server cannot generate it (for instance, because
+            it has no local user in the room).
+          example:
+            - matrix.org
+            - elsewhere.ca
+          schema:
+            type: array
+            items:
+              type: string
+              format: mx-server-name
+      responses:
+        "200":
+          description: A summary of the room.
+          content:
+            application/json:
+              schema:
+                description: A summary of the room.
+                allOf:
+                  - $ref: ../client-server/definitions/room_summary.yaml
+                  - type: object
+                    properties:
+                      membership:
+                        description: |-
+                          The membership state of the user if the user is joined to the room. Absent
+                          if the API was called unauthenticated.
+                        enum:
+                          - invite
+                          - join
+                          - knock
+                          - leave
+                          - ban
+                        type: string
+              examples:
+                response:
+                  value: {
+                    room_id: "!ol19s:bleecker.street",
+                    avatar_url: "mxc://bleecker.street/CHEDDARandBRIE",
+                    guest_can_join: false,
+                    name: "CHEESE",
+                    num_joined_members: 37,
+                    topic: "Tasty tasty cheese",
+                    world_readable: true,
+                    join_rule: "public",
+                    room_type: "m.space",
+                    membership: "invite",
+                    encryption: "m.megolm.v1.aes-sha2",
+                    room_version: "9001",
+                  }
+        "404":
+          description: |-
+            The room could not be found.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Room not found."
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
