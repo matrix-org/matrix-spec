@@ -3,6 +3,9 @@
 
 {{% changed-in v="1.7" %}}
 
+{{% changed-in v="1.16" %}}: the legacy push rules that looked for mentions in
+the `body` of the event were removed.
+
 This module allows users to "mention" other users and rooms within a room event.
 This is primarily used as an indicator that the recipient should receive a notification
 about the event.
@@ -38,19 +41,18 @@ encrypted as normal. To properly process mentions in encrypted rooms, events
 must be decrypted first. See [receiving notifications](#receiving-notifications).
 {{% /boxes/warning %}}
 
-Note that, for backwards compatibility, push rules such as [`.m.rule.contains_display_name`](#_m_rule_contains_display_name),
-[`.m.rule.contains_user_name`](#_m_rule_contains_user_name), and
-[`.m.rule.roomnotif`](#_m_rule_roomnotif) continue to  match if the `body` of
-the event contains the user's display name or ID. To avoid unintentional notifications,
-**it is recommended that clients include a `m.mentions` property on each event**.
-(If there are no mentions to include it can be an empty object.)
-
-{{% boxes/rationale %}}
+{{% boxes/note %}}
 In previous versions of the specification, mentioning users was done by
 including the user's display name or the localpart of their Matrix ID and room
 mentions were done by including the string "@room" in the plaintext `body` of
-the event. This was prone to confusing and buggy behaviour.
-{{% /boxes/rationale %}}
+the event. When the `m.mentions` field was introduced, those push rules were
+disabled if the `m.mentions` field was present.
+
+To avoid unintentional notifications with clients and servers that still use
+those push rules, **it is recommended that clients still include a `m.mentions`
+property on each event**. (If there are no mentions to include it can be an
+empty object.)
+{{% /boxes/note %}}
 
 #### Client behaviour
 
