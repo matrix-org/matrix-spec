@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 type: object
 description: |
   If the `m.call.invite` event has `version` `"1"`, a client wishing to
