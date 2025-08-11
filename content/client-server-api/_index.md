@@ -2837,7 +2837,7 @@ most recent message events for each room, as well as the state of the
 room at the start of the returned timeline. The response also includes a
 `next_batch` field, which should be used as the value of the `since`
 parameter in the next call to `/sync`. Finally, the response includes,
-for each room, a `prev_batch` field, which can be passed as a `start`
+for each room, a `prev_batch` field, which can be passed as a `from`/`to`
 parameter to the [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API to retrieve earlier
 messages.
 
