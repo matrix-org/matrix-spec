@@ -2491,7 +2491,65 @@ using an `unstable` version.
 When this capability is not listed, clients should use `"1"` as the
 default and only stable `available` room version.
 
+### `m.profile_fields` capability
+
+{{% added-in v="1.16" %}}
+
+This capability defines which [profile](#profiles) fields the user is
+able to change.
+
+The capability value has a required flag, `enabled`, and two optional lists, `allowed` and
+`disallowed`.
+
+When `enabled` is `false`, all profile fields are managed by the server
+and the client is not permitted to make any changes.
+
+When `enabled` is `true`, clients are permitted to modify profile fields,
+subject to the restrictions implied by the OPTIONAL lists `allowed` and
+`disallowed`. 
+
+If `allowed` is present, clients can modify only the fields
+listed. They SHOULD assume all other fields to be managed by
+the server. In this case, `disallowed` has no meaning and should be ignored.
+
+If `disallowed` is present (and `allowed` is not), clients SHOULD assume
+that the listed fields are managed by the server. Clients may modify any
+fields that are *not* listed, provided `enabled` is `true`.
+
+If neither `allowed` nor `disallowed` is present, clients can modify all fields
+without restrictions, provided `enabled` is `true`.
+
+When this capability is not listed, clients SHOULD assume the user is able to change
+profile fields without any restrictions, provided the homeserver
+advertises a specification version that includes the `m.profile_fields`
+capability in the [`/versions`](/client-server-api/#get_matrixclientversions)
+response.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.profile_fields": {
+      "enabled": true,
+      "disallowed": ["displayname"]
+    }
+  }
+}
+```
+
 ### `m.set_displayname` capability
+
+{{% boxes/note %}}
+{{% changed-in v="1.16" %}}
+This capability is now deprecated. Clients SHOULD use the
+[`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
+capability instead.
+
+For backwards compatibility, servers that forbid setting the 
+`displayname` profile field in the `m.profile_fields` capability
+MUST still present this capability with `"enabled": false`.
+{{% /boxes/note %}}
 
 This capability has a single flag, `enabled`, to denote whether the user
 is able to change their own display name via profile endpoints. Cases for
@@ -2516,6 +2574,17 @@ An example of the capability API's response for this capability is:
 ```
 
 ### `m.set_avatar_url` capability
+
+{{% boxes/note %}}
+{{% changed-in v="1.16" %}}
+This capability is now deprecated. Clients SHOULD use the
+[`m.profile_fields`](/client-server-api/#mprofile_fields-capability)
+capability instead.
+
+For backwards compatibility, servers that forbid setting the 
+`avatar_url` profile field in the `m.profile_fields` capability
+MUST still present this capability with `"enabled": false`.
+{{% /boxes/note %}}
 
 This capability has a single flag, `enabled`, to denote whether the user
 is able to change their own avatar via profile endpoints. Cases for
@@ -2837,7 +2906,7 @@ most recent message events for each room, as well as the state of the
 room at the start of the returned timeline. The response also includes a
 `next_batch` field, which should be used as the value of the `since`
 parameter in the next call to `/sync`. Finally, the response includes,
-for each room, a `prev_batch` field, which can be passed as a `start`
+for each room, a `prev_batch` field, which can be passed as a `from`/`to`
 parameter to the [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API to retrieve earlier
 messages.
 
