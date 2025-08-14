@@ -18,6 +18,7 @@ example:
   $ref: "../examples/pdu_v3.json"
 allOf:
   - $ref: "components/pdu_base.yaml"
+  - $ref: "components/room_id_before_v12.yaml"
   - type: object
     properties:
       redacts:

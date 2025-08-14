@@ -12,19 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: object
-title: Persistent Data Unit
 description: |-
-  A persistent data unit (event) for room versions 4, 5, 6, 7, 8, 9 and 10.
-example:
-  $ref: "../examples/pdu_v4.json"
-allOf:
-  - $ref: "components/pdu_base.yaml"
-  - $ref: "components/auth_events_prev_events_v4.yaml"
-  - $ref: "components/room_id_before_v12.yaml"
-  - $ref: "components/depth_v6.yaml"
-  - type: object
-    properties:
-      redacts:
-        type: string
-        description: For redaction events, the ID of the event being redacted.
-        example: "$def_456-oldevent"
+  The room_id field of PDUs for room version 12 and beyond.
+properties:
+  room_id:
+    type: string
+    description: Room identifier. Omitted from `m.room.create` events.
+    example: "!Nhcu5BS-UMnFX7hBVfVSoXiD7OgH6iRT-xyIuqDnpYQ"
+required:
+  - room_id

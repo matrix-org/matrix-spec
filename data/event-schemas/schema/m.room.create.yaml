@@ -33,8 +33,36 @@ properties:
             description: The ID of the old room.
           event_id:
             type: string
-            description: The event ID of the last known event in the old room.
-        required: [room_id, event_id]
+            deprecated: true
+            x-changedInMatrixVersion:
+              "1.16": |-
+                This field became deprecated and may not be present in all cases. It SHOULD still
+                be populated where possible/practical. Previously, it was required.
+            description: |-
+              The event ID of the last known event in the old room, if known.
+
+              If not set, clients SHOULD search for the `m.room.tombstone` state event to navigate to
+              when directing the user to the old room (potentially after joining the room, if requested
+              by the user).
+        required: [room_id]
+      additional_creators:
+        type: array
+        items:
+          type: string
+          description: Additional user ID to consider a creator of the room, if supported by the room version.
+        x-addedInMatrixVersion: "1.16"
+        description: |-
+          Starting with room version 12, the other user IDs to consider as creators for the room in
+          addition to the `sender` of this event. Each string MUST be a valid [user ID](/appendices#user-identifiers)
+          for the room version.
+
+          When not present or empty, the `sender` of the event is the only creator.
+
+          In room versions 1 through 11, this field serves no purpose and is not validated. Clients
+          SHOULD NOT attempt to parse or understand this field in these room versions.
+
+          **Note**: Because `creator` was removed in room version 11, the field is not used to determine
+          which user(s) are room creators in room version 12 and beyond either.
     type: object
   state_key:
     description: A zero-length string.

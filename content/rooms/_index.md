@@ -36,11 +36,12 @@ Alternatively, consider flipping the column/row organization to be features
 up top and versions on the left.
 -->
 
-| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
-|-------------------|---|---|---|---|---|---|---|---|---|----|----|
-| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ |
-| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ |
-| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ |
+| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|-------------------|---|---|---|---|---|---|---|---|---|----|----|----|
+| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ |
+| **Additional room creators** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ |
 
 ## Complete list of room versions
 
@@ -52,8 +53,21 @@ stable and unstable periodically for a variety of reasons, including
 discovered security vulnerabilities and age.
 
 Clients should not ask room administrators to upgrade their rooms if the
-room is running a stable version. Servers SHOULD use **room version 11** as
+room is running a stable version. Servers SHOULD use **room version 12** as
 the default room version when creating new rooms.
+
+{{% boxes/note %}}
+
+{{% added-in v="1.16" %}}
+
+Room version 12 is introduced and made default in this specification release.
+Servers are encouraged to continue using room version 11 as the default room
+version for the early days and weeks following this specification release,
+and then gradually switch the default over when they deem appropriate.
+
+<!-- TODO(SCT): Remove this note box in Matrix 1.17 -->
+
+{{% /boxes/note %}}
 
 The available room versions are:
 
@@ -76,6 +90,9 @@ The available room versions are:
 -   [Version 10](/rooms/v10) - **Stable**. Enforces integer-only power levels
     and adds `knock_restricted` join rule.
 -   [Version 11](/rooms/v11) - **Stable**. Clarifies the redaction algorithm.
+-   [Version 12](/rooms/v12) - **Stable**. Changes room IDs to be hashes of the
+    create event, formalizes room creators with infinite power level, and iterates
+    on state resolution.
 
 ## Room version grammar
 

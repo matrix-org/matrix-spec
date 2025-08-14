@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 type: object
-title: Persistent Data Unit
 description: |-
-  A persistent data unit (event) for room versions 4, 5, 6, 7, 8, 9 and 10.
-example:
-  $ref: "../examples/pdu_v4.json"
-allOf:
-  - $ref: "components/pdu_base.yaml"
-  - $ref: "components/auth_events_prev_events_v4.yaml"
-  - $ref: "components/room_id_before_v12.yaml"
-  - $ref: "components/depth_v6.yaml"
-  - type: object
-    properties:
-      redacts:
-        type: string
-        description: For redaction events, the ID of the event being redacted.
-        example: "$def_456-oldevent"
+  The depth field of PDUs for room version 6 and beyond.
+properties:
+  # v6 enforces Canonical JSON and therefore needs a depth limit change
+  depth:
+    type: integer
+    description: |-
+      The maximum depth of the `prev_events`, plus one. Must be less than the
+      maximum value for an integer (2^53 - 1). If the room's depth is already at
+      the limit, the depth must be set to the limit.
+    example: 12

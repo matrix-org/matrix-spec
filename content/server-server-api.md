@@ -119,7 +119,7 @@ to send. The process overall is as follows:
     server must present a valid certificate for the hostname.
 
 3.  If the hostname is not an IP literal, a regular HTTPS request is
-    made to `https://<hostname>/.well-known/matrix/server` (according to 
+    made to `https://<hostname>/.well-known/matrix/server` (according to
     [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615)), expecting
     the schema defined later in this section. 30x redirects should be
     followed, however redirection loops should be avoided. Responses
@@ -461,9 +461,12 @@ specification](/rooms).
 Whenever a server receives an event from a remote server, the receiving
 server must ensure that the event:
 
-1.  Is a valid event, otherwise it is dropped. For an event to be valid, it
-    must contain a `room_id`, and it must comply with the event format of
-    that [room version](/rooms).
+1.  {{% changed-in v="1.16" %}} Is a valid event, otherwise it is dropped. For
+    an event to be valid, it must comply with the event format of that [room version](/rooms).
+    For some room versions, a `room_id` may also be required on the event in order
+    to determine the room version to check the event against. See the event format
+    section of the [room version specifications](/rooms) for details on when it
+    is required.
 2.  Passes signature checks, otherwise it is dropped.
 3.  Passes hash checks, otherwise it is redacted before being processed
     further.
@@ -529,7 +532,8 @@ the sender permission to send the event. The `auth_events` for the
 `m.room.create` event in a room is empty; for other events, it should be
 the following subset of the room state:
 
-- The `m.room.create` event.
+- {{% changed-in v="1.16" %}} Depending on the [room version](/rooms), the
+  `m.room.create` event.
 
 - The current `m.room.power_levels` event, if any.
 
@@ -1050,7 +1054,7 @@ from the user owning the invited third-party identifier.
 
 ## Published Room Directory
 
-To complement the [room directory in the Client-Server API](/client-server-api#published-room-directory), 
+To complement the [room directory in the Client-Server API](/client-server-api#published-room-directory),
 homeservers need a way to query the published rooms of another server.
 This can be done by making a request to the `/publicRooms` endpoint for
 the server the room directory should be retrieved for.

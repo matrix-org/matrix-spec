@@ -36,6 +36,17 @@ server:
     previous room, no `type` is specified on the new room's create event
     either.
 
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} If both the new and old [room version](/rooms) support
+additional creators, the server will not transfer those additional creators automatically.
+They must be explicitly set during the `/upgrade` call.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} When upgrading to room version 12 or later, the `predecessor` field MAY NOT contain
+an `event_id`.
+{{% /boxes/note %}}
+
 3.  Replicates transferable state events to the new room. The exact
     details for what is transferred is left as an implementation detail,
     however the recommended state events to transfer are:

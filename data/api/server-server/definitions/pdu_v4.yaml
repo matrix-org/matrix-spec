@@ -20,6 +20,7 @@ example:
 allOf:
   - $ref: "components/pdu_base.yaml"
   - $ref: "components/auth_events_prev_events_v4.yaml"
+  - $ref: "components/room_id_before_v12.yaml"
   - type: object
     properties:
       redacts:

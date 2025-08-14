@@ -657,27 +657,48 @@ provides no way to encode ASCII punctuation).
 
 #### Room IDs
 
-A room has exactly one room ID. A room ID has the format:
+{{% changed-in v="1.16" %}} Room IDs can now appear without a domain depending on
+the room version.
+
+A room has exactly one room ID. Room IDs take the form:
+
+    !opaque_id
+
+However, the precise format depends upon the [room version specification](/rooms):
+some room versions included a `domain` component, whereas more recent room versions
+omit the domain and use a base64-encoded hash instead.
+
+Room IDs are case-sensitive and not meant to be human-readable. They are intended
+to be used as fully opaque strings by clients, even when a `domain` component is
+present.
+
+If the room version requires a `domain` component, room IDs take the following
+form:
 
     !opaque_id:domain
 
-The `domain` of a room ID is the [server name](#server-name) of the
-homeserver which created the room. The domain is used only for
-namespacing to avoid the risk of clashes of identifiers between
-different homeservers. There is no implication that the room in
-question is still available at the corresponding homeserver.
+In such a form, the `opaque_id` is a localpart. The localpart MUST only contain
+valid non-surrogate Unicode code points, including control characters, except `:`
+and `NUL` (U+0000). The localpart SHOULD only consist of alphanumeric characters
+(`A-Z`, `a-z`, `0-9`) when generating them. The `domain` is the [server name](#server-name)
+of the homeserver which created the room - it is only used to reduce namespace
+collisions. There is no implication that the room in question is still available
+at the corresponding homeserver. Combined, the localpart, domain, and `!` sigil
+MUST NOT exceed 255 bytes.
 
-Room IDs are case-sensitive. They are not meant to be
-human-readable. They are intended to be treated as fully opaque strings
-by clients.
+When a room version requires the `domain`-less format, room IDs are simply the
+[event ID](#event-ids) of the `m.room.create` event using `!` as the sigil instead
+of `$`. The grammar is otherwise inherited verbatim.
 
-The localpart of a room ID (`opaque_id` above) may contain any valid
-non-surrogate Unicode code points, including control characters, except `:` and `NUL`
-(U+0000), but it is recommended to only include ASCII letters and
-digits (`A-Z`, `a-z`, `0-9`) when generating them.
+{{% boxes/note %}}
+Applications which previously relied upon the `domain` in a room ID can instead
+parse the [user IDs](#user-identifiers) found in the `m.room.create` event's `sender`.
 
-The length of a room ID, including the `!` sigil and the domain, MUST
-NOT exceed 255 bytes.
+Though the `m.room.create` event's `additional_creators` (in `content`) may be
+used when present, applications should take care when parsing or interpreting the
+list. The user IDs in `additional_creators` will have correct grammar, but may
+not be real users or may not belong to actual Matrix homeservers.
+{{% /boxes/note %}}
 
 #### Room Aliases
 
