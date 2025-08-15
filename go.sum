@@ -1,4 +1,4 @@
-github.com/FortAwesome/Font-Awesome v0.0.0-20240716171331-37eff7fa00de/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
-github.com/matrix-org/docsy v0.0.0-20241106102557-ec7b98ee4014 h1:CNvxuuURuxkEjA0QN+lRKELc7PRDsX270e8v4GDF3II=
-github.com/matrix-org/docsy v0.0.0-20241106102557-ec7b98ee4014/go.mod h1:4Ek1bcdbfU/j8hIatEjNhIs1Yua85FtQf3kLvoYZ0bQ=
-github.com/twbs/bootstrap v5.3.3+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=
+github.com/FortAwesome/Font-Awesome v0.0.0-20241216213156-af620534bfc3/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
+github.com/matrix-org/docsy v0.0.0-20250722140156-5df72519f5af h1:XghgUC0H5BoGrvtT9/oWBUi+5Zux875qRHhpAZ0RURI=
+github.com/matrix-org/docsy v0.0.0-20250722140156-5df72519f5af/go.mod h1:4/t21g/nPraob/DVMm3jrk26k0CDL5I7Mxf+ar0IAgs=
+github.com/twbs/bootstrap v5.3.6+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=
