@@ -18,6 +18,8 @@
 # difficult because the schema would be at two different locations, with
 # different relative pathing.
 
+$schema: https://json-schema.org/draft/2020-12/schema
+
 title: StrippedStateEvent
 type: object
 description: |-

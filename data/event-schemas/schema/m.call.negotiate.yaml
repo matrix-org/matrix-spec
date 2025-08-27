@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 type: object
 description: |
   Provides SDP negotiation semantics for media pause, hold/resume, ICE restarts
