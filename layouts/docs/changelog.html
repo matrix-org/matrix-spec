@@ -1,14 +1,8 @@
 {{- /*
 
-    Template to render a page with a `changelog` layout or the `changelog`
-    section page. This conflation seems to be a limitation of Hugo currently, it
-    uses this template for both cases.
+    Template to render a page with a `changelog` layout.
 
-    For the `changelog` section page, this redirects the page to the latest
-    version's changelog page.
-
-    For a page with a `changelog` layout, this adds a table at the top of the
-    page with information about the release:
+    This adds a table at the top of the page with information about the release:
 
     * A link to the matrix-spec repository at the time of the release, with the
       version taken from the `linkTitle` in the frontmatter of the page, unless
@@ -21,11 +15,6 @@
 */ -}}
 
 {{ define "main" }}
-{{ if .IsSection -}}
-    {{ with index .RegularPages.ByDate.Reverse 0 -}}
-    <meta http-equiv="refresh" content="0; url={{ .RelPermalink }}">
-    {{ end -}}
-{{ else -}}
     {{ $version := lower .LinkTitle -}}
 <div class="td-content">
     <h1>{{ .Title }}</h1>
@@ -50,5 +39,4 @@
 
     {{ .Content }}
 </div>
-{{ end -}}
 {{ end }}

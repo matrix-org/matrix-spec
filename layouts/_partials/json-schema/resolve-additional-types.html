@@ -66,7 +66,7 @@
  *     If the input `schema` was itself an object that we should create a table for,
  *     this will be the same as the first entry in `objects`.
  */
-{{ define "partials/resolve-additional-types-inner" }}
+{{ define "_partials/resolve-additional-types-inner" }}
     {{ $this_object := .schema }}
     {{ $anchor_base := .anchor_base }}
     {{ $name := .name }}
@@ -222,7 +222,7 @@
  *   * `objects`: The array of object schema definitions.
  *   * `schema`: An updated copy of the `schema` input (eg, an `anchor` may be added).
  */
-{{ define "partials/get-additional-objects" }}
+{{ define "_partials/get-additional-objects" }}
     /* .name is the name of the object for logging purposes */
     {{ $name := .name }}
 
@@ -246,6 +246,6 @@
  * This is needed for uniqify to work - otherwise objects that are the same
  * but with (for example) different examples will be considered different.
  */
-{{ define "partials/clean-object" }}
+{{ define "_partials/clean-object" }}
     {{ return (dict "title" .title "properties" .properties "additionalProperties" .additionalProperties "patternProperties" .patternProperties "required" .required "enum" .enum "anchor" .anchor) }}
 {{ end }}
