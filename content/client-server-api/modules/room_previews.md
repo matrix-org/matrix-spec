@@ -6,7 +6,7 @@ It is sometimes desirable to offer a preview of a room, where a user can
 This can be particularly effective when combined with [Guest Access](#guest-access).
 
 Previews are implemented via the `world_readable` [Room History
-Visibility](#room-history-visibility). setting, along with a special version of the [GET
+Visibility](#room-history-visibility) setting, along with a special version of the [GET
 /events](#get_matrixclientv3events) endpoint.
 
 #### Client behaviour
