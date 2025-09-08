@@ -2810,7 +2810,7 @@ fresh state can be acquired from a join.
 Stripped state should contain some or all of the following state events, which
 should be represented as stripped state events when possible:
 
-* [`m.room.create`](#mroomcreate)
+* [`m.room.create`](#mroomcreate) ({{% changed-in v="1.16" %}} required on invites and knocks)
 * [`m.room.name`](#mroomname)
 * [`m.room.avatar`](#mroomavatar)
 * [`m.room.topic`](#mroomtopic)
