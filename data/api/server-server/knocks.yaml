@@ -294,9 +294,21 @@ paths:
                     type: array
                     items:
                       $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                    x-changedInMatrixVersion:
+                      "1.16": |
+                        `m.room.create` and format requirements were added.
                     description: |-
-                      A list of [stripped state events](/client-server-api/#stripped-state)
-                      to help the initiator of the knock identify the room.
+                      A list of state events to help the initiator of the knock identify
+                      the room. Translated as [stripped state events](/client-server-api/#stripped-state)
+                      over the Client-Server API.
+
+                      MUST contain the `m.room.create` event for the room. All events
+                      listed MUST additionally be formatted according to the room
+                      version specification.
+
+                      Entries which are [improperly signed](/server-server-api/#validating-hashes-and-signatures-on-received-events)
+                      or formatted SHOULD be removed by the server prior to supplying
+                      them over the Client-Server API.
                     example:
                       $ref: ../../event-schemas/examples/knock_room_state.json
                 required:
