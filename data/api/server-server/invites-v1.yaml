@@ -85,10 +85,19 @@ paths:
                             Servers might need to apply validation to the `invite_room_state` depending
                             on room version. See the `400 M_MISSING_PARAM` error definition for more
                             information.
+
+                            Note that events have a different format depending on the room
+                            version - check the [room version specification](/rooms) for
+                            precise event formats.
                           items:
-                            $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                            type: object
+                            properties: {}
+                            description: |-
+                              Note that events have a different format depending on the room
+                              version - check the [room version specification](/rooms) for
+                              precise event formats.
                           example:
-                            $ref: ../../event-schemas/examples/invite_room_state.json
+                            $ref: ./examples/stripped_state.json
               type: object
         required: true
       responses:
@@ -129,35 +138,7 @@ paths:
                         "origin_server_ts": 1549041175876,
                         "sender": "@someone:example.org",
                         "unsigned": {
-                          "invite_room_state": [
-                            {
-                              "type": "m.room.create",
-                              "sender": "@bob:example.org",
-                              "state_key": "",
-                              "content": {
-                                "version": "12"
-                              },
-                              "remaining_fields": "are formatted according to the room version specification"
-                            },
-                            {
-                              "type": "m.room.name",
-                              "sender": "@bob:example.org",
-                              "state_key": "",
-                              "content": {
-                                "name": "Example Room"
-                              },
-                              "remaining_fields": "are formatted according to the room version specification"
-                            },
-                            {
-                              "type": "m.room.join_rules",
-                              "sender": "@bob:example.org",
-                              "state_key": "",
-                              "content": {
-                                "join_rule": "invite"
-                              },
-                              "remaining_fields": "are formatted according to the room version specification"
-                            }
-                          ]
+                          "invite_room_state": {"$ref": "./examples/stripped_state.json"}
                         },
                         "content": {
                           "membership": "invite"

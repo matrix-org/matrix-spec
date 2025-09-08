@@ -293,7 +293,12 @@ paths:
                   knock_room_state:
                     type: array
                     items:
-                      $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                      type: object
+                      properties: {}
+                      description: |-
+                        Note that events have a different format depending on the room
+                        version - check the [room version specification](/rooms) for
+                        precise event formats.
                     x-changedInMatrixVersion:
                       "1.16": |
                         `m.room.create` and format requirements were added.
@@ -309,15 +314,19 @@ paths:
                       Entries which are [improperly signed](/server-server-api/#validating-hashes-and-signatures-on-received-events)
                       or formatted SHOULD be removed by the server prior to supplying
                       them over the Client-Server API.
+
+                      Note that events have a different format depending on the room
+                      version - check the [room version specification](/rooms) for
+                      precise event formats.
                     example:
-                      $ref: ../../event-schemas/examples/knock_room_state.json
+                      "$ref": "./examples/stripped_state.json"
                 required:
                   - knock_room_state
               examples:
                 response:
                   value: {
                     "knock_room_state": {
-                      "$ref": "../../event-schemas/examples/knock_room_state.json"
+                      "$ref": "./examples/stripped_state.json"
                     }
                   }
         "403":
