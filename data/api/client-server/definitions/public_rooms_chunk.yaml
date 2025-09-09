@@ -43,7 +43,7 @@ properties:
     example: "All things general"
   world_readable:
     type: boolean
-    description: Whether the room may be viewed by guest users without joining.
+    description: Whether the room may be viewed by users without joining.
     example: false
   guest_can_join:
     type: boolean
