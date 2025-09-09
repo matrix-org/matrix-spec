@@ -555,7 +555,7 @@ resolve to the desired MSC, whether it started as an issue or a PR.
 Other metadata:
 
 -   The MSC number is taken from the GitHub Pull Request ID. This is
-    carried for the lifetime of the proposal. These IDs do not necessary
+    carried for the lifetime of the proposal. These IDs do not necessarily
     represent a chronological order.
 -   The GitHub PR title will act as the MSC's title.
 -   Please link to the spec PR (if any) by adding a "PRs: \#1234" line
