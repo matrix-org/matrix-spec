@@ -2848,6 +2848,12 @@ events are not signed and could theoretically be modified, or outdated due to
 updates not being sent.
 {{% /boxes/warning %}}
 
+{{% boxes/warning %}}
+{{% added-in v="1.16" %}} Servers cannot pass through what they receive over
+federation to clients as stripped state. Servers are expected to prune the events
+into the stripped state schema below before passing the details onto clients.
+{{% /boxes/warning %}}
+
 {{% event-fields event_type="stripped_state" %}}
 
 ### Size limits
