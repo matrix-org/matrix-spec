@@ -19,7 +19,7 @@ paths:
   "/profile/{userId}/{keyName}":
     put:
       x-changedInMatrixVersion:
-        "1.16": This endpoint now accepts a variable `keyName` parameter. Previously only `displayname` and `avatar_url` were accepted.
+        "1.16": This endpoint now accepts a variable `keyName` parameter and `m.tz` was added as a defined key. Previously only `displayname` and `avatar_url` were accepted.
       summary: Set a profile field for a user.
       description: |-
         Set or update a profile field for a user. Must be authenticated with an
@@ -44,13 +44,13 @@ paths:
         - in: path
           name: keyName
           description: The name of the profile field to set. This MUST be either
-            `avatar_url`, `displayname`, or a custom field following the
+            `avatar_url`, `displayname`, `m.tz`, or a custom field following the
             [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
           required: true
           example: "displayname"
           schema:
             type: string
-            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
+            pattern: '^(avatar_url|displayname|m\.tz|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       requestBody:
         description: A JSON object containing the property whose name matches
           the `keyName` specified in the URL. See `additionalProperties` for
@@ -69,6 +69,10 @@ paths:
                 
                 For `displayname`, the value MUST be a string.
                 
+                For `m.tz`, the value MUST be a valid identifier from the  [IANA Time Zone Database](https://www.iana.org/time-zones).
+                Servers MAY choose to validate the value. Clients MUST expect unknown or invalid
+                values.
+
                 For custom keys, any JSON type is allowed. Servers MAY not validate
                 these values, but clients SHOULD follow the format defined for that key.
               additionalProperties: true
@@ -137,7 +141,7 @@ paths:
         - User data
     get:
       x-changedInMatrixVersion:
-        "1.16": This endpoint now accepts a variable `keyName` parameter. Previously only `displayname` and `avatar_url` were accepted.
+        "1.16": This endpoint now accepts a variable `keyName` parameter and `m.tz` was added as a defined key. Previously only `displayname` and `avatar_url` were accepted.
       summary: Get a profile field for a user.
       description: Get the value of a profile field for a user.
       operationId: getProfileField
@@ -156,7 +160,7 @@ paths:
           example: "displayname"
           schema:
             type: string
-            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
+            pattern: '^(avatar_url|displayname|m\.tz|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       responses:
         "200":
           description: The profile field value was retrieved.
@@ -214,7 +218,7 @@ paths:
           example: "displayname"
           schema:
             type: string
-            pattern: '^(avatar_url|displayname|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
+            pattern: '^(avatar_url|displayname|m\.tz|[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+)$'
       responses:
         "200":
           description: The profile field was deleted or it doesn't exist.
@@ -293,6 +297,10 @@ paths:
                     type: string
                     description: The user's display name if they have set one, otherwise not
                       present.
+                  m.tz:
+                    x-addedInMatrixVersion: "1.16"
+                    type: string
+                    description: The user's time zone.
                 additionalProperties:
                   x-addedInMatrixVersion: "1.16"
                   description: Additional profile fields.
@@ -302,6 +310,7 @@ paths:
                     {
                       "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
                       "displayname": "Alice Margatroid",
+                      "m.tz": "Europe/London",
                       "m.example_field": "custom_value",
                     }
         "403":
