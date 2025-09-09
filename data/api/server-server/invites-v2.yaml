@@ -92,6 +92,7 @@ paths:
                     precise event formats.
                   items:
                     type: object
+                    title: PDU
                     properties: {}
                     description: |-
                       Note that events have a different format depending on the room
