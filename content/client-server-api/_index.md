@@ -2810,13 +2810,21 @@ fresh state can be acquired from a join.
 Stripped state should contain some or all of the following state events, which
 should be represented as stripped state events when possible:
 
-* [`m.room.create`](#mroomcreate) ({{% changed-in v="1.16" %}} required on invites and knocks)
+* [`m.room.create`](#mroomcreate)
 * [`m.room.name`](#mroomname)
 * [`m.room.avatar`](#mroomavatar)
 * [`m.room.topic`](#mroomtopic)
 * [`m.room.join_rules`](#mroomjoin_rules)
 * [`m.room.canonical_alias`](#mroomcanonical_alias)
 * [`m.room.encryption`](#mroomencryption)
+
+{{% changed-in v="1.16" %}} The `m.room.create` event is now **required** in
+the following places:
+* [`invite_state`](#get_matrixclientv3sync_response-200_invited-room) and
+  [`knock_state`](#get_matrixclientv3sync_response-200_knocked-room) on
+  [`/sync`](#get_matrixclientv3sync) responses.
+* When present on [`m.room.member`](#mroommember) events, the `invite_room_state`
+  and `knock_room_state` under `unsigned` on the event.
 
 {{% boxes/note %}}
 Clients should inspect the list of stripped state events and not assume any
