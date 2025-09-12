@@ -2818,6 +2818,14 @@ should be represented as stripped state events when possible:
 * [`m.room.canonical_alias`](#mroomcanonical_alias)
 * [`m.room.encryption`](#mroomencryption)
 
+{{% changed-in v="1.16" %}} The `m.room.create` event is now **required** in
+the following places:
+* [`invite_state`](#get_matrixclientv3sync_response-200_invited-room) and
+  [`knock_state`](#get_matrixclientv3sync_response-200_knocked-room) on
+  [`/sync`](#get_matrixclientv3sync) responses.
+* On [`m.room.member`](#mroommember) events, the `invite_room_state`
+  and `knock_room_state` under `unsigned` on the event.
+
 {{% boxes/note %}}
 Clients should inspect the list of stripped state events and not assume any
 particular event is present. The server might include events not described
@@ -2846,6 +2854,12 @@ Although stripped state is usually generated and provided by the server, it
 is still possible to be incorrect on the receiving end. The stripped state
 events are not signed and could theoretically be modified, or outdated due to
 updates not being sent.
+{{% /boxes/warning %}}
+
+{{% boxes/warning %}}
+{{% added-in v="1.16" %}} Servers cannot pass through what they receive over
+federation to clients as stripped state. Servers are expected to prune the events
+into the stripped state schema below before passing the details onto clients.
 {{% /boxes/warning %}}
 
 {{% event-fields event_type="stripped_state" %}}

@@ -72,13 +72,32 @@ paths:
                   $ref: definitions/invite_event.yaml
                 invite_room_state:
                   type: array
+                  x-changedInMatrixVersion:
+                    "1.16": |
+                      `m.room.create` and format requirements were added.
                   description: |-
-                    An optional list of [stripped state events](/client-server-api/#stripped-state)
-                    to help the receiver of the invite identify the room.
+                    A list of state events to help the receiver of the invite identify the room.
+                    Translated as [stripped state events](/client-server-api/#stripped-state)
+                    over the Client-Server API.
+
+                    MUST contain the `m.room.create` event for the room. All events listed
+                    MUST additionally be formatted according to the room version specification.
+
+                    Servers might need to apply validation to the `invite_room_state` depending
+                    on room version. See the `400 M_MISSING_PARAM` error definition for more
+                    information.
+
+                    Note that events have a different format depending on the room
+                    version - check the [room version specification](/rooms) for
+                    precise event formats.
                   items:
-                    $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
-                  example:
-                    $ref: ../../event-schemas/examples/invite_room_state.json
+                    type: object
+                    title: PDU
+                    properties: {}
+                    description: |-
+                      Note that events have a different format depending on the room
+                      version - check the [room version specification](/rooms) for
+                      precise event formats.
               required:
                 - room_version
                 - event
@@ -111,24 +130,7 @@ paths:
                       "origin_server_ts": 1549041175876,
                       "sender": "@someone:example.org",
                       "unsigned": {
-                        "invite_room_state": [
-                          {
-                            "type": "m.room.name",
-                            "sender": "@bob:example.org",
-                            "state_key": "",
-                            "content": {
-                              "name": "Example Room"
-                            }
-                          },
-                          {
-                            "type": "m.room.join_rules",
-                            "sender": "@bob:example.org",
-                            "state_key": "",
-                            "content": {
-                              "join_rule": "invite"
-                            }
-                          }
-                        ]
+                        "invite_room_state": {"$ref": "./examples/invite_or_knock_state.json"}
                       },
                       "content": {
                         "membership": "invite"
@@ -151,6 +153,24 @@ paths:
 
             The error should be passed through to clients so that they
             may give better feedback to users.
+
+            The `M_MISSING_PARAM` error code is used to indicate one or more of
+            the following:
+
+            * The `m.room.create` event is missing from `invite_room_state`.
+            * One or more entries in `invite_room_state` are not formatted according
+              to the room's version.
+            * One or more events fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+            * One or more events does not reside in the same room as the invite.
+              Note: Some room versions may require calculating the room ID for an
+              event rather than relying on the presence of `room_id`.
+
+            Servers MAY apply the validation above to room versions 1 through 11,
+            and SHOULD apply the validation above to all other room versions.
+
+            If `M_MISSING_PARAM` is returned and the request is associated with a
+            Client-Server API request, the Client-Server API request SHOULD fail
+            with a 5xx error rather than being passed through.
           content:
             application/json:
               schema:

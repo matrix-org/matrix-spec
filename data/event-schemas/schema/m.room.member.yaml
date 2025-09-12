@@ -137,6 +137,9 @@ properties:
       - type: object
         properties:
           invite_room_state:
+            x-changedInMatrixVersion:
+              "1.16": |
+                `m.room.create` was made a required event type for stripped state.
             description: |-
               A subset of the state of the room at the time of the invite, if `membership` is `invite`.
               Note that this state is informational, and SHOULD NOT be trusted; once the client has
@@ -145,16 +148,21 @@ properties:
               they SHOULD behave properly (with possibly a degraded but not a broken experience) in
               the absence of any particular events here. If they are set on the room, at least the
               state for `m.room.avatar`, `m.room.canonical_alias`, `m.room.join_rules`, and `m.room.name`
-              SHOULD be included.
+              SHOULD be included. The `m.room.create` event MUST be included, though MAY be missing if
+              the server hasn't updated to support the Matrix 1.16 specification.
             items:
               $ref: "core-event-schema/stripped_state.yaml"
             type: array
           knock_room_state:
+            x-changedInMatrixVersion:
+              "1.16": |
+                `m.room.create` was made a required event type for stripped state.
             description: |-
               A subset of the state of the room at the time of the knock, if `membership` is `knock`.
               This has the same restrictions as `invite_room_state`. If they are set on the room, at least
               the state for `m.room.avatar`, `m.room.canonical_alias`, `m.room.join_rules`, `m.room.name`,
-              and `m.room.encryption` SHOULD be included.
+              and `m.room.encryption` SHOULD be included. The `m.room.create` event MUST be included,
+              though MAY be missing if the server hasn't updated to support the Matrix 1.16 specification.
             items:
               $ref: "core-event-schema/stripped_state.yaml"
             type: array

@@ -945,6 +945,18 @@ Note that invites are used to indicate that knocks were accepted. As such,
 receiving servers should be prepared to manually link up a previous knock
 to an invite if the invite event does not directly reference the knock.
 
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} `invite_room_state` MUST now have its entries formatted
+according to the room's version (see [room version specification](/rooms)). However,
+servers SHOULD consider their local ecosystems before returning the described
+`400 M_MISSING_PARAM` error code. While migrating, servers SHOULD warn about
+invites which fail the validation rather than error in room versions 1 through 11.
+All invites to other room versions which fail validation SHOULD result in an error.
+
+The specification suggests that servers finish their migration no later than
+January 2026, though servers may extend this as required to support their users.
+{{% /boxes/note %}}
+
 {{% http-api spec="server-server" api="invites-v1" %}}
 
 {{% http-api spec="server-server" api="invites-v2" %}}
