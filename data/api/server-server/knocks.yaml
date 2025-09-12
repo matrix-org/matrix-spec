@@ -319,14 +319,14 @@ paths:
                       version - check the [room version specification](/rooms) for
                       precise event formats.
                     example:
-                      "$ref": "./examples/stripped_state.json"
+                      "$ref": "./examples/invite_or_knock_state.json"
                 required:
                   - knock_room_state
               examples:
                 response:
                   value: {
                     "knock_room_state": {
-                      "$ref": "./examples/stripped_state.json"
+                      "$ref": "./examples/invite_or_knock_state.json"
                     }
                   }
         "403":
