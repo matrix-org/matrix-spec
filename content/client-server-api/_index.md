@@ -2823,7 +2823,7 @@ the following places:
 * [`invite_state`](#get_matrixclientv3sync_response-200_invited-room) and
   [`knock_state`](#get_matrixclientv3sync_response-200_knocked-room) on
   [`/sync`](#get_matrixclientv3sync) responses.
-* When present on [`m.room.member`](#mroommember) events, the `invite_room_state`
+* On [`m.room.member`](#mroommember) events, the `invite_room_state`
   and `knock_room_state` under `unsigned` on the event.
 
 {{% boxes/note %}}
