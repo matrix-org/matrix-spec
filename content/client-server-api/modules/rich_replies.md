@@ -64,11 +64,11 @@ as if it were to be under `m.relates_to` directly instead.
 
 #### Mentioning the replied to user
 
-In order to notify users of the reply, it may be desirable to include the `sender`
-of the replied to event and any users mentioned in that event. See
-[user and room mentions](#user-and-room-mentions) for additional information.
+In order to notify users of the reply, it MAY be desirable to include the `sender`
+of the replied to event. See [user and room mentions](#user-and-room-mentions) for
+additional information.
 
-An example including mentioning the original sender and other users:
+An example including mentioning the original sender:
 
 ```json
 {
@@ -83,8 +83,6 @@ An example including mentioning the original sender and other users:
       "user_ids": [
         // The sender of $another_event.
         "@alice:example.org",
-        // Another Matrix ID copied from the m.mentions property of $another_event.
-        "@bob:example.org"
       ]
     }
   },
