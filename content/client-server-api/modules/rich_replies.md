@@ -64,6 +64,11 @@ as if it were to be under `m.relates_to` directly instead.
 
 #### Mentioning the replied to user
 
+{{% boxes/note %}}
+{{% changed-in v="1.16" %}}
+Clients SHOULD no longer propagate mentioned users in the replied to event.
+{{% /boxes/note %}}
+
 In order to notify users of the reply, it MAY be desirable to include the `sender`
 of the replied to event. See [user and room mentions](#user-and-room-mentions) for
 additional information.
