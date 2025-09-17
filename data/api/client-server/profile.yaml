@@ -29,6 +29,11 @@ paths:
         Servers MAY reject `null` values. Servers that accept `null` values SHOULD store
         them rather than treating `null` as a deletion request. Clients that want to delete a
         field, including its key and value, SHOULD use the `DELETE` endpoint instead.
+
+        This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation)
+        depending on the `keyName`. Clients SHOULD check the value of the
+        [`m.profile_fields` capability](/client-server-api/#mprofile_fields-capability) to detect
+        which `keyName`s they are allowed to modify.
       operationId: setProfileField
       security:
         - accessTokenQuery: []
