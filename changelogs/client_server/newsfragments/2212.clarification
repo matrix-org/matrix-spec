@@ -1,0 +1,1 @@
+Add note to each endpoint that uses capability negotiation and document expected response when the capability is not available.
