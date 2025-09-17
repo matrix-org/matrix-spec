@@ -1,1 +1,0 @@
-Fix `/sync` flow referencing incorrect parameter to use with `/messages`.

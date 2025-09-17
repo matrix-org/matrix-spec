@@ -1,1 +1,0 @@
-In room versions 1 through 12, an event's `auth_events` have always needed to belong to the same room as per [MSC4307](https://github.com/matrix-org/matrix-spec-proposals/pull/4307).
