@@ -32,8 +32,8 @@ paths:
 
         This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation)
         depending on the `keyName`.
-        For the `displayname` key, clients SHOULD check the value of the [`m.set_displayname` capability](/client-server-api/#m.set_displayname-capability).
-        For the `avatar_url` key, clients SHOULD check the value of the [`m.set_avatar_url` capability](/client-server-api/#m.set_avatar_url-capability).
+        For the `displayname` key, clients SHOULD check the value of the [`m.set_displayname` capability](/client-server-api/#mset_displayname-capability).
+        For the `avatar_url` key, clients SHOULD check the value of the [`m.set_avatar_url` capability](/client-server-api/#mset_avatar_url-capability).
       operationId: setProfileField
       security:
         - accessTokenQuery: []
