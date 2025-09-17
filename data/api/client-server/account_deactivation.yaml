@@ -35,6 +35,12 @@ paths:
         Unlike other endpoints, this endpoint does not take an `id_access_token`
         parameter because the homeserver is expected to sign the request to the
         identity server instead.
+
+        {{% boxes/warning %}}
+        Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
+        via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        {{% /boxes/warning %}}
+
       security:
         - {}
         - accessTokenQuery: []
