@@ -93,7 +93,7 @@ Example:
 ```
 
 `ed25519` and `curve25519` keys are used for [device keys](#device-keys).
-Additionally, `ed25519` keys are keys used for [cross-signing](#cross-signing).
+Additionally, `ed25519` keys are used for [cross-signing](#cross-signing).
 
 `signed_curve25519` keys are used for [one-time and fallback keys](#one-time-and-fallback-keys).
 
