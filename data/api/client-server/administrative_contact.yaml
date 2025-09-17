@@ -99,6 +99,10 @@ paths:
         has been removed, making this endpoint behave as though it was `false`.
         This results in this endpoint being an equivalent to `/3pid/bind` rather
         than dual-purpose.
+
+        This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation).
+        Clients SHOULD check the value of the [`m.3pid_changes` capability](/client-server-api/#m3pid_changes-capability)
+        to determine if this endpoint is available.
       operationId: post3PIDs
       deprecated: true
       security:
@@ -176,6 +180,18 @@ paths:
                   value: {
                     "submit_url": "https://example.org/path/to/submitToken"
                   }
+        "400":
+          description: The 3PID changes capability is not available.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "3PID changes are disabled on this server."
+                  }
         "403":
           description: The credentials could not be verified with the identity server.
           content:
@@ -201,6 +217,10 @@ paths:
 
         Homeservers should prevent the caller from adding a 3PID to their account if it has
         already been added to another user's account on the homeserver.
+
+        This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation).
+        Clients SHOULD check the value of the [`m.3pid_changes` capability](/client-server-api/#m3pid_changes-capability)
+        to determine if this endpoint is available.
 
         {{% boxes/warning %}}
         Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
@@ -244,6 +264,18 @@ paths:
               examples:
                 response:
                   value: {}
+        "400":
+          description: The 3PID changes capability is not available.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "3PID changes are disabled on this server."
+                  }
         "401":
           description: The homeserver requires additional authentication information.
           content:
@@ -331,6 +363,10 @@ paths:
         Unlike other endpoints, this endpoint does not take an `id_access_token`
         parameter because the homeserver is expected to sign the request to the
         identity server instead.
+
+        This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation).
+        Clients SHOULD check the value of the [`m.3pid_changes` capability](/client-server-api/#m3pid_changes-capability)
+        to determine if this endpoint is available.
       operationId: delete3pidFromAccount
       security:
         - accessTokenQuery: []
@@ -389,6 +425,18 @@ paths:
                     example: success
                 required:
                   - id_server_unbind_result
+        "400":
+          description: The 3PID changes capability is not available.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "3PID changes are disabled on this server."
+                  }
       tags:
         - Account management
   /account/3pid/unbind:

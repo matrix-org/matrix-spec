@@ -29,6 +29,11 @@ paths:
         Servers MAY reject `null` values. Servers that accept `null` values SHOULD store
         them rather than treating `null` as a deletion request. Clients that want to delete a
         field, including its key and value, SHOULD use the `DELETE` endpoint instead.
+
+        This endpoint uses [capabilities negotiation](/client-server-api/#capabilities-negotiation)
+        depending on the `keyName`.
+        For the `displayname` key, clients SHOULD check the value of the [`m.set_displayname` capability](/client-server-api/#m.set_displayname-capability).
+        For the `avatar_url` key, clients SHOULD check the value of the [`m.set_avatar_url` capability](/client-server-api/#m.set_avatar_url-capability).
       operationId: setProfileField
       security:
         - accessTokenQuery: []
@@ -115,6 +120,12 @@ paths:
                     {
                       "errcode": "M_INVALID_PARAM",
                       "error": "Invalid profile key.",
+                    }
+                capability_disabled:
+                  value:
+                    {
+                      "errcode": "M_FORBIDDEN",
+                      "error": "Profile modification is disabled on this homeserver.",
                     }
         "403":
           description: The server is unwilling to perform the operation, either
