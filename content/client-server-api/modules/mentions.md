@@ -3,7 +3,7 @@
 
 {{% changed-in v="1.7" %}}
 
-{{% changed-in v="1.16" %}}: the legacy push rules that looked for mentions in
+{{% changed-in v="1.17" %}}: the legacy push rules that looked for mentions in
 the `body` of the event were removed.
 
 This module allows users to "mention" other users and rooms within a room event.

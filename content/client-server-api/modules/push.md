@@ -382,7 +382,7 @@ The following `alt_aliases` values will NOT match:
 
 **`contains_display_name`**
 
-{{% changed-in v="1.16" %}}: this condition is deprecated and **should not be
+{{% changed-in v="1.17" %}}: this condition is deprecated and **should not be
 used in new push rules**.
 
 This matches messages where `content.body` contains the owner's display name in
@@ -416,7 +416,7 @@ Parameters:
 
 #### Predefined Rules
 
-{{% changed-in v="1.16" %}}: the legacy default push rules that looked for
+{{% changed-in v="1.17" %}}: the legacy default push rules that looked for
 mentions in the `body` of the event were removed.
 
 Homeservers can specify "server-default rules". They operate at a lower
