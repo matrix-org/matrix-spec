@@ -438,8 +438,8 @@ user ID without a password.
 
     Content:
     {
-      type: "m.login.application_service",
-      username: "_irc_example"
+      "type": "m.login.application_service",
+      "username": "_irc_example"
     }
 
 Similarly, logging in as users needs API changes in order to allow the AS to
@@ -454,7 +454,7 @@ log in without needing the user's password. This is achieved by including the
 
     Content:
     {
-      type: "m.login.application_service",
+      "type": "m.login.application_service",
       "identifier": {
         "type": "m.id.user",
         "user": "_irc_example"
