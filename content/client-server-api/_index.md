@@ -3386,10 +3386,10 @@ Unspecified room types are permitted through the use of
 ### Creation
 
 The homeserver will create an `m.room.create` event when a room is
-created, which serves as the root of the event graph for this room. This
-event also has a `creator` key which contains the user ID of the room
-creator. It will also generate several other events in order to manage
-permissions in this room. This includes:
+created, which serves as the root of the event graph for this room. The
+event `sender` is the user ID of the room creator. The server will also
+generate several other events in order to manage permissions in this room.
+This includes:
 
 -   `m.room.power_levels` : Sets the power levels of users and required power
     levels for various actions within the room such as sending events.
