@@ -110,6 +110,18 @@ paths:
             application/json:
               schema:
                 $ref: definitions/auth_response.yaml
+        "404":
+          description: The get login token capability is not available.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_UNRECOGNIZED",
+                    "error": "The get login token capability is not available."
+                  }
         "429":
           description: This request was rate-limited.
           content:
