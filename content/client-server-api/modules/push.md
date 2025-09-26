@@ -83,7 +83,7 @@ Push Ruleset
 :   A push ruleset *scopes a set of rules according to some criteria*. For
     example, some rules may only be applied for messages from a particular
     sender, a particular room, or by default. The push ruleset contains the
-    entire set of scopes and rules.
+    entire set of rules.
 
 #### Push Rules
 
@@ -91,10 +91,8 @@ A push rule is a single rule that states under what *conditions* an
 event should be passed onto a push gateway and *how* the notification
 should be presented. There are different "kinds" of push rules and each
 rule has an associated priority. Every push rule MUST have a `kind` and
-`rule_id`. The `rule_id` is a unique string within the kind of rule and
-its' scope: `rule_ids` do not need to be unique between rules of the
-same kind on different devices. Rules may have extra keys depending on
-the value of `kind`.
+`rule_id`. The `rule_id` is a unique string within the kind of rule.
+Rules may have extra keys depending on the value of `kind`.
 
 The different `kind`s of rule, in the order that they are checked, are:
 
