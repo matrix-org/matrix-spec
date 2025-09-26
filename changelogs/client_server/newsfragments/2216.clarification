@@ -1,0 +1,1 @@
+`room_id` is required for peeking via `/_matrix/client/v3/events`.
