@@ -134,9 +134,14 @@ entity isn't in the room.
 `mxc://` URIs are vulnerable to directory traversal attacks such as
 `mxc://127.0.0.1/../../../some_service/etc/passwd`. This would cause the
 target homeserver to try to access and return this file. As such,
-homeservers MUST sanitise `mxc://` URIs by allowing only alphanumeric
-(`A-Za-z0-9`), `_` and `-` characters in the `server-name` and
-`media-id` values. This set of whitelisted characters allows URL-safe
+homeservers MUST sanitise `mxc://` URIs by:
+
+-   restricting the `server-name` segment to valid
+    [server names](/appendices/#server-name)
+-   allowing only alphanumeric (`A-Za-z0-9`), `_` and `-` characters in
+    the `media-id` segment
+
+The resulting set of whitelisted characters allows URL-safe
 base64 encodings specified in RFC 4648. Applying this character
 whitelist is preferable to blacklisting `.` and `/` as there are
 techniques around blacklisted characters (percent-encoded characters,
