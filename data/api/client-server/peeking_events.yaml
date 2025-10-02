@@ -59,6 +59,7 @@ paths:
           example: "!somewhere:over.the.rainbow"
           schema:
             type: string
+          required: true
       responses:
         "200":
           description: The events received, which may be none.
