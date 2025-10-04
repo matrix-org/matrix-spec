@@ -74,7 +74,7 @@ The rules are as follows:
             1.  If membership state is `join` or `invite`, allow.
             2.  If the `join_authorised_via_users_server` key in `content`
                 is not a user with sufficient permission to invite other
-                users, reject.
+                users or is not a joined member of the room, reject.
             3.  Otherwise, allow.
         6.  If the `join_rule` is `public`, allow.
         7.  Otherwise, reject.
