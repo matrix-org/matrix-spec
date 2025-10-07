@@ -458,25 +458,31 @@ In summary:
 
 Unstable endpoints MUST use `/unstable` as the endpoint version and a
 vendor prefix in Java package naming format. For example:
-`/_matrix/client/unstable/org.matrix.mscxxxx/login`. The foundation's
-preferred vendor prefix is `org.matrix`.
+`/_matrix/client/unstable/com.example.mscxxxx/login`.
+
+{{% boxes/note %}}
+Proposal authors operating with a Matrix.org Foundation mandate SHOULD use
+a vendor prefix within the `org.matrix` namespace. This namespace is otherwise
+restricted. Authors who don't own a domain MAY use the `com.github` namespace
+instead.
+{{% /boxes/note %}}
 
 Note that unstable namespaces do not automatically inherit endpoints from
 stable namespaces: for example, the fact that `/_matrix/client/v3/sync`
-exists does not imply that `/_matrix/client/unstable/org.matrix.mscxxxx/sync`
+exists does not imply that `/_matrix/client/unstable/com.example.mscxxxx/sync`
 exists.
 
 Vendor prefixes MUST also be used for:
 
 -   New parameters on existing endpoints. For example:
-    `/_matrix/client/v3/publicRooms?org.matrix.mscxxxx.ordered_by=member_count`.
+    `/_matrix/client/v3/publicRooms?com.example.mscxxxx.ordered_by=member_count`.
 -   New properties in existing JSON objects. For example:
 
     ```json
     {
       "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
       "displayname": "Alice Margatroid",
-      "org.matrix.mscxxxx.phone": [{
+      "com.example.mscxxxx.phone": [{
         "type": "landline",
         "number": "+1-206-555-7000"
       }],
@@ -487,7 +493,7 @@ Vendor prefixes MUST also be used for:
 
     ```json
     {
-      "errcode": "ORG.MATRIX.MSCXXXX.M_INVALID_EMAIL",
+      "errcode": "COM.EXAMPLE.MSCXXXX.M_INVALID_EMAIL",
       "error": "The email address you provided is invalid."
     }
     ```
@@ -496,13 +502,13 @@ If the client needs to be sure the server supports the feature, an
 unstable feature flag that MUST also be vendor prefixed is to be used.
 This flag shows up in the `unstable_features` section of
 [`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
-as, for example, `org.matrix.mscxxxx.new_login`.
+as, for example, `com.example.mscxxxx.new_login`.
 
 {{% boxes/note %}}
 MSCs MUST still describe what the stable endpoints/feature looks like
 with a note towards the bottom for what the unstable feature
 flag/prefixes are. For example, an MSC would propose `/_matrix/client/v1/new/endpoint`,
-not `/_matrix/client/unstable/org.matrix.mscxxxx/new/endpoint`.
+not `/_matrix/client/unstable/com.example.mscxxxx/new/endpoint`.
 {{% /boxes/note %}}
 
 When using this approach correctly, the implementation can release
