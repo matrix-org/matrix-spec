@@ -463,7 +463,7 @@ vendor prefix in Java package naming format. For example:
 {{% boxes/note %}}
 Proposal authors operating with a Matrix.org Foundation mandate SHOULD use
 a vendor prefix within the `org.matrix` namespace. This namespace is otherwise
-restricted. Authors who don't own a domain MAY use the `com.github` namespace
+restricted. Authors who don't own a domain MAY use the `io.github` namespace
 instead.
 {{% /boxes/note %}}
 
