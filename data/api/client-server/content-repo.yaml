@@ -605,7 +605,8 @@ paths:
           description: |-
             The OpenGraph data for the URL, which may be empty. Some values are
             replaced with matrix equivalents if they are provided in the response.
-            The differences from the OpenGraph protocol are described here.
+            The differences from the [OpenGraph](https://ogp.me/) protocol are
+            described here.
           content:
             application/json:
               schema:
@@ -620,6 +621,9 @@ paths:
                     format: uri
                     description: An [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris) to
                       the image. Omitted if there is no image.
+                additionalProperties:
+                    description: |-
+                      Additional properties as per the [OpenGraph](https://ogp.me/) protocol.
               examples:
                 response:
                   value: {
