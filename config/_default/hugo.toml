@@ -110,7 +110,7 @@ sidebar_menu_compact = true
 [[params.links.bottom]]
 	name = "Twitter"
 	url = "https://twitter.com/matrixdotorg"
-	icon = "fab fa-twitter"
+	icon = "fab fa-x-twitter"
   desc = "Matrix on Twitter"
 
 
