@@ -324,7 +324,7 @@ paths:
         This endpoint was deprecated in r0 of this specification. Clients
         should instead call the
         [/rooms/{roomId}/event/{eventId}](/client-server-api/#get_matrixclientv3roomsroomideventeventid) API
-        or the [/rooms/{roomId}/context/{eventId](/client-server-api/#get_matrixclientv3roomsroomidcontexteventid) API.
+        or the [/rooms/{roomId}/context/{eventId}](/client-server-api/#get_matrixclientv3roomsroomidcontexteventid) API.
       operationId: getOneEvent
       security:
         - accessTokenQuery: []
