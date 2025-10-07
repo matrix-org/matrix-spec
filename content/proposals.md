@@ -489,6 +489,7 @@ Vendor prefixes MUST also be used for:
       ...
     }
     ```
+
 -   New values for existing parameters or properties. For example:
 
     ```json
