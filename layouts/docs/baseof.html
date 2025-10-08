@@ -12,6 +12,9 @@
     class="no-js">
   <head>
     {{ partial "head.html" . }}
+    {{ if .Page.Store.Get "hasMath" }}
+      <link href="https://cdn.jsdelivr.net/npm/katex@0.16.23/dist/katex.min.css" rel="stylesheet">
+    {{ end }}
   </head>
   <body class="td-{{ .Kind }}{{ with .Page.Params.body_class }} {{ . }}{{ end }}">
     <header>

@@ -1,6 +1,6 @@
 ---
 title: "Spec Change Proposals"
-weight: 60
+weight: 62
 type: docs
 ---
 
