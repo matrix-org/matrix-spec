@@ -356,6 +356,7 @@ service would like to masquerade as.
 Inputs:
 -   Application service token (`as_token`)
 -   User ID in the AS namespace to act as.
+-   Device ID belonging to the User ID to act with.
 
 Notes:
 -   This applies to all aspects of the Client-Server API, except for
@@ -375,9 +376,19 @@ service's `user` namespaces. If the parameter is missing, the homeserver
 is to assume the application service intends to act as the user implied
 by the `sender_localpart` property of the registration.
 
+{{% added-in v="1.17" %}} Application services MAY similarly masquerade
+as a specific device ID belonging the user ID through use of the `device_id`
+query string parameter on the request. If the given device ID is not known
+to belong to the user, the server will return a 400 `M_UNKNOWN_DEVICE` error.
+If no `user_id` is supplied, the `device_id` MUST belong to the user implied
+by the `sender_localpart` property of the application service's registration.
+If no `device_id` is supplied, the homeserver is to assume the request is
+being made without a device ID and will fail to complete operations which
+require a device ID (such as uploading one-time keys).
+
 An example request would be:
 
-    GET /_matrix/client/v3/account/whoami?user_id=@_irc_user:example.org
+    GET /_matrix/client/v3/account/whoami?user_id=@_irc_user:example.org&device_id=ABC123
     Authorization: Bearer YourApplicationServiceTokenHere
 
 #### Timestamp massaging

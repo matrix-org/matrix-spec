@@ -132,6 +132,10 @@ The server did not understand the request. This is expected to be returned with
 a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
 code if the endpoint is implemented, but the incorrect HTTP method is used.
 
+`M_UNKNOWN_DEVICE`
+{{% added-in v="1.17" %}} The device ID supplied by the application service does
+not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
+
 `M_UNKNOWN`
 An unknown error has occurred.
 
