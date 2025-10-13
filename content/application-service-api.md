@@ -178,13 +178,13 @@ The application service API provides a transaction API for sending a
 list of events. Each list of events includes a transaction ID, which
 works as follows:
 
-```
+```nohighlight
     Typical
     HS ---> AS : Homeserver sends events with transaction ID T.
        <---    : Application Service sends back 200 OK.
 ```
 
-```
+```nohighlight
     AS ACK Lost
     HS ---> AS : Homeserver sends events with transaction ID T.
        <-/-    : AS 200 OK is lost.
@@ -258,7 +258,7 @@ have been omitted for brevity):
 
 **Typical**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
     HS <--- AS : 200 OK {}
@@ -267,7 +267,7 @@ AS <--- HS : 200 OK {"duration_ms": 123}
 
 **Incorrect `hs_token`**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
     HS <--- AS : 403 Forbidden {"errcode": "M_FORBIDDEN"}
@@ -276,7 +276,7 @@ AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 403, "body": 
 
 **Can't connect to appservice**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS -/-> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
 AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}

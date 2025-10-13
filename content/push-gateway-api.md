@@ -14,7 +14,7 @@ A client's homeserver forwards information about received events to the
 push gateway. The gateway then submits a push notification to the push
 notification provider (e.g. APNS, GCM).
 
-```
+```nohighlight
                                    +--------------------+  +-------------------+
                   Matrix HTTP      |                    |  |                   |
              Notification Protocol |   App Developer    |  |   Device Vendor   |

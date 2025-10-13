@@ -151,7 +151,7 @@ request.
 
 How data flows between clients:
 
-```
+```nohighlight
     { Matrix client A }                             { Matrix client B }
         ^          |                                    ^          |
         |  events  |  Client-Server API                 |  events  |

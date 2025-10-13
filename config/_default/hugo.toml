@@ -47,7 +47,7 @@ description = "Home of the Matrix specification for decentralised communication"
       [markup.goldmark.extensions.passthrough]
         enable = true
         [markup.goldmark.extensions.passthrough.delimiters]
-          block = [['\[', '\]'], ['$$', '$$']]
+          block = [['\[', '\]']]
           inline = [['\(', '\)']]
   [markup.highlight]
       # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
@@ -127,8 +127,7 @@ sidebar_menu_compact = true
 [[server.headers]]
   for = '/**'
   [server.headers.values]
-    # TODO: figure out CSP
-    # Content-Security-Policy = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     # Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"

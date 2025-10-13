@@ -39,16 +39,15 @@ bit chain key, \(C_{0,0}\), are derived from the shared secret using an
 HMAC-based Key Derivation Function using [SHA-256][] as the hash function
 ([HKDF-SHA-256][]) with default salt and ``"OLM_ROOT"`` as the info.
 
-```math
+\[
 \begin{aligned}
     S&=\operatorname{ECDH}\left(I_A,E_B\right)\;\parallel\;
        \operatorname{ECDH}\left(E_A,I_B\right)\;\parallel\;
        \operatorname{ECDH}\left(E_A,E_B\right)\\
-
     R_0\;\parallel\;C_{0,0}&=
         \operatorname{HKDF}\left(0,S,\text{``OLM\_ROOT"},64\right)
 \end{aligned}
-```
+\]
 
 #### Advancing the root key
 
@@ -61,7 +60,7 @@ chain key, \(C_{i,0}\), are derived from the shared secret using
 [HKDF-SHA-256][] using \(R_{i-1}\) as the salt and ``"OLM_RATCHET"`` as the
 info.
 
-```math
+\[
 \begin{aligned}
     R_i\;\parallel\;C_{i,0}&=
         \operatorname{HKDF}\left(
@@ -71,7 +70,7 @@ info.
             64
         \right)
 \end{aligned}
-```
+\]
 
 #### Advancing the chain key
 
@@ -79,11 +78,11 @@ Advancing a chain key takes the previous chain key, \(C_{i,j-1}\). The next
 chain key, \(C_{i,j}\), is the [HMAC-SHA-256][] of ``"\x02"`` using the
 previous chain key as the key.
 
-```math
+\[
 \begin{aligned}
     C_{i,j}&=\operatorname{HMAC}\left(C_{i,j-1},\text{``\char`\\x02"}\right)
 \end{aligned}
-```
+\]
 
 #### Creating a message key
 
@@ -93,11 +92,11 @@ current chain key as the key. The message keys where \(i\) is even are used
 by Alice to encrypt messages. The message keys where \(i\) is odd are used
 by Bob to encrypt messages.
 
-```math
+\[
 \begin{aligned}
     M_{i,j}&=\operatorname{HMAC}\left(C_{i,j},\text{``\char`\\x01"}\right)
 \end{aligned}
-```
+\]
 
 ### The Olm Protocol
 
@@ -206,7 +205,7 @@ a means for recipients to distinguish between them.
 Olm messages start with a one byte version followed by a variable length
 payload followed by a fixed length message authentication code.
 
-```text
+```nohighlight
  +--------------+------------------------------------+-----------+
  | Version Byte | Payload Bytes                      | MAC Bytes |
  +--------------+------------------------------------+-----------+
@@ -242,7 +241,7 @@ MAC protects all of the bytes preceding the MAC.
 Olm pre-key messages start with a one byte version followed by a variable
 length payload.
 
-```text
+```nohighlight
  +--------------+------------------------------------+
  | Version Byte | Payload Bytes                      |
  +--------------+------------------------------------+
@@ -269,12 +268,12 @@ encryption and [HMAC-SHA-256][] (truncated to 64 bits) for authentication.  The
 message key using [HKDF-SHA-256][] using the default salt and an info of
 ``"OLM_KEYS"``.
 
-```math
+\[
 \begin{aligned}
     AES\_KEY_{i,j}\;\parallel\;HMAC\_KEY_{i,j}\;\parallel\;AES\_IV_{i,j}
     &= \operatorname{HKDF}\left(0,M_{i,j},\text{``OLM\_KEYS"},80\right)
 \end{aligned}
-```
+\]
 
 The plain-text is encrypted with AES-256, using the key \(AES\_KEY_{i,j}\)
 and the IV \(AES\_IV_{i,j}\) to give the cipher-text, \(X_{i,j}\).
@@ -375,7 +374,7 @@ in use (256 bits for this version of Megolm).
 The ratchet is initialised with cryptographically-secure random data, and
 advanced as follows:
 
-```math
+\[
 \begin{aligned}
 R_{i,0} &=
   \begin{cases}
@@ -403,7 +402,7 @@ R_{i,3} &=
   H_3\left(R_{i-1,3}\right) &\text{otherwise}
   \end{cases}
 \end{aligned}
-```
+\]
 
 where \(H_0\), \(H_1\), \(H_2\), and \(H_3\) are different hash
 functions. In summary: every \(2^8\) iterations, \(R_{i,3}\) is
@@ -461,12 +460,12 @@ This version of Megolm uses [AES-256][] in [CBC][] mode with [PKCS#7][] padding 
 [HMAC-SHA-256][] (truncated to 64 bits). The 256 bit AES key, 256 bit HMAC key,
 and 128 bit AES IV are derived from the megolm ratchet \(R_i\):
 
-```math
+\[
 \begin{aligned}
  \mathit{AES\_KEY}_{i}\;\parallel\;\mathit{HMAC\_KEY}_{i}\;\parallel\;\mathit{AES\_IV}_{i}
     &= \operatorname{HKDF}\left(0,\,R_{i},\text{"MEGOLM\_KEYS"},\,80\right) \\
 \end{aligned}
-```
+\]
 
 where \(\parallel\) represents string splitting, and
 \(\operatorname{HKDF}\left(\mathit{salt},\,\mathit{IKM},\,\mathit{info},\,L\right)\)
@@ -497,14 +496,14 @@ received the session data.
 After each message is encrypted, the ratchet is advanced. This is done as
 described in [The Megolm ratchet algorithm](#the-megolm-ratchet-algorithm), using the following definitions:
 
-```math
+\[
 \begin{aligned}
     H_0(A) &\equiv \operatorname{HMAC}(A,\text{``\char`\\x00"}) \\
     H_1(A) &\equiv \operatorname{HMAC}(A,\text{``\char`\\x01"}) \\
     H_2(A) &\equiv \operatorname{HMAC}(A,\text{``\char`\\x02"}) \\
     H_3(A) &\equiv \operatorname{HMAC}(A,\text{``\char`\\x03"}) \\
 \end{aligned}
-```
+\]
 
 where \(\operatorname{HMAC}(A, T)\) is the HMAC-SHA-256 of ``T``, using ``A`` as the
 key.
@@ -528,7 +527,7 @@ session.
 
 The session sharing format is as follows:
 
-```text
+```nohighlight
 +---+----+--------+--------+--------+--------+------+-----------+
 | V | i  | R(i,0) | R(i,1) | R(i,2) | R(i,3) | Kpub | Signature |
 +---+----+--------+--------+--------+--------+------+-----------+
@@ -558,7 +557,7 @@ format](#session-sharing-format) except for dropping the signature.
 
 The Megolm session export format is thus as follows:
 
-```text
+```nohighlight
 +---+----+--------+--------+--------+--------+------+
 | V | i  | R(i,0) | R(i,1) | R(i,2) | R(i,3) | Kpub |
 +---+----+--------+--------+--------+--------+------+
@@ -577,7 +576,7 @@ Megolm messages consist of a one byte version, followed by a variable length
 payload, a fixed length message authentication code, and a fixed length
 signature.
 
-```text
+```nohighlight
 +---+------------------------------------+-----------+------------------+
 | V | Payload Bytes                      | MAC Bytes | Signature Bytes  |
 +---+------------------------------------+-----------+------------------+

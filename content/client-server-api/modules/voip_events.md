@@ -129,7 +129,7 @@ or not there have been any changes to the Matrix spec.
 
 A call is set up with message events exchanged as follows:
 
-```
+```nohighlight
     Caller                    Callee
     [Place Call]
     m.call.invite ----------->
@@ -144,7 +144,7 @@ A call is set up with message events exchanged as follows:
 
 Or a rejected call:
 
-```
+```nohighlight
     Caller                      Callee
     m.call.invite ------------>
     m.call.candidate --------->
