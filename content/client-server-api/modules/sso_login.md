@@ -67,7 +67,7 @@ opening an embedded web view.
 
 These steps are illustrated as follows:
 
-```
+```nohighlight
     Matrix Client                        Matrix Homeserver      Auth Server
         |                                       |                   |
         |-------------(0) GET /login----------->|                   |

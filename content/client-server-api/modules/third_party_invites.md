@@ -44,7 +44,7 @@ If the lookup yields a result for a Matrix User ID then the normal [invite
 process](/server-server-api/#inviting-to-a-room) can be initiated. This process
 ends up looking like this:
 
-```
+```nohighlight
     +---------+                         +-------------+                                    +-----------------+
     | Client  |                         | Homeserver  |                                    | IdentityServer  |
     +---------+                         +-------------+                                    +-----------------+
@@ -74,7 +74,7 @@ the invite on the identity server with a call to
 and emit a valid [`m.room.third_party_invite`](#mroomthird_party_invite) event
 to the room. This process ends up looking like this:
 
-```
+```nohighlight
     +---------+                         +-------------+                                               +-----------------+
     | Client  |                         | Homeserver  |                                               | IdentityServer  |
     +---------+                         +-------------+                                               +-----------------+
@@ -133,7 +133,7 @@ and an identity server IS, the full sequence for a third-party invite
 would look like the following. This diagram assumes H1 and H2 are
 residents of the room while H3 is attempting to join.
 
-```
+```nohighlight
     +-------+ +-----------------+         +-----+                                          +-----+           +-----+                      +-----+
     | UserA | | ThirdPartyUser  |         | H1  |                                          | H2  |           | H3  |                      | IS  |
     +-------+ +-----------------+         +-----+                                          +-----+           +-----+                      +-----+

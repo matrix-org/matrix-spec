@@ -214,7 +214,7 @@ before delivering them to clients.
 Some receipts are sent across federation as EDUs with type `m.receipt`. The
 format of the EDUs are:
 
-```
+```nohighlight
 {
     <room_id>: {
         <receipt_type>: {
