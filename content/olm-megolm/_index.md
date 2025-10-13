@@ -305,7 +305,7 @@ has proven ownership of.
    publishes the same identity key, claiming it as her own. Alice downloads
    Eve's keys, and associates \(I_B\) with Eve. Alice sends a message to
    Eve; Eve cannot decrypt it, but forwards it to Bob. Bob believes the
-   Alice sent the message to him, wheras Alice intended it to go to Eve.
+   Alice sent the message to him, whereas Alice intended it to go to Eve.
 
    This is prevented by Alice including the user ID of the intended recpient
    (Eve) in the plain-text of the pre-key message. Bob can now tell that the
