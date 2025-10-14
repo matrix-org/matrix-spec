@@ -102,6 +102,13 @@ paths:
           example: "!au1ba7o:matrix.org"
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example: {}
+        required: true
       responses:
         "200":
           description: The room has been forgotten.
