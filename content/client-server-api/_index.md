@@ -907,6 +907,7 @@ This specification defines the following auth types:
 -   `m.login.dummy`
 -   `m.login.registration_token`
 -   {{% added-in v="1.11" %}} `m.login.terms`
+-   {{% added-in v="1.17" %}} `m.oauth`
 
 ###### Password-based
 
@@ -1244,6 +1245,40 @@ user during registration, if applicable.
    ```
 
 {{% definition path="api/client-server/definitions/m.login.terms_params" %}}
+
+###### OAuth authentication
+
+{{% added-in v="1.17" %}}
+
+| Type                          | Description                                                       |
+|-------------------------------|-------------------------------------------------------------------|
+| `m.oauth`                     | Authentication is supported by authorising via the homeserver's OAuth account management web UI. |
+
+{{% boxes/note %}}
+The `m.oauth` authentication type is currently only valid on the
+[`/keys/device_signing/upload`](/client-server-api/#post_matrixclientv3keysdevice_signingupload) endpoint.
+{{% /boxes/note %}}
+
+This authentication type provides homeservers the ability to guard access to
+sensitive actions when the client has authenticated via the
+[OAuth 2.0 API](/client-server-api/#oauth-20-api), which is otherwise not
+compatible with User-Interactive Authentication (UIA). To do so, the server
+returns a 401 response on the respective request, where the response body
+includes `m.oauth` in the `flows` list, and the `m.oauth` property in the
+`params` object has the structure [shown below](#definition-moauth-params).
+
+The client is expected to open the contained URL to let the user confirm the
+action in the homeserver's account management web UI. Once the user has done
+so, the client submits an `auth` dict with just the `session`, as follows,
+to complete the stage:
+
+```json
+{
+  "session": "<session ID>"
+}
+```
+
+{{% definition path="api/client-server/definitions/m.oauth_params" %}}
 
 ##### Fallback
 
@@ -1591,6 +1626,11 @@ because they don't have access to the user's credentials anymore.
 The [User-Interactive Authentication API](#user-interactive-authentication-api)
 is not compatible with the OAuth 2.0 API, so the endpoints that depend on it for
 authentication can't be used when an access token is obtained with this API.
+
+The only exception to this is the
+[`/keys/device_signing/upload`](/client-server-api/#post_matrixclientv3keysdevice_signingupload)
+endpoint which uses the [`m.oauth`](/client-server-api/#oauth-authentication)
+authentication type.
 {{% /boxes/warning %}}
 
 **Sample flow**
