@@ -20,9 +20,9 @@ Previously, a rich reply could only reference another `m.room.message` event.
 {{% boxes/note %}}
 {{% changed-in v="1.13" %}}
 In previous versions of the specification, rich replies could include a fallback
-representation of the original message message in the `body` (using a prefix
-sequence) and `formatted_body` (using a custom HTML element) for clients that do
-not support rich replies. This is no longer the case, but clients SHOULD still
+representation of the original message in the `body` (using a prefix sequence)
+and `formatted_body` (using a custom HTML element) for clients that do not
+support rich replies. This is no longer the case, but clients SHOULD still
 remove this fallback before rendering the event.
 
 To strip the fallback on the `body`, the client should iterate over each
