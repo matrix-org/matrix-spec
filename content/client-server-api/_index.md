@@ -136,6 +136,17 @@ code if the endpoint is implemented, but the incorrect HTTP method is used.
 {{% added-in v="1.17" %}} The device ID supplied by the application service does
 not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
 
+`M_RESOURCE_LIMIT_EXCEEDED`
+The request cannot be completed because the homeserver has reached a
+resource limit imposed on it. For example, a homeserver held in a shared
+hosting environment may reach a resource limit if it starts using too
+much memory or disk space. The error MUST have an `admin_contact` field
+to provide the user receiving the error a place to reach out to.
+Typically, this error will appear on routes which attempt to modify
+state (e.g.: sending messages, account data, etc) and not routes which
+only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
+[`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
+
 `M_UNKNOWN`
 An unknown error has occurred.
 
@@ -220,17 +231,6 @@ The request or entity was too large.
 `M_EXCLUSIVE`
 The resource being requested is reserved by an application service, or
 the application service making the request has not created the resource.
-
-`M_RESOURCE_LIMIT_EXCEEDED`
-The request cannot be completed because the homeserver has reached a
-resource limit imposed on it. For example, a homeserver held in a shared
-hosting environment may reach a resource limit if it starts using too
-much memory or disk space. The error MUST have an `admin_contact` field
-to provide the user receiving the error a place to reach out to.
-Typically, this error will appear on routes which attempt to modify
-state (e.g.: sending messages, account data, etc) and not routes which
-only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
-[`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
 
 `M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
 The user is unable to reject an invite to join the server notices room.
