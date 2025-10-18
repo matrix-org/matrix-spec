@@ -906,6 +906,7 @@ This specification defines the following auth types:
 -   `m.login.msisdn`
 -   `m.login.dummy`
 -   `m.login.registration_token`
+-   {{% added-in v="1.11" %}} `m.login.terms`
 
 ###### Password-based
 
