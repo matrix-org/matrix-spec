@@ -157,7 +157,7 @@ Some secret is encrypted using keys with ID `key_id_1` and `key_id_2`:
 
 `org.example.some.secret`:
 
-```
+```nohighlight
 {
   "encrypted": {
     "key_id_1": {
@@ -177,7 +177,7 @@ and the key descriptions for the keys would be:
 
 `m.secret_storage.key.key_id_1`:
 
-```
+```nohighlight
 {
   "name": "Some key",
   "algorithm": "m.secret_storage.v1.aes-hmac-sha2",
@@ -187,7 +187,7 @@ and the key descriptions for the keys would be:
 
 `m.secret_storage.key.key_id_2`:
 
-```
+```nohighlight
 {
   "name": "Some other key",
   "algorithm": "m.secret_storage.v1.aes-hmac-sha2",
@@ -199,7 +199,7 @@ If `key_id_1` is the default key, then we also have:
 
 `m.secret_storage.default_key`:
 
-```
+```nohighlight
 {
   "key": "key_id_1"
 }
@@ -294,7 +294,7 @@ in the `iterations` parameter.
 
 Example:
 
-```
+```nohighlight
 {
     "passphrase": {
         "algorithm": "m.pbkdf2",

@@ -1,7 +1,7 @@
 
 ### Push Notifications
 
-```
+```nohighlight
                                    +--------------------+  +-------------------+
                   Matrix HTTP      |                    |  |                   |
              Notification Protocol |   App Developer    |  |   Device Vendor   |

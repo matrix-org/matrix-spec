@@ -749,13 +749,13 @@ history (a permalink).
 
 The Matrix URI scheme is defined as follows (`[]` enclose optional parts, `{}`
 enclose variables):
-```
+```nohighlight
 matrix:[//{authority}/]{type}/{id without sigil}[/{type}/{id without sigil}...][?{query}][#{fragment}]
 ```
 
 As a schema, this can be represented as:
 
-```
+```nohighlight
 MatrixURI = "matrix:" hier-part [ "?" query ] [ "#" fragment ]
 hier-part = [ "//" authority "/" ] path
 path = entity-descriptor ["/" entity-descriptor]
@@ -865,7 +865,7 @@ below for more details.
 A matrix.to URI has the following format, based upon the specification
 defined in [RFC 3986](https://tools.ietf.org/html/rfc3986):
 
-```
+```nohighlight
 https://matrix.to/#/<identifier>/<extra parameter>?<additional arguments>
 ```
 

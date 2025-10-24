@@ -58,7 +58,7 @@ parent to the room. The `state_key` for the event is the child room's ID.
 
 For example, to achieve the following:
 
-```
+```nohighlight
 #space:example.org
     #general:example.org (!abcdefg:example.org)
     !private:example.org

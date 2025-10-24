@@ -1,6 +1,6 @@
 ---
 title: "Spec Change Proposals"
-weight: 60
+weight: 62
 type: docs
 ---
 
@@ -281,7 +281,7 @@ corresponding labels for each stage on the
 [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals)
 pull request trackers.
 
-```
+```nohighlight
                            +                          +
          Proposals         |          Spec PRs        |  Additional States
          +-------+         |          +------+        |  +---------------+

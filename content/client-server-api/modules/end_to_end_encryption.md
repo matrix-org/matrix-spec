@@ -18,7 +18,7 @@ exchange fingerprints between users to build a web of trust.
 device. This may include long-term identity keys, and/or one-time
 keys.
 
-```
+```nohighlight
       +----------+  +--------------+
       | Bob's HS |  | Bob's Device |
       +----------+  +--------------+
@@ -29,7 +29,7 @@ keys.
 
 2) Alice requests Bob's public identity keys and supported algorithms.
 
-```
+```nohighlight
       +----------------+  +------------+  +----------+
       | Alice's Device |  | Alice's HS |  | Bob's HS |
       +----------------+  +------------+  +----------+
@@ -40,7 +40,7 @@ keys.
 
 3) Alice selects an algorithm and claims any one-time keys needed.
 
-```
+```nohighlight
       +----------------+  +------------+  +----------+
       | Alice's Device |  | Alice's HS |  | Bob's HS |
       +----------------+  +------------+  +----------+
@@ -491,7 +491,7 @@ this example, Bob's device sends the `m.key.verification.start`, Alice's device
 could also send that message. As well, the order of the
 `m.key.verification.done` messages could be reversed.
 
-```
+```nohighlight
     +---------------+ +---------------+                    +-------------+ +-------------+
     | AliceDevice1  | | AliceDevice2  |                    | BobDevice1  | | BobDevice2  |
     +---------------+ +---------------+                    +-------------+ +-------------+
@@ -695,7 +695,7 @@ The process between Alice and Bob verifying each other would be:
 The wire protocol looks like the following between Alice and Bob's
 devices:
 
-```
+```nohighlight
     +-------------+                    +-----------+
     | AliceDevice |                    | BobDevice |
     +-------------+                    +-----------+
@@ -969,7 +969,7 @@ she can trust Bob's device if:
 
 The following diagram illustrates how keys are signed:
 
-```
+```nohighlight
     +------------------+                ..................   +----------------+
     | +--------------+ |   ..................            :   | +------------+ |
     | |              v v   v            :   :            v   v v            | |
@@ -1000,7 +1000,7 @@ the user who created them.
 The following diagram illustrates Alice's view, hiding the keys and
 signatures that she cannot see:
 
-```
+```nohighlight
     +------------------+                +----------------+   +----------------+
     | +--------------+ |                |                |   | +------------+ |
     | |              v v                |                v   v v            | |
@@ -1218,7 +1218,7 @@ The binary segment MUST be of the following form:
 
 For example, if Alice displays a QR code encoding the following binary data:
 
-```
+```nohighlight
       "MATRIX"    |ver|mode| len   | event ID
  4D 41 54 52 49 58  02  00   00 2D   21 41 42 43 44 ...
 | user's cross-signing key    | other user's cross-signing key | shared secret

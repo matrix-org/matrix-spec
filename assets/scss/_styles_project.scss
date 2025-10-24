@@ -502,6 +502,13 @@ Make padding symmetrical (this selector is used in the default styles to apply p
   }
 }
 
+/* Adjust the width of math to match normal paragraphs */
+@include media-breakpoint-up(lg) {
+  .katex-display {
+    max-width: 80%;
+  }
+}
+
 /* Adjust default styles for info banner */
 .pageinfo-primary {
   @include media-breakpoint-up(lg) {
