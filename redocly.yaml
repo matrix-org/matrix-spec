@@ -9,3 +9,5 @@ rules:
   no-path-trailing-slash: off
   operation-2xx-response: off
   spec-strict-refs: error
+  # $ref in examples are not spec-compliant so we perform this check in a python script.
+  no-invalid-schema-examples: off
