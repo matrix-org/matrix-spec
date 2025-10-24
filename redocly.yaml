@@ -9,5 +9,6 @@ rules:
   no-path-trailing-slash: off
   operation-2xx-response: off
   spec-strict-refs: error
-  # $ref in examples are not spec-compliant so we perform this check in a python script.
+  # $ref in examples are not spec-compliant, yet we find them useful. Disable this rule
+  # and instead check example schema using `check-event-schema-examples.py`
   no-invalid-schema-examples: off
