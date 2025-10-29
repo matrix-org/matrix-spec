@@ -44,6 +44,9 @@ description = "Home of the Matrix specification for decentralised communication"
       # Enables us to render raw HTML
       unsafe = true
     [markup.goldmark.extensions]
+      # Tell Goldmark to pass delimited blocks through the `render-passthrough` render hook.
+      # This is used to render the maths in the Olm spec.
+      # See: https://gohugo.io/functions/transform/tomath/#step-1.
       [markup.goldmark.extensions.passthrough]
         enable = true
         [markup.goldmark.extensions.passthrough.delimiters]
