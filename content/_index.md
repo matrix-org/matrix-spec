@@ -25,6 +25,7 @@ The specification consists of the following parts:
 * [Identity Service API](/identity-service-api)
 * [Push Gateway API](/push-gateway-api)
 * [Room Versions](/rooms)
+* [Olm & Megolm](/olm-megolm)
 * [Appendices](/appendices)
 
 Additionally, this introduction page contains the key baseline
