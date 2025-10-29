@@ -127,6 +127,8 @@ sidebar_menu_compact = true
 [[server.headers]]
   for = '/**'
   [server.headers.values]
+    # `style-src 'unsafe-inline'` is needed to correctly render the maths in the Olm spec:
+    # https://github.com/KaTeX/KaTeX/issues/4096
     Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
