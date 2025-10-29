@@ -1,3 +1,13 @@
+{{- /*
+
+    This is a passthrough render hook (https://gohugo.io/render-hooks/passthrough/).
+
+    We use it to send the delimited passthrough element through KaTeX to render maths
+    in the Olm / Megolm spec.
+
+    See: https://gohugo.io/functions/transform/tomath/#step-2
+
+*/ -}}
 {{- $opts := dict "output" "htmlAndMathml" "displayMode" (eq .Type "block") }}
 {{- with try (transform.ToMath .Inner $opts) }}
   {{- with .Err }}
