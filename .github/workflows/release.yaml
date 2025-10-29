@@ -12,6 +12,9 @@ jobs:
     defaults:
       run:
         working-directory: packages/npm
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: 🧮 Checkout code
         uses: actions/checkout@v4
@@ -23,6 +26,10 @@ jobs:
           cache-dependency-path: packages/npm/yarn.lock
           registry-url: "https://registry.npmjs.org"
 
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
+
       - name: 🔨 Install dependencies
         run: "yarn install --frozen-lockfile"
 
@@ -33,10 +40,4 @@ jobs:
           VERSION: ${{ github.event.release.tag_name }}.0
 
       - name: 🚀 Publish to npm
-        id: npm-publish
-        uses: JS-DevTools/npm-publish@19c28f1ef146469e409470805ea4279d47c3d35c # v3.1.1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: packages/npm
-          access: public
-          ignore-scripts: false
+        run: npm publish --provenance --access public --tag latest
