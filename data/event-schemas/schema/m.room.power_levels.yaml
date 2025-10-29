@@ -13,24 +13,34 @@ description: |-
   0. If the room contains no `m.room.power_levels` event, the room's creator has
   a power level of 100, and all other users have a power level of 0.
 
-  The level required to send a certain event is governed by `events`,
-  `state_default` and `events_default`. If an event type is specified in
-  `events`, then the user must have at least the level specified in order to
-  send that event. If the event type is not supplied, it defaults to
-  `events_default` for Message Events and `state_default` for State
-  Events.
+  Except for membership events and redactions, the level required to
+  send a certain event is governed purely by `events`, `state_default`
+  and `events_default`. If an event type is specified in `events`, then
+  the user must have at least the level specified in order to send that
+  event. If the event type is not supplied, it defaults to `events_default`
+  for message events and `state_default` for state events.
 
   If there is no `state_default` in the `m.room.power_levels` event, or
   there is no `m.room.power_levels` event, the `state_default` is 50.
   If there is no `events_default` in the `m.room.power_levels` event,
   or there is no `m.room.power_levels` event, the `events_default` is 0.
 
-  The power level required to invite a user to the room, kick a user from the
-  room, ban a user from the room, or redact an event sent by another user, is
-  defined by `invite`, `kick`, `ban`, and `redact`, respectively.  The levels
-  for `kick`, `ban` and `redact` default to 50 if they are not specified in the
-  `m.room.power_levels` event, or if the room contains no `m.room.power_levels`
-  event. `invite` defaults to 0 in either case.
+  Membership events are not subject to `events`, `events_default`, or
+  `state_default`. Instead, the power level required to invite a user
+  to the room, kick a user from the room, or ban a user from the room
+  is defined by `invite`, `kick`, and `ban`, respectively. The levels
+  for `kick` and `ban` default to 50 if they are not specified in the
+  `m.room.power_levels` event, or if the room contains no
+  `m.room.power_levels` event. `invite` defaults to 0 in either case.
+  Other membership values are handled during event authorization. See
+  the authorization rules in [room versions](/rooms) for further details.
+
+  For redactions of a user's own events, the required power level is
+  determined by the `m.room.redaction` event power level, as per `events`
+  and `events_default`. The power level required to redact an event sent
+  by another user is _additionally_ governed by `redact`. The level for
+  `redact` defaults to 50 if it is not specified in the `m.room.power_levels`
+  event, or if the room contains no `m.room.power_levels` event.
 
   **Note:**
 
