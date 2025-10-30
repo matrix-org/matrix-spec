@@ -3,7 +3,7 @@
 # Download the KaTeX fonts and CSS, and copy them into `static`.
 set -e
 
-root=$(git rev-parse --show-toplevel)
+root=$(dirname "$0")/..
 
 # Check that the caller supplied a version.
 version=$1
