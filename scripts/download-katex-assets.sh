@@ -36,6 +36,6 @@ install -vm644 "$tmp_dir/katex/katex.min.css" "$root/static/css/katex.min.css"
 
 # Remove any existing fonts and move the new ones into place.
 rm -rvf "$root"/static/css/fonts/KaTeX*
-while read -r file; do
+while IFS= read -r -d '' file; do
     install -vm644 "$file" "$root/static/css/fonts"
-done < <(find "$tmp_dir/katex/fonts" -maxdepth 1 -name "KaTeX*.woff2")
+done < <(find "$tmp_dir/katex/fonts" -maxdepth 1 -name "KaTeX*.woff2" -print0)
