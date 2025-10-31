@@ -687,7 +687,7 @@ request parameter.
 A client should first make a request with no `auth` parameter.
 The homeserver returns an HTTP 401 response, with a JSON body, as follows:
 
-```
+```nohighlight
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 ```
@@ -733,7 +733,7 @@ given. It also contains other keys dependent on the auth type being
 attempted. For example, if the client is attempting to complete auth
 type `example.type.foo`, it might submit something like this:
 
-```
+```nohighlight
 POST /_matrix/client/v3/endpoint HTTP/1.1
 Content-Type: application/json
 ```
@@ -756,7 +756,7 @@ along with the same object as when no authentication was attempted, with
 the addition of the `completed` key which is an array of auth types the
 client has completed successfully:
 
-```
+```nohighlight
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 ```
@@ -790,7 +790,7 @@ but the client may make a second attempt, it returns the same HTTP
 status 401 response as above, with the addition of the standard
 `errcode` and `error` fields describing the error. For example:
 
-```
+```nohighlight
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 ```
@@ -820,7 +820,7 @@ Content-Type: application/json
 If the request fails for a reason other than authentication, the server
 returns an error message in the standard format. For example:
 
-```
+```nohighlight
 HTTP/1.1 400 Bad request
 Content-Type: application/json
 ```
@@ -859,7 +859,7 @@ must still give a 401 response to requests with no auth data.
 At a high level, the requests made for an API call completing an auth
 flow with three stages will resemble the following diagram:
 
-```
+```nohighlight
     _______________________
     |       Stage 0         |
     | No auth               |
@@ -918,7 +918,7 @@ This specification defines the following auth types:
 To use this authentication type, clients should submit an auth dict as
 follows:
 
-```
+```nohighlight
 {
   "type": "m.login.password",
   "identifier": {
@@ -1168,7 +1168,7 @@ user during registration, if applicable.
 
 1. A client might submit a registration request as follows:
 
-   ```
+   ```nohighlight
    POST /_matrix/client/v3/register
    ```
    ```json
@@ -1181,7 +1181,7 @@ user during registration, if applicable.
 2. The server requires the user to accept some terms of service before
    registration, so returns the following response:
 
-   ```
+   ```nohighlight
    HTTP/1.1 401 Unauthorized
    Content-Type: application/json
    ```
@@ -1216,7 +1216,7 @@ user during registration, if applicable.
 
 4. The client repeats the registration request, confirming that the user has
    accepted the documents:
-   ```
+   ```nohighlight
    POST /_matrix/client/v3/register
    ```
    ```json
@@ -1231,7 +1231,7 @@ user during registration, if applicable.
    ```
 
 5. All authentication steps have now completed, so the request is successful:
-   ```
+   ```nohighlight
    HTTP/1.1 200 OK
    Content-Type: application/json
    ```
@@ -1652,7 +1652,7 @@ This authorization request URL must be opened in the user's browser:
 
 Sample authorization request, with extra whitespaces for readability:
 
-```
+```nohighlight
 https://account.example.com/oauth2/auth?
     client_id     = s6BhdRkqt3 &
     response_type = code &
@@ -1685,7 +1685,7 @@ used in the authorization request.
 
 A successful authorization will have a `code` value, for example:
 
-```
+```nohighlight
 https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
 ```
 
@@ -1697,7 +1697,7 @@ A failed authorization will have the following values:
 
 For example:
 
-```
+```nohighlight
 https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&error=access_denied&error_description=The+resource+owner+or+authorization+server+denied+the+request.&error_uri=https%3A%2F%2Ferrors.example.com%2F
 ```
 
@@ -1722,7 +1722,7 @@ type, the expiration time, and the refresh token.
 
 Sample token request:
 
-```
+```nohighlight
 POST /oauth2/token HTTP/1.1
 Host: account.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -2045,7 +2045,7 @@ When generating a new `device_id`, the client SHOULD generate a random string
 with enough entropy. It SHOULD only use characters from the unreserved character
 list defined by [RFC 3986 section 2.3](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3):
 
-```
+```nohighlight
 unreserved = a-z / A-Z / 0-9 / "-" / "." / "_" / "~"
 ```
 
@@ -2058,7 +2058,7 @@ In any case it MUST only use characters allowed by the OAuth 2.0 scope
 definition in [RFC 6749 section 3.3](https://datatracker.ietf.org/doc/html/rfc6749#section-3.3),
 which is defined as the following ASCII ranges:
 
-```
+```nohighlight
 %x21 / %x23-5B / %x5D-7E
 ```
 
@@ -2200,7 +2200,7 @@ The body of the request includes the following parameters, encoded as
 
 For example, revoking using the access token:
 
-```
+```nohighlight
 POST /oauth2/revoke HTTP/1.1
 Host: auth.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -2245,7 +2245,7 @@ set to `true` on all but the following Client-Server APIs:
 Servers MAY additionally include details of why the lock was applied in
 the `error` field.
 
-```
+```nohighlight
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 ```
@@ -2325,7 +2325,7 @@ When a client attempts to perform an action while suspended, the server MUST
 respond with a `403 Forbidden` error response with `M_USER_SUSPENDED` as the
 error code, as shown below:
 
-```
+```nohighlight
 HTTP/1.1 403 Forbidden
 Content-Type: application/json
 ```
@@ -2933,7 +2933,7 @@ For example, a `/sync` request might return a range of four events
 `E2`, `E3`, `E4` and `E5` within a given room, omitting two prior events
 `E0` and `E1`. This can be visualised as follows:
 
-```
+```nohighlight
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]
                ^                      ^
                |                      |
@@ -2951,7 +2951,7 @@ deprecated `/events` API) support long-polling in this way.
 Continuing the example above, an incremental sync might report
 a single new event `E6`. The response can be visualised as:
 
-```
+```nohighlight
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]->[E6]
                                       ^     ^
                                       |     |
@@ -2975,7 +2975,7 @@ the `since` parameter. The server knows about four new events, `E7`, `E8`,
 the server sends a `limited` response containing `E8`, `E9` and `E10`but
 omitting `E7`. This forms a gap, which we can see in the visualisation:
 
-```
+```nohighlight
                                             | gap |
                                             | <-> |
     [E0]->[E1]->[E2]->[E3]->[E4]->[E5]->[E6]->[E7]->[E8]->[E9]->[E10]
@@ -3070,29 +3070,29 @@ to another.
 
 Valid requests look like:
 
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.example.event
 { "key" : "without a state key" }
 ```
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.another.example.event/foo
 { "key" : "with 'foo' as the state key" }
 ```
 
 In contrast, these requests are invalid:
 
-```
+```nohighlight
 POST /rooms/!roomid:domain/state/m.example.event/
 { "key" : "cannot use POST here" }
 ```
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.another.example.event/foo/11
 { "key" : "txnIds are not supported" }
 ```
 
 Care should be taken to avoid setting the wrong `state key`:
 
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.another.example.event/11
 { "key" : "with '11' as the state key, but was probably intended to be a txnId" }
 ```
@@ -3100,7 +3100,7 @@ PUT /rooms/!roomid:domain/state/m.another.example.event/11
 The `state_key` is often used to store state about individual users, by
 using the user ID as the `state_key` value. For example:
 
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.favorite.animal.event/%40my_user%3Aexample.org
 { "animal" : "cat", "reason": "fluffy" }
 ```
@@ -3108,7 +3108,7 @@ PUT /rooms/!roomid:domain/state/m.favorite.animal.event/%40my_user%3Aexample.org
 In some cases, there may be no need for a `state_key`, so it can be
 omitted:
 
-```
+```nohighlight
 PUT /rooms/!roomid:domain/state/m.room.bgd.color
 { "color": "red", "hex": "#ff0000" }
 ```

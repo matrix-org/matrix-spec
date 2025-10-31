@@ -289,7 +289,7 @@ and any query parameters if present, but should not include the leading
 
 Step 1 sign JSON:
 
-```
+```nohighlight
 {
     "method": "POST",
     "uri": "/target",
@@ -822,7 +822,7 @@ ResidentServer->JoiningServer: send_join response
 JoiningServer->Client: join response
 -->
 
-```
+```nohighlight
 +---------+          +---------------+            +-----------------+ +-----------------+
 | Client  |          | JoiningServer |            | DirectoryServer | | ResidentServer  |
 +---------+          +---------------+            +-----------------+ +-----------------+

@@ -43,6 +43,15 @@ description = "Home of the Matrix specification for decentralised communication"
     [markup.goldmark.renderer]
       # Enables us to render raw HTML
       unsafe = true
+    [markup.goldmark.extensions]
+      # Tell Goldmark to pass delimited blocks through the `render-passthrough` render hook.
+      # This is used to render the maths in the Olm spec.
+      # See: https://gohugo.io/functions/transform/tomath/#step-1.
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block = [['\[', '\]']]
+          inline = [['\(', '\)']]
   [markup.highlight]
       # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
       # If the style is changed, remember to regenerate the CSS with:
@@ -121,7 +130,9 @@ sidebar_menu_compact = true
 [[server.headers]]
   for = '/**'
   [server.headers.values]
-    Content-Security-Policy = "default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
+    # `style-src 'unsafe-inline'` is needed to correctly render the maths in the Olm spec:
+    # https://github.com/KaTeX/KaTeX/issues/4096
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     # Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"

@@ -33,7 +33,7 @@ specification.
 Content locations are represented as Matrix Content (`mxc://`) URIs. They
 look like:
 
-```
+```nohighlight
 mxc://<server-name>/<media-id>
 
 <server-name> : The name of the homeserver where this content originated, e.g. matrix.org
