@@ -1457,8 +1457,8 @@ readers without adding any useful extra information.
 ##### `m.olm.v1.curve25519-aes-sha2`
 
 The name `m.olm.v1.curve25519-aes-sha2` corresponds to version 1 of the
-Olm ratchet, as defined by the [Olm
-specification](http://matrix.org/docs/spec/olm.html). This uses:
+Olm ratchet, as defined by the [Olm specification](/olm-megolm/olm).
+This uses:
 
 -   Curve25519 for the initial key agreement.
 -   HKDF-SHA-256 for ratchet key derivation.
@@ -1631,8 +1631,8 @@ This is due to a deprecation of the fields. See
 {{% changed-in v="1.3" %}}
 
 The name `m.megolm.v1.aes-sha2` corresponds to version 1 of the Megolm
-ratchet, as defined by the [Megolm
-specification](http://matrix.org/docs/spec/megolm.html). This uses:
+ratchet, as defined by the [Megolm specification](/olm-megolm/megolm).
+This uses:
 
 -   HMAC-SHA-256 for the hash ratchet.
 -   HKDF-SHA-256, AES-256 in CBC mode, and 8 byte truncated HMAC-SHA-256
