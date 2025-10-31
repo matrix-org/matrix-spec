@@ -133,10 +133,15 @@ paths:
             sync and the **start** of the timeline in `state` and MUST omit
             `state_after`.
 
-            Even if this is set to `true`, clients MUST update their local state
-            with events in `state` and `timeline` if `state_after` is missing in
-            the response, for compatibility with servers that don't support this
-            parameter.
+            Servers MAY implement this parameter ahead of declaring support for
+            the version of the spec in which it was introduced. Consequently,
+            clients MAY set this parameter to `true` regardless of the
+            [`/versions`](/client-server-api/#get_matrixclientversions) response.
+            If they do, they can infer whether the server actually supports this
+            parameter from the presence of `state_after` in the response. If
+            `state_after` is missing, clients MUST behave as if they had not
+            specified the parameter and update their local state with events
+            in `state` and `timeline`.
 
             By default, this is `false`.
           example: false
