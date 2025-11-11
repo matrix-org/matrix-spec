@@ -675,7 +675,7 @@ The process between Alice and Bob verifying each other would be:
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
     * Each of the keys that they wish the other user to verify (usually their
-      device ed25519 key and their master key, see below).
+      device ed25519 key and their master signing key, see below).
     * The complete list of key IDs that they wish the other user to verify.
 
     The MAC calculation is defined [below](#mac-calculation).
@@ -937,49 +937,50 @@ used to trust device keys that were not verified directly.
 
 Each user has three ed25519 key pairs used for cross-signing:
 
--   a master key (MK) that serves as the user's identity in
-    cross-signing and signs their user-signing and self-signing keys;
+-   a master signing key (MSK, for historical reasons sometimes known as
+    `master_key`) that serves as the user's identity in cross-signing and signs
+    their user-signing and self-signing keys;
 -   a user-signing key (USK) -- only visible to the user that it belongs
-    to -- that signs other users' master keys; and
+    to -- that signs other users' master signing keys; and
 -   a self-signing key (SSK) that signs the user's own device keys.
 
-The master key may also be used to sign other items such as the backup
-key. The master key may also be signed by the user's own device keys to
+The master signing key may also be used to sign other items such as the backup
+key. The master signing key may also be signed by the user's own device keys to
 aid in migrating from device verifications: if Alice's device had
 previously verified Bob's device and Bob's device has signed his master
-key, then Alice's device can trust Bob's master key, and she can sign it
+key, then Alice's device can trust Bob's master signing key, and she can sign it
 with her user-signing key.
 
-Users upload the public part of their master, user-signing and self-signing
-key to the server using [POST
+Users upload the public part of their master signing, user-signing and
+self-signing key to the server using [POST
 /\_matrix/client/v3/keys/device\_signing/upload](/client-server-api/#post_matrixclientv3keysdevice_signingupload). When Alice uploads
 new keys, her user ID will appear in the `changed`
 property of the `device_lists` field of the `/sync` of response of all
 users who share an encrypted room with her. When Bob sees Alice's user
 ID in his `/sync`, he will call [POST /\_matrix/client/v3/keys/query](/client-server-api/#post_matrixclientv3keysquery)
-to retrieve Alice's device keys, as well as their master, user-signing and
-self-signing key.
+to retrieve Alice's device keys, as well as their master signing, user-signing
+and self-signing key.
 
 If Alice has a device and wishes to send an encrypted message to Bob,
 she can trust Bob's device if:
 
--   Alice's device is using a master key that has signed her
+-   Alice's device is using a master signing key that has signed her
     user-signing key,
--   Alice's user-signing key has signed Bob's master key,
--   Bob's master key has signed Bob's self-signing key, and
+-   Alice's user-signing key has signed Bob's master signing key,
+-   Bob's master signing key has signed Bob's self-signing key, and
 -   Bob's self-signing key has signed Bob's device key.
 
 The following diagram illustrates how keys are signed:
 
 ```
     +------------------+                ..................   +----------------+
-    | +--------------+ |  ...................            :   | +------------+ |
-    | |              v v  v             :   :            v   v v            | |
-    | |           +----------+          :   :         +----------+          | |
-    | |           | Alice MK |          :   :         |  Bob MK  |          | |
-    | |           +----------+          :   :         +----------+          | |
-    | |             |      :            :   :           :      |            | |
-    | |          +--+      :....        :   :        ...:      +---+        | |
+    | +--------------+ |   ..................            :   | +------------+ |
+    | |              v v   v            :   :            v   v v            | |
+    | |           +-----------+         :   :         +-----------+         | |
+    | |           | Alice MSK |         :   :         |  Bob MSK  |         | |
+    | |           +-----------+         :   :         +-----------+         | |
+    | |             |       :           :   :           :       |           | |
+    | |          +--+       :...        :   :        ...:       +--+        | |
     | |          v             v        :   :        v             v        | |
     | |    +-----------+ .............  :   :  ............. +-----------+  | |
     | |    | Alice SSK | : Alice USK :  :   :  :  Bob USK  : |  Bob SSK  |  | |
@@ -1006,11 +1007,11 @@ signatures that she cannot see:
     +------------------+                +----------------+   +----------------+
     | +--------------+ |                |                |   | +------------+ |
     | |              v v                |                v   v v            | |
-    | |           +----------+          |             +----------+          | |
-    | |           | Alice MK |          |             |  Bob MK  |          | |
-    | |           +----------+          |             +----------+          | |
-    | |             |      |            |                      |            | |
-    | |          +--+      +---+        |                      +---+        | |
+    | |           +-----------+         |             +-----------+         | |
+    | |           | Alice MSK |         |             |  Bob MSK  |         | |
+    | |           +-----------+         |             +-----------+         | |
+    | |             |       |           |                       |           | |
+    | |          +--+       +--+        |                       +--+        | |
     | |          v             v        |                          v        | |
     | |    +-----------+ +-----------+  |                    +-----------+  | |
     | |    | Alice SSK | | Alice USK |  |                    |  Bob SSK  |  | |
@@ -1026,27 +1027,28 @@ signatures that she cannot see:
 ```
 
 [Verification methods](#device-verification) can be used to verify a
-user's master key by treating the master public key, encoded using unpadded
-base64, as the device ID, and treating it as a normal device. For
-example, if Alice and Bob verify each other using SAS, Alice's
+user's master signing key by treating its public key (master signing public
+key), encoded using unpadded base64, as the device ID, and treating it as a
+normal device. For example, if Alice and Bob verify each other using SAS,
+Alice's
 `m.key.verification.mac` message to Bob may include
 `"ed25519:alices+master+public+key": "alices+master+public+key"` in the
 `mac` property. Servers therefore must ensure that device IDs will not
 collide with public keys used for cross-signing.
 
 Using the [Secrets](#secrets) module the private keys used for cross-signing can
-be stored on the server or shared with other devices.  When doing so, the master,
-user-signing, and self-signing keys are identified using the names
-`m.cross_signing.master`, `m.cross_signing.user_signing`, and
+be stored on the server or shared with other devices.  When doing so, the
+master signing, user-signing, and self-signing keys are identified using the
+names `m.cross_signing.master`, `m.cross_signing.user_signing`, and
 `m.cross_signing.self_signing`, respectively, and the keys are base64-encoded
 before being encrypted.
 
 ###### Key and signature security
 
-A user's master key could allow an attacker to impersonate that user to
+A user's master signing key could allow an attacker to impersonate that user to
 other users, or other users to that user. Thus clients must ensure that
-the private part of the master key is treated securely. If clients do
-not have a secure means of storing the master key (such as a secret
+the private part of the master signing key is treated securely. If clients do
+not have a secure means of storing the master signing key (such as a secret
 storage system provided by the operating system), then clients must not
 store the private part.
 
@@ -1054,9 +1056,9 @@ If a user's client sees that any other user has changed their master
 key, that client must notify the user about the change before allowing
 communication between the users to continue.
 
-Since device key IDs (`ed25519:DEVICE_ID`) as well as master, user-signing and
-self-signing key IDs (`ed25519:PUBLIC_KEY`) occupy the same namespace, clients
-must ensure that they use the correct keys when verifying.
+Since device key IDs (`ed25519:DEVICE_ID`) as well as master signing,
+user-signing and self-signing key IDs (`ed25519:PUBLIC_KEY`) occupy the same
+namespace, clients must ensure that they use the correct keys when verifying.
 
 While servers MUST not allow devices to have the same IDs as keys used for
 cross-signing, a malicious server could construct such a situation, so clients
@@ -1074,27 +1076,27 @@ precautions against this:
 
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
-the user's master key and possibly by re-verifying devices or users.
+the user's master signing key and possibly by re-verifying devices or users.
 However, doing so relies on the user being able to notice when their
 keys have been compromised, and it involves extra work for the user, and
 so although clients do not have to treat the private parts as
-sensitively as the master key, clients should still make efforts to
+sensitively as the master signing key, clients should still make efforts to
 store the private part securely, or not store it at all. Clients will
 need to balance the security of the keys with the usability of signing
 users and devices when performing key verification.
 
 To avoid leaking of social graphs, servers will only allow users to see:
 
--   signatures made by the user's own master, self-signing or
+-   signatures made by the user's own master signing, self-signing or
     user-signing keys,
 -   signatures made by the user's own devices about their own master
     key,
 -   signatures made by other users' self-signing keys about their
     respective devices,
--   signatures made by other users' master keys about their respective
+-   signatures made by other users' master signing keys about their respective
     self-signing key, or
 -   signatures made by other users' devices about their respective
-    master keys.
+    master signing keys.
 
 Users will not be able to see signatures made by other users'
 user-signing keys.
@@ -1107,7 +1109,7 @@ user-signing keys.
 
 Verifying by QR codes provides a quick way to verify when one of the parties
 has a device capable of scanning a QR code. The QR code encodes both parties'
-master keys as well as a random shared secret that is used to allow
+master signing keys as well as a random shared secret that is used to allow
 bi-directional verification from a single scan.
 
 To advertise the ability to show a QR code, clients use the names
@@ -1196,23 +1198,24 @@ The binary segment MUST be of the following form:
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
   - `0x00` verifying another user with cross-signing
-  - `0x01` self-verifying in which the current device does trust the master key
+  - `0x01` self-verifying in which the current device does trust the master signing key
   - `0x02` self-verifying in which the current device does not yet trust the
-    master key
+    master signing key
 - the event ID or `transaction_id` of the associated verification
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
   - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
-  - if `0x00` or `0x01`, then the current user's own master public key
+  - if `0x00` or `0x01`, then the current user's own master signing public key
   - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
     public key is
   - if `0x01`, then what the device thinks the other device's Ed25519 signing
     public key is
-  - if `0x02`, then what the device thinks the user's master public key is
+  - if `0x02`, then what the device thinks the user's master signing public key
+    is
 - a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
@@ -1228,9 +1231,9 @@ For example, if Alice displays a QR code encoding the following binary data:
 ```
 
 Mode `0x00` indicates that Alice is verifying another user (say Bob), in
-response to the request from event "$ABCD...", her master key is
+response to the request from event "$ABCD...", her master signing key is
 `0001020304050607...` (which is "AAECAwQFBg..." in base64), she thinks that
-Bob's master key is `1011121314151617...` (which is "EBESExQVFh..." in
+Bob's master signing key is `1011121314151617...` (which is "EBESExQVFh..." in
 base64), and the shared secret is `2021222324252627` (which is "ICEiIyQlJic" in
 base64).
 
@@ -1302,7 +1305,7 @@ one of its variants.
 Clients must only store keys in backups after they have ensured that the
 `auth_data` is trusted. This can be done either by:
 
-- checking that it is signed by the user's [master key](#cross-signing)
+- checking that it is signed by the user's [master signing key](#cross-signing)
   or by a verified device belonging to the same user, or
 - deriving the public key from a private key that it obtained from a trusted
   source. Trusted sources for the private key include the user entering the
@@ -1788,12 +1791,12 @@ a way to identify the server's support for fallback keys.
 
 | Parameter  | Type      | Description                                                                                                                                                      |
 |------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| changed    | [string]  | List of users who have updated their device identity or their master, self-signing or user-signing keys, or who now share an encrypted room with the client since the previous sync response. |
+| changed    | [string]  | List of users who have updated their device identity or their master signing, self-signing or user-signing keys, or who now share an encrypted room with the client since the previous sync response. |
 | left       | [string]  | List of users with whom we do not share any encrypted rooms anymore since the previous sync response.                                                            |
 
 {{% boxes/note %}}
 For optimal performance, Alice should be added to `changed` in Bob's
-sync only when she updates her devices or master, self-signing or
+sync only when she updates her devices or master signing, self-signing or
 user-signing keys, or when Alice and Bob now share a room but didn't
 share any room previously.
 However, for the sake of simpler logic, a server may add Alice to
