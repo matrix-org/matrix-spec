@@ -262,6 +262,8 @@ paths:
                 or the requested device ID is the same as a cross-signing key
                 ID.
               * `M_USER_DEACTIVATED`: The user has been deactivated.
+                Note that servers MAY choose not to use this error code and instead use `M_FORBIDDEN`,
+                particularly when the server can't authenticate the deactivated user.
           content:
             application/json:
               schema:
