@@ -17,6 +17,9 @@ is met:
 2. The domain of the redaction event's `sender` matches that of the
    original event's `sender`.
 
+Note that the first condition holds true even when the `sender` doesn't have a
+high enough power level to send the type of event that they're redacting.
+
 If the server would apply a redaction, the redaction event is also sent
 to clients. Otherwise, the server simply waits for a valid partner event
 to arrive where it can then re-check the above.
