@@ -1775,19 +1775,18 @@ property is required for inclusion, though previous versions of the
 specification did not have it. In addition to `/versions`, this can be
 a way to identify the server's support for fallback keys.
 
-
-| Parameter                        | Type               | Description                                                                                                            |
-|----------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------|
-| device_lists                     | DeviceLists        | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
-| device_one_time_keys_count       | {string: integer}  | Optional. For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device.  If an algorithm is unlisted, the count for that algorithm is assumed to be zero.  If this entire parameter is missing, the count for all algorithms is assumed to be zero.  |
-| device_unused_fallback_key_types | [string]           | **Required.** The unused fallback key algorithms.                                                                      |
+| Parameter                        | Type              | Description                                                                                                            |
+|----------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------|
+| device_lists                     | DeviceLists       | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
+| device_one_time_keys_count       | {string: integer} | **Required if any unclaimed one-time keys exist.** For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device. If the count for an algorithm is zero, servers MAY omit that algorithm. If the count for all algorithms is zero, servers MAY omit this parameter entirely. |
+| device_unused_fallback_key_types | [string]          | **Required.** The unused fallback key algorithms.                                                                      |
 
 `DeviceLists`
 
-| Parameter  | Type      | Description                                                                                                                                                      |
-|------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| changed    | [string]  | List of users who have updated their device identity or cross-signing keys, or who now share an encrypted room with the client since the previous sync response. |
-| left       | [string]  | List of users with whom we do not share any encrypted rooms anymore since the previous sync response.                                                            |
+| Parameter | Type     | Description                                                                                                                                                      |
+|-----------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| changed   | [string] | List of users who have updated their device identity or cross-signing keys, or who now share an encrypted room with the client since the previous sync response. |
+| left      | [string] | List of users with whom we do not share any encrypted rooms anymore since the previous sync response.                                                            |
 
 {{% boxes/note %}}
 For optimal performance, Alice should be added to `changed` in Bob's
