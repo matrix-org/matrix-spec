@@ -1778,7 +1778,7 @@ a way to identify the server's support for fallback keys.
 | Parameter                        | Type              | Description                                                                                                            |
 |----------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------|
 | device_lists                     | DeviceLists       | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
-| device_one_time_keys_count       | {string: integer} | **Required if unclaimed one-time keys exist.** For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device. If the count for an algorithm is zero, servers MAY omit that algorithm. If the count for all algorithms is zero, servers MAY omit this parameter entirely. |
+| device_one_time_keys_count       | {string: integer} | **Required if any unclaimed one-time keys exist.** For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device. If the count for an algorithm is zero, servers MAY omit that algorithm. If the count for all algorithms is zero, servers MAY omit this parameter entirely. |
 | device_unused_fallback_key_types | [string]          | **Required.** The unused fallback key algorithms.                                                                      |
 
 `DeviceLists`
