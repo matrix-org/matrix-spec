@@ -1,0 +1,1 @@
+Clarify that servers may choose not to use `M_USER_DEACTIVATED` at login time, for example for privacy reasons when they can't authenticate deactivated users.
