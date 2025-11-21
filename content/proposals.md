@@ -408,41 +408,9 @@ development or testing data.
 that a particular MSC works) do not have to follow this process.
 
 1.  Have an idea for a feature.
-1.  Implement the feature using unstable endpoints, vendor prefixes, and
-    unstable feature flags as appropriate.
-    -   When using unstable endpoints, they MUST include a vendor
-        prefix. For example:
-        `/_matrix/client/unstable/com.example/login`. Vendor prefixes
-        throughout Matrix always use the Java package naming convention.
-        The MSC for the feature should identify which preferred vendor
-        prefix is to be used by early adopters.
-    -   Note that unstable namespaces do not automatically inherit
-        endpoints from stable namespaces: for example, the fact that
-        `/_matrix/client/r0/sync` exists does not imply that
-        `/_matrix/client/unstable/com.example/sync` exists.
-    -   If the client needs to be sure the server supports the feature,
-        an unstable feature flag that MUST be vendor prefixed is to be
-        used. This kind of flag shows up in the `unstable_features`
-        section of `/versions` as, for example, `com.example.new_login`.
-        The MSC for the feature should identify which preferred feature
-        flag is to be used by early adopters.
-    -   When using this approach correctly, the implementation can
-        ship/release the feature at any time, so long as the
-        implementation is able to accept the technical debt that results
-        from needing to provide adequate backwards and forwards
-        compatibility. The implementation MUST support the flag (and
-        server-side implementation) disappearing and be generally safe
-        for users. Note that implementations early in the MSC review
-        process may also be required to provide backwards compatibility
-        with earlier editions of the proposal.
-    -   If the implementation cannot support the technical debt (or if
-        it's impossible to provide forwards/backwards compatibility -
-        e.g. a user authentication change which can't be safely rolled
-        back), the implementation should not attempt to implement the
-        feature and should instead wait for a spec release.
-    -   If at any point after early release, the idea changes in a
-        backwards-incompatible way, the feature flag should also change
-        so that implementations can adapt as needed.
+1.  Implement the feature using [unstable endpoints, vendor prefixes, and
+    unstable feature flags](#unstable-endpoints-features-and-vendor-prefixes)
+    as appropriate.
 1.  In parallel, or ahead of implementation, open an MSC and solicit
     review per above.
 1.  Before FCP can be called, the Spec Core Team will require evidence
@@ -452,10 +420,7 @@ that a particular MSC works) do not have to follow this process.
     forwards/backwards compatibility concerns mentioned here.
 1.  The FCP process is completed, and assuming nothing is flagged the
     MSC lands.
-1.  Implementations can now switch to using stable prefixes
-    (for example, for an endpoint, moving from
-    `/unstable/org.matrix.mscxxxx/frobnicate`
-    to `/v1/frobnicate`), assuming that the change
+1.  Implementations can now switch to using stable prefixes, assuming that the change
     is backwards compatible with older implementations. In the rare occasion
     where backwards compatibility is not possible without a new spec release,
     implementations should continue to use unstable prefixes.
@@ -471,13 +436,6 @@ that a particular MSC works) do not have to follow this process.
     started supporting the new spec release, some noise should be raised
     in the general direction of the implementation.
 
-{{% boxes/note %}}
-MSCs MUST still describe what the stable endpoints/feature looks like
-with a note towards the bottom for what the unstable feature
-flag/prefixes are. For example, an MSC would propose `/_matrix/client/r0/new/endpoint`, not `/_matrix/client/unstable/
-com.example/new/endpoint`.
-{{% /boxes/note %}}
-
 In summary:
 
 -   Implementations MUST NOT use stable endpoints before the MSC has
@@ -489,13 +447,89 @@ In summary:
 -   Implementations SHOULD be wary of the technical debt they are
     incurring by moving faster than the spec.
 -   The vendor prefix is chosen by the developer of the feature, using
-    the Java package naming convention. The foundation's preferred
-    vendor prefix is `org.matrix`.
+    the Java package naming convention.
 -   The vendor prefixes, unstable feature flags, and unstable endpoints
     should be included in the MSC, though the MSC MUST be written in a
     way that proposes new stable endpoints. Typically this is solved by
     a small table at the bottom mapping the various values from stable
     to unstable.
+
+#### Unstable endpoints, features and vendor prefixes
+
+Unstable endpoints MUST use `/unstable` as the endpoint version and a
+vendor prefix in Java package naming format. For example:
+`/_matrix/client/unstable/com.example.mscxxxx/login`.
+
+{{% boxes/note %}}
+Proposal authors operating with a Matrix.org Foundation mandate SHOULD use
+a vendor prefix within the `org.matrix` namespace. This namespace is otherwise
+restricted. Authors who don't own a domain MAY use the `io.github` namespace
+instead.
+{{% /boxes/note %}}
+
+Note that unstable namespaces do not automatically inherit endpoints from
+stable namespaces: for example, the fact that `/_matrix/client/v3/sync`
+exists does not imply that `/_matrix/client/unstable/com.example.mscxxxx/sync`
+exists.
+
+Vendor prefixes MUST also be used for:
+
+-   New parameters on existing endpoints. For example:
+    `/_matrix/client/v3/publicRooms?com.example.mscxxxx.ordered_by=member_count`.
+-   New properties in existing JSON objects. For example:
+
+    ```json
+    {
+      "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
+      "displayname": "Alice Margatroid",
+      "com.example.mscxxxx.phone": [{
+        "type": "landline",
+        "number": "+1-206-555-7000"
+      }],
+      ...
+    }
+    ```
+
+-   New values for existing parameters or properties. For example:
+
+    ```json
+    {
+      "errcode": "COM.EXAMPLE.MSCXXXX.M_INVALID_EMAIL",
+      "error": "The email address you provided is invalid."
+    }
+    ```
+
+If the client needs to be sure the server supports the feature, an
+unstable feature flag that MUST also be vendor prefixed is to be used.
+This flag shows up in the `unstable_features` section of
+[`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+as, for example, `com.example.mscxxxx.new_login`.
+
+{{% boxes/note %}}
+MSCs MUST still describe what the stable endpoints/feature looks like
+with a note towards the bottom for what the unstable feature
+flag/prefixes are. For example, an MSC would propose `/_matrix/client/v1/new/endpoint`,
+not `/_matrix/client/unstable/com.example.mscxxxx/new/endpoint`.
+{{% /boxes/note %}}
+
+When using this approach correctly, the implementation can release
+the feature at any time, so long as the implementation is able to
+accept the technical debt that results from needing to provide
+adequate backwards and forwards compatibility. The implementation
+MUST support the flag (and server-side implementation) disappearing
+and be generally safe for users. Note that implementations early in
+the MSC review process may also be required to provide backwards
+compatibility with earlier editions of the proposal.
+
+If the implementation cannot support the technical debt (or if it's
+impossible to provide forwards/backwards compatibility - e.g. a user
+authentication change which can't be safely rolled back), the
+implementation should not attempt to implement the feature and should
+instead wait for a spec release.
+
+If at any point after early release, the idea changes in a
+backwards-incompatible way, the feature flag should also change so
+that implementations can adapt as needed.
 
 ### Placeholder MSCs
 
