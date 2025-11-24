@@ -24,6 +24,7 @@ properties:
       A URL pointing to the homeserver's OAuth account management web UI
       where the user can approve the action. MUST be a valid URI with scheme
       `http://` or `https://`, the latter being RECOMMENDED.
+    pattern: "^https?://"
 example: {
     "url": "https://example.org/account/reset-cross-signing"
 }
