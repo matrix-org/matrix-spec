@@ -262,6 +262,8 @@ paths:
                 or the requested device ID is the same as a cross-signing key
                 ID.
               * `M_USER_DEACTIVATED`: The user has been deactivated.
+                Servers MAY instead use `M_FORBIDDEN` when they can no longer authenticate
+                the deactivated user (e.g. their password has been wiped).
           content:
             application/json:
               schema:
