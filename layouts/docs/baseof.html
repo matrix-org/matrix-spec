@@ -5,6 +5,25 @@
 
 */}}
 
+{{/* Generate a static file versions.json that can be used to populate the version picker */}}
+{{ if .IsHome }}
+  {{- /* Load all changelog subpages, sorted by release date */ -}}
+  {{ $changelog := site.GetPage "changelog" }}
+  {{ $pages := $changelog.RegularPages.ByDate.Reverse }}
+
+  {{- /* Collect proper versions and build metadata dicts */ -}}
+  {{ $versions := slice }}
+  {{ range $pages }}
+    {{ if findRE `^v[0-9]+\.[0-9]+$` .Params.linkTitle }}
+      {{ $versions = $versions | append (dict "name" .Params.linkTitle "date" .Params.date ) }}
+    {{ end }}
+  {{ end }}
+
+  {{- /* Generate the JSON */ -}}
+  {{ $json := jsonify $versions }}
+  {{ $noop := (resources.FromString "/versions.json" $json).Permalink }}
+{{ end }}
+
 <!doctype html>
 <html itemscope itemtype="http://schema.org/WebPage"
     {{- with .Site.Language.LanguageDirection }} dir="{{ . }}" {{- end -}}
