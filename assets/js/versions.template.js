@@ -14,9 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// This oddity is an attempt at producing a readable Hugo template while avoiding
+// JS syntax errors in your IDE
+const currentVersion = `{{ if eq .Site.Params.version.status "unstable" }}
+    {{- /**/ -}}
+    unstable
+    {{- /**/ -}}
+{{ else }}
+    {{- /**/ -}}
+    {{ printf "v%s.%s" .Site.Params.version.major .Site.Params.version.minor }}
+    {{- /**/ -}}
+{{ end }}`;
+
 function appendVersion(parent, name, url) {
     // The list item
     const li = document.createElement("li");
+    if (name === currentVersion) {
+        li.classList.add("selected")
+    }
     parent.appendChild(li);
 
     // The link

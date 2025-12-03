@@ -50,6 +50,10 @@ Custom SCSS for the Matrix spec
   a {
     color: $black;
   }
+
+  ul#version-selector li.selected a {
+    color: $secondary;
+  }
 }
 
 /* Styles for the sidebar nav */
