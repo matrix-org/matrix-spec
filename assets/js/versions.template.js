@@ -32,6 +32,9 @@ function appendVersion(parent, name, url) {
     if (name === currentVersion) {
         li.classList.add("selected")
     }
+    if (name === "unstable") {
+        li.classList.add("unstable")
+    }
     parent.appendChild(li);
 
     // The link

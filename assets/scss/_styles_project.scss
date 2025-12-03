@@ -54,6 +54,10 @@ Custom SCSS for the Matrix spec
   ul#version-selector li.selected a {
     color: $secondary;
   }
+
+  ul#version-selector li.unstable:not(.selected) a {
+    color: $warning;
+  }
 }
 
 /* Styles for the sidebar nav */
