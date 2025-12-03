@@ -8,5 +8,10 @@
 */}}
 {{ $toc := resources.Get "js/toc.js" -}}
 <script defer src="{{ $toc.RelPermalink }}"></script>
-{{ $versions := resources.Get "js/versions.js" -}}
-<script defer src="{{ $versions.RelPermalink }}"></script>
+
+{{- /* Load the versions script template, run and publish it */ -}}
+{{ with resources.Get "js/versions.template.js" }}
+  {{ with resources.ExecuteAsTemplate "js/versions.js" $ . }}
+    <script defer src="{{ .RelPermalink }}"></script>
+  {{ end }}
+{{ end }}

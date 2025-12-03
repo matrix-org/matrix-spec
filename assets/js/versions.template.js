@@ -74,5 +74,5 @@ fetch("/versions.json")
         }
 
         // For historical versions, simply link to the changelog
-        appendVersion(ul, "historical", "/changelog/historical/");
+        appendVersion(ul, "historical", '{{ (site.GetPage "changelog/historical").RelPermalink }}');
     });
