@@ -69,6 +69,10 @@ current_version_url = "https://spec.matrix.org/latest"
 major = "1"
 minor = "16"
 
+[[params.versions]]
+# We must include this parameter to enable docsy's version picker in the navbar. The picker
+# is populated automatically in navbar-version-selector.html.
+
 # User interface configuration
 [params.ui]
 # Collapse HTTP API and event <details> elements
