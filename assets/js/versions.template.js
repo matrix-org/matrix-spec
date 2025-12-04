@@ -14,8 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// This oddity is an attempt at producing a readable Hugo template while avoiding
-// JS syntax errors in your IDE
+// Determine the current version as defined in hugo.toml. This will either be
+// "unstable" or "vX.X" and doesn't depend on the current URL.
+//
+// The oddity below is an attempt at producing a readable Hugo template while
+// avoiding JS syntax errors in your IDE.
 const currentVersion = `{{ if eq .Site.Params.version.status "unstable" }}
     {{- /**/ -}}
     unstable
@@ -26,20 +29,31 @@ const currentVersion = `{{ if eq .Site.Params.version.status "unstable" }}
     {{- /**/ -}}
 {{ end }}`;
 
+// Determine the current version segment by regex matching the URL. This will either
+// be "unstable", "latest", "vX.X" (production) or undefined (local & netlify).
+const href = window.location.href;
+const segmentMatches = href.match(/(?<=\/)unstable|latest|v\d+.\d+(?=\/)/);
+const currentSegment = segmentMatches ? segmentMatches[0] : undefined;
+
+// Determine the selected menu element. If we were able to obtain the version
+// segment from the URL (production), use that. Otherwise (local & netlify),
+// fall back to the version as defined in Hugo.
+const selected = currentSegment ?? currentVersion;
+
 function appendVersion(parent, name, url) {
     // The list item
     const li = document.createElement("li");
-    if (name === currentVersion) {
-        li.classList.add("selected")
+    if (name === selected) {
+        li.classList.add("selected");
     }
-    if (name === "unstable") {
-        li.classList.add("unstable")
+    if (name === "latest") {
+        li.classList.add("latest");
     }
     parent.appendChild(li);
 
     // The link
     const a = document.createElement("a");
-    a.classList.add("dropdown-item")
+    a.classList.add("dropdown-item");
     a.setAttribute("href", url);
     li.appendChild(a);
 
@@ -51,20 +65,16 @@ function appendVersion(parent, name, url) {
             return;
         }
 
-        // Stop further event handling
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        // Try to find the current version segment
-        const href = window.location.href;
-        const matches = href.match(/\/unstable\/|\/latest\/|\/v\d+.\d+\//g);
-        if (!matches) {
-            window.location.href = url;
+        // If we couldn't determine the current segment, we cannot safely replace
+        // it and have to let the browser load the (root) URL instead
+        if (!currentSegment) {
             return;
         }
 
-        // Replace the segment
-        window.location.href = href.replace(matches[0], `/${name}/`);
+        // Otherwise, stop further event handling and replace the segment
+        ev.preventDefault();
+        ev.stopPropagation();
+        window.location.href = href.replace(`/${currentSegment}/`, `/${name}/`);
     });
 
     // The link text
@@ -83,8 +93,9 @@ fetch("/versions.json")
             return;
         }
 
-        // Add an entry for the unstable version
+        // Add a entries for the unstable version and the "latest" shortcut
         appendVersion(ul, "unstable", "https://spec.matrix.org/unstable");
+        appendVersion(ul, "latest", "https://spec.matrix.org/latest");
 
         // Add an entry for each proper version
         for (const version of versions) {

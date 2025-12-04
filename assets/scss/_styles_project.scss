@@ -58,11 +58,11 @@ Custom SCSS for the Matrix spec
   }
 
   ul#version-selector li.selected a {
-    color: $secondary;
+    font-weight: bold;
   }
 
-  ul#version-selector li.unstable:not(.selected) a {
-    color: $warning;
+  ul#version-selector li.latest a {
+    color: $secondary;
   }
 }
 
