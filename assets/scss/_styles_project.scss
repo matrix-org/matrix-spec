@@ -50,6 +50,20 @@ Custom SCSS for the Matrix spec
   a {
     color: $black;
   }
+
+  /* Make the version dropdown scroll if its too large */
+  ul#version-selector {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  ul#version-selector li.selected a {
+    font-weight: bold;
+  }
+
+  ul#version-selector li.latest a {
+    color: $secondary;
+  }
 }
 
 /* Styles for the sidebar nav */
