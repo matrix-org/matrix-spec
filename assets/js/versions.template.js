@@ -82,7 +82,14 @@ function appendVersion(parent, name, url) {
     a.appendChild(text);
 }
 
-fetch("/latest/versions.json")
+// If we're in the unstable version, we're the latest thing and can just load
+// versions.json from our own resources. Otherwise, we fall back to loading it
+// from /unstable/versions.json, assuming we are on the spec.matrix.org deployment.
+const url = currentVersion === "unstable"
+    ? '{{ "/" | relURL }}versions.json'
+    : "/unstable/versions.json";
+
+fetch(url)
     .then(r => r.json())
     .then(versions => {
         // Find the surrounding list element
