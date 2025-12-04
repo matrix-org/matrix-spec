@@ -82,8 +82,7 @@ function appendVersion(parent, name, url) {
     a.appendChild(text);
 }
 
-// TODO: Load /latest/versions.json
-fetch("/versions.json")
+fetch("/latest/versions.json")
     .then(r => r.json())
     .then(versions => {
         // Find the surrounding list element
