@@ -86,7 +86,7 @@ function appendVersion(parent, name, url) {
 // versions.json from our own resources. Otherwise, we fall back to loading it
 // from /unstable/versions.json, assuming we are on the spec.matrix.org deployment.
 const url = currentVersion === "unstable"
-    ? '{{ "/" | relURL }}versions.json'
+    ? '{{ .Site.Home.Permalink }}versions.json'
     : "/unstable/versions.json";
 
 fetch(url)
