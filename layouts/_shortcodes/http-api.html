@@ -23,6 +23,13 @@
 {{ $api := .Params.api}}
 {{ $anchor_base := .Params.anchor_base}}
 
+{{/* Allow an outer page to collect endpoints (used for modules). */}}
+{{ $target_page := .Page }}
+{{ with .Page.Scratch.Get "endpoint_page" }}
+  {{ $target_page = . }}
+{{ end }}
+{{ $module_name := .Page.Scratch.Get "endpoint_module" }}
+
 {{ $api_data := index .Site.Data.api .Params.spec .Params.api }}
 {{ $base_url := (index $api_data.servers 0).variables.basePath.default }}
 {{ $path := delimit (slice "api" $spec $api) "/" }}
@@ -30,4 +37,4 @@
 {{ $api_data = partial "json-schema/resolve-refs" (dict "schema" $api_data "path" $path) }}
 {{ $api_data = partial "json-schema/resolve-allof" $api_data }}
 
-{{ partial "openapi/render-api" (dict "api_data" $api_data "base_url" $base_url "anchor_base" $anchor_base "page" .Page) }}
+{{ partial "openapi/render-api" (dict "api_data" $api_data "base_url" $base_url "anchor_base" $anchor_base "page" $target_page "module" $module_name) }}

@@ -16,6 +16,7 @@
 {{ $base_url := .base_url }}
 {{ $anchor_base := .anchor_base }}
 {{ $page := .page }}
+{{ $module := .module }}
 
 {{ range $path_name, $path_data := $api_data.paths }}
 
@@ -27,28 +28,28 @@
 
     {{ with $path_data.get }}
 
-        {{ $operation_params := merge $params (dict "method" "GET" "operation_data" . "anchor_base" $anchor_base "page" $page) }}
+        {{ $operation_params := merge $params (dict "method" "GET" "operation_data" . "anchor_base" $anchor_base "page" $page "module" $module) }}
         {{ partial "openapi/render-operation" $operation_params }}
 
     {{ end }}
 
     {{ with $path_data.post }}
 
-        {{ $operation_params := merge $params (dict "method" "POST" "operation_data" . "anchor_base" $anchor_base "page" $page) }}
+        {{ $operation_params := merge $params (dict "method" "POST" "operation_data" . "anchor_base" $anchor_base "page" $page "module" $module) }}
         {{ partial "openapi/render-operation" $operation_params }}
 
     {{ end }}
 
     {{ with $path_data.put }}
 
-        {{ $operation_params := merge $params (dict "method" "PUT" "operation_data" . "anchor_base" $anchor_base "page" $page) }}
+        {{ $operation_params := merge $params (dict "method" "PUT" "operation_data" . "anchor_base" $anchor_base "page" $page "module" $module) }}
         {{ partial "openapi/render-operation" $operation_params }}
 
     {{ end }}
 
     {{ with $path_data.delete }}
 
-        {{ $operation_params := merge $params (dict "method" "DELETE" "operation_data" . "anchor_base" $anchor_base "page" $page) }}
+        {{ $operation_params := merge $params (dict "method" "DELETE" "operation_data" . "anchor_base" $anchor_base "page" $page "module" $module) }}
         {{ partial "openapi/render-operation" $operation_params }}
 
     {{ end }}

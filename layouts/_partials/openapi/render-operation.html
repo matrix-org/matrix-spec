@@ -23,6 +23,7 @@
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
 {{ $page := .page }}
+{{ $module := .module }}
 
 {{ $anchor := "" }}
 {{ if .anchor_base }}
@@ -33,7 +34,7 @@
 {{/* Collect endpoints for the on-page endpoints TOC */}}
 {{ if $page }}
   {{/* Store each endpoint's metadata in a scratch variable */}}
-  {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary "deprecated" $operation_data.deprecated }}
+  {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary "deprecated" $operation_data.deprecated "module" $module }}
   {{ if not (reflect.IsSlice ($page.Scratch.Get "api_endpoints")) }}
     {{ $page.Scratch.Set "api_endpoints" (slice) }}
   {{ end }}
