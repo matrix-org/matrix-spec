@@ -1,0 +1,9 @@
+{{- /* Shared render for spec pages: title, optional description, endpoints list, body, and last-mod info. */ -}}
+<div class="td-content">
+  <h1>{{ .Title }}</h1>
+  {{ partial "endpoints-toc.html" . }}
+
+  {{ .Content }}
+
+  {{ partial "page-meta-lastmod.html" . }}
+</div>
