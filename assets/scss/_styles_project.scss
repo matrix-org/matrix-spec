@@ -51,12 +51,16 @@ Custom SCSS for the Matrix spec
     color: $black;
   }
 
-  /* Make the version dropdown scroll if its too large */
+  /* Make the version dropdown scroll if it's too large */
   ul#version-selector {
     max-height: 80vh;
     overflow-y: auto;
   }
 
+  /* As these styles are only applied by JavaScript, PurgeCSS doesn't see them
+   * in the source code and removes them unless we explicitly tell it not to.
+   */
+  /* purgecss start ignore */
   ul#version-selector li.selected a {
     font-weight: bold;
   }
@@ -64,6 +68,7 @@ Custom SCSS for the Matrix spec
   ul#version-selector li.latest a {
     color: $secondary;
   }
+  /* purgecss end ignore */
 }
 
 /* Styles for the sidebar nav */
