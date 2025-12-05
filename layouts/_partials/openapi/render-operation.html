@@ -22,12 +22,23 @@
 {{ $method := .method }}
 {{ $endpoint := .endpoint }}
 {{ $operation_data := .operation_data }}
+{{ $page := .page }}
 
 {{ $anchor := "" }}
 {{ if .anchor_base }}
   {{ $anchor = printf "%s_" .anchor_base }}
 {{ end }}
 {{ $anchor = printf "%s%s%s" $anchor (lower $method) (anchorize $endpoint) }}
+
+{{/* Collect endpoints for the on-page endpoints TOC */}}
+{{ if $page }}
+  {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary }}
+  {{/* Store each endpoint's metadata in a scratch variable */}}
+  {{ if not (reflect.IsSlice ($page.Scratch.Get "api_endpoints")) }}
+    {{ $page.Scratch.Set "api_endpoints" (slice) }}
+  {{ end }}
+  {{ $page.Scratch.Add "api_endpoints" (slice $entry) }}
+{{ end }}
 
 <section class="rendered-data">
 
