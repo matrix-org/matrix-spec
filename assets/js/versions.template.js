@@ -40,13 +40,13 @@ const currentSegment = segmentMatches ? segmentMatches[0] : undefined;
 // fall back to the version as defined in Hugo.
 const selected = currentSegment ?? currentVersion;
 
-function appendVersion(parent, name, url) {
+function appendVersion(parent, name, segment, url) {
     // The list item
     const li = document.createElement("li");
-    if (name === selected) {
+    if (segment === selected) {
         li.classList.add("selected");
     }
-    if (name === "latest") {
+    if (segment === "latest") {
         li.classList.add("latest");
     }
     parent.appendChild(li);
@@ -74,7 +74,7 @@ function appendVersion(parent, name, url) {
         // Otherwise, stop further event handling and replace the segment
         ev.preventDefault();
         ev.stopPropagation();
-        window.location.href = href.replace(`/${currentSegment}/`, `/${name}/`);
+        window.location.href = href.replace(`/${currentSegment}/`, `/${segment}/`);
     });
 
     // The link text
@@ -100,12 +100,13 @@ fetch(url)
         }
 
         // Add a entries for the unstable version and the "latest" shortcut
-        appendVersion(ul, "unstable", "https://spec.matrix.org/unstable");
-        appendVersion(ul, "latest", "https://spec.matrix.org/latest");
+        appendVersion(ul, "unstable", "unstable", "https://spec.matrix.org/unstable");
+        const latestName = versions?.length ? `latest (${versions[0].name})` : "latest";
+        appendVersion(ul, latestName, "latest", "https://spec.matrix.org/latest");
 
         // Add an entry for each proper version
         for (const version of versions) {
-            appendVersion(ul, version.name, `https://spec.matrix.org/${version.name}`);
+            appendVersion(ul, version.name, version.name, `https://spec.matrix.org/${version.name}`);
         }
 
         // For historical versions, simply link to the changelog
