@@ -1,0 +1,28 @@
+{{/* Minimal list of API endpoints for the current page. */}}
+{{ $raw := .Scratch.Get "api_endpoints" }}
+{{/* Normalize to a slice */}}
+{{ $endpoints := slice }}
+{{ if reflect.IsSlice $raw }}
+  {{ $endpoints = $raw }}
+{{ else if reflect.IsMap $raw }}
+  {{ range $raw }}
+    {{ $endpoints = append $endpoints . }}
+  {{ end }}
+{{ end }}
+{{ if gt (len $endpoints) 0 }}
+  <div class="endpoints-toc mb-4">
+    <details>
+      <summary>List of Endpoints</summary>
+      <ul class="endpoint-list">
+        {{ range $endpoints }}
+          <li>
+            <a href="#{{ .anchor }}">
+              <span class="http-api-method">{{ .method }}</span>
+              <span class="endpoint-path">{{ .endpoint }}</span>
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    </details>
+  </div>
+{{ end }}
