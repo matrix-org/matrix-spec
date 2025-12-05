@@ -57,18 +57,13 @@ Custom SCSS for the Matrix spec
     overflow-y: auto;
   }
 
-  /* As these styles are only applied by JavaScript, PurgeCSS doesn't see them
-   * in the source code and removes them unless we explicitly tell it not to.
-   */
-  /* purgecss start ignore */
-  ul#version-selector li.selected a {
+  ul#version-selector li.version-picker-selected a {
     font-weight: bold;
   }
 
-  ul#version-selector li.latest a {
+  ul#version-selector li.version-picker-latest a {
     color: $secondary;
   }
-  /* purgecss end ignore */
 }
 
 /* Styles for the sidebar nav */

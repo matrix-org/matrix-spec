@@ -16,6 +16,9 @@ const purgecss = require('@fullhuman/postcss-purgecss')({
             extensions: ["json"],
         },
     ],
+    // As these classes are only applied by JavaScript, PurgeCSS doesn't see them
+    // in the source code and removes them unless we explicitly tell it not to.
+    safelist: ['version-picker-selected', 'version-picker-latest']
 });
 
 module.exports = {

@@ -44,10 +44,10 @@ function appendVersion(parent, name, segment, url) {
     // The list item
     const li = document.createElement("li");
     if (segment === selected) {
-        li.classList.add("selected");
+        li.classList.add("version-picker-selected");
     }
     if (segment === "latest") {
-        li.classList.add("latest");
+        li.classList.add("version-picker-latest");
     }
     parent.appendChild(li);
 
