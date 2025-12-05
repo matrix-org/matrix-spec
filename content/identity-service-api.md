@@ -2,16 +2,14 @@
 title: "Identity Service API"
 weight: 40
 type: docs
+description: |
+  The Matrix client-server and server-server APIs are largely expressed in
+  Matrix user identifiers. Sometimes it is useful to refer to users by other
+  (“third-party”) identifiers such as email addresses or phone numbers. The
+  Identity Service API describes how mappings between 3PIDs and Matrix user
+  IDs can be established, validated, and used; in practice this has been
+  applied to email addresses and phone numbers.
 ---
-
-The Matrix client-server and server-server APIs are largely expressed in
-Matrix user identifiers. From time to time, it is useful to refer to
-users by other ("third-party") identifiers, or "3PID"s, e.g. their email
-address or phone number. This Identity Service Specification describes
-how mappings between third-party identifiers and Matrix user identifiers
-can be established, validated, and used. This description technically
-may apply to any 3PID, but in practice has only been applied
-specifically to email addresses and phone numbers.
 
 ## General principles
 

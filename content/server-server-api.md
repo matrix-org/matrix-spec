@@ -2,48 +2,45 @@
 title: "Server-Server API"
 weight: 20
 type: docs
+description: |
+  Matrix homeservers use the Federation APIs (also known as server-server APIs)
+  to communicate with each other. Homeservers use these APIs to push messages in
+  real-time, retrieve historic messages, and query profile or presence
+  information about users on other servers. The APIs are implemented over HTTPS,
+  with authentication provided by public key signatures both at the TLS
+  transport layer and in HTTP Authorization headers.
+
+  There are three main kinds of communication that occur between
+  homeservers:
+
+  Persistent Data Units (PDUs):
+  These events are broadcast from one homeserver to any others that have
+  joined the same room (identified by Room ID). They are persisted in
+  long-term storage and record the history of messages and state for a
+  room.
+
+  Like email, it is the responsibility of the originating server of a PDU
+  to deliver that event to its recipient servers. However PDUs are signed
+  using the originating server's private key so that it is possible to
+  deliver them through third-party servers.
+
+  Ephemeral Data Units (EDUs):
+  These events are pushed between pairs of homeservers. They are not
+  persisted and are not part of the history of a room, nor does the
+  receiving homeserver have to reply to them.
+
+  Queries:
+  These are single request/response interactions between a given pair of
+  servers, initiated by one side sending an HTTPS GET request to obtain
+  some information, and responded by the other. They are not persisted and
+  contain no long-term significant history. They simply request a snapshot
+  state at the instant the query is made.
+
+  EDUs and PDUs are further wrapped in an envelope called a Transaction,
+  which is transferred from the origin to the destination homeserver using
+  an HTTPS PUT request.
+
 ---
-
-Matrix homeservers use the Federation APIs (also known as server-server
-APIs) to communicate with each other. Homeservers use these APIs to push
-messages to each other in real-time, to retrieve historic messages from
-each other, and to query profile and presence information about users on
-each other's servers.
-
-The APIs are implemented using HTTPS requests between each of the
-servers. These HTTPS requests are strongly authenticated using public
-key signatures at the TLS transport layer and using public key
-signatures in HTTP Authorization headers at the HTTP layer.
-
-There are three main kinds of communication that occur between
-homeservers:
-
-Persistent Data Units (PDUs):
-These events are broadcast from one homeserver to any others that have
-joined the same room (identified by Room ID). They are persisted in
-long-term storage and record the history of messages and state for a
-room.
-
-Like email, it is the responsibility of the originating server of a PDU
-to deliver that event to its recipient servers. However PDUs are signed
-using the originating server's private key so that it is possible to
-deliver them through third-party servers.
-
-Ephemeral Data Units (EDUs):
-These events are pushed between pairs of homeservers. They are not
-persisted and are not part of the history of a room, nor does the
-receiving homeserver have to reply to them.
-
-Queries:
-These are single request/response interactions between a given pair of
-servers, initiated by one side sending an HTTPS GET request to obtain
-some information, and responded by the other. They are not persisted and
-contain no long-term significant history. They simply request a snapshot
-state at the instant the query is made.
-
-EDUs and PDUs are further wrapped in an envelope called a Transaction,
-which is transferred from the origin to the destination homeserver using
-an HTTPS PUT request.
 
 ## API standards
 
