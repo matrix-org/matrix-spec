@@ -32,8 +32,8 @@
 
 {{/* Collect endpoints for the on-page endpoints TOC */}}
 {{ if $page }}
-  {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary }}
   {{/* Store each endpoint's metadata in a scratch variable */}}
+  {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary "deprecated" $operation_data.deprecated }}
   {{ if not (reflect.IsSlice ($page.Scratch.Get "api_endpoints")) }}
     {{ $page.Scratch.Set "api_endpoints" (slice) }}
   {{ end }}

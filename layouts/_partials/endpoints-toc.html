@@ -19,6 +19,7 @@
             <a href="#{{ .anchor }}">
               <span class="http-api-method">{{ .method }}</span>
               <span class="endpoint-path">{{ .endpoint }}</span>
+              {{ if .deprecated }}<span class="endpoint-deprecated">(deprecated)</span>{{ end }}
             </a>
           </li>
         {{ end }}

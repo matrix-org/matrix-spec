@@ -289,6 +289,12 @@ Custom SCSS for the Matrix spec
     font-family: $font-family-monospace;
     color: $secondary;
   }
+
+  .endpoint-deprecated {
+    color: $danger;
+    font-weight: $font-weight-bold;
+    margin-left: 0.35rem;
+  }
 }
 
 .page-description {
