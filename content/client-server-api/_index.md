@@ -2,13 +2,13 @@
 title: "Client-Server API"
 weight: 10
 type: docs
+description: |
+  The client-server API allows clients to send messages, control rooms and
+  synchronise conversation history. It is designed to support both lightweight
+  clients which store no state and lazy-load data from the server as required,
+  as well as heavyweight clients which maintain a full local persistent copy of
+  server state.
 ---
-
-The client-server API allows clients to
-send messages, control rooms and synchronise conversation history. It is
-designed to support both lightweight clients which store no state and
-lazy-load data from the server as required - as well as heavyweight
-clients which maintain a full local persistent copy of server state.
 
 ## API Standards
 
