@@ -11,6 +11,34 @@
 
 {{ with .Site.GetPage "client-server-api/modules" }}
     {{ with .Resources.GetMatch (printf "%s%s" $name ".md") }}
+        {{/* Preserve previous scratch values so nested modules don't leak */}}
+        {{ $prevPage := .Scratch.Get "endpoint_page" }}
+        {{ $prevModule := .Scratch.Get "endpoint_module" }}
+
+        {{/* Allow endpoints rendered in the module to accumulate on the parent page */}}
+        {{ .Scratch.Set "endpoint_page" $.Page }}
+        {{/* Name the module for grouping in the endpoints list */}}
+        {{ $display := $.Get "title" }}
+        {{ if not $display }}
+          {{ $display = index $.Site.Data.cs_modules $name }}
+        {{ end }}
+        {{ if not $display }}
+          {{ $display = $name }}
+        {{ end }}
+        {{ .Scratch.Set "endpoint_module" $display }}
+
 {{ .RenderShortcodes }}
+
+        {{/* Restore previous scratch values */}}
+        {{ if $prevPage }}
+          {{ .Scratch.Set "endpoint_page" $prevPage }}
+        {{ else }}
+          {{ .Scratch.Delete "endpoint_page" }}
+        {{ end }}
+        {{ if $prevModule }}
+          {{ .Scratch.Set "endpoint_module" $prevModule }}
+        {{ else }}
+          {{ .Scratch.Delete "endpoint_module" }}
+        {{ end }}
     {{ end }}
 {{ end }}

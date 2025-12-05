@@ -281,7 +281,6 @@ Custom SCSS for the Matrix spec
   }
 
   .endpoint-list .http-api-method {
-    font-weight: $font-weight-bold;
     margin-right: 0.35rem;
   }
 
@@ -294,6 +293,17 @@ Custom SCSS for the Matrix spec
     color: $danger;
     font-weight: $font-weight-bold;
     margin-left: 0.35rem;
+  }
+
+  .endpoint-module {
+    &:not(:first-child) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .endpoint-module-title {
+    font-weight: $font-weight-bold;
+    margin-bottom: 0.35rem;
   }
 }
 
