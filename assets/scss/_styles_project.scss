@@ -59,8 +59,10 @@ Custom SCSS for the Matrix spec
 
   /* As these styles are only applied by JavaScript, PurgeCSS doesn't see them
    * in the source code and removes them unless we explicitly tell it not to.
+   * We use /*! so that PostCSS doesn't strip the comments before PurgeCSS can
+   * see them.
    */
-  /* purgecss start ignore */
+  /*! purgecss start ignore */
   ul#version-selector li.selected a {
     font-weight: bold;
   }
@@ -68,7 +70,7 @@ Custom SCSS for the Matrix spec
   ul#version-selector li.latest a {
     color: $secondary;
   }
-  /* purgecss end ignore */
+  /*! purgecss end ignore */
 }
 
 /* Styles for the sidebar nav */
