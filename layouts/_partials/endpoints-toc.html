@@ -16,9 +16,9 @@
       {{/* Sort by module to group visually */}}
       {{ $sorted := sort $endpoints "module" }}
       {{ $current := "" }}
-      {{ $seen := newScratch }}
       {{ range $sorted }}
         {{ $mod := .module }}
+        {{/* Set a title for the base endpoints */}}
         {{ if not $mod }}{{ $mod = "Required" }}{{ end }}
         {{ if ne $mod $current }}
           {{ if $current }}</ul></div>{{ end }}
@@ -28,16 +28,13 @@
           {{ $current = $mod }}
         {{ end }}
         {{ $key := printf "%s|%s" .method .anchor }}
-        {{ if not ($seen.Get $key) }}
-          {{ $seen.Set $key true }}
-          <li>
-            <a href="#{{ .anchor }}">
-              <span class="http-api-method">{{ .method }}</span>
-              <span class="endpoint-path">{{ .endpoint }}</span>
-              {{ if .deprecated }}<span class="endpoint-deprecated">(deprecated)</span>{{ end }}
-            </a>
-          </li>
-        {{ end }}
+        <li>
+          <a href="#{{ .anchor }}">
+            <span class="http-api-method">{{ .method }}</span>
+            <span class="endpoint-path">{{ .endpoint }}</span>
+            {{ if .deprecated }}<span class="endpoint-deprecated">(deprecated)</span>{{ end }}
+          </a>
+        </li>
       {{ end }}
       {{ if $current }}</ul></div>{{ end }}
     </details>

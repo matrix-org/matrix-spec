@@ -35,10 +35,21 @@
 {{ if $page }}
   {{/* Store each endpoint's metadata in a scratch variable */}}
   {{ $entry := dict "anchor" $anchor "method" $method "endpoint" $endpoint "summary" $operation_data.summary "deprecated" $operation_data.deprecated "module" $module }}
+  {{ if not ($page.Scratch.Get "api_endpoints_seen") }}
+    {{ $page.Scratch.Set "api_endpoints_seen" dict }}
+  {{ end }}
+  {{/* Keep a map of seen endpoints. This is necessary as this partial may be
+       rendered multiple times for the same endpoint (e.g. in the TOC and
+       in the main content), leading to duplicates. */}}
+  {{ $seen := $page.Scratch.Get "api_endpoints_seen" }}
+  {{ $key := printf "%s|%s" $method $endpoint }}
+  {{ if not (index $seen $key) }}
   {{ if not (reflect.IsSlice ($page.Scratch.Get "api_endpoints")) }}
     {{ $page.Scratch.Set "api_endpoints" (slice) }}
   {{ end }}
   {{ $page.Scratch.Add "api_endpoints" (slice $entry) }}
+    {{ $page.Scratch.SetInMap "api_endpoints_seen" $key true }}
+  {{ end }}
 {{ end }}
 
 <section class="rendered-data">
