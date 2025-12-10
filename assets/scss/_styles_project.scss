@@ -278,10 +278,17 @@ Custom SCSS for the Matrix spec
   .endpoint-list a {
     text-decoration: none;
     color: inherit;
+    padding: 0.05rem 0.25rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: $secondary-background;
+    }
   }
 
   .endpoint-list .http-api-method {
     margin-right: 0.35rem;
+    font-weight: $font-weight-bold;
   }
 
   .endpoint-path {
@@ -302,7 +309,8 @@ Custom SCSS for the Matrix spec
   }
 
   .endpoint-module-title {
-    font-weight: $font-weight-bold;
+    // font-weight: $font-weight-bold;
+    font-size: 1.20rem;
     margin-bottom: 0.35rem;
   }
 }
