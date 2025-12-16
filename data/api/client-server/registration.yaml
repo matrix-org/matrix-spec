@@ -60,6 +60,18 @@ paths:
 
         Any user ID returned by this API must conform to the grammar given in the
         [Matrix specification](/appendices/#user-identifiers).
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        Even if the server doesn't support the Legacy authentication API, it
+        MUST support this endpoint for application services to be able to
+        [create users](/application-service-api/#server-admin-style-permissions).
+
+        In that case application services MUST set the `"inhibit_login": true`
+        parameter as they cannot use it to log in as users. If the
+        `inhibit_login` parameter is not set to `true`, the server MUST return a
+        400 HTTP status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+        {{% /boxes/note %}}
       operationId: register
       parameters:
         - in: query

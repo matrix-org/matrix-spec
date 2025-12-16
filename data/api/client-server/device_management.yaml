@@ -87,8 +87,21 @@ paths:
       tags:
         - Device management
     put:
-      summary: Update a device
-      description: Updates the metadata on the given device.
+      summary: Create or update a device
+      description: |-
+        Updates the metadata on the given device.
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        This endpoint can be used by application services to create a device.
+
+        When a new device was created, the homeserver MUST return a 201 HTTP
+        status code. It MUST still return a 200 HTTP status code if a device was
+        updated.
+
+        This endpoint is rate-limited for device creation. Servers MAY want to
+        use login rate limits.
+        {{% /boxes/note %}}
       operationId: updateDevice
       security:
         - accessTokenQuery: []
@@ -127,6 +140,16 @@ paths:
               examples:
                 response:
                   value: {}
+        "201":
+          description: |-
+            The device was successfully created by the application service.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
         "404":
           description: The current user has no device with the given ID.
       tags:
@@ -142,6 +165,12 @@ paths:
         Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        When this endpoint is used by an application service, the server MUST NOT
+        require User-Interactive Authentication.
+        {{% /boxes/note %}}
       operationId: deleteDevice
       security:
         - accessTokenQuery: []
@@ -199,6 +228,12 @@ paths:
         Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        When this endpoint is used by an application service, the server MUST NOT
+        require User-Interactive Authentication.
+        {{% /boxes/note %}}
       operationId: deleteDevices
       security:
         - accessTokenQuery: []

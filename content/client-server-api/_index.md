@@ -1562,6 +1562,10 @@ If the access token does correspond to an appservice, but the user id does
 not lie within its namespace then the homeserver will respond with an
 errcode of `M_EXCLUSIVE`.
 
+{{% added-in v="1.17" %}} If this login type is used and the server doesn't
+support logging in via the Legacy authentication API, it MUST return a 400 HTTP
+status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+
 ##### Login Fallback
 
 If a client does not recognize any or all login flows it can use the

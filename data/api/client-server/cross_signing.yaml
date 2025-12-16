@@ -46,6 +46,12 @@ paths:
         authentication type if the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/note %}}
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        When this endpoint is used by an application service, the server MUST NOT require
+        User-Interactive Authentication, even if cross-signing keys already exist.
+        {{% /boxes/note %}}
       operationId: uploadCrossSigningKeys
       security:
         - accessTokenQuery: []
