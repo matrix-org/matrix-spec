@@ -501,6 +501,12 @@ user must do that directly in the homeserver's web UI. However, the client can
 signal to the homeserver that the user wishes to create a new account with the
 [`prompt=create`](#user-registration) parameter during authorization.
 
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Application services can use the `/register` endpoint to create users regardless
+of the authentication API supported by the homeserver.
+{{% /boxes/note %}}
+
 ### Login
 
 With the legacy API, a client can obtain an access token by using one of the
