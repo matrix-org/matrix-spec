@@ -477,8 +477,7 @@ the API that was used to obtain their current access token.
 
 {{% boxes/note %}}
 Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
-such as automated applications that cannot use a web browser, or
-user management by [application services](application-service-api/#server-admin-style-permissions).
+such as automated applications that cannot use a web browser.
 {{% /boxes/note %}}
 
 ### Authentication API discovery
