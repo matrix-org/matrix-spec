@@ -110,5 +110,5 @@ fetch(url)
         }
 
         // For historical versions, simply link to the changelog
-        appendVersion(ul, "historical", '{{ (site.GetPage "changelog/historical").RelPermalink }}');
+        appendVersion(ul, "historical", "historical", '{{ (site.GetPage "changelog/historical").RelPermalink }}');
     });
