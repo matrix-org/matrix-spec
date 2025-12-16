@@ -139,6 +139,32 @@ paths:
                     items:
                       type: string
                       description: A prompt value that the server supports.
+                  account_management_uri:
+                    x-addedInMatrixVersion: "1.17"
+                    type: string
+                    format: uri
+                    description: |-
+                      The URL where the user is able to access the account management capabilities
+                      of the homeserver.
+
+                      This is an extension [defined in this specification](/client-server-api/#oauth-20-account-management).
+                  account_management_uri_supported:
+                    x-addedInMatrixVersion: "1.17"
+                    type: array
+                    description: |-
+                      List of actions that the account management URL supports.
+
+                      This is an extension [defined in this specification](/client-server-api/#oauth-20-account-management).
+                    items:
+                      type: string
+                      enum:
+                        - "org.matrix.profile"
+                        - "org.matrix.devices_list"
+                        - "org.matrix.device_view"
+                        - "org.matrix.device_delete"
+                        - "org.matrix.account_deactivate"
+                        - "org.matrix.cross_signing_reset"
+                      description: An action that the account management URL supports.
                 required:
                   - issuer
                   - authorization_endpoint
