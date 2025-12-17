@@ -547,18 +547,12 @@ client-server endpoint.
 Application services need to be able to create and delete devices to manage the
 encryption for their users without having to rely on `/login`, which also
 generates an access token for the user, and which might not be available for
-homeservers that only support the [OAuth 2.0 API](client-server-api/#oauth-20-api).
+homeservers that only support the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
 
 ##### Creating devices
 
 Application services can use the [`PUT /_matrix/client/v3/devices/{deviceId}`](/client-server-api/#put_matrixclientv3devicesdeviceid)
 endpoint to create new devices.
-
-When a new device was created, the homeserver MUST return a 201 HTTP status code.
-It MUST still return a 200 HTTP status code if a device was updated.
-
-This endpoint is rate-limited for device creation. Servers MAY want to use login
-rate limits.
 
 ##### Deleting devices
 
