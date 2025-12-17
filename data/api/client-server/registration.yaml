@@ -215,6 +215,9 @@ paths:
             * `M_INVALID_USERNAME` : The desired user ID is not a valid user name.
             * `M_EXCLUSIVE` : The desired user ID is in the exclusive namespace
               claimed by an application service.
+            * {{% added-in v="1.17" %}} `M_APPSERVICE_LOGIN_UNSUPPORTED`: an application service
+              used the `m.login.application_service` type without setting `inhibit_login` to `true`,
+              but the server doesn't support logging in via the Legacy authentication API.
 
             These errors may be returned at any stage of the registration process,
             including after authentication if the requested user ID was registered
