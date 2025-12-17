@@ -21,13 +21,17 @@ paths:
       x-addedInMatrixVersion: "1.1"
       x-changedInMatrixVersion:
         "1.11": UIA is not always required for this endpoint.
+        "1.17": |-
+          This endpoint no longer requires User-Interactive Authentication when used by an
+          application service.
       summary: Upload cross-signing keys.
       description: |-
         Publishes cross-signing keys for the user.
 
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api),
+        except when used by an application service.
 
-        User-Interactive Authentication MUST be performed, except in these cases:
+        User-Interactive Authentication MUST be performed for regular clients, except in these cases:
         - there is no existing cross-signing master key uploaded to the homeserver, OR
         - there is an existing cross-signing master key and it exactly matches the
           cross-signing master key provided in the request body. If there are any additional
@@ -45,12 +49,6 @@ paths:
         it uses the [`m.oauth`](/client-server-api/#oauth-authentication)
         authentication type if the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
-        {{% /boxes/note %}}
-
-        {{% boxes/note %}}
-        {{% added-in v="1.17" %}}
-        When this endpoint is used by an application service, the server MUST NOT require
-        User-Interactive Authentication, even if cross-signing keys already exist.
         {{% /boxes/note %}}
       operationId: uploadCrossSigningKeys
       security:
