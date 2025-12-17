@@ -87,7 +87,7 @@ properties:
           example: "github"
       required: ['id', 'name']
   oauth_aware_preferred:
-    type: bool
+    type: boolean
     x-addedInMatrixVersion: "1.17"
     description: |
       Whether the `m.login.sso` flow is preferred over other flows for
