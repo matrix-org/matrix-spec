@@ -148,7 +148,7 @@ paths:
                       of the homeserver.
 
                       This is an extension [defined in this specification](/client-server-api/#oauth-20-account-management).
-                  account_management_uri_supported:
+                  account_management_actions_supported:
                     x-addedInMatrixVersion: "1.17"
                     type: array
                     description: |-
