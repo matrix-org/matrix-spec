@@ -86,5 +86,12 @@ properties:
             brand usage as intended by the server.
           example: "github"
       required: ['id', 'name']
+  oauth_aware_preferred:
+    type: bool
+    x-addedInMatrixVersion: "1.17"
+    description: |
+      Whether the `m.login.sso` flow is preferred over other flows for
+      [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+    example: true
 
 required: ['type']
