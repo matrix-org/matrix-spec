@@ -477,8 +477,7 @@ the API that was used to obtain their current access token.
 
 {{% boxes/note %}}
 Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
-such as automated applications that cannot use a web browser, or
-user management by [application services](application-service-api/#server-admin-style-permissions).
+such as automated applications that cannot use a web browser.
 {{% /boxes/note %}}
 
 ### Authentication API discovery
@@ -501,6 +500,12 @@ With the OAuth 2.0 API, a client can't register a new account directly. The end
 user must do that directly in the homeserver's web UI. However, the client can
 signal to the homeserver that the user wishes to create a new account with the
 [`prompt=create`](#user-registration) parameter during authorization.
+
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Application services can use the `/register` endpoint to create users regardless
+of the authentication API supported by the homeserver.
+{{% /boxes/note %}}
 
 ### Login
 
@@ -1561,6 +1566,10 @@ respond with an errcode of `M_FORBIDDEN`.
 If the access token does correspond to an appservice, but the user id does
 not lie within its namespace then the homeserver will respond with an
 errcode of `M_EXCLUSIVE`.
+
+{{% added-in v="1.17" %}} If this login type is used and the server doesn't
+support logging in via the Legacy authentication API, it MUST return a 400 HTTP
+status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
 
 ##### Login Fallback
 

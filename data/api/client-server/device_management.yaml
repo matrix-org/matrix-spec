@@ -87,8 +87,21 @@ paths:
       tags:
         - Device management
     put:
-      summary: Update a device
-      description: Updates the metadata on the given device.
+      summary: Create or update a device
+      x-changedInMatrixVersion:
+        "1.17": The ability to create new devices was added.
+      description: |-
+        Updates the metadata on the given device, or creates a new device.
+
+        The ability to create new devices is only available to application
+        services: regular clients may only update existing devices.
+
+        When a new device was created, the homeserver MUST return a 201 HTTP
+        status code. It MUST return a 200 HTTP status code if a device was
+        updated.
+
+        This endpoint is rate-limited for device creation. Servers MAY use login
+        rate limits.
       operationId: updateDevice
       security:
         - accessTokenQuery: []
@@ -127,19 +140,34 @@ paths:
               examples:
                 response:
                   value: {}
+        "201":
+          description: |-
+            The device was successfully created by the application service.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
         "404":
           description: The current user has no device with the given ID.
       tags:
         - Device management
     delete:
       summary: Delete a device
+      x-changedInMatrixVersion:
+        "1.17": |-
+          This endpoint no longer requires User-Interactive Authentication when used by an
+          application service.
       description: |-
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api),
+        except when used by an application service.
 
         Deletes the given device, and invalidates any access token associated with it.
 
         {{% boxes/warning %}}
-        Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
+        When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
       operationId: deleteDevice
@@ -190,13 +218,18 @@ paths:
   /delete_devices:
     post:
       summary: Bulk deletion of devices
+      x-changedInMatrixVersion:
+        "1.17": |-
+          This endpoint no longer requires User-Interactive Authentication when used by an
+          application service.
       description: |-
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api),
+        except when used by an application service.
 
         Deletes the given devices, and invalidates any access token associated with them.
 
         {{% boxes/warning %}}
-        Since this endpoint uses User-Interactive Authentication, it cannot be used when the access token was obtained
+        When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
       operationId: deleteDevices
