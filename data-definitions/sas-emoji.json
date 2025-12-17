@@ -2,6 +2,8 @@
     {
         "number": 0,
         "emoji": "🐶",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/00.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/00.png",
         "description": "Dog",
         "unicode": "U+1F436",
         "translated_descriptions": {
@@ -42,6 +44,8 @@
     {
         "number": 1,
         "emoji": "🐱",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/01.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/01.png",
         "description": "Cat",
         "unicode": "U+1F431",
         "translated_descriptions": {
@@ -82,6 +86,8 @@
     {
         "number": 2,
         "emoji": "🦁",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/02.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/02.png",
         "description": "Lion",
         "unicode": "U+1F981",
         "translated_descriptions": {
@@ -122,6 +128,8 @@
     {
         "number": 3,
         "emoji": "🐎",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/03.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/03.png",
         "description": "Horse",
         "unicode": "U+1F40E",
         "translated_descriptions": {
@@ -162,6 +170,8 @@
     {
         "number": 4,
         "emoji": "🦄",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/04.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/04.png",
         "description": "Unicorn",
         "unicode": "U+1F984",
         "translated_descriptions": {
@@ -202,6 +212,8 @@
     {
         "number": 5,
         "emoji": "🐷",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/05.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/05.png",
         "description": "Pig",
         "unicode": "U+1F437",
         "translated_descriptions": {
@@ -242,6 +254,8 @@
     {
         "number": 6,
         "emoji": "🐘",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/06.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/06.png",
         "description": "Elephant",
         "unicode": "U+1F418",
         "translated_descriptions": {
@@ -282,6 +296,8 @@
     {
         "number": 7,
         "emoji": "🐰",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/07.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/07.png",
         "description": "Rabbit",
         "unicode": "U+1F430",
         "translated_descriptions": {
@@ -322,6 +338,8 @@
     {
         "number": 8,
         "emoji": "🐼",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/08.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/08.png",
         "description": "Panda",
         "unicode": "U+1F43C",
         "translated_descriptions": {
@@ -362,6 +380,8 @@
     {
         "number": 9,
         "emoji": "🐓",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/09.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/09.png",
         "description": "Rooster",
         "unicode": "U+1F413",
         "translated_descriptions": {
@@ -402,6 +422,8 @@
     {
         "number": 10,
         "emoji": "🐧",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/10.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/10.png",
         "description": "Penguin",
         "unicode": "U+1F427",
         "translated_descriptions": {
@@ -442,6 +464,8 @@
     {
         "number": 11,
         "emoji": "🐢",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/11.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/11.png",
         "description": "Turtle",
         "unicode": "U+1F422",
         "translated_descriptions": {
@@ -482,6 +506,8 @@
     {
         "number": 12,
         "emoji": "🐟",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/12.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/12.png",
         "description": "Fish",
         "unicode": "U+1F41F",
         "translated_descriptions": {
@@ -522,6 +548,8 @@
     {
         "number": 13,
         "emoji": "🐙",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/13.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/13.png",
         "description": "Octopus",
         "unicode": "U+1F419",
         "translated_descriptions": {
@@ -562,6 +590,8 @@
     {
         "number": 14,
         "emoji": "🦋",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/14.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/14.png",
         "description": "Butterfly",
         "unicode": "U+1F98B",
         "translated_descriptions": {
@@ -602,6 +632,8 @@
     {
         "number": 15,
         "emoji": "🌷",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/15.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/15.png",
         "description": "Flower",
         "unicode": "U+1F337",
         "translated_descriptions": {
@@ -642,6 +674,8 @@
     {
         "number": 16,
         "emoji": "🌳",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/16.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/16.png",
         "description": "Tree",
         "unicode": "U+1F333",
         "translated_descriptions": {
@@ -682,6 +716,8 @@
     {
         "number": 17,
         "emoji": "🌵",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/17.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/17.png",
         "description": "Cactus",
         "unicode": "U+1F335",
         "translated_descriptions": {
@@ -722,6 +758,8 @@
     {
         "number": 18,
         "emoji": "🍄",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/18.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/18.png",
         "description": "Mushroom",
         "unicode": "U+1F344",
         "translated_descriptions": {
@@ -762,6 +800,8 @@
     {
         "number": 19,
         "emoji": "🌏",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/19.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/19.png",
         "description": "Globe",
         "unicode": "U+1F30F",
         "translated_descriptions": {
@@ -802,6 +842,8 @@
     {
         "number": 20,
         "emoji": "🌙",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/20.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/20.png",
         "description": "Moon",
         "unicode": "U+1F319",
         "translated_descriptions": {
@@ -842,6 +884,8 @@
     {
         "number": 21,
         "emoji": "☁️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/21.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/21.png",
         "description": "Cloud",
         "unicode": "U+2601U+FE0F",
         "translated_descriptions": {
@@ -882,6 +926,8 @@
     {
         "number": 22,
         "emoji": "🔥",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/22.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/22.png",
         "description": "Fire",
         "unicode": "U+1F525",
         "translated_descriptions": {
@@ -922,6 +968,8 @@
     {
         "number": 23,
         "emoji": "🍌",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/23.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/23.png",
         "description": "Banana",
         "unicode": "U+1F34C",
         "translated_descriptions": {
@@ -962,6 +1010,8 @@
     {
         "number": 24,
         "emoji": "🍎",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/24.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/24.png",
         "description": "Apple",
         "unicode": "U+1F34E",
         "translated_descriptions": {
@@ -1002,6 +1052,8 @@
     {
         "number": 25,
         "emoji": "🍓",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/25.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/25.png",
         "description": "Strawberry",
         "unicode": "U+1F353",
         "translated_descriptions": {
@@ -1042,6 +1094,8 @@
     {
         "number": 26,
         "emoji": "🌽",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/26.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/26.png",
         "description": "Corn",
         "unicode": "U+1F33D",
         "translated_descriptions": {
@@ -1082,6 +1136,8 @@
     {
         "number": 27,
         "emoji": "🍕",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/27.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/27.png",
         "description": "Pizza",
         "unicode": "U+1F355",
         "translated_descriptions": {
@@ -1122,6 +1178,8 @@
     {
         "number": 28,
         "emoji": "🎂",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/28.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/28.png",
         "description": "Cake",
         "unicode": "U+1F382",
         "translated_descriptions": {
@@ -1162,6 +1220,8 @@
     {
         "number": 29,
         "emoji": "❤️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/29.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/29.png",
         "description": "Heart",
         "unicode": "U+2764U+FE0F",
         "translated_descriptions": {
@@ -1202,6 +1262,8 @@
     {
         "number": 30,
         "emoji": "😀",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/30.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/30.png",
         "description": "Smiley",
         "unicode": "U+1F600",
         "translated_descriptions": {
@@ -1242,6 +1304,8 @@
     {
         "number": 31,
         "emoji": "🤖",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/31.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/31.png",
         "description": "Robot",
         "unicode": "U+1F916",
         "translated_descriptions": {
@@ -1282,6 +1346,8 @@
     {
         "number": 32,
         "emoji": "🎩",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/32.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/32.png",
         "description": "Hat",
         "unicode": "U+1F3A9",
         "translated_descriptions": {
@@ -1322,6 +1388,8 @@
     {
         "number": 33,
         "emoji": "👓",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/33.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/33.png",
         "description": "Glasses",
         "unicode": "U+1F453",
         "translated_descriptions": {
@@ -1362,6 +1430,8 @@
     {
         "number": 34,
         "emoji": "🔧",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/34.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/34.png",
         "description": "Spanner",
         "unicode": "U+1F527",
         "translated_descriptions": {
@@ -1402,6 +1472,8 @@
     {
         "number": 35,
         "emoji": "🎅",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/35.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/35.png",
         "description": "Santa",
         "unicode": "U+1F385",
         "translated_descriptions": {
@@ -1442,6 +1514,8 @@
     {
         "number": 36,
         "emoji": "👍",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/36.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/36.png",
         "description": "Thumbs Up",
         "unicode": "U+1F44D",
         "translated_descriptions": {
@@ -1482,6 +1556,8 @@
     {
         "number": 37,
         "emoji": "☂️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/37.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/37.png",
         "description": "Umbrella",
         "unicode": "U+2602U+FE0F",
         "translated_descriptions": {
@@ -1522,6 +1598,8 @@
     {
         "number": 38,
         "emoji": "⌛",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/38.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/38.png",
         "description": "Hourglass",
         "unicode": "U+231B",
         "translated_descriptions": {
@@ -1562,6 +1640,8 @@
     {
         "number": 39,
         "emoji": "⏰",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/39.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/39.png",
         "description": "Clock",
         "unicode": "U+23F0",
         "translated_descriptions": {
@@ -1602,6 +1682,8 @@
     {
         "number": 40,
         "emoji": "🎁",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/40.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/40.png",
         "description": "Gift",
         "unicode": "U+1F381",
         "translated_descriptions": {
@@ -1642,6 +1724,8 @@
     {
         "number": 41,
         "emoji": "💡",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/41.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/41.png",
         "description": "Light Bulb",
         "unicode": "U+1F4A1",
         "translated_descriptions": {
@@ -1682,6 +1766,8 @@
     {
         "number": 42,
         "emoji": "📕",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/42.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/42.png",
         "description": "Book",
         "unicode": "U+1F4D5",
         "translated_descriptions": {
@@ -1722,6 +1808,8 @@
     {
         "number": 43,
         "emoji": "✏️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/43.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/43.png",
         "description": "Pencil",
         "unicode": "U+270FU+FE0F",
         "translated_descriptions": {
@@ -1762,6 +1850,8 @@
     {
         "number": 44,
         "emoji": "📎",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/44.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/44.png",
         "description": "Paperclip",
         "unicode": "U+1F4CE",
         "translated_descriptions": {
@@ -1802,6 +1892,8 @@
     {
         "number": 45,
         "emoji": "✂️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/45.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/45.png",
         "description": "Scissors",
         "unicode": "U+2702U+FE0F",
         "translated_descriptions": {
@@ -1842,6 +1934,8 @@
     {
         "number": 46,
         "emoji": "🔒",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/46.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/46.png",
         "description": "Lock",
         "unicode": "U+1F512",
         "translated_descriptions": {
@@ -1882,6 +1976,8 @@
     {
         "number": 47,
         "emoji": "🔑",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/47.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/47.png",
         "description": "Key",
         "unicode": "U+1F511",
         "translated_descriptions": {
@@ -1922,6 +2018,8 @@
     {
         "number": 48,
         "emoji": "🔨",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/48.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/48.png",
         "description": "Hammer",
         "unicode": "U+1F528",
         "translated_descriptions": {
@@ -1962,6 +2060,8 @@
     {
         "number": 49,
         "emoji": "☎️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/49.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/49.png",
         "description": "Telephone",
         "unicode": "U+260EU+FE0F",
         "translated_descriptions": {
@@ -2002,6 +2102,8 @@
     {
         "number": 50,
         "emoji": "🏁",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/50.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/50.png",
         "description": "Flag",
         "unicode": "U+1F3C1",
         "translated_descriptions": {
@@ -2042,6 +2144,8 @@
     {
         "number": 51,
         "emoji": "🚂",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/51.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/51.png",
         "description": "Train",
         "unicode": "U+1F682",
         "translated_descriptions": {
@@ -2082,6 +2186,8 @@
     {
         "number": 52,
         "emoji": "🚲",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/52.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/52.png",
         "description": "Bicycle",
         "unicode": "U+1F6B2",
         "translated_descriptions": {
@@ -2122,6 +2228,8 @@
     {
         "number": 53,
         "emoji": "✈️",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/53.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/53.png",
         "description": "Aeroplane",
         "unicode": "U+2708U+FE0F",
         "translated_descriptions": {
@@ -2162,6 +2270,8 @@
     {
         "number": 54,
         "emoji": "🚀",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/54.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/54.png",
         "description": "Rocket",
         "unicode": "U+1F680",
         "translated_descriptions": {
@@ -2202,6 +2312,8 @@
     {
         "number": 55,
         "emoji": "🏆",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/55.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/55.png",
         "description": "Trophy",
         "unicode": "U+1F3C6",
         "translated_descriptions": {
@@ -2242,6 +2354,8 @@
     {
         "number": 56,
         "emoji": "⚽",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/56.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/56.png",
         "description": "Ball",
         "unicode": "U+26BD",
         "translated_descriptions": {
@@ -2282,6 +2396,8 @@
     {
         "number": 57,
         "emoji": "🎸",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/57.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/57.png",
         "description": "Guitar",
         "unicode": "U+1F3B8",
         "translated_descriptions": {
@@ -2322,6 +2438,8 @@
     {
         "number": 58,
         "emoji": "🎺",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/58.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/58.png",
         "description": "Trumpet",
         "unicode": "U+1F3BA",
         "translated_descriptions": {
@@ -2362,6 +2480,8 @@
     {
         "number": 59,
         "emoji": "🔔",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/59.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/59.png",
         "description": "Bell",
         "unicode": "U+1F514",
         "translated_descriptions": {
@@ -2402,6 +2522,8 @@
     {
         "number": 60,
         "emoji": "⚓",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/60.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/60.png",
         "description": "Anchor",
         "unicode": "U+2693",
         "translated_descriptions": {
@@ -2442,6 +2564,8 @@
     {
         "number": 61,
         "emoji": "🎧",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/61.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/61.png",
         "description": "Headphones",
         "unicode": "U+1F3A7",
         "translated_descriptions": {
@@ -2482,6 +2606,8 @@
     {
         "number": 62,
         "emoji": "📁",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/62.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/62.png",
         "description": "Folder",
         "unicode": "U+1F4C1",
         "translated_descriptions": {
@@ -2522,6 +2648,8 @@
     {
         "number": 63,
         "emoji": "📌",
+        "svg": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/63.svg",
+        "png": "https://github.com/matrix-org/matrix-spec/blob/main/data-definitions/sas-emoji/63.png",
         "description": "Pin",
         "unicode": "U+1F4CC",
         "translated_descriptions": {
