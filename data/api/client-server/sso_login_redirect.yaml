@@ -37,6 +37,23 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: action
+          x-addedInMatrixVersion: "1.17"
+          description: |-
+            The action that the user wishes to take at the SSO redirect, for
+            [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+
+            The following values are supported:
+              * `login`: the SSO redirect is for the purposes of signing an
+                existing user in.
+              * `register`: the SSO redirect is for the purpose of registering a
+                new user account.
+          schema:
+            type: string
+            enum:
+              - login
+              - register
       responses:
         "302":
           description: A redirect to the SSO interface.
@@ -75,6 +92,23 @@ paths:
           required: true
           schema:
             type: string
+        - in: query
+          name: action
+          x-addedInMatrixVersion: "1.17"
+          description: |-
+            The action that the user wishes to take at the SSO redirect, for
+            [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+
+            The following values are supported:
+              * `login`: the SSO redirect is for the purposes of signing an
+                existing user in.
+              * `register`: the SSO redirect is for the purpose of registering a
+                new user account.
+          schema:
+            type: string
+            enum:
+              - login
+              - register
       responses:
         "302":
           description: A redirect to the SSO interface.
