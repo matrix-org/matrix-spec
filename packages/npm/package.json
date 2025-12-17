@@ -5,9 +5,10 @@
   "author": "matrix.org",
   "license": "Apache-2.0",
   "files": [
-    "sas-emoji.json"
+    "sas-emoji.json",
+    "sas-emoji/*"
   ],
   "scripts": {
-    "prepare": "cp ../../data-definitions/sas-emoji.json ."
+    "prepare": "cp ../../data-definitions/sas-emoji.json . && cp -r ../../data-definitions/sas-emoji ."
   }
 }
