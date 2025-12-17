@@ -446,11 +446,12 @@ achieved by including the `as_token` on a `/register` request, along
 with a login type of `m.login.application_service` to set the desired
 user ID without a password.
 
-```
+```http
 POST /_matrix/client/v3/register
 Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-Content:
+```json
 {
   "type": "m.login.application_service",
   "username": "_irc_example"
@@ -476,11 +477,12 @@ along with a login type of `m.login.application_service`:
 
 {{% added-in v="1.2" %}}
 
-```
+```http
 POST /_matrix/client/v3/login
 Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-Content:
+```json
 {
   "type": "m.login.application_service",
   "identifier": {
