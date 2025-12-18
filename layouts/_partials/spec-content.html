@@ -3,9 +3,12 @@
   <h1>{{ .Title }}</h1>
   {{ with .Params.description }}<p class="page-description">{{ . | markdownify }}</p>{{ end }}
 
+  {{/*
+    Render an endpoints table of contents. This is the main difference
+    between our templates (which call the spec-content partial) and the default
+    Docsy template.
+  */}}
   {{ partial "endpoints-toc.html" . }}
 
   {{ .Content }}
-
-  {{ partial "page-meta-lastmod.html" . }}
 </div>
