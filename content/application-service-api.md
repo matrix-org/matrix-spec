@@ -2,15 +2,13 @@
 title: "Application Service API"
 weight: 30
 type: docs
+description: |
+  The Matrix client-server API and server-server APIs provide a consistent,
+  self-contained federated messaging fabric but leave little room for custom
+  server-side behaviour such as gateways, filters, or extensible hooks. The
+  Application Service API defines a standard way to add this extensible
+  functionality, independent of the underlying homeserver implementation.
 ---
-
-The Matrix client-server API and server-server APIs provide the means to
-implement a consistent self-contained federated messaging fabric.
-However, they provide limited means of implementing custom server-side
-behaviour in Matrix (e.g. gateways, filters, extensible hooks etc). The
-Application Service API (AS API) defines a standard API to allow such
-extensible functionality to be implemented irrespective of the
-underlying homeserver implementation.
 
 ## Application Services
 

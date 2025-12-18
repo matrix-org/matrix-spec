@@ -257,6 +257,69 @@ Custom SCSS for the Matrix spec
 
 }
 
+.endpoints-toc {
+  summary {
+    cursor: pointer;
+    font-weight: $font-weight-bold;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .endpoint-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .endpoint-list li {
+    margin: 0.2rem 0;
+  }
+
+  .endpoint-list a {
+    text-decoration: none;
+    color: inherit;
+    padding: 0.05rem 0.25rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: $secondary-background;
+    }
+  }
+
+  .endpoint-list .http-api-method {
+    margin-right: 0.35rem;
+    font-weight: $font-weight-bold;
+  }
+
+  .endpoint-path {
+    font-family: $font-family-monospace;
+    color: $secondary;
+  }
+
+  .endpoint-deprecated {
+    color: $danger;
+    font-weight: $font-weight-bold;
+    margin-left: 0.35rem;
+  }
+
+  .endpoint-module {
+    &:not(:first-child) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .endpoint-module-title {
+    // font-weight: $font-weight-bold;
+    font-size: 1.20rem;
+    margin-bottom: 0.35rem;
+  }
+}
+
+.page-description {
+  margin-bottom: 1rem;
+  color: inherit;
+}
+
 /* Styles for alert boxes */
 .alert {
   &.note {
