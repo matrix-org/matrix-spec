@@ -1,1 +1,0 @@
-Allow application services to masquerade as specific devices belonging to users, as per [MSC4326](https://github.com/matrix-org/matrix-spec-proposals/pull/4326).
