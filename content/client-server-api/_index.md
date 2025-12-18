@@ -1647,7 +1647,7 @@ For a client to be considered fully OAuth 2.0 aware it MUST:
     that the web UI knows that the user wishes to sign out a device and which
     one it is.
 
-Optionally, an OAuth 2.0 aware client COULD:
+Optionally, an OAuth 2.0 aware client MAY:
 
 * Label the SSO button as "Continue" rather than "SSO" when
   `oauth_aware_preferred` is `true`. This is because after redirect the server
