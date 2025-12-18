@@ -35,6 +35,14 @@ paths:
         Unlike other endpoints, this endpoint does not take an `id_access_token`
         parameter because the homeserver is expected to sign the request to the
         identity server instead.
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server supports the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        Instead they MUST refer the user to the [account management URL](/client-server-api/#oauth-20-account-management),
+        if available, and MAY use the `action=org.matrix.account_deactivate`
+        parameter.
+        {{% /boxes/warning %}}
       security:
         - {}
         - accessTokenQuery: []

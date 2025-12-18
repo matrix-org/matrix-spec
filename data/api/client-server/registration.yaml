@@ -60,6 +60,14 @@ paths:
 
         Any user ID returned by this API must conform to the grammar given in the
         [Matrix specification](/appendices/#user-identifiers).
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server offers the [`m.login.sso`
+        authentication flow](/client-server-api/#client-login-via-sso) with
+        `oauth_aware_preferred` set to `true`. Instead they MUST add the
+        `action=register` parameter to the SSO redirect endpoint.
+        {{% /boxes/warning %}}
       operationId: register
       parameters:
         - in: query

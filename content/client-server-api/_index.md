@@ -1520,6 +1520,11 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
+{{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+MUST only offer the `m.login.sso` flow to the user when `oauth_aware_preferred`
+is set to `true` and MUST add the `action=login` parameter to the SSO redirect
+endpoint.
+
 {{% added-in v="1.7" %}} Already-authenticated clients can additionally generate
 a token for their user ID if supported by the homeserver using
 [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
