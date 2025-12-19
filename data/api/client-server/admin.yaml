@@ -150,7 +150,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "suspended": "true",
+                    "suspended": true,
                   }
         "400":
           description: |-
@@ -235,7 +235,7 @@ paths:
             examples:
                 request:
                   value: {
-                    "suspended": "true",
+                    "suspended": true,
                   }
         required: true
 
@@ -256,7 +256,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "suspended": "true",
+                    "suspended": true,
                   }
         "400":
           description: |-
@@ -342,7 +342,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "locked": "true",
+                    "locked": true,
                   }
         "400":
           description: |-
@@ -427,7 +427,7 @@ paths:
             examples:
                 request:
                   value: {
-                    "locked": "true",
+                    "locked": true,
                   }
         required: true
 
@@ -448,7 +448,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "locked": "true",
+                    "locked": true,
                   }
         "400":
           description: |-
