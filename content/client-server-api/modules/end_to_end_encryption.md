@@ -921,7 +921,7 @@ collaborate to create a common set of translations for all languages.
 
 {{% boxes/note %}}
 Known translations for the emoji are available from
-<https://github.com/matrix-org/matrix-doc/blob/master/data-definitions/>
+<https://github.com/matrix-org/matrix-spec/tree/main/data-definitions/>
 and can be translated online:
 <https://translate.riot.im/projects/matrix-doc/sas-emoji-v1>
 {{% /boxes/note %}}

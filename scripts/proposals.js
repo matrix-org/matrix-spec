@@ -6,7 +6,7 @@
  * in the specification.
  *
  * In detail, it:
- * - fetches all GitHub issues from matrix-doc that have the `proposal` label
+ * - fetches all GitHub issues from matrix-spec-proposals that have the `proposal` label
  * - groups them by their state in the MSC process
  * - does some light massaging of them so it's easier for the Hugo template to work with them
  * - store them at /data/msc

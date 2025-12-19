@@ -87,7 +87,7 @@ Matrix 1.12 is expected to be released in the July-September 2024 calendar quart
 The homeserver SHOULD be able to supply thumbnails for uploaded images
 and videos. The exact file types which can be thumbnailed are not
 currently specified - see [Issue
-\#1938](https://github.com/matrix-org/matrix-doc/issues/1938) for more
+\#1938](https://github.com/matrix-org/matrix-spec/issues/453) for more
 information.
 
 The thumbnail methods are "crop" and "scale". "scale" tries to return an
