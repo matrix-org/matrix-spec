@@ -121,10 +121,15 @@ sidebar_menu_compact = true
 	icon = "fab fa-youtube"
   desc = "Matrix YouTube channel"
 [[params.links.bottom]]
-	name = "Twitter"
-	url = "https://twitter.com/matrixdotorg"
-	icon = "fab fa-x-twitter"
-  desc = "Matrix on Twitter"
+	name = "Mastodon"
+	url = "https://mastodon.matrix.org/@matrix"
+	icon = "fab fa-mastodon"
+  desc = "Matrix on Mastodon"
+[[params.links.bottom]]
+	name = "Bluesky"
+	url = "https://bsky.app/profile/matrix.org"
+	icon = "fab fa-bluesky"
+  desc = "Matrix on Bluesky"
 
 
 # configuration for the hugo development server
