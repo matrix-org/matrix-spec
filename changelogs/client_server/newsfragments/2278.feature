@@ -1,0 +1,1 @@
+Add `GET /_matrix/client/v1/admin/suspend/{userId}`, as per [MSC4323](https://github.com/matrix-org/matrix-spec-proposals/pull/4323).
