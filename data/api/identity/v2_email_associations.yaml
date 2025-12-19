@@ -153,6 +153,25 @@ paths:
                   value: {
                     "success": true
                   }
+        "400":
+          x-addedInMatrixVersion: "1.18"
+          description: |
+            An error occurred. Some possible errors are:
+
+            - `M_TOKEN_INCORRECT`: The token that the user entered to validate the session is
+              incorrect.
+            - `M_INVALID_PARAM`: One of the supplied parameters is not valid.
+            - `M_SESSION_EXPIRED`: The validation session in question has expired.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOKEN_INCORRECT",
+                    "error": "The token is incorrect"
+                  }
         "403":
           description: |
             The user must do something in order to use this endpoint. One example
