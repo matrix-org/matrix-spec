@@ -1,0 +1,3 @@
+The optional `submit_url` response parameter of the `/requestToken` endpoints uses the same request
+and response parameters and error codes as the Identity Service API's `POST /_matrix/identity/v2/validate/email/submitToken`,
+as per [MSC4183](https://github.com/matrix-org/matrix-spec-proposals/pull/4183).
