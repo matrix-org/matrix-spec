@@ -2264,7 +2264,7 @@ The server SHOULD return one of the following responses:
 
 #### Account management {id="oauth-20-account-management"}
 
-{{% added-in v="1.17" %}}
+{{% added-in v="1.18" %}}
 
 All account management is done via the homeserver’s web UI as all endpoints that
 require User-Interactive Authentication are unsupported by this authentication
