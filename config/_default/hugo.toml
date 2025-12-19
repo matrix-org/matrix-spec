@@ -106,29 +106,29 @@ sidebar_menu_compact = true
 #   desc = "Matrix on GitHub"
 # Custom links shown in the center of the footer. (Only supported by our fork of docsy's 'footer/central' partial.)
 [[params.links.bottom]]
-	name = "GitHub"
-	url = "https://github.com/matrix-org"
-	icon = "fab fa-github"
+  name = "GitHub"
+  url = "https://github.com/matrix-org"
+  icon = "fab fa-github"
   desc = "Matrix on GitHub"
 [[params.links.bottom]]
-	name = "GitLab"
-	url = "https://gitlab.matrix.org/matrix-org"
-	icon = "fab fa-gitlab"
+  name = "GitLab"
+  url = "https://gitlab.matrix.org/matrix-org"
+  icon = "fab fa-gitlab"
   desc = "Matrix on GitLab"
 [[params.links.bottom]]
-	name = "YouTube"
-	url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
-	icon = "fab fa-youtube"
+  name = "YouTube"
+  url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
+  icon = "fab fa-youtube"
   desc = "Matrix YouTube channel"
 [[params.links.bottom]]
-	name = "Mastodon"
-	url = "https://mastodon.matrix.org/@matrix"
-	icon = "fab fa-mastodon"
+  name = "Mastodon"
+  url = "https://mastodon.matrix.org/@matrix"
+  icon = "fab fa-mastodon"
   desc = "Matrix on Mastodon"
 [[params.links.bottom]]
-	name = "Bluesky"
-	url = "https://bsky.app/profile/matrix.org"
-	icon = "fab fa-bluesky"
+  name = "Bluesky"
+  url = "https://bsky.app/profile/matrix.org"
+  icon = "fab fa-bluesky"
   desc = "Matrix on Bluesky"
 
 
