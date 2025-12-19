@@ -2283,7 +2283,7 @@ In contrast to account deactivation, locking is a non-destructive action
 that can be reversed.
 
 {{% added-in v="1.18" %}} To lock or unlock an account, the administrators
-SHOULD use the [`PUT /admin/lock/{userId}`](#post_matrixclientv1adminlockuserid)
+SHOULD use the [`PUT /admin/lock/{userId}`](#put_matrixclientv1adminlockuserid)
 endpoint. They MAY also use [`GET /admin/lock/{userId}`](#get_matrixclientv1adminlockuserid)
 to check whether a user's account is locked.
 
@@ -2335,7 +2335,7 @@ without risk of the client losing state from a logout. Suspensions are reversibl
 like locks and unlike deactivations.
 
 {{% added-in v="1.18" %}} To suspend or unsuspend an account, the administrators
-SHOULD use the [`PUT /admin/suspend/{userId}`](#post_matrixclientv1adminsuspenduserid)
+SHOULD use the [`PUT /admin/suspend/{userId}`](#put_matrixclientv1adminsuspenduserid)
 endpoint. They MAY also use [`GET /admin/suspend/{userId}`](#get_matrixclientv1adminsuspenduserid)
 to check whether a user's account is suspended.
 
