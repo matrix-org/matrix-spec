@@ -144,7 +144,7 @@ paths:
         {{% /boxes/warning %}}
 
         {{% boxes/warning %}}
-        {{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
         MUST NOT use this endpoint when the server supports the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         Instead they MUST refer the user to the [account management URL](/client-server-api/#oauth-20-account-management),
         if available, with the `action=org.matrix.device_delete` and `device_id={deviceId}` parameters.
@@ -208,7 +208,7 @@ paths:
         {{% /boxes/warning %}}
 
         {{% boxes/warning %}}
-        {{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
         MUST NOT use this endpoint when the server supports the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         Instead they MUST refer the user to the [account management URL](/client-server-api/#oauth-20-account-management),
         if available.

@@ -39,7 +39,7 @@ paths:
             type: string
         - in: query
           name: action
-          x-addedInMatrixVersion: "1.17"
+          x-addedInMatrixVersion: "1.18"
           description: |-
             The action that the user wishes to take at the SSO redirect, for
             [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
@@ -94,7 +94,7 @@ paths:
             type: string
         - in: query
           name: action
-          x-addedInMatrixVersion: "1.17"
+          x-addedInMatrixVersion: "1.18"
           description: |-
             The action that the user wishes to take at the SSO redirect, for
             [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).

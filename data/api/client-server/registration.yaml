@@ -62,7 +62,7 @@ paths:
         [Matrix specification](/appendices/#user-identifiers).
 
         {{% boxes/warning %}}
-        {{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
         MUST NOT use this endpoint when the server offers the [`m.login.sso`
         authentication flow](/client-server-api/#client-login-via-sso) with
         `oauth_aware_preferred` set to `true`. Instead they MUST add the

@@ -482,7 +482,7 @@ user management by [application services](application-service-api/#server-admin-
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-{{% added-in v="1.17" %}}
+{{% added-in v="1.18" %}}
 A compatibility layer is available to ease the transition from the legacy API to
 the OAuth 2.0 API for clients that only support the legacy API called [OAuth 2.0
 aware clients](#oauth-20-aware-clients).
@@ -1520,7 +1520,7 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
-{{% added-in v="1.17" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+{{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
 MUST only offer the `m.login.sso` flow to the user when `oauth_aware_preferred`
 is set to `true` and MUST add the `action=login` parameter to the SSO redirect
 endpoint.
@@ -1616,6 +1616,8 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 {{% http-api spec="client-server" api="account_deactivation" %}}
 
 #### OAuth 2.0 aware clients
+
+{{% added-in v="1.18" %}}
 
 This is a compatibility layer that allows clients that only support the legacy
 API to make some less-invasive changes to improve the user experience when

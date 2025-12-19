@@ -88,7 +88,7 @@ properties:
       required: ['id', 'name']
   oauth_aware_preferred:
     type: boolean
-    x-addedInMatrixVersion: "1.17"
+    x-addedInMatrixVersion: "1.18"
     description: |
       Whether the `m.login.sso` flow is preferred over other flows for
       [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
