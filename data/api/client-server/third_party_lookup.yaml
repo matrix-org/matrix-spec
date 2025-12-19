@@ -78,7 +78,7 @@ paths:
                       },
                       "room": {
                         "regexp": "[^\\s]+\\/[^\\s]+",
-                        "placeholder": "matrix-org/matrix-doc"
+                        "placeholder": "matrix-org/matrix-spec"
                       }
                     },
                     "instances": [
