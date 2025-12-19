@@ -2280,9 +2280,12 @@ The server SHOULD return one of the following responses:
 Server administrators may apply locks to prevent users from usefully
 using their accounts, for instance, due to safety or security concerns.
 In contrast to account deactivation, locking is a non-destructive action
-that can be reversed. This specification describes the behaviour of clients
-and servers when an account is locked. It deliberately leaves the methods
-for locking and unlocking accounts as a server implementation detail.
+that can be reversed.
+
+{{% added-in v="1.18" %}} To lock or unlock an account, the administrators
+SHOULD use the [`PUT /admin/lock/{userId}`](#post_matrixclientv1adminlockuserid)
+endpoint. They MAY also use [`GET /admin/lock/{userId}`](#get_matrixclientv1adminlockuserid)
+to check whether a user's account is locked.
 
 When an account is locked, servers MUST return a `401 Unauthorized` error
 response with an `M_USER_LOCKED` error code and [`soft_logout`](#soft-logout)
@@ -2330,6 +2333,11 @@ Server administrators MAY suspend a user's account to prevent further activity
 from that account. The effect is similar to [locking](#account-locking), though
 without risk of the client losing state from a logout. Suspensions are reversible,
 like locks and unlike deactivations.
+
+{{% added-in v="1.18" %}} To suspend or unsuspend an account, the administrators
+SHOULD use the [`PUT /admin/suspend/{userId}`](#post_matrixclientv1adminsuspenduserid)
+endpoint. They MAY also use [`GET /admin/suspend/{userId}`](#get_matrixclientv1adminsuspenduserid)
+to check whether a user's account is suspended.
 
 The actions a user can perform while suspended is deliberately left as an
 implementation detail. Servers SHOULD permit the user to perform at least the
@@ -2385,9 +2393,6 @@ Content-Type: application/json
   "error": "You cannot perform this action while suspended."
 }
 ```
-
-APIs for initiating suspension or unsuspension are not included in this version
-of the specification, and left as an implementation detail.
 
 ### Adding Account Administrative Contact Information
 
