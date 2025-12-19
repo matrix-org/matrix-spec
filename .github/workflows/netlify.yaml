@@ -45,7 +45,9 @@ jobs:
           name: spec-artifact
 
       - name: "📦 Extract Artifacts"
-        run: tar -xzvf spec.tar.gz && rm spec.tar.gz
+        run: |
+          mkdir spec
+          tar -C spec -xzvf spec.tar.gz && rm spec.tar.gz
         
       - name: "📤 Deploy to Netlify"
         id: netlify
