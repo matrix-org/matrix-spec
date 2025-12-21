@@ -36,7 +36,7 @@ paths:
             type: string
         - in: path
           name: userId
-          description: The user ID the join event will be for.
+          description: The user ID the join event will be for. This MUST be a user ID on the origin server.
           required: true
           example: "@someone:example.org"
           schema:
@@ -388,6 +388,43 @@ paths:
                       }
                     }
                   ]
+        "400":
+          description: |-
+            The request is invalid in some way.
+
+            The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
+
+            * The join event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+            * The event type is not `m.room.member`.
+            * The `membership` field inside the event content is not `join`.
+            * The event sender is not a user ID on the origin server.
+            * The `state_key` is not equal to the `sender`.
+
+            Servers MUST apply the validation above to the join event.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "Not a join event."
+                  }
+        "403":
+          description: |-
+            The room that the joining server is attempting to join does not permit the user
+            to join.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You are not invited to this room"
+                  }
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:

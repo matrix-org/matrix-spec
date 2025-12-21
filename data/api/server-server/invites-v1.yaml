@@ -172,6 +172,17 @@ paths:
                   }
         "400":
           description: |-
+            The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
+
+            * The invite event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+            * The event type is not `m.room.member`.
+            * The `membership` field inside the event content is not `invite`.
+            * The event sender is not a user ID on the origin server.
+            * The `state_key` is not a user ID on the receiving server.
+
+            Servers MUST apply the validation above to the invite event before
+            signing it regardless of room version.
+
             The `M_MISSING_PARAM` error code is used to indicate one or more of
             the following:
 
@@ -186,9 +197,9 @@ paths:
             Servers MAY apply the validation above to room versions 1 through 11,
             and SHOULD apply the validation above to all other room versions.
 
-            If `M_MISSING_PARAM` is returned and the request is associated with a
-            Client-Server API request, the Client-Server API request SHOULD fail
-            with a 5xx error rather than being passed through.
+            If `M_MISSING_PARAM` or `M_INVALID_PARAM` is returned and the request
+            is associated with a Client-Server API request, the Client-Server API
+            request SHOULD fail with a 5xx error rather than being passed through.
           content:
             application/json:
               schema:
