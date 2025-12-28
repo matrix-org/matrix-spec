@@ -3,6 +3,7 @@ name: "Spec"
 env:
   HUGO_VERSION: 0.153.3
   PYTHON_VERSION: 3.13
+  NODE_VERSION: 24
 
 on:
   push:
@@ -27,7 +28,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "🔎 Run validator"
         run: |
           npx @redocly/cli@latest lint data/api/*/*.yaml
@@ -199,7 +200,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
@@ -276,7 +277,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
