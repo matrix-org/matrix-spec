@@ -43,7 +43,12 @@ paths:
                 properties:
                   sub:
                     type: string
-                    description: The Matrix User ID who generated the token.
+                    description: |
+                      The Matrix User ID who generated the token.
+
+                      The caller MUST validate that the returned user ID is on the server they
+                      called (i.e. if you make a request to example.com and it returns
+                      `@alice:matrix.org`, the result is invalid).
                     example: "@alice:example.com"
                 required:
                   - sub
