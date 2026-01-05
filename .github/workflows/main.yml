@@ -243,7 +243,13 @@ jobs:
     name: "🔎 Validate generated HTML"
     runs-on: ubuntu-latest
     needs: [calculate-baseurl, build-spec]
-    # run even if generate-changelog was skipped
+    # Run even if `generate-changelog` was skipped.
+    #
+    # `build-spec` has a dependency on `generate-changelog` to ensure order of execution
+    # and to access `needs.generate-changelog.result`. However, `generate-changelog` is
+    # skipped on tag builds; even a transient dependency on `generate-changelog` is then
+    # enough for this step to also be skipped by default on tag builds. Hence the need for
+    # this explicit `if`.
     if: ${{ !failure() && !cancelled() }}
     steps:
       - name: "📥 Source checkout"
