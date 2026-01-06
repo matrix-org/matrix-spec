@@ -50,11 +50,6 @@ First, can we even release the spec? This stage is mostly preparation work neede
 to ensure a consistent and reliable specification.
 
 1. Ensure `main` is committed with all the spec changes you expect to be there.
-2. Review the changelog to look for typos, wording inconsistencies, or lines which
-   can be merged. For example, "Fix typos" and "Fix spelling" can be condensed to
-   "Fix various typos throughout the specification".
-3. Do a quick skim to ensure changelogs reference the MSCs which brought the changes
-   in. They should be linked to the GitHub MSC PR (not the markdown document).
 
 ## The release
 
@@ -79,20 +74,24 @@ release.
    2. Run `./scripts/generate-changelog.sh v1.2` (using the correct version number).
       The script will use the current date. If that date is wrong, correct the document
       by using the same `YYYY-MM-DD` date format.
-   3. Commit the result.
+   3. Review the changelog to look for typos, wording inconsistencies, or lines which
+      can be merged. For example, "Fix typos" and "Fix spelling" can be condensed to
+      "Fix various typos throughout the specification".
+   4. Do a quick skim to ensure changelogs reference the MSCs which brought the changes
+      in. They should be linked to the GitHub MSC PR (not the markdown document).
+   5. Commit the result.
+   6. Now is a good time to have someone else review the changelog.
 5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
 6. Push the release branch and the tag.
 7. GitHub Actions will run its build steps. Wait until these are successful. If fixes
    need to be made to repair the pipeline or spec build, delete and re-tag the release.
    You may need to fix up the changelog file by hand in this case.
-8. Check out and fast-forward `main` to the release branch.
-9. Create a new release on GitHub from the newly created tag.
-   * The title should be just "v1.2" (for example).
-   * The description should be a copy/paste of the changelog. The generated changelog
-     will be at `content/changelog/v1.2.md` - copy/paste verbatim.
-   * Upload the artifacts of the GitHub Actions build for the release to the GitHub
-     release as artifacts themselves. This should be the tarball that will be deployed
-     to spec.matrix.org.
+8. GitHub Actions should have drafted a release based on the new tag. Find it
+   at https://github.com/matrix-org/matrix-spec/releases.
+   1. Double-check the generated release notes, and check that `spec-artifact.zip` and
+      `spec-historical-artifact.zip` are both attached to the draft release.
+   2. Publish the draft release.
+9. Check out and fast-forward `main` to the release branch.
 10. Commit a reversion to `params.version` of `./config/_default/hugo.toml` on `main`:
     ```toml
     [params.version]
@@ -103,7 +102,8 @@ release.
     ```
 11. Push pending commits and ensure the unstable spec updates accordingly from the
     GitHub Actions pipeline.
-12. Deploy the release on the webserver. See internal wiki.
+12. Deploy the release on the webserver. See "Spec release process" in the
+    internal handbook.
 
 ## Patching a release
 
