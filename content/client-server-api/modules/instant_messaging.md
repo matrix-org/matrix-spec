@@ -119,7 +119,7 @@ Clients SHOULD verify the structure of incoming events to ensure that
 the expected keys exist and that they are of the right type. Clients can
 discard malformed events or display a placeholder message to the user.
 Redacted `m.room.message` events MUST be removed from the client. This
-can either be replaced with placeholder text (e.g. "\[REDACTED\]") or
+can either be replaced with placeholder text (e.g. "[REDACTED]") or
 the redacted message can be removed entirely from the messages view.
 
 Events which have attachments (e.g. `m.image`, `m.file`) SHOULD be
