@@ -195,6 +195,8 @@ jobs:
     needs: [calculate-baseurl, build-openapi, generate-changelog]
     # run even if generate-changelog was skipped
     if: ${{ always() }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
@@ -217,8 +219,10 @@ jobs:
         with:
           name: changelog-artifact
           path: content/changelog
+
       - name: "⚙️ hugo"
-        run: hugo --baseURL "${{ needs.calculate-baseurl.outputs.baseURL }}" -d "spec"
+        run: hugo --baseURL "${baseURL}" -d "spec${baseURL}"
+
       # We manually unpack the spec OpenAPI definition JSON to the website tree
       # to make it available to the world in a canonical place:
       # https://spec.matrix.org/latest/client-server-api/api.json
@@ -229,10 +233,13 @@ jobs:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec.tar.gz *
+
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v4
         with:
@@ -261,14 +268,9 @@ jobs:
           name: spec-artifact
 
       - name: "📝 Unpack the spec"
-        # we have to unpack it into the right path given the baseurl, so that the
-        # links are correct.
-        # eg if baseurl is `/unstable`, we want to put the site in `spec/unstable`.
         run: |
-          mkdir -p "spec${baseURL}"
-          tar -C "spec${baseURL}" --strip-components=1 -xvzf spec.tar.gz
-        env:
-          baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
+          mkdir spec
+          tar -C spec -xvzf spec.tar.gz
 
       - name: "Run htmltest"
         uses: wjdp/htmltest-action@master
@@ -278,8 +280,10 @@ jobs:
   build-historical-spec:
     name: "📖 Build the historical backup spec"
     runs-on: ubuntu-latest
-    needs: [build-openapi]
+    needs: [calculate-baseurl, build-openapi]
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
@@ -299,9 +303,8 @@ jobs:
       - name: "⚙️ hugo"
         env:
           HUGO_PARAMS_VERSION_STATUS: "historical"
-        # Create a baseURL like `/v1.2` out of the `v1.2` tag
         run: |
-          hugo --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
+          hugo --baseURL "${baseURL}" -d "spec${baseURL}"
 
       - name: "📥 Spec definition download"
         uses: actions/download-artifact@v4
@@ -309,10 +312,12 @@ jobs:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec-historical.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec-historical.tar.gz *
 
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v4
