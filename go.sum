@@ -1,3 +1,4 @@
 github.com/FortAwesome/Font-Awesome v0.0.0-20241216213156-af620534bfc3/go.mod h1:IUgezN/MFpCDIlFezw3L8j83oeiIuYoj28Miwr/KUYo=
+github.com/matrix-org/docsy v0.0.0-20260106184755-71d103ebb20a h1:WB3unuZJy7ewAf33sxbtEwYnC+i+Jt1sJpAR3BtzvEo=
+github.com/matrix-org/docsy v0.0.0-20260106184755-71d103ebb20a/go.mod h1:mdn1m5HJug6ZddQgrOyCrXNegbtdl5evHiqqbEQLzdI=
 github.com/twbs/bootstrap v5.3.8+incompatible/go.mod h1:fZTSrkpSf0/HkL0IIJzvVspTt1r9zuf7XlZau8kpcY0=
-github.com/zecakeh/matrix-org-docsy v0.0.0-20251228152706-da15500d5e72/go.mod h1:mdn1m5HJug6ZddQgrOyCrXNegbtdl5evHiqqbEQLzdI=
