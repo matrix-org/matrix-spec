@@ -50,11 +50,6 @@ First, can we even release the spec? This stage is mostly preparation work neede
 to ensure a consistent and reliable specification.
 
 1. Ensure `main` is committed with all the spec changes you expect to be there.
-2. Review the changelog to look for typos, wording inconsistencies, or lines which
-   can be merged. For example, "Fix typos" and "Fix spelling" can be condensed to
-   "Fix various typos throughout the specification".
-3. Do a quick skim to ensure changelogs reference the MSCs which brought the changes
-   in. They should be linked to the GitHub MSC PR (not the markdown document).
 
 ## The release
 
@@ -79,7 +74,13 @@ release.
    2. Run `./scripts/generate-changelog.sh v1.2` (using the correct version number).
       The script will use the current date. If that date is wrong, correct the document
       by using the same `YYYY-MM-DD` date format.
-   3. Commit the result.
+   3. Review the changelog to look for typos, wording inconsistencies, or lines which
+      can be merged. For example, "Fix typos" and "Fix spelling" can be condensed to
+      "Fix various typos throughout the specification".
+   4. Do a quick skim to ensure changelogs reference the MSCs which brought the changes
+      in. They should be linked to the GitHub MSC PR (not the markdown document).
+   5. Commit the result.
+   6. Now is a good time to have someone else review the changelog.
 5. Tag the branch with the spec release with a format of `v1.2` (if releasing Matrix 1.2).
 6. Push the release branch and the tag.
 7. GitHub Actions will run its build steps. Wait until these are successful. If fixes
