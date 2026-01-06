@@ -86,14 +86,12 @@ release.
 7. GitHub Actions will run its build steps. Wait until these are successful. If fixes
    need to be made to repair the pipeline or spec build, delete and re-tag the release.
    You may need to fix up the changelog file by hand in this case.
-8. Check out and fast-forward `main` to the release branch.
-9. Create a new release on GitHub from the newly created tag.
-   * The title should be just "v1.2" (for example).
-   * The description should be a copy/paste of the changelog. The generated changelog
-     will be at `content/changelog/v1.2.md` - copy/paste verbatim.
-   * Upload the artifacts of the GitHub Actions build for the release to the GitHub
-     release as artifacts themselves. This should be the tarball that will be deployed
-     to spec.matrix.org.
+8. GitHub Actions should have drafted a release based on the new tag. Find it
+   at https://github.com/matrix-org/matrix-spec/releases.
+   1. Double-check the generated release notes, and check that `spec-artifact.zip` and
+      `spec-historical-artifact.zip` are both attached to the draft release.
+   2. Publish the draft release.
+9. Check out and fast-forward `main` to the release branch.
 10. Commit a reversion to `params.version` of `./config/_default/hugo.toml` on `main`:
     ```toml
     [params.version]
