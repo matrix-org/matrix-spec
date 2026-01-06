@@ -247,6 +247,16 @@ paths:
             The error should be passed through to clients so that they
             may give better feedback to users.
 
+            The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
+
+            * The join event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+            * The event type is not `m.room.member`.
+            * The `membership` field inside the event content is not `join`.
+            * The event sender is not a user ID on the origin server.
+            * The `state_key` is not equal to the `sender`.
+
+            Servers MUST apply the validation above to the join event.
+
             New in `v1.2`, the following error conditions might happen:
 
             If the room is [restricted](/client-server-api/#restricted-rooms)
