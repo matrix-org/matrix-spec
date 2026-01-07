@@ -2266,7 +2266,7 @@ The server SHOULD return one of the following responses:
 
 {{% added-in v="1.18" %}}
 
-All account management is done via the homeserver’s web UI as all endpoints that
+All account management is done via the homeserver's web UI as all endpoints that
 require User-Interactive Authentication are unsupported by this authentication
 API.
 
@@ -2307,8 +2307,8 @@ The following account management actions are defined:
 |----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `org.matrix.profile`             | The user wishes to view/edit their profile (name, avatar, contact details).                                                                          |
 | `org.matrix.devices_list`        | The user wishes to view a list of their devices.                                                                                                     |
-| `org.matrix.device_view`         | The user wishes to view the details of a specific device. A `device_id` should be provided.                                                          |
-| `org.matrix.device_delete`       | The user wishes to delete/log out a specific device. A `device_id` should be provided.                                                               |
+| `org.matrix.device_view`         | The user wishes to view the details of a specific device. A `device_id` SHOULD be provided.                                                          |
+| `org.matrix.device_delete`       | The user wishes to delete/log out a specific device. A `device_id` SHOULD be provided.                                                               |
 | `org.matrix.account_deactivate`  | The user wishes to deactivate their account.                                                                                                         |
 | `org.matrix.cross_signing_reset` | The user wishes to reset their cross-signing identity. Servers SHOULD use this action in the URL of the [`m.oauth`](#oauth-authentication) UIA type. |
 
