@@ -1,8 +1,11 @@
 {{- /*
 
-  A version of the navbar.html partial in Docsy, only modified
-	to include the spec version, which is calculated using an
-  inline `version-string` partial.
+  A copy of the navbar.html partial in Docsy, modified to:
+
+  * remove `data-bs-theme` at L20, otherwise the title disappears on hover.
+  * replace the site title with "specification" at L31.
+  * include the spec version from the config at L34-35, which is calculated
+    using an inline `version-string` partial.
 
 */ -}}
 
@@ -13,8 +16,8 @@
 {{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
 
 <nav class="td-navbar js-navbar-scroll
-            {{- if $cover }} td-navbar-cover {{- end }}" data-bs-theme="light">
-<div class="container-fluid flex-column flex-md-row">
+            {{- if $cover }} td-navbar-cover {{- end }}">
+<div class="td-navbar-container container-fluid flex-column flex-md-row">
   <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
     {{- /**/ -}}
     <span class="navbar-brand__logo navbar-logo">
@@ -32,7 +35,8 @@
 	  <span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
     {{- /**/ -}}
   </a>
-  <div class="td-navbar-nav-scroll ms-md-auto" id="main_navbar">
+  <div class="td-navbar-nav-scroll td-navbar-nav-scroll--indicator" id="main_navbar">
+    <div class="scroll-indicator scroll-left"></div>
     <ul class="navbar-nav">
       {{ $p := . -}}
       {{ range .Site.Menus.main -}}
@@ -58,39 +62,41 @@
       </li>
       {{ end -}}
       {{ if .Site.Params.versions -}}
-      <li class="nav-item dropdown d-none d-lg-block">
+      <li class="nav-item dropdown d-none d-lg-block td-navbar__version-menu">
         {{ partial "navbar-version-selector.html" . -}}
       </li>
       {{ end -}}
       {{ if (gt (len .Site.Home.Translations) 0) -}}
-      <li class="nav-item dropdown d-none d-lg-block">
+      <li class="nav-item td-navbar__lang-menu">
         {{ partial "navbar-lang-selector.html" . -}}
       </li>
       {{ end -}}
-      {{ if .Site.Params.ui.showLightDarkModeMenu -}}
-      <li class="td-light-dark-menu nav-item dropdown">
+      {{- $darkMode := partialCached "dark-mode-config.html" "dark-mode-global" -}}
+      {{ if $darkMode.showMenu -}}
+      <li class="nav-item td-navbar__light-dark-menu">
         {{ partial "theme-toggler" . }}
       </li>
       {{ end -}}
     </ul>
+    <div class="scroll-indicator scroll-right"></div>
   </div>
-  <div class="d-none d-lg-block">
+  <div class="d-none d-lg-block td-navbar__search">
     {{ partial "search-input.html" . }}
   </div>
 </div>
 </nav>
 
-{{ define "_partials/version-string" }}
-    {{ $ret := "unstable version"}}
+{{- define "_partials/version-string" -}}
+    {{ $ret := "unstable version" -}}
 
-    {{ $status := .Site.Params.version.status }}
+    {{ $status := .Site.Params.version.status -}}
 
-    {{ if ne $status "unstable"}}
-        {{ $path := path.Join "changelogs" }}
+    {{ if ne $status "unstable" -}}
+        {{ $path := path.Join "changelogs" -}}
 
-        {{/* produces a string similar to "version v1.5" */}}
-        {{ $ret = delimit (slice "version v" .Site.Params.version.major "." .Site.Params.version.minor) "" }}
-    {{ end }}
+        {{/* produces a string similar to "version v1.5" */ -}}
+        {{ $ret = delimit (slice "version v" .Site.Params.version.major "." .Site.Params.version.minor) "" -}}
+    {{ end -}}
 
-    {{ return $ret }}
-{{ end }}
+    {{ return $ret -}}
+{{- end -}}
