@@ -2266,9 +2266,7 @@ The server SHOULD return one of the following responses:
 
 {{% added-in v="1.18" %}}
 
-All account management is done via the homeserver's web UI as all endpoints that
-require User-Interactive Authentication are unsupported by this authentication
-API.
+All account management is done via the homeserver's web UI.
 
 This specification defines extensions to the [OAuth Authorization Server
 Metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata)
