@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "Recent Emoji Event",
+  "description": "Lets clients maintain a list of recently used emoji.",
+  "allOf": [{
+    "$ref": "core-event-schema/event.yaml"
+  }],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": ["m.recent_emoji"]
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "recent_emoji": {
+          "description": "The list of recently used emoji. Elements in the list are ordered descendingly by last usage time.",
+          "type": "array",
+          "items": {
+            "$ref": "../../api/client-server/definitions/recent_emoji.yaml"
+          },
+        }
+      },
+      "required": ["recent_emoji"]
+    }
+  },
+  "required": ["type", "content"]
+}
