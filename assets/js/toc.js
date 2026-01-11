@@ -50,7 +50,7 @@ function getHeadings() {
   let headings = [];
 
   // First get the anchors in the ToC.
-  const toc_anchors = document.querySelectorAll("#toc nav a");
+  const toc_anchors = document.querySelectorAll("#TableOfContents a");
 
   for (const anchor of toc_anchors) {
     // Then get the heading from its selector in the anchor's href.
@@ -59,7 +59,7 @@ function getHeadings() {
       console.error("Got ToC anchor without href");
       continue;
     }
-    
+
     const heading = document.querySelector(selector);
     if (!heading) {
       console.error("Heading not found for selector:", selector);
@@ -122,13 +122,13 @@ function getCurrentHeading(headings, headerOffset) {
 */
 function selectTocEntry(id) {
   // Deselect previously selected entries.
-  const activeEntries = document.querySelectorAll("#toc nav a.active");
+  const activeEntries = document.querySelectorAll("#TableOfContents a.active");
   for (const activeEntry of activeEntries) {
     activeEntry.classList.remove('active');
   }
 
   // Find the new entry and select it.
-  const newEntry = document.querySelector(`#toc nav a[href="#${id}"]`);
+  const newEntry = document.querySelector(`#TableOfContents a[href="#${id}"]`);
   if (!newEntry) {
     console.error("ToC entry not found for ID:", id);
     return;

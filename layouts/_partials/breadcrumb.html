@@ -1,28 +1,35 @@
 {{/*
 
-  A copy of the breadcrumb.html partial in Docsy, modified
-	to:
+  A copy of the breadcrumb.html partial in Docsy, modified to:
+
+  * show the breadcrumbs by default by removing the `td-breadcrumbs__single`
+    class
   * omit breadcrumbs when this is the homepage
   * otherwise, include the homepage in the breadcrumbs
 
 */}}
 
-{{ if not .IsHome }}
+{{ if not .IsHome -}}
 <nav aria-label="breadcrumb" class="td-breadcrumbs">
-	<ol class="breadcrumb">
-{{ template "breadcrumbnav" (dict "p1" . "p2" .) }}
-	</ol>
-</nav	>
-{{ end }}
+  <ol class="breadcrumb">
+	{{- template "breadcrumbnav" (dict "p1" . "p2" .) }}
+  </ol>
+</nav>
+{{ end -}}
 
-{{ define "breadcrumbnav" }}
-{{ if .p1.Parent }}
-{{ template "breadcrumbnav" (dict "p1" .p1.Parent "p2" .p2 )  }}
-{{ else if not .p1.IsHome }}
-{{ template "breadcrumbnav" (dict "p1" .p1.Site.Home "p2" .p2 )  }}
-{{ end }}
-{{ $isActive :=  eq .p1 .p2  }}
-<li class="breadcrumb-item{{ if $isActive }} active{{ end }}" {{ if $isActive }}aria-current="page"{{ end }}>
-	<a href="{{ .p1.RelPermalink }}">{{ .p1.LinkTitle }}</a>
-</li>
-{{ end }}
+{{- define "breadcrumbnav" -}}
+  {{ if .p1.Parent -}}
+    {{ template "breadcrumbnav" (dict "p1" .p1.Parent "p2" .p2 )  -}}
+  {{ else if not .p1.IsHome -}}
+    {{ template "breadcrumbnav" (dict "p1" .p1.Site.Home "p2" .p2 )  -}}
+  {{ end -}}
+  {{ $isActive :=  eq .p1 .p2  }}
+  <li class="breadcrumb-item{{ if $isActive }} active{{ end }}"
+      {{- if $isActive }}aria-current="page"{{ end }}>
+    {{ if $isActive -}}
+      {{ .p1.LinkTitle -}}
+    {{ else -}}
+      <a href="{{ .p1.RelPermalink }}">{{ .p1.LinkTitle }}</a>
+    {{- end -}}
+  </li>
+{{- end -}}

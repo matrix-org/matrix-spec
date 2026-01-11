@@ -5,15 +5,7 @@
     We use it to send the delimited passthrough element through KaTeX to render maths
     in the Olm / Megolm spec.
 
-    See: https://gohugo.io/functions/transform/tomath/#step-2
+    See: https://www.docsy.dev/docs/content/diagrams-and-formulae/#add-passthrough-render-hook
 
 */ -}}
-{{- $opts := dict "output" "htmlAndMathml" "displayMode" (eq .Type "block") }}
-{{- with try (transform.ToMath .Inner $opts) }}
-  {{- with .Err }}
-    {{- errorf "Unable to render mathematical markup to HTML using the transform.ToMath function. The KaTeX display engine threw the following error: %s: see %s." . $.Position }}
-  {{- else }}
-    {{- .Value }}
-    {{- $.Page.Store.Set "hasMath" true }}
-  {{- end }}
-{{- end -}}
+{{ partial "scripts/math.html" . }}

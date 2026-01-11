@@ -1,15 +1,29 @@
 {{/*
 
-  A modified version of the toc.html partial in Docsy.
+  A copy of the toc.html partial in Docsy, modified to:
 
-*/}}
-{{ $page := .Params }}
+  * show the page's title instead of "on this page"
+
+*/ -}}
+
+{{/*
+
+  Always render the td-toc element. ScrollSpy is counting on it to exist,
+  even if it's empty.
+
+  cSpell:ignore notoc
+*/ -}}
+
+<div class="td-toc" data-proofer-ignore>
 {{ if not .Params.notoc -}}
-  {{ with .TableOfContents -}}
-    <hr>
-    <div id="toc">
-        <a id="toc-title" href="#">{{ $page.Title }}</a>
-        {{ . }}
+  {{ $toc := .TableOfContents -}}
+  {{ if and $toc (ne $toc `<nav id="TableOfContents"></nav>`) -}}
+    <div class="td-toc-title">
+      <span class="td-toc-title__text">{{ .Params.Title }}</span>
+      <a class="td-toc-title__link" title="{{ i18n "toc_top_of_page" }}" href="#"></a>
     </div>
+    {{ $toc | safeHTML }}
   {{ end -}}
 {{ end -}}
+</div>
+{{/* */ -}}
