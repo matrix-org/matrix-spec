@@ -29,9 +29,13 @@ SHOULD limit the length of the `recent_emoji` array by dropping elements from
 its end. A RECOMMENDED maximum length is 100 emoji.
 
 To enable future extension, clients MUST tolerate and preserve array elements
-within `recent_emoji` that they don't understand or support. This means ignoring
-the entries when deciding what to display to the user while retaining them when
+within `recent_emoji` regardless of whether they understand or support the
+contained `emoji` value. This means ignoring entries with unrecognised values
+of `emoji` when deciding what to display to the user while retaining them when
 modifying the array (unless the modification is for truncation).
+
+To prevent undefined behavior, clients SHOULD remove array elements that
+don't conform to the event schema such as elements with negative counters.
 
 
 
