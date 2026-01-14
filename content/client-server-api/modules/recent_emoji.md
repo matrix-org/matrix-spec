@@ -4,9 +4,8 @@
 
 This module enables clients to track a user's cumulated emoji usage across different
 devices. The data is stored in the [`m.recent_emoji`](#mrecent_emoji)
-global [account data](https://spec.matrix.org/v1.15/client-server-api/#client-config) and can, 
-among other things, be used to generate recommendations
-in emoji pickers.
+global [account data](#client-config) and can, among other things, be used to
+generate recommendations in emoji pickers.
 
 #### Events
 
