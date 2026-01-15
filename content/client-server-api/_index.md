@@ -2289,7 +2289,9 @@ The account management URL MAY accept the following minimum query parameters.
 
 ##### Account management URL actions
 
-The following account management actions are defined:
+Account management actions are unique to the application. They SHOULD follow the
+[Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar)
+where feasible. The Matrix-specific actions are:
 
 | Action                           | Description                                                                                                                                          |
 |----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
