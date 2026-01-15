@@ -2277,12 +2277,9 @@ in a browser.
 ##### Account management URL discovery
 
 The [OAuth 2.0 authorization server metadata](#server-metadata-discovery) is
-extended to include the following fields:
+extended to include the following **optional** fields.
 
-| Field                                  | Description                                                                                     |
-|----------------------------------------|-------------------------------------------------------------------------------------------------|
-| `account_management_uri`               | The URL where the user is able to access the account management capabilities of the homeserver. |
-| `account_management_actions_supported` | An array of actions that the account management URL supports, as defined below.                 |
+{{% definition path="schemas/oauth2-account-management-server-metadata" %}}
 
 ##### Account management URL parameters
 

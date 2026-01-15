@@ -1,0 +1,16 @@
+type: object
+title: OAuth 2.0 Server Metadata Account Management Extension
+properties:
+  account_management_uri:
+    type: string
+    format: uri
+    description: |-
+      The URL where the user is able to access the account management capabilities of the
+      homeserver.
+  account_management_actions_supported:
+    type: array
+    description: |-
+      List of [actions](/client-server-api/#account-management-url-actions) that the account
+      management URL supports.
+    items:
+      $ref: ./oauth2-account-management-action.yaml
