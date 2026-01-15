@@ -2283,16 +2283,9 @@ extended to include the following **optional** fields.
 
 ##### Account management URL parameters
 
-The account management URL MAY accept the following query parameters:
+The account management URL MAY accept the following minimum query parameters.
 
-| Parameter   | Description                                                                                                                           |
-|-------------|---------------------------------------------------------------------------------------------------------------------------------------|
-| `action`    | **Optional**. The action that the user wishes to take. Must match one of the actions in `account_management_actions_supported` above. |
-| `device_id` | **Optional**. Identifies a particular Matrix device ID for actions that support it.                                                   |
-
-If the `org.matrix.device_view` or `org.matrix.device_delete` actions are
-advertised as supported by the server then the server SHOULD support the
-`device_id` parameter.
+{{% definition path="schemas/oauth2-account-management-url" %}}
 
 ##### Account management URL actions
 

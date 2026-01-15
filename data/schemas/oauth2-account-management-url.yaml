@@ -1,0 +1,16 @@
+type: object
+title: OAuth 2.0 Account Management URL Query Parameters
+properties:
+  action:
+    $ref: ./oauth2-account-management-action.yaml
+    description: |-
+      The action that the user wishes to take. Must match one of the actions advertised by the
+      server in [`account_management_actions_supported`](/client-server-api/#account-management-url-discovery).
+  device_id:
+    type: string
+    description: |-
+      For Matrix-specific actions, the user's device ID. Actions which don't support the device ID
+      will ignore it.
+
+      If the `org.matrix.device_view` or `org.matrix.device_delete` actions are advertised as
+      supported by the server then the server SHOULD support the `device_id` parameter.
