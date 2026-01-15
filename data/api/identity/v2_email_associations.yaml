@@ -157,10 +157,10 @@ paths:
           description: |
             An error occurred. Some possible errors are:
 
-            - **[Added in v1.18]** `M_TOKEN_INCORRECT`: The token that the user entered to validate the session is
+            - {{% added-in v="1.18" %}} `M_TOKEN_INCORRECT`: The token that the user entered to validate the session is
               incorrect.
-            - **[Added in v1.18]** `M_INVALID_PARAM`: One of the supplied parameters is not valid.
-            - **[Added in v1.18]** `M_SESSION_EXPIRED`: The validation session in question has expired.
+            - {{% added-in v="1.18" %}} `M_INVALID_PARAM`: One of the supplied parameters is not valid.
+            - {{% added-in v="1.18" %}} `M_SESSION_EXPIRED`: The validation session in question has expired.
           content:
             application/json:
               schema:
