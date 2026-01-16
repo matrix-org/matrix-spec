@@ -32,8 +32,8 @@ properties:
       An optional field containing a URL where the client must submit the
       validation token, with identical request and response parameters and error
       codes to the Identity Service API's
-      [`POST /_matrix/identity/v2/validate/email/submitToken`](/identity-service-api/#post_matrixidentityv2validateemailsubmittoken)
-      and [`POST /_matrix/identity/v2/validate/msisdn/submitToken`](/identity-service-api/#post_matrixidentityv2validatemsisdnsubmittoken)
+      [`POST /validate/email/submitToken`](/identity-service-api/#post_matrixidentityv2validateemailsubmittoken)
+      and [`POST /validate/msisdn/submitToken`](/identity-service-api/#post_matrixidentityv2validatemsisdnsubmittoken)
       endpoints (without the requirement for an access token). The homeserver
       must send this token to the user (if applicable), who should then be
       prompted to provide it to the client.
