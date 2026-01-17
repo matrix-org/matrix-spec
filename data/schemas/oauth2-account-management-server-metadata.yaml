@@ -19,7 +19,7 @@ properties:
     format: uri
     description: |-
       The URL where the user is able to access the account management capabilities of the
-      homeserver.
+      server.
   account_management_actions_supported:
     type: array
     description: |-
