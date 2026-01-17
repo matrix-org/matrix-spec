@@ -15,7 +15,7 @@ type: object
 title: OAuth 2.0 Account Management URL Query Parameters
 properties:
   action:
-    $ref: ./oauth2-account-management-action.yaml
+    type: string
     description: |-
       The action that the user wishes to take. Must match one of the actions advertised by the
       server in [`account_management_actions_supported`](/client-server-api/#account-management-url-discovery).
