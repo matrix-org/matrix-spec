@@ -645,7 +645,7 @@ manage their account like [changing their password](#password-management),
 [deactivating their account](#account-deactivation).
 
 With the OAuth 2.0 API, all account management is done via the homeserver's web
-UI.
+UI that can be accessed by users via the [account management URL](#oauth-20-account-management).
 
 ### Legacy API
 
@@ -2270,6 +2270,46 @@ The server SHOULD return one of the following responses:
   `401 Unauthorized` response
 - For other errors, the server returns a `400 Bad Request` response with error
   details
+
+#### Account management {id="oauth-20-account-management"}
+
+{{% added-in v="1.18" %}}
+
+All account management is done via the homeserver's web UI.
+
+This specification defines extensions to the [OAuth Authorization Server
+Metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata)
+to offer clients a way to deep-link to the account management capabilities of
+the homeserver to allow the user to complete the account management operations
+in a browser.
+
+##### Account management URL discovery
+
+The [OAuth 2.0 authorization server metadata](#server-metadata-discovery) is
+extended to include the following **optional** fields.
+
+{{% definition path="schemas/oauth2-account-management-server-metadata" %}}
+
+##### Account management URL parameters
+
+The account management URL MAY accept the following minimum query parameters.
+
+{{% definition path="schemas/oauth2-account-management-url" %}}
+
+##### Account management URL actions
+
+Account management actions are unique to the application. They SHOULD follow the
+[Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar)
+where feasible. The Matrix-specific actions are:
+
+| Action                           | Description                                                                                                                                          |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `org.matrix.profile`             | The user wishes to view/edit their profile (name, avatar, contact details).                                                                          |
+| `org.matrix.devices_list`        | The user wishes to view a list of their devices.                                                                                                     |
+| `org.matrix.device_view`         | The user wishes to view the details of a specific device. A `device_id` SHOULD be provided.                                                          |
+| `org.matrix.device_delete`       | The user wishes to delete/log out a specific device. A `device_id` SHOULD be provided.                                                               |
+| `org.matrix.account_deactivate`  | The user wishes to deactivate their account.                                                                                                         |
+| `org.matrix.cross_signing_reset` | The user wishes to reset their cross-signing identity. Servers SHOULD use this action in the URL of the [`m.oauth`](#oauth-authentication) UIA type. |
 
 ### Account moderation
 
