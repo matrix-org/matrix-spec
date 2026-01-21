@@ -1,8 +1,9 @@
 name: "Spec"
 
 env:
-  HUGO_VERSION: 0.148.1
+  HUGO_VERSION: 0.153.3
   PYTHON_VERSION: 3.13
+  NODE_VERSION: 24
 
 on:
   push:
@@ -27,7 +28,7 @@ jobs:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "🔎 Run validator"
         run: |
           npx @redocly/cli@latest lint data/api/*/*.yaml
@@ -195,11 +196,13 @@ jobs:
     needs: [calculate-baseurl, build-openapi, generate-changelog]
     # run even if generate-changelog was skipped
     if: ${{ always() }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
@@ -217,8 +220,10 @@ jobs:
         with:
           name: changelog-artifact
           path: content/changelog
+
       - name: "⚙️ hugo"
-        run: hugo --baseURL "${{ needs.calculate-baseurl.outputs.baseURL }}" -d "spec"
+        run: hugo --baseURL "${baseURL}" -d "spec${baseURL}"
+
       # We manually unpack the spec OpenAPI definition JSON to the website tree
       # to make it available to the world in a canonical place:
       # https://spec.matrix.org/latest/client-server-api/api.json
@@ -229,10 +234,13 @@ jobs:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec.tar.gz *
+
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v4
         with:
@@ -243,6 +251,14 @@ jobs:
     name: "🔎 Validate generated HTML"
     runs-on: ubuntu-latest
     needs: [calculate-baseurl, build-spec]
+    # Run even if `generate-changelog` was skipped.
+    #
+    # `build-spec` has a dependency on `generate-changelog` to ensure order of execution
+    # and to access `needs.generate-changelog.result`. However, `generate-changelog` is
+    # skipped on tag builds; even a transient dependency on `generate-changelog` is then
+    # enough for this step to also be skipped by default on tag builds. Hence the need for
+    # this explicit `if`.
+    if: ${{ !failure() && !cancelled() }}
     steps:
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
@@ -253,14 +269,9 @@ jobs:
           name: spec-artifact
 
       - name: "📝 Unpack the spec"
-        # we have to unpack it into the right path given the baseurl, so that the
-        # links are correct.
-        # eg if baseurl is `/unstable`, we want to put the site in `spec/unstable`.
         run: |
-          mkdir -p "spec${baseURL}"
-          tar -C "spec${baseURL}" --strip-components=1 -xvzf spec.tar.gz
-        env:
-          baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
+          mkdir spec
+          tar -C spec -xvzf spec.tar.gz
 
       - name: "Run htmltest"
         uses: wjdp/htmltest-action@master
@@ -270,13 +281,15 @@ jobs:
   build-historical-spec:
     name: "📖 Build the historical backup spec"
     runs-on: ubuntu-latest
-    needs: [build-openapi]
+    needs: [calculate-baseurl, build-openapi]
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
         uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
@@ -291,9 +304,8 @@ jobs:
       - name: "⚙️ hugo"
         env:
           HUGO_PARAMS_VERSION_STATUS: "historical"
-        # Create a baseURL like `/v1.2` out of the `v1.2` tag
         run: |
-          hugo --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
+          hugo --baseURL "${baseURL}" -d "spec${baseURL}"
 
       - name: "📥 Spec definition download"
         uses: actions/download-artifact@v4
@@ -301,12 +313,51 @@ jobs:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec-historical.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec-historical.tar.gz *
+
       - name: "📤 Artifact upload"
         uses: actions/upload-artifact@v4
         with:
           name: spec-historical-artifact
           path: spec-historical.tar.gz
+
+  # If we're building a tag, create a release and publish the artifacts
+  create_release:
+    name: "Create release"
+    if: ${{ !failure() && !cancelled() && startsWith(github.ref, 'refs/tags/') }}
+    needs:
+      - build-spec
+      - build-historical-spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Check out changelogs"
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          sparse-checkout: |
+            content/changelog
+      - name: "📥 Download built spec"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: spec-artifact
+      - name: "📥 Download historical spec artifact"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: spec-historical-artifact
+      - name: "✨ Create draft release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Remove front-matter from changelog
+          sed '1,/^---$/d' "content/changelog/${{ github.ref_name }}.md" > changelog.md
+
+          # Create a draft release, using the changelog as release notes, and attaching the spec artifacts.
+          gh release create -d -t "${{ github.ref_name }}" \
+            -F "changelog.md" \
+            "${{ github.ref_name }}" \
+            spec.tar.gz \
+            spec-historical.tar.gz

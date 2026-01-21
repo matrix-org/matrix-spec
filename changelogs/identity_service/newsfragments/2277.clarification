@@ -1,0 +1,3 @@
+Clarify the error codes that can be returned with a 400 HTTP status code by the `POST /_matrix/identity/v2/validate/email/submitToken`
+and `POST /_matrix/identity/v2/validate/msisdn/submitToken` endpoints, introducing the `M_TOKEN_INCORRECT`
+error code, as per [MSC4183](https://github.com/matrix-org/matrix-spec-proposals/pull/4183).

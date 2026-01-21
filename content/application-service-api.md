@@ -2,15 +2,13 @@
 title: "Application Service API"
 weight: 30
 type: docs
+description: |
+  The Matrix client-server API and server-server APIs provide a consistent,
+  self-contained federated messaging fabric but leave little room for custom
+  server-side behaviour such as gateways, filters, or extensible hooks. The
+  Application Service API defines a standard way to add this extensible
+  functionality, independent of the underlying homeserver implementation.
 ---
-
-The Matrix client-server API and server-server APIs provide the means to
-implement a consistent self-contained federated messaging fabric.
-However, they provide limited means of implementing custom server-side
-behaviour in Matrix (e.g. gateways, filters, extensible hooks etc). The
-Application Service API (AS API) defines a standard API to allow such
-extensible functionality to be implemented irrespective of the
-underlying homeserver implementation.
 
 ## Application Services
 
@@ -428,6 +426,8 @@ imports and similar behaviour).
 
 #### Server admin style permissions
 
+{{% changed-in v="1.17" %}}
+
 The homeserver needs to give the application service *full control* over
 its namespace, both for users and for room aliases. This means that the
 AS should be able to manage any users and room alias in its namespace. No additional API
@@ -444,33 +444,59 @@ achieved by including the `as_token` on a `/register` request, along
 with a login type of `m.login.application_service` to set the desired
 user ID without a password.
 
-    POST /_matrix/client/v3/register
-    Authorization: Bearer YourApplicationServiceTokenHere
+```http
+POST /_matrix/client/v3/register
+Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-    Content:
-    {
-      "type": "m.login.application_service",
-      "username": "_irc_example"
-    }
+```json
+{
+  "type": "m.login.application_service",
+  "username": "_irc_example"
+}
+```
 
-Similarly, logging in as users needs API changes in order to allow the AS to
-log in without needing the user's password. This is achieved by including the
-`as_token` on a `/login` request, along with a login type of
-`m.login.application_service`:
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Servers MUST still allow application services to use the `/register` endpoint
+with a login type of `m.login.application_service` even if they don't support
+the [Legacy Authentication API](/client-server-api/#legacy-api).
+
+In that case application services MUST set the `"inhibit_login": true` parameter
+as they cannot use it to log in as users. If the `inhibit_login` parameter is
+not set to `true`, the server MUST return a 400 HTTP status code with an
+`M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+{{% /boxes/note %}}
+
+Similarly, logging in as users using the [Legacy authentication API](/client-server-api/#legacy-api)
+needs API changes in order to allow the AS to log in without needing the user's
+password. This is achieved by including the `as_token` on a `/login` request,
+along with a login type of `m.login.application_service`:
 
 {{% added-in v="1.2" %}}
 
-    POST /_matrix/client/v3/login
-    Authorization: Bearer YourApplicationServiceTokenHere
+```http
+POST /_matrix/client/v3/login
+Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-    Content:
-    {
-      "type": "m.login.application_service",
-      "identifier": {
-        "type": "m.id.user",
-        "user": "_irc_example"
-      }
-    }
+```json
+{
+  "type": "m.login.application_service",
+  "identifier": {
+    "type": "m.id.user",
+    "user": "_irc_example"
+  }
+}
+```
+
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Application services MUST NOT use the `/login` endpoint if the server doesn't
+support the Legacy authentication API. If `/login` is called with the
+`m.login.application_service` login type the server MUST return a 400 HTTP
+status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+{{% /boxes/note %}}
 
 Application services which attempt to create users or aliases *outside*
 of their defined namespaces, or log in as users outside of their defined
@@ -511,6 +537,38 @@ clients through additional parameters on the `/publicRooms`
 client-server endpoint.
 
 {{% http-api spec="client-server" api="appservice_room_directory" %}}
+
+#### Device management
+
+{{% added-in v="1.17" %}}
+
+Application services need to be able to create and delete devices to manage the
+encryption for their users without having to rely on `/login`, which also
+generates an access token for the user, and which might not be available for
+homeservers that only support the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+
+##### Creating devices
+
+Application services can use the [`PUT /_matrix/client/v3/devices/{deviceId}`](/client-server-api/#put_matrixclientv3devicesdeviceid)
+endpoint to create new devices.
+
+##### Deleting devices
+
+The following endpoints used to delete devices MUST NOT require [User-Interactive
+Authentication](/client-server-api/#user-interactive-authentication-api) when
+used by an application service:
+
+* [`DELETE /_matrix/client/v3/devices/{deviceId}`](/client-server-api/#delete_matrixclientv3devicesdeviceid)
+* [`POST /_matrix/client/v3/delete_devices`](/client-server-api/#post_matrixclientv3delete_devices)
+
+#### Cross-signing
+
+{{% added-in v="1.17" %}}
+
+Appservices need to be able to verify themselves and replace their cross-signing
+keys, so the [`POST /_matrix/client/v3/keys/device_signing/upload`](/client-server-api/#post_matrixclientv3keysdevice_signingupload)
+endpoint MUST NOT require [User-Interactive Authentication](/client-server-api/#user-interactive-authentication-api)
+when used by an application service, even if cross-signing keys already exist.
 
 ### Referencing messages from a third-party network
 

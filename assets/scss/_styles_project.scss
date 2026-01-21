@@ -76,52 +76,126 @@ Custom SCSS for the Matrix spec
   scroll-behavior: smooth;
   overscroll-behavior: contain;
 
-  &>.td-sidebar-nav__section {
+  & > .td-sidebar-nav__section {
     margin-top: 1rem;
-  }
 
-  .td-sidebar-nav__section .ul-1 ul {
-    padding-left: 0;
-  }
-
-  /* This is to make the width of the items that have sub-items (like room versions)
-  the same as the width of items that don't (like changelog) */
-  .pr-md-3, .px-md-3 {
-    padding-right: 0 !important;
-  }
-
-  .ul-1 > li > a {
-    padding-left: 1rem !important;
-  }
-
-  .ul-2 > li > a {
-    padding-left: 2rem !important;
-  }
-
-  a.td-sidebar-link.tree-root {
-    color: $gray-800;
-    font-weight: $font-weight-bold;
-    font-size: 1.3rem;
-    margin-bottom: 0;
-    border-bottom: none;
-  }
-
-  a, a.td-sidebar-link {
-    color: $gray-800;
-    font-weight: $font-weight-normal;
-    padding-top: .2rem;
-    padding-bottom: .2rem;
-
-    display: block;
-    transition: all 100ms ease-in-out;
-
-    &:hover {
-      background-color: $secondary-lighter-background;
-      color: $gray-800;
+    .ul-1 ul {
+      padding-left: 0;
     }
 
-    &.active, &active:hover {
-      background-color: $secondary-background;
+    /* This is to make the width of the items that have sub-items (like room versions)
+    the same as the width of items that don't (like changelog) */
+    .pr-md-3, .px-md-3 {
+      padding-right: 0 !important;
+    }
+
+    .ul-1 > li > a {
+      padding-left: 1rem !important;
+    }
+
+    .ul-2 > li > a {
+      padding-left: 2rem !important;
+    }
+  }
+
+  /* Styles for the table of contents */
+  & > .td-toc {
+    padding-top: 1rem;
+    padding-left: 1.5rem;
+    /* Add border above the toc */
+    border-top: 1px solid var(--bs-tertiary-color);
+
+    ol {
+      padding-left: 1rem;
+      counter-reset: section;
+      list-style-type: none;
+    }
+
+    #TableOfContents {
+      /* Remove the space between the title and the ToC */
+      margin-top: 0;
+
+      &>ol>li {
+        margin-bottom: .5rem;
+
+        &>a {
+          font-weight: $font-weight-bold;
+        }
+      }
+
+      ol {
+        padding-left: 0;
+      }
+
+      &>ol>li>a {
+        padding-left: 1rem;
+      }
+
+      &>ol>li>ol>li>a {
+        padding-left: 2rem;
+      }
+
+      &>ol>li>ol>li>ol>li>a {
+        padding-left: 3rem;
+      }
+
+      &>ol>li>ol>li>ol>li>ol>li>a {
+        padding-left: 4rem;
+      }
+
+      &>ol>li>ol>li>ol>li>ol>li>ol>li>a {
+        padding-left: 5rem;
+      }
+
+    }
+
+    li a:before {
+      counter-increment: section;
+      content: counters(section, ".") " ";
+    }
+
+    .td-toc-title {
+      font-weight: $font-weight-bold;
+      font-size: 1.3rem;
+
+      /* Remove the border under the title */
+      border-bottom: 0;
+      /* Remove the space under the title */
+      margin-bottom: 0;
+
+      /* Fix the top of page link color */
+      a, a:hover {
+        color: $secondary;
+      }
+    }
+  }
+
+  /* Apply the same style to links in the navigation and in the ToC */
+  & > .td-sidebar-nav__section, & > .td-toc #TableOfContents {
+    li a.td-sidebar-link.tree-root {
+      color: $gray-800;
+      font-weight: $font-weight-bold;
+      font-size: 1.3rem;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    li a, li a.td-sidebar-link {
+      color: $gray-800;
+      font-weight: $font-weight-normal;
+      padding-top: .2rem;
+      padding-bottom: .2rem;
+
+      transition: all 100ms ease-in-out;
+
+      &:hover {
+        background-color: $secondary-lighter-background;
+        color: $gray-800;
+      }
+
+      &.active, &active:hover {
+        background-color: $secondary-background;
+      }
     }
   }
 }
@@ -199,62 +273,67 @@ Custom SCSS for the Matrix spec
   scroll-margin-top: 5.5rem;
 }
 
-/* Styles for the table of contents */
-#toc {
-  padding-top: .5rem;
-  padding-left: 1.5rem;
-
-  ol {
-    padding-left: 1rem;
-    counter-reset: section;
-    list-style-type: none;
-  }
-
-  #TableOfContents {
-    &>ol>li {
-      margin-bottom: .5rem;
-
-      &>a {
-        font-weight: $font-weight-bold;
-      }
-    }
-
-    ol {
-      padding-left: 0;
-    }
-
-    &>ol>li>a {
-      padding-left: 1rem;
-    }
-
-    &>ol>li>ol>li>a {
-      padding-left: 2rem;
-    }
-
-    &>ol>li>ol>li>ol>li>a {
-      padding-left: 3rem;
-    }
-
-    &>ol>li>ol>li>ol>li>ol>li>a {
-      padding-left: 4rem;
-    }
-
-    &>ol>li>ol>li>ol>li>ol>li>ol>li>a {
-      padding-left: 5rem;
-    }
-
-  }
-
-  li a:before {
-    counter-increment: section;
-    content: counters(section, ".") " ";
-  }
-
-  #toc-title {
+.endpoints-toc {
+  summary {
+    cursor: pointer;
     font-weight: $font-weight-bold;
-    font-size: 1.3rem;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
   }
 
+  .endpoint-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .endpoint-list li {
+    margin: 0.2rem 0;
+  }
+
+  .endpoint-list a {
+    text-decoration: none;
+    color: inherit;
+    padding: 0.05rem 0.25rem;
+    border-radius: 0.2rem;
+
+    &:hover {
+      background-color: $secondary-background;
+    }
+  }
+
+  .endpoint-list .http-api-method {
+    margin-right: 0.35rem;
+    font-weight: $font-weight-bold;
+  }
+
+  .endpoint-path {
+    font-family: $font-family-monospace;
+    color: $secondary;
+  }
+
+  .endpoint-deprecated {
+    color: $danger;
+    font-weight: $font-weight-bold;
+    margin-left: 0.35rem;
+  }
+
+  .endpoint-module {
+    &:not(:first-child) {
+      margin-top: 0.75rem;
+    }
+  }
+
+  .endpoint-module-title {
+    // font-weight: $font-weight-bold;
+    font-size: 1.20rem;
+    margin-bottom: 0.35rem;
+  }
+}
+
+.page-description {
+  margin-bottom: 1rem;
+  color: inherit;
 }
 
 /* Styles for alert boxes */

@@ -2,13 +2,13 @@
 title: "Client-Server API"
 weight: 10
 type: docs
+description: |
+  The client-server API allows clients to send messages, control rooms and
+  synchronise conversation history. It is designed to support both lightweight
+  clients which store no state and lazy-load data from the server as required,
+  as well as heavyweight clients which maintain a full local persistent copy of
+  server state.
 ---
-
-The client-server API allows clients to
-send messages, control rooms and synchronise conversation history. It is
-designed to support both lightweight clients which store no state and
-lazy-load data from the server as required - as well as heavyweight
-clients which maintain a full local persistent copy of server state.
 
 ## API Standards
 
@@ -477,8 +477,7 @@ the API that was used to obtain their current access token.
 
 {{% boxes/note %}}
 Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
-such as automated applications that cannot use a web browser, or
-user management by [application services](application-service-api/#server-admin-style-permissions).
+such as automated applications that cannot use a web browser.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
@@ -508,6 +507,12 @@ With the OAuth 2.0 API, a client can't register a new account directly. The end
 user must do that directly in the homeserver's web UI. However, the client can
 signal to the homeserver that the user wishes to create a new account with the
 [`prompt=create`](#user-registration) parameter during authorization.
+
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Application services can use the `/register` endpoint to create users regardless
+of the authentication API supported by the homeserver.
+{{% /boxes/note %}}
 
 ### Login
 
@@ -647,7 +652,7 @@ manage their account like [changing their password](#password-management),
 [deactivating their account](#account-deactivation).
 
 With the OAuth 2.0 API, all account management is done via the homeserver's web
-UI.
+UI that can be accessed by users via the [account management URL](#oauth-20-account-management).
 
 ### Legacy API
 
@@ -1574,6 +1579,10 @@ If the access token does correspond to an appservice, but the user id does
 not lie within its namespace then the homeserver will respond with an
 errcode of `M_EXCLUSIVE`.
 
+{{% added-in v="1.17" %}} If this login type is used and the server doesn't
+support logging in via the Legacy authentication API, it MUST return a 400 HTTP
+status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+
 ##### Login Fallback
 
 If a client does not recognize any or all login flows it can use the
@@ -2339,6 +2348,46 @@ The server SHOULD return one of the following responses:
   `401 Unauthorized` response
 - For other errors, the server returns a `400 Bad Request` response with error
   details
+
+#### Account management {id="oauth-20-account-management"}
+
+{{% added-in v="1.18" %}}
+
+All account management is done via the homeserver's web UI.
+
+This specification defines extensions to the [OAuth Authorization Server
+Metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata)
+to offer clients a way to deep-link to the account management capabilities of
+the homeserver to allow the user to complete the account management operations
+in a browser.
+
+##### Account management URL discovery
+
+The [OAuth 2.0 authorization server metadata](#server-metadata-discovery) is
+extended to include the following **optional** fields.
+
+{{% definition path="schemas/oauth2-account-management-server-metadata" %}}
+
+##### Account management URL parameters
+
+The account management URL MAY accept the following minimum query parameters.
+
+{{% definition path="schemas/oauth2-account-management-url" %}}
+
+##### Account management URL actions
+
+Account management actions are unique to the application. They SHOULD follow the
+[Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar)
+where feasible. The Matrix-specific actions are:
+
+| Action                           | Description                                                                                                                                          |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `org.matrix.profile`             | The user wishes to view/edit their profile (name, avatar, contact details).                                                                          |
+| `org.matrix.devices_list`        | The user wishes to view a list of their devices.                                                                                                     |
+| `org.matrix.device_view`         | The user wishes to view the details of a specific device. A `device_id` SHOULD be provided.                                                          |
+| `org.matrix.device_delete`       | The user wishes to delete/log out a specific device. A `device_id` SHOULD be provided.                                                               |
+| `org.matrix.account_deactivate`  | The user wishes to deactivate their account.                                                                                                         |
+| `org.matrix.cross_signing_reset` | The user wishes to reset their cross-signing identity. Servers SHOULD use this action in the URL of the [`m.oauth`](#oauth-authentication) UIA type. |
 
 ### Account moderation
 
@@ -3967,6 +4016,7 @@ that profile.
 | [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Recently used emoji](#recently-used-emoji)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
 | [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
@@ -4031,42 +4081,43 @@ operations and run in a resource constrained environment. Like embedded
 applications, they are not intended to be fully-fledged communication
 systems.
 
-{{% cs-module name="instant_messaging" %}}
-{{% cs-module name="rich_replies" %}}
-{{% cs-module name="voip_events" %}}
-{{% cs-module name="typing_notifications" %}}
-{{% cs-module name="receipts" %}}
-{{% cs-module name="read_markers" %}}
-{{% cs-module name="presence" %}}
-{{% cs-module name="content_repo" %}}
-{{% cs-module name="send_to_device" %}}
-{{% cs-module name="device_management" %}}
-{{% cs-module name="end_to_end_encryption" %}}
-{{% cs-module name="secrets" %}}
-{{% cs-module name="history_visibility" %}}
-{{% cs-module name="push" %}}
-{{% cs-module name="third_party_invites" %}}
-{{% cs-module name="search" %}}
-{{% cs-module name="guest_access" %}}
-{{% cs-module name="room_previews" %}}
-{{% cs-module name="tags" %}}
-{{% cs-module name="account_data" %}}
-{{% cs-module name="admin" %}}
-{{% cs-module name="event_context" %}}
-{{% cs-module name="sso_login" %}}
-{{% cs-module name="dm" %}}
-{{% cs-module name="ignore_users" %}}
-{{% cs-module name="stickers" %}}
-{{% cs-module name="report_content" %}}
-{{% cs-module name="third_party_networks" %}}
-{{% cs-module name="openid" %}}
-{{% cs-module name="server_acls" %}}
-{{% cs-module name="mentions" %}}
-{{% cs-module name="room_upgrades" %}}
-{{% cs-module name="server_notices" %}}
-{{% cs-module name="moderation_policies" %}}
-{{% cs-module name="spaces" %}}
-{{% cs-module name="event_replacements" %}}
-{{% cs-module name="event_annotations" %}}
-{{% cs-module name="threading" %}}
-{{% cs-module name="reference_relations" %}}
+{{% cs-module name="Instant Messaging" filename="instant_messaging" %}}
+{{% cs-module name="Rich replies" filename="rich_replies" %}}
+{{% cs-module name="Voice over IP" filename="voip_events" %}}
+{{% cs-module name="Typing Notifications" filename="typing_notifications" %}}
+{{% cs-module name="Receipts" filename="receipts" %}}
+{{% cs-module name="Read and unread markers" filename="read_markers" %}}
+{{% cs-module name="Presence" filename="presence" %}}
+{{% cs-module name="Content repository" filename="content_repo" %}}
+{{% cs-module name="Send-to-Device messaging" filename="send_to_device" %}}
+{{% cs-module name="Device Management" filename="device_management" %}}
+{{% cs-module name="End-to-End Encryption" filename="end_to_end_encryption" %}}
+{{% cs-module name="Secrets" filename="secrets" %}}
+{{% cs-module name="Room History Visibility" filename="history_visibility" %}}
+{{% cs-module name="Push Notifications" filename="push" %}}
+{{% cs-module name="Third-party invites" filename="third_party_invites" %}}
+{{% cs-module name="Server Side Search" filename="search" %}}
+{{% cs-module name="Guest Access" filename="guest_access" %}}
+{{% cs-module name="Room Previews" filename="room_previews" %}}
+{{% cs-module name="Room Tagging" filename="tags" %}}
+{{% cs-module name="Client Config" filename="account_data" %}}
+{{% cs-module name="Server Administration" filename="admin" %}}
+{{% cs-module name="Event Context" filename="event_context" %}}
+{{% cs-module name="SSO client login/authentication" filename="sso_login" %}}
+{{% cs-module name="Direct Messaging" filename="dm" %}}
+{{% cs-module name="Ignoring Users" filename="ignore_users" %}}
+{{% cs-module name="Sticker Messages" filename="stickers" %}}
+{{% cs-module name="Reporting Content" filename="report_content" %}}
+{{% cs-module name="Third-party Networks" filename="third_party_networks" %}}
+{{% cs-module name="OpenID" filename="openid" %}}
+{{% cs-module name="Server Access Control Lists (ACLs) for rooms" filename="server_acls" %}}
+{{% cs-module name="User and room mentions" filename="mentions" %}}
+{{% cs-module name="Room Upgrades" filename="room_upgrades" %}}
+{{% cs-module name="Server Notices" filename="server_notices" %}}
+{{% cs-module name="Moderation policy lists" filename="moderation_policies" %}}
+{{% cs-module name="Spaces" filename="spaces" %}}
+{{% cs-module name="Event replacements" filename="event_replacements" %}}
+{{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
+{{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
+{{% cs-module name="Threading" filename="threading" %}}
+{{% cs-module name="Reference relations" filename="reference_relations" %}}

@@ -243,8 +243,13 @@ paths:
                     }
                   }
         "400":
-          description: Part of the request was invalid. For example, the login type may
-            not be recognised.
+          description: |-
+            Part of the request was invalid. For example, the login type may not be recognised.
+
+            Specific error codes used with this status code include:
+              * {{% added-in v="1.17" %}} `M_APPSERVICE_LOGIN_UNSUPPORTED`: an application service
+                used the `m.login.application_service` type, but the server doesn't support logging
+                in via the Legacy authentication API.
           content:
             application/json:
               schema:

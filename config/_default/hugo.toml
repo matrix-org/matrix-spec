@@ -75,8 +75,8 @@ status = "unstable"
 current_version_url = "https://spec.matrix.org/latest"
 # The following is used when status = "stable", and is displayed in various UI elements on a released version
 # of the spec.
-# major = "1"
-# minor = "16"
+#major = "1"
+#minor = "17"
 
 [[params.versions]]
 # We must include this parameter to enable docsy's version picker in the navbar. The picker
@@ -106,25 +106,30 @@ sidebar_menu_compact = true
 #   desc = "Matrix on GitHub"
 # Custom links shown in the center of the footer. (Only supported by our fork of docsy's 'footer/central' partial.)
 [[params.links.bottom]]
-	name = "GitHub"
-	url = "https://github.com/matrix-org"
-	icon = "fab fa-github"
+  name = "GitHub"
+  url = "https://github.com/matrix-org"
+  icon = "fab fa-github"
   desc = "Matrix on GitHub"
 [[params.links.bottom]]
-	name = "GitLab"
-	url = "https://gitlab.matrix.org/matrix-org"
-	icon = "fab fa-gitlab"
+  name = "GitLab"
+  url = "https://gitlab.matrix.org/matrix-org"
+  icon = "fab fa-gitlab"
   desc = "Matrix on GitLab"
 [[params.links.bottom]]
-	name = "YouTube"
-	url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
-	icon = "fab fa-youtube"
+  name = "YouTube"
+  url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
+  icon = "fab fa-youtube"
   desc = "Matrix YouTube channel"
 [[params.links.bottom]]
-	name = "Twitter"
-	url = "https://twitter.com/matrixdotorg"
-	icon = "fab fa-x-twitter"
-  desc = "Matrix on Twitter"
+  name = "Mastodon"
+  url = "https://mastodon.matrix.org/@matrix"
+  icon = "fab fa-mastodon"
+  desc = "Matrix on Mastodon"
+[[params.links.bottom]]
+  name = "Bluesky"
+  url = "https://bsky.app/profile/matrix.org"
+  icon = "fab fa-bluesky"
+  desc = "Matrix on Bluesky"
 
 
 # configuration for the hugo development server
@@ -161,3 +166,11 @@ sidebar_menu_compact = true
     mediaType = "text/markdown"
     isPlainText = true
     baseName = "checklist"
+
+# Add font media types for downloading KaTeX fonts.
+# See: https://www.docsy.dev/docs/content/diagrams-and-formulae/#create-media-types-for-katex-fonts
+[mediaTypes]
+  [mediaTypes.'font/woff']
+    suffixes = ['woff']
+  [mediaTypes.'font/woff2']
+    suffixes = ['woff2']
