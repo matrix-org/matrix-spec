@@ -41,8 +41,7 @@ paths:
           name: action
           x-addedInMatrixVersion: "1.18"
           description: |-
-            The action that the user wishes to take at the SSO redirect, for
-            [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+            The action that the user wishes to take at the SSO redirect.
 
             The following values are supported:
               * `login`: the SSO redirect is for the purposes of signing an
@@ -96,8 +95,7 @@ paths:
           name: action
           x-addedInMatrixVersion: "1.18"
           description: |-
-            The action that the user wishes to take at the SSO redirect, for
-            [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+            The action that the user wishes to take at the SSO redirect.
 
             The following values are supported:
               * `login`: the SSO redirect is for the purposes of signing an

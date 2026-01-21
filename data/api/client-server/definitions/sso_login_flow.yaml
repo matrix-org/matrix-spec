@@ -90,8 +90,9 @@ properties:
     type: boolean
     x-addedInMatrixVersion: "1.18"
     description: |
-      Whether the `m.login.sso` flow is preferred over other flows for
-      [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients).
+      Whether the `m.login.sso` flow is preferred over other flows. If this is `true`,
+      [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients) MUST only
+      offer this flow to the user.
     example: true
 
 required: ['type']

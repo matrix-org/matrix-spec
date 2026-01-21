@@ -482,9 +482,9 @@ such as automated applications that cannot use a web browser.
 
 {{% boxes/note %}}
 {{% added-in v="1.18" %}}
-A compatibility layer is available to ease the transition from the legacy API to
-the OAuth 2.0 API for clients that only support the legacy API called [OAuth 2.0
-aware clients](#oauth-20-aware-clients).
+A compatibility feature, called [OAuth 2.0 aware clients](#oauth-20-aware-clients),
+is available to ease the transition to the OAuth 2.0 API for clients that only
+support the legacy API.
 {{% /boxes/note %}}
 
 ### Authentication API discovery
@@ -1525,11 +1525,6 @@ client supports it, the client should redirect the user to the
 is complete, the client will need to submit a `/login` request matching
 `m.login.token`.
 
-{{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
-MUST only offer the `m.login.sso` flow to the user when `oauth_aware_preferred`
-is set to `true` and MUST add the `action=login` parameter to the SSO redirect
-endpoint.
-
 {{% added-in v="1.7" %}} Already-authenticated clients can additionally generate
 a token for their user ID if supported by the homeserver using
 [`POST /login/get_token`](/client-server-api/#post_matrixclientv1loginget_token).
@@ -1628,10 +1623,11 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 {{% added-in v="1.18" %}}
 
-This is a compatibility layer that allows clients that only support the legacy
-API to make some less-invasive changes to improve the user experience when
-talking to a homeserver that is using the OAuth 2.0 API without actually having
-to implement the full OAuth 2.0 API.
+This is a compatibility feature to aide clients in the transition to the OAuth
+2.0 API. It allows clients that only support the legacy API to make some
+less-invasive changes to improve the user experience when talking to a
+homeserver that is using the OAuth 2.0 API without actually having to implement
+the full OAuth 2.0 API.
 
 ##### Client behaviour
 
@@ -1639,8 +1635,8 @@ For a client to be considered fully OAuth 2.0 aware it MUST:
 
 * Support the [`m.login.sso` authentication flow](#client-login-via-sso).
 * Where a `oauth_aware_preferred` value of `true` is present on an `m.login.sso`
-  flow then *only* offer that auth flow to the user.
-* Append `action=login` and `action=register` parameters to the [SSO redirect
+  flow, *only* offer that auth flow to the user.
+* Append `action=login` or `action=register` parameters to the [SSO redirect
   endpoints](#get_matrixclientv3loginssoredirect). The client might determine
   the value to use based on whether the user clicked a "Login" or "Register"
   button.
