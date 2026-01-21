@@ -480,6 +480,13 @@ Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
 such as automated applications that cannot use a web browser.
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+A compatibility feature, called [OAuth 2.0 aware clients](#oauth-20-aware-clients),
+is available to ease the transition to the OAuth 2.0 API for clients that only
+support the legacy API.
+{{% /boxes/note %}}
+
 ### Authentication API discovery
 
 To discover if a homeserver supports the legacy API, the [`GET /login`](#get_matrixclientv3login)
@@ -1611,6 +1618,73 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 ##### Account deactivation
 
 {{% http-api spec="client-server" api="account_deactivation" %}}
+
+#### OAuth 2.0 aware clients
+
+{{% added-in v="1.18" %}}
+
+This is a compatibility feature to aide clients in the transition to the OAuth
+2.0 API. It allows clients that only support the legacy API to make some
+less-invasive changes to improve the user experience when talking to a
+homeserver that is using the OAuth 2.0 API without actually having to implement
+the full OAuth 2.0 API.
+
+##### Client behaviour
+
+For a client to be considered fully OAuth 2.0 aware it MUST:
+
+* Support the [`m.login.sso` authentication flow](#client-login-via-sso).
+* Where a `oauth_aware_preferred` value of `true` is present on an `m.login.sso`
+  flow, *only* offer that auth flow to the user.
+* Append `action=login` or `action=register` parameters to the [SSO redirect
+  endpoints](#get_matrixclientv3loginssoredirect). The client might determine
+  the value to use based on whether the user clicked a "Login" or "Register"
+  button.
+* Check and honour the [`m.3pid_changes` capability](#m3pid_changes-capability)
+  so that the user is not offered the ability to add or remove 3PIDs if the
+  homeserver says the capability is not available.
+* Determine if the homeserver is using the OAuth 2.0 API by using
+  [server metadata discovery](#get_matrixclientv1auth_metadata) from the OAuth
+  2.0 API.
+* If a homeserver is using the OAuth 2.0 API as discovered in the previous step
+  then the client MUST redirect users to manage their account at the [account
+  management URL](#oauth-20-account-management), if available, instead of
+  providing a native UI using the legacy API endpoints.
+  
+  * If the user wishes to deactivate their account then the client MUST refer
+    them to the account management URL.
+  * If the user wishes to sign out a device other than its own then the client
+    MUST deep link the user to the account management URL by adding the
+    `action=org.matrix.device_delete` and `device_id=<device_id>` parameters so
+    that the web UI knows that the user wishes to sign out a device and which
+    one it is.
+
+Optionally, an OAuth 2.0 aware client MAY:
+
+* Label the SSO button as "Continue" rather than "SSO" when
+  `oauth_aware_preferred` is `true`. This is because after redirect the server
+  may then offer a password and/or further upstream IdPs.
+* Pass other [account management URL parameters](#account-management-url-parameters)
+  for context when linking to the account web UI.
+
+##### Server behaviour
+
+For a homeserver to provide support for OAuth 2.0 aware clients it MUST:
+
+* Support the [OAuth 2.0 API](#oauth-20-api).
+* Provide an implementation of the [`m.login.sso` authentication flow](#client-login-via-sso)
+  from the legacy API.
+* If password authentication was previously enabled on the homeserver then
+  provide an implementation of the [`m.login.password` authentication flow](#legacy-login)
+  from the legacy API.
+* Indicate that the `m.login.sso` flow is preferred by setting
+  `oauth_aware_preferred` to `true`.
+* Support a value for the `action` param on the [SSO redirect endpoints](#get_matrixclientv3loginssoredirect).
+
+Additionally, the homeserver SHOULD:
+
+* Advertise the [account management URL](#oauth-20-account-management) in the
+  [server metadata](#get_matrixclientv1auth_metadata).
 
 ### OAuth 2.0 API
 
