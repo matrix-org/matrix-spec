@@ -50,6 +50,11 @@ paths:
                       m.change_password:
                         $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can change their password.
+                      m.forget_forced_upon_leave:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: |-
+                          Capability to indicate if the server automatically forgets rooms once the user
+                          leaves.
                       m.room_versions:
                         type: object
                         description: The room versions the server supports.

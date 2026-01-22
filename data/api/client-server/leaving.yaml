@@ -29,8 +29,15 @@ paths:
         If the user was invited to the room, but had not joined, this call
         serves to reject the invite.
 
-        The user will still be allowed to retrieve history from the room which
-        they were previously allowed to see.
+        Servers MAY additionally forget the room when this endpoint is called –
+        just as if the user had also invoked [`/forget`](/client-server-api/#post_matrixclientv3roomsroomidforget).
+        Servers that do this, MUST inform clients about this behavior using the
+        [`m.forget_forced_upon_leave`](/client-server-api/#mforget_forced_upon_leave-capability)
+        capability.
+
+        If the server doesn't automatically forget the room, the user will still be
+        allowed to retrieve history from the room which they were previously allowed
+        to see.
       operationId: leaveRoom
       security:
         - accessTokenQuery: []
