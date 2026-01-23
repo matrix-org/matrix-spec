@@ -2621,6 +2621,8 @@ An example of the capability API's response for this capability is:
 
 ### `m.forget_forced_upon_leave` capability
 
+{{% added-in v="1.18" %}}
+
 This capability has a single flag, `enabled`, which indicates whether or
 not the server automatically forgets rooms which the user has left.
 
