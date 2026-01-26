@@ -19,6 +19,10 @@ paths:
   "/rooms/{roomId}/leave":
     post:
       summary: Stop the requesting user participating in a particular room.
+      x-changedInMatrixVersion:
+        "1.18": |-
+          Servers may additionally forget the room provided that they make this behavior
+          transparent.
       description: |-
         This API stops a user participating in a particular room.
 
