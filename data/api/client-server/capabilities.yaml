@@ -51,7 +51,6 @@ paths:
                         $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can change their password.
                       m.forget_forced_upon_leave:
-                        x-addedInMatrixVersion: "1.18"
                         $ref: '#/components/schemas/booleanCapability'
                         description: |-
                           Capability to indicate if the server automatically forgets rooms once the user
