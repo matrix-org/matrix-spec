@@ -84,9 +84,9 @@ Additionally, web clients should ensure that *all* `a` tags get a
 `rel="noopener"` to prevent the target page from referencing the
 client's tab/window.
 
-{{% added-in v="1.18" %}} Clients that support the `ol` tag MUST also support
-the `start` attribute in order to prevent loss of meaning of a message due to
-the numbering of list items.
+{{% added-in v="1.18" %}} Clients that support rendering numbered lists via the
+`ol` tag MUST also support the `start` attribute in order to prevent loss of
+meaning of a message due to the numbering of list items.
 
 Tags must not be nested more than 100 levels deep. Clients should only
 support the subset of tags they can render, falling back to other
