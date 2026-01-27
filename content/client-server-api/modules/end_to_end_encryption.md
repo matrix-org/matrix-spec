@@ -21,14 +21,15 @@ recommendations.
 
 * Clients SHOULD create new [cross-signing keys](#cross-signing) for users who
   do not yet have cross-signing keys.
-* Users SHOULD have [Secret Storage](#storage) set up to avoid needing to reset
-  their cryptographic identity in case the user does not have an existing device
-  that can [share the secrets](#sharing) with the new device. The user's Secret
-  Storage SHOULD contain the user's cross-signing private keys and the [key
-  backup](#server-side-key-backups) decryption key (if the user is using key
-  backup). The user's Secret Storage SHOULD have a [default key](#key-storage)
-  (a key referred to by `m.secret_storage.default_key`) that encrypts the
-  private cross-signing keys and key backup decryption key (if available).
+* Clients SHOULD encourage users to set up their [Secret Storage](#storage) to
+  avoid needing to reset their cryptographic identity in case the user does not
+  have an existing device that can [share the secrets](#sharing) with the new
+  device. The user's Secret Storage SHOULD contain the user's cross-signing
+  private keys and the [key backup](#server-side-key-backups) decryption key
+  (if the user is using key backup). The user's Secret Storage SHOULD have a
+  [default key](#key-storage) (a key referred to by
+  `m.secret_storage.default_key`) that encrypts the private cross-signing keys
+  and key backup decryption key (if available).
 * Clients SHOULD encourage users to [cross-sign](#cross-signing) their devices.
   This includes both when logging in a new device, and for existing devices.
   Clients MAY even go so  far as to require cross-signing of devices by
@@ -42,7 +43,7 @@ recommendations.
   device keys) is deprecated.
 * Clients SHOULD flag when [cross-signing keys](#cross-signing) change. If
   Alice's cross-signing keys change, Alice's own devices MUST alert her to this
-  fact, and prompt her  to re-cross-sign those devices. If Bob is in an
+  fact, and prompt her to re-cross-sign those devices. If Bob is in an
   encrypted room with Alice,  Bob's devices SHOULD inform him of Alice's key
   change and SHOULD prevent him from sending an encrypted message to Alice
   without acknowledging the change. Bob's clients may behave differently
@@ -59,6 +60,11 @@ recommendations.
   [`m.room_key.withheld`](#mroom_keywithheld) message with a code of
   `m.unverified` to indicate to the non-cross-signed device why it is not
   receiving the room key.
+
+  Note that clients cannot selectively send room events only to cross-signed
+  devices. The only way to exclude non-cross-signed devices from encrypted
+  conversations is to not send the room keys so those devices won't be able to
+  decrypt the messages.
 * Similarly, messages sent from [non-cross-signed](#cross-signing) devices
   cannot be trusted and SHOULD NOT be displayed to the user. Clients have no
   assurance that encrypted messages sent from non-cross-signed devices were sent
@@ -80,7 +86,9 @@ recommendations.
   a different user. Clients MAY accept such messages, provided the session
   creator's device is [cross-signed](#cross-signing). However, the client MUST
   annotate the message with a warning, unless the client has a way to check that
-  the bridge bot is permitted to encrypt messages on behalf of the user.
+  the bridge bot is permitted to encrypt messages on behalf of the user. Future
+  MSCs such as [MSC4350](https://github.com/matrix-org/matrix-spec-proposals/pull/4350)
+  may provide a secure way to allow such impersonation.
 
 #### Key Distribution
 
