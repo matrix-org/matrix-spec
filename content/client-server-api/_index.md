@@ -3317,9 +3317,9 @@ the topic to be removed from the room.
 
 {{% changed-in v="1.18" %}}
 
-If the server advertises support for a version that supports it, clients MAY use
-the [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
-endpoint to send `m.room.redaction` events.
+If the server advertises support for a spec version that supports it, clients
+MAY use the [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+endpoint to send `m.room.redaction` events in all room versions.
 
 They can also use the following endpoint.
 
