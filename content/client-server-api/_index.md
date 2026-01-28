@@ -2627,7 +2627,7 @@ This capability has a single flag, `enabled`, which indicates whether or
 not the server automatically forgets rooms which the user has left.
 
 When `enabled` is `true` and the user leaves a room, the server will automatically
-forget the room – just as if the user had called [`/forget`](#post_matrixclientv3roomsroomidforget)
+forget the room — just as if the user had called [`/forget`](#post_matrixclientv3roomsroomidforget)
 themselves. This behavior applies irrespective of whether the user has left the
 room on their own (through [`/leave`](#post_matrixclientv3roomsroomidleave)) or
 has been kicked or banned from the room by another user.
