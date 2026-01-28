@@ -31,4 +31,4 @@ For example, this is a valid `m.room.power_levels` event in this room version:
 ```
 
 In this example, both `@bob:localhost` and `@alice:localhost` have the same effective
-power level of `50`, even though the values are visually different.
+power level of `50`, even though the values are technically different.
