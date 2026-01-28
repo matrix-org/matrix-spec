@@ -1,5 +1,5 @@
 
-##### `m.room.power_levels` Events Accept Values as Floats
+##### `m.room.power_levels` events accept values as floats
 
 When the value is a float, anything after the decimal point is removed,
 making e.g. `5.17`, `5.42`, and `5` functionally identical. 
