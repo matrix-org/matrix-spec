@@ -2619,6 +2619,40 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.forget_forced_upon_leave` capability
+
+{{% added-in v="1.18" %}}
+
+This capability has a single flag, `enabled`, which indicates whether or
+not the server automatically forgets rooms which the user has left.
+
+When `enabled` is `true` and the user leaves a room, the server will automatically
+forget the room — just as if the user had called [`/forget`](#post_matrixclientv3roomsroomidforget)
+themselves. This behavior applies irrespective of whether the user has left the
+room on their own (through [`/leave`](#post_matrixclientv3roomsroomidleave)) or
+has been kicked or banned from the room by another user.
+
+When `enabled` is `false`, the server does not automatically forget rooms
+upon leave. In this case, clients MAY distinguish the actions of leaving
+and forgetting a room in their UI. Similarly, clients MAY retrieve and
+visualize left but unforgotten rooms using a [filter](#filtering) with
+`include_leave = true`.
+
+When the capability or the `enabled` property are not present, clients SHOULD
+assume that the server does not automatically forget rooms.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.forget_forced_upon_leave": {
+      "enabled": true
+    }
+  }
+}
+```
+
 ### `m.room_versions` capability
 
 This capability describes the default and available room versions a
