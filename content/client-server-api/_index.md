@@ -4159,3 +4159,4 @@ systems.
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
+{{% cs-module name="Invite permission" filename="invite_permission" %}}
