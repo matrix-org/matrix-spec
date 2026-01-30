@@ -4071,6 +4071,7 @@ that profile.
 | [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Invite blocking](#invite-blocking)                        | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
