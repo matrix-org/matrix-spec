@@ -56,19 +56,6 @@ Clients should not ask room administrators to upgrade their rooms if the
 room is running a stable version. Servers SHOULD use **room version 12** as
 the default room version when creating new rooms.
 
-{{% boxes/note %}}
-
-{{% added-in v="1.16" %}}
-
-Room version 12 is introduced and made default in this specification release.
-Servers are encouraged to continue using room version 11 as the default room
-version for the early days and weeks following this specification release,
-and then gradually switch the default over when they deem appropriate.
-
-<!-- TODO(SCT): Remove this note box in Matrix 1.17 -->
-
-{{% /boxes/note %}}
-
 The available room versions are:
 
 -   [Version 1](/rooms/v1) - **Stable**. The initial room version.
