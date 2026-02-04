@@ -4071,7 +4071,7 @@ that profile.
 | [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
-| [Invite permission](#invite-permission)                        | Optional  | Optional | Optional | Optional | Optional |
+| [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -4145,6 +4145,7 @@ systems.
 {{% cs-module name="SSO client login/authentication" filename="sso_login" %}}
 {{% cs-module name="Direct Messaging" filename="dm" %}}
 {{% cs-module name="Ignoring Users" filename="ignore_users" %}}
+{{% cs-module name="Invite permission" filename="invite_permission" %}}
 {{% cs-module name="Sticker Messages" filename="stickers" %}}
 {{% cs-module name="Reporting Content" filename="report_content" %}}
 {{% cs-module name="Third-party Networks" filename="third_party_networks" %}}
@@ -4160,4 +4161,3 @@ systems.
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
-{{% cs-module name="Invite permission" filename="invite_permission" %}}
