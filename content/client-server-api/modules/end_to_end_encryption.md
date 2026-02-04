@@ -5,6 +5,91 @@ Matrix optionally supports end-to-end encryption, allowing rooms to be
 created whose conversation contents are not decryptable or interceptable
 on any of the participating homeservers.
 
+#### Recommended client behaviour
+
+{{% added-in v="1.18" %}}
+
+While clients are able to choose what encryption features they implement based
+on their threat model, this section recommends behaviours that will improve the
+overall user experience and security of encrypted conversations.
+
+While a user may be unable to [verify](#device-verification) every other user
+that they communicate with, or may be unaware of the need to verify other users,
+[cross-signing](#cross-signing) gives some measure of protection and so SHOULD
+be used where possible. In particular, clients SHOULD implement the following
+recommendations.
+
+* Clients SHOULD create new [cross-signing keys](#cross-signing) for users who
+  do not yet have cross-signing keys.
+* Clients SHOULD encourage users to set up their [Secret Storage](#storage) to
+  avoid needing to reset their cryptographic identity in case the user does not
+  have an existing device that can [share the secrets](#sharing) with the new
+  device. The user's Secret Storage SHOULD contain the user's cross-signing
+  private keys and the [key backup](#server-side-key-backups) decryption key
+  (if the user is using key backup). The user's Secret Storage SHOULD have a
+  [default key](#key-storage) (a key referred to by
+  `m.secret_storage.default_key`) that encrypts the private cross-signing keys
+  and key backup decryption key (if available).
+* Clients SHOULD encourage users to [cross-sign](#cross-signing) their devices.
+  This includes both when logging in a new device, and for existing devices.
+  Clients MAY even go so  far as to require cross-signing of devices by
+  preventing the user from using  the client until the device is cross-signed.
+  If the user cannot cross-sign their device (for example, if they have
+  forgotten their Secret Storage key), the client can allow users to reset their
+  [Secret Storage](#storage), cross-signing keys, and [key backup](#server-side-key-backups).
+* When Alice [verifies](#device-verification) Bob, the verification SHOULD
+  verify their [cross-signing keys](#cross-signing). Any flow between different
+  users that does not verify the users' cross-signing keys (it verifies only the
+  device keys) is deprecated.
+* Clients SHOULD flag when [cross-signing keys](#cross-signing) change. If
+  Alice's cross-signing keys change, Alice's own devices MUST alert her to this
+  fact, and prompt her to re-cross-sign those devices. If Bob is in an
+  encrypted room with Alice,  Bob's devices SHOULD inform him of Alice's key
+  change and SHOULD prevent him from sending an encrypted message to Alice
+  without acknowledging the change. Bob's clients may behave differently
+  depending on whether Bob had previously [verified](#device-verification)
+  Alice or not. For example, if Bob had previously verified Alice, and Alice's
+  keys change, Bob's client may require Bob to re-verify, or may display a more
+  aggressive warning.
+* Clients SHOULD NOT send encrypted [to-device](#send-to-device-messaging)
+  messages, such as [room keys](#sharing-keys-between-devices) or [secrets](#secrets)
+  (via [Secret Sharing](#sharing)), to [non-cross-signed](#cross-signing)
+  devices by default. Non-cross-signed devices don't provide any assurance that
+  the device belongs to the user, and server admins can trivially create new
+  devices for users. When sending room keys, clients can use a
+  [`m.room_key.withheld`](#mroom_keywithheld) message with a code of
+  `m.unverified` to indicate to the non-cross-signed device why it is not
+  receiving the room key.
+
+  Note that clients cannot selectively send room events only to cross-signed
+  devices. The only way to exclude non-cross-signed devices from encrypted
+  conversations is to not send the room keys so those devices won't be able to
+  decrypt the messages.
+* Similarly, messages sent from [non-cross-signed](#cross-signing) devices
+  cannot be trusted and SHOULD NOT be displayed to the user. Clients have no
+  assurance that encrypted messages sent from non-cross-signed devices were sent
+  by the user, rather than an impersonator.
+* Matrix clients MUST NOT consider non-cryptographic devices (devices which do
+  not have [device identity keys](#device-keys) uploaded to the homeserver) to
+  be equivalent to [non-cross-signed](#cross-signing) cryptographic devices for
+  purposes of enforcing E2EE policy. For example, clients SHOULD NOT warn nor
+  refuse to send messages due to the presence of non-cryptographic devices. For
+  all intents and purposes, non-cryptographic devices are a completely separate
+  concept and do not exist from the perspective of the cryptography layer since
+  they do not have identity keys, so it is impossible to send them decryption
+  keys.
+* Clients MAY make provisions for encrypted bridges. Some bridges are structured
+  in a way such that only one user controlled by the bridge (often called the
+  bridge bot) participates in encryption, and encrypted messages from other
+  bridge users are encrypted by the bridge bot. Thus encrypted messages sent by
+  one user could be encrypted by a [Megolm](#mmegolmv1aes-sha2) session sent by
+  a different user. Clients MAY accept such messages, provided the session
+  creator's device is [cross-signed](#cross-signing). However, the client MUST
+  annotate the message with a warning, unless the client has a way to check that
+  the bridge bot is permitted to encrypt messages on behalf of the user. Future
+  MSCs such as [MSC4350](https://github.com/matrix-org/matrix-spec-proposals/pull/4350)
+  may provide a secure way to allow such impersonation.
+
 #### Key Distribution
 
 Encryption and Authentication in Matrix is based around public-key
@@ -674,8 +759,11 @@ The process between Alice and Bob verifying each other would be:
     their devices if they match or not.
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
-    * Each of the keys that they wish the other user to verify (usually their
-      device ed25519 key and their master cross-signing key).
+    * {{% changed-in v="1.18" %}} Each of the keys that they wish the other user
+      to verify (usually their device ed25519 key and their master cross-signing
+      key). The master cross-signing key SHOULD be included when two different
+      users are verifying each other. Verifying individual devices of other
+      users is deprecated.
     * The complete list of key IDs that they wish the other user to verify.
 
     The MAC calculation is defined [below](#mac-calculation).
