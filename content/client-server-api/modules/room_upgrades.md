@@ -43,8 +43,8 @@ They must be explicitly set during the `/upgrade` call.
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
-{{% added-in v="1.16" %}} When upgrading to room version 12 or later, the `predecessor` field MAY NOT contain
-an `event_id`.
+{{% added-in v="1.16" %}} When upgrading to room version 12 or later, the `event_id` property inside
+`predecessor` MAY be omitted.
 {{% /boxes/note %}}
 
 3.  Replicates transferable state events to the new room. The exact
