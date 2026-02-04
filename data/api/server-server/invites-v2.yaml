@@ -192,11 +192,17 @@ paths:
                   }
         "403":
           description: |-
-            The invite is not allowed. This could be for a number of reasons, including:
+            The invite is not allowed.
+
+            The `M_FORBIDDEN` error code is used to indicate one of the following:
 
             * The sender is not allowed to send invites to the target user/homeserver.
             * The homeserver does not permit anyone to invite its users.
             * The homeserver refuses to participate in the room.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:
