@@ -6,13 +6,13 @@
 Users may want to control who is allowed to invite them to new rooms. This module defines how
 clients and servers can implement invite permission.
 
-#### Events
+#### Account data
 
 {{% event event="m.invite_permission_config" %}}
 
 #### Client behaviour
 
-To reject invites from all users automatically, clients MUST add an [`m.invite_permission_config`](#minvite_permission_config)
+To reject invites from all users automatically, clients MAY add an [`m.invite_permission_config`](#minvite_permission_config)
 event in the user's [account data](#client-config) with the `default_action` property set to
 `block`. To stop rejecting all invites, the same event without the `default_action` property MUST be
 added to the account data.
@@ -20,8 +20,8 @@ added to the account data.
 When the `default_action` field is unset, other parts of the specification might still have effects
 on invites seen by clients, like [ignoring users](#ignoring-users).
 
-When sending an invite to a user that blocks invites, clients SHOULD receive an error response with
-the `M_INVITE_BLOCKED` error code.
+Attempting to send an invite to a user that blocks invites will result in an error response with the
+`M_INVITE_BLOCKED` error code.
 
 #### Server behaviour
 
@@ -38,9 +38,8 @@ is invited:
 * [`PUT /_matrix/client/v3/rooms/{roomId}/state/m.room.member/{stateKey}`](#put_matrixclientv3roomsroomidstateeventtypestatekey),
   when the `membership` is set to `invite`.
 
-In addition, existing events already in the database MUST NOT be served over client synchronisation
-endpoints such as [`GET /sync`](#get_matrixclientv3sync). Invite events received over federation
-should likewise not be served over `GET /sync` requests.
+In addition, invite events for this user already in the database, or received over federation, MUST
+NOT be served over client synchronisation endpoints such as [`GET /sync`](#get_matrixclientv3sync).
  
 Servers MAY return any suppressed invite events over `GET /sync` if invite blocking is later
 disabled.
