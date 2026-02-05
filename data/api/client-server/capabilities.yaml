@@ -84,7 +84,7 @@ paths:
                         description: |
                           **Deprecated:** Capability to indicate if the user can change their display name.
                           Refer to `m.profile_fields` for extended profile management.
-                          
+
                           For backwards compatibility, servers that directly or indirectly include the
                           `displayname` profile field in the `m.profile_fields` capability MUST also
                           set this capability accordingly.
@@ -121,7 +121,7 @@ paths:
                             description: |
                               If present, a list of profile fields that clients are allowed to create, modify or delete,
                               provided `enabled` is `true`; no other profile fields may be changed.
-                              
+
                               If absent, clients may set all profile fields except those forbidden by the `disallowed`
                               list, where present.
                             items:
@@ -133,7 +133,7 @@ paths:
                             type: array
                             description:  |
                               This property has no meaning if `allowed` is also specified.
-                              
+
                               Otherwise, if present, a list of profile fields that clients are _not_ allowed to create, modify or delete.
                               Provided `enabled` is `true`, clients MAY assume that they can set any profile field which is not
                               included in this list.
@@ -147,6 +147,34 @@ paths:
                             example: true
                         required:
                           - enabled
+                      m.account_moderation:
+                        x-addedInMatrixVersion: "1.18"
+                        type: object
+                        title: AccountModerationCapability
+                        description: |-
+                          Capability to indicate if the user can perform account moderation actions
+                          via [server administration](/client-server-api/#server-administration)
+                          endpoints.
+
+                          This property should be omitted altogether if `suspend` and `lock` would
+                          be `false`.
+                        properties:
+                          suspend:
+                            type: boolean
+                            description: |-
+                              `true` if the user can suspend a user via [`PUT /admin/suspend/{userId}`](/client-server-api/#put_matrixclientv1adminsuspenduserid),
+                              `false` otherwise.
+
+                              Defaults to `false`.
+                            example: true
+                          lock:
+                            type: boolean
+                            description: |-
+                              `true` if the user can lock a user via [`PUT /admin/lock/{userId}`](/client-server-api/#put_matrixclientv1adminlockuserid),
+                              `false` otherwise.
+
+                              Defaults to `false`.
+                            example: true
               examples:
                 response:
                   value: {
