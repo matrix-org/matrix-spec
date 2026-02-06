@@ -79,7 +79,7 @@ paths:
                         - keys
                   master_key:
                     type: object
-                    description: The user\'s master cross-signing key.
+                    description: The user\'s master signing key.
                     allOf:
                       - $ref: ../client-server/definitions/cross_signing_key.yaml
                       - example:
