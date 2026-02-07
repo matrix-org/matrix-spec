@@ -23,6 +23,17 @@ paths:
       description: |-
         Asks the receiving server to return information that the sending
         server will need to prepare a knock event for the room.
+
+        Before signing the returned template and calling `/send_knock`,
+        the sending server MUST verify that:
+
+        * the `room_id` is equal to the `roomId` path parameter.
+        * both the `sender` and `state_key` are equal to the `userId` path parameter.
+        * the `type` of the event is `m.room.member`.
+        * the `membership` field inside `content` is `knock`.
+
+        In case any of the above checks fail, the response MUST be treated as malformed and
+        discarded. The caller MAY try to knock through another server.
       operationId: makeKnock
       security:
         - signedRequest: []
