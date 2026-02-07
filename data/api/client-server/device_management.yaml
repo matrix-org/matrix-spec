@@ -170,6 +170,13 @@ paths:
         When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
         {{% /boxes/warning %}}
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server supports the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        Instead they MUST refer the user to the [account management URL](/client-server-api/#oauth-20-account-management),
+        if available, with the `action=org.matrix.device_delete` and `device_id={deviceId}` parameters.
+        {{% /boxes/warning %}}
       operationId: deleteDevice
       security:
         - accessTokenQuery: []
@@ -231,6 +238,13 @@ paths:
         {{% boxes/warning %}}
         When this endpoint requires User-Interactive Authentication, it cannot be used when the access token was obtained
         via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        {{% /boxes/warning %}}
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server supports the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        Instead they MUST refer the user to the [account management URL](/client-server-api/#oauth-20-account-management),
+        if available.
         {{% /boxes/warning %}}
       operationId: deleteDevices
       security:

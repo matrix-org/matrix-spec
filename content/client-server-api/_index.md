@@ -480,6 +480,13 @@ Currently the OAuth 2.0 API doesn't cover all the use cases of the legacy API,
 such as automated applications that cannot use a web browser.
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+A compatibility feature, called [OAuth 2.0 aware clients](#oauth-20-aware-clients),
+is available to ease the transition to the OAuth 2.0 API for clients that only
+support the legacy API.
+{{% /boxes/note %}}
+
 ### Authentication API discovery
 
 To discover if a homeserver supports the legacy API, the [`GET /login`](#get_matrixclientv3login)
@@ -645,7 +652,7 @@ manage their account like [changing their password](#password-management),
 [deactivating their account](#account-deactivation).
 
 With the OAuth 2.0 API, all account management is done via the homeserver's web
-UI.
+UI that can be accessed by users via the [account management URL](#oauth-20-account-management).
 
 ### Legacy API
 
@@ -1612,6 +1619,73 @@ MAY reject weak passwords with an error code `M_WEAK_PASSWORD`.
 
 {{% http-api spec="client-server" api="account_deactivation" %}}
 
+#### OAuth 2.0 aware clients
+
+{{% added-in v="1.18" %}}
+
+This is a compatibility feature to aide clients in the transition to the OAuth
+2.0 API. It allows clients that only support the legacy API to make some
+less-invasive changes to improve the user experience when talking to a
+homeserver that is using the OAuth 2.0 API without actually having to implement
+the full OAuth 2.0 API.
+
+##### Client behaviour
+
+For a client to be considered fully OAuth 2.0 aware it MUST:
+
+* Support the [`m.login.sso` authentication flow](#client-login-via-sso).
+* Where a `oauth_aware_preferred` value of `true` is present on an `m.login.sso`
+  flow, *only* offer that auth flow to the user.
+* Append `action=login` or `action=register` parameters to the [SSO redirect
+  endpoints](#get_matrixclientv3loginssoredirect). The client might determine
+  the value to use based on whether the user clicked a "Login" or "Register"
+  button.
+* Check and honour the [`m.3pid_changes` capability](#m3pid_changes-capability)
+  so that the user is not offered the ability to add or remove 3PIDs if the
+  homeserver says the capability is not available.
+* Determine if the homeserver is using the OAuth 2.0 API by using
+  [server metadata discovery](#get_matrixclientv1auth_metadata) from the OAuth
+  2.0 API.
+* If a homeserver is using the OAuth 2.0 API as discovered in the previous step
+  then the client MUST redirect users to manage their account at the [account
+  management URL](#oauth-20-account-management), if available, instead of
+  providing a native UI using the legacy API endpoints.
+  
+  * If the user wishes to deactivate their account then the client MUST refer
+    them to the account management URL.
+  * If the user wishes to sign out a device other than its own then the client
+    MUST deep link the user to the account management URL by adding the
+    `action=org.matrix.device_delete` and `device_id=<device_id>` parameters so
+    that the web UI knows that the user wishes to sign out a device and which
+    one it is.
+
+Optionally, an OAuth 2.0 aware client MAY:
+
+* Label the SSO button as "Continue" rather than "SSO" when
+  `oauth_aware_preferred` is `true`. This is because after redirect the server
+  may then offer a password and/or further upstream IdPs.
+* Pass other [account management URL parameters](#account-management-url-parameters)
+  for context when linking to the account web UI.
+
+##### Server behaviour
+
+For a homeserver to provide support for OAuth 2.0 aware clients it MUST:
+
+* Support the [OAuth 2.0 API](#oauth-20-api).
+* Provide an implementation of the [`m.login.sso` authentication flow](#client-login-via-sso)
+  from the legacy API.
+* If password authentication was previously enabled on the homeserver then
+  provide an implementation of the [`m.login.password` authentication flow](#legacy-login)
+  from the legacy API.
+* Indicate that the `m.login.sso` flow is preferred by setting
+  `oauth_aware_preferred` to `true`.
+* Support a value for the `action` param on the [SSO redirect endpoints](#get_matrixclientv3loginssoredirect).
+
+Additionally, the homeserver SHOULD:
+
+* Advertise the [account management URL](#oauth-20-account-management) in the
+  [server metadata](#get_matrixclientv1auth_metadata).
+
 ### OAuth 2.0 API
 
 {{% added-in v="1.15" %}}
@@ -2271,6 +2345,46 @@ The server SHOULD return one of the following responses:
 - For other errors, the server returns a `400 Bad Request` response with error
   details
 
+#### Account management {id="oauth-20-account-management"}
+
+{{% added-in v="1.18" %}}
+
+All account management is done via the homeserver's web UI.
+
+This specification defines extensions to the [OAuth Authorization Server
+Metadata registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata)
+to offer clients a way to deep-link to the account management capabilities of
+the homeserver to allow the user to complete the account management operations
+in a browser.
+
+##### Account management URL discovery
+
+The [OAuth 2.0 authorization server metadata](#server-metadata-discovery) is
+extended to include the following **optional** fields.
+
+{{% definition path="schemas/oauth2-account-management-server-metadata" %}}
+
+##### Account management URL parameters
+
+The account management URL MAY accept the following minimum query parameters.
+
+{{% definition path="schemas/oauth2-account-management-url" %}}
+
+##### Account management URL actions
+
+Account management actions are unique to the application. They SHOULD follow the
+[Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar)
+where feasible. The Matrix-specific actions are:
+
+| Action                           | Description                                                                                                                                          |
+|----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `org.matrix.profile`             | The user wishes to view/edit their profile (name, avatar, contact details).                                                                          |
+| `org.matrix.devices_list`        | The user wishes to view a list of their devices.                                                                                                     |
+| `org.matrix.device_view`         | The user wishes to view the details of a specific device. A `device_id` SHOULD be provided.                                                          |
+| `org.matrix.device_delete`       | The user wishes to delete/log out a specific device. A `device_id` SHOULD be provided.                                                               |
+| `org.matrix.account_deactivate`  | The user wishes to deactivate their account.                                                                                                         |
+| `org.matrix.cross_signing_reset` | The user wishes to reset their cross-signing identity. Servers SHOULD use this action in the URL of the [`m.oauth`](#oauth-authentication) UIA type. |
+
 ### Account moderation
 
 #### Account locking
@@ -2500,6 +2614,40 @@ An example of the capability API's response for this capability is:
   "capabilities": {
     "m.change_password": {
       "enabled": false
+    }
+  }
+}
+```
+
+### `m.forget_forced_upon_leave` capability
+
+{{% added-in v="1.18" %}}
+
+This capability has a single flag, `enabled`, which indicates whether or
+not the server automatically forgets rooms which the user has left.
+
+When `enabled` is `true` and the user leaves a room, the server will automatically
+forget the room — just as if the user had called [`/forget`](#post_matrixclientv3roomsroomidforget)
+themselves. This behavior applies irrespective of whether the user has left the
+room on their own (through [`/leave`](#post_matrixclientv3roomsroomidleave)) or
+has been kicked or banned from the room by another user.
+
+When `enabled` is `false`, the server does not automatically forget rooms
+upon leave. In this case, clients MAY distinguish the actions of leaving
+and forgetting a room in their UI. Similarly, clients MAY retrieve and
+visualize left but unforgotten rooms using a [filter](#filtering) with
+`include_leave = true`.
+
+When the capability or the `enabled` property are not present, clients SHOULD
+assume that the server does not automatically forget rooms.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.forget_forced_upon_leave": {
+      "enabled": true
     }
   }
 }
@@ -3201,6 +3349,14 @@ the topic to be removed from the room.
 
 #### Client behaviour
 
+{{% changed-in v="1.18" %}}
+
+If the server advertises support for a spec version that supports it, clients
+MAY use the [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+endpoint to send `m.room.redaction` events in all room versions.
+
+They can also use the following endpoint.
+
 {{% http-api spec="client-server" api="redaction" %}}
 
 ### Forming relationships between events
@@ -3898,6 +4054,7 @@ that profile.
 | [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Recently used emoji](#recently-used-emoji)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
 | [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
@@ -3914,6 +4071,7 @@ that profile.
 | [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -3987,6 +4145,7 @@ systems.
 {{% cs-module name="SSO client login/authentication" filename="sso_login" %}}
 {{% cs-module name="Direct Messaging" filename="dm" %}}
 {{% cs-module name="Ignoring Users" filename="ignore_users" %}}
+{{% cs-module name="Invite permission" filename="invite_permission" %}}
 {{% cs-module name="Sticker Messages" filename="stickers" %}}
 {{% cs-module name="Reporting Content" filename="report_content" %}}
 {{% cs-module name="Third-party Networks" filename="third_party_networks" %}}
@@ -3999,5 +4158,6 @@ systems.
 {{% cs-module name="Spaces" filename="spaces" %}}
 {{% cs-module name="Event replacements" filename="event_replacements" %}}
 {{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
+{{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}

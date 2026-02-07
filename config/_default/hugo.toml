@@ -166,3 +166,11 @@ sidebar_menu_compact = true
     mediaType = "text/markdown"
     isPlainText = true
     baseName = "checklist"
+
+# Add font media types for downloading KaTeX fonts.
+# See: https://www.docsy.dev/docs/content/diagrams-and-formulae/#create-media-types-for-katex-fonts
+[mediaTypes]
+  [mediaTypes.'font/woff']
+    suffixes = ['woff']
+  [mediaTypes.'font/woff2']
+    suffixes = ['woff2']

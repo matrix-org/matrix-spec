@@ -84,6 +84,10 @@ Additionally, web clients should ensure that *all* `a` tags get a
 `rel="noopener"` to prevent the target page from referencing the
 client's tab/window.
 
+{{% added-in v="1.18" %}} Clients that support rendering numbered lists via the
+`ol` tag MUST also support the `start` attribute in order to prevent loss of
+meaning of a message due to the numbering of list items.
+
 Tags must not be nested more than 100 levels deep. Clients should only
 support the subset of tags they can render, falling back to other
 representations of the tags where possible. For example, a client may
@@ -119,7 +123,7 @@ Clients SHOULD verify the structure of incoming events to ensure that
 the expected keys exist and that they are of the right type. Clients can
 discard malformed events or display a placeholder message to the user.
 Redacted `m.room.message` events MUST be removed from the client. This
-can either be replaced with placeholder text (e.g. "\[REDACTED\]") or
+can either be replaced with placeholder text (e.g. "[REDACTED]") or
 the redacted message can be removed entirely from the messages view.
 
 Events which have attachments (e.g. `m.image`, `m.file`) SHOULD be

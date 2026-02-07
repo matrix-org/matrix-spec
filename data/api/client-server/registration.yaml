@@ -72,6 +72,15 @@ paths:
         `inhibit_login` parameter is not set to `true`, the server MUST return a
         400 HTTP status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
         {{% /boxes/note %}}
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server offers the [`m.login.sso`
+        authentication flow](/client-server-api/#client-login-via-sso) with
+        `oauth_aware_preferred` set to `true`. Instead they MUST use the
+        [`/login/sso/redirect`](/client-server-api/#get_matrixclientv3loginssoredirect)
+        endpoint, adding the `action=register` parameter.
+        {{% /boxes/warning %}}
       operationId: register
       parameters:
         - in: query
