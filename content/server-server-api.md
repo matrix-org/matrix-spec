@@ -868,8 +868,10 @@ selecting a resident from the candidate list, and using the
 enough information for the joining server to fill in the event.
 
 The joining server is expected to add or replace the `origin`,
-`origin_server_ts`, and `event_id` on the templated event received by
-the resident server. This event is then signed by the joining server.
+`origin_server_ts`, and `event_id` on the templated event received by the
+resident server. The joining server MUST also verify that the `type`, `room_id`,
+`sender`, `state_key` and `content.membership` fields have the expected values.
+This event is then signed by the joining server.
 
 To complete the join handshake, the joining server submits this new event
 to the resident server it used for `GET /make_join`, using the `PUT /send_join`
