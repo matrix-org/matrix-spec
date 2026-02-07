@@ -204,6 +204,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
+
+        * The knock event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `knock`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendKnock
       security:
         - signedRequest: []
@@ -332,15 +341,7 @@ paths:
                   }
         "400":
           description: |-
-            The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
-
-            * The knock event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
-            * The event type is not `m.room.member`.
-            * The `membership` field inside the event content is not `knock`.
-            * The event sender is not a user ID on the origin server.
-            * The `state_key` is not equal to the `sender`.
-
-            Servers MUST apply the validation above to the knock event.
+            The request is invalid in some way.
           content:
             application/json:
               schema:

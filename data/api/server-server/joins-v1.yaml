@@ -238,6 +238,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
+
+        * The join event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `join`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendJoinV1
       security:
         - signedRequest: []
@@ -391,16 +400,6 @@ paths:
         "400":
           description: |-
             The request is invalid in some way.
-
-            The `M_INVALID_PARAM` error code is used to indicate one or more of the following:
-
-            * The join event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
-            * The event type is not `m.room.member`.
-            * The `membership` field inside the event content is not `join`.
-            * The event sender is not a user ID on the origin server.
-            * The `state_key` is not equal to the `sender`.
-
-            Servers MUST apply the validation above to the join event.
           content:
             application/json:
               schema:
