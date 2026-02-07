@@ -1,8 +1,12 @@
 
 ##### `m.room.power_levels` events accept values as floats
 
-When the value is a float, anything after the decimal point is removed,
-making e.g. `5.17`, `5.42`, and `5` functionally identical. 
+When the value is a float
+ * First, exponential notation is applied: `5.114698E4` becomes `51146.98`
+ * Second, the value is truncated at the decimal point: `51146.98` becomes `51146`.
+
+Any float greater than or equal to `1e309` must result in the powerlevel event
+being rejected.
 
 For example, this is a valid `m.room.power_levels` event in this room version:
 
@@ -32,9 +36,6 @@ For example, this is a valid `m.room.power_levels` event in this room version:
 
 In this example, both `@bob:localhost` and `@alice:localhost` have the same effective
 power level of `50`, even though the values are technically different.
-
-When a float written in exponential notation is unpacked, the decimal portion is removed
-afterward; for example, `5.114698E4` becomes `51146.98`, which is then truncated to `51146`.
 
 Note that, since this room version does not enforce that events comply with the requirements
 of [Canonical JSON](/appendices#canonical-json), power levels can be formatted as floats.
