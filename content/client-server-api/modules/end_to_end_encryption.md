@@ -93,7 +93,7 @@ Example:
 ```
 
 `ed25519` and `curve25519` keys are used for [device keys](#device-keys).
-Additionally, `ed25519` keys are used for [cross-signing key](#cross-signing).
+Additionally, `ed25519` keys are used for [cross-signing](#cross-signing).
 
 `signed_curve25519` keys are used for [one-time and fallback keys](#one-time-and-fallback-keys).
 
@@ -951,8 +951,8 @@ previously verified Bob's device and Bob's device has signed his master
 key, then Alice's device can trust Bob's master signing key, and she can sign it
 with her user-signing key.
 
-Users upload the public part of their master signing, user-signing and
-self-signing key to the server using [POST
+Users upload the public parts of their master signing, user-signing and
+self-signing keys to the server using [POST
 /\_matrix/client/v3/keys/device\_signing/upload](/client-server-api/#post_matrixclientv3keysdevice_signingupload). When Alice uploads
 new keys, her user ID will appear in the `changed`
 property of the `device_lists` field of the `/sync` of response of all
