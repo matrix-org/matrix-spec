@@ -32,9 +32,9 @@ paths:
         except when used by an application service.
 
         User-Interactive Authentication MUST be performed for regular clients, except in these cases:
-        - there is no existing cross-signing master key uploaded to the homeserver, OR
-        - there is an existing cross-signing master key and it exactly matches the
-          cross-signing master key provided in the request body. If there are any additional
+        - there is no existing master signing key uploaded to the homeserver, OR
+        - there is an existing master signing key and it exactly matches the
+          master signing key provided in the request body. If there are any additional
           keys provided in the request (self-signing key, user-signing key) they MUST also
           match the existing keys stored on the server. In other words, the request contains
           no new keys.
@@ -61,22 +61,22 @@ paths:
               type: object
               properties:
                 master_key:
-                  description: Optional. The user\'s master key.
+                  description: Optional. The user\'s master signing key.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
                 self_signing_key:
                   description: |-
                     Optional. The user\'s self-signing key. Must be signed by
-                    the accompanying master key, or by the user\'s most recently
-                    uploaded master key if no master key is included in the
+                    the accompanying master signing key, or by the user\'s most recently
+                    uploaded master signing key if no master signing key is included in the
                     request.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
                 user_signing_key:
                   description: |-
                     Optional. The user\'s user-signing key. Must be signed by
-                    the accompanying master key, or by the user\'s most recently
-                    uploaded master key if no master key is included in the
+                    the accompanying master signing key, or by the user\'s most recently
+                    uploaded master signing key if no master signing key is included in the
                     request.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
@@ -147,7 +147,7 @@ paths:
 
             * `M_INVALID_SIGNATURE`: For example, the self-signing or
               user-signing key had an incorrect signature.
-            * `M_MISSING_PARAM`: No master key is available.
+            * `M_MISSING_PARAM`: No master signing key is available.
           content:
             application/json:
               schema:
