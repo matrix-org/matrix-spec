@@ -1055,7 +1055,7 @@ If a user's client sees that any other user has changed their master
 key, that client must notify the user about the change before allowing
 communication between the users to continue.
 
-Since device key IDs (`ed25519:DEVICE_ID`) as well as cross-signing key IDs
+Since device key IDs (`ed25519:DEVICE_ID`) and cross-signing key IDs
 (`ed25519:PUBLIC_KEY`) occupy the same namespace, clients must ensure that they
 use the correct keys when verifying.
 
