@@ -25,6 +25,15 @@ paths:
         the appropriate people. How such information is delivered is left up to
         implementations. The caller is not required to be joined to the room to
         report it.
+
+        Clients could infer whether a reported room exists based on the 404 response.
+        Homeservers that wish to conceal this information MAY return 200 responses
+        regardless of the existence of the reported room.
+
+        Furthermore, it might be possible for clients to deduce whether a reported
+        room exists by timing the response. This is because only a report for an
+        existing room will require the homeserver to do further processing. To
+        combat this, homeservers MAY add a random delay when generating a response.
       operationId: reportRoom
       parameters:
         - in: path
@@ -52,6 +61,11 @@ paths:
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []
+      x-changedInMatrixVersion:
+        1.18: |
+          Servers MAY deny room ID enumeration by using the 200 response
+          regardless of the existence of the reported room and/or by adding
+          a random delay when generating responses.
       responses:
         "200":
           description: The room has been reported successfully.
@@ -91,6 +105,10 @@ paths:
         the appropriate people. The caller must be joined to the room to report
         it.
 
+        Clients could infer whether a reported event exists based on the 404 response.
+        Homeservers that wish to conceal this information MAY return 200 responses
+        regardless of the existence of the reported event.
+
         Furthermore, it might be possible for clients to deduce whether a reported
         event exists by timing the response. This is because only a report for an
         existing event will require the homeserver to do further processing. To
@@ -117,15 +135,9 @@ paths:
             schema:
               type: object
               example: {
-                "score": -100,
                 "reason": "this makes me sad"
               }
               properties:
-                score:
-                  type: integer
-                  description: |-
-                    The score to rate this content as where -100 is most offensive
-                    and 0 is inoffensive.
                 reason:
                   type: string
                   description: The reason the content is being reported.
@@ -136,6 +148,10 @@ paths:
       x-changedInMatrixVersion:
         1.8: |
           This endpoint now requires the user to be joined to the room.
+        1.18: |
+          The `score` request parameter was removed. Additionally, servers
+          may deny event ID enumeration by using the 200 response
+          regardless of the existence of the reported event.
       responses:
         "200":
           description: The event has been reported successfully.
