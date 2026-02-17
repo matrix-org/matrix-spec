@@ -5,8 +5,8 @@ When the value is a float
  * First, exponential notation is applied: `5.114698E4` becomes `51146.98`
  * Second, the value is truncated at the decimal point: `51146.98` becomes `51146`.
 
-Any float greater than or equal to `1e309` must result in the powerlevel event
-being rejected.
+Values outside the range represented by IEE754 binary64 (a "double") cause the
+powerlevel event to be rejected.
 
 For example, this is a valid `m.room.power_levels` event in this room version:
 
