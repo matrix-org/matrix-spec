@@ -3413,7 +3413,7 @@ This specification describes the following relationship types:
 * [Event replacements](#event-replacements).
 * [Event annotations](#event-annotations-and-reactions).
 * [Threads](#threading).
-* [References](#reference-relations)
+* [References](#reference-relations).
 
 #### Aggregations of child events
 
