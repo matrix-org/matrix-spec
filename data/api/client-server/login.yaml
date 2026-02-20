@@ -70,6 +70,21 @@ paths:
                       }
                     ]
                   }
+        "404":
+          description: |-
+            With `M_UNRECOGNIZED`: the homeserver does not support the legacy authentication API.
+            (See [Authentication API discovery](/client-server-api/#authentication-api-discovery).)
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value:
+                    {
+                      "errcode": "M_UNRECOGNIZED",
+                      "error": "OAuth 2.0 authentication is in use on this homeserver.",
+                    }
         "429":
           description: This request was rate-limited.
           content:
