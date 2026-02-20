@@ -138,7 +138,7 @@ sidebar_menu_compact = true
 [[params.links.bottom]]
   name = "Matrix.org Blog Feed"
   url = "https://matrix.org/atom.xml"
-  icon = "fab fa-rss"
+  icon = "fas fa-rss"
   desc = "Matrix.org Blog Atom Feed"
 
 
