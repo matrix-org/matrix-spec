@@ -65,7 +65,7 @@ description = "Home of the Matrix specification for decentralised communication"
 # Everything below this are Site Params
 
 [params]
-copyright = "The Matrix.org Foundation CIC"
+copyright = "The Matrix.org Foundation C.I.C."
 
 [params.version]
 # must be one of "unstable", "current", "historical"
