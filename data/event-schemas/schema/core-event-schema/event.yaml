@@ -8,7 +8,7 @@ properties:
     type: object
   type:
     description: The type of event. This SHOULD be namespaced similar to Java package
-      naming conventions e.g. 'com.example.subdomain.event.type'
+      naming conventions e.g. `com.example.subdomain.event.type`
     type: string
 required:
   - type
