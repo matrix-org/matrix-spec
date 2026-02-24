@@ -6,7 +6,7 @@ When the value is a float
  * Second, the value is truncated at the decimal point: `51146.98` becomes `51146`.
 
 Values outside the range represented by IEE754 binary64 (a "double") cause the
-powerlevel event to be rejected.
+powerlevel event to be rejected, as does `Infinity` and `NaN`.
 
 For example, this is a valid `m.room.power_levels` event in this room version:
 
