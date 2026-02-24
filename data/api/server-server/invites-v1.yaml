@@ -207,7 +207,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "errcode": "M_MISSING_PARAM",
+                    "errcode": "M_INVALID_PARAM",
                     "error": "Create event not among invite state entries."
                   }
 servers:

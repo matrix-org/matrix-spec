@@ -256,8 +256,8 @@ paths:
             The error should be passed through to clients so that they
             may give better feedback to users.
 
-            If `M_MISSING_PARAM` is returned and the request is associated with a
-            Client-Server API request, the Client-Server API request SHOULD fail
+            If `M_MISSING_PARAM` or `M_INVALID_PARAM` is returned and the request is associated
+            with a Client-Server API request, the Client-Server API request SHOULD fail
             with a 5xx error rather than being passed through.
 
             New in `v1.2`, the following error conditions might happen:
