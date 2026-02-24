@@ -23,6 +23,17 @@ paths:
       description: |-
         Asks the receiving server to return information that the sending
         server will need to prepare a leave event to get out of the room.
+
+        Before signing the returned template and calling `/send_leave`,
+        the sending server MUST verify that:
+
+        * the `room_id` is equal to the `roomId` path parameter.
+        * both the `sender` and `state_key` are equal to the `userId` path parameter.
+        * the `type` of the event is `m.room.member`.
+        * the `membership` field inside `content` is `leave`.
+
+        In case any of the above checks fail, the response MUST be treated as malformed and
+        discarded. The caller MAY try to leave through another server.
       operationId: makeLeave
       security:
         - signedRequest: []
@@ -36,7 +47,7 @@ paths:
             type: string
         - in: path
           name: userId
-          description: The user ID the leave event will be for.
+          description: The user ID the leave event will be for. This MUST be a user ID on the origin server.
           required: true
           example: "@someone:example.org"
           schema:
@@ -153,6 +164,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        A specific error code is not mandated, but servers SHOULD return `M_INVALID_PARAM` if:
+
+        * The leave event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `leave`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendLeaveV1
       security:
         - signedRequest: []
@@ -249,6 +269,19 @@ paths:
                     200,
                     {}
                   ]
+        "400":
+          description: |-
+            The request is invalid in some way.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "Not a leave event."
+                  }
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:

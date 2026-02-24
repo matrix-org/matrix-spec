@@ -13,7 +13,7 @@
 # limitations under the License.
 type: object
 title: CrossSigningKey
-description: Cross signing key
+description: Key used for cross signing
 properties:
   user_id:
     type: string
@@ -44,8 +44,8 @@ properties:
     title: Signatures
     description: |-
       Signatures of the key, calculated using the process described at [Signing JSON](/appendices/#signing-json).
-      Optional for the master key. Other keys must be signed by the
-      user\'s master key.
+      Optional for the master signing key. Other keys must be signed by the
+      user\'s master signing key.
     example: {
         "@alice:example.com": {
             "ed25519:alice+base64+master+key": "signature+of+key"

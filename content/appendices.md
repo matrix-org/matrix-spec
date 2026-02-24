@@ -533,6 +533,11 @@ where `domain` is the [server name](#server-name) of the homeserver
 which allocated the identifier, and `localpart` is an identifier
 allocated by that homeserver.
 
+Because the domain part identifies the server on which the ID resolves,
+the canonical pronunciation of the separating `:` is "on".
+For example, `@user:matrix.org` would be pronounced as "at user on matrix dot
+org".
+
 The precise grammar defining the allowable format of an identifier
 depends on the type of identifier. For example, event IDs can sometimes
 be represented with a `domain` component under some conditions - see the

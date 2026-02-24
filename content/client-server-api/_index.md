@@ -2394,9 +2394,12 @@ where feasible. The Matrix-specific actions are:
 Server administrators may apply locks to prevent users from usefully
 using their accounts, for instance, due to safety or security concerns.
 In contrast to account deactivation, locking is a non-destructive action
-that can be reversed. This specification describes the behaviour of clients
-and servers when an account is locked. It deliberately leaves the methods
-for locking and unlocking accounts as a server implementation detail.
+that can be reversed.
+
+{{% added-in v="1.18" %}} To lock or unlock an account, administrators
+SHOULD use the [`PUT /admin/lock/{userId}`](#put_matrixclientv1adminlockuserid)
+endpoint. They MAY also use [`GET /admin/lock/{userId}`](#get_matrixclientv1adminlockuserid)
+to check whether a user's account is locked.
 
 When an account is locked, servers MUST return a `401 Unauthorized` error
 response with an `M_USER_LOCKED` error code and [`soft_logout`](#soft-logout)
@@ -2444,6 +2447,11 @@ Server administrators MAY suspend a user's account to prevent further activity
 from that account. The effect is similar to [locking](#account-locking), though
 without risk of the client losing state from a logout. Suspensions are reversible,
 like locks and unlike deactivations.
+
+{{% added-in v="1.18" %}} To suspend or unsuspend an account, administrators
+SHOULD use the [`PUT /admin/suspend/{userId}`](#put_matrixclientv1adminsuspenduserid)
+endpoint. They MAY also use [`GET /admin/suspend/{userId}`](#get_matrixclientv1adminsuspenduserid)
+to check whether a user's account is suspended.
 
 The actions a user can perform while suspended is deliberately left as an
 implementation detail. Servers SHOULD permit the user to perform at least the
@@ -2499,9 +2507,6 @@ Content-Type: application/json
   "error": "You cannot perform this action while suspended."
 }
 ```
-
-APIs for initiating suspension or unsuspension are not included in this version
-of the specification, and left as an implementation detail.
 
 ### Adding Account Administrative Contact Information
 
@@ -2614,6 +2619,40 @@ An example of the capability API's response for this capability is:
   "capabilities": {
     "m.change_password": {
       "enabled": false
+    }
+  }
+}
+```
+
+### `m.forget_forced_upon_leave` capability
+
+{{% added-in v="1.18" %}}
+
+This capability has a single flag, `enabled`, which indicates whether or
+not the server automatically forgets rooms which the user has left.
+
+When `enabled` is `true` and the user leaves a room, the server will automatically
+forget the room — just as if the user had called [`/forget`](#post_matrixclientv3roomsroomidforget)
+themselves. This behavior applies irrespective of whether the user has left the
+room on their own (through [`/leave`](#post_matrixclientv3roomsroomidleave)) or
+has been kicked or banned from the room by another user.
+
+When `enabled` is `false`, the server does not automatically forget rooms
+upon leave. In this case, clients MAY distinguish the actions of leaving
+and forgetting a room in their UI. Similarly, clients MAY retrieve and
+visualize left but unforgotten rooms using a [filter](#filtering) with
+`include_leave = true`.
+
+When the capability or the `enabled` property are not present, clients SHOULD
+assume that the server does not automatically forget rooms.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.forget_forced_upon_leave": {
+      "enabled": true
     }
   }
 }
@@ -3314,6 +3353,14 @@ the topic to be removed from the room.
 {{% event event="m.room.redaction" %}}
 
 #### Client behaviour
+
+{{% changed-in v="1.18" %}}
+
+If the server advertises support for a spec version that supports it, clients
+MAY use the [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](#put_matrixclientv3roomsroomidsendeventtypetxnid)
+endpoint to send `m.room.redaction` events in all room versions.
+
+They can also use the following endpoint.
 
 {{% http-api spec="client-server" api="redaction" %}}
 
@@ -4029,6 +4076,7 @@ that profile.
 | [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
+| [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -4102,6 +4150,7 @@ systems.
 {{% cs-module name="SSO client login/authentication" filename="sso_login" %}}
 {{% cs-module name="Direct Messaging" filename="dm" %}}
 {{% cs-module name="Ignoring Users" filename="ignore_users" %}}
+{{% cs-module name="Invite permission" filename="invite_permission" %}}
 {{% cs-module name="Sticker Messages" filename="stickers" %}}
 {{% cs-module name="Reporting Content" filename="report_content" %}}
 {{% cs-module name="Third-party Networks" filename="third_party_networks" %}}

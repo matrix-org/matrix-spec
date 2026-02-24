@@ -250,7 +250,6 @@ paths:
                   }
         "400":
           description: |-
-
             The request is invalid. A meaningful `errcode` and description
             error text will be returned. Example reasons for rejection include:
 
@@ -270,6 +269,17 @@ paths:
               of a homeserver which does not support the requested room version.
               The `errcode` will be `M_UNSUPPORTED_ROOM_VERSION` in these
               cases.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+        "403":
+          description: |-
+            Creating the room is not allowed.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that one of the homeservers of the invited users rejected
+            the invite due to [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:

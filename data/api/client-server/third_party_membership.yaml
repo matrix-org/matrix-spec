@@ -97,6 +97,10 @@ paths:
             - The invitee is already a member of the room.
             - The inviter is not currently in the room.
             - The inviter's power level is insufficient to invite users to the room.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:

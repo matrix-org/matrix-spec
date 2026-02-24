@@ -83,7 +83,7 @@ paths:
                   value: {}
         "400":
           description: |-
-            
+
             The request is invalid. A meaningful `errcode` and description
             error text will be returned. Example reasons for rejection include:
 
@@ -99,12 +99,18 @@ paths:
                 $ref: definitions/errors/error.yaml
         "403":
           description: |-
-            You do not have permission to invite the user to the room. A meaningful `errcode` and description error text will be returned. Example reasons for rejections are:
+            You do not have permission to invite the user to the room. A
+            meaningful `errcode` and description error text will be returned.
+            Example reasons for rejections are:
 
             - The invitee has been banned from the room.
             - The invitee is already a member of the room.
             - The inviter is not currently in the room.
             - The inviter's power level is insufficient to invite users to the room.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:

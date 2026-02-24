@@ -38,6 +38,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        A specific error code is not mandated, but servers SHOULD return `M_INVALID_PARAM` if:
+
+        * The leave event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `leave`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendLeaveV2
       security:
         - signedRequest: []
@@ -134,6 +143,19 @@ paths:
               examples:
                 response:
                   value: {}
+        "400":
+          description: |-
+            The request is invalid in some way.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "Not a leave event."
+                  }
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:

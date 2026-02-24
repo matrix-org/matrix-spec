@@ -1,0 +1,21 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+allOf:
+  - $ref: core-event-schema/event.yaml
+  - title: Invite Permission
+    type: object
+    description: |-
+      The permission configuration for receiving invites for the current account.
+    properties:
+      content:
+        type: object
+        properties:
+          default_action:
+            type: string
+            description: |-
+              When set to `block`, the user does not wish to receive *any* room invites, and they
+              should be rejected automatically by the homeserver.
+
+              A missing, invalid or unsupported value means that the user wants to receive invites
+              as normal. Other parts of the specification might still have effects on invites, like
+              [ignoring users](/client-server-api/#ignoring-users).

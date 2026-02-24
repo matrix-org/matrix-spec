@@ -116,7 +116,13 @@ paths:
                     "error": "The alias '#hello:example.org' does not point to this room."
                   }
         "403":
-          description: The sender doesn't have permission to send the event into the room.
+          description: |-
+            The sender doesn't have permission to send the event into the room.
+
+            {{% added-in v="1.18"%}} If the `eventType` is `m.room.member` and
+            the `membership` is `invite`, the `M_INVITE_BLOCKED` error code is
+            used to indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:

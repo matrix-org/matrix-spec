@@ -116,11 +116,6 @@ sidebar_menu_compact = true
   icon = "fab fa-gitlab"
   desc = "Matrix on GitLab"
 [[params.links.bottom]]
-  name = "YouTube"
-  url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
-  icon = "fab fa-youtube"
-  desc = "Matrix YouTube channel"
-[[params.links.bottom]]
   name = "Mastodon"
   url = "https://mastodon.matrix.org/@matrix"
   icon = "fab fa-mastodon"
@@ -130,6 +125,21 @@ sidebar_menu_compact = true
   url = "https://bsky.app/profile/matrix.org"
   icon = "fab fa-bluesky"
   desc = "Matrix on Bluesky"
+[[params.links.bottom]]
+  name = "LinkedIn"
+  url = "https://www.linkedin.com/company/matrix-org/"
+  icon = "fab fa-linkedin"
+  desc = "Matrix on LinkedIn"
+[[params.links.bottom]]
+  name = "YouTube"
+  url = "https://www.youtube.com/channel/UCVFkW-chclhuyYRbmmfwt6w"
+  icon = "fab fa-youtube"
+  desc = "Matrix YouTube channel"
+[[params.links.bottom]]
+  name = "Matrix.org Blog Feed"
+  url = "https://matrix.org/atom.xml"
+  icon = "fas fa-rss"
+  desc = "Matrix.org Blog Atom Feed"
 
 
 # configuration for the hugo development server

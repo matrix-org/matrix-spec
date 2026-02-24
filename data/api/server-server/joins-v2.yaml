@@ -38,6 +38,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        A specific error code is not mandated, but servers SHOULD return `M_INVALID_PARAM` if:
+
+        * The join event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `join`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendJoinV2
       security:
         - signedRequest: []
@@ -246,6 +255,10 @@ paths:
 
             The error should be passed through to clients so that they
             may give better feedback to users.
+
+            If `M_MISSING_PARAM` or `M_INVALID_PARAM` is returned and the request is associated
+            with a Client-Server API request, the Client-Server API request SHOULD fail
+            with a 5xx error rather than being passed through.
 
             New in `v1.2`, the following error conditions might happen:
 
