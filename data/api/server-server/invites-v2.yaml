@@ -43,7 +43,7 @@ paths:
 
         Servers MUST apply certain validation to ensure they don't accidentally sign non-invite
         events from a malicious server. A specific error code is not mandated, but servers SHOULD
-        use `M_INVALID_PARAM` for errors from all the following validation checks:
+        return `M_INVALID_PARAM` if:
 
         * The invite event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
         * The event type is not `m.room.member`.
@@ -52,7 +52,8 @@ paths:
         * The `state_key` is not a user ID on the receiving server.
 
         The `invite_room_state` has additional validation, which servers MAY apply to room versions
-        1 through 11 and SHOULD apply to all other room versions:
+        1 through 11 and SHOULD apply to all other room versions. As with the above errors, servers
+        SHOULD return `M_INVALID_PARAM` if:
 
         * The `m.room.create` event is missing from `invite_room_state`.
         * One or more entries in `invite_room_state` are not formatted according

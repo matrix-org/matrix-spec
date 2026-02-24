@@ -217,8 +217,7 @@ paths:
         fields for a PDU.**
 
         The receiving server MUST apply certain validation before accepting the event.
-        A specific error code is not mandated, but servers SHOULD use `M_INVALID_PARAM`
-        for errors from all the following validation checks:
+        A specific error code is not mandated, but servers SHOULD return `M_INVALID_PARAM` if:
 
         * The knock event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
         * The event type is not `m.room.member`.
