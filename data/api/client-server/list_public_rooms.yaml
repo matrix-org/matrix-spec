@@ -226,7 +226,7 @@ paths:
                   type: boolean
                   description: |-
                     Whether or not to include all known networks/protocols from
-                    application services on the homeserver. Defaults to false.
+                    application services on the homeserver. Defaults to `false`.
                   example: false
                 third_party_instance_id:
                   type: string
