@@ -1035,7 +1035,7 @@ Alice's
 `mac` property. Servers therefore must ensure that device IDs will not
 collide with cross-signing public keys.
 
-Using the [Secrets](#secrets) module the cross-signing private keys can
+Using the [Secrets](#secrets) module the private parts of the cross-signing keys can
 be stored on the server or shared with other devices.  When doing so, the
 master signing, user-signing, and self-signing keys are identified using the
 names `m.cross_signing.master`, `m.cross_signing.user_signing`, and
