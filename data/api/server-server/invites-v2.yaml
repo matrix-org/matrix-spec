@@ -42,8 +42,8 @@ paths:
         transaction](/server-server-api/#transactions).
 
         Servers MUST apply certain validation to ensure they don't accidentally sign non-invite
-        events from a malicious server. The `M_MISSING_PARAM` error code is used to indicate one
-        or more of the following:
+        events from a malicious server. A specific error code is not mandated, but servers SHOULD
+        use `M_INVALID_PARAM` for errors from all the following validation checks:
 
         * The invite event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
         * The event type is not `m.room.member`.
@@ -51,8 +51,8 @@ paths:
         * The event sender is not a user ID on the origin server.
         * The `state_key` is not a user ID on the receiving server.
 
-        The `M_MISSING_PARAM` error code is also used to indicate one or more of the following
-        problems in the `invite_room_state` field:
+        The `invite_room_state` has additional validation, which servers MAY apply to room versions
+        1 through 11 and SHOULD apply to all other room versions:
 
         * The `m.room.create` event is missing from `invite_room_state`.
         * One or more entries in `invite_room_state` are not formatted according
@@ -61,9 +61,6 @@ paths:
         * One or more events does not reside in the same room as the invite.
           Note: Some room versions may require calculating the room ID for an
           event rather than relying on the presence of `room_id`.
-
-        Servers MAY apply the `invite_room_state` validation to room versions 1 through 11,
-        and SHOULD apply the validation to all other room versions.
       operationId: sendInviteV2
       security:
         - signedRequest: []
@@ -108,8 +105,7 @@ paths:
                     MUST additionally be formatted according to the room version specification.
 
                     Servers might need to apply validation to the `invite_room_state` depending
-                    on room version. See the `400 M_MISSING_PARAM` error definition for more
-                    information.
+                    on room version. See the endpoint description for more information.
 
                     Note that events have a different format depending on the room
                     version - check the [room version specification](/rooms) for
@@ -178,8 +174,8 @@ paths:
             The error should be passed through to clients so that they
             may give better feedback to users.
 
-            If `M_MISSING_PARAM` is returned and the request is associated with a
-            Client-Server API request, the Client-Server API request SHOULD fail
+            If `M_MISSING_PARAM` or `M_INVALID_PARAM` is returned and the request is associated
+            with a Client-Server API request, the Client-Server API request SHOULD fail
             with a 5xx error rather than being passed through.
           content:
             application/json:
