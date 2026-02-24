@@ -22,15 +22,6 @@ paths:
     put:
       summary: Submit a signed leave event to a resident server
       description: |-
-        **Note:**
-        This API is nearly identical to the v1 API with the
-        exception of the response format being fixed.
-
-        This endpoint is preferred over the v1 API as it provides
-        a more standardised response format. Senders which receive
-        a 400, 404, or other status code which indicates this endpoint
-        is not available should retry using the v1 API instead.
-
         Submits a signed leave event to the resident server for it
         to accept it into the room's graph. Note that events have
         a different format depending on the room version - check

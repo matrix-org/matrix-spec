@@ -1,0 +1,1 @@
+Remove `/v1/send_join` and `/v1/send_leave`, as per [MSC4376](https://github.com/matrix-org/matrix-spec-proposals/pull/4376).
