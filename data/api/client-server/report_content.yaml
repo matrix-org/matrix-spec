@@ -150,7 +150,7 @@ paths:
           This endpoint now requires the user to be joined to the room.
         1.18: |
           The `score` request parameter was removed. Additionally, servers
-          may deny event ID enumeration by using the 200 response
+          may prevent event ID enumeration by using the 200 response
           regardless of the existence of the reported event.
       responses:
         "200":
