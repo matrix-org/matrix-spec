@@ -63,7 +63,7 @@ paths:
         - accessTokenBearer: []
       x-changedInMatrixVersion:
         1.18: |
-          Servers MAY deny room ID enumeration by using the 200 response
+          Servers MAY prevent room ID enumeration by using the 200 response
           regardless of the existence of the reported room and/or by adding
           a random delay when generating responses.
       responses:
