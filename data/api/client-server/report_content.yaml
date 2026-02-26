@@ -105,9 +105,9 @@ paths:
         the appropriate people. The caller must be joined to the room to report
         it.
 
-        Clients could infer whether a reported event exists based on the 404 response.
-        Homeservers that wish to conceal this information MAY return 200 responses
-        regardless of the existence of the reported event.
+        Clients could infer whether a reported event or room exists based on the 404
+        response. Homeservers that wish to conceal this information MAY return 200
+        responses regardless of the existence of the reported event or room.
 
         Furthermore, it might be possible for clients to deduce whether a reported
         event exists by timing the response. This is because only a report for an
@@ -150,8 +150,8 @@ paths:
           This endpoint now requires the user to be joined to the room.
         1.18: |
           The `score` request parameter was removed. Additionally, servers
-          may prevent event ID enumeration by using the 200 response
-          regardless of the existence of the reported event.
+          may prevent event/room ID enumeration by using the 200 response
+          regardless of the existence of the reported event/room.
       responses:
         "200":
           description: The event has been reported successfully.
