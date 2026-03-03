@@ -107,7 +107,7 @@ flag to `true`.
 ```
 
 {{% boxes/note %}}
-Clients which are acutely aware of threads (they do not render threads, but are otherwise
+Clients which are aware of threads (they do not render threads, but are otherwise
 aware of the feature existing in the spec) can treat rich replies to an event with a `rel_type`
 of `m.thread` as a threaded reply, for conversation continuity on the threaded client's side.
 

@@ -3320,7 +3320,7 @@ PUT /rooms/!roomid:domain/state/m.room.bgd.color
 ### Redactions
 
 Since events are extensible it is possible for malicious users and/or
-servers to add keys that are, for example offensive or illegal. Since
+servers to add keys that are, for example, offensive or illegal. Since
 some events cannot be simply deleted, e.g. membership events, we instead
 'redact' events. This involves removing all keys from an event that are
 not required by the protocol. This stripped down event is thereafter
@@ -3418,7 +3418,7 @@ This specification describes the following relationship types:
 * [Event replacements](#event-replacements).
 * [Event annotations](#event-annotations-and-reactions).
 * [Threads](#threading).
-* [References](#reference-relations)
+* [References](#reference-relations).
 
 #### Aggregations of child events
 

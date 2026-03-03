@@ -126,7 +126,7 @@ paths:
                   description: |-
                     ID of the client device. If this does not correspond to a
                     known client device, a new device will be created. The server
-                    will auto-generate a device_id if this is not specified.
+                    will auto-generate a `device_id` if this is not specified.
                   example: GHTYAJCE
                 initial_device_display_name:
                   type: string
@@ -139,11 +139,11 @@ paths:
                   description: |-
                     If true, an `access_token` and `device_id` should not be
                     returned from this call, therefore preventing an automatic
-                    login. Defaults to false.
+                    login. Defaults to `false`.
                   example: false
                 refresh_token:
                   type: boolean
-                  description: If true, the client supports refresh tokens.
+                  description: If `true`, the client supports refresh tokens.
                   x-addedInMatrixVersion: "1.3"
         required: true
       responses:

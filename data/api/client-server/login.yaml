@@ -163,7 +163,7 @@ paths:
                     known client device, a new device will be created. The given
                     device ID must not be the same as a
                     [cross-signing](/client-server-api/#cross-signing) key ID.
-                    The server will auto-generate a device_id
+                    The server will auto-generate a `device_id`
                     if this is not specified.
                 initial_device_display_name:
                   type: string
