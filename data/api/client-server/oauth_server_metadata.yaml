@@ -195,6 +195,21 @@ paths:
                     "org.matrix.cross_signing_reset",
                   ],
                 }
+        "404":
+          description: |-
+            With `M_UNRECOGNIZED`: the homeserver does not support the OAuth 2.0 API.
+            (See [Authentication API discovery](/client-server-api/#authentication-api-discovery).)
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value:
+                    {
+                      "errcode": "M_UNRECOGNIZED",
+                      "error": "Legacy authentication is in use on this homeserver.",
+                    }
       tags:
         - Session management
 servers:

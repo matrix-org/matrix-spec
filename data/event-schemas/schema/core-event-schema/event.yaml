@@ -7,8 +7,7 @@ properties:
       When interacting with the REST API, this is the HTTP body.
     type: object
   type:
-    description: The type of event. This SHOULD be namespaced similar to Java package
-      naming conventions e.g. 'com.example.subdomain.event.type'
+    description: The type of event, as defined by [the event type specification](/client-server-api/#types-of-room-events).
     type: string
 required:
   - type

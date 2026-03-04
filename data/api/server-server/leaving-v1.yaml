@@ -23,6 +23,17 @@ paths:
       description: |-
         Asks the receiving server to return information that the sending
         server will need to prepare a leave event to get out of the room.
+
+        Before signing the returned template and calling `/send_leave`,
+        the sending server MUST verify that:
+
+        * the `room_id` is equal to the `roomId` path parameter.
+        * both the `sender` and `state_key` are equal to the `userId` path parameter.
+        * the `type` of the event is `m.room.member`.
+        * the `membership` field inside `content` is `leave`.
+
+        In case any of the above checks fail, the response MUST be treated as malformed and
+        discarded. The caller MAY try to leave through another server.
       operationId: makeLeave
       security:
         - signedRequest: []
@@ -36,7 +47,7 @@ paths:
             type: string
         - in: path
           name: userId
-          description: The user ID the leave event will be for.
+          description: The user ID the leave event will be for. This MUST be a user ID on the origin server.
           required: true
           example: "@someone:example.org"
           schema:
@@ -138,117 +149,6 @@ paths:
                     "errcode": "M_FORBIDDEN",
                     "error": "User is not in the room."
                   }
-  "/send_leave/{roomId}/{eventId}":
-    put:
-      deprecated: true
-      summary: Submit a signed leave event to a resident server
-      description: |-
-        **Note:**
-        Servers should instead prefer to use the v2 `/send_leave` endpoint.
-
-        Submits a signed leave event to the resident server for it
-        to accept it into the room's graph. Note that events have
-        a different format depending on the room version - check
-        the [room version specification](/rooms) for precise event formats.
-        **The request and response body here describe the common
-        event fields in more detail and may be missing other required
-        fields for a PDU.**
-      operationId: sendLeaveV1
-      security:
-        - signedRequest: []
-      parameters:
-        - in: path
-          name: roomId
-          description: The room ID that is about to be left.
-          required: true
-          example: "!abc123:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The event ID for the leave event.
-          required: true
-          example: $abc123:example.org
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                sender:
-                  type: string
-                  description: The user ID of the leaving member.
-                  example: "@someone:example.org"
-                origin:
-                  type: string
-                  description: The name of the leaving homeserver.
-                  example: matrix.org
-                origin_server_ts:
-                  type: integer
-                  format: int64
-                  description: A timestamp added by the leaving homeserver.
-                  example: 1234567890
-                type:
-                  type: string
-                  description: The value `m.room.member`.
-                  example: m.room.member
-                state_key:
-                  type: string
-                  description: The user ID of the leaving member.
-                  example: "@someone:example.org"
-                content:
-                  type: object
-                  title: Membership Event Content
-                  description: The content of the event.
-                  example:
-                    membership: leave
-                  properties:
-                    membership:
-                      type: string
-                      description: The value `leave`.
-                      example: leave
-                  required:
-                    - membership
-                depth:
-                  type: integer
-                  description: This field must be present but is ignored; it may be 0.
-                  example: 12
-              required:
-                - state_key
-                - sender
-                - origin
-                - origin_server_ts
-                - type
-                - depth
-                - content
-        required: true
-      responses:
-        "200":
-          description: |-
-            An empty response to indicate the event was accepted into the graph by
-            the receiving homeserver.
-          content:
-            application/json:
-              schema:
-                type: array
-                minItems: 2
-                maxItems: 2
-                items:
-                  anyOf:
-                    - type: integer
-                      description: The value `200`.
-                      example: 200
-                    - type: object
-                      title: Empty Object
-                      description: An empty object.
-              examples:
-                response:
-                  value: [
-                    200,
-                    {}
-                  ]
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:

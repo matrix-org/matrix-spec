@@ -1,0 +1,1 @@
+`/_matrix/client/v3/rooms/{roomId}/report` and `/_matrix/client/v3/rooms/{roomId}/report/{eventId}` may respond with HTTP 200 regardless of the reported subject's existence or add a random delay when generating responses as per [MSC4277](https://github.com/matrix-org/matrix-spec-proposals/pull/4277).

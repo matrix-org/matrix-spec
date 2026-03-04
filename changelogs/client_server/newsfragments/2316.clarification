@@ -1,0 +1,1 @@
+Add 404 responses to the OpenAPI of `GET /login` and `GET /auth_metadata` endpoints. The responses were already defined in text but not written in OpenAPI.

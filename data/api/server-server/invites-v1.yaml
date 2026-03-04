@@ -36,6 +36,28 @@ paths:
         Also note that if the remote homeserver is already in the room, it will receive the
         invite event twice; once through this endpoint, and again through a [federation
         transaction](/server-server-api/#transactions).
+
+        Servers MUST apply certain validation to ensure they don't accidentally sign non-invite
+        events from a malicious server. A specific error code is not mandated, but servers SHOULD
+        return `M_INVALID_PARAM` if:
+
+        * The invite event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `invite`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not a user ID on the receiving server.
+
+        The `invite_room_state` has additional validation, which servers MAY apply to room versions
+        1 through 11 and SHOULD apply to all other room versions. As with the above errors, servers
+        SHOULD return `M_INVALID_PARAM` if:
+
+        * The `m.room.create` event is missing from `invite_room_state`.
+        * One or more entries in `invite_room_state` are not formatted according
+          to the room's version.
+        * One or more events fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * One or more events does not reside in the same room as the invite.
+          Note: Some room versions may require calculating the room ID for an
+          event rather than relying on the presence of `room_id`.
       operationId: sendInviteV1
       security:
         - signedRequest: []
@@ -83,8 +105,7 @@ paths:
                             MUST additionally be formatted according to the room version specification.
 
                             Servers might need to apply validation to the `invite_room_state` depending
-                            on room version. See the `400 M_MISSING_PARAM` error definition for more
-                            information.
+                            on room version. See endpoint description for more information.
 
                             Note that events have a different format depending on the room
                             version - check the [room version specification](/rooms) for
@@ -178,23 +199,7 @@ paths:
                   }
         "400":
           description: |-
-            The `M_MISSING_PARAM` error code is used to indicate one or more of
-            the following:
-
-            * The `m.room.create` event is missing from `invite_room_state`.
-            * One or more entries in `invite_room_state` are not formatted according
-              to the room's version.
-            * One or more events fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
-            * One or more events does not reside in the same room as the invite.
-              Note: Some room versions may require calculating the room ID for an
-              event rather than relying on the presence of `room_id`.
-
-            Servers MAY apply the validation above to room versions 1 through 11,
-            and SHOULD apply the validation above to all other room versions.
-
-            If `M_MISSING_PARAM` is returned and the request is associated with a
-            Client-Server API request, the Client-Server API request SHOULD fail
-            with a 5xx error rather than being passed through.
+            The request is invalid in some way.
           content:
             application/json:
               schema:
@@ -202,7 +207,7 @@ paths:
               examples:
                 response:
                   value: {
-                    "errcode": "M_MISSING_PARAM",
+                    "errcode": "M_INVALID_PARAM",
                     "error": "Create event not among invite state entries."
                   }
 servers:

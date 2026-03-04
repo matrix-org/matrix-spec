@@ -70,6 +70,21 @@ paths:
                       }
                     ]
                   }
+        "404":
+          description: |-
+            With `M_UNRECOGNIZED`: the homeserver does not support the legacy authentication API.
+            (See [Authentication API discovery](/client-server-api/#authentication-api-discovery).)
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value:
+                    {
+                      "errcode": "M_UNRECOGNIZED",
+                      "error": "OAuth 2.0 authentication is in use on this homeserver.",
+                    }
         "429":
           description: This request was rate-limited.
           content:
@@ -148,7 +163,7 @@ paths:
                     known client device, a new device will be created. The given
                     device ID must not be the same as a
                     [cross-signing](/client-server-api/#cross-signing) key ID.
-                    The server will auto-generate a device_id
+                    The server will auto-generate a `device_id`
                     if this is not specified.
                 initial_device_display_name:
                   type: string

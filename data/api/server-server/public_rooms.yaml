@@ -49,7 +49,7 @@ paths:
           name: include_all_networks
           description: |-
             Whether or not to include all networks/protocols defined by application
-            services on the homeserver. Defaults to false.
+            services on the homeserver. Defaults to `false`.
           example: false
           schema:
             type: boolean
@@ -121,7 +121,7 @@ paths:
                   type: boolean
                   description: |-
                     Whether or not to include all known networks/protocols from
-                    application services on the homeserver. Defaults to false.
+                    application services on the homeserver. Defaults to `false`.
                   example: false
                 third_party_instance_id:
                   type: string

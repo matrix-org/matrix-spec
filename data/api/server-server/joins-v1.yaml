@@ -23,6 +23,17 @@ paths:
       description: |-
         Asks the receiving server to return information that the sending
         server will need to prepare a join event to get into the room.
+
+        Before signing the returned template and calling `/send_join`,
+        the sending server MUST verify that:
+
+        * the `room_id` is equal to the `roomId` path parameter.
+        * both the `sender` and `state_key` are equal to the `userId` path parameter.
+        * the `type` of the event is `m.room.member`.
+        * the `membership` field inside `content` is `join`.
+
+        In case any of the above checks fail, the response MUST be treated as malformed and
+        discarded. The caller MAY try to join through another server.
       operationId: makeJoin
       security:
         - signedRequest: []
@@ -36,7 +47,7 @@ paths:
             type: string
         - in: path
           name: userId
-          description: The user ID the join event will be for.
+          description: The user ID the join event will be for. This MUST be a user ID on the origin server.
           required: true
           example: "@someone:example.org"
           schema:
@@ -223,171 +234,6 @@ paths:
                     "errcode": "M_NOT_FOUND",
                     "error": "Unknown room"
                   }
-  "/send_join/{roomId}/{eventId}":
-    put:
-      deprecated: true
-      summary: Submit a signed join event to a resident server
-      description: |-
-        **Note:**
-        Servers should instead prefer to use the v2 `/send_join` endpoint.
-
-        Submits a signed join event to the resident server for it
-        to accept it into the room's graph. Note that events have
-        a different format depending on the room version - check
-        the [room version specification](/rooms) for precise event formats.
-        **The request and response body here describe the common
-        event fields in more detail and may be missing other required
-        fields for a PDU.**
-      operationId: sendJoinV1
-      security:
-        - signedRequest: []
-      parameters:
-        - in: path
-          name: roomId
-          description: The room ID that is about to be joined.
-          required: true
-          example: "!abc123:matrix.org"
-          schema:
-            type: string
-        - in: path
-          name: eventId
-          description: The event ID for the join event.
-          required: true
-          example: $abc123:example.org
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                sender:
-                  type: string
-                  description: The user ID of the joining member.
-                  example: "@someone:example.org"
-                origin:
-                  type: string
-                  description: The name of the joining homeserver.
-                  example: matrix.org
-                origin_server_ts:
-                  type: integer
-                  format: int64
-                  description: A timestamp added by the joining homeserver.
-                  example: 1234567890
-                type:
-                  type: string
-                  description: The value `m.room.member`.
-                  example: m.room.member
-                state_key:
-                  type: string
-                  description: The user ID of the joining member.
-                  example: "@someone:example.org"
-                content:
-                  type: object
-                  title: Membership Event Content
-                  description: The content of the event.
-                  example:
-                    membership: join
-                  properties:
-                    membership:
-                      type: string
-                      description: The value `join`.
-                      example: join
-                    join_authorised_via_users_server:
-                      type: string
-                      x-addedInMatrixVersion: "1.2"
-                      description: |-
-                        Required if the room is [restricted](/client-server-api/#restricted-rooms)
-                        and is joining through one of the conditions available. If the
-                        user is responding to an invite, this is not required.
-
-                        An arbitrary user ID belonging to the resident server in
-                        the room being joined that is able to issue invites to other
-                        users. This is used in later validation of the auth rules for
-                        the `m.room.member` event.
-
-                        The resident server which owns the provided user ID must have a
-                        valid signature on the event. If the resident server is receiving
-                        the `/send_join` request, the signature must be added before sending
-                        or persisting the event to other servers.
-                  required:
-                    - membership
-              required:
-                - state_key
-                - sender
-                - origin
-                - origin_server_ts
-                - type
-                - content
-        required: true
-      responses:
-        "200":
-          description: The join event has been accepted into the room.
-          content:
-            application/json:
-              schema:
-                type: array
-                minItems: 2
-                maxItems: 2
-                items:
-                  anyOf:
-                    - type: integer
-                      description: The value `200`.
-                      example: 200
-                    - type: object
-                      title: Room State
-                      description: The state for the room.
-                      properties:
-                        auth_chain:
-                          type: array
-                          description: |-
-                            The auth chain for the entire current room state prior to the join event.
-
-                            Note that events have a different format depending on the room version - check the
-                            [room version specification](/rooms) for precise event formats.
-                          items:
-                            type: object
-                            title: PDU
-                            description: |-
-                              The [PDUs](/server-server-api/#pdus) that make up the auth chain. The event format varies depending
-                              on the room version - check the [room version specification](/rooms) for precise event formats.
-                        state:
-                          type: array
-                          description: |-
-                            The resolved current room state prior to the join event.
-
-                            The event format varies depending on the room version - check the [room version specification](/rooms)
-                            for precise event formats.
-                          items:
-                            type: object
-                            title: PDU
-                            description: |-
-                              The [PDUs](/server-server-api/#pdus) for the fully resolved state of the room. The event format varies depending
-                              on the room version - check the [room version specification](/rooms) for precise event formats.
-                      required:
-                        - auth_chain
-                        - state
-              examples:
-                response:
-                  value: [
-                    200,
-                    {
-                      "auth_chain": [
-                        {
-                          "$ref": "examples/minimal_pdu.json"
-                        }
-                      ],
-                      "state": [
-                        {
-                          "$ref": "examples/minimal_pdu.json"
-                        }
-                      ],
-                      "event": {
-                        "$ref": "examples/pdu_v4_join_membership.json"
-                      }
-                    }
-                  ]
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:
