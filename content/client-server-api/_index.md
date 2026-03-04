@@ -148,35 +148,35 @@ only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
 [`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
 
 `M_USER_LIMIT_EXCEEDED`
-{{% added-in v="1.18" %}} The request cannot be completed because the user has
+: {{% added-in v="1.18" %}} The request cannot be completed because the user has
 exceeded (or the request would cause them to exceed) a limit associated with
 their account. For example, a user may have reached their allocated storage
 quota, reached a maximum number of allowed rooms, devices, or other
 account-scoped resources, or exceeded usage limits for specific features.
 
-The error response MUST have an `info_uri` field (string), which is a URI
+: The error response MUST have an `info_uri` field (string), which is a URI
 that the client can present to the user to provide more context on the
 encountered limit and, if applicable, guidance on how to increase the limit.
 The homeserver MAY return different values for `info_uri` depending on the type
 of limit reached.
 
-The error response MAY include a `can_upgrade` field (boolean, default `false`).
+: The error response MAY include a `can_upgrade` field (boolean, default `false`).
 If `true`, it indicates that the specific limit encountered can be increased,
 for example by upgrading the user's account tier. If absent or `false`, the
 limit is a hard limit that cannot be increased.
 
-The HTTP status code will depend on depend on the particular endpoint.
+: The HTTP status code will depend on depend on the particular endpoint.
 
-Example response:
+: Example response:
 
-```json
-{
-  "errcode": "M_USER_LIMIT_EXCEEDED",
-  "error": "You have exceeded your storage quota of 10GB",
-  "info_uri": "https://example.com/homeserver/about?limit_type=quota",
-  "can_upgrade": true
-}
-```
+  ```json
+  {
+    "errcode": "M_USER_LIMIT_EXCEEDED",
+    "error": "You have exceeded your storage quota of 10GB",
+    "info_uri": "https://example.com/homeserver/about?limit_type=quota",
+    "can_upgrade": true
+  }
+  ```
 
 `M_UNKNOWN`
 : An unknown error has occurred.
