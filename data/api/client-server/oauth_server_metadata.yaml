@@ -67,8 +67,7 @@ paths:
                     type: string
                     format: uri
                     description: |-
-                      URL of the token endpoint, necessary to use the authorization code grant,
-                      device authorization grant and the refresh token grant.
+                      URL of the token endpoint, used by the grants.
                   revocation_endpoint:
                     type: string
                     format: uri
