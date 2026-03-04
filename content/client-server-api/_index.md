@@ -523,7 +523,7 @@ endpoint.
 
 With the OAuth 2.0 API, a client can obtain an access token by using one of the
 [grant types](#grant-types) supported by the homeserver and authorizing the
-proper [scope](#scope), as demonstrated in the [login flow](#login-flow). To
+proper [scope](#scope), as demonstrated in the [login flows](#login-flows). To
 invalidate the access token the client must use [token revocation](#token-revocation).
 
 ### Using access tokens
@@ -1720,30 +1720,33 @@ authentication type.
 
 1. [Discover the OAuth 2.0 server metadata](#server-metadata-discovery).
 2. [Register the client with the homeserver](#client-registration).
-3. Obtain an access token by authorizing a [scope](#scope) for the client with
-   one of the supported grant types:
-   - Use the [authorization code grant](#authorization-code-grant) via the
-     [login flow](#login-flow) for clients with access to a web browser.
-   - {{% added-in v="1.18" %}} Use the [device authorization grant](#device-authorization-grant) via the
-     [device authorization flow](#device-authorization-flow) for clients on
-     devices with limited input capabilities (e.g. CLI applications or embedded devices)
-     where the user completes authorization on a separate device.
+3. [Obtain an access token](#login-flows) by authorizing a [scope](#scope) for
+   the client with the [authorization code grant](#authorization-code-grant) or
+   [device authorization grant](#device-authorization-grant).
 4. [Refresh the access token](#token-refresh-flow) with the [refresh token grant](#refresh-token-grant) when it expires.
 5. [Revoke the tokens](#token-revocation) when the users wants to log out of the client.
 
-#### Login flow
+#### Login flows
 
-Logging in with the OAuth 2.0 API should be done with the [authorization code
-grant](#authorization-code-grant) for clients that have access to a web browser.
-For clients on devices with limited input capabilities, the
-[device authorization flow](#device-authorization-flow) can be used instead.
+Logging in and obtaining an access token with the OAuth 2.0 API should be done
+using either the [authorization code flow](#authorization-code-flow) or
+[device authorization flow](#device-authorization-flow).
 
-In the context of the Matrix specification,
-this means requesting a [scope](#scope) including full client-server API
-read/write access and allocating a device ID.
+The client allocates a device ID and then requests authorization for a
+[scope](#scope) that includes full Matrix client-server API read/write access
+and use of the device ID.
 
-Once the client has retrieved the [server metadata](#server-metadata-discovery),
-it needs to generate the following values:
+##### Authorization code flow
+
+This login flow uses the [authorization code grant](#authorization-code-grant)
+and is suitable for clients where the following criteria are met:
+
+- The is a web browser available for the user to complete authentication and
+  authorization.
+- The client can receive the callback via a redirect from the web browser.
+
+Once the client has retrieved the [server metadata](#server-metadata-discovery)
+the client needs to generate the following values:
 
 - `device_id`: a unique identifier for this device; see the
   [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
@@ -1884,25 +1887,21 @@ Sample response:
 Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
 endpoint to get the user ID that owns the access token.
 
-#### Device authorization flow
+##### Device authorization flow
 
 {{% added-in v="1.18" %}}
 
-The device authorization flow allows clients to obtain an access token without
-needing to directly interact with a web browser. Instead, the user completes
-authorization on a web browser that can be on a separate device. This is useful
-for devices with limited input capabilities (such as CLI applications or
-embedded devices) or where the redirect handling may be unreliable (such as a
-desktop applications).
+This flow uses the [device authorization grant](#device-authorization-grant) to
+allow clients to obtain an access token without needing to directly interact
+with a web browser. Instead, the user completes authorization on a web browser
+that can be a separate device.
 
-This flow uses the [device authorization grant](#device-authorization-grant).
+This is useful for devices with limited input
+capabilities (such as CLI applications or embedded devices) or where the
+redirect handling may be unreliable (such as a desktop applications).
 
-In the context of the Matrix specification, this means requesting a
-[scope](#scope) including full client-server API read/write access and
-allocating a device ID, as with the [login flow](#login-flow).
-
-Once the client has retrieved the [server metadata](#server-metadata-discovery),
-it needs to generate the following value:
+Once the client has retrieved the [server metadata](#server-metadata-discovery)
+the client needs to generate following value:
 
 - `device_id`: a unique identifier for this device; see the
   [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
@@ -1920,7 +1919,7 @@ the `device_authorization_endpoint` as defined in
 
 Sample device authorization request:
 
-```http
+```
 POST /oauth2/device HTTP/1.1
 Host: account.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -1994,7 +1993,7 @@ parameters, encoded as `application/x-www-form-urlencoded` in the body:
 
 Sample token polling request:
 
-```http
+```
 POST /oauth2/token HTTP/1.1
 Host: account.example.com
 Content-Type: application/x-www-form-urlencoded
@@ -2023,8 +2022,7 @@ The server responds as defined in [RFC 8628 section
 ```
 
 Finally, the client can call the [`/whoami`](#get_matrixclientv3accountwhoami)
-endpoint to get the user ID that owns the access token. Token refreshing and
-revocation proceed as with the [login flow](#login-flow).
+endpoint to get the user ID that owns the access token.
 
 #### Token refresh flow
 
@@ -2381,19 +2379,6 @@ To use this grant, homeservers and clients MUST:
   Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
   for clients with an HTTPS redirect URI.
 
-###### User registration
-
-Clients can signal to the server that the user desires to register a new account
-by initiating the authorization code grant with the `prompt=create` parameter
-set in the authorization request as defined in [Initiating User Registration via
-OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
-
-Whether the homeserver supports this parameter is advertised by the
-`prompt_values_supported` authorization server metadata.
-
-Servers that support this parameter SHOULD show the account registration UI in
-the browser.
-
 ##### Device authorization grant
 
 {{% added-in v="1.18" %}}
@@ -2527,6 +2512,22 @@ The server SHOULD return one of the following responses:
   `401 Unauthorized` response
 - For other errors, the server returns a `400 Bad Request` response with error
   details
+
+#### User registration
+
+Clients can signal to the server that the user desires to register a new account
+by initiating the [authorization code grant](#authorization-code-grant) with the `prompt=create` parameter
+set in the authorization request as defined in [Initiating User Registration via
+OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+
+Whether the homeserver supports this parameter is advertised by the
+`prompt_values_supported` authorization server metadata.
+
+Servers that support this parameter SHOULD show the account registration UI in
+the browser.
+
+The `prompt=create` parameter is not supported when using the [device
+authorization grant](#device-authorization-grant).
 
 #### Account management {id="oauth-20-account-management"}
 
