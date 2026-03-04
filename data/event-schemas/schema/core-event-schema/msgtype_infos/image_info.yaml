@@ -35,6 +35,7 @@ properties:
       - $ref: thumbnail_info.yaml
     description: Metadata about the image referred to in `thumbnail_url`.
   is_animated:
+    x-addedInMatrixVersion: "1.18"
     description: |-
       If this flag is `true`, the original image SHOULD be assumed to be
       animated. If this flag is `false`, the original image SHOULD be assumed to
