@@ -34,5 +34,18 @@ properties:
     allOf:
       - $ref: thumbnail_info.yaml
     description: Metadata about the image referred to in `thumbnail_url`.
+  is_animated:
+    description: |-
+      If this flag is `true`, the original image SHOULD be assumed to be
+      animated. If this flag is `false`, the original image SHOULD be assumed to
+      NOT be animated.
+
+      If a sending client is unable to determine whether an image is animated,
+      it SHOULD leave the flag unset.
+
+      Receiving clients MAY use this flag to optimize whether to download the
+      original image rather than a thumbnail if it is animated, but they SHOULD
+      NOT trust this flag.
+    type: boolean
 title: ImageInfo
 type: object
