@@ -1741,7 +1741,7 @@ and use of the device ID.
 This login flow uses the [authorization code grant](#authorization-code-grant)
 and is suitable for clients where the following criteria are met:
 
-- The is a web browser available for the user to complete authentication and
+- There is a web browser available for the user to complete authentication and
   authorization.
 - The client can receive the callback via a redirect from the web browser.
 
