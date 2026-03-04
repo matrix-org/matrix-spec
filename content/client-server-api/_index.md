@@ -1729,12 +1729,10 @@ authentication type.
 #### Login flows
 
 Logging in and obtaining an access token with the OAuth 2.0 API should be done
-using either the [authorization code flow](#authorization-code-flow) or
-[device authorization flow](#device-authorization-flow).
-
-The client allocates a device ID and then requests authorization for a
-[scope](#scope) that includes full Matrix client-server API read/write access
-and use of the device ID.
+using either the [authorization code grant](#authorization-code-grant) or
+[device authorization grant](#device-authorization-grant). In the context of the
+Matrix specification, this means requesting a [scope](#scope) including full
+client-server API read/write access and allocating a device ID.
 
 ##### Authorization code flow
 
