@@ -270,9 +270,9 @@ key, and encrypts the file using AES-CTR. The counter is 64 bits long,
 starting at 0 and prefixed by a random 64-bit Initialization Vector (IV),
 which together form a 128-bit unique counter block.
 
-Clients MUST generate both the AES key and IV using a secure random
-source and MUST NOT use the same key or IV multiple times. The latter
-64 bits of the 128-bit counter block MUST start at zero.
+Clients MUST generate both the AES key and IV using a cryptographically 
+secure random source and MUST NOT use the same key or IV multiple
+times. The latter 64 bits of the 128-bit counter block MUST start at zero.
 
 {{% boxes/warning %}}
 An IV must never be used multiple times with the same key. This implies
