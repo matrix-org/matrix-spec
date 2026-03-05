@@ -350,11 +350,14 @@ field, and as a result should remove her from its list of tracked users.
 When encryption is enabled in a room, files should be uploaded encrypted
 on the homeserver.
 
-In order to achieve this, a client should generate a single-use 256-bit
-AES key, and encrypt the file using AES-CTR. The counter should be
-64-bit long, starting at 0 and prefixed by a random 64-bit
-Initialization Vector (IV), which together form a 128-bit unique counter
-block.
+In order to achieve this, the client generates a single-use 256-bit AES
+key, and encrypts the file using AES-CTR. The counter is 64 bits long,
+starting at 0 and prefixed by a random 64-bit Initialization Vector (IV),
+which together form a 128-bit unique counter block.
+
+Clients MUST generate both the AES key and IV using a cryptographically 
+secure random source and MUST NOT use the same key or IV multiple
+times. The latter 64 bits of the 128-bit counter block MUST start at zero.
 
 {{% boxes/warning %}}
 An IV must never be used multiple times with the same key. This implies
@@ -364,13 +367,14 @@ same key and IV.
 {{% /boxes/warning %}}
 
 Then, the encrypted file can be uploaded to the homeserver. The key and
-the IV must be included in the room event along with the resulting
-`mxc://` in order to allow recipients to decrypt the file. As the event
+the IV are included in the room event along with the resulting `mxc://`
+in order to allow recipients to decrypt the file. As the event
 containing those will be Megolm encrypted, the server will never have
 access to the decrypted file.
 
-A hash of the ciphertext must also be included, in order to prevent the
-homeserver from changing the file content.
+A hash of the ciphertext MUST also be included, in order to prevent the
+homeserver from changing the file content. Clients MUST verify the hash
+before using the file contents.
 
 A client should send the data as an encrypted `m.room.message` event,
 using either `m.file` as the msgtype, or the appropriate msgtype for the
@@ -392,7 +396,7 @@ properties.
 | url       | string           | **Required.** The URL to the file.                                                             |
 | key       | JWK              | **Required.** A [JSON Web Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) object.       |
 | iv        | string           | **Required.** The 128-bit unique counter block used by AES-CTR, encoded as unpadded base64.    |
-| hashes    | {string: string} | **Required.** A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64. Clients should support the SHA-256 hash, which uses the key `sha256`. |
+| hashes    | {string: string} | **Required.** A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64. Clients MUST support the SHA-256 hash, which uses the key `sha256`. |
 | v         | string           | **Required.** Version of the encrypted attachment's protocol. Must be `v2`.                    |
 
 `JWK`
