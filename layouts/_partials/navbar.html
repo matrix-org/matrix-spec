@@ -61,6 +61,28 @@
         </a>
       </li>
       {{ end -}}
+      <li class="nav-item" id="search-button">
+        <a class="nav-link" href="#" role="button">Search</a>
+      </li>
+      <script>
+        document.querySelector("#search-button").addEventListener("click", (event) => {
+          const search = document.querySelector("#search");
+
+          if (search.style.display === "block") {
+            // Hide the search widget.
+            search.style.display = "none";
+          } else {
+            // Initialise the search widget if needed.
+            if (!search.innerHTML.length) {
+              new PagefindUI({ element: "#search", showSubResults: true });
+            }
+
+            // Unhide and focus the search widget.
+            search.style.display = "block";
+            search.querySelector("input").focus();
+          }
+        });
+      </script>
       {{ if .Site.Params.versions -}}
       <li class="nav-item dropdown d-none d-lg-block td-navbar__version-menu">
         {{ partial "navbar-version-selector.html" . -}}
