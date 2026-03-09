@@ -1,0 +1,1 @@
+Add a "Policy Servers" module, as per [MSC4284](https://github.com/matrix-org/matrix-spec-proposals/pull/4284).
