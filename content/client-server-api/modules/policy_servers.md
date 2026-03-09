@@ -42,7 +42,7 @@ homeserver.
 
 Clients do not interact with the Policy Server directly, but may need enough
 information to be able to set the `m.room.policy` state event. For this, a client
-can attempt to call [`/.well-known/matrix/policy_server`](#getwell-knownmatrixpolicyserver)
+can attempt to call [`/.well-known/matrix/policy_server`](#getwell-knownmatrixpolicy_server)
 on a user-provided server name. The returned information can then be used to
 populate the `m.room.policy` state event.
 

@@ -22,7 +22,7 @@ paths:
       description: |-
         A server is a Policy Server if it implements this endpoint, among
         [other requirements](/server-server-api/#policy-servers). This endpoint
-        is otherwise optional. See [Unsupported Endpoints](#unsupported-endpoints)
+        is otherwise optional. See [Unsupported Endpoints](/server-server-api/#unsupported-endpoints)
         for details on how to exclude implementation of this endpoint.
 
         This endpoint MUST NOT be called for events which have a type of `m.room.policy`
@@ -132,7 +132,7 @@ paths:
 
             Error codes include:
             * `M_NOT_FOUND` - The room is not known or is not protected by the Policy Server.
-            * `M_UNRECOGNIZED` - The server is not a Policy Server. See [Unsupported Endpoints](#unsupported-endpoints)
+            * `M_UNRECOGNIZED` - The server is not a Policy Server. See [Unsupported Endpoints](/server-server-api/#unsupported-endpoints)
               for more detail.
           content:
             application/json:
