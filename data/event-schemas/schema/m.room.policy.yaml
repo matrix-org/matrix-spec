@@ -1,0 +1,36 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/state_event.yaml
+description: |-
+  A [Policy Server](/client-server-api/#policy-servers) configuration. If invalid
+  or not set, the room does not use a Policy Server.
+properties:
+  content:
+    properties:
+      via:
+        description: |-
+          The server name to use as a Policy Server. MUST have a joined user in
+          the room.
+        type: string
+      public_keys:
+        description: |-
+          The unpadded base64-encoded public keys for the Policy Server. MUST contain at
+          least `ed25519`.
+        type: object
+        additionalProperties:
+          description: The unpadded base64-encoded public key for the key algorithm.
+          type: string
+    type: object
+    required:
+      - via
+      - public_keys
+  state_key:
+    description: An empty string.
+    type: string
+  type:
+    enum:
+      - m.room.policy
+    type: string
+type: object
