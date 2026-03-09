@@ -51,6 +51,7 @@ paths:
                     additionalProperties:
                       type: string
                       description: The unpadded base64-encoded public key for the key algorithm.
+                required: ["public_keys"]
               examples:
                 response:
                   value:
@@ -59,7 +60,6 @@ paths:
                         "ed25519": "6yhHGKhCiXTSEN2ksjV7kX_N6rBQZ3Xb-M7LlC6NS-s"
                       }
                     }
-              required: ["public_keys"]
         "404":
           description: No policy server information available.
       tags:
