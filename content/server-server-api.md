@@ -1277,6 +1277,171 @@ endpoint MUST be protected as follows:
         room ID MUST be ignored if the sending server is denied access to
         the room identified by that ID.
 
+{{< added-in v="1.18" >}} The following endpoints MAY be protected:
+
+-   [`/_matrix/policy/v1/sign`](#post_matrixpolicyv1sign) - Protected if the server
+    is tracking the DAG and chooses to enforce the ACL.
+
+
+## Policy Servers
+
+{{% added-in v="1.18" %}}
+
+Policy Servers are an available tool for rooms to add proactive protections. Rooms
+which use a Policy Server (PS) can prevent unwanted events from reaching users. Rooms
+are not required to use a Policy Server, and can disable it any time after enabling
+it.
+
+For a homeserver to be a Policy Server, it MUST implement the following functionality
+of the Server-Server API:
+
+* [Normal server name resolution](#resolving-server-names).
+* [Publishing a signing key](#publishing-keys).
+* [Request authentication](#authentication).
+* Being able to [make and send join requests](#joining-rooms).
+* Receiving and processing [`POST /_matrix/policy/v1/sign`](#post_matrixpolicyv1sign)
+  requests.
+
+All other functionality and endpoints are optional for a Policy Server.
+
+{{% boxes/note %}}
+Though a Policy Server is not required to implement the full Server-Server API
+surface, some functionality may be desirable to implement anyway:
+
+* Receiving [invites](#inviting-to-a-room) can make it easier to add the Policy
+  Server to a room.
+* Receiving [transactions](#transactions) is recommended to avoid remote servers
+  flagging the Policy Server as "offline", even if the contents are discarded.
+* Receiving [device lookups](#get_matrixfederationv1userdevicesuserid) can also
+  help reduce remote servers flagging the Policy Server as "offline".
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Policy Servers are *not* required to track the DAG for a room. Policy Servers
+might be optimized for content moderation and therefore do not need knowledge of
+the DAG.
+{{% /boxes/note %}}
+
+### Determining if a Policy Server is enabled in a room
+
+For a room to be considered as "using" a Policy Server, *all* of the following
+conditions MUST be true:
+
+* The *current state* for the room has a valid [`m.room.policy`](/client-server-api/#mroompolicy)
+  state event with empty state key. Valid means `content` contains at least:
+  * A string value for `via`.
+  * An object value for `public_keys` containing at least a string value for
+    `ed25519`.
+* The server name denoted by the `m.room.policy` state event's `via` has at least
+  one joined user in the room in *current state*. The user does not need any
+  special permissions or power levels in the room.
+
+If a room has enabled a Policy Server, *all* servers in that room MUST [ask that
+Policy Server](#asking-for-a-policy-server-signature-on-an-event) for a signature
+before sending an event. If the Policy Server refuses to sign the event being
+sent, servers SHOULD fail to send that event as per the [validation rules](#validating-policy-server-signatures).
+
+{{% boxes/note %}}
+"Current state" shares the same definition as [soft failure](#soft-failure).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Policy Servers MUST have at least one joined user in the room to give the Policy
+Server agency in whether it serves that role for the room. Otherwise, a room
+would be able to force a Policy Server to participate and then overwhelm it.
+{{% /boxes/note %}}
+
+### Validating Policy Server signatures
+
+Policy Servers use signatures to indicate whether an event was checked and is
+recommended for inclusion in a room. The Policy Server's recommendation does *not*
+affect the authorization rules for an event, but does affect whether homeservers
+[soft fail](#soft-failure) or refuse to actually go forward with sending an event.
+
+If a room has disabled (or never enabled) a Policy Server, events are recommended
+for inclusion and subject to normal authorization rules.
+
+{{% boxes/note %}}
+Because the Policy Server is not asked to sign [`m.room.policy`](/client-server-api/#mroompolicy)
+state events with empty string `state_key`s, those events will not have a Policy
+Server signature. Those events are by default recommended for inclusion and still
+subject to normal authorization rules.
+
+All other events SHOULD have a valid Policy Server signature when a Policy Server
+is enabled in the room, including non-state `m.room.policy` events and `m.room.policy`
+state events with non-empty `state_key`s. This also includes state events like
+membership and power level changes.
+{{% /boxes/note %}}
+
+If a room has enabled a Policy Server, the Policy Server's signature appears
+alongside the normal [event signatures](#signing-events), though uses a public
+key from the room's `m.room.policy` state event.
+
+{{% boxes/note %}}
+Currently, only Ed25519 keys are supported by homeservers. The Key ID for the
+`ed25519` key in `m.room.policy` is *always* `ed25519:policy_server`.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+By embedding the Policy Server's public key into room state, the Policy Server
+does not need to be online or have its keys cached by a notary in order to validate
+an event.
+{{% /boxes/note %}}
+
+{{% boxes/warning %}}
+The Policy Server's [published signing key](#publishing-keys) SHOULD NOT be the
+same key contained in the `m.room.policy` state event. This is to keep "can send
+federation traffic" and "can recommend events for inclusion" separate, and to
+allow rooms to revoke the Policy Server's key without cooperation of the Policy
+Server.
+
+If the Policy Server is acting as a normal homeserver and attempting to send an
+event, that event will require the a signature from the server's published signing
+key alongside the Policy Server signature described in this section.
+{{% /boxes/warning %}}
+
+If the Policy Server's signature is valid, the event is recommended for inclusion
+in the room, and is still subject to normal authorization rules.
+
+If the Policy Server's signature is invalid or missing, the homeserver SHOULD
+[ask for a new signature](#asking-for-a-policy-server-signature-on-an-event). If
+the event still does not have a valid Policy Server signature, the event is *not*
+recommended for inclusion and the homeserver SHOULD:
+
+* If applicable, reject the Client-Server API request which was generating the
+  event. If the Policy Server returned an error, that error SHOULD be provided
+  to the client verbatim. The event the client was attempting to send SHOULD be
+  discarded and not processed/sent any further.
+* If the event was received over federation or the homeserver sends a local client's
+  event anyway, [soft fail](#soft-failure) the event.
+
+{{% boxes/note %}}
+For clarity, an event which lacks a valid Policy Server signature is still subject
+to normal authorization rules.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+When a Policy Server's signature is invalid, a new one is requested because the
+Policy Server's key may have rotated between the event being signed and the event
+being checked.
+
+Because the key is contained in the `m.room.policy` state event, if the Policy
+Server rotates its key without the room also updating the state event, events
+will be flagged as not recommended for inclusion. This is expected behaviour.
+{{% /boxes/note %}}
+
+### Asking for a Policy Server signature on an event
+
+Per [above](#determining-if-a-policy-server-is-enabled-in-a-room), if a room has
+a Policy Server enabled, *all* servers in the room MUST ask the Policy Server to
+sign their events before sending them to clients and servers.
+
+After asking for a signature, homeservers SHOULD [validate](#validating-policy-server-signatures)
+the returned signature before continuing to send events. If the Policy Server
+returns an error, the event SHOULD NOT be sent to clients and servers.
+
+{{% http-api spec="server-server" api="room_policy" %}}
+
 ## Signing Events
 
 Signing events is complicated by the fact that servers can choose to

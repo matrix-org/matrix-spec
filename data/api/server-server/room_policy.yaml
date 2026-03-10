@@ -1,0 +1,172 @@
+# Copyright 2026 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Federation Room Policy API
+  version: 1.0.0
+paths:
+  "/sign":
+    post:
+      summary: Asks the Policy Server to sign an event.
+      description: |-
+        A server is a Policy Server if it implements this endpoint, among
+        [other requirements](/server-server-api/#policy-servers). This endpoint
+        is otherwise optional. See [Unsupported Endpoints](/server-server-api/#unsupported-endpoints)
+        for details on how to exclude implementation of this endpoint.
+
+        This endpoint MUST NOT be called for events which have a type of `m.room.policy`
+        and an empty string `state_key`. All other events, including state events,
+        non-state `m.room.policy` events, and `m.room.policy` state events with
+        non-empty string `state_key`s are processed by this endpoint.
+
+        Whether a signature is required by a Policy Server further depends on whether
+        the room has [enabled a Policy Server](#determining-if-a-policy-server-is-enabled-in-a-room).
+
+        {{% boxes/note %}}
+        The Policy Server MAY respond with *any* of the defined errors to indicate
+        failure. For example, if it wishes to hide whether it knows about a room,
+        it MAY return `400 M_FORBIDDEN` instead (or, it MAY sign the event anyway).
+        {{% /boxes/note %}}
+
+        What the Policy Server checks for when calling this endpoint is left as an
+        implementation detail.
+      operationId: askPolicyServerToSign
+      security:
+        - signedRequest: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: PDU
+              description: |-
+                The [PDU](/server-server-api/#pdus) to request a signature for. The event format
+                varies depending on the room version - check the [room version specification](/rooms)
+                for precise event formats.
+              properties: {}
+              example:
+                $ref: examples/minimal_pdu.json
+        required: true
+      responses:
+        "200":
+          description: |-
+            The Policy Server has signed the event, indicating that it recommends the event for
+            inclusion in the room. Only the Policy Server's signature is returned. This signature
+            is to be added to the event before sending or processing the event further.
+
+            `ed25519:policy_server` is *always* used for Ed25519 signatures.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                required: []
+                example: {
+                  "policy.example.org": {
+                    "ed25519:policy_server": "zLFxllD0pbBuBpfHh8NuHNaICpReF/PAOpUQTsw+bFGKiGfDNAsnhcP7pbrmhhpfbOAxIdLraQLeeiXBryLmBw"
+                  }
+                }
+        "429":
+          $ref: '#/components/responses/rateLimited'
+        "400":
+          description: |-
+            The request is invalid or the Policy Server refuses to sign the event.
+
+            Error codes include:
+            * `M_BAD_JSON` - The supplied PDU-formatted event was improperly formatted. For example,
+              missing keys required for the room version.
+            * `M_NOT_JSON` - The body wasn't JSON.
+            * `M_FORBIDDEN` - The Policy Server refuses to sign the event.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "The message appears to contain possible spam"
+                  }
+        "403":
+          description: |-
+            The calling server is [ACL'd](/server-server-api/#server-access-control-lists-acls).
+
+            {{% boxes/note %}}
+            This endpoint is optionally affected by server ACLs. The Policy Server
+            MAY NOT apply an ACL to the request, especially if the Policy Server
+            is not tracking the room DAG.
+            {{% /boxes/note %}}
+          content:
+            application/json:
+              schema:
+                allOf:
+                    # XXX: We should move error definitions into a more generic place.
+                  - $ref: ../client-server/definitions/errors/error.yaml
+                  - type: object
+                    properties:
+                      errcode:
+                        description: "The `M_FORBIDDEN` error code."
+                    required: [errcode]
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "Your server is not allowed to request a signature."
+                  }
+        "404":
+          description: |-
+            The server is not a Policy Server, or the room is unknown/not protected by the Policy Server.
+
+            Error codes include:
+            * `M_NOT_FOUND` - The room is not known or is not protected by the Policy Server.
+            * `M_UNRECOGNIZED` - The server is not a Policy Server. See [Unsupported Endpoints](/server-server-api/#unsupported-endpoints)
+              for more detail.
+          content:
+            application/json:
+              schema:
+                # XXX: We should move error definitions into a more generic place.
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Unknown room"
+                  }
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8448
+      basePath:
+        default: /_matrix/policy/v1
+components:
+  securitySchemes:
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest
+  responses:
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            # XXX: We should move error definitions into a more generic place.
+            $ref: ../client-server/definitions/errors/rate_limited.yaml
+
