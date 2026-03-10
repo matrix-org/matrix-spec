@@ -62,7 +62,7 @@ properties:
       allow:
         type: array
         description: |-
-          The server names to allow in the room, excluding any port information.
+          The case-insensitive server names to allow in the room, excluding any port information.
           Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
 
           **This defaults to an empty list when not provided, effectively disallowing
@@ -72,7 +72,7 @@ properties:
       deny:
         type: array
         description: |-
-          The server names to disallow in the room, excluding any port information.
+          The case-insensitive server names to disallow in the room, excluding any port information.
           Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
 
           This defaults to an empty list when not provided.
