@@ -66,6 +66,9 @@ description = "Home of the Matrix specification for decentralised communication"
 
 [params]
 copyright = "The Matrix.org Foundation C.I.C."
+offlineSearch = true
+offlineSearchSummaryLength = 200
+offlineSearchMaxResults = 25
 
 [params.version]
 # must be one of "unstable", "current", "historical"
