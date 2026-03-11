@@ -111,22 +111,26 @@ paths:
       summary: Query for profile information about a given user
       description: |-
         Performs a query to get profile information, such as a display name or avatar,
-        for a given user. Homeservers should only query profiles for users that belong
+        for a given user. Homeservers MUST only query profiles for users that belong
         to the target server (identified by the [server name](/appendices/#server-name)
         in the user ID).
 
-        Servers may wish to cache the response to this query to avoid requesting the
-        information too often.
+        Responding servers MAY
+          - allow users to set arbitrary key/value pairs in their profile in addition to the
+            specified pairs
+          - deny profile look-up over federation by responding with 403 and an error code of
+            `M_FORBIDDEN`
+          - omit certain key/value pairs in the response
 
-        Servers MAY deny profile look-up over federation by responding with 403 and an
-        error code of `M_FORBIDDEN`.
+        Requesting servers MAY wish to cache the response to this query to avoid requesting the
+        information too often.
       operationId: queryProfile
       security:
         - signedRequest: []
       parameters:
         - in: query
           name: user_id
-          description: The user ID to query. Must be a user local to the receiving homeserver.
+          description: The user ID to query. MUST be a user local to the receiving homeserver.
           required: true
           example: "@someone:example.org"
           schema:
@@ -134,24 +138,24 @@ paths:
         - in: query
           name: field
           description: |-
-            The field to query. If specified, the server will only return the given field
-            in the response. If not specified, the server will return the full profile for
-            the user.
+            The field of the profile to query. If specified, the server MUST only return the
+            given field in the response. If not specified, the server MUST return the full,
+            public, profile for the user.
+
+            Defined values are `displayname`, `avatar_url` and `m.tz`. In addition to these
+            servers MAY allow users to set additional key/value pairs.
           schema:
             type: string
-            enum:
-              - displayname
-              - avatar_url
       responses:
         "200":
           description: |-
             The profile for the user. If a `field` is specified in the request, only the
-            matching field should be included in the response. If no `field` was specified,
-            the response should include the fields of the user's profile that can be made
+            matching field MUST included in the response. If no `field` was specified,
+            the response MUST include the fields of the user's profile that can be made
             public, such as the display name and avatar.
 
             If the user does not have a particular field set on their profile, the server
-            should exclude it from the response body or give it the value `null`.
+            MUST either exclude it from the response body or give it the value `null`.
           content:
             application/json:
               schema:
@@ -160,20 +164,20 @@ paths:
                   displayname:
                     type: string
                     description: |-
-                      The display name of the user. May be omitted if the user does not have a
-                      display name set.
+                      The display name of the user. MUST either be omitted or set to `null` if
+                      the user does not have a display name set.
                     example: John Doe
                   avatar_url:
                     type: string
                     description: |-
-                      The avatar URL for the user's avatar. May be omitted if the user does not
-                      have an avatar set.
-                    example: mxc://matrix.org/MyC00lAvatar
+                      The avatar URL for the user's avatar. MUST either be omitted or set to
+                      `null` if the user does not have an avatar set.
+                    example: mxc://example.org/MyC00lAvatar
               examples:
                 response:
                   value: {
                     "displayname": "John Doe",
-                    "avatar_url": "mxc://matrix.org/MyC00lAvatar"
+                    "avatar_url": "mxc://example.org/MyC00lAvatar"
                   }
         "403":
           x-addedInMatrixVersion: "1.12"
@@ -190,7 +194,7 @@ paths:
                     "error": "Profile lookup over federation is disabled on this homeserver"
                   }
         "404":
-          description: The user does not exist or does not have a profile.
+          description: The user does not exist, does not have a profile or the queried field does not exist.
           content:
             application/json:
               schema:
