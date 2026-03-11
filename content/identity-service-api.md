@@ -70,27 +70,6 @@ the keys `error` and `errcode` MUST always be present.
 
 Some standard error codes are below:
 
-`M_NOT_FOUND`
-: The resource requested could not be located.
-
-`M_MISSING_PARAMS`
-: The request was missing one or more parameters.
-
-`M_INVALID_PARAM`
-: The request contained one or more invalid parameters.
-
-`M_SESSION_NOT_VALIDATED`
-: The session has not been validated.
-
-`M_NO_VALID_SESSION`
-: A session could not be located for the given parameters.
-
-`M_SESSION_EXPIRED`
-: The session has expired and must be renewed.
-
-`M_INVALID_EMAIL`
-: The email address provided was not valid.
-
 `M_EMAIL_SEND_ERROR`
 : There was an error sending an email. Typically seen when attempting to
 verify ownership of a given email address.
@@ -98,9 +77,38 @@ verify ownership of a given email address.
 `M_INVALID_ADDRESS`
 : The provided third-party address was not valid.
 
+`M_INVALID_EMAIL`
+: The email address provided was not valid.
+
+`M_INVALID_PARAM`
+: The request contained one or more invalid parameters.
+
+`M_MISSING_PARAMS`
+: The request was missing one or more parameters.
+
+`M_NO_VALID_SESSION`
+: A session could not be located for the given parameters.
+
+`M_NOT_FOUND`
+: The resource requested could not be located.
+
 `M_SEND_ERROR`
 : There was an error sending a notification. Typically seen when
 attempting to verify ownership of a given third-party address.
+
+`M_SESSION_EXPIRED`
+: The session has expired and must be renewed.
+
+`M_SESSION_NOT_VALIDATED`
+: The session has not been validated.
+
+`M_THREEPID_IN_USE`
+: The third-party identifier is already in use by another user. Typically
+this error will have an additional `mxid` property to indicate who owns
+the third-party identifier.
+
+`M_UNKNOWN`
+: An unknown error has occurred.
 
 `M_UNRECOGNIZED`
 : The request contained an unrecognised value, such as an unknown token or
@@ -110,14 +118,6 @@ medium.
 This is expected to be returned with a 404 HTTP status code if the endpoint is
 not implemented or a 405 HTTP status code if the endpoint is implemented, but
 the incorrect HTTP method is used.
-
-`M_THREEPID_IN_USE`
-: The third-party identifier is already in use by another user. Typically
-this error will have an additional `mxid` property to indicate who owns
-the third-party identifier.
-
-`M_UNKNOWN`
-: An unknown error has occurred.
 
 ## Privacy
 
