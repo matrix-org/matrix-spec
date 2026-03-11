@@ -246,10 +246,6 @@ particular domain.
 : The third party identifier specified by the client is not acceptable because it is
 already in use in some way.
 
-`M_THREEPID_IN_USE`
-: Sent when a threepid given to an API cannot be used because the same
-threepid is already in use.
-
 `M_THREEPID_MEDIUM_NOT_SUPPORTED`
 : The homeserver does not support adding a third party identifier of the given medium.
 
