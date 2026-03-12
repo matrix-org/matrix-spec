@@ -70,6 +70,8 @@ the keys `error` and `errcode` MUST always be present.
 
 Some standard error codes are below:
 
+<!-- Please keep the error codes below in alphabetical order -->
+
 `M_EMAIL_SEND_ERROR`
 : There was an error sending an email. Typically seen when attempting to
 verify ownership of a given email address.
@@ -118,6 +120,8 @@ medium.
 This is expected to be returned with a 404 HTTP status code if the endpoint is
 not implemented or a 405 HTTP status code if the endpoint is implemented, but
 the incorrect HTTP method is used.
+
+<!-- Please keep the error codes above in alphabetical order -->
 
 ## Privacy
 

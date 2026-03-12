@@ -93,6 +93,8 @@ request being made was invalid.
 
 These error codes can be returned by any API endpoint:
 
+<!-- Please keep the error codes below in alphabetical order -->
+
 `M_BAD_JSON`
 : Request contained valid JSON, but it was malformed in some way, e.g.
 missing required keys, invalid values for keys.
@@ -181,11 +183,15 @@ code if the endpoint is implemented, but the incorrect HTTP method is used.
 : The account has been [suspended](#account-suspension) and can only be used for
 limited actions at this time.
 
+<!-- Please keep the error codes above in alphabetical order -->
+
 #### Other error codes
 
 The following error codes are specific to certain endpoints.
 
 <!-- TODO: move them to the endpoints that return them -->
+
+<!-- Please keep the error codes below in alphabetical order -->
 
 `M_BAD_STATE`
 : The state change requested cannot be performed, such as attempting to
@@ -269,6 +275,8 @@ for endpoints that prove authentication, such as [`/login`](#get_matrixclientv3l
 
 `M_USER_IN_USE`
 : Encountered when trying to register a user ID which has been taken.
+
+<!-- Please keep the error codes above in alphabetical order -->
 
 #### Rate limiting
 
