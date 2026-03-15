@@ -637,7 +637,7 @@ request.
 
 The prompt for Bob to accept/reject Alice's request (or the unsupported method
 prompt) should be automatically dismissed 10 minutes after the `timestamp` (in
-the case of to-device messages) or `origin_ts` (in the case of in-room
+the case of to-device messages) or `origin_server_ts` (in the case of in-room
 messages) field or 2 minutes after Bob's client receives the message, whichever
 comes first, if Bob does not interact with the prompt. The prompt should
 additionally be hidden if an appropriate `m.key.verification.cancel` message is
