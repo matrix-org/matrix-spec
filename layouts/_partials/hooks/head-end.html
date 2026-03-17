@@ -16,7 +16,3 @@
 {{ $inter := resources.Get "css/fonts/Inter.css" -}}
 <link rel="preload" href="{{ $inter.RelPermalink }}" as="style">
 <link rel="stylesheet" href="{{ $inter.RelPermalink }}">
-
-{{/* Load Pagefind stuff to power the page search. */}}
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-<script src="/pagefind/pagefind-ui.js"></script>

@@ -662,8 +662,7 @@ dd {
   }
 }
 
-/* Style for page search */
-#search {
-  display: none;
-  padding-bottom: 1rem;
+/* Style for the page search widget */
+.td-offline-search-results {
+  max-width: 460px;
 }
