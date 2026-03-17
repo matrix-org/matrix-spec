@@ -24,7 +24,7 @@ paths:
 
         {{% boxes/note %}}
         Like the [well-known discovery URI](/client-server-api/#well-known-uris),
-        this endpoint should be accessed with the hostname of the homeserver's
+        this endpoint should be accessed with the hostname of the Policy Server's
         [server name](/appendices/#server-name) by making a
         GET request to `https://hostname/.well-known/matrix/policy_server`.
         {{% /boxes/note %}}

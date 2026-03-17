@@ -1277,10 +1277,10 @@ endpoint MUST be protected as follows:
         room ID MUST be ignored if the sending server is denied access to
         the room identified by that ID.
 
-{{< added-in v="1.18" >}} The following endpoints MAY be protected:
+The following endpoints MAY be protected:
 
--   [`/_matrix/policy/v1/sign`](#post_matrixpolicyv1sign) - Protected if the server
-    is tracking the DAG and chooses to enforce the ACL.
+-   [`/_matrix/policy/v1/sign`](#post_matrixpolicyv1sign) - {{< added-in v="1.18" >}}
+    Protected if the server is tracking the DAG and chooses to enforce the ACL.
 
 
 ## Policy Servers
@@ -1396,7 +1396,7 @@ allow rooms to revoke the Policy Server's key without cooperation of the Policy
 Server.
 
 If the Policy Server is acting as a normal homeserver and attempting to send an
-event, that event will require the a signature from the server's published signing
+event, that event will require a signature from the server's published signing
 key alongside the Policy Server signature described in this section.
 {{% /boxes/warning %}}
 
