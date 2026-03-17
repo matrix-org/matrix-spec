@@ -84,7 +84,7 @@ For the `users` namespace, application services can only register interest in
 homeserver). Events affecting users on other homeservers are not sent to an application
 service, even if the user happens to match the one of the `users` namespaces (unless,
 of course, the event affects a room that the application service is interested in
-for another room - for example, because there is another user in the room that the
+for another reason - for example, because there is another user in the room that the
 application service is interested in).
 
 For the `rooms` and `aliases` namespaces, all events in a matching room will be
