@@ -34,7 +34,7 @@ search backend.
 
     $searchInput.focus(() => {
       pagefind.init();
-    }); 
+    });
 
     //
     // Register handler
