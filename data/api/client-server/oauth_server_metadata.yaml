@@ -67,8 +67,7 @@ paths:
                     type: string
                     format: uri
                     description: |-
-                      URL of the token endpoint, necessary to use the authorization code grant and
-                      the refresh token grant.
+                      URL of the token endpoint, used by the grants.
                   revocation_endpoint:
                     type: string
                     format: uri
@@ -101,6 +100,10 @@ paths:
                       This array MUST contain at least the `authorization_code` and `refresh_token`
                       values, for clients to be able to use the authorization code grant and refresh
                       token grant, respectively.
+
+                      {{% added-in v="1.18" %}} It MAY also contain
+                      `urn:ietf:params:oauth:grant-type:device_code` to indicate support for the
+                      [device authorization grant](/client-server-api/#device-authorization-grant).
                     items:
                       type: string
                       description: A grant type that the server supports.
@@ -165,6 +168,14 @@ paths:
                         - "org.matrix.account_deactivate"
                         - "org.matrix.cross_signing_reset"
                       description: An action that the account management URL supports.
+                  device_authorization_endpoint:
+                    x-addedInMatrixVersion: "1.18"
+                    type: string
+                    format: uri
+                    description: |-
+                      URL of the device authorization endpoint, as defined in
+                      [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628), necessary to use
+                      the [device authorization grant](/client-server-api/#device-authorization-grant).
                 required:
                   - issuer
                   - authorization_endpoint
@@ -180,9 +191,10 @@ paths:
                   "authorization_endpoint": "https://account.example.com/oauth2/auth",
                   "token_endpoint": "https://account.example.com/oauth2/token",
                   "registration_endpoint": "https://account.example.com/oauth2/clients/register",
+                  "device_authorization_endpoint": "https://account.example.com/oauth2/device",
                   "revocation_endpoint": "https://account.example.com/oauth2/revoke",
                   "response_types_supported": ["code"],
-                  "grant_types_supported": ["authorization_code", "refresh_token"],
+                  "grant_types_supported": ["authorization_code", "refresh_token", "urn:ietf:params:oauth:grant-type:device_code"],
                   "response_modes_supported": ["query", "fragment"],
                   "code_challenge_methods_supported": ["S256"],
                   "account_management_uri": "https://account.example.com/manage",

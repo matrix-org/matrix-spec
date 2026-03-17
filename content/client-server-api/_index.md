@@ -554,7 +554,7 @@ endpoint.
 
 With the OAuth 2.0 API, a client can obtain an access token by using one of the
 [grant types](#grant-types) supported by the homeserver and authorizing the
-proper [scope](#scope), as demonstrated in the [login flow](#login-flow). To
+proper [scope](#scope), as demonstrated in the [login flows](#login-flows). To
 invalidate the access token the client must use [token revocation](#token-revocation).
 
 ### Using access tokens
@@ -1751,19 +1751,31 @@ authentication type.
 
 1. [Discover the OAuth 2.0 server metadata](#server-metadata-discovery).
 2. [Register the client with the homeserver](#client-registration).
-3. [Obtain an access token](#login-flow) by authorizing a [scope](#scope) for the client with the [authorization code grant](#authorization-code-grant).
+3. [Obtain an access token](#login-flows) by authorizing a [scope](#scope) for
+   the client with the [authorization code grant](#authorization-code-grant) or
+   [device authorization grant](#device-authorization-grant).
 4. [Refresh the access token](#token-refresh-flow) with the [refresh token grant](#refresh-token-grant) when it expires.
 5. [Revoke the tokens](#token-revocation) when the users wants to log out of the client.
 
-#### Login flow
+#### Login flows
 
-Logging in with the OAuth 2.0 API should be done with the [authorization code
-grant](#authorization-code-grant). In the context of the Matrix specification,
-this means requesting a [scope](#scope) including full client-server API
-read/write access and allocating a device ID.
+Logging in and obtaining an access token with the OAuth 2.0 API should be done
+using either the [authorization code grant](#authorization-code-grant) or
+[device authorization grant](#device-authorization-grant). In the context of the
+Matrix specification, this means requesting a [scope](#scope) including full
+client-server API read/write access and allocating a device ID.
 
-Once the client has retrieved the [server metadata](#server-metadata-discovery),
-it needs to generate the following values:
+##### Authorization code flow
+
+This login flow uses the [authorization code grant](#authorization-code-grant)
+and is suitable for clients where the following criteria are met:
+
+- There is a web browser available for the user to complete authentication and
+  authorization.
+- The client can receive the callback via a redirect from the web browser.
+
+Once the client has retrieved the [server metadata](#server-metadata-discovery)
+the client needs to generate the following values:
 
 - `device_id`: a unique identifier for this device; see the
   [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
@@ -1902,6 +1914,143 @@ Sample response:
 ```
 
 Finally, the client can call the  [`/whoami`](#get_matrixclientv3accountwhoami)
+endpoint to get the user ID that owns the access token.
+
+##### Device authorization flow
+
+{{% added-in v="1.18" %}}
+
+This flow uses the [device authorization grant](#device-authorization-grant) to
+allow clients to obtain an access token without needing to directly interact
+with a web browser. Instead, the user completes authorization on a web browser
+that can be a separate device.
+
+This is useful for devices with limited input
+capabilities (such as CLI applications or embedded devices) or where the
+redirect handling may be unreliable (such as a desktop applications).
+
+Once the client has retrieved the [server metadata](#server-metadata-discovery)
+the client needs to generate following value:
+
+- `device_id`: a unique identifier for this device; see the
+  [`urn:matrix:client:device:<device_id>`](#device-id-allocation) scope token.
+
+**Device authorization request**
+
+The client sends a `application/x-www-form-urlencoded` encoded `POST` request to
+the `device_authorization_endpoint` as defined in
+[RFC 8628 section 3.1](https://datatracker.ietf.org/doc/html/rfc8628#section-3.1):
+
+| Parameter   | Value                                                          |
+|-------------|----------------------------------------------------------------|
+| `client_id` | The client ID returned from client registration.               |
+| `scope`     | `urn:matrix:client:api:* urn:matrix:client:device:<device_id>` with the `device_id` generated previously. |
+
+Sample device authorization request:
+
+```
+POST /oauth2/device HTTP/1.1
+Host: account.example.com
+Content-Type: application/x-www-form-urlencoded
+
+client_id=s6BhdRkqt3&scope=urn%3Amatrix%3Aclient%3Aapi%3A%2A%20urn%3Amatrix%3Aclient%3Adevice%3AAABBBCCCDDD
+```
+
+**Device authorization response**
+
+The server responds with a JSON object as defined in
+[RFC 8628 section 3.2](https://datatracker.ietf.org/doc/html/rfc8628#section-3.2),
+containing:
+
+| Parameter                    |                                                                                                                                               |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `device_code`                | The device verification code.                                                                                                                 |
+| `user_code`                  | An end-user verification code.                                                                                                                |
+| `verification_uri`           | The end-user verification URI on the authorization server.                                                                                    |
+| `verification_uri_complete`  | Optionally, the URI which doesn't require the user to manually type the `user_code`, designed for non-textual transmission.                   |
+| `expires_in`                 | The lifetime in seconds of the `device_code` and `user_code`.                                                                                 |
+| `interval`                   | The minimum number of seconds the client should wait between polling requests to the token endpoint. If omitted, clients should default to 5. |
+
+It is RECOMMENDED that the server provides a `verification_uri_complete` such
+that the user does not need to type in the `user_code`.
+
+Sample response:
+
+```json
+{
+  "device_code": "GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS",
+  "user_code": "WDJB-MJHT",
+  "verification_uri": "https://account.example.com/link",
+  "verification_uri_complete": "https://account.example.com/link?user_code=WDJB-MJHT",
+  "expires_in": 1800,
+  "interval": 5
+}
+```
+
+**User interaction**
+
+The client conveys the `verification_uri_complete` (and/or `verification_uri`
+and `user_code`) to the user. How the client does this depends on the
+specific device characteristics and use case. For example:
+
+- A CLI application could display the `verification_uri` and `user_code` as text
+  for the user to type into their browser on another device.
+- An embedded device with a screen could encode the `verification_uri_complete`
+  (with fallback to `verification_uri`) as a QR code for the user to scan with
+  their phone.
+- A desktop application running on a platform that does not support callbacks
+  could launch the `verification_uri_complete` (with fallback to
+  `verification_uri`) in the system browser.
+
+The user opens the verification URI in a web browser, which may be on another
+device, and completes authentication and authorization.
+
+**Token polling**
+
+While the user is completing authorization, the client polls the
+`token_endpoint` for the outcome, at intervals no shorter than the `interval`
+value from the device authorization response.
+
+The poll request is a `POST` to the `token_endpoint` with the following
+parameters, encoded as `application/x-www-form-urlencoded` in the body:
+
+| Parameter     | Value                                                          |
+|---------------|----------------------------------------------------------------|
+| `grant_type`  | `urn:ietf:params:oauth:grant-type:device_code`                 |
+| `device_code` | The `device_code` from the device authorization response.      |
+| `client_id`   | The client ID returned from client registration.               |
+
+Sample token polling request:
+
+```
+POST /oauth2/token HTTP/1.1
+Host: account.example.com
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Adevice_code&device_code=GmRhmhcxhwAzkoEqiMEg_DnyEysNkuNhszIySk9eS&client_id=s6BhdRkqt3
+```
+
+The server responds as defined in [RFC 8628 section
+3.5](https://datatracker.ietf.org/doc/html/rfc8628#section-3.5):
+
+- While authorization is pending, the server returns an `authorization_pending`
+  error (or `slow_down` if the client is polling too frequently).
+- If authorization is denied, the server returns an `access_denied` error.
+- If the device code expires, the server returns an `expired_token` error.
+- On successful authorization, the server returns a JSON object containing the
+  access token, token type, expiration time, refresh token, and scope:
+
+```json
+{
+  "access_token": "2YotnFZFEjr1zCsicMWpAA",
+  "token_type": "Bearer",
+  "expires_in": 299,
+  "refresh_token": "tGz3JOkF0XG5Qx2TlKWIA",
+  "scope": "urn:matrix:client:api:* urn:matrix:client:device:AAABBBCCCDDD"
+}
+```
+
+Finally, the client can call the [`/whoami`](#get_matrixclientv3accountwhoami)
 endpoint to get the user ID that owns the access token.
 
 #### Token refresh flow
@@ -2234,6 +2383,7 @@ The client must also have obtained a `client_id` by [registering with the server
 
 This specification supports the following grant types:
 - [Authorization code grant](#authorization-code-grant)
+- {{% added-in v="1.18" %}} [Device authorization grant](#device-authorization-grant)
 - [Refresh token grant](#refresh-token-grant)
 
 ##### Authorization code grant
@@ -2258,18 +2408,34 @@ To use this grant, homeservers and clients MUST:
   Encoding Practices](https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html)
   for clients with an HTTPS redirect URI.
 
-###### User registration
+##### Device authorization grant
 
-Clients can signal to the server that the user desires to register a new account
-by initiating the authorization code grant with the `prompt=create` parameter
-set in the authorization request as defined in [Initiating User Registration via
-OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+{{% added-in v="1.18" %}}
 
-Whether the homeserver supports this parameter is advertised by the
-`prompt_values_supported` authorization server metadata.
+As per [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628), the device
+authorization grant lets clients on devices with limited input capabilities
+obtain an access token by having the user complete authorization on a separate
+device with a web browser.
 
-Servers that support this parameter SHOULD show the account registration UI in
-the browser.
+This grant requires the client to know the following [authorization server
+metadata](#server-metadata-discovery):
+
+- `device_authorization_endpoint`
+
+To use this grant, homeservers and clients MUST:
+
+- Support the device authorization grant as per
+  [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628).
+- Support the [refresh token grant](#refresh-token-grant).
+
+As with the [authorization code grant](#authorization-code-grant), when
+authorization is granted to a client, the homeserver MUST issue a refresh token
+to the client in addition to the access token. The access token and refresh
+token have the same lifetime constraints as described in the [refresh token
+grant](#refresh-token-grant) section.
+
+The full flow for using this grant is described in the
+[device authorization flow](#device-authorization-flow).
 
 ##### Refresh token grant
 
@@ -2375,6 +2541,22 @@ The server SHOULD return one of the following responses:
   `401 Unauthorized` response
 - For other errors, the server returns a `400 Bad Request` response with error
   details
+
+#### User registration
+
+Clients can signal to the server that the user desires to register a new account
+by initiating the [authorization code grant](#authorization-code-grant) with the `prompt=create` parameter
+set in the authorization request as defined in [Initiating User Registration via
+OpenID Connect 1.0](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+
+Whether the homeserver supports this parameter is advertised by the
+`prompt_values_supported` authorization server metadata.
+
+Servers that support this parameter SHOULD show the account registration UI in
+the browser.
+
+The `prompt=create` parameter is not supported when using the [device
+authorization grant](#device-authorization-grant).
 
 #### Account management {id="oauth-20-account-management"}
 
