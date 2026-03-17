@@ -473,6 +473,9 @@ server must ensure that the event:
     otherwise it is rejected.
 6.  Passes authorization rules based on the current state of the room,
     otherwise it is "soft failed".
+7. {{% added-in v="1.18" %}} Is [validated](#validating-policy-server-signatures)
+   by the Policy Server, if the room is [using a Policy Server](#determining-if-a-policy-server-is-enabled-in-a-room),
+   otherwise it is "soft failed".
 
 Further details of these checks, and how to handle failures, are
 described below.
@@ -688,6 +691,11 @@ then any new event `D'` will not reference `C`:
     B   C
     |
     D'
+
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events can also be soft failed if they fail [Policy Server checks](#validating-policy-server-signatures).
+{{% /boxes/note %}}
 
 #### Retrieving event authorization information
 
@@ -1465,6 +1473,12 @@ The signature is then copied back to the original event object.
 For an example of a signed event, see the [room version
 specification](/rooms).
 
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events sent in rooms with [Policy Servers](#policy-servers) MUST [ask](#asking-for-a-policy-server-signature-on-an-event)
+the Policy Server for a signature too.
+{{% /boxes/note %}}
+
 ### Validating hashes and signatures on received events
 
 When a server receives an event over federation from another server, the
@@ -1498,6 +1512,12 @@ If the hash check fails, then it is assumed that this is because we have
 only been given a redacted version of the event. To enforce this, the
 receiving server should use the redacted copy it calculated rather than
 the full copy it received.
+
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events sent in rooms with [Policy Servers](#policy-servers) have [additional](#validating-policy-server-signatures)
+signature validation requirements.
+{{% /boxes/note %}}
 
 ### Calculating the reference hash for an event
 
