@@ -93,48 +93,27 @@ request being made was invalid.
 
 These error codes can be returned by any API endpoint:
 
-`M_FORBIDDEN`
-: Forbidden access, e.g. joining a room without permission, failed login.
-
-`M_UNKNOWN_TOKEN`
-: The access or refresh token specified was not recognised.
-
-: An additional response parameter, `soft_logout`, might be present on the
-response for 401 HTTP status codes. See [the soft logout
-section](#soft-logout) for more information.
-
-`M_MISSING_TOKEN`
-: No access token was specified for the request.
-
-`M_USER_LOCKED`
-: The account has been [locked](#account-locking) and cannot be used at this time.
-
-`M_USER_SUSPENDED`
-: The account has been [suspended](#account-suspension) and can only be used for
-limited actions at this time.
+<!-- Please keep the error codes below in alphabetical order -->
 
 `M_BAD_JSON`
 : Request contained valid JSON, but it was malformed in some way, e.g.
 missing required keys, invalid values for keys.
 
-`M_NOT_JSON`
-: Request did not contain valid JSON.
-
-`M_NOT_FOUND`
-: No resource was found for this request.
+`M_FORBIDDEN`
+: Forbidden access, e.g. joining a room without permission, failed login.
 
 `M_LIMIT_EXCEEDED`
 : Too many requests have been sent in a short period of time. Wait a while
 then try again. See [Rate limiting](#rate-limiting).
 
-`M_UNRECOGNIZED`
-: The server did not understand the request. This is expected to be returned with
-a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
-code if the endpoint is implemented, but the incorrect HTTP method is used.
+`M_MISSING_TOKEN`
+: No access token was specified for the request.
 
-`M_UNKNOWN_DEVICE`
-: {{% added-in v="1.17" %}} The device ID supplied by the application service does
-not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
+`M_NOT_FOUND`
+: No resource was found for this request.
+
+`M_NOT_JSON`
+: Request did not contain valid JSON.
 
 `M_RESOURCE_LIMIT_EXCEEDED`
 : The request cannot be completed because the homeserver has reached a
@@ -181,39 +160,85 @@ limit is a hard limit that cannot be increased.
 `M_UNKNOWN`
 : An unknown error has occurred.
 
+`M_UNKNOWN_DEVICE`
+: {{% added-in v="1.17" %}} The device ID supplied by the application service does
+not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
+
+`M_UNKNOWN_TOKEN`
+: The access or refresh token specified was not recognised.
+
+: An additional response parameter, `soft_logout`, might be present on the
+response for 401 HTTP status codes. See [the soft logout
+section](#soft-logout) for more information.
+
+`M_UNRECOGNIZED`
+: The server did not understand the request. This is expected to be returned with
+a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
+code if the endpoint is implemented, but the incorrect HTTP method is used.
+
+`M_USER_LOCKED`
+: The account has been [locked](#account-locking) and cannot be used at this time.
+
+`M_USER_SUSPENDED`
+: The account has been [suspended](#account-suspension) and can only be used for
+limited actions at this time.
+
+<!-- Please keep the error codes above in alphabetical order -->
+
 #### Other error codes
 
 The following error codes are specific to certain endpoints.
 
 <!-- TODO: move them to the endpoints that return them -->
 
-`M_UNAUTHORIZED`
-: The request was not correctly authorized. Usually due to login failures.
+<!-- Please keep the error codes below in alphabetical order -->
 
-`M_USER_DEACTIVATED`
-: The user ID associated with the request has been deactivated. Typically
-for endpoints that prove authentication, such as [`/login`](#get_matrixclientv3login).
+`M_BAD_STATE`
+: The state change requested cannot be performed, such as attempting to
+unban a user who is not banned.
 
-`M_USER_IN_USE`
-: Encountered when trying to register a user ID which has been taken.
+`M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
+: The user is unable to reject an invite to join the server notices room.
+See the [Server Notices](#server-notices) module for more information.
+
+`M_CAPTCHA_INVALID`
+: The Captcha provided did not match what was expected.
+
+`M_CAPTCHA_NEEDED`
+: A Captcha is required to complete the request.
+
+`M_EXCLUSIVE`
+: The resource being requested is reserved by an application service, or
+the application service making the request has not created the resource.
+
+`M_GUEST_ACCESS_FORBIDDEN`
+: The room or resource does not permit guests to access it.
+
+`M_INCOMPATIBLE_ROOM_VERSION`
+: The client attempted to join a room that has a version the server does
+not support. Inspect the `room_version` property of the error response
+for the room's version.
+
+`M_INVALID_PARAM`
+: A parameter that was specified has the wrong value. For example, the
+server expected an integer and instead received a string.
+
+`M_INVALID_ROOM_STATE`
+: Sent when the initial state given to the `createRoom` API is invalid.
 
 `M_INVALID_USERNAME`
 : Encountered when trying to register a user ID which is not valid.
+
+`M_MISSING_PARAM`
+: A required parameter was missing from the request.
 
 `M_ROOM_IN_USE`
 : Sent when the room alias given to the `createRoom` API is already in
 use.
 
-`M_INVALID_ROOM_STATE`
-: Sent when the initial state given to the `createRoom` API is invalid.
-
-`M_THREEPID_IN_USE`
-: Sent when a threepid given to an API cannot be used because the same
-threepid is already in use.
-
-`M_THREEPID_NOT_FOUND`
-: Sent when a threepid given to an API cannot be used because no record
-matching the threepid was found.
+`M_SERVER_NOT_TRUSTED`
+: The client's request used a third-party server, e.g. identity server,
+that this server does not trust.
 
 `M_THREEPID_AUTH_FAILED`
 : Authentication could not be performed on the third-party identifier.
@@ -223,56 +248,35 @@ matching the threepid was found.
 if the server only permits, for example, email addresses from a
 particular domain.
 
-`M_SERVER_NOT_TRUSTED`
-: The client's request used a third-party server, e.g. identity server,
-that this server does not trust.
+`M_THREEPID_IN_USE`
+: The third party identifier specified by the client is not acceptable because it is
+already in use in some way.
+
+`M_THREEPID_MEDIUM_NOT_SUPPORTED`
+: The homeserver does not support adding a third party identifier of the given medium.
+
+`M_THREEPID_NOT_FOUND`
+: Sent when a threepid given to an API cannot be used because no record
+matching the threepid was found.
+
+`M_TOO_LARGE`
+: The request or entity was too large.
+
+`M_UNAUTHORIZED`
+: The request was not correctly authorized. Usually due to login failures.
 
 `M_UNSUPPORTED_ROOM_VERSION`
 : The client's request to create a room used a room version that the
 server does not support.
 
-`M_INCOMPATIBLE_ROOM_VERSION`
-: The client attempted to join a room that has a version the server does
-not support. Inspect the `room_version` property of the error response
-for the room's version.
+`M_USER_DEACTIVATED`
+: The user ID associated with the request has been deactivated. Typically
+for endpoints that prove authentication, such as [`/login`](#get_matrixclientv3login).
 
-`M_BAD_STATE`
-: The state change requested cannot be performed, such as attempting to
-unban a user who is not banned.
+`M_USER_IN_USE`
+: Encountered when trying to register a user ID which has been taken.
 
-`M_GUEST_ACCESS_FORBIDDEN`
-: The room or resource does not permit guests to access it.
-
-`M_CAPTCHA_NEEDED`
-: A Captcha is required to complete the request.
-
-`M_CAPTCHA_INVALID`
-: The Captcha provided did not match what was expected.
-
-`M_MISSING_PARAM`
-: A required parameter was missing from the request.
-
-`M_INVALID_PARAM`
-: A parameter that was specified has the wrong value. For example, the
-server expected an integer and instead received a string.
-
-`M_TOO_LARGE`
-: The request or entity was too large.
-
-`M_EXCLUSIVE`
-: The resource being requested is reserved by an application service, or
-the application service making the request has not created the resource.
-
-`M_CANNOT_LEAVE_SERVER_NOTICE_ROOM`
-: The user is unable to reject an invite to join the server notices room.
-See the [Server Notices](#server-notices) module for more information.
-
-`M_THREEPID_MEDIUM_NOT_SUPPORTED`
-: The homeserver does not support adding a third party identifier of the given medium.
-
-`M_THREEPID_IN_USE`
-: The third party identifier specified by the client is not acceptable because it is
-already in use in some way.
+<!-- Please keep the error codes above in alphabetical order -->
 
 #### Rate limiting
 
