@@ -17,8 +17,8 @@ for added protection.
 {{% /boxes/note %}}
 
 A room's Policy Server is designated by the [`m.room.policy`](#mroompolicy) state
-event described below. If the state event is not set in the room or is incomplete,
-the room does *not* use a Policy Server. Similarly, if the server name in the state
+event described below. If the state event is not set in the room or is missing
+required fields, the room does *not* use a Policy Server. Similarly, if the server name in the state
 event has zero joined users in the room, the room also does *not* use a Policy
 Server.
 
