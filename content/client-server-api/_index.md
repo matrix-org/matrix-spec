@@ -469,6 +469,8 @@ The flow for auto-discovery is as follows:
 
 {{% http-api spec="client-server" api="support" %}}
 
+{{% http-api spec="client-server" api="policy_server" %}}
+
 ### API Versions
 
 Upon connecting, the Matrix client and server need to negotiate which version of the specification
@@ -1685,7 +1687,7 @@ For a client to be considered fully OAuth 2.0 aware it MUST:
   then the client MUST redirect users to manage their account at the [account
   management URL](#oauth-20-account-management), if available, instead of
   providing a native UI using the legacy API endpoints.
-  
+
   * If the user wishes to deactivate their account then the client MUST refer
     them to the account management URL.
   * If the user wishes to sign out a device other than its own then the client
@@ -4275,6 +4277,7 @@ that profile.
 | [Read and Unread Markers](#read-and-unread-markers)        | Optional  | Optional | Optional | Optional | Optional |
 | [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
+| [Policy Servers](#policy-servers)                          | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Recently used emoji](#recently-used-emoji)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
@@ -4377,6 +4380,7 @@ systems.
 {{% cs-module name="Room Upgrades" filename="room_upgrades" %}}
 {{% cs-module name="Server Notices" filename="server_notices" %}}
 {{% cs-module name="Moderation policy lists" filename="moderation_policies" %}}
+{{% cs-module name="Policy Servers" filename="policy_servers" %}}
 {{% cs-module name="Spaces" filename="spaces" %}}
 {{% cs-module name="Event replacements" filename="event_replacements" %}}
 {{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
