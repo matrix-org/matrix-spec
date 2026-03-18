@@ -62,8 +62,9 @@ properties:
       allow:
         type: array
         description: |-
-          The case-insensitive server names to allow in the room, excluding any port information.
-          Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
+          The case-insensitive [glob expressions](/appendices#glob-style-matching) that are
+          evaluated against server names excluding any port information to determine the servers
+          to allow in the room.
 
           **This defaults to an empty list when not provided, effectively disallowing
           every server.**
@@ -72,8 +73,9 @@ properties:
       deny:
         type: array
         description: |-
-          The case-insensitive server names to disallow in the room, excluding any port information.
-          Each entry is interpreted as a [glob-style pattern](/appendices#glob-style-matching).
+          The case-insensitive [glob expressions](/appendices#glob-style-matching) that are
+          evaluated against server names excluding any port information to determine the servers
+          to disallow in the room.
 
           This defaults to an empty list when not provided.
         items:
