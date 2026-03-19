@@ -15,18 +15,18 @@ limitations under the License.
 */
 
 /*
-Adapted from [1] to combine Docsy's built-in search UI with the Pagefind
+Adapted from [1] to combine Docsy"s built-in search UI with the Pagefind
 search backend.
 
   [1]: https://github.com/matrix-org/docsy/blob/71d103ebb20ace3d528178c4b6d92b6cc4f7fd53/assets/js/offline-search.js
 */
 
 (function ($) {
-  'use strict';
+  "use strict";
 
   $(document).ready(async function () {
     const pagefind = await import("/pagefind/pagefind.js");
-    const $searchInput = $('.td-search input');
+    const $searchInput = $(".td-search input");
 
     //
     // Lazily initialise Pagefind only when the user is about to start a search.
@@ -40,7 +40,7 @@ search backend.
     // Register handler
     //
 
-    $searchInput.on('change', (event) => {
+    $searchInput.on("change", (event) => {
       render($(event.target));
 
       // Hide keyboard on mobile browser
@@ -48,7 +48,7 @@ search backend.
     });
 
     // Prevent reloading page by enter key on sidebar search.
-    $searchInput.closest('form').on('submit', () => {
+    $searchInput.closest("form").on("submit", () => {
       return false;
     });
 
@@ -73,7 +73,7 @@ search backend.
       //
 
       const searchQuery = $targetSearchInput.val();
-      if (searchQuery === '') {
+      if (searchQuery === "") {
         return;
       }
 
@@ -88,75 +88,109 @@ search backend.
       // Make result html
       //
 
-      const $html = $('<div>');
+      const $html = $("<div>");
 
       $html.append(
-        $('<div>')
+        $("<div>")
           .css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginBottom: '1em',
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "1em",
           })
           .append(
-            $('<span>').text('Search results').css({ fontWeight: 'bold' })
+            $("<span>").text("Search results").css({ fontWeight: "bold" })
           )
           .append(
-            $('<span>').addClass('td-offline-search-results__close-button')
+            $("<span>").addClass("td-offline-search-results__close-button")
           )
       );
 
-      const $searchResultBody = $('<div>').css({
+      const $searchResultBody = $("<div>").css({
         maxHeight: `calc(100vh - ${
           $targetSearchInput.offset().top - $(window).scrollTop() + 180
         }px)`,
-        overflowY: 'auto',
+        overflowY: "auto",
       });
       $html.append($searchResultBody);
 
       if (results.length === 0) {
         $searchResultBody.append(
-          $('<p>').text(`No results found for query "${searchQuery}"`)
+          $("<p>").text(`No results found for query "${searchQuery}"`)
         );
       } else {
-        results.forEach((r) => {
-          r.sub_results.forEach((s) => {
-            const href = s.url;
+        results.forEach((r, index_r) => {
+          // Add the main result"s page title.
+          $searchResultBody.append(
+            $("<a>")
+              .addClass("d-block")
+              .css({
+                fontSize: "1.2rem",
+              })
+              .attr("href", r.url)
+              .text(r.meta.title)
+          );
+          
+          // Render the first 3 subresults per page and wrap the rest
+          // in a collapsed container.
+          const LIMIT = 3;
+          let $wrapper = null;
 
-            const $entry = $('<div>').addClass('mt-4');
+          r.sub_results.forEach((s, index_s) => {
+            
+
+            if (index_s === LIMIT) {
+              const wrapper_id = `collapssible-subresults-${index_r}`;
+              const $expander = $("<a>")
+                .attr("data-bs-toggle", "collapse")
+                .attr("data-bs-target", `#${wrapper_id}`)
+                .attr("href", "#")
+                .attr("role", "button")
+                .attr("aria-expanded", "false")
+                .attr("aria-controls", wrapper_id)
+                .css("margin-left", "0.5rem")
+                .text(`${r.sub_results.length - index_s} more result(s) from ${r.meta.title}`);
+
+              $searchResultBody.append($("<p>").append($expander));
+              $wrapper = $("<div>")
+                .addClass("collapse")
+                .attr("id", wrapper_id);
+              $searchResultBody.append($wrapper);
+            }
+
+            const $entry = $("<div>")
+              .css("margin-top", "0.5rem")
+              .css("margin-left", "0.5rem");
 
             $entry.append(
-              $('<small>').addClass('d-block text-body-secondary').text(r.meta.title)
-            );
-
-            $entry.append(
-              $('<a>')
-                .addClass('d-block')
-                .css({
-                  fontSize: '1.2rem',
-                })
-                .attr('href', href)
+              $("<a>")
+                .addClass("d-block")
+                .attr("href", s.url)
                 .text(s.title)
             );
 
-            $entry.append($('<p>').html(s.excerpt));
+            $entry.append($("<p>").html(s.excerpt));
 
-            $searchResultBody.append($entry);
+            if (index_s < LIMIT) {
+              $searchResultBody.append($entry);
+            } else {
+              $wrapper.append($entry);
+            }
           });
         });
       }
 
-      $targetSearchInput.one('shown.bs.popover', () => {
-        $('.td-offline-search-results__close-button').on('click', () => {
-          $targetSearchInput.val('');
-          $targetSearchInput.trigger('change');
+      $targetSearchInput.one("shown.bs.popover", () => {
+        $(".td-offline-search-results__close-button").on("click", () => {
+          $targetSearchInput.val("");
+          $targetSearchInput.trigger("change");
         });
       });
 
       const popover = new bootstrap.Popover($targetSearchInput, {
         content: $html[0],
         html: true,
-        customClass: 'td-offline-search-results',
-        placement: 'bottom',
+        customClass: "td-offline-search-results",
+        placement: "bottom",
       });
       popover.show();
     };
