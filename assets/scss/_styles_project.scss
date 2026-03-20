@@ -664,5 +664,10 @@ dd {
 
 /* Style for the page search widget */
 .td-offline-search-results {
+  width: 100%;
   max-width: 460px;
+}
+
+.td-offline-search-results .spinner-container {
+  text-align: center;
 }

@@ -37,7 +37,7 @@ search backend.
     });
 
     //
-    // Register handler
+    // Set up search input handler.
     //
 
     $searchInput.on("change", (event) => {
@@ -53,12 +53,12 @@ search backend.
     });
 
     //
-    // Pagefind
+    // Callback for searching and rendering the results.
     //
 
     const render = async ($targetSearchInput) => {
       //
-      // Dispose existing popover
+      // Dispose any existing popover.
       //
 
       {
@@ -69,7 +69,7 @@ search backend.
       }
 
       //
-      // Search
+      // Kick off the search and collect the results.
       //
 
       const searchQuery = $targetSearchInput.val();
@@ -77,34 +77,61 @@ search backend.
         return;
       }
 
+      // Show the results popover with a spinner while we're busy.
+      const $spinner = $("<div>")
+        .addClass("spinner-container")
+        .append($("<div>")
+          .addClass("spinner-border")
+          .attr("role", "status")
+          .append($("<div>")
+            .addClass("visually-hidden")
+            .text("Loading...")))
+        .append($("<p>")
+          .text("Loading..."));
+      const popover = new bootstrap.Popover($targetSearchInput, {
+        content: $spinner[0],
+        html: true,
+        customClass: "td-offline-search-results",
+        placement: "bottom",
+      });
+      popover.show();
+
+      // Kick off the search.
       const search = await pagefind.debouncedSearch(searchQuery);
       if (search === null) {
         // A more recent search call has been made, nothing to do.
         return;
       }
-      const results = await Promise.all(search.results.slice(0, 20).map(r => r.data()));
+
+      // Load all result details. We may want to switch to a paged UI in future for better performance.
+      const results = await Promise.all(search.results.slice(0, 100).map(r => r.data()));
 
       //
-      // Make result html
+      // Construct the search results html.
       //
 
       const $html = $("<div>");
 
-      $html.append(
-        $("<div>")
-          .css({
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "1em",
+      // Add the header and close button.
+      $html.append($("<div>")
+        .css({
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "1em",
+        })
+        .append($("<span>")
+          .text("Search results")
+          .css({ fontWeight: "bold" }))
+        .append($("<span>")
+          .addClass("td-offline-search-results__close-button")
+          .on("click", () => {
+            $targetSearchInput.val("");
+            $targetSearchInput.trigger("change");
           })
-          .append(
-            $("<span>").text("Search results").css({ fontWeight: "bold" })
-          )
-          .append(
-            $("<span>").addClass("td-offline-search-results__close-button")
-          )
+        )
       );
 
+      // Add the main search results body.
       const $searchResultBody = $("<div>").css({
         maxHeight: `calc(100vh - ${
           $targetSearchInput.offset().top - $(window).scrollTop() + 180
@@ -119,7 +146,7 @@ search backend.
         );
       } else {
         results.forEach((r, index_r) => {
-          // Add the main result"s page title.
+          // Add the main result's page title.
           $searchResultBody.append(
             $("<a>")
               .addClass("d-block")
@@ -136,8 +163,6 @@ search backend.
           let $wrapper = null;
 
           r.sub_results.forEach((s, index_s) => {
-            
-
             if (index_s === LIMIT) {
               const wrapper_id = `collapssible-subresults-${index_r}`;
               const $expander = $("<a>")
@@ -179,20 +204,16 @@ search backend.
         });
       }
 
-      $targetSearchInput.one("shown.bs.popover", () => {
-        $(".td-offline-search-results__close-button").on("click", () => {
-          $targetSearchInput.val("");
-          $targetSearchInput.trigger("change");
-        });
-      });
-
-      const popover = new bootstrap.Popover($targetSearchInput, {
-        content: $html[0],
-        html: true,
-        customClass: "td-offline-search-results",
-        placement: "bottom",
-      });
-      popover.show();
+      // Finally, show the search results.
+      //
+      // Ideally we would just call setContent but there appears to be a bug in Bootstrap
+      // that causes the popover to be hidden when setContent is called after the popover
+      // has been shown. To work around this, we use the hack from [1] to inject the HTML
+      // content manually.
+      //
+      // [1]: https://github.com/twbs/bootstrap/issues/37206#issuecomment-1259541205
+      $(popover.tip.querySelector('.popover-body')).html($html[0]);
+      popover.update();
     };
   });
 })(jQuery);
