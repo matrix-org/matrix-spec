@@ -155,7 +155,7 @@ search backend.
               .text(r.meta.title))
             .append($("<span>")
               .addClass("text-body-secondary")
-              .text(` – ${r.sub_results.length} result(s)`)));
+              .text(` – ${r.sub_results.length} ${resultsString(r.sub_results.length)}`)));
           
           // Render the first 3 subresults per page and wrap the rest
           // in a collapsed container.
@@ -164,6 +164,7 @@ search backend.
 
           r.sub_results.forEach((s, index_s) => {
             if (index_s === LIMIT) {
+              const num_hidden_results = r.sub_results.length - index_s;
               const wrapper_id = `collapssible-subresults-${index_r}`;
               const $action = $("<span>").text("▶ Show");
               const $expander = $("<a>")
@@ -174,7 +175,7 @@ search backend.
                 .attr("aria-expanded", "false")
                 .attr("aria-controls", wrapper_id)
                 .append($action)
-                .append($("<span>").text(` ${r.sub_results.length - index_s} more result(s) from ${r.meta.title}`));
+                .append($("<span>").text(` ${num_hidden_results} more ${resultsString(num_hidden_results)} from ${r.meta.title}`));
 
               $searchResultBody.append($("<p>").append($expander));
               $wrapper = $("<div>")
@@ -219,3 +220,11 @@ search backend.
     };
   });
 })(jQuery);
+
+//
+// Helpers
+//
+
+const resultsString = (n) => {
+  return n > 1 ? "results" : "result";
+};
