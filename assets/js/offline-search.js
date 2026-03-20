@@ -42,9 +42,6 @@ search backend.
 
     $searchInput.on("change", (event) => {
       render($(event.target));
-
-      // Hide keyboard on mobile browser
-      $searchInput.blur();
     });
 
     // Prevent reloading page by enter key on sidebar search.
