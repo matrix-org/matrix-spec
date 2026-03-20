@@ -124,6 +124,8 @@ search backend.
           .css({ fontWeight: "bold" }))
         .append($("<span>")
           .addClass("td-offline-search-results__close-button")
+          .attr("role", "button")
+          .attr("aria-label", "Close")
           .on("click", () => {
             $targetSearchInput.val("");
             $targetSearchInput.trigger("change");
