@@ -668,6 +668,12 @@ dd {
   max-width: 460px;
 }
 
+.td-offline-search-results .td-offline-search-results__subresults.collapse.show {
+  // Prevent the first child margin from collapsing upward when Bootstrap
+  // finishes the collapse animation, which otherwise causes a small jump.
+  display: flow-root;
+}
+
 .td-offline-search-results .spinner-container {
   text-align: center;
 }

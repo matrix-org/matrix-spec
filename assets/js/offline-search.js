@@ -179,7 +179,7 @@ search backend.
 
               $searchResultBody.append($("<p>").append($expander));
               $wrapper = $("<div>")
-                .addClass("collapse")
+                .addClass("collapse td-offline-search-results__subresults")
                 .attr("id", wrapper_id)
                 .on("hide.bs.collapse", _ => $action.text("▶ Show"))
                 .on("show.bs.collapse", _ => $action.text("▼ Hide"));
