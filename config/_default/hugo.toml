@@ -152,8 +152,9 @@ sidebar_menu_compact = true
   [server.headers.values]
     # `style-src 'unsafe-inline'` is needed to correctly render the maths in the Olm spec:
     # https://github.com/KaTeX/KaTeX/issues/4096
-    # TODO: Figure out CSP to allow loading the Pagefind Wasm
-    #Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
+    # `script-src 'unsafe-eval'` is needed because Pagefind relies on it to load its Wasm:
+    # https://github.com/Pagefind/pagefind/blob/main/docs/content/docs/hosting.md
+    Content-Security-Policy = "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-eval'; img-src 'self' data:; connect-src 'self'; font-src 'self' data:; media-src 'self'; child-src 'self'; form-action 'self'; object-src 'self'"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     # Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
