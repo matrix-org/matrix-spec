@@ -165,6 +165,7 @@ search backend.
           r.sub_results.forEach((s, index_s) => {
             if (index_s === LIMIT) {
               const wrapper_id = `collapssible-subresults-${index_r}`;
+              const $action = $("<span>").text("Show");
               const $expander = $("<a>")
                 .attr("data-bs-toggle", "collapse")
                 .attr("data-bs-target", `#${wrapper_id}`)
@@ -173,12 +174,15 @@ search backend.
                 .attr("aria-expanded", "false")
                 .attr("aria-controls", wrapper_id)
                 .css("margin-left", "0.5rem")
-                .text(`${r.sub_results.length - index_s} more result(s) from ${r.meta.title}`);
+                .append($action)
+                .append($("<span>").text(` ${r.sub_results.length - index_s} more result(s) from ${r.meta.title}`));
 
               $searchResultBody.append($("<p>").append($expander));
               $wrapper = $("<div>")
                 .addClass("collapse")
-                .attr("id", wrapper_id);
+                .attr("id", wrapper_id)
+                .on("hide.bs.collapse", _ => $action.text("Show"))
+                .on("show.bs.collapse", _ => $action.text("Hide"));
               $searchResultBody.append($wrapper);
             }
 
