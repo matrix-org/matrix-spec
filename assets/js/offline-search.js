@@ -146,15 +146,16 @@ search backend.
       } else {
         results.forEach((r, index_r) => {
           // Add the main result's page title.
-          $searchResultBody.append(
-            $("<a>")
-              .addClass("d-block")
+          $searchResultBody.append($("<div>")
+            .append($("<a>")
               .css({
                 fontSize: "1.2rem",
               })
               .attr("href", r.url)
-              .text(r.meta.title)
-          );
+              .text(r.meta.title))
+            .append($("<span>")
+              .addClass("text-body-secondary")
+              .text(` – ${r.sub_results.length} result(s)`)));
           
           // Render the first 3 subresults per page and wrap the rest
           // in a collapsed container.
