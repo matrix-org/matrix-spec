@@ -25,7 +25,9 @@ search backend.
   "use strict";
 
   $(document).ready(async function () {
-    const pagefind = await import("./pagefind/pagefind.js");
+    // This is going to be loaded from ${deployment}/js/main.js so to use a relative path
+    // to the Pagefind script we need to navigate one level up.
+    const pagefind = await import("../pagefind/pagefind.js");
     const $searchInput = $(".td-search input");
 
     //
