@@ -677,3 +677,8 @@ dd {
 .td-offline-search-results .spinner-container {
   text-align: center;
 }
+
+.td-offline-search-results__close-button {
+  // Prevent the label from rendering white on white.
+  --bs-btn-color: unset;
+}
