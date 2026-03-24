@@ -223,7 +223,7 @@ search backend.
       // content manually.
       //
       // [1]: https://github.com/twbs/bootstrap/issues/37206#issuecomment-1259541205
-      $(popover.tip.querySelector('.popover-body')).html($html[0]);
+      $(popover.tip.querySelector('.popover-body')).empty().append($html);
       popover.update();
     };
   });
