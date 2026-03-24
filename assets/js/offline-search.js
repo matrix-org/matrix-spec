@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 /*
-Adapted from [1] to combine Docsy"s built-in search UI with the Pagefind
+Adapted from [1] to combine Docsy's built-in search UI with the Pagefind
 search backend.
 
   [1]: https://github.com/matrix-org/docsy/blob/71d103ebb20ace3d528178c4b6d92b6cc4f7fd53/assets/js/offline-search.js
