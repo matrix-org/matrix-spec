@@ -87,7 +87,7 @@ search backend.
             .text("Loading...")))
         .append($("<p>")
           .text("Loading..."));
-      const popover = new bootstrap.Popover($targetSearchInput, {
+      const popover = new bootstrap.Popover($targetSearchInput[0], {
         content: $spinner[0],
         html: true,
         customClass: "td-offline-search-results",
