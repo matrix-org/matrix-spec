@@ -226,5 +226,5 @@ search backend.
 //
 
 const resultsString = (n) => {
-  return n > 1 ? "results" : "result";
+  return n === 1 ? "result" : "results";
 };
