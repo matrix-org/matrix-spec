@@ -73,7 +73,7 @@ search backend.
       }
 
       //
-      // Kick off the search and collect the results.
+      // Check if we need to do a search at all.
       //
 
       const searchQuery = $targetSearchInput.val();
@@ -81,37 +81,8 @@ search backend.
         return;
       }
 
-      // Show the results popover with a spinner while we're busy.
-      const $spinner = $("<div>")
-        .addClass("spinner-container")
-        .append($("<div>")
-          .addClass("spinner-border")
-          .attr("role", "status")
-          .append($("<div>")
-            .addClass("visually-hidden")
-            .text("Loading...")))
-        .append($("<p>")
-          .text("Loading..."));
-      const popover = new bootstrap.Popover($targetSearchInput[0], {
-        content: $spinner[0],
-        html: true,
-        customClass: "td-offline-search-results",
-        placement: "bottom",
-      });
-      popover.show();
-
-      // Kick off the search.
-      const search = await pagefind.debouncedSearch(searchQuery);
-      if (search === null) {
-        // A more recent search call has been made, nothing to do.
-        return;
-      }
-
-      // Load all result details. We may want to switch to a paged UI in future for better performance.
-      const results = await Promise.all(search.results.slice(0, 100).map(r => r.data()));
-
       //
-      // Construct the search results html.
+      // Prepare the results popover.
       //
 
       const $html = $("<div>");
@@ -149,87 +120,56 @@ search backend.
       });
       $html.append($searchResultBody);
 
-      if (results.length === 0) {
+      // Append a spinner while we're busy.
+      const $spinner = $("<div>")
+        .addClass("spinner-container")
+        .append($("<div>")
+          .addClass("spinner-border")
+          .attr("role", "status")
+          .append($("<div>")
+            .addClass("visually-hidden")
+            .text("Loading...")))
+        .append($("<p>")
+          .text("Loading..."));
+      $searchResultBody.append($spinner)
+
+      // Display the popover.
+      const popover = new bootstrap.Popover($targetSearchInput[0], {
+        content: $html[0],
+        html: true,
+        customClass: "td-offline-search-results",
+        placement: "bottom",
+      });
+      popover.show();
+
+      //
+      // Kick off the search, load the results and inject them into the popover.
+      //
+
+      const search = await pagefind.debouncedSearch(searchQuery);
+      if (search === null) {
+        // A more recent search call has been made, nothing to do.
+        return;
+      }
+
+      if (search.results.length === 0) {
         $searchResultBody.append(
           $("<p>").text(`No results found for query "${searchQuery}"`)
         );
       } else {
-        results.forEach((r, index_r) => {
-          // Add the main result's page title.
-          $searchResultBody.append($("<div>")
-            .append($("<a>")
-              .css({
-                fontSize: "1.2rem",
-              })
-              .attr("href", r.url)
-              .text(r.meta.title))
-            .append($("<span>")
-              .addClass("text-body-secondary")
-              .text(` – ${r.sub_results.length} ${resultsString(r.sub_results.length)}`)));
-          
-          // Render the first 3 subresults per page and wrap the rest
-          // in a collapsed container.
-          const LIMIT = 3;
-          let $wrapper = null;
+        for (const [index, result] of search.results.entries()) {
+          // Insert a container for the result *before* the spinner. This
+          // will push down the spinner as new content is loaded and keep
+          // it at the end of the popover.
+          const $container = $("<div>");
+          $spinner.before($container);
 
-          r.sub_results.forEach((s, index_s) => {
-            if (index_s === LIMIT) {
-              const num_hidden_results = r.sub_results.length - index_s;
-              const wrapper_id = `collapsible-subresults-${index_r}`;
-              const $action = $("<span>").text("▶ Show");
-              const $expander = $("<button>")
-                .attr("data-bs-toggle", "collapse")
-                .attr("data-bs-target", `#${wrapper_id}`)
-                .attr("aria-expanded", "false")
-                .attr("aria-controls", wrapper_id)
-                .attr("type", "button")
-                .addClass("td-offline-search-results__expander-button")
-                .addClass("btn")
-                .addClass("btn-sm")
-                .addClass("btn-link")
-                .append($action)
-                .append($("<span>").text(` ${num_hidden_results} more ${resultsString(num_hidden_results)} from ${r.meta.title}`));
+          renderResult(await result.data(), index, $container);
+        }
 
-              $searchResultBody.append($("<p>").append($expander));
-              $wrapper = $("<div>")
-                .addClass("collapse td-offline-search-results__subresults")
-                .attr("id", wrapper_id)
-                .on("hide.bs.collapse", _ => $action.text("▶ Show"))
-                .on("show.bs.collapse", _ => $action.text("▼ Hide"));
-              $searchResultBody.append($wrapper);
-            }
-
-            const $entry = $("<div>")
-              .css("margin-top", "0.5rem");
-
-            $entry.append(
-              $("<a>")
-                .addClass("d-block")
-                .attr("href", s.url)
-                .text(s.title)
-            );
-
-            $entry.append($("<p>").html(s.excerpt));
-
-            if (index_s < LIMIT) {
-              $searchResultBody.append($entry);
-            } else {
-              $wrapper.append($entry);
-            }
-          });
-        });
+        // Remove the spinner now that everything was loaded.
+        $spinner.remove();
       }
-
-      // Finally, show the search results.
-      //
-      // Ideally we would just call setContent but there appears to be a bug in Bootstrap
-      // that causes the popover to be hidden when setContent is called after the popover
-      // has been shown. To work around this, we use the hack from [1] to inject the HTML
-      // content manually.
-      //
-      // [1]: https://github.com/twbs/bootstrap/issues/37206#issuecomment-1259541205
-      $(popover.tip.querySelector('.popover-body')).empty().append($html);
-      popover.update();
     };
   });
 })(jQuery);
@@ -237,6 +177,71 @@ search backend.
 //
 // Helpers
 //
+
+const renderResult = (data, index, $container) => {
+  // Add the main result's page title.
+  $container.append($("<div>")
+    .append($("<a>")
+      .css({
+        fontSize: "1.2rem",
+      })
+      .attr("href", data.url)
+      .text(data.meta.title))
+    .append($("<span>")
+      .addClass("text-body-secondary")
+      .text(` – ${data.sub_results.length} ${resultsString(data.sub_results.length)}`)));
+  
+  // Render the first 3 subresults per page and wrap the rest
+  // in a collapsed container.
+  const LIMIT = 3;
+  let $wrapper = null;
+
+  data.sub_results.forEach((s, index_s) => {
+    if (index_s === LIMIT) {
+      const num_hidden_results = data.sub_results.length - index_s;
+      const wrapper_id = `collapsible-subresults-${index}`;
+      const $action = $("<span>").text("▶ Show");
+      const $expander = $("<button>")
+        .attr("data-bs-toggle", "collapse")
+        .attr("data-bs-target", `#${wrapper_id}`)
+        .attr("aria-expanded", "false")
+        .attr("aria-controls", wrapper_id)
+        .attr("type", "button")
+        .addClass("td-offline-search-results__expander-button")
+        .addClass("btn")
+        .addClass("btn-sm")
+        .addClass("btn-link")
+        .append($action)
+        .append($("<span>").text(` ${num_hidden_results} more ${resultsString(num_hidden_results)} from ${data.meta.title}`));
+
+      $container.append($("<p>").append($expander));
+      $wrapper = $("<div>")
+        .addClass("collapse td-offline-search-results__subresults")
+        .attr("id", wrapper_id)
+        .on("hide.bs.collapse", _ => $action.text("▶ Show"))
+        .on("show.bs.collapse", _ => $action.text("▼ Hide"));
+      $container.append($wrapper);
+    }
+
+    const $entry = $("<div>")
+      .css("margin-top", "0.5rem");
+
+    $entry.append(
+      $("<a>")
+        .addClass("d-block")
+        .attr("href", s.url)
+        .text(s.title)
+    );
+
+    $entry.append($("<p>").html(s.excerpt));
+
+    if (index_s < LIMIT) {
+      $container.append($entry);
+    } else {
+      $wrapper.append($entry);
+    }
+  });
+};
 
 const resultsString = (n) => {
   return n === 1 ? "result" : "results";
