@@ -169,13 +169,15 @@ search backend.
               const num_hidden_results = r.sub_results.length - index_s;
               const wrapper_id = `collapsible-subresults-${index_r}`;
               const $action = $("<span>").text("▶ Show");
-              const $expander = $("<a>")
+              const $expander = $("<button>")
                 .attr("data-bs-toggle", "collapse")
                 .attr("data-bs-target", `#${wrapper_id}`)
-                .attr("href", "#")
-                .attr("role", "button")
                 .attr("aria-expanded", "false")
                 .attr("aria-controls", wrapper_id)
+                .attr("type", "button")
+                .addClass("btn")
+                .addClass("btn-sm")
+                .addClass("btn-outline-secondary")
                 .append($action)
                 .append($("<span>").text(` ${num_hidden_results} more ${resultsString(num_hidden_results)} from ${r.meta.title}`));
 
