@@ -25,7 +25,7 @@ search backend.
   "use strict";
 
   $(document).ready(async function () {
-    const pagefind = await import("/pagefind/pagefind.js");
+    const pagefind = await import("./pagefind/pagefind.js");
     const $searchInput = $(".td-search input");
 
     //
