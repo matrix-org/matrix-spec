@@ -42,8 +42,13 @@ search backend.
     // Set up search input handler.
     //
 
-    $searchInput.on("change", (event) => {
-      render($(event.target));
+    $searchInput.on("keypress", (event) => {
+      // Start searching only upon Enter.
+      if (event.which === 13) {
+        event.preventDefault();
+        render($(event.target));
+        return;
+      }
     });
 
     // Prevent reloading page by enter key on sidebar search.
