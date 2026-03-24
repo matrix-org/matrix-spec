@@ -116,16 +116,7 @@ search backend.
       $html.append($searchResultBody);
 
       // Append a spinner while we're busy.
-      const $spinner = $("<div>")
-        .addClass("spinner-container")
-        .append($("<div>")
-          .addClass("spinner-border")
-          .attr("role", "status")
-          .append($("<div>")
-            .addClass("visually-hidden")
-            .text("Loading...")))
-        .append($("<p>")
-          .text("Loading..."));
+      const $spinner = createSpinner();
       $searchResultBody.append($spinner)
 
       // Display the popover.
@@ -152,18 +143,7 @@ search backend.
           $("<p>").text(`No results found for query "${searchQuery}"`)
         );
       } else {
-        for (const [index, result] of search.results.entries()) {
-          // Insert a container for the result *before* the spinner. This
-          // will push down the spinner as new content is loaded and keep
-          // it at the end of the popover.
-          const $container = $("<div>");
-          $spinner.before($container);
-
-          renderResult(await result.data(), index, $container);
-        }
-
-        // Remove the spinner now that everything was loaded.
-        $spinner.remove();
+        await loadAndRenderResults(search.results, 0, $spinner, $searchResultBody);
       }
     };
   });
@@ -178,6 +158,62 @@ const disposePopover = ($targetSearchInput) => {
   if (popover !== null) {
     popover.dispose();
   }
+}
+
+const createSpinner = () => {
+  return $("<div>")
+    .addClass("spinner-container")
+    .append($("<div>")
+      .addClass("spinner-border")
+      .attr("role", "status")
+      .append($("<div>")
+        .addClass("visually-hidden")
+        .text("Loading...")))
+    .append($("<p>")
+      .text("Loading..."));
+}
+
+const loadAndRenderResults = async (results, offset, $spinner, $searchResultBody) => {
+  // Load and render the first three results and hide the remainder behind a
+  // button to not freeze the browser by loading results that may not be
+  // displayed.
+  const LIMIT = 3;
+
+  for (const [index, result] of results.entries()) {
+    if (index < LIMIT) {
+      // Insert a container for the result *before* the spinner. This
+      // will push down the spinner as new content is loaded and keep
+      // it at the end of the popover.
+      const $container = $("<div>");
+      $spinner.before($container);
+
+      renderResult(await result.data(), index + offset, $container);
+    } else if (index === LIMIT) {
+      const num_hidden_results = results.length - index;
+      const $loader = $("<button>")
+        .attr("type", "button")
+        .addClass("td-offline-search-results__expander-button")
+        .addClass("btn")
+        .addClass("btn-sm")
+        .addClass("btn-link")
+        .text(`Load more results from ${num_hidden_results} other ${pagesString(num_hidden_results)}`)
+        .on("click", async () => {
+          // Remove the button.
+          $loader.remove();
+
+          // Add a spinner while we're busy.
+          const $spinner = createSpinner();
+          $searchResultBody.append($spinner)
+
+          // Load and render the results.
+          await loadAndRenderResults(results.slice(LIMIT), LIMIT + offset, $spinner, $searchResultBody);
+        });
+      $spinner.before($loader)
+    }
+  }
+
+  // Remove the spinner now that everything was loaded.
+  $spinner.remove();
 }
 
 const renderResult = (data, index, $container) => {
@@ -247,4 +283,8 @@ const renderResult = (data, index, $container) => {
 
 const resultsString = (n) => {
   return n === 1 ? "result" : "results";
+};
+
+const pagesString = (n) => {
+  return n === 1 ? "page" : "pages";
 };
