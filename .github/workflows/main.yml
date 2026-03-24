@@ -238,7 +238,7 @@ jobs:
 
       - name: "🔍 pagefind indexing"
         run: |
-          npx -y pagefind --site "spec${baseURL}"
+          npm run pagefind -- --site "spec${baseURL}"
 
       - name: "📦 Tarball creation"
         run: |

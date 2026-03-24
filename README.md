@@ -85,7 +85,7 @@ The spec uses [Pagefind](https://pagefind.app/) to provide a page search widget.
 search index _after_ building the static site.
 
 ```
-hugo build && npx -y pagefind --site public && hugo serve
+hugo build && npm run pagefind -- --site public && hugo serve
 ```
 
 Note that while `hugo serve` supports hot reloading, changes made to the site content won't reflect in the search index without
