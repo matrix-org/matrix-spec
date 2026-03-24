@@ -165,7 +165,7 @@ search backend.
           r.sub_results.forEach((s, index_s) => {
             if (index_s === LIMIT) {
               const num_hidden_results = r.sub_results.length - index_s;
-              const wrapper_id = `collapssible-subresults-${index_r}`;
+              const wrapper_id = `collapsible-subresults-${index_r}`;
               const $action = $("<span>").text("▶ Show");
               const $expander = $("<a>")
                 .attr("data-bs-toggle", "collapse")
