@@ -178,9 +178,10 @@ search backend.
                 .attr("aria-expanded", "false")
                 .attr("aria-controls", wrapper_id)
                 .attr("type", "button")
+                .addClass("td-offline-search-results__expander-button")
                 .addClass("btn")
                 .addClass("btn-sm")
-                .addClass("btn-outline-secondary")
+                .addClass("btn-link")
                 .append($action)
                 .append($("<span>").text(` ${num_hidden_results} more ${resultsString(num_hidden_results)} from ${r.meta.title}`));
 

@@ -682,3 +682,11 @@ dd {
   // Prevent the label from rendering white on white.
   --bs-btn-color: unset;
 }
+
+.td-offline-search-results__expander-button {
+  // Prevent the label from rendering white on white.
+  --bs-btn-color: unset;
+  // Avoid any extra inset.
+  --bs-btn-padding-x: 0;
+  --bs-btn-padding-y: 0;
+}
