@@ -65,12 +65,7 @@ search backend.
       // Dispose any existing popover.
       //
 
-      {
-        let popover = bootstrap.Popover.getInstance($targetSearchInput[0]);
-        if (popover !== null) {
-          popover.dispose();
-        }
-      }
+      disposePopover($targetSearchInput);
 
       //
       // Check if we need to do a search at all.
@@ -106,7 +101,7 @@ search backend.
           .attr("aria-label", "Close")
           .on("click", () => {
             $targetSearchInput.val("");
-            $targetSearchInput.trigger("change");
+            disposePopover($targetSearchInput);
           })
         )
       );
@@ -177,6 +172,13 @@ search backend.
 //
 // Helpers
 //
+
+const disposePopover = ($targetSearchInput) => {
+  const popover = bootstrap.Popover.getInstance($targetSearchInput[0]);
+  if (popover !== null) {
+    popover.dispose();
+  }
+}
 
 const renderResult = (data, index, $container) => {
   // Add the main result's page title.
