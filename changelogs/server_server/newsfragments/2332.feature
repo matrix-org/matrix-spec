@@ -1,1 +1,0 @@
-Add a concept of "Policy Servers", as per [MSC4284](https://github.com/matrix-org/matrix-spec-proposals/pull/4284).

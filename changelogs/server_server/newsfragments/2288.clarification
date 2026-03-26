@@ -1,1 +1,0 @@
-Specify that callers of `/_matrix/federation/v1/openid/userinfo` must validate the returned user ID.
