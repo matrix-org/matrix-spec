@@ -1502,6 +1502,12 @@ The signatures expected on an event are:
     Other room versions do not track the `event_id` over federation and
     therefore do not need a signature from those servers.
 
+Only signatures from known server keys are validated here, any unknown keys are ignored.
+In particular, the [policy server key](#validating-policy-server-signatures) is not
+expected to be published and therefore should be skipped at this stage.
+Additionally, any keys that are known to have expired prior to the event's
+`origin_server_ts` are ignored.
+
 If all signatures from known keys are found to be valid, the expected content hash is
 calculated as described below. The content hash in the `hashes` property
 of the received event is base64-decoded, and the two are compared for
