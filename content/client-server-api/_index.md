@@ -3120,19 +3120,20 @@ events they have already been sent, and choose to skip sending membership
 events for members whose membership has not changed. These are called
 'redundant membership events'. Clients may request that redundant membership
 events are always included in responses by setting `include_redundant_members`
-to true in the filter.
+to `true` in the filter.
 
 The expected pattern for using lazy-loading is currently:
 
--   Client performs an initial /sync with lazy-loading enabled, and
+-   Client performs an initial `/sync` with lazy-loading enabled, and
     receives only the membership events which relate to the senders of
     the events it receives.
 -   Clients which support display-name tab-completion or other
     operations which require rapid access to all members in a room
-    should call /members for the currently selected room, with an `?at`
-    parameter set to the /sync response's from token. The member list
-    for the room is then maintained by the state in subsequent
-    incremental /sync responses.
+    should call [`/members`](#get_matrixclientv3roomsroomidmembers) for
+    the currently selected room, with an `?at` parameter set to the
+    `/sync` response's `from` token. The member list for the room is
+    then maintained by the state in subsequent incremental `/sync`
+    responses.
 -   Clients which do not support tab-completion may instead pull in
     profiles for arbitrary users (e.g. read receipts, typing
     notifications) on demand by querying the room state or [`/profile`](#get_matrixclientv3profileuserid).
