@@ -233,6 +233,8 @@ components:
       example: "!636q39766251:matrix.org"
       schema:
         type: string
+        format: mx-room-id
+        pattern: "^!"
     eventId:
       in: path
       name: eventId
@@ -241,6 +243,8 @@ components:
       example: $asfDuShaf7Gafaw
       schema:
         type: string
+        format: mx-event-id
+        pattern: "^\\$"
     from:
       in: query
       name: from

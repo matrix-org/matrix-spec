@@ -56,6 +56,8 @@ paths:
           example: "!636q39766251:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: query
           name: ts
           description: |-
@@ -86,6 +88,8 @@ paths:
                 properties:
                   event_id:
                     type: string
+                    format: mx-event-id
+                    pattern: "^\\$"
                     description: The ID of the event found
                   origin_server_ts:
                     type: integer

@@ -39,6 +39,8 @@ properties:
   sender:
     description: The `sender` for the event.
     type: string
+    format: mx-user-id
+    pattern: "^@"
 required:
   - type
   - state_key

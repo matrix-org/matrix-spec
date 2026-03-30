@@ -76,6 +76,8 @@ properties:
       join_authorised_via_users_server:
         x-addedInMatrixVersion: "1.2"
         type: string
+        format: mx-user-id
+        pattern: "^@"
         description: |-
           Usually found on `join` events, this field is used to denote which homeserver (through
           representation of a user with sufficient power level) authorised the user's join. More
@@ -127,6 +129,8 @@ properties:
       `join`, the user ID sending the event does not need to match the user ID in the `state_key`,
       unlike other events. Regular authorisation rules still apply.
     type: string
+    format: mx-user-id
+    pattern: "^@"
   type:
     enum:
       - m.room.member

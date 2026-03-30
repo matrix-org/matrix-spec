@@ -10,6 +10,8 @@ properties:
       redacts:
         description: The event ID that was redacted. Required for, and present starting in, room version 11.
         type: string
+        format: mx-event-id
+        pattern: "^\\$"
       reason:
         description: 'The reason for the redaction, if any.'
         type: string
@@ -17,6 +19,8 @@ properties:
   redacts:
     description: Required for, and only present in, room versions 1 - 10. The event ID that was redacted.
     type: string
+    format: mx-event-id
+    pattern: "^\\$"
   type:
     enum:
       - m.room.redaction

@@ -66,6 +66,11 @@ mx-mxc-uri:
   url: client-server-api#matrix-content-mxc-uris
   # regex: "^mxc:\\/\\/"
 
+mx-unpadded-base64:
+  title: Unpadded Base64
+  url: appendices#unpadded-base64
+  # no regex
+
 uri:
   title: URI
   url: https://datatracker.ietf.org/doc/html/rfc3986

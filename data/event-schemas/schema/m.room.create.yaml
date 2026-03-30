@@ -12,6 +12,8 @@ properties:
           The `user_id` of the room creator. **Required** for, and only present in, room versions 1 - 10. Starting with
           room version 11 the event `sender` should be used instead.
         type: string
+        format: mx-user-id
+        pattern: "^@"
       m.federate:
         description: Whether users on other servers can join this room. Defaults to `true` if key does not exist.
         type: boolean
@@ -32,9 +34,13 @@ properties:
         properties:
           room_id:
             type: string
+            format: mx-room-id
+            pattern: "^!"
             description: The ID of the old room.
           event_id:
             type: string
+            format: mx-event-id
+            pattern: "^\\$"
             deprecated: true
             x-changedInMatrixVersion:
               "1.16": |-
@@ -51,6 +57,8 @@ properties:
         type: array
         items:
           type: string
+          format: mx-user-id
+          pattern: "^@"
           description: Additional user ID to consider a creator of the room, if supported by the room version.
         x-addedInMatrixVersion: "1.16"
         description: |-

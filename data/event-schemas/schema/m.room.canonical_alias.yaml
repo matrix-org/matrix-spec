@@ -16,6 +16,8 @@ properties:
           The canonical alias for the room. If not present, null, or empty the
           room should be considered to have no canonical alias.
         type: string
+        format: mx-room-alias
+        pattern: "^#"
       alt_aliases:
         description: |
           Alternative aliases the room advertises. This list can have aliases
@@ -23,6 +25,8 @@ properties:
         type: array
         items:
           type: string
+          format: mx-room-alias
+          pattern: "^#"
     type: object
   state_key:
     description: A zero-length string.
