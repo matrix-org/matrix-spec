@@ -126,6 +126,25 @@ state (e.g.: sending messages, account data, etc) and not routes which
 only read state (e.g.: [`/sync`](#get_matrixclientv3sync),
 [`/user/{userId}/account_data/{type}`](#get_matrixclientv3useruseridaccount_datatype), etc).
 
+`M_UNKNOWN`
+: An unknown error has occurred.
+
+`M_UNKNOWN_DEVICE`
+: {{% added-in v="1.17" %}} The device ID supplied by the application service does
+not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
+
+`M_UNKNOWN_TOKEN`
+: The access or refresh token specified was not recognised.
+
+: An additional response parameter, `soft_logout`, might be present on the
+response for 401 HTTP status codes. See [the soft logout
+section](#soft-logout) for more information.
+
+`M_UNRECOGNIZED`
+: The server did not understand the request. This is expected to be returned with
+a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
+code if the endpoint is implemented, but the incorrect HTTP method is used.
+
 `M_USER_LIMIT_EXCEEDED`
 : {{% added-in v="1.18" %}} The request cannot be completed because the user has
 exceeded (or the request would cause them to exceed) a limit associated with
@@ -156,25 +175,6 @@ limit is a hard limit that cannot be increased.
     "can_upgrade": true
   }
   ```
-
-`M_UNKNOWN`
-: An unknown error has occurred.
-
-`M_UNKNOWN_DEVICE`
-: {{% added-in v="1.17" %}} The device ID supplied by the application service does
-not belong to the user ID during [identity assertion](/application-service-api/#identity-assertion).
-
-`M_UNKNOWN_TOKEN`
-: The access or refresh token specified was not recognised.
-
-: An additional response parameter, `soft_logout`, might be present on the
-response for 401 HTTP status codes. See [the soft logout
-section](#soft-logout) for more information.
-
-`M_UNRECOGNIZED`
-: The server did not understand the request. This is expected to be returned with
-a 404 HTTP status code if the endpoint is not implemented or a 405 HTTP status
-code if the endpoint is implemented, but the incorrect HTTP method is used.
 
 `M_USER_LOCKED`
 : The account has been [locked](#account-locking) and cannot be used at this time.
