@@ -68,7 +68,7 @@ The available room versions are:
 -   [Version 5](/rooms/v5) - **Stable**. Introduces enforcement of
     signing key validity periods.
 -   [Version 6](/rooms/v6) - **Stable**. Alters several
-    authorization rules for events.
+    authorisation rules for events.
 -   [Version 7](/rooms/v7) - **Stable**. Introduces knocking.
 -   [Version 8](/rooms/v8) - **Stable**. Adds a join rule to allow members
     of another room to join without invite.
@@ -85,7 +85,7 @@ The available room versions are:
 
 Room versions are used to change properties of rooms that may not be
 compatible with other servers. For example, changing the rules for event
-authorization would cause older servers to potentially end up in a
+authorisation would cause older servers to potentially end up in a
 split-brain situation due to not understanding the new rules.
 
 A room version is defined as a string of characters which MUST NOT

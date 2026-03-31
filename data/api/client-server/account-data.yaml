@@ -34,7 +34,7 @@ paths:
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -83,7 +83,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to modify this user's account 
+            The access token provided is not authorised to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -126,7 +126,7 @@ paths:
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -151,7 +151,7 @@ paths:
                 }
         "403":
           description: |-
-            The access token provided is not authorized to retrieve this user's account 
+            The access token provided is not authorised to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -196,7 +196,7 @@ paths:
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -253,7 +253,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to modify this user's account 
+            The access token provided is not authorised to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -296,7 +296,7 @@ paths:
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -341,7 +341,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to retrieve this user's account 
+            The access token provided is not authorised to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:

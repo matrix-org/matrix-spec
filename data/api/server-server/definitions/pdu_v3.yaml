@@ -38,7 +38,7 @@ allOf:
           type: string
           description: Event ID.
         description: |-
-          Event IDs for the authorization events that would
+          Event IDs for the authorisation events that would
           allow this event to be in the room.
 
           Must contain less than or equal to 10 events. Note that if the relevant
