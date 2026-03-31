@@ -26,6 +26,8 @@ properties:
       `senders` filter.
     items:
       type: string
+      format: mx-user-id
+      pattern: "^@"
     type: array
   not_types:
     description: A list of event types to exclude. If this list is absent then no
@@ -40,6 +42,8 @@ properties:
       senders are included.
     items:
       type: string
+      format: mx-user-id
+      pattern: "^@"
     type: array
   types:
     description: A list of event types to include. If this list is absent then all

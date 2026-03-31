@@ -43,12 +43,16 @@ allOf:
         filter.
       items:
         type: string
+        format: mx-room-id
+        pattern: "^!"
       type: array
     rooms:
       description: A list of room IDs to include. If this list is absent then all rooms
         are included.
       items:
         type: string
+        format: mx-room-id
+        pattern: "^!"
       type: array
     contains_url:
       type: boolean

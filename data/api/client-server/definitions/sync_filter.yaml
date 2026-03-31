@@ -50,6 +50,8 @@ properties:
           `state`, `timeline` or `account_data`
         items:
           type: string
+          format: mx-room-id
+          pattern: "^!"
         type: array
       rooms:
         description: A list of room IDs to include. If this list is absent then all rooms
@@ -57,6 +59,8 @@ properties:
           `state`, `timeline` or `account_data`
         items:
           type: string
+          format: mx-room-id
+          pattern: "^!"
         type: array
       ephemeral:
         allOf:
