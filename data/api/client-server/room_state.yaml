@@ -49,6 +49,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventType
           description: The type of event to send.
@@ -86,6 +88,8 @@ paths:
                 properties:
                   event_id:
                     type: string
+                    format: mx-event-id
+                    pattern: "^\\$"
                     description: A unique identifier for the event.
                 required:
                   - event_id

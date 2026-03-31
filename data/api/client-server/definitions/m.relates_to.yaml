@@ -39,5 +39,7 @@ properties:
       such.
   event_id:
     type: string
+    format: mx-event-id
+    pattern: "^\\$"
     description: The event ID of the event that this event relates to.
 required: ['rel_type', 'event_id']

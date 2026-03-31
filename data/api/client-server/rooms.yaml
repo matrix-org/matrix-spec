@@ -34,6 +34,8 @@ paths:
           example: "!636q39766251:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventId
           description: The event ID to get.
@@ -41,6 +43,8 @@ paths:
           example: $asfDuShaf7Gafaw:matrix.org
           schema:
             type: string
+            format: mx-event-id
+            pattern: "^\\$"
       responses:
         "200":
           description: The full event.
@@ -89,6 +93,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventType
           description: The type of state to look up.
@@ -158,6 +164,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The current state of the room
@@ -211,6 +219,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: query
           name: at
           description: |-
@@ -305,6 +315,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       security:
         - accessTokenQuery: []
         - accessTokenBearer: []

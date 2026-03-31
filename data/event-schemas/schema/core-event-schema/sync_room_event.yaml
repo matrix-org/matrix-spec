@@ -29,9 +29,13 @@ allOf:
     event_id:
       description: The globally unique event identifier.
       type: string
+      format: mx-event-id
+      pattern: "^\\$"
     sender:
       description: Contains the fully-qualified ID of the user who sent this event.
       type: string
+      format: mx-user-id
+      pattern: "^@"
     origin_server_ts:
       description: Timestamp in milliseconds on originating homeserver
         when this event was sent.

@@ -27,6 +27,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The current state of the room
@@ -38,6 +40,8 @@ paths:
                 properties:
                   room_id:
                     type: string
+                    format: mx-room-id
+                    pattern: "^!"
                     description: The ID of this room.
                   membership:
                     type: string
