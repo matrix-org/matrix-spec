@@ -1484,10 +1484,9 @@ the Policy Server for a signature too.
 When a server receives an event over federation from another server, the
 receiving server should check the hashes and signatures on that event.
 
-First the signature is checked. The event is redacted following the
-[redaction
-algorithm](/client-server-api#redactions), and
-the resultant object is checked for a signature from the originating
+First the signatures are checked. The event is redacted following the
+[redaction algorithm](/client-server-api#redactions), and
+the resultant object is checked for signatures from the originating
 server, following the algorithm described in [Checking for a
 signature](/appendices#checking-for-a-signature). Note that this
 step should succeed whether we have been sent the full event or a
@@ -1503,7 +1502,13 @@ The signatures expected on an event are:
     Other room versions do not track the `event_id` over federation and
     therefore do not need a signature from those servers.
 
-If the signature is found to be valid, the expected content hash is
+Only signatures from known server keys are validated here, any unknown keys are ignored.
+In particular, the [policy server key](#validating-policy-server-signatures) is not
+expected to be published and therefore should be skipped at this stage.
+Additionally, any keys that are known to have expired prior to the event's
+`origin_server_ts` are ignored.
+
+If all signatures from known keys are found to be valid, the expected content hash is
 calculated as described below. The content hash in the `hashes` property
 of the received event is base64-decoded, and the two are compared for
 equality.
