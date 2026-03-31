@@ -116,7 +116,7 @@ paths:
 
         The user calling this endpoint MUST be a server admin.
 
-        In order to prevent user enumeration, servers MUST ensure that authorization is checked
+        In order to prevent user enumeration, servers MUST ensure that authorisation is checked
         prior to trying to do account lookups.
       operationId: getAdminSuspendUser
       security:
@@ -204,7 +204,7 @@ paths:
         is allowed to suspend other users at the [`GET /capabilities`](/client-server-api/#get_matrixclientv3capabilities)
         endpoint prior to using this endpoint.
 
-        In order to prevent user enumeration, servers MUST ensure that authorization is checked
+        In order to prevent user enumeration, servers MUST ensure that authorisation is checked
         prior to trying to do account lookups.
       operationId: setAdminSuspendUser
       security:
@@ -309,7 +309,7 @@ paths:
 
         The user calling this endpoint MUST be a server admin.
 
-        In order to prevent user enumeration, servers MUST ensure that authorization is checked
+        In order to prevent user enumeration, servers MUST ensure that authorisation is checked
         prior to trying to do account lookups.
       operationId: getAdminLockUser
       security:
@@ -396,7 +396,7 @@ paths:
         is allowed to lock other users at the [`GET /capabilities`](/client-server-api/#get_matrixclientv3capabilities)
         endpoint prior to using this endpoint.
 
-        In order to prevent user enumeration, servers MUST ensure that authorization is checked
+        In order to prevent user enumeration, servers MUST ensure that authorisation is checked
         prior to trying to do account lookups.
       operationId: setAdminLockUser
       security:

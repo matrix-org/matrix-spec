@@ -8,7 +8,7 @@ description: |
   real-time, retrieve historic messages, and query profile or presence
   information about users on other servers. The APIs are implemented over HTTPS,
   with authentication provided by public key signatures both at the TLS
-  transport layer and in HTTP Authorization headers.
+  transport layer and in HTTP `Authorization` headers.
 
   There are three main kinds of communication that occur between
   homeservers:
@@ -279,7 +279,7 @@ Every HTTP request made by a homeserver is authenticated using public
 key digital signatures. The request method, target and body are signed
 by wrapping them in a JSON object and signing it using the [JSON signing
 algorithm](/appendices#signing-json). The resulting signatures are added
-as an Authorization header with an auth scheme of `X-Matrix`. Note that
+as an `Authorization` header with an auth scheme of `X-Matrix`. Note that
 the target field should include the full path starting with `/_matrix/...`,
 including the `?` and any query parameters if present, but should not
 include the leading `https:`, nor the destination server's hostname.
@@ -307,7 +307,7 @@ section](#resolving-server-names) above do not affect these - the server
 names from before delegation would take place are used. This same
 condition applies throughout the request signing process.
 
-Step 2 add Authorization header:
+Step 2 add `Authorization` header:
 
     POST /target HTTP/1.1
     Authorization: X-Matrix origin="origin.hs.example.com",destination="destination.hs.example.com",key="ed25519:key1",sig="ABCDEF..."
@@ -346,9 +346,9 @@ def authorization_headers(origin_name, origin_signing_key,
     return ("Authorization", authorization_headers[0])
 ```
 
-The format of the Authorization header is given in
+The format of the `Authorization` header is given in
 [Section 11.4 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-11.4). In
-summary, the header begins with authorization scheme `X-Matrix`, followed by one
+summary, the header begins with authorisation scheme `X-Matrix`, followed by one
 or more spaces, followed by a comma-separated list of parameters written as
 name=value pairs. Zero or more spaces and tabs around each comma are allowed.
 The names are case insensitive and order does not matter. The
@@ -369,7 +369,7 @@ For compatibility with older servers, the sender should
 For compatibility with older servers, the recipient should allow colons to be
 included in values without requiring the value to be enclosed in quotes.
 
-The authorization parameters to include are:
+The authorisation parameters to include are:
 
 - `origin`: the server name of the sending server. This is the same as the
   `origin` field from JSON described in step 1.
@@ -378,8 +378,8 @@ The authorization parameters to include are:
   in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but MUST always send it. If this property
   is included, but the value does not match the receiving server's name, the
-  receiving server must deny the request with an HTTP status code 401
-  Unauthorized.
+  receiving server must deny the request with an HTTP status code `401
+  Unauthorized`.
 - `key`: the ID, including the algorithm name, of the sending server's key used
   to sign the request.
 - `signature`: the signature of the JSON as calculated in step 1.
@@ -467,11 +467,11 @@ server must ensure that the event:
 2.  Passes signature checks, otherwise it is dropped.
 3.  Passes hash checks, otherwise it is redacted before being processed
     further.
-4.  Passes authorization rules based on the event's auth events,
+4.  Passes authorisation rules based on the event's auth events,
     otherwise it is rejected.
-5.  Passes authorization rules based on the state before the event,
+5.  Passes authorisation rules based on the state before the event,
     otherwise it is rejected.
-6.  Passes authorization rules based on the current state of the room,
+6.  Passes authorisation rules based on the current state of the room,
     otherwise it is "soft failed".
 7. {{% added-in v="1.18" %}} Is [validated](#validating-policy-server-signatures)
    by the Policy Server, if the room is [using a Policy Server](#determining-if-a-policy-server-is-enabled-in-a-room),
@@ -516,9 +516,9 @@ and must never populate the default power levels in a room as string values.
 See the [room version specification](/rooms) for more information.
 {{% /boxes/warning %}}
 
-#### Authorization rules
+#### Authorisation rules
 
-The rules governing whether an event is authorized depends on a set of
+The rules governing whether an event is authorised depends on a set of
 state. A given event is checked multiple times against different sets of
 state, as specified above. Each room version can have a different
 algorithm for how the rules work, and which rules are applied. For more
@@ -697,9 +697,9 @@ then any new event `D'` will not reference `C`:
 Events can also be soft failed if they fail [Policy Server checks](#validating-policy-server-signatures).
 {{% /boxes/note %}}
 
-#### Retrieving event authorization information
+#### Retrieving event authorisation information
 
-The homeserver may be missing event authorization information, or wish
+The homeserver may be missing event authorisation information, or wish
 to check with other servers to ensure it is receiving the correct auth
 chain. These APIs give the homeserver an avenue for getting the
 information it needs.

@@ -32,8 +32,8 @@ description: |-
   for `kick` and `ban` default to 50 if they are not specified in the
   `m.room.power_levels` event, or if the room contains no
   `m.room.power_levels` event. `invite` defaults to 0 in either case.
-  Other membership values are handled during event authorization. See
-  the authorization rules in [room versions](/rooms) for further details.
+  Other membership values are handled during event authorisation. See
+  the authorisation rules in [room versions](/rooms) for further details.
 
   For redactions of a user's own events, the required power level is
   determined by the `m.room.redaction` event power level, as per `events`

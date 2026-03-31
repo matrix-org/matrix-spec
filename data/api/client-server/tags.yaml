@@ -31,7 +31,7 @@ paths:
           required: true
           description: |-
             The id of the user to get tags for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -83,7 +83,7 @@ paths:
           required: true
           description: |-
             The id of the user to add a tag for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -133,7 +133,7 @@ paths:
           required: true
           description: |-
             The id of the user to remove a tag for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string

@@ -97,7 +97,7 @@ paths:
       summary: Authenticates the user.
       description: |-
         Authenticates the user, and issues an access token they can
-        use to authorize themself in subsequent requests.
+        use to authorise themself in subsequent requests.
 
         If the client does not supply a `device_id`, the server must
         auto-generate one.
@@ -194,7 +194,7 @@ paths:
                     type: string
                     description: |-
                       An access token for the account.
-                      This access token can then be used to authorize other requests.
+                      This access token can then be used to authorise other requests.
                   refresh_token:
                     type: string
                     description: |-
