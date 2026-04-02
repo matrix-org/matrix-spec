@@ -236,6 +236,10 @@ jobs:
         run: |
           tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
+      - name: "🔍 pagefind indexing"
+        run: |
+          npm run pagefind -- --site "spec${baseURL}"
+
       - name: "📦 Tarball creation"
         run: |
           cd spec
