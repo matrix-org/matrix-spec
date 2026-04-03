@@ -1,1 +1,1 @@
-Clarify the s2s profile query behaviour and responses.
+Clarify the behaviour and response format of `GET /_matrix/federation/v1/query/profile`.

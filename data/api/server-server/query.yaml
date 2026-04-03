@@ -115,12 +115,12 @@ paths:
         to the target server (identified by the [server name](/appendices/#server-name)
         in the user ID).
 
-        Responding servers MAY
-          - allow users to set arbitrary key/value pairs in their profile in addition to the
-            specified pairs
-          - deny profile look-up over federation by responding with 403 and an error code of
-            `M_FORBIDDEN`
-          - omit certain key/value pairs in the response
+        Responding servers MAY:
+          - Allow users to set arbitrary key/value pairs in their profile in addition to the
+            specified pairs.
+          - Deny profile look-up over federation by responding with 403 and an error code of
+            `M_FORBIDDEN`.
+          - Omit certain key/value pairs in the response.
 
         Requesting servers MAY wish to cache the response to this query to avoid requesting the
         information too often.
@@ -149,10 +149,12 @@ paths:
       responses:
         "200":
           description: |-
-            The profile for the user. If a `field` is specified in the request, only the
-            matching field MUST included in the response. If no `field` was specified,
-            the response MUST include the fields of the user's profile that can be made
-            public, such as the display name and avatar.
+            The profile for the user. If a `field` is specified in the request, the response
+            MUST only included the specified `field`. If no `field` was specified, the response
+            SHOULD include all of the fields of the user's profile, which can be made public.
+
+            If a field in the user's profile can't be made public over the federation, the
+            responding server MAY choose to exclude it in the response.
 
             If the user does not have a particular field set on their profile, the server
             MUST either exclude it from the response body or give it the value `null`.
@@ -175,8 +177,10 @@ paths:
                     example: mxc://example.org/MyC00lAvatar
                   m.tz:
                     type: string
-                    description: The name of the user's time zone. The name MUST be registered in
-                      the [IANA Time Zone Database](https://www.iana.org/time-zones).
+                    description: The name of the user's time zone. The name SHOULD be registered in
+                      the [IANA Time Zone Database](https://www.iana.org/time-zones), requesting
+                      servers MUST tolerate invalid or unknown values.
+                    x-addedInMatrixVersion: "1.16"
                 additionalProperties:
                   description: Additional profile fields.
               examples:
