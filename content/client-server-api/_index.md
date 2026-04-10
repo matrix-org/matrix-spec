@@ -4280,6 +4280,7 @@ that profile.
 | [Policy Servers](#policy-servers)                          | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Recently used emoji](#recently-used-emoji)                | Optional  | Optional | Optional | Optional | Optional |
+| [Key Backup Enabled](#key-backup-enabled)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
 | [Rich replies](#rich-replies)                              | Optional  | Optional | Optional | Optional | Optional |
@@ -4385,5 +4386,6 @@ systems.
 {{% cs-module name="Event replacements" filename="event_replacements" %}}
 {{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
+{{% cs-module name="Key backup enabled" filename="key_backup_enabled" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}

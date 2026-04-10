@@ -1,0 +1,7 @@
+{
+  "$ref": "core/event.json",
+  "type": "m.key_backup",
+  "content": {
+    "enabled": false
+  }
+}
