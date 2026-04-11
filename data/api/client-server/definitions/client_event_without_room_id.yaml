@@ -118,7 +118,9 @@ properties:
         description: |
           The event ID of the state event replaced by this event. This field is generated
           by the local homeserver, and is only returned if the event is a state event.
+          Unlike `prev_content`, this field is included regardless of history visibility.
         type: string
+        x-addedInMatrixVersion: "1.19"
       membership:
         description: |
           The room membership of the user making the request, at the time of the event.
