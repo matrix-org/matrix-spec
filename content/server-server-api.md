@@ -1508,7 +1508,7 @@ expected to be published and therefore should be skipped at this stage.
 Additionally, any keys that are known to have expired prior to the event's
 `origin_server_ts` are ignored.
 
-If all signatures from known keys are found to be valid, the expected content hash is
+If all signatures from known unexpired keys from the originating server(s) are found to be valid, the expected content hash is
 calculated as described below. The content hash in the `hashes` property
 of the received event is base64-decoded, and the two are compared for
 equality.
