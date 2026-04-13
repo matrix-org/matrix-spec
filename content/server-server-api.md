@@ -1492,37 +1492,35 @@ signature](/appendices#checking-for-a-signature). Note that this
 step should succeed whether we have been sent the full event or a
 redacted copy.
 
-The signatures expected on an event are:
+Unless the event is a 3rd party invite, only the signature(s) from the
+originating server (the server the `sender` belongs to) are required for
+verification. If a signature is from an unknown or expired key, it is skipped.
 
--   The `sender`'s server, unless the invite was created as a result of
-    3rd party invite. The sender must already match the 3rd party
-    invite, and the server which actually sends the event may be a
-    different server.
--   For room versions 1 and 2, the server which created the `event_id`.
-    Other room versions do not track the `event_id` over federation and
-    therefore do not need a signature from those servers.
+If the event is a 3rd party invite, the sender must already match the 3rd party
+invite, and the server which actually sends the event may be a different
+server.
 
-Only signatures from known server keys are validated here, any unknown keys are ignored.
+Only signatures from known server keys are validated here. Any unknown keys are ignored.
 In particular, the [policy server key](#validating-policy-server-signatures) is not
 expected to be published and therefore should be skipped at this stage.
 Additionally, any keys that are known to have expired prior to the event's
 `origin_server_ts` are ignored.
-
-If all signatures from known unexpired keys from the originating server(s) are found to be valid, the expected content hash is
-calculated as described below. The content hash in the `hashes` property
-of the received event is base64-decoded, and the two are compared for
-equality.
-
-If the hash check fails, then it is assumed that this is because we have
-only been given a redacted version of the event. To enforce this, the
-receiving server should use the redacted copy it calculated rather than
-the full copy it received.
 
 {{% boxes/note %}}
 {{% added-in v="1.18" %}}
 Events sent in rooms with [Policy Servers](#policy-servers) have [additional](#validating-policy-server-signatures)
 signature validation requirements.
 {{% /boxes/note %}}
+
+If all signatures from known unexpired keys from the originating server(s) are
+found to be valid, the expected content hash is calculated as described below.
+The content hash in the `hashes` property of the received event is base64-decoded,
+and the two are compared for equality.
+
+If the hash check fails, then it is assumed that this is because we have
+only been given a redacted version of the event. To enforce this, the
+receiving server should use the redacted copy it calculated rather than
+the full copy it received.
 
 ### Calculating the reference hash for an event
 
