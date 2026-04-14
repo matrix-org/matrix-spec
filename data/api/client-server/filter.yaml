@@ -36,6 +36,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
       requestBody:
         content:
           application/json:
@@ -130,6 +132,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: filterId
           description: The filter ID to download.
