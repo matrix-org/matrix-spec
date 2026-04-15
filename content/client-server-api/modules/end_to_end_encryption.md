@@ -1488,11 +1488,7 @@ disabling [server-side backups of room keys](#server-side-key-backups). The data
 is stored in the [`m.key_backup`](#mkey_backup) global
 [account data](#client-config).
 
-####### Events
-
 {{% event event="m.key_backup" %}}
-
-####### Client behaviour on sign-in
 
 When a user signs in to a client which supports encryption and key backup:
 
@@ -1508,15 +1504,11 @@ When a user signs in to a client which supports encryption and key backup:
   clients MUST ignore the existing value and MAY decide whether or not to
   perform key backup, possibly based on user input.
 
-####### Client behaviour on setting change
-
 If the user turns on key backups, clients MUST set this event type in account
 data, to `"enabled": true`.
 
 If the user turns off key backups, clients MUST set this event type in account
 data, to `"enabled": false`.
-
-####### Not actively monitoring this setting
 
 Clients are not required to monitor the `m.key_backup` account data actively.
 Clients MAY monitor the setting but should be aware that changing this setting
