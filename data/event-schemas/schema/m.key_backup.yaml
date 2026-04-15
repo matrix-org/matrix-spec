@@ -1,25 +1,24 @@
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "type": "object",
-  "title": "Key Backup Event",
-  "description": "Allows clients to track user preferences about key backup.",
-  "allOf": [{
-    "$ref": "core-event-schema/event.yaml"
-  }],
-  "properties": {
-    "type": {
-      "type": "string",
-      "enum": ["m.key_backup"]
-    },
-    "content": {
-      "type": "object",
-      "properties": {
-        "enabled": {
-          "description": "True if the user chose to enable key backup. False if the user chose to disable key backup.",
-          "type": "boolean",
-        }
-      },
-      "required": ["enabled"]
-    }
-  },
-}
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/event.yaml
+description: |-
+  Allows clients to track user preferences about key backup.
+properties:
+  content:
+    type: object
+    properties:
+      enabled:
+        type: boolean
+        description: |-
+          True if the user chose to enable key backup. False if the user chose
+          to disable key backup.
+    required:
+      - enabled
+  type:
+    type: string
+    enum:
+      - m.key_backup
+title: Key Backup Event
+type: object
