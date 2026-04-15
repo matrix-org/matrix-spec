@@ -1483,7 +1483,7 @@ potential new key backup algorithm version that would fix this issue.
 
 {{% added-in v="1.19" %}}
 
-This module enables clients to track a user's preference about enabling or
+This enables clients to track a user's preference about enabling or
 disabling [server-side backups of room keys](#server-side-key-backups). The data
 is stored in the [`m.key_backup`](#mkey_backup) global
 [account data](#client-config).
