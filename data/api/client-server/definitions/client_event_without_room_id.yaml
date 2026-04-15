@@ -28,6 +28,8 @@ properties:
   event_id:
     description: The globally unique identifier for this event.
     type: string
+    format: mx-event-id
+    pattern: "^\\$"
     example: '$26RqwJMLw-yds1GAH_QxjHRC1Da9oasK0e5VLnck_45'
   type:
     description: The type of the event.
@@ -47,6 +49,8 @@ properties:
   sender:
     description: Contains the fully-qualified ID of the user who sent this event.
     type: string
+    format: mx-user-id
+    pattern: "^@"
     example: "@example:example.org"
   origin_server_ts:
     description: |-

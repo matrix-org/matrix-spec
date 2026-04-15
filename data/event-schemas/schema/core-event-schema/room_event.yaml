@@ -11,5 +11,7 @@ allOf:
         The ID of the room associated with this event. Will not be present on events
         that arrive through `/sync`, despite being required everywhere else.
       type: string
+      format: mx-room-id
+      pattern: "^!"
   required:
   - room_id

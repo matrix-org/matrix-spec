@@ -55,6 +55,8 @@ properties:
               enum: ['m.room_membership']
             room_id:
               type: string
+              format: mx-room-id
+              pattern: "^!"
               description: |-
                 Required if `type` is `m.room_membership`. The room ID to check the
                 user's membership against. If the user is joined to this room, they

@@ -37,6 +37,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: query
           name: from
           x-changedInMatrixVersion:

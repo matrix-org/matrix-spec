@@ -20,10 +20,13 @@ properties:
       The signatures are calculated using the process described at
       [Signing JSON](/appendices/#signing-json).
     type: object
-    additionalProperties:
-      type: object
-      additionalProperties:
-        type: string
+    patternProperties:
+      "":
+        x-pattern-format: mx-server-name
+        type: object
+        additionalProperties:
+          type: string
+          format: mx-unpadded-base64
     example: {
       "magic.forest": {
         "ed25519:3": "fQpGIW1Snz+pwLZu6sTy2aHy/DYWWTspTJRPyNp0PKkymfIsNffysMl6ObMMFdIJhk6g6pwlIqZ54rxo8SLmAg"

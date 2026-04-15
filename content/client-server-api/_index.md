@@ -3348,8 +3348,8 @@ room at the start of the returned timeline. The response also includes a
 `next_batch` field, which should be used as the value of the `since`
 parameter in the next call to `/sync`. Finally, the response includes,
 for each room, a `prev_batch` field, which can be passed as a `from`/`to`
-parameter to the [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API to retrieve earlier
-messages.
+parameter to the [`/rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
+API to retrieve earlier messages.
 
 For example, a `/sync` request might return a range of four events
 `E2`, `E3`, `E4` and `E5` within a given room, omitting two prior events
@@ -3368,7 +3368,8 @@ response to the previous call as the `since` parameter. The client
 should also pass a `timeout` parameter. The server will then hold open
 the HTTP connection for a short period of time waiting for new events,
 returning early if an event occurs. Only the `/sync` API (and the
-deprecated `/events` API) support long-polling in this way.
+deprecated [`/events`](#get_matrixclientv3events) API) support
+long-polling in this way.
 
 Continuing the example above, an incremental sync might report
 a single new event `E6`. The response can be visualised as:
@@ -3388,7 +3389,7 @@ containing only the most recent message events. A state "delta" is also
 returned, summarising any state changes in the omitted part of the
 timeline. The client may therefore end up with "gaps" in its knowledge
 of the message timeline. The client can fill these gaps using the
-[`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages) API.
+[`/rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages) API.
 
 Continuing our example, suppose we make a third `/sync` request asking for
 events since the last sync, by passing the `next_batch` token `x-y-z` as
@@ -3411,7 +3412,7 @@ The limited response includes a state delta which describes how the state
 of the room changes over the gap. This delta explains how to build the state
 prior to returned timeline (i.e. at `E7`) from the state the client knows
 (i.e. at `E6`). To close the gap, the client should make a request to
-[`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
+[`/rooms/{roomId}/messages`](#get_matrixclientv3roomsroomidmessages)
 with the query parameters `from=x-y-z` and `to=d-e-f`.
 
 {{% boxes/warning %}}

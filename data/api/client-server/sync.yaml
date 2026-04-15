@@ -209,6 +209,8 @@ paths:
                                       field may be omitted.
                                     items:
                                       type: string
+                                      format: mx-user-id
+                                      pattern: "^@"
                                   m.joined_member_count:
                                     type: integer
                                     description: |-
