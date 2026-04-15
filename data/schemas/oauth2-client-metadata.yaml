@@ -111,7 +111,7 @@ properties:
       Array of the OAuth 2.0 grant types that the client may use.
 
       This MUST include:
-      - the `authorisation_code` value to use the authorisation code grant,
+      - the `authorization_code` value to use the authorisation code grant,
       - the `refresh_token` value to use the refresh token grant.
 
       The server MUST ignore values that it does not understand.

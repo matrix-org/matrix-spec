@@ -2426,7 +2426,7 @@ device with a web browser.
 This grant requires the client to know the following [authorisation server
 metadata](#server-metadata-discovery):
 
-- `device_authorisation_endpoint`
+- `device_authorization_endpoint`
 
 To use this grant, homeservers and clients MUST:
 
