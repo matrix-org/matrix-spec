@@ -4386,6 +4386,5 @@ systems.
 {{% cs-module name="Event replacements" filename="event_replacements" %}}
 {{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
-{{% cs-module name="Key backup enabled" filename="key_backup_enabled" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
