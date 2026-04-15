@@ -1479,7 +1479,7 @@ potential new key backup algorithm version that would fix this issue.
 
 {{% http-api spec="client-server" api="key_backup" %}}
 
-###### Key backup enabled
+###### Key backup enabled preference
 
 {{% added-in v="1.19" %}}
 
