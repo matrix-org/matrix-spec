@@ -22,5 +22,4 @@
       "required": ["enabled"]
     }
   },
-  "required": ["type", "content"]
 }
