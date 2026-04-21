@@ -2,7 +2,6 @@
 
   A copy of the navbar.html partial in Docsy, modified to:
 
-  * remove `data-bs-theme` at L20, otherwise the title disappears on hover.
   * replace the site title with "specification" at L31.
   * include the spec version from the config at L34-35, which is calculated
     using an inline `version-string` partial.
@@ -16,7 +15,8 @@
 {{ $baseURL := urls.Parse $.Site.Params.Baseurl -}}
 
 <nav class="td-navbar js-navbar-scroll
-            {{- if $cover }} td-navbar-cover {{- end }}">
+      {{- if $cover }} td-navbar-cover td-navbar-transparent {{- end }}"
+      {{- if eq (.Param "ui.navbar_theme") "dark" }} data-bs-theme="dark" {{- end }}>
 <div class="td-navbar-container container-fluid flex-column flex-md-row">
   <a class="navbar-brand" href="{{ .Site.Home.RelPermalink }}">
     {{- /**/ -}}
@@ -35,7 +35,7 @@
 	  <span class="navbar-version"> &mdash; {{ partial "version-string" . }}</span>
     {{- /**/ -}}
   </a>
-  <div class="td-navbar-nav-scroll td-navbar-nav-scroll--indicator" id="main_navbar">
+  <div class="td-navbar__main td-navbar-nav-scroll td-navbar-nav-scroll--indicator" id="main_navbar">
     <div class="scroll-indicator scroll-left"></div>
     <ul class="navbar-nav">
       {{ $p := . -}}
@@ -80,7 +80,7 @@
     </ul>
     <div class="scroll-indicator scroll-right"></div>
   </div>
-  <div class="d-none d-lg-block td-navbar__search">
+  <div class="td-navbar__search d-none d-lg-block">
     {{ partial "search-input.html" . }}
   </div>
 </div>

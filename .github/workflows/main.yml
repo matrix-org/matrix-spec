@@ -1,7 +1,7 @@
 name: "Spec"
 
 env:
-  HUGO_VERSION: 0.153.3
+  HUGO_VERSION: 0.155.3
   PYTHON_VERSION: 3.13
   NODE_VERSION: 24
 
