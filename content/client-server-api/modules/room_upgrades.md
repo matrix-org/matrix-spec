@@ -22,7 +22,7 @@ without the user having to jump between the rooms.
 
 When joining a room using the room ID in an `m.room.tombstone` event or
 `predecessor` field on `m.room.create`, clients SHOULD parse the event
-sender and use the resulting server name as a `via` parameter.
+`sender` and use the resulting server name as a `via` parameter.
 
 {{% http-api spec="client-server" api="room_upgrades" %}}
 
