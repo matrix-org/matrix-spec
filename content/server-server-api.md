@@ -1492,9 +1492,12 @@ signature](/appendices#checking-for-a-signature). Note that this
 step should succeed whether we have been sent the full event or a
 redacted copy.
 
-Unless the event is a 3rd party invite, only the signature(s) from the
-originating server (the server the `sender` belongs to) are required for
-verification. If a signature is from an unknown or expired key, it is skipped.
+For room versions 3 and later, unless the event is a 3rd party invite, only the
+signature(s) from the originating server (the server the `sender` belongs to)
+are required for verification. Room versions 1 and 2 also require that a
+signature is present from the domain in the `event_id`, if it differs from the
+originating server. If a signature is from an unknown or expired key, it is
+skipped.
 
 If the event is a 3rd party invite, the sender must already match the 3rd party
 invite, and the server which actually sends the event may be a different
