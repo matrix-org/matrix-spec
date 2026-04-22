@@ -140,6 +140,8 @@ paths:
                     server to invite everyone in the list to the newly created room.
                   items:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                 invite_3pid:
                   type: array
                   description: |-
@@ -241,6 +243,8 @@ paths:
                   room_id:
                     type: string
                     description: The created room's ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:

@@ -33,6 +33,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       requestBody:
         content:
           application/json:
@@ -42,6 +44,8 @@ paths:
                 room_id:
                   type: string
                   description: The room ID to set.
+                  format: mx-room-id
+                  pattern: "^!"
               required:
                 - room_id
               example: {
@@ -104,6 +108,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       responses:
         "200":
           description: The room ID and other information for this alias.
@@ -115,12 +121,15 @@ paths:
                   room_id:
                     type: string
                     description: The room ID for this room alias.
+                    format: mx-room-id
+                    pattern: "^!"
                   servers:
                     type: array
                     description: A list of servers that are aware of this room alias.
                     items:
                       type: string
                       description: A server which is aware of this room alias.
+                      format: mx-server-name
               examples:
                 response:
                   value: {
@@ -185,6 +194,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       responses:
         "200":
           description: The mapping was deleted.
@@ -241,6 +252,8 @@ paths:
           example: "!abc123:example.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The list of local aliases for the room.
@@ -254,6 +267,8 @@ paths:
                     description: The server's local aliases on the room. Can be empty.
                     items:
                       type: string
+                      format: mx-room-alias
+                      pattern: "^#"
                 required:
                   - aliases
               examples:
