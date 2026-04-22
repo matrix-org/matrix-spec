@@ -30,7 +30,7 @@ paths:
             `public` [join rule](#mroomjoin_rules)
         -   users who are joined to rooms known to the homeserver that have a
             `world_readable` [history visibility](#room-history-visibility)
-        
+
         The search MUST consider local users to the homeserver, and SHOULD
         query remote users as part of the search.
 
@@ -82,6 +82,8 @@ paths:
                           type: string
                           example: "@foo:bar.com"
                           description: The user's matrix user ID.
+                          format: mx-user-id
+                          pattern: "^@"
                         display_name:
                           type: string
                           example: Foo
