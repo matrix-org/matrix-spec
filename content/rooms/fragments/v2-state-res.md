@@ -123,11 +123,11 @@ events: for events *x* and *y*, *x* &lt; *y* if
 The *iterative auth checks algorithm* takes as input an initial room
 state and a sorted list of state events, and constructs a new room state
 by iterating through the event list and applying the state event to the
-room state if the state event is allowed by the [authorization
-rules](/server-server-api#authorization-rules).
-If the state event is not allowed by the authorization rules, then the
+room state if the state event is allowed by the [authorisation
+rules](/server-server-api#authorisation-rules).
+If the state event is not allowed by the authorisation rules, then the
 event is ignored. If a `(event_type, state_key)` key that is required
-for checking the authorization rules is not present in the state, then
+for checking the authorisation rules is not present in the state, then
 the appropriate state event from the event's `auth_events` is used if
 the auth event is not rejected.
 

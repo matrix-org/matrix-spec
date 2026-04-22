@@ -159,7 +159,7 @@ paths:
         "403":
           description: |-
             The public key of one of the keys is the same as one of the user\'s
-            device IDs, or the request is not authorized for any other reason.
+            device IDs, or the request is not authorised for any other reason.
           content:
             application/json:
               schema:

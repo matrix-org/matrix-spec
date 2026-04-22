@@ -87,7 +87,7 @@ properties:
     description: |-
       Array of redirection URIs for use in redirect-based flows.
 
-      At least one URI is required to use the authorization code grant.
+      At least one URI is required to use the authorisation code grant.
 
       The server MUST perform [validation on redirect URIs](/client-server-api/#redirect-uri-validation).
     items:
@@ -99,7 +99,7 @@ properties:
     description: |-
       Array of the OAuth 2.0 response types that the client may use.
 
-      This MUST include the `code` value to use the authorization code grant.
+      This MUST include the `code` value to use the authorisation code grant.
 
       The server MUST ignore values that it does not understand.
     items:
@@ -111,7 +111,7 @@ properties:
       Array of the OAuth 2.0 grant types that the client may use.
 
       This MUST include:
-      - the `authorization_code` value to use the authorization code grant,
+      - the `authorization_code` value to use the authorisation code grant,
       - the `refresh_token` value to use the refresh token grant.
 
       The server MUST ignore values that it does not understand.
