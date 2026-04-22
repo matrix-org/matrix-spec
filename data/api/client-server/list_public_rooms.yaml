@@ -31,6 +31,8 @@ paths:
           example: "!curbf:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The visibility of the room in the directory.
@@ -84,6 +86,8 @@ paths:
           example: "!curbf:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -158,6 +162,7 @@ paths:
             to the local server. Case sensitive.
           schema:
             type: string
+            format: mx-server-name
       responses:
         "200":
           description: A list of the published rooms on the server.
@@ -186,6 +191,7 @@ paths:
             to the local server. Case sensitive.
           schema:
             type: string
+            format: mx-server-name
       requestBody:
         content:
           application/json:

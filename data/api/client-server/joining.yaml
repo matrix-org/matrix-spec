@@ -43,6 +43,8 @@ paths:
           example: "!d41d8cd:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -78,6 +80,8 @@ paths:
                   room_id:
                     type: string
                     description: The joined room ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
@@ -136,7 +140,13 @@ paths:
           required: true
           example: "#monkeys:matrix.org"
           schema:
-            type: string
+            oneOf:
+              - type: string
+                format: mx-room-id
+                pattern: "^!"
+              - type: string
+                format: mx-room-alias
+                pattern: "^#"
         - in: query
           name: via
           x-addedInMatrixVersion: "1.12"
@@ -150,6 +160,7 @@ paths:
             type: array
             items:
               type: string
+              format: mx-server-name
       requestBody:
         content:
           application/json:
@@ -185,6 +196,8 @@ paths:
                   room_id:
                     type: string
                     description: The joined room ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
