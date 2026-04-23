@@ -5,7 +5,8 @@
   "main": "none.js",
   "scripts": {
     "get-proposals": "node ./scripts/proposals.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pagefind": "pagefind $@"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "@fullhuman/postcss-purgecss": "^6.0.0",
     "autoprefixer": "^10.4.20",
     "node-fetch": "^2.6.7",
+    "pagefind": "^1.4.0",
     "postcss": "^8.4.49",
     "postcss-cli": "^11.0.0"
   }

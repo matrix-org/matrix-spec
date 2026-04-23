@@ -661,3 +661,32 @@ dd {
     margin: 0;
   }
 }
+
+/* Style for the page search widget */
+.td-offline-search-results {
+  width: 100%;
+  max-width: 460px;
+}
+
+.td-offline-search-results .td-offline-search-results__subresults.collapse.show {
+  // Prevent the first child margin from collapsing upward when Bootstrap
+  // finishes the collapse animation, which otherwise causes a small jump.
+  display: flow-root;
+}
+
+.td-offline-search-results .spinner-container {
+  text-align: center;
+}
+
+.td-offline-search-results__close-button {
+  // Prevent the label from rendering white on white.
+  --bs-btn-color: unset;
+}
+
+.td-offline-search-results__expander-button {
+  // Prevent the label from rendering white on white.
+  --bs-btn-color: unset;
+  // Avoid any extra inset.
+  --bs-btn-padding-x: 0;
+  --bs-btn-padding-y: 0;
+}
