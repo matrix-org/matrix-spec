@@ -151,7 +151,8 @@ paths:
           description: |-
             The profile for the user. If a `field` is specified in the request, the response
             MUST only include the specified `field`. If no `field` was specified, the response
-            SHOULD include all of the fields of the user's profile, which can be made public.
+            SHOULD include all of the fields of the user's profile that can be made public, such
+            as the display name and avatar.
 
             If a field in the user's profile can't be made public over the federation, the
             responding server MAY choose to exclude it in the response.
