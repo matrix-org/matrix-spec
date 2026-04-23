@@ -254,7 +254,7 @@ components:
 
         Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
         `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-        or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+        or a `prev_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
       required: false
       example: page2_token
       schema:
