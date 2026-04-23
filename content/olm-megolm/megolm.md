@@ -374,5 +374,5 @@ Version 2.0 http://www.apache.org/licenses/LICENSE-2.0.
 [AES-256]: http://csrc.nist.gov/publications/fips/fips197/fips-197.pdf
 [CBC]: http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf
 [PKCS#7]: https://tools.ietf.org/html/rfc2315
-[Olm]: https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/olm.md
+[Olm]: /olm-megolm/olm/
 [Protocol Buffers encoding]: https://developers.google.com/protocol-buffers/docs/encoding
