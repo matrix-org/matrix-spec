@@ -82,6 +82,18 @@ paths:
               examples:
                 response:
                   value: {}
+        "413":
+          description: At least one device message is too large to fit in a single EDU.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOO_LARGE",
+                    "error": "device message to @test:example.com too large to fit in a single EDU"
+                  }
       tags:
         - Send-to-Device messaging
 servers:
