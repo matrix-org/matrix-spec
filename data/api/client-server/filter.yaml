@@ -32,7 +32,7 @@ paths:
           name: userId
           required: true
           description: The id of the user uploading the filter. The access token must be
-            authorized to make requests for this user id.
+            authorised to make requests for this user id.
           example: "@alice:example.com"
           schema:
             type: string

@@ -83,11 +83,11 @@ properties:
           representation of a user with sufficient power level) authorised the user's join. More
           information about this field can be found in the [Restricted Rooms Specification](/client-server-api/#restricted-rooms).
 
-          Client and server implementations should be aware of the [signing implications](/rooms/v8/#authorization-rules)
+          Client and server implementations should be aware of the [signing implications](/rooms/v8/#authorisation-rules)
           of including this field in further events: in particular, the event must be signed by the
           server which owns the user ID in the field. When copying the membership event's `content`
           (for profile updates and similar) it is therefore encouraged to exclude this field in the
-          copy, as otherwise the event might fail event authorization.
+          copy, as otherwise the event might fail event authorisation.
       reason:
         x-addedInMatrixVersion: "1.1"
         type: string

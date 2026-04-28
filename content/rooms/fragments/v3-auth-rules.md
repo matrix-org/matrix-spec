@@ -7,7 +7,7 @@ in the same respect, so does not need a signature from that server.
 The event must still be signed by the server denoted by the `sender` property,
 however.
 
-The types of state events that affect authorization are:
+The types of state events that affect authorisation are:
 
 -   [`m.room.create`](/client-server-api#mroomcreate)
 -   [`m.room.member`](/client-server-api#mroommember)

@@ -42,7 +42,7 @@ paths:
         "200":
           description: |-
             The fully resolved state for the room, prior to considering any state
-            changes induced by the requested event. Includes the authorization
+            changes induced by the requested event. Includes the authorisation
             chain for the events.
           content:
             application/json:
@@ -52,8 +52,8 @@ paths:
                   auth_chain:
                     type: array
                     description: |-
-                      The full set of authorization events that make up the state
-                      of the room, and their authorization events, recursively. Note that
+                      The full set of authorisation events that make up the state
+                      of the room, and their authorisation events, recursively. Note that
                       events have a different format depending on the room version -
                       check the [room version specification](/rooms) for precise event formats.
                     items:
@@ -114,7 +114,7 @@ paths:
         "200":
           description: |-
             The fully resolved state for the room, prior to considering any state
-            changes induced by the requested event. Includes the authorization
+            changes induced by the requested event. Includes the authorisation
             chain for the events.
           content:
             application/json:
@@ -124,8 +124,8 @@ paths:
                   auth_chain_ids:
                     type: array
                     description: |-
-                      The full set of authorization events that make up the state
-                      of the room, and their authorization events, recursively.
+                      The full set of authorisation events that make up the state
+                      of the room, and their authorisation events, recursively.
                     items:
                       type: string
                     example:

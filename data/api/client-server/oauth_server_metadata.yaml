@@ -18,22 +18,22 @@ info:
 paths:
   "/auth_metadata":
     get:
-      summary: Get the OAuth 2.0 authorization server metadata.
+      summary: Get the OAuth 2.0 authorisation server metadata.
       description: |-
-        Gets the OAuth 2.0 authorization server metadata, as defined in
+        Gets the OAuth 2.0 authorisation server metadata, as defined in
         [RFC 8414](https://datatracker.ietf.org/doc/html/rfc8414), including the
         endpoint URLs and the supported parameters that can be used by the
         clients.
 
         This endpoint definition includes only the fields that are meaningful in
         the context of the Matrix specification. The full list of possible
-        fields is available in the [OAuth Authorization Server Metadata
+        fields is available in the [OAuth Authorisation Server Metadata
         registry](https://www.iana.org/assignments/oauth-parameters/oauth-parameters.xhtml#authorization-server-metadata),
         and normative definitions of them are available in their respective
         RFCs.
 
         {{% boxes/note %}}
-        The authorization server metadata is relatively large and may change
+        The authorisation server metadata is relatively large and may change
         over time. Clients should:
 
         - Cache the metadata appropriately based on HTTP caching headers
@@ -42,7 +42,7 @@ paths:
       operationId: getAuthMetadata
       responses:
         "200":
-          description: The OAuth 2.0 authorization server metadata.
+          description: The OAuth 2.0 authorisation server metadata.
           content:
             application/json:
               schema:
@@ -52,7 +52,7 @@ paths:
                     type: string
                     format: uri
                     description: |-
-                      The authorization server's issuer identifier, which is a URL that uses the
+                      The authorisation server's issuer identifier, which is a URL that uses the
                       `https` scheme and has no query or fragment components.
 
                       This is not used in the context of the Matrix specification, but is required
@@ -61,7 +61,7 @@ paths:
                     type: string
                     format: uri
                     description: |-
-                      URL of the authorization endpoint, necessary to use the authorization code
+                      URL of the authorisation endpoint, necessary to use the authorisation code
                       grant.
                   token_endpoint:
                     type: string
@@ -84,10 +84,10 @@ paths:
                     type: array
                     description: |-
                       List of OAuth 2.0 response type strings that the server supports at the
-                      authorization endpoint.
+                      authorisation endpoint.
 
                       This array MUST contain at least the `code` value, for clients to be able to
-                      use the authorization code grant.
+                      use the authorisation code grant.
                     items:
                       type: string
                       description: A response type that the server supports.
@@ -98,12 +98,12 @@ paths:
                       endpoint.
 
                       This array MUST contain at least the `authorization_code` and `refresh_token`
-                      values, for clients to be able to use the authorization code grant and refresh
+                      values, for clients to be able to use the authorisation code grant and refresh
                       token grant, respectively.
 
                       {{% added-in v="1.18" %}} It MAY also contain
                       `urn:ietf:params:oauth:grant-type:device_code` to indicate support for the
-                      [device authorization grant](/client-server-api/#device-authorization-grant).
+                      [device authorisation grant](/client-server-api/#device-authorisation-grant).
                     items:
                       type: string
                       description: A grant type that the server supports.
@@ -111,10 +111,10 @@ paths:
                     type: array
                     description: |-
                       List of OAuth 2.0 response mode strings that the server supports at the
-                      authorization endpoint.
+                      authorisation endpoint.
 
                       This array MUST contain at least the `query` and `fragment` values, for
-                      improved security in the authorization code grant.
+                      improved security in the authorisation code grant.
                     items:
                       type: string
                       description: A response mode that the server supports.
@@ -122,10 +122,10 @@ paths:
                     type: array
                     description: |-
                       List of OAuth 2.0 Proof Key for Code Exchange (PKCE) code challenge methods
-                      that the server supports at the authorization endpoint.
+                      that the server supports at the authorisation endpoint.
 
                       This array MUST contain at least the `S256` value, for improved security in
-                      the authorization code grant.
+                      the authorisation code grant.
                     items:
                       type: string
                       description: A PKCE code challenge method that the server supports.
@@ -133,7 +133,7 @@ paths:
                     type: array
                     description: |-
                       List of OpenID Connect prompt values that the server supports at the
-                      authorization endpoint.
+                      authorisation endpoint.
 
                       Only the `create` value defined in [Initiating User Registration via OpenID
                       Connect](https://openid.net/specs/openid-connect-prompt-create-1_0.html) is
@@ -173,9 +173,9 @@ paths:
                     type: string
                     format: uri
                     description: |-
-                      URL of the device authorization endpoint, as defined in
+                      URL of the device authorisation endpoint, as defined in
                       [RFC 8628](https://datatracker.ietf.org/doc/html/rfc8628), necessary to use
-                      the [device authorization grant](/client-server-api/#device-authorization-grant).
+                      the [device authorisation grant](/client-server-api/#device-authorisation-grant).
                 required:
                   - issuer
                   - authorization_endpoint

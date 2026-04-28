@@ -100,7 +100,7 @@ this.
 
 ### Homeserver -&gt; Application Service API
 
-#### Authorization
+#### Authorisation
 
 {{% changed-in v="1.4" %}}
 
