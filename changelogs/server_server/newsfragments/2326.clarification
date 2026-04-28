@@ -1,0 +1,1 @@
+Clarify the behaviour and response format of `GET /_matrix/federation/v1/query/profile`.
