@@ -375,11 +375,10 @@ The authorization parameters to include are:
   `origin` field from JSON described in step 1.
 - `destination`: {{% added-in v="1.3" %}} the server name of the receiving
   server. This is the same as the `destination` field from the JSON described
-  in step 1. For compatibility with older servers, recipients should accept
-  requests without this parameter, but MUST always send it. If this property
-  is included, but the value does not match the receiving server's name, the
+  in step 1. If the value does not match the receiving server's name, the
   receiving server must deny the request with an HTTP status code 401
   Unauthorized.
+  {{% changed-in v="1.19" %}} This field is now required.
 - `key`: the ID, including the algorithm name, of the sending server's key used
   to sign the request.
 - `signature`: the signature of the JSON as calculated in step 1.
