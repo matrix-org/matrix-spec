@@ -46,6 +46,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: keyName
           description: The name of the profile field to set. This MUST be either
@@ -69,11 +71,11 @@ paths:
               description: |
                 An object which contains exactly one property. The key
                 of that property MUST match the `keyName` specified in the URL.
-                
-                For `avatar_url`, the value MUST be an MXC URI string. 
-                
+
+                For `avatar_url`, the value MUST be an MXC URI string.
+
                 For `displayname`, the value MUST be a string.
-                
+
                 For `m.tz`, the value MUST be a valid identifier from the  [IANA Time Zone Database](https://www.iana.org/time-zones).
                 Servers MAY choose to validate the value. Clients MUST expect unknown or invalid
                 values.
@@ -96,7 +98,7 @@ paths:
           description: |
             The input was invalid in some way. This can include one
             of the following error codes:
-            
+
             - `M_BAD_JSON`: The provided value is not valid JSON.
             - `M_MISSING_PARAM`: The required `keyName` property is
               missing from the request body.
@@ -158,6 +160,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: keyName
           description: The name of the profile field to retrieve.
@@ -216,6 +220,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: keyName
           description: The name of the profile field to delete.
@@ -286,6 +292,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
       responses:
         "200":
           description: The profile information for this user.

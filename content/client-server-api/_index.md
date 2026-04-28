@@ -4214,13 +4214,13 @@ an automatic propagation event to occur, informing likely-interested
 parties of the new values. This change is conveyed using two separate
 mechanisms:
 
--   an `m.room.member` event (with a `join` membership) is sent to every
-    room the user is a member of, to update the `displayname` and
+-   an [`m.room.member`](#mroommember) event (with a `join` membership) is sent
+    to every room the user is a member of, to update the `displayname` and
     `avatar_url`.
--   an `m.presence` presence status update is sent, again containing the
-    new values of the `displayname` and `avatar_url` keys, in addition
-    to the required `presence` key containing the current presence state
-    of the user.
+-   an [`m.presence`](#mpresence) presence status update is sent, again
+    containing the new values of the `displayname` and `avatar_url` keys, in
+    addition to the required `presence` key containing the current presence
+    state of the user.
 
 Both of these should be done automatically by the homeserver when a user
 successfully changes their display name or avatar URL fields.
