@@ -19,7 +19,7 @@ nested titles (h6, or 6 `#` characters) and instead re-evaluate the document str
 Correct capitalisation for long section names
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Headings should be in `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`,
+Headings should be in `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`_,
 as represented by this document.
 
 TODOs
@@ -59,7 +59,7 @@ General
     Of course, identifiers used within the protocol itself must use the
     spellings defined by the protocol. So, for example, the
     `authorization_endpoint` property in the `OAuth 2.0
-    metadata <https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv1auth_metadata>`
+    metadata <https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv1auth_metadata>`_
     uses the same spelling as defined in RFC8414.
 
 * The word "homeserver" is spelt thus (rather than "home server", "Homeserver",
