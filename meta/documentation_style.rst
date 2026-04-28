@@ -53,13 +53,13 @@ General
   spelt accordingly.
 
   * This extends to terms defined in other specifications: for example, in the
-    context of OAuth 2.0, we refer to an "authori**s**ation code grant", even though
-    RFC6749 uses the spelling "authori**z**ation".
+    context of OAuth 2.0, we refer to an "authorisation code grant", even though
+    RFC6749 uses the spelling "authorization".
 
     Of course, identifiers used within the protocol itself must use the
     spellings defined by the protocol. So, for example, the
-    `authorization_endpoint` property in the [OAuth 2.0
-    metadata](https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv1auth_metadata)
+    `authorization_endpoint` property in the `OAuth 2.0
+    metadata <https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv1auth_metadata>`
     uses the same spelling as defined in RFC8414.
 
 * The word "homeserver" is spelt thus (rather than "home server", "Homeserver",
