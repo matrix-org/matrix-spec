@@ -1,5 +1,5 @@
 
-The types of state events that affect authorization are:
+The types of state events that affect authorisation are:
 
 -   [`m.room.create`](/client-server-api#mroomcreate)
 -   [`m.room.member`](/client-server-api#mroommember)

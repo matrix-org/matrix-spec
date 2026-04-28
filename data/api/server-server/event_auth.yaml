@@ -13,7 +13,7 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Federation Event Authorization API
+  title: Matrix Federation Event Authorisation API
   version: 1.0.0
 paths:
   "/event_auth/{roomId}/{eventId}":

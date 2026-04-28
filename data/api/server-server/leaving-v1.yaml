@@ -137,7 +137,7 @@ paths:
                     }
                   }
         "403":
-          description: The request is not authorized. This could mean that the user is not
+          description: The request is not authorised. This could mean that the user is not
             in the room.
           content:
             application/json:
