@@ -131,32 +131,35 @@ def canonical_json(value):
 
 #### Grammar
 
-Adapted from the grammar in <http://tools.ietf.org/html/rfc7159>
-removing insignificant whitespace, fractions, exponents and redundant
-character escapes.
+Adapted grammar from <http://tools.ietf.org/html/rfc7159> removing
+insignificant whitespace, fractions, exponents and redundant character escapes
+written in [ABNF](https://datatracker.ietf.org/doc/html/rfc5234) with
+[case sensitive strings](https://datatracker.ietf.org/doc/html/rfc7405).
 
-    value     = false / null / true / object / array / number / string
-    false     = %x66.61.6C.73.65
-    null      = %x6E.75.6C.6C
-    true      = %x74.72.75.65
-    object    = %x7B [ member *( %x2C member ) ] %x7D
-    member    = string %x3A value
-    array     = %x5B [ value *( %x2C value ) ] %x5D
-    number    = [ %x2D ] int
-    int       = %x30 / ( %x31-39 *digit )
-    digit     = %x30-39
-    string    = %x22 *char %x22
-    char      = unescaped / %x5C escaped
-    unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
-    escaped   = %x22 ; "    quotation mark  U+0022
-              / %x5C ; \    reverse solidus U+005C
-              / %x62 ; b    backspace       U+0008
-              / %x66 ; f    form feed       U+000C
-              / %x6E ; n    line feed       U+000A
-              / %x72 ; r    carriage return U+000D
-              / %x74 ; t    tab             U+0009
-              / %x75.30.30.30 (%x30-37 / %x62 / %x65-66) ; u000X
-              / %x75.30.30.31 (%x30-39 / %x61-66)        ; u001X
+```
+value     = false / null / true / object / array / number / string
+false     = %s"false"
+null      = %s"null"
+true      = %s"true"
+object    = "{" [ member *( "," member ) ] "}"
+member    = string ":" value
+array     = "[" [ value *( "," value ) ] "]"
+number    = [ "-" ] int
+int       = %x30 / ( %x31-39 *DIGIT )   ; 0 or 1-9 *DIGIT (0-9)
+string    = DQUOTE *char DQUOTE         ; quoted chars
+char      = unescaped / "\" escaped
+unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
+escaped   = %x62 ; b    backspace       U+0008
+          / %x74 ; t    tab             U+0009
+          / %x6E ; n    line feed       U+000A
+          / %x66 ; f    form feed       U+000C
+          / %x72 ; r    carriage return U+000D
+          / %x22 ; "    quotation mark  U+0022
+          / %x5C ; \    reverse solidus U+005C
+          / %s"u000" (%x30-37 / %x62 / %x65-66) ; all codepoints from u000X excluding the ones
+                                                ; explicitly escaped above (0-7, b, e, f)
+          / %s"u000" (%x30-39 / %x61-66)        ; u001X (0-9, a-f)
+```
 
 #### Examples
 
