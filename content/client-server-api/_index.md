@@ -4230,6 +4230,10 @@ users, they should include the display name and avatar URL fields in
 these events so that clients already have these details to hand, and do
 not have to perform extra round trips to query it.
 
+### Mutual Rooms
+
+{{% http-api spec="client-server" api="mutual_rooms" %}}
+
 ## Modules
 
 Modules are parts of the Client-Server API which are not universal to
