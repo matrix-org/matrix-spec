@@ -1,0 +1,127 @@
+# Copyright 2026 Logan Devine <logan@zirco.dev>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Mutual Rooms API
+  version: 1.0.0
+paths:
+  /mutual_rooms:
+    get:
+      summary: Get the list of rooms that the user shares with another user.
+      description: |-
+        Get the list of rooms that the user shares with another user. The
+        server will return a list of room IDs that the user shares with the
+        specified `user_id`.
+      operationId: getMutualRooms
+      security:
+        - accessTokenQuery: []
+        - accessTokenBearer: []
+      parameters:
+        - in: query
+          name: user_id
+          required: true
+          description: The MXID of the user to check for mutual rooms with.
+          example: "@alice:example.com"
+          schema:
+            type: string
+            format: mx-user-id
+            pattern: "^@"
+        - in: query
+          name: from
+          required: false
+          description: |-
+            A pagination token from a previous result. This should be a `next_batch` result from
+            a previous call to this endpoint. If not provided, the server will return the first
+            batch of results.
+          example: next_batch_token
+          schema:
+            type: string
+      responses:
+        "200":
+          description: |-
+            A list of room IDs that the user shares with the specified user.
+            If the provided `user_id` is not a valid user, the server MUST return an empty list of rooms.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - joined
+                  - count
+                properties:
+                  joined:
+                    type: array
+                    description: |-
+                      A list of room IDs where both the authenticated user and `user_id` have a
+                      membership of type `join`.
+                    items:
+                      type: string
+                      format: mx-room-id
+                      pattern: "^!"
+                      example: "!OGEhHVWSdvArJzumhm:matrix.org"
+                  count:
+                    type: integer
+                    description: |-
+                      The number of such rooms. This is the total count even if the response is
+                      batched and `joined` doesn't include all rooms. This MAY be inaccurate
+                      if the server is unable to calculate the exact number of rooms.
+                    example: 1
+                  next_batch:
+                    type: string
+                    description: |-
+                      A pagination token to retrieve the next batch of results. This will be absent
+                      if there are no more results to return.
+                    example: next_batch_token
+
+        "400":
+          description: |-
+            Part of the request was invalid. The `from` token provided was invalid or expired,
+            the `user_id` parameter was missing, [non-compliant](/appendices/#historical-user-ids),
+            or was the sender's own user ID.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "The user ID provided was invalid"
+                  }
+        "429":
+          description: This request was rate-limited.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/rate_limited.yaml
+      tags:
+        - Mutual Rooms
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    accessTokenQuery:
+      $ref: definitions/security.yaml#/accessTokenQuery
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
