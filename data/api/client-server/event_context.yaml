@@ -79,10 +79,10 @@ paths:
                 properties:
                   start:
                     type: string
-                    description: A token that can be used to paginate backwards with.
+                    description: A token that can be used to paginate backwards with using [`/messages`](#get_matrixclientv3roomsroomidmessages).
                   end:
                     type: string
-                    description: A token that can be used to paginate forwards with.
+                    description: A token that can be used to paginate forwards with using [`/messages`](#get_matrixclientv3roomsroomidmessages).
                   events_before:
                     type: array
                     description: |-
