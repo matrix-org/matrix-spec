@@ -12,7 +12,7 @@ properties:
         items:
           type: string
           format: mx-event-id
-          pattern: "^$"
+          pattern: "^\\$"
         type: array
     required:
       - pinned
