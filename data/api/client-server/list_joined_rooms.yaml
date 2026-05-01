@@ -39,6 +39,8 @@ paths:
                     description: The ID of each room in which the user has `joined` membership.
                     items:
                       type: string
+                      format: mx-room-id
+                      pattern: "^!"
               examples:
                 response:
                   value: {

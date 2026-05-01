@@ -39,6 +39,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -52,6 +54,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being kicked.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   type: string
                   description: |-

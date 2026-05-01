@@ -3936,28 +3936,28 @@ room to send events in the room:
 
 Some rooms require that users be invited to it before they can join;
 others allow anyone to join. Whether a given room is an "invite-only"
-room is determined by the room config key `m.room.join_rules`. It can
-have one of the following values:
+room is determined by the room state event [`m.room.join_rules`](#mroomjoin_rules).
+It can have one of the following values:
 
 `public`
-This room is free for anyone to join without an invite.
+: This room is free for anyone to join without an invite.
 
 `invite`
-This room can only be joined if you were invited.
+: This room can only be joined if you were invited.
 
 `knock`
-This room can only be joined if you were invited, and allows anyone to
+: This room can only be joined if you were invited, and allows anyone to
 request an invite to the room. Note that this join rule is only available
 in room versions [which support knocking](/rooms/#feature-matrix).
 
-{{% added-in v="1.2" %}} `restricted`
-This room can be joined if you were invited or if you are a member of another
+`restricted`
+: {{% added-in v="1.2" %}} This room can be joined if you were invited or if you are a member of another
 room listed in the join rules. If the server cannot verify membership for any
 of the listed rooms then you can only join with an invite. Note that this rule
 is only expected to work in room versions [which support it](/rooms/#feature-matrix).
 
-{{% added-in v="1.3" %}} `knock_restricted`
-This room can be joined as though it was `restricted` *or* `knock`. If you
+`knock_restricted`
+: {{% added-in v="1.3" %}} This room can be joined as though it was `restricted` *or* `knock`. If you
 interact with the room using knocking, the `knock` rule takes effect whereas
 trying to join the room without an invite applies the `restricted` join rule.
 Note that this rule is only expected to work in room versions

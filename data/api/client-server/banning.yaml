@@ -37,6 +37,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -50,6 +52,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being banned.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   x-addedInMatrixVersion: "1.1"
                   type: string
@@ -108,6 +112,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -121,6 +127,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being unbanned.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   x-addedInMatrixVersion: "1.1"
                   type: string

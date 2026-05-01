@@ -48,6 +48,8 @@ paths:
           example: "!d41d8cd:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -61,6 +63,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the invitee.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   x-addedInMatrixVersion: "1.1"
                   type: string

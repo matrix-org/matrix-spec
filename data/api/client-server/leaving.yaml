@@ -54,6 +54,8 @@ paths:
           example: "!nkl290a:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -113,6 +115,8 @@ paths:
           example: "!au1ba7o:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The room has been forgotten.
