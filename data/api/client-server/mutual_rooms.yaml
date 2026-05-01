@@ -40,7 +40,10 @@ paths:
         - in: query
           name: from
           required: false
-          description: A pagination token from a previous result.
+          description: |-
+            A pagination token from a previous result. This should be a `next_batch` result from
+            a previous call to this endpoint. If not provided, the server will return the first
+            batch of results.
           example: next_batch_token
           schema:
             type: string
@@ -83,7 +86,9 @@ paths:
 
         "400":
           description: |-
-            The user ID provided was [non-compliant](/appendices/#historical-user-ids).
+            Part of the request was invalid. The `from` token provided was invalid or expired,
+            the `user_id` parameter was missing, [non-compliant](/appendices/#historical-user-ids),
+            or was the sender's own user ID.
           content:
             application/json:
               schema:
