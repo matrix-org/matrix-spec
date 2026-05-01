@@ -35,6 +35,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: query
           name: from
           required: false
@@ -62,12 +64,14 @@ paths:
                       membership of type `join`.
                     items:
                       type: string
+                      format: mx-room-id
+                      pattern: "^!"
                       example: "!OGEhHVWSdvArJzumhm:matrix.org"
                   count:
                     type: integer
                     description: |-
                       The number of such rooms. This is the total count even if the response is
-                      batched and joined doesn't include all rooms. This MAY be inaccurate
+                      batched and `joined` doesn't include all rooms. This MAY be inaccurate
                       if the server is unable to calculate the exact number of rooms.
                     example: 1
                   next_batch:
