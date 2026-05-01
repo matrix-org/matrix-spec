@@ -454,8 +454,7 @@ status code of 400.
 
 #### Security considerations
 
-Messages sent using this module are not encrypted, although end to end
-encryption is in development (see [E2E module](#end-to-end-encryption)).
+Messages sent using this module MAY be encrypted, see [End-to-End Encryption](#end-to-end-encryption).
 
 Clients should sanitise **all displayed keys** for unsafe HTML to
 prevent Cross-Site Scripting (XSS) attacks. This includes room names and
