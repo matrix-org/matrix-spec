@@ -305,7 +305,7 @@ has proven ownership of.
    Eve; Eve cannot decrypt it, but forwards it to Bob. Bob believes the
    Alice sent the message to him, whereas Alice intended it to go to Eve.
 
-   This is prevented by Alice including the user ID of the intended recpient
+   This is prevented by Alice including the user ID of the intended recipient
    (Eve) in the plain-text of the pre-key message. Bob can now tell that the
    message was meant for Eve rather than him.
 
