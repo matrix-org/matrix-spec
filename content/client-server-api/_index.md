@@ -3936,8 +3936,8 @@ room to send events in the room:
 
 Some rooms require that users be invited to it before they can join;
 others allow anyone to join. Whether a given room is an "invite-only"
-room is determined by the room config key `m.room.join_rules`. It can
-have one of the following values:
+room is determined by the room state event [`m.room.join_rules`](#mroomjoin_rules).
+It can have one of the following values:
 
 `public`
 : This room is free for anyone to join without an invite.
