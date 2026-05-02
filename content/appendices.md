@@ -146,7 +146,7 @@ member    = string ":" value
 array     = "[" [ value *( "," value ) ] "]"
 number    = [ "-" ] int
 int       = %x30 / ( %x31-39 *DIGIT )   ; Integer without leading zeros
-string    = DQUOTE *char DQUOTE         ; Quoted chars
+string    = DQUOTE *char DQUOTE         ; Quoted characters
 char      = unescaped / "\" escaped
 unescaped = %x20-21 / %x23-5B / %x5D-10FFFF ; All UTF-8 codepoints except ASCII control
                                             ; characters, " and \
