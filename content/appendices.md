@@ -145,10 +145,11 @@ object    = "{" [ member *( "," member ) ] "}"
 member    = string ":" value
 array     = "[" [ value *( "," value ) ] "]"
 number    = [ "-" ] int
-int       = %x30 / ( %x31-39 *DIGIT )   ; 0 or 1-9 *DIGIT (0-9)
-string    = DQUOTE *char DQUOTE         ; quoted chars
+int       = %x30 / ( %x31-39 *DIGIT )   ; Integer without leading zeros
+string    = DQUOTE *char DQUOTE         ; Quoted chars
 char      = unescaped / "\" escaped
-unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
+unescaped = %x20-21 / %x23-5B / %x5D-10FFFF ; All UTF-8 codepoints except ASCII control
+                                            ; characters, " and \
 escaped   = %x62 ; b    backspace       U+0008
           / %x74 ; t    tab             U+0009
           / %x6E ; n    line feed       U+000A
@@ -156,9 +157,10 @@ escaped   = %x62 ; b    backspace       U+0008
           / %x72 ; r    carriage return U+000D
           / %x22 ; "    quotation mark  U+0022
           / %x5C ; \    reverse solidus U+005C
-          / %s"u000" (%x30-37 / %x62 / %x65-66) ; all codepoints from u000X excluding the ones
-                                                ; explicitly escaped above (0-7, b, e, f)
-          / %s"u000" (%x30-39 / %x61-66)        ; u001X (0-9, a-f)
+          / %s"u000" (%x30-37 / %x62 / %x65-66) ; All ASCII control characters which have not been
+                                                ; escaped otherwise (for example \n).
+                                                ; u000X, where X is [0-7, b, e, f]
+          / %s"u001" (%x30-39 / %x61-66)        ; u001X, where X is [0-9, a-f]
 ```
 
 #### Examples
