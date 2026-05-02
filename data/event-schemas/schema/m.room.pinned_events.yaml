@@ -11,6 +11,8 @@ properties:
         description: An ordered list of event IDs to pin.
         items:
           type: string
+          format: mx-event-id
+          pattern: "^\\$"
         type: array
     required:
       - pinned

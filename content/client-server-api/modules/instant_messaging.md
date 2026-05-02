@@ -197,7 +197,7 @@ To ensure this is done consistently across clients, clients SHOULD use
 the following algorithm to calculate a disambiguated display name for a
 given user:
 
-1.  Inspect the `m.room.member` state event for the relevant user id.
+1.  Inspect the [`m.room.member`](#mroommember) state event for the relevant user id.
 2.  If the `m.room.member` state event has no `displayname` field, or if
     that field has a `null` value, use the raw user id as the display
     name. Otherwise:
