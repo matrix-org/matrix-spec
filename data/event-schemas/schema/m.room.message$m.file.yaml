@@ -44,6 +44,8 @@ properties:
               The URL to the thumbnail of the file. Only present if the
               thumbnail is unencrypted.
             type: string
+            format: mx-mxc-uri
+            pattern: "^mxc:\\/\\/"
           thumbnail_file:
             description: |-
               Information on the encrypted thumbnail file, as specified in
@@ -66,6 +68,8 @@ properties:
           Required if the file is unencrypted. The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris))
           to the file.
         type: string
+        format: mx-mxc-uri
+        pattern: "^mxc:\\/\\/"
       file:
         description: |-
           Required if the file is encrypted. Information on the encrypted

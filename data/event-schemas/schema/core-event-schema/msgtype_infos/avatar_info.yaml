@@ -22,6 +22,8 @@ properties:
     description: |-
       The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)) to a thumbnail of the image.
     type: string
+    format: mx-mxc-uri
+    pattern: "^mxc:\\/\\/"
   thumbnail_info:
     allOf:
       - $ref: thumbnail_info.yaml

@@ -16,6 +16,8 @@ properties:
           The URL to the image. If this property is not present, the room has no avatar. This can be useful
           to remove a previous room avatar.
         type: string
+        format: mx-mxc-uri
+        pattern: "^mxc:\\/\\/"
     type: object
   state_key:
     description: A zero-length string.
