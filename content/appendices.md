@@ -157,8 +157,8 @@ escaped   = %x62 ; b    backspace       U+0008
           / %x72 ; r    carriage return U+000D
           / %x22 ; "    quotation mark  U+0022
           / %x5C ; \    reverse solidus U+005C
-          / %s"u000" (%x30-37 / %x62 / %x65-66) ; All ASCII control characters which have not been
-                                                ; escaped otherwise (for example \n).
+          / %s"u000" (%x30-37 / %x62 / %x65-66) ; All ASCII control characters which do not have
+                                                ; dedicated escape sequences (for example \n).
                                                 ; u000X, where X is [0-7, b, e, f]
           / %s"u001" (%x30-39 / %x61-66)        ; u001X, where X is [0-9, a-f]
 ```
