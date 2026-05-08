@@ -1,44 +1,37 @@
-{
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "type": "object",
-    "description": "This event is sent by the callee when they wish to answer the call.",
-    "x-weight": 40,
-    "allOf": [{
-        "$ref": "core-event-schema/room_event.yaml"
-    }],
-    "properties": {
-        "content": {
-            "type": "object",
-            "allOf": [{
-                "$ref": "core-event-schema/call_event.yaml"
-            }],
-            "properties": {
-                "answer": {
-                    "type": "object",
-                    "title": "Answer",
-                    "description": "The session description object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "enum": ["answer"],
-                            "description": "The type of session description."
-                        },
-                        "sdp": {
-                            "type": "string",
-                            "description": "The SDP text of the session description."
-                        }
-                    },
-                    "required": ["type", "sdp"]
-                },
-                "sdp_stream_metadata": {
-                    "$ref": "components/sdp_stream_metadata.yaml"
-                }
-            },
-            "required": ["answer"]
-        },
-        "type": {
-            "type": "string",
-            "enum": ["m.call.answer"]
-        }
-    }
-}
+$schema: https://json-schema.org/draft/2020-12/schema
+
+type: object
+description: This event is sent by the callee when they wish to answer the call.
+x-weight: 40
+allOf:
+- $ref: core-event-schema/room_event.yaml
+properties:
+  content:
+    type: object
+    allOf:
+    - $ref: core-event-schema/call_event.yaml
+    properties:
+      answer:
+        type: object
+        title: Answer
+        description: The session description object
+        properties:
+          type:
+            type: string
+            enum:
+            - answer
+            description: The type of session description.
+          sdp:
+            type: string
+            description: The SDP text of the session description.
+        required:
+        - type
+        - sdp
+      sdp_stream_metadata:
+        $ref: components/sdp_stream_metadata.yaml
+    required:
+    - answer
+  type:
+    type: string
+    enum:
+    - m.call.answer
