@@ -1,20 +1,20 @@
 
 ### Voice over IP
 
-This module outlines how two users in a room can set up a Voice over IP
-(VoIP) call to each other. Voice and video calls are built upon the
-WebRTC 1.0 standard. Call signalling is achieved by sending [message
-events](#events) to the room. In this version of the spec, only two-party
-communication is supported (e.g. between two peers, or between a peer
+This module outlines how two users in a room can set up a Voice over IP (VoIP)
+call to each other. Voice and video calls are built upon the [WebRTC 1.0
+standard](https://www.w3.org/TR/webrtc/). Call signalling is achieved by sending
+[message events](#events) to the room. In this version of the spec, only
+two-party communication is supported (e.g. between two peers, or between a peer
 and a multi-point conferencing unit). Calls can take place in rooms with
 multiple members, but only two devices can take part in the call.
 
 All VoIP events have a `version` field. This is used to determine whether
 devices support this new version of the protocol. For example, clients can use
-this field to know whether to expect an `m.call.select_answer` event from their
-opponent. If clients see events with `version` other than `0` or `"1"`
-(including, for example, the numeric value `1`), they should treat these the
-same as if they had `version` == `"1"`.
+this field to know whether to expect an [`m.call.select_answer`](#mcallselect_answer)
+event from their opponent. If clients see events with `version` other than `0`
+or `"1"` (including, for example, the numeric value `1`), they should treat
+these the same as if they had `version` == `"1"`.
 
 Note that this implies any and all future versions of VoIP events should be
 backwards-compatible.  If it does become necessary to introduce a non
@@ -29,10 +29,10 @@ lowercase alphanumeric characters is recommended. Parties in the call are identi
 `(user_id, party_id)`.
 
 The client  adds a `party_id` field containing this ID to the top-level of the content of all VoIP events
-it sends on the call, including `m.call.invite`. Clients use this to identify remote echo of their own
-events: since a user may call themselves, they cannot simply ignore events from their own user. This
-field also identifies different answers sent by different clients to an invite, and matches `m.call.candidates`
-events to their respective answer/invite.
+it sends on the call, including [`m.call.invite`](#mcallinvite). Clients use this to identify remote echo
+of their own events: since a user may call themselves, they cannot simply ignore events from their own
+user. This field also identifies different answers sent by different clients to an invite, and matches
+[`m.call.candidates`](#mcallcandidates) events to their respective answer/invite.
 
 A client implementation may choose to use the device ID used in end-to-end cryptography for this purpose,
 or it may choose, for example, to use a different one for each call to avoid leaking information on which
@@ -44,15 +44,16 @@ A grammar for `party_id` is defined [below](#grammar-for-voip-ids).
 #### Politeness
 In line with [WebRTC perfect negotiation](https://w3c.github.io/webrtc-pc/#perfect-negotiation-example)
 there are rules to establish which party is polite in the process of renegotiation. The callee is
-always the polite party. In a glare situation, the politeness of a party is therefore determined by
-whether the inbound or outbound call is used: if a client discards its outbound call in favour of
-an inbound call, it becomes the polite party.
+always the polite party. In a [glare](#glare) situation, the politeness of a party is therefore
+determined by whether the inbound or outbound call is used: if a client discards its outbound call
+in favour of an inbound call, it becomes the polite party.
 
 #### Call Event Liveness
-`m.call.invite` contains a `lifetime` field that indicates how long the offer is valid for. When
-a client receives an invite, it should use the event's `age` field in the sync response plus the
-time since it received the event from the homeserver to determine whether the invite is still valid.
-The use of the `age` field ensures that incorrect clocks on client devices don't break calls.
+[`m.call.invite`](#mcallinvite) contains a `lifetime` field that indicates how long the offer is
+valid for. When a client receives an invite, it should use the event's `age` field in the
+[`GET /sync`](#get_matrixclientv3sync) response plus the time since it received the event from the
+homeserver to determine whether the invite is still valid. The use of the `age` field ensures that
+incorrect clocks on client devices don't break calls.
 
 If the invite is still valid *and will remain valid for long enough for the user to accept the call*,
 it should signal an incoming call. The amount of time allowed for the user to accept the call may
@@ -83,7 +84,7 @@ Clients should aim to send a small number of candidate events, with guidelines:
 
 #### End-of-candidates
 An ICE candidate whose value is the empty string means that no more ICE candidates will
-be sent. Clients must send such a candidate in an `m.call.candidates` message.
+be sent. Clients must send such a candidate in an [`m.call.candidates`](#mcallcandidates) message.
 The WebRTC spec requires browsers to generate such a candidate, however note that at time of writing,
 not all browsers do (Chrome does not, but does generate an `icegatheringstatechange` event). The
 client should send any remaining candidates once candidate generation finishes, ignoring timeouts above.
@@ -156,10 +157,10 @@ Or a rejected call:
 Calls are negotiated according to the WebRTC specification.
 
 In response to an incoming invite, a client may do one of several things:
- * Attempt to accept the call by sending an `m.call.answer`.
- * Actively reject the call everywhere: send an `m.call.reject` as per above, which will stop the call from
-   ringing on all the user's devices and the caller's client will inform them that the user has
-   rejected their call.
+ * Attempt to accept the call by sending an [`m.call.answer`](#mcallanswer).
+ * Actively reject the call everywhere: send an [`m.call.reject`](#mcallreject) as per above, which
+   will stop the call from ringing on all the user's devices and the caller's client will inform
+   them that the user has rejected their call.
  * Ignore the call: send no events, but stop alerting the user about the call. The user's other
    devices will continue to ring, and the caller's device will continue to indicate that the call
    is ringing, and will time the call out in the normal way if no other device responds.
@@ -224,8 +225,8 @@ As calls are "placed" to rooms rather than users, the glare resolution
 algorithm outlined below is only considered for calls which are to the
 same room. The algorithm is as follows:
 
--   If an `m.call.invite` to a room is received whilst the client is
-    **preparing to send** an `m.call.invite` to the same room:
+-   If an [`m.call.invite`](#mcallinvite) to a room is received whilst the
+    client is **preparing to send** an `m.call.invite` to the same room:
     -   the client should cancel its outgoing call and instead
         automatically accept the incoming call on behalf of the user.
 -   If an `m.call.invite` to a room is received **after the client has
