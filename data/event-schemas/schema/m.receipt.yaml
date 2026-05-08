@@ -27,7 +27,7 @@ properties:
                         type: object
                         description: |-
                             A collection of users who have sent `m.read` receipts for
-                            this event. The string key is the user ID the receipt 
+                            this event. The string key is the user ID the receipt
                             belongs to.
                         patternProperties:
                             "^@": &receiptUserMap
@@ -46,10 +46,10 @@ properties:
                                         type: string
                                         x-addedInMatrixVersion: "1.4"
                                         description: |-
-                                            The root thread event's ID (or `main`) for which
-                                            thread this receipt is intended to be under. If
-                                            not specified, the read receipt is *unthreaded*
-                                            (default).
+                                            The [thread root](/client-server-api/#threading)'s
+                                            [event ID](/appendices#event-ids) (or `main`) for which
+                                            thread this receipt is intended to be under. If not
+                                            specified, the read receipt is *unthreaded* (default).
                     "m.read.private":
                         type: object
                         description: |-

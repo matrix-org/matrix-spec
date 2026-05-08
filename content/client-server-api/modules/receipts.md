@@ -90,11 +90,11 @@ room that the event was sent to or dismissing a notification in order
 for the event to count as "read". Clients SHOULD NOT send read receipts
 for events sent by their own user.
 
-Similar to the rules for sending receipts, threaded receipts should appear
-in the context of the thread. If a thread is rendered behind a disclosure,
-the client hasn't yet shown the event (or any applicable read receipts)
-to the user. Once they expand the thread though, a threaded read receipt
-would be sent and per-thread receipts from other users shown.
+Similar to the rules for sending receipts, [threaded receipts](#threaded-read-receipts)
+should appear in the context of the thread. If a thread is rendered behind a
+disclosure, the client hasn't yet shown the event (or any applicable read
+receipts) to the user. Once they expand the thread though, a threaded read
+receipt would be sent and per-thread receipts from other users shown.
 
 A client can update the markers for its user by interacting with the
 following HTTP APIs.
@@ -232,5 +232,5 @@ MUST NOT appear in this federated `m.receipt` EDU.
 
 #### Security considerations
 
-As receipts are sent outside the context of the event graph, there are
-no integrity checks performed on the contents of `m.receipt` events.
+As receipts are sent outside the context of the [event graph](/#event-graphs),
+there are no integrity checks performed on the contents of `m.receipt` events.
