@@ -45,7 +45,7 @@ paths:
                     items:
                       type: string
                       format: uri
-                      pattern: "$turns?:"
+                      pattern: "^turns?:"
                     description: A list of TURN URIs
                   ttl:
                     type: integer
