@@ -131,27 +131,39 @@ or not there have been any changes to the Matrix spec.
 A call is set up with message events exchanged as follows:
 
 ```nohighlight
-    Caller                    Callee
-    [Place Call]
-    m.call.invite ----------->
-    m.call.candidate -------->
-    [..candidates..] -------->
-                            [Answers call]
-           <--------------- m.call.answer
-    m.call.select_answer ----------->
-     [Call is active and ongoing]
-           <--------------- m.call.hangup
+    +---------+                    +---------+ 
+    | Caller  |                    | Callee  |
+    +---------+                    +---------+
+         |                              |
+   (Places Call)                        |
+         |------- m.call.invite ------->|
+         |----- m.call.candidate ------>|
+         |----- [..candidates..] ------>|
+         |                              |
+         |                        (Answers call)
+         |<------ m.call.answer --------|
+         |---  m.call.select_answer --->|
+         .                              .
+         . (Call is active and ongoing) .
+         .                              .
+         |                         (Ends call)
+         |<------ m.call.hangup --------|
 ```
 
 Or a rejected call:
 
 ```nohighlight
-    Caller                      Callee
-    m.call.invite ------------>
-    m.call.candidate --------->
-    [..candidates..] --------->
-                             [Rejects call]
-             <-------------- m.call.hangup
+    +---------+                    +---------+ 
+    | Caller  |                    | Callee  |
+    +---------+                    +---------+
+         |                              |
+   (Places Call)                        |
+         |------- m.call.invite ------->|
+         |----- m.call.candidate ------>|
+         |----- [..candidates..] ------>|
+         |                              |
+         |                       (Rejects call)
+         |<------ m.call.reject --------|
 ```
 
 Calls are negotiated according to the WebRTC specification.
