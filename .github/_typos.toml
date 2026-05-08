@@ -3,6 +3,12 @@ extend-exclude = ["/themes", "/attic", "/data-definitions", "*.css", "syntax.scs
 
 [default]
 check-filename = true
+extend-ignore-re = [
+    # Ignore lines that start with `# Copyright ` (i.e. comments containing a
+    # copyright statement in YAML files), they may contain a first or last name
+    # that can be wrongfully detected as typos.
+    "(?Rm)^#\\s*Copyright\\s.*$",
+]
 
 [default.extend-identifiers]
 au1ba7o = "au1ba7o"
