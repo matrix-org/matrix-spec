@@ -13,6 +13,8 @@ properties:
         type: array
         items:
           type: string
+          format: mx-user-id
+          pattern: "^@"
         description: The list of user IDs typing in this room, if any.
     required:
     - user_ids
