@@ -36,6 +36,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: roomId
           description: The room in which the user is typing.
@@ -43,6 +45,8 @@ paths:
           example: "!wefh3sfukhs:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
