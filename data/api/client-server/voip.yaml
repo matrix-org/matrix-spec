@@ -44,6 +44,8 @@ paths:
                     type: array
                     items:
                       type: string
+                      format: uri
+                      pattern: "^turns?:"
                     description: A list of TURN URIs
                   ttl:
                     type: integer
