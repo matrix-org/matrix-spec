@@ -1742,6 +1742,9 @@ over the requirements to create a new account and is not limited by the steps
 defined in this specification. It also means that less trust is given to clients
 because they don't have access to the user's credentials anymore.
 
+The best practices from [RFC 9700](https://datatracker.ietf.org/doc/html/rfc9700)
+are applicable to this API and are recommended reading for implementors.
+
 {{% boxes/warning %}}
 The [User-Interactive Authentication API](#user-interactive-authentication-api)
 is not compatible with the OAuth 2.0 API, so the endpoints that depend on it for
