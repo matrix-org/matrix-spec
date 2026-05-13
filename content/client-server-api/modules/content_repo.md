@@ -40,6 +40,10 @@ mxc://<server-name>/<media-id>
 <media-id> : An opaque ID which identifies the content.
 ```
 
+The `media-id` segment MUST consist of only alphanumeric (`A-Za-z0-9`), `_` and
+`-` characters. See the [security considerations](#content-repo-security-considerations)
+section below for more details.
+
 #### Client behaviour {id="content-repo-client-behaviour"}
 
 Clients can access the content repository using the following endpoints.
@@ -125,7 +129,7 @@ Servers MUST NOT upscale thumbnails under any circumstance. Servers MUST
 NOT return a smaller thumbnail than requested, unless the original
 content makes that impossible.
 
-#### Security considerations
+#### Security considerations {id="content-repo-security-considerations"}
 
 The HTTP GET endpoint does not require any authentication. Knowing the
 URL of the content is sufficient to retrieve the content, even if the
