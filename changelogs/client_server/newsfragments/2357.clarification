@@ -1,0 +1,1 @@
+The `prev_batch` token from `/sync` can be used as the `from` value in `GET /rooms/{roomId}/relations/{eventId}`.
