@@ -4302,6 +4302,7 @@ that profile.
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
+| [Mutual Rooms](#mutual-rooms)                              | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -4392,3 +4393,4 @@ systems.
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
+{{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
