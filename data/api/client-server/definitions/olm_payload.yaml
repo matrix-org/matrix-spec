@@ -65,15 +65,15 @@ example: {
   "sender": "<sender_user_id>",
   "recipient": "<recipient_user_id>",
   "recipient_keys": {
-    "ed25519": "<our_ed25519_key>"
+    "ed25519": "<recipient_ed25519_key>"
   },
   "keys": {
     "ed25519": "<sender_ed25519_key>"
   },
   "sender_device_keys": {
     "algorithms": ["<supported>", "<algorithms>"],
-    "user_id": "<user_id>",
-    "device_id": "<device_id>",
+    "user_id": "<sender_user_id>",
+    "device_id": "<sender_device_id>",
     "keys": {
       "ed25519:<device_id>": "<sender_ed25519_key>",
       "curve25519:<device_id>": "<sender_curve25519_key>"
