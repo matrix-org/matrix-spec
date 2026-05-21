@@ -1698,7 +1698,7 @@ Curve25519 key used to establish the Olm session does indeed belong
 to the claimed `sender`. This requires a signed "device keys" structure
 for that Curve25519 key, which can be obtained in one of two ways:
 
-1.  An Olm message may be received with a `sender_device_keys` property
+1.  An event encrypted using Olm may be received with a `sender_device_keys` property
     in the decrypted content.
 2.  The keys are returned via a [`/keys/query`](#post_matrixclientv3keysquery)
     request. Note that both the Curve25519 key **and** the Ed25519 key in
