@@ -132,18 +132,26 @@ search backend.
       // Kick off the search, load the results and inject them into the popover.
       //
 
-      const search = await pagefind.debouncedSearch(searchQuery);
+      // First search all non-changelog pages.
+      const search = await pagefind.debouncedSearch(searchQuery, { filters: { not: { type: "changelog" } } });
       if (search === null) {
         // A more recent search call has been made, nothing to do.
         return;
       }
 
-      if (search.results.length === 0) {
+      // Now search the changelog pages and append any results so that changelog
+      // results are ranked lowest. We cannot use Pagefind's sorting to do this
+      // because that would override the default ranking within the non-changelog
+      // results
+      const changelogSearch = await pagefind.search(searchQuery, { filters: { type: "changelog" } });
+      const results = [...search.results, ...changelogSearch.results];
+
+      if (results.length === 0) {
         $searchResultBody.append(
           $("<p>").text(`No results found for query "${searchQuery}"`)
         );
       } else {
-        await loadAndRenderResults(search.results, 0, $spinner, $searchResultBody);
+        await loadAndRenderResults(results, 0, $spinner, $searchResultBody);
       }
     };
   });
