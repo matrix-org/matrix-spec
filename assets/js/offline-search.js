@@ -42,9 +42,9 @@ search backend.
     // Set up search input handler.
     //
 
-    $searchInput.on("keypress", (event) => {
+    $searchInput.on("keydown", (event) => {
       // Start searching only upon Enter.
-      if (event.which === 13) {
+      if (event.key === "Enter") {
         event.preventDefault();
         render($(event.target));
         return;
