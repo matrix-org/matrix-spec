@@ -1,0 +1,1 @@
+Clarify that policy servers might share a name with event origins, and that servers should avoid overwriting/discarding signatures for the event origin when getting a policy server signature.
