@@ -16,7 +16,7 @@
 
 {{ define "main" }}
     {{ $version := lower .LinkTitle -}}
-<div class="td-content">
+<div class="td-content" data-pagefind-filter="type:changelog">
     <h1>{{ .Title }}</h1>
 
     <table class="release-info">

@@ -79,6 +79,18 @@ We use a highly customized [Docsy](https://www.docsy.dev/) theme for our generat
 Awesome. If you're looking at making design-related changes to the spec site, please coordinate with us in
 [#matrix-docs:matrix.org](https://matrix.to/#/#matrix-docs:matrix.org) before opening a PR.
 
+## Page search
+
+The spec uses [Pagefind](https://pagefind.app/) to provide a page search widget. To test this locally, you'll need to generate the
+search index _after_ building the static site.
+
+```
+hugo build && npm run pagefind -- --site public && hugo serve
+```
+
+Note that while `hugo serve` supports hot reloading, changes made to the site content won't reflect in the search index without
+rebuilding it.
+
 ## Building the specification
 
 If for some reason you're not a CI/CD system and want to render a static version of the spec for yourself, follow the above
