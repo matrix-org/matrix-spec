@@ -41,6 +41,12 @@ paths:
 
         What the Policy Server checks for when calling this endpoint is left as an
         implementation detail.
+
+        {{% boxes/warning %}}
+        The policy server name might be the same as the event's origin, and therefore the event might
+        have existing signatures. Those existing signatures might not be returned by the policy server,
+        but should be retained to validate the event.
+        {{% /boxes/warning %}}
       operationId: askPolicyServerToSign
       security:
         - signedRequest: []

@@ -31,7 +31,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: "🔎 Run validator"
         run: |
-          npx @redocly/cli@latest lint data/api/*/*.yaml
+          npx @redocly/cli@2.31.5 lint data/api/*/*.yaml
 
   check-event-examples:
     name: "🔎 Check Event schema examples"
@@ -235,6 +235,10 @@ jobs:
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
           tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
+
+      - name: "🔍 pagefind indexing"
+        run: |
+          npm run pagefind -- --site "spec${baseURL}"
 
       - name: "📦 Tarball creation"
         run: |
