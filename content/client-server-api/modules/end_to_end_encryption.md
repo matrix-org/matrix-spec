@@ -1623,9 +1623,9 @@ An event encrypted using Olm has the following format:
 ```
 
 `ciphertext` is a mapping from device Curve25519 key to an encrypted
-payload for that device. `body` is a Base64-encoded Olm message body.
+payload for that device. `body` is a Base64-encoded [Olm message body](/olm-megolm/olm/#the-olm-message-format).
 `type` is an integer indicating the type of the message body: 0 for the
-initial pre-key message, 1 for ordinary messages.
+initial [pre-key message](/olm-megolm/olm/#pre-key-messages), 1 for [normal messages](/olm-megolm/olm/#normal-messages).
 
 Olm sessions will generate messages with a type of 0 until they receive
 a message. Once a session has decrypted a message it will produce
