@@ -5,7 +5,7 @@ type: docs
 ---
 
 An implementation of the double cryptographic ratchet described by
-https://whispersystems.org/docs/specifications/doubleratchet/.
+https://signal.org/docs/specifications/doubleratchet/.
 
 ## Notation
 
