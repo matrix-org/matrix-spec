@@ -16,7 +16,7 @@
 type: object
 title: OlmPayload
 description: |-
-  The plaintext payload of Olm message events.
+  The plaintext payload of an event encrypted using Olm.
 properties:
   type:
     type: string
