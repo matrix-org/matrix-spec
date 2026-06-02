@@ -1,0 +1,1 @@
+Add `GET /_matrix/client/v1/mutual_rooms`, as per [MSC2666](https://github.com/matrix-org/matrix-spec-proposals/pull/2666).
