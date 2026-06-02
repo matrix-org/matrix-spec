@@ -5,7 +5,7 @@ type: docs
 ---
 
 An implementation of the double cryptographic ratchet described by
-https://whispersystems.org/docs/specifications/doubleratchet/.
+https://signal.org/docs/specifications/doubleratchet/.
 
 ## Notation
 
@@ -320,11 +320,11 @@ Can be sent to olm at matrix.org.
 ## Acknowledgements
 
 The ratchet that Olm implements was designed by Trevor Perrin and Moxie
-Marlinspike - details at https://whispersystems.org/docs/specifications/doubleratchet/. Olm is
+Marlinspike - details at https://signal.org/docs/specifications/doubleratchet/. Olm is
 an entirely new implementation written by the Matrix.org team.
 
 [Curve25519]: http://cr.yp.to/ecdh.html
-[Triple Diffie-Hellman]: https://whispersystems.org/blog/simplifying-otr-deniability/
+[Triple Diffie-Hellman]: https://signal.org/blog/simplifying-otr-deniability/
 [HMAC-based key derivation function]: https://tools.ietf.org/html/rfc5869
 [HKDF-SHA-256]: https://tools.ietf.org/html/rfc5869
 [HMAC-SHA-256]: https://tools.ietf.org/html/rfc2104
