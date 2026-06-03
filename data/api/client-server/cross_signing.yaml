@@ -203,8 +203,8 @@ paths:
                     "user_id": "@alice:example.com",
                     "device_id": "HIJKLMN",
                     "algorithms": [
-                      "m.olm.v1.curve25519-aes-sha256",
-                      "m.megolm.v1.aes-sha"
+                      "m.olm.v1.curve25519-aes-sha2",
+                      "m.megolm.v1.aes-sha2"
                     ],
                     "keys": {
                       "curve25519:HIJKLMN": "base64+curve25519+key",
