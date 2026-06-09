@@ -1,0 +1,1 @@
+The room directory now returns rooms in a server-defined order rather than largest first, as per [MSC4423](https://github.com/matrix-org/matrix-spec-proposals/pull/4423).

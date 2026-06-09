@@ -22,8 +22,12 @@ paths:
       description: |-
         Lists the server's published room directory.
 
-        This API returns paginated responses. The rooms are ordered by the number
-        of joined members, with the largest rooms first.
+        This API returns paginated responses.
+
+        {{% changed-in v="1.19" %}} The server determines the order of the rooms
+        returned by this endpoint. Previously, rooms were ordered with the largest
+        joined member count first. Continuing to order by largest first or another
+        stable order is recommended.
 
         This SHOULD not return rooms that are listed on another homeserver's directory,
         just those listed on the receiving homeserver's directory.
@@ -76,8 +80,12 @@ paths:
       description: |-
         Lists the server's published room directory with an optional filter.
 
-        This API returns paginated responses. The rooms are ordered by the number
-        of joined members, with the largest rooms first.
+        This API returns paginated responses.
+
+        {{% changed-in v="1.19" %}} The server determines the order of the rooms
+        returned by this endpoint. Previously, rooms were ordered with the largest
+        joined member count first. Continuing to order by largest first or another
+        stable order is recommended.
       operationId: queryPublicRooms
       security:
         - signedRequest: []
