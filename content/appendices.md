@@ -881,20 +881,21 @@ https://matrix.to/#/<identifier>/<extra parameter>?<additional arguments>
 
 The identifier may be a room ID, room alias, or user ID. The
 extra parameter is only used in the case of permalinks where an event ID
-is referenced. The matrix.to URI, when referenced, must always start
+is referenced. The matrix.to URI, when referenced, MUST always start
 with `https://matrix.to/#/` followed by the identifier.
 
 The `<additional arguments>` and the preceding question mark are
-optional and only apply in certain circumstances, documented below.
+OPTIONAL and only apply in certain circumstances, documented below.
 
-Clients should not rely on matrix.to URIs falling back to a web server
-if accessed and instead should perform some sort of action within the
+Clients SHOULD NOT rely on matrix.to URIs falling back to a web server
+if accessed and instead SHOULD perform some sort of action within the
 client. For example, if the user were to click on a matrix.to URI for a
-room alias, the client may open a view for the user to participate in
+room alias, the client MAY open a view for the user to participate in
 the room.
 
 The components of the matrix.to URI (`<identifier>` and
-`<extra parameter>`) are to be percent-encoded as per RFC 3986.
+`<extra parameter>`) MUST be percent-encoded as per RFC 3986.
+Clients MUST NOT produce incorrectly encoded URIs to avoid ambiguous interpretation.
 
 Examples of matrix.to URIs are:
 
