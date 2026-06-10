@@ -1,0 +1,43 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/event.yaml
+description: |-
+  Stores which room image packs the user has enabled globally, so that the
+  images in those packs are available in all rooms.
+properties:
+  type:
+    type: string
+    enum:
+      - m.image_pack.rooms
+  content:
+    type: object
+    properties:
+      rooms:
+        description: |-
+          A map of room ID to a map of `state_key` to an empty object.
+          Each entry references a specific `m.room.image_pack` state event
+          that the user has enabled globally.
+
+          The bottom-level object is reserved for future use by a subsequent
+          MSC. Clients MUST treat it as opaque and preserve any unrecognised
+          properties when modifying this event.
+
+          A room ID present as a key but with no `state_key` entries (i.e. an
+          empty inner object) currently has no defined meaning.
+
+          Clients SHOULD be aware that the user may not be a member of a room
+          referenced here, and MAY present appropriate UI to handle this case.
+        type: object
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    required:
+      - rooms
+required:
+  - type
+  - content
+title: ImagePackRooms
+type: object

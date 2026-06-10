@@ -1,0 +1,101 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/state_event.yaml
+description: |-
+  Defines an image pack in a room. An image pack is a named collection of
+  images (emoticons and/or stickers) that can be used by room members.
+
+  A room MAY contain multiple image packs, each identified by a unique
+  `state_key`.
+properties:
+  content:
+    type: object
+    properties:
+      images:
+        description: |-
+          A map from a [shortcode](#shortcode-grammar) to an image object.
+          Each entry defines one image available in this pack.
+        type: object
+        additionalProperties:
+          title: ImagePackImage
+          type: object
+          description: |-
+            An image available in the pack.
+          properties:
+            url:
+              description: |-
+                The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)
+                for this image.
+              type: string
+              format: mx-mxc-uri
+              pattern: "^mxc:\\/\\/"
+            body:
+              description: |-
+                A textual representation or description of the image. This is
+                used as the `alt` attribute when the emote is sent in a message,
+                and as the `body` when the image is sent as a sticker.
+              type: string
+            info:
+              allOf:
+                - $ref: core-event-schema/msgtype_infos/image_info.yaml
+              description: |-
+                Metadata about the image, using the same
+                [`ImageInfo`](/client-server-api/#msticker_imageinfo) structure
+                as [`m.sticker`](/client-server-api/#msticker) events.
+          required:
+            - url
+      pack:
+        title: ImagePackMeta
+        type: object
+        description: |-
+          Metadata about the image pack as a whole. If absent, clients SHOULD
+          use the room's name and avatar as the pack's display name and avatar.
+        properties:
+          display_name:
+            description: |-
+              A display name for the pack. If absent and the pack is defined in
+              a room, defaults to the room's name.
+            type: string
+          avatar_url:
+            description: |-
+              The [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)
+              of an avatar for the pack. If absent and the pack is defined in a
+              room, defaults to the room's avatar.
+            type: string
+            format: mx-mxc-uri
+            pattern: "^mxc:\\/\\/"
+          usage:
+            description: |-
+              The intended usages for this pack. The defined values are
+              `emoticon` (images intended to be sent inline in messages) and
+              `sticker` (images intended to be sent as standalone sticker
+              events). If absent or empty, all usage types are assumed.
+
+              Clients SHOULD use this property to determine in which pickers
+              (emote picker, sticker picker) to surface images from this pack.
+            type: array
+            items:
+              type: string
+              enum:
+                - emoticon
+                - sticker
+          attribution:
+            description: |-
+              An attribution string for the pack, for example crediting the
+              original author or source.
+            type: string
+    required:
+      - images
+  state_key:
+    description: |-
+      A unique identifier for this image pack within the room. This is not
+      intended to be surfaced to users.
+    type: string
+  type:
+    enum:
+      - m.room.image_pack
+    type: string
+title: RoomImagePack
+type: object
