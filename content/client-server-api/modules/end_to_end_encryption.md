@@ -1669,8 +1669,9 @@ following checks:
 1.  The `sender` property in the decrypted content must match the
     `sender` of the event.
 2.  The `keys.ed25519` property in the decrypted content must match
-    the `sender_key` property in the cleartext `m.room.encrypted`
-    event body.
+    the Ed25519 identity key of the sending device. This key can be
+    obtained from either [`/keys/query`](#post_matrixclientv3keysquery)
+    or the `sender_device_keys` object (see below).
 3.  The `recipient` property in the decrypted content must match
     the user ID of the local user.
 4.  The `recipient_keys.ed25519` property in the decrypted content
@@ -1678,11 +1679,11 @@ following checks:
 5.  Where `sender_device_keys` is present in the decrypted content:
     1.  `sender_device_keys.user_id` must also match the `sender`
         of the event.
-    2.  `sender_device_keys.keys.ed25519:<device_id>` must also match
+    2.  `sender_device_keys.keys.curve25519:<device_id>` must also match
         the `sender_key` property in the cleartext `m.room.encrypted`
         event body.
-    3.  `sender_device_keys.keys.curve25519:<device_id>` must match
-        the Curve25519 key used to establish the Olm session.
+    3.  `sender_device_keys.keys.ed25519:<device_id>` must be the same
+        as the `keys.ed25519` property in the decrypted content.
     4.  The `sender_device_keys` structure must have a valid signature
         from the key with ID `ed25519:<device_id>` (i.e., the sending
         device's Ed25519 key).
