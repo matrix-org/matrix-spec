@@ -1,1 +1,1 @@
-Add support for image packs (`m.room.image_pack` and `m.image_pack.rooms`), allowing custom emoticons and stickers to be organised into packs and shared between users.
+Add support for image packs (`m.room.image_pack` and `m.image_pack.rooms`), allowing custom emoticons and stickers to be organised into packs and shared between users, as per [MSC2545](https://github.com/matrix-org/matrix-spec-proposals/pull/2545).
