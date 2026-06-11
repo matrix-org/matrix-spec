@@ -4281,6 +4281,7 @@ that profile.
 | [Event Replacements](#event-replacements)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Read and Unread Markers](#read-and-unread-markers)        | Optional  | Optional | Optional | Optional | Optional |
 | [Guest Access](#guest-access)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Image Packs](#image-packs)                                | Optional  | Optional | Optional | Optional | Optional |
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
 | [Policy Servers](#policy-servers)                          | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
@@ -4391,6 +4392,7 @@ systems.
 {{% cs-module name="Event replacements" filename="event_replacements" %}}
 {{% cs-module name="Event annotations and reactions" filename="event_annotations" %}}
 {{% cs-module name="Recently used emoji" filename="recent_emoji" %}}
+{{% cs-module name="Image packs" filename="image_packs" %}}
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
 {{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
