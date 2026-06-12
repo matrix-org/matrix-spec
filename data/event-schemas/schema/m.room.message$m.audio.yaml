@@ -58,9 +58,7 @@ properties:
         pattern: "^mxc:\\/\\/"
       file:
         description: |-
-          Required if the file is encrypted. Information on the encrypted
-          file, as specified in
-          [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+          Required if the file is encrypted. An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
         title: EncryptedFile
         type: object
     required:
