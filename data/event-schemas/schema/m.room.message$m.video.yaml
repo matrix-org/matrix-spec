@@ -58,8 +58,7 @@ properties:
             pattern: "^mxc:\\/\\/"
           thumbnail_file:
             description: |-
-              Information on the encrypted thumbnail file, as specified in
-              [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+              An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
               Only present if the thumbnail is encrypted.
             title: EncryptedFile
             type: object
@@ -82,9 +81,7 @@ properties:
         pattern: "^mxc:\\/\\/"
       file:
         description: |-
-          Required if the file is encrypted. Information on the encrypted
-          file, as specified in
-          [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+          Required if the file is encrypted. An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
         title: EncryptedFile
         type: object
     required:
