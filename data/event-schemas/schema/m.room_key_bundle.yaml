@@ -1,0 +1,40 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/event.yaml
+
+description: |-
+  This event type is used to share a bundle of room keys when inviting a new user to the room.
+
+  It is encrypted as an
+  [`m.room.encrypted`](/client-server-api/#mroomencrypted) [to-device
+  event](/client-server-api/#send-to-device-messaging) using
+  [Olm](/client-server-api/#molmv1curve25519-aes-sha2).
+
+  The `sender_device_keys` property in the [Olm
+  plaintext](/client-server-api/#definition-olmpayload) MUST be
+  populated. Recipients SHOULD ignore `m.room_key_bundle` messages which omit
+  them.
+properties:
+  content:
+    properties:
+      room_id:
+        type: string
+        description: The room to which the keys in the key bundle relate.
+      file:
+        description: |-
+          An [EncryptedFile](/client-server-api/#definition-encryptedfile)
+          structure.  The location and decryption keys for the encrypted
+          [`RoomKeyBundle`](/client-server-api/#definition-roomkeybundle).
+        title: EncryptedFile
+        type: object      
+    required:
+      - room_id
+      - file
+    type: object
+  type:
+    enum:
+      - m.room_key_bundle
+    type: string
+type: object

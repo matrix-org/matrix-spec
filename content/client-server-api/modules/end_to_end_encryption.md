@@ -1547,6 +1547,143 @@ objects described as follows:
 
 {{% definition path="api/client-server/definitions/megolm_export_session_data" %}}
 
+#### Sharing keys between users
+
+{{% added-in v="1.19" %}}
+
+When Alice invites Bob to an encrypted room, she might want Bob to have access
+to messages that were previously sent in that room, subject to the [history
+visibility](#room-history-visibility) setting of the room.
+
+Alice does this by constructing an [encrypted key
+bundle](#construction-and-sharing-of-the-key-bundle) and sharing it with Bob
+before inviting him.
+
+##### Shareable encryption sessions
+
+Only room keys which were marked as "shareable" by the creator of the
+encryption session should be shared with new users.
+
+When Alice wants to send a message in the room she shares with Bob, she first
+checks the [history visibility](#room-history-visibility) state of the
+room. If it is `shared` or `world_readable`, then when she sends the Megolm
+keys to Bob via an [`m.room_key`](#mroom_key) message, she sets
+`shared_history` to `true`.
+
+If the history visibility changes in a way that would affect the
+`shared_history` flag (i.e., it changes from `joined` or `invited` to `shared`
+or `world_readable`, or vice versa), then clients MUST rotate their outbound
+megolm session before sending more messages.
+
+Clients SHOULD show a visual indication to users that their encrypted messages
+may be shared with future room members in this way.
+
+Recipients SHOULD keep a record of the `shared_history` flag for each
+encryption session. The state of the flag is also saved in the
+[`BackedUpSessionData`](#definition-backedupsessiondata) type in key backups,
+and the [`ExportedSessionData`](#definition-exportedsessiondata) type in key
+exports.
+
+A session is therefore considered as "shareable" if any of the following
+conditions are satisfied:
+
+ * The client created the session itself, when the `history_visibility` state
+   was set to `shared` or `world_readable`.
+ * The keys to the session were received from an [`m.room_key`](#mroom_key)
+   message with `shared_history` set to `true`.
+ * The keys to the session were loaded from key backup, and the
+   [`BackedUpSessionData`](#definition-backedupsessiondata) structure had
+   `shared_history` set to `true`.
+ * The keys to the session were loaded from a key export, and the
+   [`ExportedSessionData`](#definition-exportedsessiondata) structure had
+   `shared_history` set to `true`.
+ * The keys were received as part of a
+   [`RoomKeyBundle`](#definition-roomkeybundle).
+
+{{% boxes/note %}}
+Tracking shareable sessions in this way prevents an attack where a malicious
+homeserver can incorrectly flag history as shared, without telling the sender
+of the messages. It also ensures that a user that sends an encrypted message does
+so in the knowledge that the message may be shared with new members in the
+room.
+{{% /boxes/note %}}
+
+##### Construction and sharing of the key bundle
+
+Alice MAY choose not to share any room history (even messages sent when the
+history visibity setting would allow sharing) if the current history
+visibility setting does not allow sharing (i.e. if `history_visibility` is
+set to `invited` or `joined`).
+
+Otherwise, before inviting Bob to a room, Alice constructs and sends a key bundle as follows:
+
+1. Alice SHOULD ensure that she has downloaded all keys relevant to the room
+   from [server-side key backup](#server-side-key-backups), if she is using it.
+
+2. Alice constructs a [`RoomKeyBundle`](#definition-roomkeybundle) structure,
+   containing the sessions she is aware of in the room. Alice SHOULD include
+   only [shareable encryption sessions](#shareable-encryption-sessions) in the
+   `room_keys` section of the structure; other sessions should be listed un the
+   with `withheld` section.
+
+3. Alice serialises the `RoomKeyBundle` as JSON.
+
+4. Alice encrypts and uploads the serialised JSON in the same way as when
+   [sending an encrypted attachment](#sending-encrypted-attachments).
+
+5. Alice ensures she has an up-to-date list of Bob's devices (performing a
+   [`/keys/query`](#post_matrixclientv3keysquery) request if necessary).
+
+6. For each of Bob's devices which are correctly
+   [cross-signed](#cross-signing), Alice encrypts and sends an
+   [`m.room_key_bundle`](#mroom_key_bundle) message.
+
+Alice MUST NOT send the `m.room.key_bundle` message to devices that have not
+been correctly cross-signed by their owner, due to the risk of sharing
+significant amounts of encrypted content with an attacker-controlled device.
+
+{{% definition path="api/client-server/definitions/room_key_bundle" %}}
+
+{{% event event="m.room_key_bundle" %}}
+
+##### Receiving a key bundle event
+
+When Bob's client receives an `m.room_key_bundle` event from Alice, there are two possibilities:
+
+ * If Bob has recently accepted an invite to the room from Alice, the client
+   should immediately download and decrypt the key bundle and start processing
+   it. Note, however, that this process must be resilient to Bob's client being
+   restarted before the download/import completes.
+
+   The definition of "recently" is left up to clients. (They should consider
+   balancing the needs of (a) a user that closes their client just after
+   joining a room but before the bundle is imported, against (b) the overhead
+   of attempting to download a key bundle on every startup. 24 hours is a
+   recommended time limit.)
+
+ * Otherwise, Bob's client should store the details of the key bundle but not
+   download it immediately. If he later accepts an invite to the room from
+   Alice, his client downloads and processes the bundle at that point.
+
+   Delaying the download in this way avoids a potential DoS vector in which an
+   attacker can cause the victim to download a large quantity of useless data.
+
+Once Bob has downloaded and decrypted the key bundle, the sessions are imported
+as they would be when importing a [key export](#key-exports); however:
+
+ * Only keys for the relevant room should be imported. Keys for other rooms
+   SHOULD be ignored.
+
+ * Bob's client MUST remember who he received the keys from (Alice, in this
+   case), and MUST show that information to the user, since he has only that
+   user's word for the authenticity of those sessions.
+
+Client implementations should note that server implementations may delete or
+expire old media that appears unused. They must therefore gracefully handle
+download failures due to the key bundle having expired (typically by just
+giving up on the attempt to download the bundle, though they could also warn
+the user.)
+
 #### Messaging Algorithms
 
 ##### Messaging Algorithm Names
