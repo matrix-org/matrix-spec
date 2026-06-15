@@ -25,6 +25,19 @@ properties:
       session_key:
         type: string
         description: The key to be exchanged.
+      shared_history:
+        x-addedInMatrixVersion: "1.19"
+        type: boolean
+        description: |
+          `true` indicates that the creator of this encryption considers that
+          the session is [shareable](/client-server-api/#shareable-encryption-sessions):
+          in other words, the sender has observed that the [room history
+          visibility](/client-server-api/#room-history-visibility) is set to
+          `shared` or `world_readable`, and that they understand and agree that
+          the session keys may be shared with newly-invited users in future.
+
+          Absence, or any other value, indicates that the creator of the
+          session does not consider the session to be shareable.
     required:
       - algorithm
       - room_id

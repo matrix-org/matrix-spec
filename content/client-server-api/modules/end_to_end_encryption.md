@@ -1967,7 +1967,7 @@ In order to enable end-to-end encryption in a room, clients can send an
 When creating a Megolm session in a room, clients must share the
 corresponding session key using Olm with the intended recipients, so
 that they can decrypt future messages encrypted using this session. An
-`m.room_key` event is used to do this. Clients must also handle
+[`m.room_key`](#mroom_key) event is used to do this. Clients must also handle
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
 
