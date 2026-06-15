@@ -45,6 +45,7 @@ properties:
         example: A256CTR
       k:
         type: string
+        format: mx-urlsafe-unpadded-base64
         description: The key, encoded as [URL-safe unpadded Base64](/appendices/#url-safe-unpadded-base64).
         example: "aWF6-32KGYaC3A_FEUCk1Bt0JA37zP0wrStgmdCaW-0"
       ext:
