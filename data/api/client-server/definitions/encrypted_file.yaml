@@ -59,6 +59,7 @@ properties:
       - ext
   iv:
     type: string
+    format: mx-unpadded-base64
     description: The 128-bit unique counter block used by AES-CTR, encoded as [unpadded Base64](/appendices/#unpadded-base64).
     example: "w+sE15fzSc0AAAAAAAAAAA"
   hashes:
@@ -69,6 +70,7 @@ properties:
     properties:
       sha256:
         type: string
+        format: mx-unpadded-base64
         description: The hash of the ciphertext. encoded as [unpadded Base64](/appendices/#unpadded-base64).
         example: "fdSLu/YkRx3Wyh3KQabP3rd6+SFiKg5lsJZQHtkSAYA"
     required: ['sha256']
