@@ -1982,6 +1982,32 @@ When a client is updating a Megolm session in its store, the client MUST ensure:
   user, or from a `m.room_key` event.
 * that the new session key has a lower message index than the existing session key.
 
+When encrypting outgoing messages in a room using Megolm, clients MUST rotate
+their outgoing Megolm session (i.e. discard the existing session, and create
+and share a new session before sending more room messages) whenever any of the
+following happens:
+
+ * The existing session has been in use for longer than the period specified in
+   `rotation_period_ms` in the [`m.room.encryption`](#mroomencryption) room
+   state event, or an appropriate default.
+
+ * The existing session has been used to encrypt as many messages as specified in
+   `rotation_period_msgs` in the [`m.room.encryption`](#mroomencryption) room
+   state event, or an appropriate default.
+
+ * A user or device that was previously participating in the room, and may have
+   received a copy of the decryption keys for the session, is seen to leave the
+   room.
+
+   {{% changed-in v="1.19" %}} Since any user that received an invite to the
+   room may have received a copy of the decryption keys for the session via
+   [history sharing](#sharing-keys-between-users), clients MUST observe changes
+   in state in the room, and whenever they see a user leaving the room, assume
+   that the departed user may have access to any existing Megolm session, and
+   rotate the session. Note that, in a `limited` [sync](#syncing), clients must
+   treat any membership event with a membership other than `join` as an
+   indication that the affected user may have joined and left the room.
+
 #### Protocol definitions
 
 ##### Events
