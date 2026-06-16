@@ -1,0 +1,87 @@
+# Copyright 2018-2026 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+type: object
+title: EncryptedFile
+description: |
+  Information on an encrypted media blob, including its location in the
+  [content repository](/client-server-api/#content-repository), and the keys
+  necessary to decrypt it.
+properties:
+  url:
+    type: string
+    format: mx-mxc-uri
+    description: The URL to the file.
+    example: "mxc://example.org/FHyPlCeYUSFFxlgbQYZmoEoe"
+  key:
+    type: object
+    title: JWK
+    description: A [JSON Web Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) object.
+    properties:
+      kty:
+        type: string
+        description: Key type. Must be `oct`.
+        example: "oct"
+      key_ops:
+        type: array
+        items:
+          type: string
+        description: Key operations. Must at least contain `encrypt` and `decrypt`.
+        example: ["encrypt", "decrypt"]
+      alg:
+        type: string
+        description: Algorithm. Must be `A256CTR`.
+        example: A256CTR
+      k:
+        type: string
+        format: mx-urlsafe-unpadded-base64
+        description: The key, encoded as [URL-safe unpadded Base64](/appendices/#url-safe-unpadded-base64).
+        example: "aWF6-32KGYaC3A_FEUCk1Bt0JA37zP0wrStgmdCaW-0"
+      ext:
+        type: boolean
+        description: "Extractable. Must be `true`. This is a [W3C extension](https://w3c.github.io/webcrypto/#iana-section-jwk)."
+        example: true
+    required:
+      - kty
+      - key_ops
+      - alg
+      - k
+      - ext
+  iv:
+    type: string
+    format: mx-unpadded-base64
+    description: The 128-bit unique counter block used by AES-CTR, encoded as [unpadded Base64](/appendices/#unpadded-base64).
+    example: "w+sE15fzSc0AAAAAAAAAAA"
+  hashes:
+    type: object
+    title: EncryptedFileHashes
+    description:
+      A map from an algorithm name to a hash of the ciphertext. Clients MUST support the SHA-256 hash, which uses the key `sha256`.
+    properties:
+      sha256:
+        type: string
+        format: mx-unpadded-base64
+        description: The hash of the ciphertext. encoded as [unpadded Base64](/appendices/#unpadded-base64).
+        example: "fdSLu/YkRx3Wyh3KQabP3rd6+SFiKg5lsJZQHtkSAYA"
+    required: ['sha256']
+  v:
+    type: string
+    description: Version of the encrypted attachment’s protocol. Must be `v2`.
+    example: v2
+required:
+  - url
+  - key
+  - iv
+  - hashes
+  - v

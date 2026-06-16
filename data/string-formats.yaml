@@ -71,6 +71,11 @@ mx-unpadded-base64:
   url: appendices#unpadded-base64
   # no regex
 
+mx-urlsafe-unpadded-base64:
+  title: URL-safe unpadded Base64
+  url: appendices/#url-safe-unpadded-base64
+  # no regex
+
 uri:
   title: URI
   url: https://datatracker.ietf.org/doc/html/rfc3986

@@ -12,7 +12,7 @@ Specifically, where RFC 4648 requires that encoded data be padded to a
 multiple of four characters using `=` characters, unpadded Base64 omits
 this padding.
 
-For reference, RFC 4648 uses the following alphabet for Base 64:
+For reference, RFC 4648 uses the following alphabet for Base64:
 
     Value Encoding  Value Encoding  Value Encoding  Value Encoding
         0 A            17 R            34 i            51 z
@@ -46,6 +46,12 @@ Examples of strings encoded using unpadded Base64:
 When decoding Base64, implementations SHOULD accept input with or
 without padding characters wherever possible, to ensure maximum
 interoperability.
+
+### URL-safe unpadded Base64
+
+URL-safe unpadded Base64 is identical to standard unpadded Base64, except that
+it uses `-` (minus) as the 62nd character in the alphabet, and `_` (underscore)
+as the 63rd. This matches [RFC4648’s definition of URL-safe base64](https://tools.ietf.org/html/rfc4648#section-5).
 
 ## Binary data
 

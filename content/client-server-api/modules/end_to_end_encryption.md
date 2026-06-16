@@ -355,7 +355,7 @@ key, and encrypts the file using AES-CTR. The counter is 64 bits long,
 starting at 0 and prefixed by a random 64-bit Initialization Vector (IV),
 which together form a 128-bit unique counter block.
 
-Clients MUST generate both the AES key and IV using a cryptographically 
+Clients MUST generate both the AES key and IV using a cryptographically
 secure random source and MUST NOT use the same key or IV multiple
 times. The latter 64 bits of the 128-bit counter block MUST start at zero.
 
@@ -385,31 +385,11 @@ Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) format, with a
 ###### Extensions to `m.room.message` msgtypes
 
 This module adds `file` and `thumbnail_file` properties, of type
-`EncryptedFile`, to `m.room.message` msgtypes that reference files, such
-as [m.file](#mfile) and [m.image](#mimage), replacing the `url` and `thumbnail_url`
-properties.
+[`EncryptedFile`](#definition-encryptedfile), to `m.room.message` msgtypes that
+reference files, such as [m.file](#mfile) and [m.image](#mimage), replacing the
+`url` and `thumbnail_url` properties.
 
-`EncryptedFile`
-
-| Parameter | Type             | Description                                                                                    |
-|-----------|------------------|------------------------------------------------------------------------------------------------|
-| url       | string           | **Required.** The URL to the file.                                                             |
-| key       | JWK              | **Required.** A [JSON Web Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) object.       |
-| iv        | string           | **Required.** The 128-bit unique counter block used by AES-CTR, encoded as unpadded base64.    |
-| hashes    | {string: string} | **Required.** A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64. Clients MUST support the SHA-256 hash, which uses the key `sha256`. |
-| v         | string           | **Required.** Version of the encrypted attachment's protocol. Must be `v2`.                    |
-
-`JWK`
-
-| Parameter | Type     | Description                                                                                                              |
-| --------- |----------|--------------------------------------------------------------------------------------------------------------------------|
-| kty       | string   | **Required.** Key type. Must be `oct`.                                                                                   |
-| key_ops   | [string] | **Required.** Key operations. Must at least contain `encrypt` and `decrypt`.                                             |
-| alg       | string   | **Required.** Algorithm. Must be `A256CTR`.                                                                              |
-| k         | string   | **Required.** The key, encoded as urlsafe unpadded base64.                                                               |
-| ext       | boolean  | **Required.** Extractable. Must be `true`. This is a [W3C extension](https://w3c.github.io/webcrypto/#iana-section-jwk). |
-
-Example:
+Example `m.room.message` event containing an encrypted image:
 
 ```json
 {
@@ -469,6 +449,8 @@ Example:
   }
 }
 ```
+
+{{% definition path="api/client-server/definitions/encrypted_file" %}}
 
 #### Device verification
 
@@ -764,7 +746,7 @@ The process between Alice and Bob verifying each other would be:
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
     * {{% changed-in v="1.18" %}} Each of the keys that they wish the other user
-      to verify (usually their device ed25519 key and their master signing key, 
+      to verify (usually their device ed25519 key and their master signing key,
       see below). The master signing key SHOULD be included when two different
       users are verifying each other. Verifying individual devices of other
       users is deprecated.
