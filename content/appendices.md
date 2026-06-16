@@ -51,7 +51,7 @@ interoperability.
 
 URL-safe unpadded Base64 is identical to standard unpadded Base64, except that
 it uses `-` (minus) as the 62nd character in the alphabet, and `_` (underscore)
-as the 63rd.
+as the 63rd. This matches [RFC4648’s definition of URL-safe base64](https://tools.ietf.org/html/rfc4648#section-5).
 
 ## Binary data
 
