@@ -156,7 +156,7 @@ paths:
                         public_key:
                           type: string
                           description: |
-                            The public key, encoded using standard or URL-safe [unpadded Base64](/appendices/#unpadded-base64).
+                            The public key, encoded using [standard unpadded Base64](/appendices/#unpadded-base64) or [URL-safe unpadded Base64](/appendices/#url-safe-unpadded-base64).
                         key_validity_url:
                           type: string
                           description: |
