@@ -1573,7 +1573,7 @@ keys to Bob via an [`m.room_key`](#mroom_key) message, she sets
 If the history visibility changes in a way that would affect the
 `shared_history` flag (i.e., it changes from `joined` or `invited` to `shared`
 or `world_readable`, or vice versa), then clients MUST rotate their outbound
-megolm session before sending more messages.
+Megolm session before sending more messages.
 
 Clients SHOULD show a visual indication to users that their encrypted messages
 may be shared with future room members in this way.
@@ -1651,7 +1651,7 @@ significant amounts of encrypted content with an attacker-controlled device.
 When Bob's client receives an `m.room_key_bundle` event from Alice, there are two possibilities:
 
  * If Bob has recently accepted an invite to the room from Alice, the client
-   should immediately download and decrypt the key bundle and start processing
+   SHOULD immediately download and decrypt the key bundle and start processing
    it. Note, however, that this process must be resilient to Bob's client being
    restarted before the download/import completes.
 
@@ -1661,7 +1661,7 @@ When Bob's client receives an `m.room_key_bundle` event from Alice, there are tw
    of attempting to download a key bundle on every startup. 24 hours is a
    recommended time limit.)
 
- * Otherwise, Bob's client should store the details of the key bundle but not
+ * Otherwise, Bob's client SHOULD store the details of the key bundle but not
    download it immediately. If he later accepts an invite to the room from
    Alice, his client downloads and processes the bundle at that point.
 
