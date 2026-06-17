@@ -1610,35 +1610,35 @@ room.
 
 ##### Construction and sharing of the key bundle
 
-Alice MAY choose not to share any room history (even messages sent when the
+Alice's client MAY choose not to share any room history (even messages sent when the
 history visibity setting would allow sharing) if the current history
 visibility setting does not allow sharing (i.e. if `history_visibility` is
 set to `invited` or `joined`).
 
-Otherwise, before inviting Bob to a room, Alice constructs and sends a key bundle as follows:
+Otherwise, before inviting Bob to a room, Alice's client constructs and sends a key bundle as follows:
 
-1. Alice SHOULD ensure that she has downloaded all keys relevant to the room
+1. Alice's client SHOULD ensure that it has downloaded all keys relevant to the room
    from [server-side key backup](#server-side-key-backups), if she is using it.
 
-2. Alice constructs a [`RoomKeyBundle`](#definition-roomkeybundle) structure,
-   containing the sessions she is aware of in the room. Alice SHOULD include
+2. Alice's client constructs a [`RoomKeyBundle`](#definition-roomkeybundle) structure,
+   containing the sessions she is aware of in the room. Alice MUST include
    only [shareable encryption sessions](#shareable-encryption-sessions) in the
-   `room_keys` section of the structure; other sessions should be listed un the
+   `room_keys` section of the structure; other sessions SHOULD be listed in the
    with `withheld` section.
 
-3. Alice serialises the `RoomKeyBundle` as JSON.
+3. The client serialises the `RoomKeyBundle` as JSON.
 
-4. Alice encrypts and uploads the serialised JSON in the same way as when
+4. Alice's client encrypts and uploads the serialised JSON in the same way as when
    [sending an encrypted attachment](#sending-encrypted-attachments).
 
-5. Alice ensures she has an up-to-date list of Bob's devices (performing a
+5. Alice's client ensures she has an up-to-date list of Bob's devices (performing a
    [`/keys/query`](#post_matrixclientv3keysquery) request if necessary).
 
 6. For each of Bob's devices which are correctly
-   [cross-signed](#cross-signing), Alice encrypts and sends an
+   [cross-signed](#cross-signing), Alice's client encrypts and sends an
    [`m.room_key_bundle`](#mroom_key_bundle) message.
 
-Alice MUST NOT send the `m.room.key_bundle` message to devices that have not
+Alice's client MUST NOT send the `m.room.key_bundle` message to devices that have not
 been correctly cross-signed by their owner, due to the risk of sharing
 significant amounts of encrypted content with an attacker-controlled device.
 
@@ -2007,6 +2007,10 @@ following happens:
    rotate the session. Note that, in a `limited` [sync](#syncing), clients must
    treat any membership event with a membership other than `join` as an
    indication that the affected user may have joined and left the room.
+
+ * {{% added-in v="1.19" %}} The [history visibility](#room-history-visibility)
+   state of the room changes in a way that would affect the `shared_history`
+   flag: see [shareable encryption sessions](#shareable-encryption-sessions).
 
 #### Protocol definitions
 
