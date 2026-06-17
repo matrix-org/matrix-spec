@@ -1575,7 +1575,7 @@ If the history visibility changes in a way that would affect the
 or `world_readable`, or vice versa), then clients MUST rotate their outbound
 Megolm session before sending more messages.
 
-Clients SHOULD show a visual indication to users that their encrypted messages
+Clients SHOULD show an indication to users that their encrypted messages
 may be shared with future room members in this way.
 
 Recipients SHOULD keep a record of the `shared_history` flag for each
