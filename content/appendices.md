@@ -900,14 +900,22 @@ room alias, the client may open a view for the user to participate in
 the room.
 
 The components of the matrix.to URI (`<identifier>` and
-`<extra parameter>`) are to be percent-encoded as per RFC 3986.
+`<extra parameter>`) MUST be percent-encoded as per RFC 3986.
 
 Examples of matrix.to URIs are:
 
 <!-- Author's note: These examples should be consistent with the matrix scheme counterparts. -->
+* Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere:example.org`
+* Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere:example.org?via=elsewhere.ca`
+* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere:example.org/$event:example.org?via=elsewhere.ca`
+* Link to `@alice:example.org`: `https://matrix.to/#/@alice:example.org`
+
+Note that encoding of characters is REQUIRED by RFC 3986 when they could otherwise be misinterpreted, and OPTIONAL for any other character.
+Hence the following encoding is also valid:
+
 * Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere%3Aexample.org`
-* Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org?via=elsewhere.ca`
-* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
+* Link to `!somewhere:example.org`: `https://matrix.to/#/%21somewhere%3Aexample.org?via=elsewhere.ca`
+* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/%21somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
 * Link to `@alice:example.org`: `https://matrix.to/#/%40alice%3Aexample.org`
 
 {{% boxes/note %}}
