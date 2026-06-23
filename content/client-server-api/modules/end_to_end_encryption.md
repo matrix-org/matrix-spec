@@ -1624,7 +1624,7 @@ Otherwise, before inviting Bob to a room, Alice's client constructs and sends a 
    containing the sessions she is aware of in the room. Alice MUST include
    only [shareable encryption sessions](#shareable-encryption-sessions) in the
    `room_keys` section of the structure; other sessions SHOULD be listed in the
-   with `withheld` section.
+   `withheld` section.
 
 3. The client serialises the `RoomKeyBundle` as JSON.
 

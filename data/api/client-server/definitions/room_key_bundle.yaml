@@ -41,6 +41,8 @@ properties:
           example: "m.megolm.v1.aes-sha2"
         room_id:
           type: string
+          format: mx-room-id
+          pattern: "^!"
           description: |-
             The room where the session is used.
           example: "!Cuyf34gef24t:localhost"
@@ -48,6 +50,7 @@ properties:
           type: object
           additionalProperties:
             type: string
+            format: mx-unpadded-base64
           description: |-
             A map from algorithm name (`ed25519`) to the Ed25519 signing key of
             the device which initiated the session originally, according to the
@@ -55,6 +58,7 @@ properties:
           example: { "ed25519": "aj40p+aw64yPIdsxoog8jhPu9i7l7NcFRecuOQblE3Y" }
         sender_key:
           type: string
+          format: mx-unpadded-base64
           description: |-
             Unpadded base64-encoded device Curve25519 key, of the device which
             initiated the session originally, according to the creator of this
@@ -67,9 +71,10 @@ properties:
           example: "X3lUlvLELLYxeTx4yOVu6UDpasGEVO0Jbu+QFnm0cKQ"
         session_key:
           type: string
+          format: mx-unpadded-base64
           description: |-
             Unpadded base64-encoded session key in [session-export
-            format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).
+            format](/olm-megolm/megolm/#session-export-format).
           example: "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
     required:
       - algorithm
