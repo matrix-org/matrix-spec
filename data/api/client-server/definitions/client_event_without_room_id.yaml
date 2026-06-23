@@ -124,6 +124,8 @@ properties:
           by the local homeserver, and is only returned if the event is a state event.
           Unlike `prev_content`, this field is included regardless of history visibility.
         type: string
+        format: mx-event-id
+        pattern: "^\\$"
         x-addedInMatrixVersion: "1.19"
       membership:
         description: |

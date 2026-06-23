@@ -26,6 +26,7 @@ while read f; do
     # check that each changelog file has a known extension
     if ! [[ "$extension" == "new" || "$extension" == "feature" || "$extension" == "clarification" || "$extension" == "breaking" || "$extension" == "deprecation" ]]; then
         echo -e "\e[31mERROR: newsfragment $f does not have one of the required file extensions for a changelog entry: .new, .feature, .clarification, .breaking, .deprecation\e[39m" >&2
+        failed=1
     fi
 
     # check that there is nothing that looks like a newsfile outside one of the

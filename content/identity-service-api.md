@@ -276,9 +276,8 @@ internal state of the hash function.
 
 After formatting each query, the string is run through SHA-256 as
 defined by [RFC 4634](https://tools.ietf.org/html/rfc4634). The
-resulting bytes are then encoded using URL-Safe [Unpadded
-Base64](/appendices#unpadded-base64) (similar to [room version
-4's event ID format](/rooms/v4#event-ids)).
+resulting bytes are then encoded using [URL-Safe unpadded
+Base64](/appendices/#url-safe-unpadded-base64).
 
 An example set of queries when using the pepper `matrixrocks` would be:
 
