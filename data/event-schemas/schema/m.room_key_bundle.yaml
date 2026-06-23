@@ -21,6 +21,8 @@ properties:
     properties:
       room_id:
         type: string
+        format: mx-room-id
+        pattern: "^!"
         description: The room to which the keys in the key bundle relate.
       file:
         description: |-

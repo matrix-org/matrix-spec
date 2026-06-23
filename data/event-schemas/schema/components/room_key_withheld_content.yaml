@@ -7,6 +7,8 @@ properties:
       The encryption algorithm for the key that this event is about.
   room_id:
     type: string
+    format: mx-room-id
+    pattern: "^!"
     description: |-
       Required if `code` is not `m.no_olm`.  The room for the key that
       this event is about.
@@ -17,6 +19,7 @@ properties:
       that this event is about.
   sender_key:
     type: string
+    format: mx-unpadded-base64
     description: |-
       The unpadded base64-encoded device curve25519 key of the event\'s
       sender.
