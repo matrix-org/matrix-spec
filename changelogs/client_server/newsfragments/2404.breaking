@@ -1,0 +1,1 @@
+Clients are now supposed to follow 30x redirects from `/.well-known/matrix/client` as per [MSC4402](https://github.com/matrix-org/matrix-spec-proposals/pull/4402).
