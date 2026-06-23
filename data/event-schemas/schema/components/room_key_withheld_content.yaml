@@ -31,6 +31,7 @@ properties:
       - m.unauthorised
       - m.unavailable
       - m.no_olm
+      - m.history_not_shared
     description: |-
       A machine-readable code for why the key was not sent. Codes beginning
       with `m.` are reserved for codes defined in the Matrix

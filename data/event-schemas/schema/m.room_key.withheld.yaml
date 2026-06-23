@@ -8,7 +8,7 @@ description: |-
   This event type is used to indicate that the sender is not sharing room keys
   with the recipient. It is sent as a to-device event.
 
-  Possible values for `code` include:
+  The following values for `code` are defined:
 
   * `m.blacklisted`: the user/device was blacklisted.
   * `m.unverified`: the user/device was not verified, and the sender is only
@@ -19,6 +19,13 @@ description: |-
   * `m.unavailable`: sent in reply to a key request if the device that the
     key is requested from does not have the requested key.
   * `m.no_olm`: an olm session could not be established.
+  * **[Added in `v1.19`]** `m.history_not_shared`: when used as part of a
+    [`RoomKeyBundle` structure](/client-server-api/#definition-roomkeybundle),
+    indicates to the recipient of the bundle that the corresponding room key
+    was not marked as
+    [shareable](/client-server-api/#shareable-encryption-sessions) by the
+    sender. Clients SHOULD NOT use this `code` in a `m.room_key.withheld`
+    event.
 
   In most cases, this event refers to a specific room key. The one exception to
   this is when the sender is unable to establish an olm session with the
