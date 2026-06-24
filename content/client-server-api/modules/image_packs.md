@@ -8,7 +8,7 @@ collections and share them with others.
 An **emoticon** (also called an emote) is a custom image sent inline within a
 message, analogous to emoji but defined outside the Unicode standard. A
 **sticker** is a standalone image sent as an [`m.sticker`](#msticker) event.
-Image packs provide a distribution mechanism for both.
+Image packs provide a distribution and discovery mechanism for both.
 
 {{% boxes/note %}}
 Emoticons are distinct from the [`m.emote`](#mroommessage-msgtypes) message
