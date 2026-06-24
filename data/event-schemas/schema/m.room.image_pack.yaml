@@ -68,7 +68,7 @@ properties:
             pattern: "^mxc:\\/\\/"
           usage:
             description: |-
-              The intended usages for this pack. The defined values are
+              The intended usage(s) for this pack. The defined values are
               `emoticon` (images intended to be sent inline in messages) and
               `sticker` (images intended to be sent as standalone sticker
               events). If absent or empty, all usage types are assumed.
