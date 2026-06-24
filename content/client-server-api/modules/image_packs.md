@@ -140,7 +140,7 @@ The `title` attribute SHOULD be present and set to the shortcode of the
 emote. Clients MAY display this as a tooltip.
 
 The `height` attribute MUST be present for backwards compatibility with
-clients that do not support custom emotes. Clients SHOULD set this to `32`.
+clients that do not support custom emotes. Clients SHOULD set this to "32".
 Clients implementing image pack support SHOULD override this value when
 rendering based on the user's font size or other environmental factors. The
 `width` attribute SHOULD be omitted to preserve the image's aspect ratio.
