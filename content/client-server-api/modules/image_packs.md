@@ -34,7 +34,7 @@ Where `ALPHA` and `DIGIT` are as defined in
 [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234). Shortcodes are
 case-sensitive. The length of a shortcode MUST NOT exceed 100 bytes.
 
-The `:` character is excluded because it is widely used across messaging
+The `:` character is specifically excluded because it is widely used across messaging
 platforms as a delimiter for triggering emote search (for example, typing
 `:cat` to search for an emote named `cat`). The `/` character is excluded
 because clients MAY use it to separate a shortcode from a pack name in
