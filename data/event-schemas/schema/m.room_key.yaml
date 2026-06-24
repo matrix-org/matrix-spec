@@ -29,7 +29,7 @@ properties:
         x-addedInMatrixVersion: "1.19"
         type: boolean
         description: |
-          `true` indicates that the creator of this encryption considers that
+          `true` indicates that the creator of this encryption key considers that
           the session is [shareable](/client-server-api/#shareable-encryption-sessions):
           in other words, the sender has observed that the [room history
           visibility](/client-server-api/#room-history-visibility) is set to
