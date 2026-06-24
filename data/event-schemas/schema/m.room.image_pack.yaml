@@ -90,8 +90,7 @@ properties:
       - images
   state_key:
     description: |-
-      A unique identifier for this image pack within the room. This is not
-      intended to be surfaced to users.
+      A unique identifier for this image pack within the room.
     type: string
   type:
     enum:
