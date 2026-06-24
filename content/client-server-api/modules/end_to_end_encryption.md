@@ -1564,11 +1564,11 @@ before inviting him.
 Only room keys which were marked as "shareable" by the creator of the
 encryption session should be shared with new users.
 
-When Alice wants to send a message in the room she shares with Bob, she first
+When a user wants to send a message in an encrypted room, their client first
 checks the [history visibility](#room-history-visibility) state of the
-room. If it is `shared` or `world_readable`, then when she sends the Megolm
-keys to Bob via an [`m.room_key`](#mroom_key) message, she sets
-`shared_history` to `true`.
+room. If it is `shared` or `world_readable`, then when the client sends the Megolm
+keys to room members via [`m.room_key`](#mroom_key) messages, it SHOULD set
+`shared_history` to `true`. Otherwise, it SHOULD set `shared_history` to `false`.
 
 If the history visibility changes in a way that would affect the
 `shared_history` flag (i.e., it changes from `joined` or `invited` to `shared`
