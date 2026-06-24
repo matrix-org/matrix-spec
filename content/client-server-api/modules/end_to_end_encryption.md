@@ -1662,6 +1662,7 @@ of olm sessions maintained per device should be at least 4.
 ###### Validation of incoming decrypted events
 
 {{% changed-in v="1.15" %}} Existing checks made more explicit, and checks for `sender_device_keys` added.
+{{% changed-in v="1.19" %}} Corrections to some errors in the description of the verification checks.
 
 After decrypting an incoming encrypted event, clients MUST apply the
 following checks:
@@ -1679,7 +1680,7 @@ following checks:
 5.  Where `sender_device_keys` is present in the decrypted content:
     1.  `sender_device_keys.user_id` must also match the `sender`
         of the event.
-    2.  `sender_device_keys.keys.curve25519:<device_id>` must also match
+    2.  `sender_device_keys.keys.curve25519:<device_id>` must match
         the `sender_key` property in the cleartext `m.room.encrypted`
         event body.
     3.  `sender_device_keys.keys.ed25519:<device_id>` must be the same
