@@ -83,8 +83,8 @@ properties:
                 - sticker
           attribution:
             description: |-
-              An attribution string for the pack, for example crediting the
-              original author or source.
+              An attribution string for the pack. For crediting the
+              original author or source, for example.
             type: string
     required:
       - images
