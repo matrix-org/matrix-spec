@@ -57,6 +57,8 @@ when creating or editing image packs.
 
 {{% event event="m.room.image_pack" %}}
 
+#### Account data
+
 {{% event event="m.image_pack.rooms" %}}
 
 #### Image properties
@@ -81,6 +83,22 @@ that room.
 To make a room's image pack available globally across all rooms, a user adds
 a reference to the pack in their `m.image_pack.rooms` account data event. The
 reference consists of the room ID and the `state_key` of the pack.
+
+For example, to enable two packs from different rooms:
+
+```json
+{
+  "rooms": {
+    "!someroom:example.org": {
+      "": {}
+    },
+    "!anotherroom:example.org": {
+      "": {},
+      "sticker_pack": {}
+    }
+  }
+}
+```
 
 #### Space image packs
 

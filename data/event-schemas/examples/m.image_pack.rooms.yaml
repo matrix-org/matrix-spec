@@ -1,0 +1,15 @@
+{
+  "$ref": "core/event.json",
+  "type": "m.image_pack.rooms",
+  "content": {
+    "rooms": {
+      "!someroom:example.org": {
+        "": {}
+      },
+      "!anotherroom:example.org": {
+        "": {},
+        "sticker_pack": {}
+      }
+    }
+  }
+}

@@ -18,6 +18,9 @@ properties:
           A map from a [shortcode](#shortcode-grammar) to an image object.
           Each entry defines one image available in this pack.
         type: object
+        propertyNames:
+          type: string
+          pattern: '^[A-Za-z0-9_-]{1,100}$'
         additionalProperties:
           title: ImagePackImage
           type: object

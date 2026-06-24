@@ -1,0 +1,29 @@
+{
+  "$ref": "core/state_event.json",
+  "type": "m.room.image_pack",
+  "state_key": "",
+  "content": {
+    "images": {
+      "cat_wave": {
+        "url": "mxc://example.org/abc123",
+        "body": "a waving cat",
+        "info": {
+          "mimetype": "image/png",
+          "w": 512,
+          "h": 512,
+          "size": 84400
+        }
+      },
+      "cat_nap": {
+        "url": "mxc://example.org/def456",
+        "body": "a sleeping cat"
+      }
+    },
+    "pack": {
+      "display_name": "Cats",
+      "avatar_url": "mxc://example.org/abc123",
+      "usage": ["emoticon"],
+      "attribution": "drawn by @alice:example.org"
+    }
+  }
+}
