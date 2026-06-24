@@ -1,0 +1,49 @@
+type: object
+properties:
+  algorithm:
+    type: string
+    enum: ["m.megolm.v1.aes-sha2"]
+    description: |-
+      The encryption algorithm for the key that this event is about.
+  room_id:
+    type: string
+    format: mx-room-id
+    pattern: "^!"
+    description: |-
+      Required if `code` is not `m.no_olm`.  The room for the key that
+      this event is about.
+  session_id:
+    type: string
+    description: |-
+      Required if `code` is not `m.no_olm`.  The session ID of the key
+      that this event is about.
+  sender_key:
+    type: string
+    format: mx-unpadded-base64
+    description: |-
+      The unpadded base64-encoded device curve25519 key of the event\'s
+      sender.
+  code:
+    type: string
+    enum:
+      - m.blacklisted
+      - m.unverified
+      - m.unauthorised
+      - m.unavailable
+      - m.no_olm
+      - m.history_not_shared
+    description: |-
+      A machine-readable code for why the key was not sent. Codes beginning
+      with `m.` are reserved for codes defined in the Matrix
+      specification. Custom codes must use the Java package naming
+      convention.
+  reason:
+    type: string
+    description: |-
+      A human-readable reason for why the key was not sent. The receiving
+      client should only use this string if it does not understand the
+      `code`.
+required:
+  - algorithm
+  - sender_key
+  - code

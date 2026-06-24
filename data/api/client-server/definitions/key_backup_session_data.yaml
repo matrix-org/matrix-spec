@@ -49,6 +49,12 @@ properties:
     description: |-
       Unpadded base64-encoded session key in [session-export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).
     example: "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
+  shared_history:
+    x-addedInMatrixVersion: "1.19"
+    type: boolean
+    description: |-
+      Whether the session is [shareable](/client-server-api/#shareable-encryption-sessions).
+    example: false
 required:
   - algorithm
   - forwarding_curve25519_key_chain

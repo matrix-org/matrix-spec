@@ -1,0 +1,21 @@
+{
+  "type": "m.room_key_bundle",
+  "content": {
+    "room_id": "!Cuyf34gef24t:localhost",
+    "file": {
+      "v": "v2",
+      "url": "mxc://example.org/FHyPlCeYUSFFxlgbQYZmoEoe",
+      "key": {
+          "alg": "A256CTR",
+          "ext": true,
+          "k": "aWF6-32KGYaC3A_FEUCk1Bt0JA37zP0wrStgmdCaW-0",
+          "key_ops": ["encrypt","decrypt"],
+          "kty": "oct"
+      },
+      "iv": "w+sE15fzSc0AAAAAAAAAAA",
+      "hashes": {
+        "sha256": "fdSLu/YkRx3Wyh3KQabP3rd6+SFiKg5lsJZQHtkSAYA"
+      }
+    }
+  }
+}
