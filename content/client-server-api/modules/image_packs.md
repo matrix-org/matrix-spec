@@ -100,7 +100,7 @@ packs in the following order:
 2. Packs defined in the current room's state.
 3. Packs from the canonical space hierarchy of the current room.
 
-The ordering of images *within* a pack is left to a future specification.
+The ordering of images *within* a pack is currently up to implementations.
 
 #### Client behaviour
 
