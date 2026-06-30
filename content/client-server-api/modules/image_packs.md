@@ -165,8 +165,8 @@ Clients implementing image pack support SHOULD override this value when
 rendering based on the user's font size or other environmental factors. The
 `width` attribute SHOULD be omitted to preserve the image's aspect ratio.
 
-Clients MAY render messages that consist entirely of custom emotes at a larger
-size.
+Clients MAY render messages that consist entirely of custom emotes and/or normal emoji
+at a larger size.
 
 ##### Sending stickers
 
