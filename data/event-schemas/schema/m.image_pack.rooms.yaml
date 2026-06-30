@@ -27,7 +27,8 @@ properties:
           empty inner object) currently has no defined meaning.
 
           Clients SHOULD be aware that the user may not be a member of a room
-          referenced here, and MAY present appropriate UI to handle this case.
+          referenced here, thus the client will not be able to access any images from the
+          pack. Clients MAY present appropriate UI to handle this case.
         type: object
         additionalProperties:
           type: object
