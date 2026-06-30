@@ -20,8 +20,7 @@ properties:
           Each entry references a specific `m.room.image_pack` state event
           that the user has enabled globally.
 
-          The bottom-level object is reserved for future use by a subsequent
-          MSC. Clients MUST treat it as opaque and preserve any unrecognised
+          The bottom-level object is reserved for future use. Clients SHOULD treat it as opaque and preserve any unrecognised
           properties when modifying this event.
 
           A room ID present as a key but with no `state_key` entries (i.e. an
