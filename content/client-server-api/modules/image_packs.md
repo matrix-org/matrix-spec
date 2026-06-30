@@ -34,6 +34,7 @@ Where `ALPHA` and `DIGIT` are as defined in
 [RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234). Shortcodes are
 case-sensitive. The length of a shortcode MUST NOT exceed 100 bytes.
 
+{{% boxes/note %}}
 The `:` character is specifically excluded because it is widely used across messaging
 platforms as a delimiter for triggering emote search (for example, typing
 `:cat` to search for an emote named `cat`). The `/` character is excluded
@@ -41,6 +42,7 @@ because clients MAY use it to separate a shortcode from a pack name in
 completion UI (for example, `:cat/my_pack:`). Spaces are excluded to avoid
 ambiguity and common usability issues. This character set matches that used
 by Discord and Slack, simplifying bridging.
+{{% /boxes/note %}}
 
 Homeservers MAY enforce this grammar when `m.room.image_pack` events are
 submitted by clients via
