@@ -180,7 +180,9 @@ Clients MAY use the `:` character as a trigger to initiate emote search in the m
 multiple packs contain images with the same shortcode, clients SHOULD provide
 disambiguation UI rather than silently resolving to one image. Clients MAY
 disambiguate by appending a slugified pack display name separated by `/`
-(for example, `:cat_wave/my_pack:`). Because pack names are not globally
+(for example, `:cat_wave/my_pack:`).
+
+Because pack names are not globally
 unique, clients SHOULD NOT attempt to automatically resolve a shortcode to a
 specific image. Clients SHOULD instead present a search modal or similar UI
 to allow the user to select the intended image.
