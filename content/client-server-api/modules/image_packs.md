@@ -213,13 +213,3 @@ implicitly trusts the pack's administrator not to introduce abusive imagery.
 If abusive content is added to a pack, the affected user SHOULD remove the
 reference from their `m.image_pack.rooms` account data.
 
-#### Unstable prefix
-
-Before this feature was included in the Matrix specification, the following
-unstable identifiers were in use. Clients SHOULD migrate to the stable
-identifiers defined in this specification.
-
-| Stable identifier | Unstable identifier |
-|---|---|
-| `m.room.image_pack` | `im.ponies.room_emotes` |
-| `m.image_pack.rooms` | `im.ponies.emote_rooms` |
