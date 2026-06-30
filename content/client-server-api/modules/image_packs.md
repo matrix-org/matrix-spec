@@ -176,7 +176,7 @@ absent, an empty object.
 
 ##### Emote picker suggestions
 
-Clients MAY use the `:` character as a trigger to initiate emote search. When
+Clients MAY use the `:` character as a trigger to initiate emote search in the message composer. When
 multiple packs contain images with the same shortcode, clients SHOULD provide
 disambiguation UI rather than silently resolving to one image. Clients MAY
 disambiguate by appending a slugified pack display name separated by `/`
