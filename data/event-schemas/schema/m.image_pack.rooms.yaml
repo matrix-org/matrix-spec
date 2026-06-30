@@ -31,6 +31,10 @@ properties:
           pack. Clients MAY present appropriate UI to handle this case.
         type: object
         additionalProperties:
+          description: |
+            Map from image pack `state_key` to an empty object.
+            
+            The bottom-level object is reserved ...
           type: object
           additionalProperties:
             type: object
