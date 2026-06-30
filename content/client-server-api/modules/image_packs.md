@@ -76,7 +76,7 @@ animations based on user preferences.
 #### Room image packs
 
 A room MAY contain any number of image packs, each defined by an
-`m.room.image_pack` state event with a distinct `state_key`. Clients SHOULD
+[`m.room.image_pack`](#mroomimage_pack) state event with a distinct `state_key`. An image pack with an empty `state_key` has no special meaning, it is simply another unique identifier. Clients SHOULD
 present the images in a room's packs only when the user is interacting in
 that room.
 
