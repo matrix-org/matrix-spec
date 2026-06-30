@@ -55,14 +55,6 @@ Clients SHOULD render emotes and stickers that have malformed shortcodes, so
 that users can identify and correct them. Clients SHOULD enforce this grammar
 when creating or editing image packs.
 
-#### Events
-
-{{% event event="m.room.image_pack" %}}
-
-#### Account data
-
-{{% event event="m.image_pack.rooms" %}}
-
 #### Image properties
 
 Emoticons SHOULD be at least 128×128 pixels. Stickers SHOULD be at least
@@ -80,27 +72,15 @@ A room MAY contain any number of image packs, each defined by an
 present the images in a room's packs only when the user is interacting in
 that room, unless that image pack is enabled globally.
 
+{{% event event="m.room.image_pack" %}}
+
 #### User image packs
 
 To make a room's image pack available globally across all rooms, a user adds
 a reference to the pack in their `m.image_pack.rooms` account data event. The
 reference consists of the room ID and the `state_key` of the pack.
 
-For example, to enable two packs from different rooms:
-
-```json
-{
-  "rooms": {
-    "!someroom:example.org": {
-      "": {}
-    },
-    "!anotherroom:example.org": {
-      "": {},
-      "sticker_pack": {}
-    }
-  }
-}
-```
+{{% event event="m.image_pack.rooms" %}}
 
 #### Space image packs
 
@@ -214,4 +194,3 @@ A user who enables a room image pack globally via `m.image_pack.rooms`
 implicitly trusts the pack's administrator not to introduce abusive imagery.
 If abusive content is added to a pack, the affected user SHOULD remove the
 reference from their `m.image_pack.rooms` account data.
-
