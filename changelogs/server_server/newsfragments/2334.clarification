@@ -1,1 +1,0 @@
-Clarify that server ACLs are case-insensitive, as per [MSC4436](https://github.com/matrix-org/matrix-spec-proposals/pull/4436).

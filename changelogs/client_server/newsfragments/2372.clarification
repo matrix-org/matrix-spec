@@ -1,1 +1,0 @@
-Clarify how to paginate messages using the pagination tokens returned by `GET /rooms/{roomId}/context/{eventId}`.
