@@ -429,7 +429,7 @@ Instead, they can be reached via HTTPS on the [server name](/appendices/#server-
 
 Servers hosting the `.well-known` JSON file SHOULD offer CORS headers,
 as per the [CORS](#web-browser-clients) section in this specification.
-{{% added-in v="1.19" %}} Servers SHOULD also ensure that each 30x redirect, if any, offers such CORS headers.
+{{% added-in v="1.20" %}} Servers SHOULD also ensure that each 30x redirect, if any, offers such CORS headers.
 {{% /boxes/note %}}
 
 The flow for auto-discovery is as follows:
@@ -438,7 +438,7 @@ The flow for auto-discovery is as follows:
     Matrix ID at the first colon.
 2.  Extract the hostname from the server name as described by the [grammar](/appendices/#server-name).
 3.  Make a GET request to `https://hostname/.well-known/matrix/client`.
-    {{% added-in v="1.19" %}} 30x redirects SHOULD be followed, however redirection loops should be avoided.
+    {{% added-in v="1.20" %}} 30x redirects SHOULD be followed, however redirection loops should be avoided.
     1.  If the returned status code is 404, then `IGNORE`.
     2.  If the returned status code is not 200, or the response body is
         empty, then `FAIL_PROMPT`.
