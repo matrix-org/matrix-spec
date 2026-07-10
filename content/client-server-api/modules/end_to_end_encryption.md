@@ -1614,7 +1614,7 @@ room.
 ##### Construction and sharing of the key bundle
 
 Alice's client MAY choose not to share any room history (even messages sent when the
-history visibity setting would allow sharing) if the current history
+history visibility setting would allow sharing) if the current history
 visibility setting does not allow sharing (i.e. if `history_visibility` is
 set to `invited` or `joined`).
 
