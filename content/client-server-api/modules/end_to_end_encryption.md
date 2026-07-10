@@ -1551,9 +1551,12 @@ objects described as follows:
 
 {{% added-in v="1.19" %}}
 
-When Alice invites Bob to an encrypted room, she might want Bob to have access
-to messages that were previously sent in that room, subject to the [history
-visibility](#room-history-visibility) setting of the room.
+When Alice invites Bob to an encrypted room, that room might be set up for
+Bob to have access to messages that were previously sent in that room,
+subject to the [history visibility](#room-history-visibility) setting of the room.
+Because the key material is not available on the server,
+Alice MUST share the decryption keys of messages visible according to
+the history visibility setting so Bob can read the message history.
 
 Alice does this by constructing an [encrypted key
 bundle](#construction-and-sharing-of-the-key-bundle) and sharing it with Bob
