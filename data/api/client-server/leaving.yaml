@@ -44,7 +44,6 @@ paths:
         to see.
       operationId: leaveRoom
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -105,7 +104,6 @@ paths:
         before calling this API.
       operationId: forgetRoom
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -161,7 +159,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

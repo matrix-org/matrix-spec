@@ -24,7 +24,6 @@ paths:
         defined is `global`.
       operationId: getPushRules
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -51,7 +50,6 @@ paths:
         Retrieve all push rules for this user.
       operationId: getPushRulesGlobal
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -68,7 +66,6 @@ paths:
       description: Retrieve a single specified push rule.
       operationId: getPushRule
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -133,7 +130,6 @@ paths:
       description: This endpoint removes the push rule defined in the path.
       operationId: deletePushRule
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -203,7 +199,6 @@ paths:
         When creating push rules, they MUST be enabled by default.
       operationId: setPushRule
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -333,7 +328,6 @@ paths:
       description: This endpoint gets whether the specified push rule is enabled.
       operationId: isPushRuleEnabled
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -396,7 +390,6 @@ paths:
         push rule.
       operationId: setPushRuleEnabled
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -468,7 +461,6 @@ paths:
       description: This endpoint get the actions for the specified push rule.
       operationId: getPushRuleActions
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -540,7 +532,6 @@ paths:
         This can be used to change the actions of builtin rules.
       operationId: setPushRuleActions
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -627,7 +618,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

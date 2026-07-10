@@ -70,7 +70,6 @@ paths:
                 - visibility
         required: true
       security:
-        - appserviceAccessTokenQuery: []
         - appserviceAccessTokenBearer: []
       responses:
         "200":
@@ -98,7 +97,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    appserviceAccessTokenQuery:
-      $ref: definitions/security.yaml#/appserviceAccessTokenQuery
     appserviceAccessTokenBearer:
       $ref: definitions/security.yaml#/appserviceAccessTokenBearer

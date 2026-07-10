@@ -25,7 +25,6 @@ paths:
         required for queries against each protocol.
       operationId: getProtocols
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -101,7 +100,6 @@ paths:
         third-party protocol.
       operationId: getProtocolMetadata
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -145,7 +143,6 @@ paths:
         as reasonably possible given the network type.
       operationId: queryLocationByProtocol
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -192,7 +189,6 @@ paths:
         a set of user parameters.
       operationId: queryUserByProtocol
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -238,7 +234,6 @@ paths:
         alias.
       operationId: queryLocationByAlias
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -274,7 +269,6 @@ paths:
       description: Retrieve an array of third-party users from a Matrix User ID.
       operationId: queryUserByID
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -318,7 +312,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

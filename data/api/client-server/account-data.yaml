@@ -26,7 +26,6 @@ paths:
         [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountData
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -118,7 +117,6 @@ paths:
         that set the account data.
       operationId: getAccountData
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -188,7 +186,6 @@ paths:
         clients in the per-room entries via [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountDataPerRoom
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -288,7 +285,6 @@ paths:
         visible to the user that set the account data.
       operationId: getAccountDataPerRoom
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -383,7 +379,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

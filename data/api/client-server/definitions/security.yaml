@@ -11,15 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-accessTokenQuery:
-  type: apiKey
-  description: |-
-    **Deprecated.** The `access_token` obtained during [account registration](/client-server-api/#account-registration)
-    or [login](/client-server-api/#login), as a query parameter.
-
-    It can also be the `as_token` of an application service.
-  name: access_token
-  in: query
 accessTokenBearer:
   type: http
   description: |-
@@ -30,13 +21,6 @@ accessTokenBearer:
 
     This is the preferred method.
   scheme: bearer
-appserviceAccessTokenQuery:
-  type: apiKey
-  description: |-
-    **Deprecated.** The `as_token` of an application service, as a query
-    parameter.
-  name: access_token
-  in: query
 appserviceAccessTokenBearer:
   type: http
   description: |-

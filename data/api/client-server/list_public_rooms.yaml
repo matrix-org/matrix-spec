@@ -76,7 +76,6 @@ paths:
         or a server administrator.
       operationId: setRoomVisibilityOnDirectory
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -189,7 +188,6 @@ paths:
         stable order is recommended.
       operationId: queryPublicRooms
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -288,7 +286,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

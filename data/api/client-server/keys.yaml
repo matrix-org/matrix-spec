@@ -24,7 +24,6 @@ paths:
       description: Publishes end-to-end encryption keys for the device.
       operationId: uploadKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -117,7 +116,6 @@ paths:
       description: Returns the current devices and identity keys for the given users.
       operationId: queryKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -306,7 +304,6 @@ paths:
         the same key.
       operationId: claimKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -405,7 +402,6 @@ paths:
           identity keys, between `from` and `to`.
       operationId: getKeysChanges
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -476,7 +472,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

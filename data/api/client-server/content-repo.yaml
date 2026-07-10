@@ -22,7 +22,6 @@ paths:
       summary: Upload some content to the content repository.
       operationId: uploadContent
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/contentType'
@@ -82,7 +81,6 @@ paths:
       operationId: uploadContentToMXC
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - $ref: '#/components/parameters/serverName'
@@ -192,7 +190,6 @@ paths:
       operationId: createContent
       x-addedInMatrixVersion: "1.7"
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       # empty json object
       responses:
@@ -579,7 +576,6 @@ paths:
         being shared should also not be shared with the homeserver.
       operationId: getUrlPreview
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -660,7 +656,6 @@ paths:
         than is advertised by the server on this endpoint.
       operationId: getConfig
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -700,8 +695,6 @@ servers:
         default: /_matrix
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer
   parameters:

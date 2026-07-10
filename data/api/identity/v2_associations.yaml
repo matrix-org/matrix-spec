@@ -23,7 +23,6 @@ paths:
       description: Determines if a given 3pid has been validated by a user.
       operationId: getValidated3pidV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -129,7 +128,6 @@ paths:
         deprecated.
       operationId: bindV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -281,7 +279,6 @@ paths:
         homeserver is acting on behalf of a client.
       operationId: unbindV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -386,7 +383,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer
