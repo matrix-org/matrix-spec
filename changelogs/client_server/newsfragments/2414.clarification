@@ -1,0 +1,1 @@
+Rename `Payload` in the Olm/Megolm specification to `Body` to avoid confusion with the distict `OlmPayload`.
