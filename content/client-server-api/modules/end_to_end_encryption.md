@@ -1723,28 +1723,30 @@ Devices that support Olm must include "m.olm.v1.curve25519-aes-sha2" in
 their list of supported messaging algorithms, must list a Curve25519
 device key, and must publish Curve25519 one-time keys.
 
-An event encrypted using Olm has the following format:
+The content of an event encrypted using Olm has the following format:
 
 ```json
 {
-  "type": "m.room.encrypted",
   "content": {
     "algorithm": "m.olm.v1.curve25519-aes-sha2",
     "sender_key": "<sender_curve25519_key>",
     "ciphertext": {
       "<device_curve25519_key>": {
         "type": 0,
-        "body": "<encrypted_payload_base_64>"
+        "body": "<base64_encoded_olm_message>"
       }
     }
   }
 }
 ```
-
-`ciphertext` is a mapping from device Curve25519 key to an encrypted
-payload for that device. `body` is a Base64-encoded [Olm message body](/olm-megolm/olm/#the-olm-message-format).
-`type` is an integer indicating the type of the message body: 0 for the
-initial [pre-key message](/olm-megolm/olm/#pre-key-messages), 1 for [normal messages](/olm-megolm/olm/#normal-messages).
+Note that when the event is received from the server, it will have a `type`
+(with a value of `m.room.encrypted`) and `sender` property alongside the
+`content` property. In `content`, `ciphertext` is a mapping from a device
+Curve25519 key to an object with a `type` and a `body`. Here, `type` is an
+integer indicating the type of the message body:
+0 for the initial [pre-key message](/olm-megolm/olm/#pre-key-messages),
+1 for [normal messages](/olm-megolm/olm/#normal-messages);
+`body` is a Base64-encoded [Olm message body](/olm-megolm/olm/#the-olm-message-format).
 
 Olm sessions will generate messages with a type of 0 until they receive
 a message. Once a session has decrypted a message it will produce
@@ -1894,23 +1896,24 @@ This uses:
 Devices that support Megolm must support Olm, and include
 "m.megolm.v1.aes-sha2" in their list of supported messaging algorithms.
 
-An event encrypted using Megolm has the following format:
+The content of an event encrypted using Megolm has the following format:
 
 ```json
 {
-  "type": "m.room.encrypted",
   "content": {
     "algorithm": "m.megolm.v1.aes-sha2",
     "sender_key": "<sender_curve25519_key>",
     "device_id": "<sender_device_id>",
     "session_id": "<outbound_group_session_id>",
-    "ciphertext": "<encrypted_payload_base_64>"
+    "ciphertext": "<base64_encoded_megolm_message>"
   }
 }
 ```
-
-The encrypted payload can contain any message event. The plaintext is of
-the form:
+Note that when the event is received from the server, it will have additional
+properties alongside the `content` property, including a `type` (with a value
+of `m.room.encrypted`) and a `sender` property. In `content`, `ciphertext`
+is a Base64-encoded [Megolm message body](/olm-megolm/megolm/#message-format),
+whose plaintext body is of the form:
 
 ```json
 {
@@ -1920,7 +1923,7 @@ the form:
 }
 ```
 
-We include the room ID in the payload, because otherwise the homeserver
+We include the room ID in the encrypted message, because otherwise the homeserver
 would be able to change the room a message was sent in.
 
 Clients must guard against replay attacks by keeping track of the
