@@ -201,17 +201,17 @@ a means for recipients to distinguish between them.
 ### Normal Messages
 
 Olm messages start with a one byte version followed by a variable length
-payload followed by a fixed length message authentication code.
+body followed by a fixed length message authentication code.
 
 ```nohighlight
  +--------------+------------------------------------+-----------+
- | Version Byte | Payload Bytes                      | MAC Bytes |
+ | Version Byte | Body Bytes                         | MAC Bytes |
  +--------------+------------------------------------+-----------+
 ```
 
 The version byte is ``"\x03"``.
 
-The payload consists of key-value pairs where the keys are integers and the
+The body consists of key-value pairs where the keys are integers and the
 values are integers and strings. The keys are encoded as a variable length
 integer tag where the 3 lowest bits indicates the type of the value:
 0 for integers, 2 for strings. If the value is an integer then the tag is
@@ -237,17 +237,17 @@ MAC protects all of the bytes preceding the MAC.
 ### Pre-Key Messages
 
 Olm pre-key messages start with a one byte version followed by a variable
-length payload.
+length body.
 
 ```nohighlight
  +--------------+------------------------------------+
- | Version Byte | Payload Bytes                      |
+ | Version Byte | Body Bytes                         |
  +--------------+------------------------------------+
 ```
 
 The version byte is ``"\x03"``.
 
-The payload uses the same key-value format as for normal messages.
+The body uses the same key-value format as for normal messages.
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
@@ -276,7 +276,7 @@ message key using [HKDF-SHA-256][] using the default salt and an info of
 The plain-text is encrypted with AES-256, using the key \(AES\_KEY_{i,j}\)
 and the IV \(AES\_IV_{i,j}\) to give the cipher-text, \(X_{i,j}\).
 
-Then the entire message (including the Version Byte and all Payload Bytes) are
+Then the entire message (including the version byte and all body bytes) are
 passed through [HMAC-SHA-256][]. The first 8 bytes of the MAC are appended to the message.
 
 ## Message authentication concerns

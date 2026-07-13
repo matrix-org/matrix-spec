@@ -147,7 +147,7 @@ and the IV \(\mathit{AES\_IV}_{i}\) to give the cipher-text, \(X_{i}\).
 
 The ratchet index \(i\), and the cipher-text \(X_{i}\), are then packed
 into a message as described in [Message format](#message-format). Then the entire message
-(including the version bytes and all payload bytes) are passed through
+(including the version byte and all body bytes) are passed through
 HMAC-SHA-256. The first 8 bytes of the MAC are appended to the message.
 
 Finally, the authenticated message is signed using the Ed25519 keypair; the 64
@@ -240,19 +240,19 @@ part of the Ed25519 keypair \(K\).
 ### Message format
 
 Megolm messages consist of a one byte version, followed by a variable length
-payload, a fixed length message authentication code, and a fixed length
+body, a fixed length message authentication code, and a fixed length
 signature.
 
 ```nohighlight
 +---+------------------------------------+-----------+------------------+
-| V | Payload Bytes                      | MAC Bytes | Signature Bytes  |
+| V | Body Bytes                         | MAC Bytes | Signature Bytes  |
 +---+------------------------------------+-----------+------------------+
 0   1                                    N          N+8                N+72   bytes
 ```
 
 The version byte, ``V``, is ``"\x03"``.
 
-The payload uses a format based on the [Protocol Buffers encoding][]. It
+The body uses a format based on the [Protocol Buffers encoding][]. It
 consists of the following key-value pairs:
 
 **Name**|**Tag**|**Type**|**Meaning**
@@ -260,7 +260,7 @@ consists of the following key-value pairs:
 Message-Index|0x08|Integer|The index of the ratchet, i
 Cipher-Text|0x12|String|The cipher-text, Xi, of the message
 
-Within the payload, integers are encoded using a variable length encoding. Each
+Within the body, integers are encoded using a variable length encoding. Each
 integer is encoded as a sequence of bytes with the high bit set followed by a
 byte with the high bit clear. The seven low bits of each byte store the bits of
 the integer. The least significant bits are stored in the first byte.
@@ -270,7 +270,7 @@ Strings are encoded as a variable-length integer followed by the string itself.
 Each key-value pair is encoded as a variable-length integer giving the tag,
 followed by a string or variable-length integer giving the value.
 
-The payload is followed by the MAC. The length of the MAC is determined by the
+The body is followed by the MAC. The length of the MAC is determined by the
 authenticated encryption algorithm being used (8 bytes in this version of the
 protocol). The MAC protects all of the bytes preceding the MAC.
 
