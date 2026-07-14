@@ -1745,7 +1745,7 @@ Note that when the event is received from the server, it will have a `type`
 Curve25519 key to an object with a `type` and a `body`. Here, `body` is a
 Base64-encoded [Olm message](/olm-megolm/olm/#the-olm-message-format), and
 `type` is an integer indicating the type of the message:
-0 for the initial [pre-key message](/olm-megolm/olm/#pre-key-messages),
+0 for the initial [pre-key messages](/olm-megolm/olm/#pre-key-messages),
 1 for [normal messages](/olm-megolm/olm/#normal-messages).
 
 Olm sessions will generate messages with a type of 0 until they receive
