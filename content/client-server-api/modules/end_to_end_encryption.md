@@ -1742,11 +1742,11 @@ The content of an event encrypted using Olm has the following format:
 Note that when the event is received from the server, it will have a `type`
 (with a value of `m.room.encrypted`) and `sender` property alongside the
 `content` property. In `content`, `ciphertext` is a mapping from a device
-Curve25519 key to an object with a `type` and a `body`. Here, `type` is an
-integer indicating the type of the message body:
+Curve25519 key to an object with a `type` and a `body`. Here, `body` is a
+Base64-encoded [Olm message](/olm-megolm/olm/#the-olm-message-format), and
+`type` is an integer indicating the type of the message:
 0 for the initial [pre-key message](/olm-megolm/olm/#pre-key-messages),
-1 for [normal messages](/olm-megolm/olm/#normal-messages);
-`body` is a Base64-encoded [Olm message body](/olm-megolm/olm/#the-olm-message-format).
+1 for [normal messages](/olm-megolm/olm/#normal-messages).
 
 Olm sessions will generate messages with a type of 0 until they receive
 a message. Once a session has decrypted a message it will produce
