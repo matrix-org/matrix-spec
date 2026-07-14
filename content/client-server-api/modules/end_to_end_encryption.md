@@ -1912,7 +1912,7 @@ The content of an event encrypted using Megolm has the following format:
 Note that when the event is received from the server, it will have additional
 properties alongside the `content` property, including a `type` (with a value
 of `m.room.encrypted`) and a `sender` property. In `content`, `ciphertext`
-is a Base64-encoded [Megolm message body](/olm-megolm/megolm/#message-format),
+is a Base64-encoded [Megolm message](/olm-megolm/megolm/#message-format),
 whose plaintext body is of the form:
 
 ```json
