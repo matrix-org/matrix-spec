@@ -20,6 +20,8 @@ properties:
     description: |-
       The ID of the user the device belongs to. Must match the user ID used
       when logging in.
+    format: mx-user-id
+    pattern: "^@"
     example: "@alice:example.com"
   device_id:
     type: string

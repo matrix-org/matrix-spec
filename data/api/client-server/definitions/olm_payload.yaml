@@ -27,9 +27,13 @@ properties:
   sender:
     type: string
     description: The user ID of the event sender.
+    format: mx-user-id
+    pattern: "^@"
   recipient:
     type: string
     description: The user ID of the intended event recipient.
+    format: mx-user-id
+    pattern: "^@"
   recipient_keys:
     description: The recipient's signing keys of the encrypted event.
     $ref: "#/components/schemas/SigningKeys"
