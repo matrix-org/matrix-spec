@@ -3660,7 +3660,7 @@ The actual aggregation format depends on the `rel_type`.
 
 When an event is served to the client through the APIs listed below, a
 `m.relations` property is included under `unsigned` if the event has child
-events which can be aggregated and point at it. The `m.relations` property is
+events which can be aggregated. The `m.relations` property is
 an object keyed by `rel_type` and value being the type-specific aggregated
 format for that `rel_type`. This `m.relations` property is known as a "bundled
 aggregation".
