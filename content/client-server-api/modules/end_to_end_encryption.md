@@ -1551,7 +1551,7 @@ objects described as follows:
 
 {{% added-in v="1.19" %}}
 
-When Alice invites Bob to an encrypted room, she might want Bob to have access
+When Alice invites Bob to an encrypted room, she likely wants Bob to have access
 to messages that were previously sent in that room, subject to the [history
 visibility](#room-history-visibility) setting of the room.
 
