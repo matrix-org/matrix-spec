@@ -191,7 +191,7 @@ Note that, as in the example above, child events of the `latest_event` should
 themselves be aggregated and included under `m.relations` for that event. The
 server should be careful to avoid loops, though loops are not currently
 possible due to `m.thread` not being permitted to target an event with an
-`m.relates_to` property.
+`m.relates_to` property with a `rel_type`.
 
 `count` is simply the number of events using `m.thread` as a `rel_type` pointing to the target event.
 It does not include events sent by [ignored users](#ignoring-users).
