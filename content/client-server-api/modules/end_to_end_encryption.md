@@ -1940,7 +1940,7 @@ As of `v1.3`, the `sender_key` and `device_id` keys are **deprecated**. They
 SHOULD continue to be sent, however they MUST NOT be used to verify the
 message's source.
 
-Clients MUST NOT store or lookup sessions using the `sender_key` or `device_id`.
+Clients MUST NOT store or look up sessions using the `sender_key` or `device_id`.
 
 In a future version of the specification the keys can be removed completely,
 including for sending new messages.
