@@ -1551,12 +1551,9 @@ objects described as follows:
 
 {{% added-in v="1.19" %}}
 
-When Alice invites Bob to an encrypted room, that room might be set up for
-Bob to have access to messages that were previously sent in that room,
-subject to the [history visibility](#room-history-visibility) setting of the room.
-Because the key material is not available on the server,
-Alice MUST share the decryption keys of messages visible according to
-the history visibility setting so Bob can read the message history.
+When Alice invites Bob to an encrypted room, she might want Bob to have access
+to messages that were previously sent in that room, subject to the [history
+visibility](#room-history-visibility) setting of the room.
 
 Alice does this by constructing an [encrypted key
 bundle](#construction-and-sharing-of-the-key-bundle) and sharing it with Bob
@@ -1613,12 +1610,22 @@ room.
 
 ##### Construction and sharing of the key bundle
 
-Alice's client MAY choose not to share any room history (even messages sent when the
-history visibility setting would allow sharing) if the current history
-visibility setting does not allow sharing (i.e. if `history_visibility` is
-set to `invited` or `joined`).
+Marking keys as [shareable](#shareable-encryption-sessions) essentially serves as
+precomputation of which keys Bob needs to decrypt all messages he can see, as
+defined by the room's history visibility.
 
-Otherwise, before inviting Bob to a room, Alice's client constructs and sends a key bundle as follows:
+History visibility mechanics prevent changing the visibility of events in
+hindsight. It is thus possible for a room timeline to have "gappy" visibility,
+i.e. events sent during `shared` visibility in the past are visible, but events
+more recently sent during `joined` visibility and before joining are not visible.
+In such cases where the current history visibility setting does not allow sharing
+(i.e. if `history_visibility` is set to `invited` or `joined`), Alice's client
+MAY choose not to share *any* room history, even messages sent when the
+history visibility setting would allow sharing.
+
+In all other cases, Alice's client MUST share all available shareable keys.
+
+Before inviting Bob to a room, Alice's client constructs and sends a key bundle as follows:
 
 1. Alice's client SHOULD ensure that it has downloaded all keys relevant to the room
    from [server-side key backup](#server-side-key-backups), if she is using it.
