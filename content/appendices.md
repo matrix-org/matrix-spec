@@ -901,7 +901,8 @@ the room.
 
 The components of the matrix.to URI (`<identifier>` and
 `<extra parameter>`) MUST be percent-encoded as per RFC 3986.
-Clients MUST NOT produce incorrectly encoded URIs to avoid ambiguous interpretation.
+Failure to do so will result in downstream software misinterpreting
+the links as invalid/not turning them into clickable links in UI.
 
 Examples of matrix.to URIs are:
 
