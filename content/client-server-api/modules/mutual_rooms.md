@@ -7,7 +7,7 @@
 #### Server behaviour
 
 The server MAY decide that the response to this endpoint is too large, and only return a
-subset of the results. In this case, the server MUST populate the optional field `next_batch`
+subset of the results. In this case, the server populates the optional field `next_batch`
 with an [opaque identifier](/appendices/#opaque-identifiers). The client can then supply
 the identifier as the `from` query parameter in a subsequent request, along with the original
 `user_id`, to fetch the next batch of responses. This will continue until the server no longer
