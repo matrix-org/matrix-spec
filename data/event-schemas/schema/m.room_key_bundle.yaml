@@ -13,7 +13,7 @@ description: |-
   [Olm](/client-server-api/#molmv1curve25519-aes-sha2).
 
   The `sender_device_keys` property in the [Olm
-  plaintext](/client-server-api/#definition-olmpayload) MUST be
+  plaintext](/client-server-api/#definition-olmplaintext) MUST be
   populated. Recipients SHOULD ignore `m.room_key_bundle` messages which omit
   them.
 properties:

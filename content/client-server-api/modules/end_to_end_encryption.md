@@ -1762,12 +1762,9 @@ Messages with type 1 can only be decrypted with an existing session. If
 there is no matching session, the client must treat this as an invalid
 message.
 
-The plaintext payload is of the form:
+The plaintext corresponding to the "Cipher-Text" in an an [Olm message](/olm-megolm/olm/#normal-messages) is of the form:
 
-{{% definition path="api/client-server/definitions/olm_payload" %}}
-
-The type and content of the plaintext message event are given in the
-payload.
+{{% definition path="api/client-server/definitions/olm_plaintext" %}}
 
 If a client has multiple sessions established with another device, it
 should use the session from which it last received and successfully
