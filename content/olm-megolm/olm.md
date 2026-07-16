@@ -17,12 +17,12 @@ side of an \(=\) it means that the output is split.
 When this document uses \(\operatorname{ECDH}\left(K_A,K_B\right)\) it means
 that each party computes a Diffie-Hellman agreement using their private key 
 and the remote party's public key.
-So party \(A\) computes \(\operatorname{ECDH}\left(K_B^{public},K_A^{private}\right)\)
-and party \(B\) computes \(\operatorname{ECDH}\left(K_A^{public},K_B^{private}\right)\).
+So party \(A\) computes \(\operatorname{ECDH}\left(K_B^{\mathit{public}},K_A^{\mathit{private}}\right)\)
+and party \(B\) computes \(\operatorname{ECDH}\left(K_A^{\mathit{public}},K_B^{\mathit{private}}\right)\).
 
-Where this document uses \(\operatorname{HKDF}\left(salt,IKM,info,L\right)\) it
+Where this document uses \(\operatorname{HKDF}\left(\mathit{salt},\mathit{IKM},\mathit{info},L\right)\) it
 refers to the [HMAC-based key derivation function][] with a salt value of
-\(salt\), input key material of \(IKM\), context string \(info\),
+\(\mathit{salt}\), input key material of \(\mathit{IKM}\), context string \(\mathit{info}\),
 and output keying material length of \(L\) bytes.
 
 ## The Olm Algorithm
@@ -226,9 +226,9 @@ significant bits are stored in the first byte.
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
-Ratchet-Key|0x0A|String|The public part of the ratchet key, Ti, of the message
-Chain-Index|0x10|Integer|The chain index, j, of the message
-Cipher-Text|0x22|String|The cipher-text, Xi, j, of the message
+Ratchet-Key|0x0A|String|The public part of the ratchet key of the message, \(T_i\).
+Chain-Index|0x10|Integer|The chain index of the message, \(j\).
+Cipher-Text|0x22|String|The cipher-text of the message, \(X_{i,j}\).
 
 The length of the MAC is determined by the authenticated encryption algorithm
 being used. (Olm version 1 uses [HMAC-SHA-256][], truncated to 8 bytes). The
@@ -251,9 +251,9 @@ The payload uses the same key-value format as for normal messages.
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
-One-Time-Key|0x0A|String|The public part of Bob's single-use key, Eb.
-Base-Key|0x12|String|The public part of Alice's single-use key, Ea.
-Identity-Key|0x1A|String|The public part of Alice's identity key, Ia.
+One-Time-Key|0x0A|String|The public part of Bob's single-use key, \(E_B\).
+Base-Key|0x12|String|The public part of Alice's single-use key, \(E_A\).
+Identity-Key|0x1A|String|The public part of Alice's identity key, \(I_A\).
 Message|0x22|String|An embedded Olm message with its own version and MAC.
 
 ## Olm Authenticated Encryption
@@ -268,13 +268,13 @@ message key using [HKDF-SHA-256][] using the default salt and an info of
 
 \[
 \begin{aligned}
-    AES\_KEY_{i,j}\;\parallel\;HMAC\_KEY_{i,j}\;\parallel\;AES\_IV_{i,j}
+    \mathit{AES\_KEY}_{i,j}\;\parallel\;\mathit{HMAC\_KEY}_{i,j}\;\parallel\;\mathit{AES\_IV}_{i,j}
     &= \operatorname{HKDF}\left(0,M_{i,j},\text{``OLM\_KEYS"},80\right)
 \end{aligned}
 \]
 
-The plain-text is encrypted with AES-256, using the key \(AES\_KEY_{i,j}\)
-and the IV \(AES\_IV_{i,j}\) to give the cipher-text, \(X_{i,j}\).
+The plain-text is encrypted with AES-256, using the key \(\mathit{AES\_KEY}_{i,j}\)
+and the IV \(\mathit{AES\_IV}_{i,j}\) to give the cipher-text, \(X_{i,j}\).
 
 Then the entire message (including the Version Byte and all Payload Bytes) are
 passed through [HMAC-SHA-256][]. The first 8 bytes of the MAC are appended to the message.
