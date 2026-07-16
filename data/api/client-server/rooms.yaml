@@ -340,7 +340,8 @@ paths:
                             description: The display name of the user this object is representing.
                           avatar_url:
                             type: string
-                            format: uri
+                            format: mx-mxc-uri
+                            pattern: "^mxc:\\/\\/"
                             description: The avatar of the user this object is representing, as an [`mxc://`
                               URI](/client-server-api/#matrix-content-mxc-uris).
                     description: A map from user ID to a RoomMember object.

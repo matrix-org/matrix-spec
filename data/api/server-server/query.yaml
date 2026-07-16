@@ -172,6 +172,8 @@ paths:
                     example: John Doe
                   avatar_url:
                     type: string
+                    format: mx-mxc-uri
+                    pattern: "^mxc:\\/\\/"
                     description: |-
                       The avatar URL for the user's avatar. MUST either be omitted or set to
                       `null` if the user does not have an avatar set.

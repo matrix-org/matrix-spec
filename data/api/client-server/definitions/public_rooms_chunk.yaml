@@ -54,7 +54,8 @@ properties:
     example: true
   avatar_url:
     type: string
-    format: uri
+    format: mx-mxc-uri
+    pattern: "^mxc:\\/\\/"
     description: The URL for the room's avatar, if one is set.
     example: "mxc://example.org/abcdef"
   join_rule:
