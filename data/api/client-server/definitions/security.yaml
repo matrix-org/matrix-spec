@@ -18,14 +18,10 @@ accessTokenBearer:
     or [login](/client-server-api/#login), using the `Authorization: Bearer` header.
 
     It can also be the `as_token` of an application service.
-
-    This is the preferred method.
   scheme: bearer
 appserviceAccessTokenBearer:
   type: http
   description: |-
     The `as_token` of an application service, using the `Authorization: Bearer`
     header.
-
-    This is the preferred method.
   scheme: bearer
