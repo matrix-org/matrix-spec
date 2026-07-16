@@ -16,6 +16,4 @@ accessTokenBearer:
   description: |-
     The `access_token` returned by a call to `/register`, using the
     `Authorization: Bearer` header.
-    
-    This is the preferred method.
   scheme: bearer
