@@ -226,9 +226,9 @@ significant bits are stored in the first byte.
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
-Ratchet-Key|0x0A|String|The public part of the ratchet key, Ti, of the message
-Chain-Index|0x10|Integer|The chain index, j, of the message
-Cipher-Text|0x22|String|The cipher-text, Xi, j, of the message
+Ratchet-Key|0x0A|String|The public part of the ratchet key of the message, \(T_i\).
+Chain-Index|0x10|Integer|The chain index of the message, \(j\).
+Cipher-Text|0x22|String|The cipher-text of the message, \(X_{i,j}\).
 
 The length of the MAC is determined by the authenticated encryption algorithm
 being used. (Olm version 1 uses [HMAC-SHA-256][], truncated to 8 bytes). The
@@ -251,9 +251,9 @@ The payload uses the same key-value format as for normal messages.
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
-One-Time-Key|0x0A|String|The public part of Bob's single-use key, Eb.
-Base-Key|0x12|String|The public part of Alice's single-use key, Ea.
-Identity-Key|0x1A|String|The public part of Alice's identity key, Ia.
+One-Time-Key|0x0A|String|The public part of Bob's single-use key, \(E_B\).
+Base-Key|0x12|String|The public part of Alice's single-use key, \(E_A\).
+Identity-Key|0x1A|String|The public part of Alice's identity key, \(I_A\).
 Message|0x22|String|An embedded Olm message with its own version and MAC.
 
 ## Olm Authenticated Encryption

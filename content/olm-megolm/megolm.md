@@ -257,8 +257,8 @@ consists of the following key-value pairs:
 
 **Name**|**Tag**|**Type**|**Meaning**
 :-----:|:-----:|:-----:|:-----:
-Message-Index|0x08|Integer|The index of the ratchet, i
-Cipher-Text|0x12|String|The cipher-text, Xi, of the message
+Message-Index|0x08|Integer|The index of the ratchet, \(i\).
+Cipher-Text|0x12|String|The cipher-text of the message, \(X_i\).
 
 Within the payload, integers are encoded using a variable length encoding. Each
 integer is encoded as a sequence of bytes with the high bit set followed by a
