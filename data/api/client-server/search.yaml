@@ -238,7 +238,8 @@ paths:
                                               title: Display name
                                             avatar_url:
                                               type: string
-                                              format: uri
+                                              format: mx-mxc-uri
+                                              pattern: "^mxc:\\/\\/"
                                               title: Avatar Url
                                     events_before:
                                       type: array

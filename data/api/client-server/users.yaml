@@ -90,7 +90,8 @@ paths:
                           description: The display name of the user, if one exists.
                         avatar_url:
                           type: string
-                          format: uri
+                          format: mx-mxc-uri
+                          pattern: "^mxc:\\/\\/"
                           example: mxc://bar.com/foo
                           description: The avatar url, as an [`mxc://`
                             URI](/client-server-api/#matrix-content-mxc-uris),
