@@ -97,7 +97,7 @@ For example, a replacement for an encrypted event might look like this:
 }
 ```
 
-... and, once decrypted, the event might look like this:
+... and the plaintext body of the Megolm message might look like this:
 
 ```json
 {
