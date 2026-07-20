@@ -1614,12 +1614,12 @@ Marking keys as [shareable](#shareable-encryption-sessions) essentially serves a
 precomputation of which keys Bob needs to decrypt all messages he can see, as
 defined by the room's history visibility.
 
-History visibility mechanics prevent changing the visibility of events in
-hindsight. It is thus possible for a room timeline to have "gappy" visibility,
-i.e. events sent during `shared` visibility in the past are visible, but events
-more recently sent during `joined` visibility and before joining are not visible.
+History visibility mechanics prevent changing the visibility of events
+retrospectively. It is thus possible for a room timeline to have "gappy" visibility.
+For example, events sent in the past during `shared` visibility are visible to new
+members, even though events sent more recently (during `joined` visibility) are not visible.
 In such cases where the current history visibility setting does not allow sharing
-(i.e. if `history_visibility` is set to `invited` or `joined`), Alice's client
+(i.e. if `history_visibility` is set to `invited` or `joined`), client implementations
 MAY choose not to share *any* room history, even messages sent when the
 history visibility setting would allow sharing.
 
