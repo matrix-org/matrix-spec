@@ -1623,9 +1623,8 @@ In such cases where the current history visibility setting does not allow sharin
 MAY choose not to share *any* room history, even messages sent when the
 history visibility setting would allow sharing.
 
-In all other cases, Alice's client SHOULD share all available shareable keys.
-
-Before inviting Bob to a room, Alice's client constructs and sends a key bundle as follows:
+In all other cases, before inviting Bob to a room, Alice's client SHOULD share all available shareable keys.
+It does this by constructing and sending a key bundle as follows:
 
 1. Alice's client SHOULD ensure that it has downloaded all keys relevant to the room
    from [server-side key backup](#server-side-key-backups), if she is using it.
