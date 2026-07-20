@@ -1723,7 +1723,7 @@ Devices that support Olm must include "m.olm.v1.curve25519-aes-sha2" in
 their list of supported messaging algorithms, must list a Curve25519
 device key, and must publish Curve25519 one-time keys.
 
-The content of an event encrypted using Olm has the following format:
+The content of an [`m.room.encrypted`](#mroomencrypted) event using Olm has the following format:
 
 ```json
 {
@@ -1896,7 +1896,7 @@ This uses:
 Devices that support Megolm must support Olm, and include
 "m.megolm.v1.aes-sha2" in their list of supported messaging algorithms.
 
-The content of an event encrypted using Megolm has the following format:
+The content of an [`m.room.encrypted`](#mroomencrypted) event using Megolm has the following format:
 
 ```json
 {
