@@ -22,6 +22,10 @@ restrictions on how the rooms can be configured in terms of
 [join rules](#mroomjoin_rules), [history visibility](#room-history-visibility),
 encryption, etc.
 
+A moderation policy list may be designated by the [`m.policy` room type](#types),
+however, policy events may still be sent in rooms without this room type. Sending
+messages in rooms with the `m.policy` room type is discouraged, but not forbidden.
+
 There are currently 3 kinds of entities which can be affected by rules:
 `user`, `server`, and `room`. All 3 are described with
 `m.policy.rule.<kind>` state events. The `state_key` for a policy rule
