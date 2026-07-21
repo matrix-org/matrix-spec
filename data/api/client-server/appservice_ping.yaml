@@ -57,7 +57,6 @@ paths:
                   example: mautrix-go_1683636478256400935_123
         required: true
       security:
-        - appserviceAccessTokenQuery: []
         - appserviceAccessTokenBearer: []
       responses:
         "200":
@@ -177,7 +176,5 @@ servers:
         default: /_matrix/client/v1
 components:
   securitySchemes:
-    appserviceAccessTokenQuery:
-      $ref: definitions/security.yaml#/appserviceAccessTokenQuery
     appserviceAccessTokenBearer:
       $ref: definitions/security.yaml#/appserviceAccessTokenBearer

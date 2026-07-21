@@ -23,7 +23,6 @@ paths:
       description: Gets all currently active pushers for the authenticated user.
       operationId: getPushers
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -137,7 +136,6 @@ paths:
         user is deleted.
       operationId: postPusher
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -297,7 +295,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

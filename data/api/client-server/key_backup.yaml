@@ -23,7 +23,6 @@ paths:
       description: Creates a new backup.
       operationId: postRoomKeysVersion
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -81,7 +80,6 @@ paths:
       description: Get information about the latest backup version.
       operationId: getRoomKeysVersionCurrent
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -157,7 +155,6 @@ paths:
       description: Get information about an existing backup.
       operationId: getRoomKeysVersion
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -245,7 +242,6 @@ paths:
         be modified.
       operationId: putRoomKeysVersion
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -348,7 +344,6 @@ paths:
         as well as all key data related to the backup will be deleted.
       operationId: deleteRoomKeysVersion
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: path
@@ -401,7 +396,6 @@ paths:
       description: Store a key in the backup.
       operationId: putRoomKeyBySessionId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -469,7 +463,6 @@ paths:
       description: Retrieve a key from the backup.
       operationId: getRoomKeyBySessionId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -526,7 +519,6 @@ paths:
       description: Delete a key from the backup.
       operationId: deleteRoomKeyBySessionId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -584,7 +576,6 @@ paths:
       description: Store several keys in the backup for a given room.
       operationId: putRoomKeysByRoomId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -657,7 +648,6 @@ paths:
       description: Retrieve the keys from the backup for a given room.
       operationId: getRoomKeysByRoomId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -710,7 +700,6 @@ paths:
       description: Delete the keys from the backup for a given room.
       operationId: deleteRoomKeysByRoomId
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -761,7 +750,6 @@ paths:
       description: Store several keys in the backup.
       operationId: putRoomKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -849,7 +837,6 @@ paths:
       description: Retrieve the keys from the backup.
       operationId: getRoomKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -916,7 +903,6 @@ paths:
       description: Delete the keys from the backup.
       operationId: deleteRoomKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -987,7 +973,5 @@ components:
         - etag
         - count
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

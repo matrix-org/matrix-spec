@@ -24,7 +24,6 @@ paths:
         and other relevant capabilities.
       operationId: getCapabilities
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -218,8 +217,6 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer
   schemas:

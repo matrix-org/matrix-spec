@@ -570,15 +570,9 @@ invalidate the access token the client must use [token revocation](#token-revoca
 Access tokens may be provided via a request header, using the Authentication
 Bearer scheme: `Authorization: Bearer TheTokenHere`.
 
-Clients may alternatively provide the access token via a query string parameter:
-`access_token=TheTokenHere`. This method is deprecated to prevent the access
-token being leaked in access/HTTP logs and SHOULD NOT be used by clients.
-
-Homeservers MUST support both methods.
-
 {{% boxes/note %}}
-{{% changed-in v="1.11" %}}
-Sending the access token as a query string parameter is now deprecated.
+{{% changed-in v="1.20" %}}
+Sending the access token as a query string parameter is no longer supported.
 {{% /boxes/note %}}
 
 When credentials are required but missing or invalid, the HTTP call will

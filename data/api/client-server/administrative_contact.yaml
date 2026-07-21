@@ -31,7 +31,6 @@ paths:
         identifiers that it will accept to reset the user's account password.
       operationId: getAccount3PIDs
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -106,7 +105,6 @@ paths:
       operationId: post3PIDs
       deprecated: true
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -216,7 +214,6 @@ paths:
         {{% /boxes/warning %}}
       operationId: add3PID
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -279,7 +276,6 @@ paths:
         Homeservers should track successful binds so they can be unbound later.
       operationId: bind3PID
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -345,7 +341,6 @@ paths:
         to determine if this endpoint is available.
       operationId: delete3pidFromAccount
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -415,7 +410,6 @@ paths:
         identity server instead.
       operationId: unbind3pidFromAccount
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -614,7 +608,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

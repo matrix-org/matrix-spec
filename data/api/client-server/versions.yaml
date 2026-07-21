@@ -45,7 +45,6 @@ paths:
       operationId: getVersions
       security:
         - {}
-        - accessTokenQuery: []
         - accessTokenBearer: []
       x-changedInMatrixVersion:
         "1.10": |
@@ -102,7 +101,5 @@ servers:
         default: /_matrix/client
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

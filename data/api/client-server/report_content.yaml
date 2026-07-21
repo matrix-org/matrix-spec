@@ -59,7 +59,6 @@ paths:
                 - reason
         required: true
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       x-changedInMatrixVersion:
         1.18: |
@@ -143,7 +142,6 @@ paths:
                   description: The reason the content is being reported.
         required: true
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       x-changedInMatrixVersion:
         1.8: |
@@ -228,7 +226,6 @@ paths:
                 - reason
         required: true
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       responses:
         "200":
@@ -277,7 +274,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

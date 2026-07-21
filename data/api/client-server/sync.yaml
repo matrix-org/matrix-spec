@@ -44,7 +44,6 @@ paths:
         events, alongside other state, when lazy-loading is not enabled.
       operationId: sync
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -686,7 +685,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

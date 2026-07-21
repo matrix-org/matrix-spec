@@ -52,7 +52,6 @@ paths:
         {{% /boxes/note %}}
       operationId: uploadCrossSigningKeys
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -182,7 +181,6 @@ paths:
         property, which contains the new signature(s) to add.
       operationId: uploadCrossSigningSignatures
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -294,7 +292,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

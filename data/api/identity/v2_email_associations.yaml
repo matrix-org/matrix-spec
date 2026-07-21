@@ -40,7 +40,6 @@ paths:
         deprecated.
       operationId: emailRequestTokenV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -108,7 +107,6 @@ paths:
         deprecated.
       operationId: emailSubmitTokenPostV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -200,7 +198,6 @@ paths:
         used by end-users, and so the response should be human-readable.
       operationId: emailSubmitTokenGetV2
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       parameters:
         - in: query
@@ -263,7 +260,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

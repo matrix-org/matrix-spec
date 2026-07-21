@@ -80,7 +80,6 @@ paths:
       x-changedInMatrixVersion:
         "1.16": Added server behaviour for how the initial power levels change depending on room version.
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -304,7 +303,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer

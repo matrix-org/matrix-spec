@@ -118,7 +118,6 @@ paths:
         may not be accepting all terms at once.
       operationId: agreeToTerms
       security:
-        - accessTokenQuery: []
         - accessTokenBearer: []
       requestBody:
         content:
@@ -159,7 +158,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    accessTokenQuery:
-      $ref: definitions/security.yaml#/accessTokenQuery
     accessTokenBearer:
       $ref: definitions/security.yaml#/accessTokenBearer
