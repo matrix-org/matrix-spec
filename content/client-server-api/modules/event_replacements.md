@@ -91,13 +91,13 @@ For example, a replacement for an encrypted event might look like this:
         "sender_key": "<sender_curve25519_key>",
         "device_id": "<sender_device_id>",
         "session_id": "<outbound_group_session_id>",
-        "ciphertext": "<encrypted_payload_base_64>"
+        "ciphertext": "<base64_encoded_megolm_message>"
     }
     // irrelevant fields not shown
 }
 ```
 
-... and, once decrypted, the payload might look like this:
+... and the plaintext body of the Megolm message might look like this:
 
 ```json
 {
