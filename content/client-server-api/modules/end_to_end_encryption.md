@@ -1911,7 +1911,9 @@ The content of an [`m.room.encrypted`](#mroomencrypted) event using Megolm has t
 ```
 Note that when the event is received from the server, it will have additional
 properties alongside the `content` property, including a `type` (with a value
-of `m.room.encrypted`) and a `sender` property. In `content`, `ciphertext`
+of `m.room.encrypted`) and a `sender` property. (See [Room event format](#room-event-format).)
+
+Within `content`, `ciphertext`
 is a Base64-encoded [Megolm message](/olm-megolm/megolm/#message-format),
 whose plaintext body is of the form:
 
