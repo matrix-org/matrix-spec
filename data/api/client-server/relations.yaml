@@ -22,13 +22,13 @@ paths:
       description: |-
         Retrieve all of the child events for a given parent event.
 
-        Note that when paginating the `from` token should be "after" the `to` token in
-        terms of topological ordering, because it is only possible to paginate "backwards"
-        through events, starting at `from`.
+        Note that, in terms of topological ordering, the `from` token should be "after"
+        the `to` token when `dir=b`, and should be "before" the `to` token when `dir=f`.
 
-        For example, passing a `from` token from page 2 of the results, and a `to` token
-        from page 1, would return the empty set. The caller can use a `from` token from
-        page 1 and a `to` token from page 2 to paginate over the same range, however.
+        For example, with `dir=b`, passing a `from` token from page 2 of the results, and
+        a `to` token from page 1, would return the empty set. The caller can use a `from`
+        token from page 1 and a `to` token from page 2 to paginate over the same range,
+        however.
       operationId: getRelatingEvents
       security:
         - accessTokenQuery: []
@@ -80,13 +80,13 @@ paths:
         Retrieve all of the child events for a given parent event which relate to the parent
         using the given `relType`.
 
-        Note that when paginating the `from` token should be "after" the `to` token in
-        terms of topological ordering, because it is only possible to paginate "backwards"
-        through events, starting at `from`.
+        Note that, in terms of topological ordering, the `from` token should be "after"
+        the `to` token when `dir=b`, and should be "before" the `to` token when `dir=f`.
 
-        For example, passing a `from` token from page 2 of the results, and a `to` token
-        from page 1, would return the empty set. The caller can use a `from` token from
-        page 1 and a `to` token from page 2 to paginate over the same range, however.
+        For example, with `dir=b`, passing a `from` token from page 2 of the results, and
+        a `to` token from page 1, would return the empty set. The caller can use a `from`
+        token from page 1 and a `to` token from page 2 to paginate over the same range,
+        however.
       operationId: getRelatingEventsWithRelType
       security:
         - accessTokenQuery: []
@@ -142,13 +142,13 @@ paths:
         Retrieve all of the child events for a given parent event which relate to the parent
         using the given `relType` and have the given `eventType`.
 
-        Note that when paginating the `from` token should be "after" the `to` token in
-        terms of topological ordering, because it is only possible to paginate "backwards"
-        through events, starting at `from`.
+        Note that, in terms of topological ordering, the `from` token should be "after"
+        the `to` token when `dir=b`, and should be "before" the `to` token when `dir=f`.
 
-        For example, passing a `from` token from page 2 of the results, and a `to` token
-        from page 1, would return the empty set. The caller can use a `from` token from
-        page 1 and a `to` token from page 2 to paginate over the same range, however.
+        For example, with `dir=b`, passing a `from` token from page 2 of the results, and
+        a `to` token from page 1, would return the empty set. The caller can use a `from`
+        token from page 1 and a `to` token from page 2 to paginate over the same range,
+        however.
       operationId: getRelatingEventsWithRelTypeAndEventType
       security:
         - accessTokenQuery: []
@@ -252,9 +252,14 @@ components:
         The pagination token to start returning results from. If not supplied, results
         start at the most recent topological event known to the server.
 
-        Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
-        `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),
-        or a `next_batch` token from [`/sync`](/client-server-api/#get_matrixclientv3sync).
+        If `dir=b`, then `from` can be `next_batch` from a previous call, or a
+        `prev_batch` token from a [`/sync`] or a `start` token from a [`/messages`].
+
+        If `dir=f`, then `from` can be `prev_batch` from a previous call, or a
+        `next_batch` token from a [`/sync`] or an `end` token from a [`/messages`].
+
+        [`/messages`]: /client-server-api/#get_matrixclientv3roomsroomidmessages
+        [`/sync`]: /client-server-api/#get_matrixclientv3sync
       required: false
       example: page2_token
       schema:
@@ -266,8 +271,11 @@ components:
         The pagination token to stop returning results at. If not supplied, results
         continue up to `limit` or until there are no more events.
 
-        Like `from`, this can be a previous token from a prior call to this endpoint
-        or from `/messages` or `/sync`.
+        Like `from`, this can be a previous token from a prior call to this endpoint,
+        or from [`/sync`] or [`/messages`].
+
+        [`/messages`]: /client-server-api/#get_matrixclientv3roomsroomidmessages
+        [`/sync`]: /client-server-api/#get_matrixclientv3sync
       required: false
       example: page3_token
       schema:
