@@ -22,7 +22,9 @@ paths:
       description: |-
         Exchanges an OpenID token from the homeserver for an access token to
         access the identity server. The request body is the same as the values
-        returned by `/openid/request_token` in the Client-Server API.
+        returned by
+        [`POST /_matrix/client/v3/user/{userId}/openid/request_token`](/client-server-api/#post_matrixclientv3useruseridopenidrequest_token)
+        in the Client-Server API.
       operationId: registerAccount
       requestBody:
         content:
