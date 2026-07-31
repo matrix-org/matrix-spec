@@ -704,7 +704,7 @@ The homeserver may provide many different ways of authenticating, such
 as user/password auth, login via a single-sign-on server (SSO), etc.
 This specification does not define how homeservers should authorise
 their users but instead defines the standard interface which
-implementations should follow so that ANY client can log in to ANY
+implementations MUST follow so that ANY client can log in to ANY
 homeserver.
 
 The process takes the form of one or more 'stages'. At each stage the
@@ -716,8 +716,8 @@ the final success.
 For each endpoint, a server offers one or more 'flows' that the client
 can use to authenticate itself. Each flow comprises a series of stages,
 as described above. The client is free to choose which flow it follows,
-however the flow's stages must be completed in order. Failing to follow
-the flows in order must result in an HTTP 401 response, as defined
+however the flow's stages MUST be completed in order. Failing to follow
+the flows in order MUST result in an HTTP 401 response, as defined
 below. When all stages in a flow are complete, authentication is
 complete and the API call succeeds.
 
@@ -729,8 +729,9 @@ what authentication data it requires via the body of an HTTP 401
 response, and the client submits that authentication data via the `auth`
 request parameter.
 
-A client should first make a request with no `auth` parameter.
-The homeserver returns an HTTP 401 response, with a JSON body, as follows:
+A client MUST first make a request with no `auth` parameter.
+The homeserver returns an HTTP 401 response with a JSON body, advertising
+the flows the client can continue with, as follows:
 
 ```nohighlight
 HTTP/1.1 401 Unauthorized
@@ -764,7 +765,7 @@ authentication type presented, that type may be present as a key in this
 dictionary. For example, the public part of an OAuth client ID could be
 given here.
 
-* `session`: This is a session identifier that the client must pass back
+* `session`: This is a session identifier that the client MUST pass back
 to the homeserver, if one is provided, in subsequent attempts to authenticate
 in the same API call.
 
@@ -772,7 +773,7 @@ The client then chooses a flow and attempts to complete the first stage.
 It does this by resubmitting the same request with the addition of an
 `auth` key in the object that it submits. This dictionary contains a
 `type` key whose value is the name of the authentication type that the
-client is attempting to complete. It must also contain a `session` key
+client is attempting to complete. It MUST also contain a `session` key
 with the value of the session key given by the homeserver, if one was
 given. It also contains other keys dependent on the auth type being
 attempted. For example, if the client is attempting to complete auth
@@ -826,7 +827,7 @@ Content-Type: application/json
 }
 ```
 
-Individual stages may require more than one request to complete, in
+Individual stages might require more than one request to complete, in
 which case the response will be as if the request was unauthenticated
 with the addition of any other keys as defined by the auth type.
 
@@ -883,8 +884,8 @@ cannot be retried by clients, therefore servers must return either a 401
 response with the completed stages, or the result of the API call if all
 stages were completed when a client retries a stage.
 
-Some authentication types may be completed by means other than through
-the Matrix client, for example, an email confirmation may be completed
+Some authentication types can be completed by means other than through
+the Matrix client, for example, an email confirmation can be completed
 when the user clicks on the link in the email. In this case, the client
 retries the request with an auth dict containing only the session key.
 The response to this will be the same as if the client were attempting
@@ -894,9 +895,9 @@ in the 'completed' array indicating whether that stage is complete.
 
 {{% boxes/note %}}
 A request to an endpoint that uses User-Interactive Authentication never
-succeeds without auth. Homeservers may allow requests that don't require
+succeeds without auth. Homeservers MAY allow requests that don't require
 auth by offering a stage with only the `m.login.dummy` auth type, but they
-must still give a 401 response to requests with no auth data.
+MUST still give a 401 response to requests with no auth data.
 {{% /boxes/note %}}
 
 **Example**
