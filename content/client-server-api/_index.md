@@ -415,6 +415,8 @@ valid data was obtained, but no server is available to serve the client.
 No further guess should be attempted and the user should make a
 conscientious decision what to do next.
 
+<a id="well-known-uri"></a>
+
 ### Well-known URIs
 
 Matrix facilitates automatic discovery for the Client-Server API base URL and more via the
