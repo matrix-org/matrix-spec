@@ -164,7 +164,7 @@ of access tokens to authenticate users. The access tokens provided by an
 Identity Server cannot be used to authenticate Client-Server API
 requests.
 
-An Identity Server access token is obtained by exchanging an OpenID
+An Identity Service access token is obtained by exchanging an OpenID
 token, which the user's client requests from their homeserver using the
 Client-Server API's [OpenID module](/client-server-api/#openid).
 
