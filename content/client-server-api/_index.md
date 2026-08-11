@@ -56,8 +56,9 @@ requirements for server responses.
 
 ### Standard error response
 
-Any errors which occur at the Matrix API level MUST return a "standard
-error response". This is a JSON object which looks like:
+Any errors which occur at the Matrix API level (for requests that are within
+scope of these [API Standards](#api-standards)) MUST return a "standard error
+response". This is a JSON object which looks like:
 
 ```json
 {
@@ -415,7 +416,9 @@ valid data was obtained, but no server is available to serve the client.
 No further guess should be attempted and the user should make a
 conscientious decision what to do next.
 
-### Well-known URIs
+### <a id="well-known-uri" /> Well-known URIs
+
+<!-- NB: `#well-known-uri` is linked to from https://www.iana.org/assignments/well-known-uris -->
 
 Matrix facilitates automatic discovery for the Client-Server API base URL and more via the
 [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) "Well-Known URI" method.
@@ -1860,7 +1863,8 @@ A successful authorisation will have a `code` value, for example:
 https://app.example.com/oauth2-callback#state=ewubooN9weezeewah9fol4oothohroh3&code=iuB7Eiz9heengah1joh2ioy9ahChuP6R
 ```
 
-A failed authorisation will have the following values:
+A failed authorisation will have the following values as defined by
+[RFC 6749 section 4.1.2.1](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1.2.1):
 
 - `error`: the error code
 - `error_description`: the error description (optional)
@@ -1890,6 +1894,12 @@ parameters, encoded as `application/x-www-form-urlencoded` in the body:
 
 The server replies with a JSON object containing the access token, the token
 type, the expiration time, and the refresh token.
+
+{{% boxes/note %}}
+Error responses to this request do not follow the Matrix [standard error
+response](#standard-error-response) structure and are instead defined by
+[RFC 6749 section 5.2](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).
+{{% /boxes/note %}}
 
 Sample token request:
 
@@ -1978,6 +1988,12 @@ containing:
 
 It is RECOMMENDED that the server provides a `verification_uri_complete` such
 that the user does not need to type in the `user_code`.
+
+{{% boxes/note %}}
+Error responses do not follow the Matrix [standard error response](#standard-error-response)
+structure and are instead defined by [RFC 6749 section 5.2](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2),
+as required by [RFC 8628 section 3.2](https://datatracker.ietf.org/doc/html/rfc8628#section-3.2).
+{{% /boxes/note %}}
 
 Sample response:
 
@@ -2076,6 +2092,12 @@ request to the `token_endpoint` with the following parameters, encoded as
 The server replies with a JSON object containing the new access token, the token
 type, the expiration time, and a new refresh token, like in the authorisation
 flow.
+
+{{% boxes/note %}}
+Error responses to this request do not follow the Matrix [standard error
+response](#standard-error-response) structure and are instead defined by
+[RFC 6749 section 5.2](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).
+{{% /boxes/note %}}
 
 #### Server metadata discovery
 
@@ -2238,6 +2260,12 @@ Server: auth.example.com
 Upon successful registration, the server replies with an `HTTP 201 Created`
 response, with a JSON object containing the allocated `client_id` and all the
 registered metadata values.
+
+{{% boxes/note %}}
+Error responses to this request do not follow the Matrix [standard error
+response](#standard-error-response) structure and are instead defined by
+[RFC 7591 section 3.2.2](https://datatracker.ietf.org/doc/html/rfc7591#section-3.2.2).
+{{% /boxes/note %}}
 
 With the registration request above, the server might reply with:
 
@@ -2546,6 +2574,12 @@ The server SHOULD return one of the following responses:
   `401 Unauthorized` response
 - For other errors, the server returns a `400 Bad Request` response with error
   details
+
+{{% boxes/note %}}
+Error responses to this request do not follow the Matrix [standard error
+response](#standard-error-response) structure and are instead defined by
+[RFC 7009 section 2.2.1](https://datatracker.ietf.org/doc/html/rfc7009#section-2.2.1).
+{{% /boxes/note %}}
 
 #### User registration
 
