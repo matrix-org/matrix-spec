@@ -415,9 +415,7 @@ valid data was obtained, but no server is available to serve the client.
 No further guess should be attempted and the user should make a
 conscientious decision what to do next.
 
-<a id="well-known-uri"></a>
-
-### Well-known URIs
+### Well-known URIs {#well-known-uri}
 
 Matrix facilitates automatic discovery for the Client-Server API base URL and more via the
 [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615) "Well-Known URI" method.
