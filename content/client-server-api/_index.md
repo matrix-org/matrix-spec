@@ -3818,7 +3818,7 @@ the create room request.
 In this specification the following room types are specified:
 
 * [`m.space`](#spaces)
-* [`m.policy`](#moderation-policy-lists)
+* [`m.policy`](#moderation-policy-lists) {{% added-in v="1.20" %}}
 
 Unspecified room types are permitted through the use of
 [Namespaced Identifiers](/appendices/#common-namespaced-identifier-grammar).

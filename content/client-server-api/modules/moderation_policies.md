@@ -22,6 +22,7 @@ restrictions on how the rooms can be configured in terms of
 [join rules](#mroomjoin_rules), [history visibility](#room-history-visibility),
 encryption, etc.
 
+{{% added-in v="1.20" %}}
 Dedicated moderation policy rooms SHOULD use the [`m.policy` room type](#types).
 However, use of the room type is not required. Policy events MAY be sent in any
 room.
