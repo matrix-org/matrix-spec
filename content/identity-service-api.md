@@ -164,6 +164,12 @@ of access tokens to authenticate users. The access tokens provided by an
 Identity Server cannot be used to authenticate Client-Server API
 requests.
 
+An Identity Service access token may be obtained as follows:
+ 1. The user's client requests an OpenID token from the homeserver using the
+     Client-Server API's [OpenID module](/client-server-api/#openid).
+ 2. The OpenID token is exchanged for an Identity Service access token via the
+     [`POST /_matrix/identity/v2/account/register`](#post_matrixidentityv2accountregister) endpoint.
+
 Access tokens may be provided via a request header, using the
 Authentication Bearer scheme: `Authorization: Bearer TheTokenHere`.
 

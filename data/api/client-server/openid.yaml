@@ -22,8 +22,8 @@ paths:
       description: |-
         Gets an OpenID token object that the requester may supply to another
         service to verify their identity in Matrix. The generated token is only
-        valid for exchanging for user information from the federation API for
-        OpenID.
+        valid for exchanging for user information from the
+        [federation API for OpenID](/server-server-api/#get_matrixfederationv1openiduserinfo).
 
         The access token generated is only valid for the OpenID API. It cannot
         be used to request another OpenID access token or call `/sync`, for
