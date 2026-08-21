@@ -27,7 +27,7 @@ properties:
     description: A secret token that the application service will use to authenticate requests to the homeserver.
   hs_token:
     type: string
-    description: A secret token that the homeserver will use authenticate requests to the application service.
+    description: A secret token that the homeserver will use to authenticate requests to the application service.
   sender_localpart:
     type: string
     description: |-
