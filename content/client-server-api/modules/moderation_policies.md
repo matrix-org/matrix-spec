@@ -22,6 +22,17 @@ restrictions on how the rooms can be configured in terms of
 [join rules](#mroomjoin_rules), [history visibility](#room-history-visibility),
 encryption, etc.
 
+{{% added-in v="1.20" %}}
+Dedicated moderation policy rooms SHOULD use the [`m.policy` room type](#types).
+However, use of the room type is not required. Policy events MAY be sent in any
+room.
+
+Like [spaces](#spaces), sending normal [`m.room.message`](#mroommessage) events
+within a policy room is discouraged. Policy rooms should be created with
+[`m.room.power_levels`](#mroompower_levels) which prohibit normal events by
+setting `events_default` to a suitably high number. In the default power level
+structure, this would be `100`.
+
 There are currently 3 kinds of entities which can be affected by rules:
 `user`, `server`, and `room`. All 3 are described with
 `m.policy.rule.<kind>` state events. The `state_key` for a policy rule

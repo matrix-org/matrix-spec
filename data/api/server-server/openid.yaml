@@ -24,6 +24,10 @@ paths:
         Exchanges an OpenID access token for information about the user
         who generated the token. Currently this only exposes the Matrix
         User ID of the owner.
+
+        The access token is obtained by the Client-Server API's
+        [`POST /_matrix/client/v3/user/{userId}/openid/request_token`](/client-server-api/#post_matrixclientv3useruseridopenidrequest_token)
+        endpoint.
       operationId: exchangeOpenIdToken
       parameters:
         - in: query
