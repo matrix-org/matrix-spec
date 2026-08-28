@@ -1,0 +1,1 @@
+Fixed conflicting information on whether clients using the authorisation code grant are required to use the `fragment` response mode.
