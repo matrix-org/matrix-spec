@@ -1,0 +1,9 @@
+{
+    "allOf": [
+        { "$ref": "components/pdu_base.json" },
+        { "$ref": "components/auth_events_prev_events_v4.json" },
+        {
+            "room_id": "!Nhcu5BS-UMnFX7hBVfVSoXiD7OgH6iRT-xyIuqDnpYQ"
+        }
+    ]
+}

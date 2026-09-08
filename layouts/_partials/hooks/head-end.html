@@ -1,0 +1,18 @@
+{{/*
+
+  This template is included at the end of each page's `<head>`.
+
+  We're using it here to include the custom CSS for the Matrix spec.
+
+*/}}
+
+{{/*
+ Load the Inter font.
+
+ We load it from a local copy, which is downloaded from
+ Google Fonts manually via a script:
+ https://github.com/matrix-org/matrix-spec/tree/main/static/css/fonts
+*/}}
+{{ $inter := resources.Get "css/fonts/Inter.css" -}}
+<link rel="preload" href="{{ $inter.RelPermalink }}" as="style">
+<link rel="stylesheet" href="{{ $inter.RelPermalink }}">

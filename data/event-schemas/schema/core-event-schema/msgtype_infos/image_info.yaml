@@ -1,4 +1,5 @@
-$schema: http://json-schema.org/draft-04/schema#
+$schema: https://json-schema.org/draft/2020-12/schema
+
 description: Metadata about an image.
 properties:
   h:
@@ -22,10 +23,11 @@ properties:
       The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)) to a thumbnail of the image.
       Only present if the thumbnail is unencrypted.
     type: string
+    format: mx-mxc-uri
+    pattern: "^mxc:\\/\\/"
   thumbnail_file:
     description: |-
-      Information on the encrypted thumbnail file, as specified in
-      [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+      An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
       Only present if the thumbnail is encrypted.
     title: EncryptedFile
     type: object
@@ -33,5 +35,19 @@ properties:
     allOf:
       - $ref: thumbnail_info.yaml
     description: Metadata about the image referred to in `thumbnail_url`.
+  is_animated:
+    x-addedInMatrixVersion: "1.18"
+    description: |-
+      If this flag is `true`, the original image SHOULD be assumed to be
+      animated. If this flag is `false`, the original image SHOULD be assumed to
+      NOT be animated.
+
+      If a sending client is unable to determine whether an image is animated,
+      it SHOULD leave the flag unset.
+
+      Receiving clients MAY use this flag to optimize whether to download the
+      original image rather than a thumbnail if it is animated, but they SHOULD
+      NOT trust this flag.
+    type: boolean
 title: ImageInfo
 type: object

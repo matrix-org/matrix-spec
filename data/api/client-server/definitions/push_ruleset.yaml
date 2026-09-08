@@ -14,37 +14,193 @@
 properties:
   content:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   override:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   room:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   sender:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
   underride:
     items:
-      allOf:
-      - $ref: push_rule.yaml
-      title: PushRule
-      type: object
+      $ref: push_rule.yaml
     type: array
 type: object
+example: {
+  "override": [
+    {
+      "actions": [],
+      "conditions": [],
+      "default": true,
+      "enabled": false,
+      "rule_id": ".m.rule.master"
+    },
+    {
+      "actions": [],
+      "conditions": [
+        {
+          "key": "content.msgtype",
+          "kind": "event_match",
+          "pattern": "m.notice"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.suppress_notices"
+    }
+  ],
+  "room": [],
+  "sender": [],
+  "underride": [
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "sound",
+          "value": "ring"
+        },
+        {
+          "set_tweak": "highlight",
+          "value": false
+        }
+      ],
+      "conditions": [
+        {
+          "key": "type",
+          "kind": "event_match",
+          "pattern": "m.call.invite"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.call"
+    },
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "sound",
+          "value": "default"
+        },
+        {
+          "set_tweak": "highlight"
+        }
+      ],
+      "conditions": [
+        {
+            "kind": "event_property_contains",
+            "key": "content.m\\.mentions.user_ids",
+            "value": "@alice:example.com"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.is_user_mention"
+    },
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "sound",
+          "value": "default"
+        },
+        {
+          "set_tweak": "highlight",
+          "value": false
+        }
+      ],
+      "conditions": [
+        {
+          "kind": "room_member_count",
+          "is": "2"
+        },
+        {
+          "kind": "event_match",
+          "key": "type",
+          "pattern": "m.room.message"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.room_one_to_one"
+    },
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "sound",
+          "value": "default"
+        },
+        {
+          "set_tweak": "highlight",
+          "value": false
+        }
+      ],
+      "conditions": [
+        {
+          "key": "type",
+          "kind": "event_match",
+          "pattern": "m.room.member"
+        },
+        {
+          "key": "content.membership",
+          "kind": "event_match",
+          "pattern": "invite"
+        },
+        {
+          "key": "state_key",
+          "kind": "event_match",
+          "pattern": "@alice:example.com"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.invite_for_me"
+    },
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "highlight",
+          "value": false
+        }
+      ],
+      "conditions": [
+        {
+          "key": "type",
+          "kind": "event_match",
+          "pattern": "m.room.member"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.member_event"
+    },
+    {
+      "actions": [
+        "notify",
+        {
+          "set_tweak": "highlight",
+          "value": false
+        }
+      ],
+      "conditions": [
+        {
+          "key": "type",
+          "kind": "event_match",
+          "pattern": "m.room.message"
+        }
+      ],
+      "default": true,
+      "enabled": true,
+      "rule_id": ".m.rule.message"
+    }
+  ]
+}

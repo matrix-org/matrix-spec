@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/room_event.yaml
 description: This message represents a single video clip.
@@ -6,8 +8,29 @@ properties:
   content:
     properties:
       body:
-        description: "A description of the video e.g. 'Gangnam style', or some kind of content description for accessibility e.g. 'video attachment'."
+        description: |-
+          If `filename` is not set or the value of both properties are
+          identical, this is the filename of the original upload. Otherwise,
+          this is a caption for the video.
         type: string
+        x-changedInMatrixVersion:
+          "1.10": This property can act as a caption for the video.
+      format:
+        description: |-
+          The format used in the `formatted_body`. This is required if `formatted_body`
+          is specified. Currently only `org.matrix.custom.html` is supported.
+        type: string
+        x-addedInMatrixVersion: "1.10"
+      formatted_body:
+        description: |-
+          The formatted version of the `body`, when it acts as a caption. This
+          is required if `format` is specified.
+        type: string
+        x-addedInMatrixVersion: "1.10"
+      filename:
+        description: The original filename of the uploaded file.
+        type: string
+        x-addedInMatrixVersion: "1.10"
       info:
         description: Metadata about the video clip referred to in `url`.
         properties:
@@ -31,10 +54,11 @@ properties:
               The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris)) to an image thumbnail of
               the video clip. Only present if the thumbnail is unencrypted.
             type: string
+            format: mx-mxc-uri
+            pattern: "^mxc:\\/\\/"
           thumbnail_file:
             description: |-
-              Information on the encrypted thumbnail file, as specified in
-              [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+              An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
               Only present if the thumbnail is encrypted.
             title: EncryptedFile
             type: object
@@ -53,11 +77,11 @@ properties:
           Required if the file is unencrypted. The URL (typically [`mxc://` URI](/client-server-api/#matrix-content-mxc-uris))
           to the video clip.
         type: string
+        format: mx-mxc-uri
+        pattern: "^mxc:\\/\\/"
       file:
         description: |-
-          Required if the file is encrypted. Information on the encrypted
-          file, as specified in
-          [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+          Required if the file is encrypted. An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
         title: EncryptedFile
         type: object
     required:

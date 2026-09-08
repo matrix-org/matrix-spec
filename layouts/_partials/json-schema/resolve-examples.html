@@ -1,0 +1,71 @@
+{{/*
+    
+    Find examples in the given JSON schema.
+
+    Tries to find examples in the `examples` and `example` keys of the schema
+    first.
+
+    If it doesn't succeed, iterates through the properties and subproperties to
+    collect their examples, to merge them into a complete example for the  whole
+    object.
+
+    Parameter: the JSON schema to extract the examples from.
+
+*/}}
+
+{{ $this_object := . }}
+{{ $examples := slice }}
+
+{{ if $this_object.examples }}
+    {{/* This is an array of examples, we can just use it */}}
+    {{ $examples = $this_object.examples }}
+{{ else if $this_object.example }}
+    {{ $examples = slice $this_object.example }}
+{{ else }}
+    {{/* Resolve the nested examples */}}
+    {{ if eq $this_object.type "object" }}
+        {{ $example := dict }}
+
+        {{ range $key, $property := $this_object.properties}}
+            {{ $this_property_examples := partial "json-schema/resolve-examples" $property }}
+            {{/*
+                It would be too complex to handle several nested examples,
+                just use the first one.
+            */}}
+            {{ with index $this_property_examples 0 }}
+                {{ $example = merge (dict $key .) $example }}
+            {{ end }}
+        {{ end }}
+
+        {{/*
+            Add the assembled example to the list if either (a) the example is
+            non-empty, or (b) the object itself is meant to be empty (so an
+            empty example is correct).
+        */}}
+        {{ if (or $example (not $this_object.properties)) }}
+            {{ $examples = slice $example }}
+        {{ end }}
+
+    {{ else if eq $this_object.type "array" }}
+
+        {{/* the "items" within an array can either be an object (where we have a
+             list of items which match the schema), or a list (for tuple
+             validation, where each item has a different schema).
+
+             TODO: support tuple validation here.
+        */}}
+        {{ if reflect.IsMap $this_object.items }}
+            {{ $items_examples := partial "json-schema/resolve-examples" $this_object.items }}
+            {{/*
+                It would be too complex to handle several nested examples,
+                just use the first one.
+            */}}
+            {{ with index $items_examples 0 }}
+                {{ $examples = slice (slice .) }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+
+{{ end }}
+
+{{ return $examples }}

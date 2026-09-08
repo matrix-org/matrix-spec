@@ -27,7 +27,7 @@ paths:
         The caller must have the required power level in order to perform this operation.
       operationId: ban
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -36,6 +36,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -49,6 +51,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being banned.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   x-addedInMatrixVersion: "1.1"
                   type: string
@@ -96,7 +100,7 @@ paths:
         The caller must have the required power level in order to perform this operation.
       operationId: unban
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -106,6 +110,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -119,6 +125,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being unbanned.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   x-addedInMatrixVersion: "1.1"
                   type: string
@@ -169,4 +177,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

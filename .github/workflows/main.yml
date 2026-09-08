@@ -1,4 +1,10 @@
 name: "Spec"
+
+env:
+  HUGO_VERSION: 0.155.3
+  PYTHON_VERSION: 3.13
+  NODE_VERSION: 24
+
 on:
   push:
     branches:
@@ -18,25 +24,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "🔎 Run validator"
         run: |
-          npx @redocly/cli@latest lint data/api/*/*.yaml
+          npx @redocly/cli@2.31.5 lint data/api/*/*.yaml
 
-  check-examples:
+  check-event-examples:
     name: "🔎 Check Event schema examples"
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -45,7 +51,45 @@ jobs:
       - name: "🔎 Run validator"
         run: |
           python scripts/check-event-schema-examples.py
-        
+
+  check-openapi-examples:
+    name: "🔎 Check OpenAPI definitions examples"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v4
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
+      - name: "🔎 Run validator"
+        run: |
+          python scripts/check-openapi-sources.py
+
+  check-schemas-examples:
+    name: "🔎 Check JSON Schemas inline examples"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Source checkout"
+        uses: actions/checkout@v4
+      - name: "➕ Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+      - name: "➕ Install dependencies"
+        run: |
+          pip install -r scripts/requirements.txt
+      - name: "🔎 Run validator"
+        run: |
+          python scripts/check-json-schemas.py
+
   calculate-baseurl:
     name: "⚙️ Calculate baseURL for later jobs"
     runs-on: ubuntu-latest
@@ -61,11 +105,11 @@ jobs:
         # the asterisk matching behaviour, not the literal string.
         run: |
           if [ "${GITHUB_EVENT_NAME}" == "pull_request" ]; then
-              echo ::set-output name=baseURL::/
+              echo "baseURL=/" >> "$GITHUB_OUTPUT"
           elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-              echo ::set-output name=baseURL::"/${GITHUB_REF/refs\/tags\//}"
+              echo "baseURL=/${GITHUB_REF/refs\/tags\//}" >> "$GITHUB_OUTPUT"
           else
-              echo ::set-output name=baseURL::/unstable
+              echo "baseURL=/unstable" >> "$GITHUB_OUTPUT"
           fi
 
   build-openapi:
@@ -74,11 +118,11 @@ jobs:
     needs: [calculate-baseurl]
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
           cache-dependency-path: scripts/requirements.txt
       - name: "➕ Install dependencies"
@@ -92,24 +136,34 @@ jobs:
             export RELEASE="unstable"
           fi
           # The output path matches the final deployment path at spec.matrix.org
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api application-service \
             -r "$RELEASE" \
             -o spec/application-service-api/api.json
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api client-server \
             -r "$RELEASE" \
             -o spec/client-server-api/api.json
-          scripts/dump-swagger.py \
+          scripts/dump-openapi.py \
             --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
             --api push-gateway \
             -r "$RELEASE" \
             -o spec/push-gateway-api/api.json
+          scripts/dump-openapi.py \
+              --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
+              --api server-server \
+              -r "$RELEASE" \
+              -o spec/server-server-api/api.json
+          scripts/dump-openapi.py \
+              --base-url "https://spec.matrix.org${{ needs.calculate-baseurl.outputs.baseURL }}" \
+              --api identity \
+              -r "$RELEASE" \
+              -o spec/identity-service-api/api.json
           tar -czf openapi.tar.gz spec
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: openapi-artifact
           path: openapi.tar.gz
@@ -121,18 +175,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "➕ Setup Python"
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: "➕ Install towncrier"
         run: "pip install 'towncrier'"
       - name: "Generate changelog"
         run: ./scripts/generate-changelog.sh vUNSTABLE
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: changelog-artifact
-          path: content/changelog/vUNSTABLE.md
+          path: content/changelog/unstable.md
 
   build-spec:
     name: "📖 Build the spec"
@@ -140,46 +196,57 @@ jobs:
     needs: [calculate-baseurl, build-openapi, generate-changelog]
     # run even if generate-changelog was skipped
     if: ${{ always() }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
-        uses: peaceiris/actions-hugo@c03b5dbed22245418539b65eb9a3b1d5fdd9a0a6
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
-          hugo-version: '0.113.0'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "⚙️ npm"
         run: |
           npm i
           npm run get-proposals
       - name: "📥 Download generated changelog"
         if: "needs.generate-changelog.result == 'success'"
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: changelog-artifact
           path: content/changelog
+
       - name: "⚙️ hugo"
-        run: hugo --baseURL "${{ needs.calculate-baseurl.outputs.baseURL }}" -d "spec"
+        run: hugo --baseURL "${baseURL}" -d "spec${baseURL}"
+
       # We manually unpack the spec OpenAPI definition JSON to the website tree
       # to make it available to the world in a canonical place:
       # https://spec.matrix.org/latest/client-server-api/api.json
       # Works for /unstable/ and /v1.1/ as well.
       - name: "📥 Spec definition download"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
+
+      - name: "🔍 pagefind indexing"
+        run: |
+          npm run pagefind -- --site "spec${baseURL}"
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec.tar.gz *
+
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: spec-artifact
           path: spec.tar.gz
@@ -188,69 +255,113 @@ jobs:
     name: "🔎 Validate generated HTML"
     runs-on: ubuntu-latest
     needs: [calculate-baseurl, build-spec]
+    # Run even if `generate-changelog` was skipped.
+    #
+    # `build-spec` has a dependency on `generate-changelog` to ensure order of execution
+    # and to access `needs.generate-changelog.result`. However, `generate-changelog` is
+    # skipped on tag builds; even a transient dependency on `generate-changelog` is then
+    # enough for this step to also be skipped by default on tag builds. Hence the need for
+    # this explicit `if`.
+    if: ${{ !failure() && !cancelled() }}
     steps:
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "📥 Fetch built spec"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: spec-artifact
 
       - name: "📝 Unpack the spec"
-        # we have to unpack it into the right path given the baseurl, so that the
-        # links are correct.
-        # eg if baseurl is `/unstable`, we want to put the site in `spec/unstable`.
         run: |
-          mkdir -p "spec${baseURL}"
-          tar -C "spec${baseURL}" --strip-components=1 -xvzf spec.tar.gz
-        env:
-          baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
+          mkdir spec
+          tar -C spec -xvzf spec.tar.gz
 
       - name: "Run htmltest"
         uses: wjdp/htmltest-action@master
         with:
-          config: .htmltest.yaml
+          config: .htmltest.yml
 
   build-historical-spec:
     name: "📖 Build the historical backup spec"
     runs-on: ubuntu-latest
-    needs: [build-openapi]
+    needs: [calculate-baseurl, build-openapi]
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    env:
+      baseURL: "${{ needs.calculate-baseurl.outputs.baseURL }}"
     steps:
       - name: "➕ Setup Node"
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: ${{ env.NODE_VERSION }}
       - name: "➕ Setup Hugo"
-        uses: peaceiris/actions-hugo@c03b5dbed22245418539b65eb9a3b1d5fdd9a0a6
+        uses: peaceiris/actions-hugo@75d2e84710de30f6ff7268e08f310b60ef14033f # v3.0.0
         with:
-          hugo-version: '0.93.3'
+          hugo-version: ${{ env.HUGO_VERSION }}
           extended: true
       - name: "📥 Source checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: "⚙️ npm"
         run: |
           npm i
           npm run get-proposals
       - name: "⚙️ hugo"
-        # Create a baseURL like `/v1.2` out of the `v1.2` tag
+        env:
+          HUGO_PARAMS_VERSION_STATUS: "historical"
         run: |
-          echo -e '[params.version]\nstatus="historical"' > historical.toml
-          hugo --config config.toml,historical.toml --baseURL "/${GITHUB_REF/refs\/tags\//}" -d "spec"
+          hugo --baseURL "${baseURL}" -d "spec${baseURL}"
 
       - name: "📥 Spec definition download"
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: openapi-artifact
       - name: "📝 Unpack the OpenAPI definitions in the right location"
         run: |
-          tar -xzf openapi.tar.gz
+          tar -C "spec${baseURL}" --strip-components=1 -xzf openapi.tar.gz
 
       - name: "📦 Tarball creation"
-        run: tar -czf spec-historical.tar.gz spec
+        run: |
+          cd spec
+          tar -czf ../spec-historical.tar.gz *
+
       - name: "📤 Artifact upload"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: spec-historical-artifact
           path: spec-historical.tar.gz
+
+  # If we're building a tag, create a release and publish the artifacts
+  create_release:
+    name: "Create release"
+    if: ${{ !failure() && !cancelled() && startsWith(github.ref, 'refs/tags/') }}
+    needs:
+      - build-spec
+      - build-historical-spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: "📥 Check out changelogs"
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          sparse-checkout: |
+            content/changelog
+      - name: "📥 Download built spec"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: spec-artifact
+      - name: "📥 Download historical spec artifact"
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+        with:
+          name: spec-historical-artifact
+      - name: "✨ Create draft release"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Remove front-matter from changelog
+          sed '1,/^---$/d' "content/changelog/${{ github.ref_name }}.md" > changelog.md
+
+          # Create a draft release, using the changelog as release notes, and attaching the spec artifacts.
+          gh release create -d -t "${{ github.ref_name }}" \
+            -F "changelog.md" \
+            "${{ github.ref_name }}" \
+            spec.tar.gz \
+            spec-historical.tar.gz

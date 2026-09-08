@@ -50,7 +50,7 @@ chain for each state *S*<sub>*i*</sub>, that is the union of the auth
 chains for each event in *S*<sub>*i*</sub>, and then taking every event
 that doesn't appear in every auth chain. If *C*<sub>*i*</sub> is the
 full auth chain of *S*<sub>*i*</sub>, then the auth difference is
- ∪ *C*<sub>*i*</sub> −  ∩ *C*<sub>*i*</sub>.
+∪ *C*<sub>*i*</sub> − ∩ *C*<sub>*i*</sub>.
 
 **Full conflicted set.**
 The *full conflicted set* is the union of the conflicted state set and
@@ -123,11 +123,11 @@ events: for events *x* and *y*, *x* &lt; *y* if
 The *iterative auth checks algorithm* takes as input an initial room
 state and a sorted list of state events, and constructs a new room state
 by iterating through the event list and applying the state event to the
-room state if the state event is allowed by the [authorization
-rules](/server-server-api#authorization-rules).
-If the state event is not allowed by the authorization rules, then the
+room state if the state event is allowed by the [authorisation
+rules](/server-server-api#authorisation-rules).
+If the state event is not allowed by the authorisation rules, then the
 event is ignored. If a `(event_type, state_key)` key that is required
-for checking the authorization rules is not present in the state, then
+for checking the authorisation rules is not present in the state, then
 the appropriate state event from the event's `auth_events` is used if
 the auth event is not rejected.
 
@@ -138,7 +138,7 @@ The *resolution* of a set of states is obtained as follows:
 1.  Select the set *X* of all *power events* that appear in the *full
     conflicted set*. For each such power event *P*, enlarge *X* by adding
     the events in the auth chain of *P* which also belong to the full
-    conflicted set. Sort $X$ into a list using the *reverse topological
+    conflicted set. Sort *X* into a list using the *reverse topological
     power ordering*.
 2.  Apply the *iterative auth checks algorithm*, starting from the
     *unconflicted state map*, to the list of events from the previous

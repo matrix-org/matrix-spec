@@ -1,13 +1,13 @@
 ---
 ---
-{{< added-in this=true >}} In room versions 1 and 2, events need a
+{{% added-in v=3 %}} In room versions 1 and 2, events need a
 signature from the domain of the `event_id` in order to be considered
 valid. This room version does not include an `event_id` over federation
 in the same respect, so does not need a signature from that server.
 The event must still be signed by the server denoted by the `sender` property,
 however.
 
-The types of state events that affect authorization are:
+The types of state events that affect authorisation are:
 
 -   [`m.room.create`](/client-server-api#mroomcreate)
 -   [`m.room.member`](/client-server-api#mroommember)
@@ -38,16 +38,20 @@ The complete list of rules, as of room version 3, is as follows:
         specified by the [auth events
         selection](/server-server-api#auth-events-selection)
         algorithm described in the server specification, reject.
+
+        **Note**: This room version requires an `m.room.create` event to be selected.
     3.  If there are entries which were themselves rejected under the [checks
         performed on receipt of a
         PDU](/server-server-api/#checks-performed-on-receipt-of-a-pdu), reject.
     4. If there is no `m.room.create` event among the entries, reject.
+    5. If any event in `auth_events` has a `room_id` which does not match that of
+       the event being authorised, reject.
 3. If the `content` of the `m.room.create` event in the room state has the
    property `m.federate` set to `false`, and the `sender` domain of the event
    does not match the `sender` domain of the create event, reject.
 4.  If type is `m.room.aliases`:
     1.  If event has no `state_key`, reject.
-    2.  If sender's domain doesn't matches `state_key`, reject.
+    2.  If sender's domain doesn't match `state_key`, reject.
     3.  Otherwise, allow.
 5.  If type is `m.room.member`:
     1.  If there is no `state_key` property, or no `membership` property in

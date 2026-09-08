@@ -13,69 +13,12 @@
 # limitations under the License.
 type: object
 title: Persistent Data Unit
-description: A persistent data unit (event) for room version 11 and beyond.
+description: A persistent data unit (event) for room version 11.
 example:
   $ref: "../examples/pdu_v11.json"
 allOf:
-  # v11 is the v4 event, but without redacts. Copy the auth_events/prev_events
-  # from pdu_v4.yaml and hashes and signatures from pdu_v3.yaml.
-  - $ref: "unsigned_pdu_base.yaml"
-  - type: object
-    properties:
-      auth_events:
-        type: array
-        items:
-          type: string
-          description: Event ID.
-        description: |-
-          Event IDs for the authorization events that would
-          allow this event to be in the room.
-
-          Must contain less than or equal to 10 events. Note that if the relevant
-          auth event selection rules are used, this restriction should never be
-          encountered.
-        example: ["$URLsafe-base64EncodedHash", "$Another_Event"]
-      prev_events:
-        type: array
-        items:
-          type: string
-          description: Event ID.
-        description: |-
-          Event IDs for the most recent events in the room
-          that the homeserver was aware of when it made this event.
-
-          Must contain less than or equal to 20 events.
-        example: ["$URLsafe-base64EncodedHash", "$Another_Event"]
-      hashes:
-        type: object
-        title: Event Hash
-        description: |-
-          Content hashes of the PDU, following the algorithm specified in [Signing Events](/server-server-api/#signing-events).
-        example: {
-          "sha256": "ThisHashCoversAllFieldsInCaseThisIsRedacted"
-        }
-        properties:
-          sha256:
-            type: string
-            description: The hash.
-            example: ThisHashCoversAllFieldsInCaseThisIsRedacted
-        required: ['sha256']
-      signatures:
-        type: object
-        description: |-
-          Signatures for the PDU, following the algorithm specified in [Signing Events](/server-server-api/#signing-events).
-        example: {
-          "example.com": {
-            "ed25519:key_version:": "86BytesOfSignatureOfTheRedactedEvent"
-          }
-        }
-        additionalProperties:
-          type: object
-          title: Server Signatures
-          additionalProperties:
-            type: string
-    required:
-      - auth_events
-      - prev_events
-      - hashes
-      - signatures
+  # v11 is the v6 event, but without redacts.
+  - $ref: "components/pdu_base.yaml"
+  - $ref: "components/auth_events_prev_events_v4.yaml"
+  - $ref: "components/room_id_before_v12.yaml"
+  - $ref: "components/depth_v6.yaml"

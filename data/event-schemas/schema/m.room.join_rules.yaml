@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: |
@@ -53,6 +55,8 @@ properties:
               enum: ['m.room_membership']
             room_id:
               type: string
+              format: mx-room-id
+              pattern: "^!"
               description: |-
                 Required if `type` is `m.room_membership`. The room ID to check the
                 user's membership against. If the user is joined to this room, they

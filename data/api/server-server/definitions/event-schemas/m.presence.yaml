@@ -21,7 +21,7 @@ allOf:
   - type: object
     properties:
       edu_type:
-        type: enum
+        type: string
         enum: ['m.presence']
         description: The string `m.presence`
         example: "m.presence"
@@ -44,7 +44,7 @@ allOf:
                   description: The user ID this presence EDU is for.
                   example: "@john:matrix.org"
                 presence:
-                  type: enum
+                  type: string
                   enum: ['offline', 'unavailable', 'online']
                   description: The presence of the user.
                   example: "online"

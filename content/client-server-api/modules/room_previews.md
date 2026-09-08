@@ -6,14 +6,14 @@ It is sometimes desirable to offer a preview of a room, where a user can
 This can be particularly effective when combined with [Guest Access](#guest-access).
 
 Previews are implemented via the `world_readable` [Room History
-Visibility](#room-history-visibility). setting, along with a special version of the [GET
+Visibility](#room-history-visibility) setting, along with a special version of the [GET
 /events](#get_matrixclientv3events) endpoint.
 
 #### Client behaviour
 
 A client wishing to view a room without joining it should call [GET
 /rooms/:room\_id/initialSync](#get_matrixclientv3roomsroomidinitialsync),
-followed by [GET /events](#get_matrixclientv3events). Clients will need to do
+followed by [GET /events](#peeking_get_matrixclientv3events). Clients will need to do
 this in parallel for each room they wish to view.
 
 Clients can of course also call other endpoints such as [GET
@@ -21,7 +21,7 @@ Clients can of course also call other endpoints such as [GET
 and [GET /search](#post_matrixclientv3search) to
 access events outside the `/events` stream.
 
-{{% http-api spec="client-server" api="peeking_events" %}}
+{{% http-api spec="client-server" api="peeking_events" anchor_base="peeking" %}}
 
 #### Server behaviour
 

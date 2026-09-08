@@ -1,0 +1,11 @@
+{{- /*
+
+    This is a passthrough render hook (https://gohugo.io/render-hooks/passthrough/).
+
+    We use it to send the delimited passthrough element through KaTeX to render maths
+    in the Olm / Megolm spec.
+
+    See: https://www.docsy.dev/docs/content/diagrams-and-formulae/#add-passthrough-render-hook
+
+*/ -}}
+{{ partial "scripts/math.html" . }}

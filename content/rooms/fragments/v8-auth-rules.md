@@ -1,13 +1,7 @@
 
 Events must be signed by the server denoted by the `sender` property.
 
-`m.room.redaction` events are not explicitly part of the auth rules.
-They are still subject to the minimum power level rules, but should always
-fall into "10. Otherwise, allow". Instead of being authorized at the time
-of receipt, they are authorized at a later stage: see the
-[Redactions](#redactions) section below for more information.
-
-The types of state events that affect authorization are:
+The types of state events that affect authorisation are:
 
 -   [`m.room.create`](/client-server-api#mroomcreate)
 -   [`m.room.member`](/client-server-api#mroommember)
@@ -19,6 +13,18 @@ The types of state events that affect authorization are:
 Power levels are inferred from defaults when not explicitly supplied.
 For example, mentions of the `sender`'s power level can also refer to
 the default power level for users in the room.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+`m.room.redaction` events are subject to auth rules in the same way as any other event.
+In practice, that means they will normally be allowed by the auth rules, unless the
+`m.room.power_levels` event sets a power level requirement for `m.room.redaction`
+events via the `events` or `events_default` properties. In particular, the _redact
+level_ is **not** considered by the auth rules.
+
+The ability to send a redaction event does not mean that the redaction itself should
+be performed. Receiving servers must perform additional checks, as described in
+the [Handling Redactions](#handling-redactions) section.
 {{% /boxes/note %}}
 
 The rules are as follows:
@@ -38,17 +44,21 @@ The rules are as follows:
         specified by the [auth events
         selection](/server-server-api#auth-events-selection)
         algorithm described in the server specification, reject.
+
+        **Note**: This room version requires an `m.room.create` event to be selected.
     3.  If there are entries which were themselves rejected under the [checks
         performed on receipt of a
         PDU](/server-server-api/#checks-performed-on-receipt-of-a-pdu), reject.
     4. If there is no `m.room.create` event among the entries, reject.
+    5. If any event in `auth_events` has a `room_id` which does not match that of
+       the event being authorised, reject.
 3. If the `content` of the `m.room.create` event in the room state has the
    property `m.federate` set to `false`, and the `sender` domain of the event
    does not match the `sender` domain of the create event, reject.
 4.  If type is `m.room.member`:
     1.  If there is no `state_key` property, or no `membership` property in
         `content`, reject.
-    2.  {{< added-in this=true >}}
+    2.  {{% added-in v=8 %}}
         If `content` has a `join_authorised_via_users_server` property:
         1.  If the event is not validly signed by the homeserver of the user ID denoted
             by the key, reject.
@@ -59,12 +69,12 @@ The rules are as follows:
         3.  If the `sender` is banned, reject.
         4.  If the `join_rule` is `invite` or `knock` then allow if
             membership state is `invite` or `join`.
-        5.  {{< added-in this=true >}}
+        5.  {{% added-in v=8 %}}
             If the `join_rule` is `restricted`:
             1.  If membership state is `join` or `invite`, allow.
             2.  If the `join_authorised_via_users_server` key in `content`
                 is not a user with sufficient permission to invite other
-                users, reject.
+                users or is not a joined member of the room, reject.
             3.  Otherwise, allow.
         6.  If the `join_rule` is `public`, allow.
         7.  Otherwise, reject.
@@ -117,7 +127,8 @@ The rules are as follows:
     7. If `membership` is `knock`:
         1.  If the `join_rule` is anything other than `knock`, reject.
         2.  If `sender` does not match `state_key`, reject.
-        3.  If the `sender`'s current membership is not `ban` or `join`, allow.
+        3.  If the `sender`'s current membership is not `ban`, `invite`,
+            or `join`, allow.
         4.  Otherwise, reject.
     8.  Otherwise, the membership is unknown. Reject.
 5.  If the `sender`'s current membership state is not `join`, reject.

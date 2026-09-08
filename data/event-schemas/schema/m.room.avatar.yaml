@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: A picture that is associated with the room. This can be displayed alongside the room information.
@@ -7,13 +9,15 @@ properties:
     properties:
       info:
         allOf:
-          - $ref: core-event-schema/msgtype_infos/image_info.yaml
+          - $ref: core-event-schema/msgtype_infos/avatar_info.yaml
         description: Metadata about the image referred to in `url`.
       url:
         description: |-
           The URL to the image. If this property is not present, the room has no avatar. This can be useful
           to remove a previous room avatar.
         type: string
+        format: mx-mxc-uri
+        pattern: "^mxc:\\/\\/"
     type: object
   state_key:
     description: A zero-length string.

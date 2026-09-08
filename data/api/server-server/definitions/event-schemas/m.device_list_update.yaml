@@ -31,7 +31,7 @@ allOf:
   - type: object
     properties:
       edu_type:
-        type: enum
+        type: string
         enum: ['m.device_list_update']
         description: The string `m.device_list_update`.
         example: "m.device_list_update"

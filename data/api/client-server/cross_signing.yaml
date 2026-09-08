@@ -19,14 +19,40 @@ paths:
   /keys/device_signing/upload:
     post:
       x-addedInMatrixVersion: "1.1"
+      x-changedInMatrixVersion:
+        "1.11": UIA is not always required for this endpoint.
+        "1.17": |-
+          This endpoint no longer requires User-Interactive Authentication when used by an
+          application service.
       summary: Upload cross-signing keys.
       description: |-
         Publishes cross-signing keys for the user.
 
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
+        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api),
+        except when used by an application service.
+
+        User-Interactive Authentication MUST be performed for regular clients, except in these cases:
+        - there is no existing master signing key uploaded to the homeserver, OR
+        - there is an existing master signing key and it exactly matches the
+          master signing key provided in the request body. If there are any additional
+          keys provided in the request (self-signing key, user-signing key) they MUST also
+          match the existing keys stored on the server. In other words, the request contains
+          no new keys.
+
+        This allows clients to freely upload one set of keys, but not modify/overwrite keys if
+        they already exist. Allowing clients to upload the same set of keys more than once
+        makes this endpoint idempotent in the case where the response is lost over the network,
+        which would otherwise cause a UIA challenge upon retry.
+
+        {{% boxes/note %}}
+        When this endpoint requires User-Interactive Authentication,
+        it uses the [`m.oauth`](/client-server-api/#oauth-authentication)
+        authentication type if the access token was obtained
+        via the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+        {{% /boxes/note %}}
       operationId: uploadCrossSigningKeys
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -34,22 +60,22 @@ paths:
               type: object
               properties:
                 master_key:
-                  description: Optional. The user\'s master key.
+                  description: Optional. The user\'s master signing key.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
                 self_signing_key:
                   description: |-
                     Optional. The user\'s self-signing key. Must be signed by
-                    the accompanying master key, or by the user\'s most recently
-                    uploaded master key if no master key is included in the
+                    the accompanying master signing key, or by the user\'s most recently
+                    uploaded master signing key if no master signing key is included in the
                     request.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
                 user_signing_key:
                   description: |-
                     Optional. The user\'s user-signing key. Must be signed by
-                    the accompanying master key, or by the user\'s most recently
-                    uploaded master key if no master key is included in the
+                    the accompanying master signing key, or by the user\'s most recently
+                    uploaded master signing key if no master signing key is included in the
                     request.
                   allOf:
                     - $ref: definitions/cross_signing_key.yaml
@@ -120,7 +146,7 @@ paths:
 
             * `M_INVALID_SIGNATURE`: For example, the self-signing or
               user-signing key had an incorrect signature.
-            * `M_MISSING_PARAM`: No master key is available.
+            * `M_MISSING_PARAM`: No master signing key is available.
           content:
             application/json:
               schema:
@@ -132,7 +158,7 @@ paths:
         "403":
           description: |-
             The public key of one of the keys is the same as one of the user\'s
-            device IDs, or the request is not authorized for any other reason.
+            device IDs, or the request is not authorised for any other reason.
           content:
             application/json:
               schema:
@@ -150,31 +176,33 @@ paths:
       description: |-
         Publishes cross-signing signatures for the user.
 
-        The request body is a map from user ID to key ID to signed JSON object.
         The signed JSON object must match the key previously uploaded or
         retrieved for the given key ID, with the exception of the `signatures`
         property, which contains the new signature(s) to add.
       operationId: uploadCrossSigningSignatures
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              title: Signatures
-              additionalProperties:
-                type: object
-                additionalProperties:
+              description: |-
+                A map of user ID to a map of key ID to signed JSON object.
+              patternProperties:
+                "^@":
+                  x-pattern-format: mx-user-id
                   type: object
+                  additionalProperties:
+                    type: object
               example: {
                 "@alice:example.com": {
                   "HIJKLMN": {
                     "user_id": "@alice:example.com",
                     "device_id": "HIJKLMN",
                     "algorithms": [
-                      "m.olm.v1.curve25519-aes-sha256",
-                      "m.megolm.v1.aes-sha"
+                      "m.olm.v1.curve25519-aes-sha2",
+                      "m.megolm.v1.aes-sha2"
                     ],
                     "keys": {
                       "curve25519:HIJKLMN": "base64+curve25519+key",
@@ -236,11 +264,13 @@ paths:
                       A map from user ID to key ID to an error for any signatures
                       that failed.  If a signature was invalid, the `errcode` will
                       be set to `M_INVALID_SIGNATURE`.
-                    additionalProperties:
-                      type: object
-                      additionalProperties:
+                    patternProperties:
+                      "^@":
                         type: object
-                        title: Error
+                        x-pattern-format: mx-user-id
+                        additionalProperties:
+                          type: object
+                          title: Error
                     example:
                       "@alice:example.com":
                         HIJKLMN:
@@ -262,4 +292,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

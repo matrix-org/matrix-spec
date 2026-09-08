@@ -16,8 +16,8 @@ The four options for the `m.room.history_visibility` event are:
 
 -   `world_readable` - All events while this is the
     `m.room.history_visibility` value may be shared by any participating
-    homeserver with anyone, regardless of whether they have ever joined
-    the room.
+    homeserver with any authenticated user, regardless of whether they have
+    ever joined the room. This includes [guest users](#guest-access).
 -   `shared` - Previous events are always accessible to newly joined
     members. All events in the room are accessible, even those sent when
     the member was not a part of the room.
@@ -43,11 +43,8 @@ setting at that time was more restrictive.
 
 #### Client behaviour
 
-Clients that implement this module MUST present to the user the possible
-options for setting history visibility when creating a room.
-
-Clients may want to display a notice that their events may be read by
-non-joined people if the value is set to `world_readable`.
+Clients may want to display a notice that events may be read by
+non-joined users if the history visibility is set to `world_readable`.
 
 #### Server behaviour
 

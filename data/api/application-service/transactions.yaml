@@ -46,6 +46,15 @@ paths:
             schema:
               type: object
               example: {
+                "ephemeral": [
+                  {
+                    "$ref": "../../event-schemas/examples/m.receipt.yaml",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org"
+                  },
+                  {
+                    "$ref": "../../event-schemas/examples/m.presence.yaml"
+                  },
+                ],
                 "events": [
                   {
                     "$ref": "../../event-schemas/examples/m.room.member.yaml"
@@ -61,6 +70,21 @@ paths:
                   description: A list of events, formatted as per the Client-Server API.
                   items:
                     $ref: ../client-server/definitions/client_event.yaml
+                ephemeral:
+                  type: array
+                  x-addedInMatrixVersion: "1.13"
+                  description: |-
+                    A list of ephemeral data, if the `receive_ephemeral` setting was enabled in the
+                    [registration](/application-service-api/#registration) file.
+
+                    There are only three event types that can currently occur in this list: `m.presence`,
+                    `m.typing`, and `m.receipt`. Room-scoped ephemeral data (`m.typing` and
+                    `m.receipt`) MUST include a `room_id` property to identify the room that they
+                    were sent in.
+
+                    This property can be omitted if it would be empty.
+                  items:
+                    $ref: ../../event-schemas/schema/core-event-schema/event.yaml
               required:
                 - events
         description: Transaction information
@@ -88,4 +112,5 @@ servers:
         default: /_matrix/app/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    homeserverAccessToken:
+      $ref: definitions/security.yaml#/homeserverAccessToken

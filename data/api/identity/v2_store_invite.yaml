@@ -42,7 +42,7 @@ paths:
         (if present) from the request here.
 
         Also, the generated ephemeral public key will be listed as valid on
-        requests to `/_matrix/identity/v2/pubkey/ephemeral/isvalid`.
+        requests to [`/_matrix/identity/v2/pubkey/ephemeral/isvalid`](/identity-service-api/#get_matrixidentityv2pubkeyephemeralisvalid).
 
         Currently, invites may only be issued for 3pids of the `email` medium.
 
@@ -51,7 +51,7 @@ paths:
         the `address` of the pending invite for display purposes.
       operationId: storeInviteV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -69,10 +69,14 @@ paths:
                 room_id:
                   type: string
                   description: The Matrix room ID to which the user is invited
+                  format: mx-room-id
+                  pattern: "^!"
                   example: "!something:example.org"
                 sender:
                   type: string
                   description: The Matrix user ID of the inviting user
+                  format: mx-user-id
+                  pattern: "^@"
                   example: "@bob:example.com"
                 room_alias:
                   type: string
@@ -80,12 +84,16 @@ paths:
                     The Matrix room alias for the room to which the user is
                     invited. This should be retrieved from the `m.room.canonical_alias`
                     state event.
+                  format: mx-room-alias
+                  pattern: "^#"
                   example: "#somewhere:example.org"
                 room_avatar_url:
                   type: string
                   description: |-
                     The Content URI for the room to which the user is invited. This should
                     be retrieved from the `m.room.avatar` state event.
+                  format: mx-mxc-uri
+                  pattern: "^mxc:\\/\\/"
                   example: mxc://example.org/s0meM3dia
                 room_join_rules:
                   type: string
@@ -107,6 +115,8 @@ paths:
                   type: string
                   description: The Content URI for the avatar of the user ID initiating the
                     invite.
+                  format: mx-mxc-uri
+                  pattern: "^mxc:\\/\\/"
                   example: mxc://example.org/an0th3rM3dia
                 room_type:
                   type: string
@@ -145,7 +155,7 @@ paths:
                         public_key:
                           type: string
                           description: |
-                            The public key, encoded using [unpadded Base64](/appendices/#unpadded-base64).
+                            The public key, encoded using [standard unpadded Base64](/appendices/#unpadded-base64) or [URL-safe unpadded Base64](/appendices/#url-safe-unpadded-base64).
                         key_validity_url:
                           type: string
                           description: |
@@ -224,4 +234,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -19,7 +19,7 @@ nested titles (h6, or 6 `#` characters) and instead re-evaluate the document str
 Correct capitalisation for long section names
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Headings should be in `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`,
+Headings should be in `sentence case <https://apastyle.apa.org/style-grammar-guidelines/capitalization/sentence-case>`_,
 as represented by this document.
 
 TODOs
@@ -47,7 +47,20 @@ General
 * Try to write clearly and unambiguously. Remember that many readers will not
   have English as their first language.
 
-* Prefer British English (colour, -ise) to American English.
+* The Matrix spec uses British English rather than American English. For example, the
+  words "colour" and "authorise" use British spellings. The
+  ``join_authorised_via_users_server`` property in ``m.room.member`` events is
+  spelt accordingly.
+
+  * This extends to terms defined in other specifications: for example, in the
+    context of OAuth 2.0, we refer to an "authorisation code grant", even though
+    RFC6749 uses the spelling "authorization".
+
+    Of course, identifiers used within the protocol itself must use the
+    spellings defined by the protocol. So, for example, the
+    ``authorization_endpoint`` property in the `OAuth 2.0
+    metadata <https://spec.matrix.org/v1.18/client-server-api/#get_matrixclientv1auth_metadata>`_
+    uses the same spelling as defined in `RFC8414 <https://www.rfc-editor.org/rfc/rfc8414#section-2>`_.
 
 * The word "homeserver" is spelt thus (rather than "home server", "Homeserver",
   or (argh) "Home Server"). However, an identity server is two words.
@@ -59,6 +72,11 @@ General
   .. Rationale: "homeserver" distinguishes from a "home server" which is a server
      you have at home. "identity server" is clear, whereas "identityserver" is
      horrible.
+
+* When talking about a user's "display name", it is spelt as two words. In
+  identifiers such as within the content of an ``m.room.member`` event, it is
+  spelt as a single word, ``displayname``. (There are some historical exceptions
+  to this where the identifier is spelt ``display_name``.)
 
 * Lists should:
 
@@ -84,18 +102,12 @@ Changes between spec versions
 Sections should reference the Matrix spec version they were added/changed in. This
 is often a guess at what the next version will be - please use the currently released
 version with a minor version bump as the referenced version. For example, if the
-current version is `v1.1` then annotate your changes with `v1.2`.
+current version is ``v1.1`` then annotate your changes with ``v1.2``.
 
 "Added/changed in" tags can be documented as the following:
 
-* `{{% added-in v="1.2" %}}` or `{{% changed-in v="1.2" %}}` within Markdown documents.
-* `x-addedInMatrixVersion` and `x-changedInMatrixVersion` within OpenAPI.
-
-In rare cases, `this=true` can be used on the Markdown syntax to adjust the wording.
-This is most commonly used in room version specifications.
-
-**Tip**: If you're trying to inline the Markdown version and getting unexpected results,
-try replacing the `%` symbols with `<` and `>`, changing how Hugo renders the shortcode.
+* ``{{% added-in v="1.2" %}}`` or ``{{% changed-in v="1.2" %}}`` within Markdown documents.
+* ``x-addedInMatrixVersion`` and ``x-changedInMatrixVersion`` within OpenAPI.
 
 OpenAPI
 ~~~~~~~
@@ -191,4 +203,4 @@ Describing grammar
 
 Use  `RFC5234-style ABNF <https://datatracker.ietf.org/doc/html/rfc5234>`_ when describing
 the grammar for something in the spec, such as user IDs or server names. Use lowercase
-and underscore-deliminated element names (`user_id`, not `UserID` or `user-id`).
+and underscore-delimited element names (``user_id``, not ``UserID`` or ``user-id``).

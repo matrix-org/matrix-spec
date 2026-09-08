@@ -12,7 +12,7 @@ The documentation style is described at
 https://github.com/matrix-org/matrix-spec/blob/main/meta/documentation_style.rst.
 
 Matrix-spec workflows
---------------------
+---------------------
 
 Specification changes
 ~~~~~~~~~~~~~~~~~~~~~
@@ -72,7 +72,7 @@ ask.
 Adding to the changelog
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-All API specifications require a changelog entry. Adding to the changelog can only
+All changes to the contents of this repository require a changelog entry. Adding to the changelog can only
 be done after you've opened your pull request, so be sure to do that first.
 
 The changelog is managed by `Towncrier <https://github.com/twisted/towncrier>`_ in the
@@ -99,6 +99,8 @@ the ``newsfragments`` directory. The ``type`` can be one of the following:
 
 * ``deprecation`` - Used when deprecating something.
 
+* ``removal`` - Used when removing something that was unused or previously deprecated.
+
 All news fragments must have a brief summary explaining the change in the
 contents of the file. The summary must end in a full stop to be in line with
 the style guide and formatting must be done using Markdown.
@@ -117,7 +119,7 @@ license - in our case, this is Apache Software License v2 (see LICENSE).
 In order to have a concrete record that your contribution is intentional
 and you agree to license it under the same terms as the project's license, we've adopted the
 same lightweight approach used by the `Linux Kernel <https://www.kernel.org/doc/html/latest/process/submitting-patches.html>`_,
-`Docker <https://github.com/docker/docker/blob/master/CONTRIBUTING.md`_, and many other
+`Docker <https://github.com/docker/docker/blob/master/CONTRIBUTING.md>`_, and many other
 projects: the `Developer Certificate of Origin <http://developercertificate.org/>`_
 (DCO). This is a simple declaration that you wrote
 the contribution or otherwise have the right to contribute it to Matrix::
@@ -163,19 +165,6 @@ include the line in your commit or pull request comment::
 
     Signed-off-by: Your Name <your@email.example.org>
 
-...using your real name; unfortunately pseudonyms and anonymous contributions
-can't be accepted. Git makes this trivial - just use the -s flag when you do
-``git commit``, having first set ``user.name`` and ``user.email`` git configs
-(which you should have done anyway :)
-
-Private sign off
-~~~~~~~~~~~~~~~~
-
-If you would like to provide your legal name privately to the Matrix.org
-Foundation (instead of in a public commit or comment), you can do so by emailing
-your legal name and a link to the pull request to dco@matrix.org. It helps to
-include "sign off" or similar in the subject line. You will then be instructed
-further.
-
-Once private sign off is complete, doing so for future contributions will not
-be required.
+Git allows you to add this signoff automatically when using the ``-s``
+flag to ``git commit``, which uses the name and email set in your
+``user.name`` and ``user.email`` git configs.

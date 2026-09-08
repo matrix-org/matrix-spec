@@ -6,11 +6,12 @@ allow users to log into applications via a single web-based
 authentication portal. Examples include OpenID Connect, "Central
 Authentication Service" (CAS) and SAML.
 
-This module allows a Matrix homeserver to delegate user authentication
-to an external authentication server supporting one of these protocols.
-In this process, there are three systems involved:
+This module allows a Matrix homeserver that supports the [legacy authentication
+API](#legacy-api) to delegate user authentication to an external authentication
+server supporting one of these protocols. In this process, there are three
+systems involved:
 
--   A Matrix client, using the APIs defined this specification, which
+-   A Matrix client, using the APIs defined in this specification, which
     is seeking to authenticate a user to a Matrix homeserver.
 -   A Matrix homeserver, implementing the APIs defined in this
     specification, but which is delegating user authentication to the
@@ -24,7 +25,7 @@ used to communicate with the authentication server. Different Matrix
 homeserver implementations might support different SSO protocols.
 
 Clients and homeservers implementing the SSO flow will need to consider
-both [login](#login) and [user-interactive authentication](#user-interactive-authentication-api). The flow is
+both [login](#legacy-login) and [user-interactive authentication](#user-interactive-authentication-api). The flow is
 similar in both cases, but there are slight differences.
 
 Typically, SSO systems require a single "callback" URI to be configured
@@ -66,7 +67,7 @@ opening an embedded web view.
 
 These steps are illustrated as follows:
 
-```
+```nohighlight
     Matrix Client                        Matrix Homeserver      Auth Server
         |                                       |                   |
         |-------------(0) GET /login----------->|                   |
@@ -123,8 +124,8 @@ authentication is successful, the browser will be redirected to that
 
     For example, consider a web-based client at
     `https://client.example.com`, which wants to initiate SSO login on
-    the homeserver at `server.example.org`. It does this by storing the
-    homeserver name in a query parameter for the `redirectUrl`: it
+    the homeserver with [server name](/appendices/#server-name) `server.example.org`. It does this by storing the
+    server name in a query parameter for the `redirectUrl`: it
     redirects to
     `https://server.example.org/login/sso/redirect?redirectUrl=https://client.example.com?hs=server.example.org`.
 

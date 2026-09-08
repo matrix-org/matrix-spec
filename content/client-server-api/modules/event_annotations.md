@@ -14,7 +14,7 @@ event with the corresponding emoji (👍). Another potential usage is to allow
 bots to send an event indicating the success or failure of a command.
 
 Along with the normal properties `event_id` and `rel_type`, an `m.relates_to`
-property with `rel_type: m.annotion` should contain a `key` that indicates the
+property with `rel_type: m.annotation` should contain a `key` that indicates the
 annotation being applied. For example, when reacting with emojis, the key
 contains the emoji being used.
 

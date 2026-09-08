@@ -38,7 +38,7 @@ paths:
         [`/sync`](/client-server-api/#get_matrixclientv3sync) API.
       operationId: knockRoom
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias
@@ -46,9 +46,16 @@ paths:
           required: true
           example: "#monkeys:matrix.org"
           schema:
-            type: string
+            oneOf:
+              - type: string
+                format: mx-room-id
+                pattern: "^!"
+              - type: string
+                format: mx-room-alias
+                pattern: "^#"
         - in: query
-          name: server_name
+          name: via
+          x-addedInMatrixVersion: "1.12"
           description: |-
             The servers to attempt to knock on the room through. One of the servers
             must be participating in the room.
@@ -59,6 +66,7 @@ paths:
             type: array
             items:
               type: string
+              format: mx-server-name
       requestBody:
         content:
           application/json:
@@ -86,6 +94,8 @@ paths:
                   room_id:
                     type: string
                     description: The knocked room ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
@@ -144,4 +154,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

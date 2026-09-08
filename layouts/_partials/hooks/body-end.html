@@ -1,0 +1,17 @@
+{{/*
+
+  This template is included at the end of each page's `<body>`.
+
+  We're using it here to highlight and scroll the ToC in the sidebar to match
+  the place we are at in the document.
+
+*/}}
+{{ $toc := resources.Get "js/toc.js" -}}
+<script defer src="{{ $toc.RelPermalink }}"></script>
+
+{{- /* Load the versions script template, run and publish it */ -}}
+{{ with resources.Get "js/versions.template.js" }}
+  {{ with resources.ExecuteAsTemplate "js/versions.js" $ . }}
+    <script defer src="{{ .RelPermalink }}"></script>
+  {{ end }}
+{{ end }}

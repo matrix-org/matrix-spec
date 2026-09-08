@@ -1,0 +1,72 @@
+{{/*
+
+  This template is used to render EDUs and PDUs in the server-server and room versions specs.
+
+  It expects to be passed a `path` parameter, which is a path, relative to /data,
+  pointing to a schema file. The file extension is omitted. For example:
+
+      {{% definition path="api/server-server/definitions/edu" %}}
+
+  This template replaces the old {{definition_*}} template.
+
+*/}}
+
+{{ $path := .Params.path }}
+{{ $compact := .Params.compact }}
+{{ $pieces := split $path "/" }}
+
+{{/* The definition is referenced by the .path parameter */}}
+{{ $definition := index .Site.Data $pieces }}
+
+{{ if not $definition }}
+  {{ errorf "site data %s not found" $path }}
+{{ end }}
+
+{{/* Resolve $ref and allOf */}}
+{{ $definition = partial "json-schema/resolve-refs" (dict "schema" $definition "path" $path) }}
+{{ $definition = partial "json-schema/resolve-allof" $definition }}
+
+{{ $anchor_base := printf "definition-%s" (anchorize $definition.title) }}
+
+<section class="rendered-data definition" id="{{ $anchor_base }}">
+
+<details {{ if not $compact }}open{{ end }}>
+<summary>
+
+<h1>
+ <code>{{ $definition.title }}</code>
+</h1>
+
+</summary>
+
+<hr>
+
+{{ if (index $definition "x-addedInMatrixVersion") }}
+  {{ partial "added-in" (dict "v" (index $definition "x-addedInMatrixVersion")) }}
+{{ end }}
+
+{{ $definition.description | markdownify }}
+
+
+{{ $additional_types := partial "json-schema/resolve-additional-types" (dict
+    "schema" $definition
+    "anchor_base" $anchor_base
+    "name" (printf "\"%s\"" $path))
+}}
+
+{{ range $additional_types }}
+    {{ partial "openapi/render-object-table" . }}
+{{end}}
+
+{{ $examples := partial "json-schema/resolve-examples" $definition }}
+{{ if $examples }}
+<h2>Examples</h2>
+
+    {{ range $examples }}
+        {{ partial "render-example" (dict "example" .) }}
+    {{ end }}
+{{ end }}
+
+</details>
+
+</section>

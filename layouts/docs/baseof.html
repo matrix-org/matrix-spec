@@ -1,28 +1,57 @@
 {{/*
 
-  A copy of the baseof.html partial in Docsy, modified
-	to remove the right-hand column from the layout.
+  A copy of the baseof.html partial in Docsy, modified to:
 
-*/}}
+  * generate a static file `versions.json` that can be used to populate the
+    version picker.
+  * remove the right-hand column from the layout.
+
+*/ -}}
+
+{{/* Generate a static file versions.json that can be used to populate the version picker */ -}}
+{{ if .IsHome }}
+  {{- /* Load all changelog subpages, sorted by release date */ -}}
+  {{ $changelog := site.GetPage "changelog" }}
+  {{ $pages := $changelog.RegularPages.ByDate.Reverse }}
+
+  {{- /* Collect proper versions and build metadata dicts */ -}}
+  {{ $versions := slice }}
+  {{ range $pages }}
+    {{ if findRE `^v[0-9]+\.[0-9]+$` .Params.linkTitle }}
+      {{ $versions = $versions | append (dict "name" .Params.linkTitle "date" .Params.date ) }}
+    {{ end }}
+  {{ end }}
+
+  {{- /* Generate the JSON */ -}}
+  {{ $json := jsonify $versions }}
+  {{ $noop := (resources.FromString "/versions.json" $json).Permalink }}
+{{ end }}
 
 <!doctype html>
-<html lang="{{ .Site.Language.Lang }}" class="no-js">
+<html itemscope itemtype="http://schema.org/WebPage"
+    {{- with .Site.Language.LanguageDirection }} dir="{{ . }}" {{- end -}}
+    {{ with .Site.Language.Lang }} lang="{{ . }}" {{- end }} {{/**/ -}}
+    class="no-js"
+    {{- $darkMode := partialCached "dark-mode-config.html" "dark-mode-global" -}}
+    {{- if $darkMode.enable }} data-theme-init{{ end }}>
   <head>
     {{ partial "head.html" . }}
   </head>
-  <body class="td-{{ .Kind }}">
+  <body class="td-{{ .Kind }}{{ with .Page.Params.body_class }} {{ . }}{{ end }}">
     <header>
       {{ partial "navbar.html" . }}
     </header>
     <div class="container-fluid td-outer">
-      <div class="td-main">
+      <div class="td-main" {{- partialCached "td/scrollspy-attr.txt" . .Section | safeHTMLAttr }}>
         <div class="row flex-xl-nowrap">
-          <div class="col-12 col-md-3 col-xl-3 td-sidebar d-print-none">
+          <aside class="col-12 col-md-3 col-xl-2 td-sidebar d-print-none">
             {{ partial "sidebar.html" . }}
-          </div>
-          <main class="col-12 col-md-9 col-xl-7 pl-md-5" role="main">
+          </aside>
+          <main class="col-12 col-md-9 col-xl-8 ps-md-5" role="main">
             {{ partial "version-banner.html" . }}
-            {{ partial "breadcrumb.html" . }}
+            {{ if not (.Param "ui.breadcrumb_disable") -}}
+              {{ partial "breadcrumb.html" . -}}
+            {{ end -}}
             {{ block "main" . }}{{ end }}
           </main>
         </div>

@@ -20,6 +20,10 @@ old room. Another approach may be to virtually merge the rooms such that
 the old room's timeline seamlessly continues into the new timeline
 without the user having to jump between the rooms.
 
+When joining a room using the room ID in an `m.room.tombstone` event or
+`predecessor` field on `m.room.create`, clients SHOULD parse the event
+`sender` and use the resulting server name as a `via` parameter.
+
 {{% http-api spec="client-server" api="room_upgrades" %}}
 
 #### Server behaviour
@@ -30,11 +34,22 @@ server:
 1.  Checks that the user has permission to send `m.room.tombstone`
     events in the room.
 
-2.  {{< changed-in v="1.4" >}} Creates a replacement room with a `m.room.create` event containing a
+2.  {{% changed-in v="1.4" %}} Creates a replacement room with a `m.room.create` event containing a
     `predecessor` field, the applicable `room_version`, and a `type` field
     which is copied from the `predecessor` room. If no `type` is set on the
     previous room, no `type` is specified on the new room's create event
     either.
+
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} If both the new and old [room version](/rooms) support
+additional creators, the server will not transfer those additional creators automatically.
+They must be explicitly set during the `/upgrade` call.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} When upgrading to room version 12 or later, the `event_id` property inside
+`predecessor` MAY be omitted.
+{{% /boxes/note %}}
 
 3.  Replicates transferable state events to the new room. The exact
     details for what is transferred is left as an implementation detail,

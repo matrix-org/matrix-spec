@@ -1,0 +1,10 @@
+{
+    "auth_events": [
+        "$urlsafe_base64_encoded_eventid",
+        "$a-different-event-id"
+    ],
+    "prev_events": [
+        "$urlsafe_base64_encoded_eventid",
+        "$a-different-event-id"
+    ]
+}

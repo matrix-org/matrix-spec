@@ -1,0 +1,16 @@
+{
+    "$ref": "components/pdu_base.json",
+    "event_id": "$a4ecee13e2accdadf56c1025:example.com",
+    "auth_events": [
+        [
+            "$af232176:example.org",
+            {"sha256": "abase64encodedsha256hashshouldbe43byteslong"}
+        ]
+    ],
+    "prev_events": [
+        [
+            "$af232176:example.org",
+            {"sha256": "abase64encodedsha256hashshouldbe43byteslong"}
+        ]
+    ]
+}

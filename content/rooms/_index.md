@@ -36,11 +36,12 @@ Alternatively, consider flipping the column/row organization to be features
 up top and versions on the left.
 -->
 
-| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 |
-|-------------------|---|---|---|---|---|---|---|---|---|----|----|
-| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ |
-| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ |
-| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ |
+| Feature \ Version | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|-------------------|---|---|---|---|---|---|---|---|---|----|----|----|
+| **Knocking**      | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **Restricted join rules** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| **`knock_restricted` join rule** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ | ✔ | ✔ |
+| **Additional room creators** | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✔ |
 
 ## Complete list of room versions
 
@@ -52,7 +53,7 @@ stable and unstable periodically for a variety of reasons, including
 discovered security vulnerabilities and age.
 
 Clients should not ask room administrators to upgrade their rooms if the
-room is running a stable version. Servers SHOULD use **room version 10** as
+room is running a stable version. Servers SHOULD use **room version 12** as
 the default room version when creating new rooms.
 
 The available room versions are:
@@ -67,7 +68,7 @@ The available room versions are:
 -   [Version 5](/rooms/v5) - **Stable**. Introduces enforcement of
     signing key validity periods.
 -   [Version 6](/rooms/v6) - **Stable**. Alters several
-    authorization rules for events.
+    authorisation rules for events.
 -   [Version 7](/rooms/v7) - **Stable**. Introduces knocking.
 -   [Version 8](/rooms/v8) - **Stable**. Adds a join rule to allow members
     of another room to join without invite.
@@ -76,12 +77,15 @@ The available room versions are:
 -   [Version 10](/rooms/v10) - **Stable**. Enforces integer-only power levels
     and adds `knock_restricted` join rule.
 -   [Version 11](/rooms/v11) - **Stable**. Clarifies the redaction algorithm.
+-   [Version 12](/rooms/v12) - **Stable**. Changes room IDs to be hashes of the
+    create event, formalizes room creators with infinite power level, and iterates
+    on state resolution.
 
 ## Room version grammar
 
 Room versions are used to change properties of rooms that may not be
 compatible with other servers. For example, changing the rules for event
-authorization would cause older servers to potentially end up in a
+authorisation would cause older servers to potentially end up in a
 split-brain situation due to not understanding the new rules.
 
 A room version is defined as a string of characters which MUST NOT

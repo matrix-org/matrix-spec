@@ -2,16 +2,14 @@
 title: "Identity Service API"
 weight: 40
 type: docs
+description: |
+  The Matrix client-server and server-server APIs are largely expressed in
+  Matrix user identifiers. Sometimes it is useful to refer to users by other
+  (“third-party”) identifiers such as email addresses or phone numbers. The
+  Identity Service API describes how mappings between 3PIDs and Matrix user
+  IDs can be established, validated, and used; in practice this has been
+  applied to email addresses and phone numbers.
 ---
-
-The Matrix client-server and server-server APIs are largely expressed in
-Matrix user identifiers. From time to time, it is useful to refer to
-users by other ("third-party") identifiers, or "3PID"s, e.g. their email
-address or phone number. This Identity Service Specification describes
-how mappings between third-party identifiers and Matrix user identifiers
-can be established, validated, and used. This description technically
-may apply to any 3PID, but in practice has only been applied
-specifically to email addresses and phone numbers.
 
 ## General principles
 
@@ -72,54 +70,58 @@ the keys `error` and `errcode` MUST always be present.
 
 Some standard error codes are below:
 
-`M_NOT_FOUND`
-The resource requested could not be located.
-
-`M_MISSING_PARAMS`
-The request was missing one or more parameters.
-
-`M_INVALID_PARAM`
-The request contained one or more invalid parameters.
-
-`M_SESSION_NOT_VALIDATED`
-The session has not been validated.
-
-`M_NO_VALID_SESSION`
-A session could not be located for the given parameters.
-
-`M_SESSION_EXPIRED`
-The session has expired and must be renewed.
-
-`M_INVALID_EMAIL`
-The email address provided was not valid.
+<!-- Please keep the error codes below in alphabetical order -->
 
 `M_EMAIL_SEND_ERROR`
-There was an error sending an email. Typically seen when attempting to
+: There was an error sending an email. Typically seen when attempting to
 verify ownership of a given email address.
 
 `M_INVALID_ADDRESS`
-The provided third-party address was not valid.
+: The provided third-party address was not valid.
+
+`M_INVALID_EMAIL`
+: The email address provided was not valid.
+
+`M_INVALID_PARAM`
+: The request contained one or more invalid parameters.
+
+`M_MISSING_PARAMS`
+: The request was missing one or more parameters.
+
+`M_NO_VALID_SESSION`
+: A session could not be located for the given parameters.
+
+`M_NOT_FOUND`
+: The resource requested could not be located.
 
 `M_SEND_ERROR`
-There was an error sending a notification. Typically seen when
+: There was an error sending a notification. Typically seen when
 attempting to verify ownership of a given third-party address.
 
-`M_UNRECOGNIZED`
-The request contained an unrecognised value, such as an unknown token or
-medium.
+`M_SESSION_EXPIRED`
+: The session has expired and must be renewed.
 
-This is also used as the response if a server did not understand the request.
-This is expected to be returned with a 404 HTTP status code if the endpoint is
-not implemented or a 405 HTTP status code if the endpoint is implemented, but
-the incorrect HTTP method is used.
+`M_SESSION_NOT_VALIDATED`
+: The session has not been validated.
 
 `M_THREEPID_IN_USE`
-The third-party identifier is already in use by another user. Typically
+: The third-party identifier is already in use by another user. Typically
 this error will have an additional `mxid` property to indicate who owns
 the third-party identifier.
 
 `M_UNKNOWN`
-An unknown error has occurred.
+: An unknown error has occurred.
+
+`M_UNRECOGNIZED`
+: The request contained an unrecognised value, such as an unknown token or
+medium.
+
+: This is also used as the response if a server did not understand the request.
+This is expected to be returned with a 404 HTTP status code if the endpoint is
+not implemented or a 405 HTTP status code if the endpoint is implemented, but
+the incorrect HTTP method is used.
+
+<!-- Please keep the error codes above in alphabetical order -->
 
 ## Privacy
 
@@ -162,15 +164,19 @@ of access tokens to authenticate users. The access tokens provided by an
 Identity Server cannot be used to authenticate Client-Server API
 requests.
 
-An access token is provided to an endpoint in one of two ways:
+An Identity Service access token may be obtained as follows:
+ 1. The user's client requests an OpenID token from the homeserver using the
+     Client-Server API's [OpenID module](/client-server-api/#openid).
+ 2. The OpenID token is exchanged for an Identity Service access token via the
+     [`POST /_matrix/identity/v2/account/register`](#post_matrixidentityv2accountregister) endpoint.
 
-1.  Via a query string parameter, `access_token=TheTokenHere`.
-2.  Via a request header, `Authorization: Bearer TheTokenHere`.
+Access tokens may be provided via a request header, using the
+Authentication Bearer scheme: `Authorization: Bearer TheTokenHere`.
 
-Clients are encouraged to the use the `Authorization` header where
-possible to prevent the access token being leaked in access/HTTP logs.
-The query string should only be used in cases where the `Authorization`
-header is inaccessible for the client.
+{{% boxes/note %}}
+{{% changed-in v="1.20" %}}
+Sending the access token as a query string parameter is no longer supported.
+{{% /boxes/note %}}
 
 When credentials are required but missing or invalid, the HTTP call will
 return with a status of 401 and the error code `M_UNAUTHORIZED`.
@@ -269,9 +275,8 @@ internal state of the hash function.
 
 After formatting each query, the string is run through SHA-256 as
 defined by [RFC 4634](https://tools.ietf.org/html/rfc4634). The
-resulting bytes are then encoded using URL-Safe [Unpadded
-Base64](/appendices#unpadded-base64) (similar to [room version
-4's event ID format](/rooms/v4#event-ids)).
+resulting bytes are then encoded using [URL-Safe unpadded
+Base64](/appendices/#url-safe-unpadded-base64).
 
 An example set of queries when using the pepper `matrixrocks` would be:
 

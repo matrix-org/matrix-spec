@@ -28,7 +28,7 @@ paths:
         [Lazy-loading room members](/client-server-api/#lazy-loading-room-members) for more information.
       operationId: getEventContext
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -78,10 +78,10 @@ paths:
                 properties:
                   start:
                     type: string
-                    description: A token that can be used to paginate backwards with.
+                    description: A token that can be used to paginate backwards with using [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
                   end:
                     type: string
-                    description: A token that can be used to paginate forwards with.
+                    description: A token that can be used to paginate forwards with using [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
                   events_before:
                     type: array
                     description: |-
@@ -154,4 +154,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -79,7 +79,7 @@ paths:
                         - keys
                   master_key:
                     type: object
-                    description: The user\'s master cross-signing key.
+                    description: The user\'s master signing key.
                     allOf:
                       - $ref: ../client-server/definitions/cross_signing_key.yaml
                       - example:
@@ -120,4 +120,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

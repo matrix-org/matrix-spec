@@ -19,7 +19,7 @@ example:
 properties:
   server_name:
     type: string
-    description: DNS name of the homeserver.
+    description: The homeserver's [server name](/appendices/#server-name).
     example: "example.org"
   verify_keys:
     type: object
@@ -98,4 +98,4 @@ properties:
       publishes a key which is valid for a significant amount of time without a way
       for the homeserver owner to revoke it.
     example: 1052262000000
-required: ["server_name", "verify_keys"]
+required: ["server_name", "verify_keys", "signatures", "valid_until_ts"]

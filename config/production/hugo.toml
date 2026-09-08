@@ -1,0 +1,6 @@
+# Settings only required when the website is built for production.
+
+# Enable stats to use them to optimize the CSS.
+[build]
+  [build.buildStats]
+    enable = true

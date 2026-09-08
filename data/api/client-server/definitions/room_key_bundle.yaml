@@ -1,0 +1,109 @@
+# Copyright 2026 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+type: object
+title: RoomKeyBundle
+description: |
+  A bundle of room keys and withheld indications, sent from one user to another, to share encrypted history.
+
+  A single session MUST NOT appear in both the `room_keys` and `withheld`
+  sections. Handling such malformed bundles as a receiving client is
+  implementation-defined.
+properties:
+  room_keys:
+    description: |
+        The room keys to be shared with the recipient of the bundle.
+
+        The data type is similar to the format used for [key exports](/client-server-api/#key-export-format),
+        but omits `forwarding_curve25519_key_chain` and `shared_history`.
+    type: array
+    items:
+      type: object
+      title: HistoricRoomKey
+      description: |-
+        The format of a session key, when shared as part of a `RoomKeyBundle`.
+      properties:
+        algorithm:
+          type: string
+          description: |-
+            The end-to-end message encryption algorithm that the key is for. Must be `m.megolm.v1.aes-sha2`.
+          example: "m.megolm.v1.aes-sha2"
+        room_id:
+          type: string
+          format: mx-room-id
+          pattern: "^!"
+          description: |-
+            The room where the session is used.
+          example: "!Cuyf34gef24t:localhost"
+        sender_claimed_keys:
+          type: object
+          additionalProperties:
+            type: string
+            format: mx-unpadded-base64
+          description: |-
+            A map from algorithm name (`ed25519`) to the Ed25519 signing key of
+            the device which initiated the session originally, according to the
+            creator of this key bundle.
+          example: { "ed25519": "aj40p+aw64yPIdsxoog8jhPu9i7l7NcFRecuOQblE3Y" }
+        sender_key:
+          type: string
+          format: mx-unpadded-base64
+          description: |-
+            Unpadded base64-encoded device Curve25519 key, of the device which
+            initiated the session originally, according to the creator of this
+            key bundle.
+          example: "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU"
+        session_id:
+          type: string
+          description: |-
+            The Megolm session ID.
+          example: "X3lUlvLELLYxeTx4yOVu6UDpasGEVO0Jbu+QFnm0cKQ"
+        session_key:
+          type: string
+          format: mx-unpadded-base64
+          description: |-
+            Unpadded base64-encoded session key in [session-export
+            format](/olm-megolm/megolm/#session-export-format).
+          example: "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
+    required:
+      - algorithm
+      - room_id
+      - sender_claimed_keys
+      - sender_key
+      - session_id
+      - session_key
+  withheld:
+    description: |-
+      The room keys that the creator of the bundle is choosing not to share
+      with the recipient.
+
+      The `code` will normally be `m.history_not_shared`, to indicate that the
+      recipient isn't allowed to receive the key.
+    type: array
+    items:
+      allOf:
+        - $ref: "../../../event-schemas/schema/components/room_key_withheld_content.yaml"
+        - title: RoomKeyWithheld
+          example:     {
+            "algorithm": "m.megolm.v1.aes-sha2",
+            "code": "m.history_not_shared",
+            "reason": "History not shared",
+            "room_id": "!Cuyf34gef24t:localhost",
+            "sender_key": "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU",
+            "session_id": "X3lUlvLELLYxeTx4yOVu6UDpasGEVO0Jbu+QFnm0cKQ"
+          }
+          
+
+
+  

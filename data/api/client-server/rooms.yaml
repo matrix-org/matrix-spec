@@ -24,7 +24,7 @@ paths:
         retrieve this event e.g. by being a member in the room for this event.
       operationId: getOneRoomEvent
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -33,6 +33,8 @@ paths:
           example: "!636q39766251:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventId
           description: The event ID to get.
@@ -40,6 +42,8 @@ paths:
           example: $asfDuShaf7Gafaw:matrix.org
           schema:
             type: string
+            format: mx-event-id
+            pattern: "^\\$"
       responses:
         "200":
           description: The full event.
@@ -78,7 +82,7 @@ paths:
         taken from the state of the room when they left.
       operationId: getRoomStateWithKey
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -87,6 +91,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventType
           description: The type of state to look up.
@@ -103,13 +109,31 @@ paths:
           example: ""
           schema:
             type: string
+        - in: query
+          name: format
+          x-addedInMatrixVersion: "1.16"
+          description: |-
+            The format to use for the returned data. `content` (the default) will
+            return only the content of the state event. `event` will return the entire
+            event in the usual format suitable for clients, including fields like event
+            ID, sender and timestamp.
+          example: event
+          schema:
+            type: string
+            enum:
+            - content
+            - event
       responses:
         "200":
-          description: The content of the state event.
+          description: |-
+            The content of the state event, or the entire client-formatted event
+            if `?format=event` was used.
           content:
             application/json:
               schema:
-                type: object
+                oneOf:
+                  - type: object
+                  - $ref: "../../event-schemas/schema/core-event-schema/state_event.yaml"
               examples:
                 response:
                   value: {
@@ -128,7 +152,7 @@ paths:
       description: Get the state events for the current state of a room.
       operationId: getRoomState
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -137,6 +161,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The current state of the room
@@ -190,6 +216,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: query
           name: at
           description: |-
@@ -202,7 +230,7 @@ paths:
             type: string
         # XXX: As mentioned in MSC1227, replacing `[not_]membership` with a JSON
         # filter might be a better alternative.
-        # See https://github.com/matrix-org/matrix-doc/issues/1337
+        # See https://github.com/matrix-org/matrix-doc/issues/1227
         - in: query
           name: membership
           description: |-
@@ -234,7 +262,7 @@ paths:
               - leave
               - ban
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: |-
@@ -283,8 +311,10 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: A map of MXID to room member objects.
@@ -294,18 +324,21 @@ paths:
                 type: object
                 properties:
                   joined:
-                    additionalProperties:
-                      title: RoomMember
-                      type: object
-                      properties:
-                        display_name:
-                          type: string
-                          description: The display name of the user this object is representing.
-                        avatar_url:
-                          type: string
-                          format: uri
-                          description: The avatar of the user this object is representing, as an [`mxc://`
-                            URI](/client-server-api/#matrix-content-mxc-uris).
+                    patternProperties:
+                      "^@":
+                        x-pattern-format: mx-user-id
+                        title: RoomMember
+                        type: object
+                        properties:
+                          display_name:
+                            type: string
+                            description: The display name of the user this object is representing.
+                          avatar_url:
+                            type: string
+                            format: mx-mxc-uri
+                            pattern: "^mxc:\\/\\/"
+                            description: The avatar of the user this object is representing, as an [`mxc://`
+                              URI](/client-server-api/#matrix-content-mxc-uris).
                     description: A map from user ID to a RoomMember object.
                     type: object
               examples:
@@ -337,4 +370,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

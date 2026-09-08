@@ -17,27 +17,33 @@
 # be on events, so we give it a whole event structure as a base for room_event.
 # This base doesn't declare a room_id, which instead appears in the room_event.
 
-allOf:
-- $ref: event.yaml
+$schema: https://json-schema.org/draft/2020-12/schema
+
+title: SyncRoomEvent
 description: In addition to the Event fields, Room Events have the following additional
   fields.
-properties:
-  event_id:
-    description: The globally unique event identifier.
-    type: string
-  sender:
-    description: Contains the fully-qualified ID of the user who sent this event.
-    type: string
-  origin_server_ts:
-    description: Timestamp in milliseconds on originating homeserver
-      when this event was sent.
-    type: integer
-    format: int64
-  unsigned:
-    $ref: unsigned_prop.yaml
-required:
-- event_id
-- sender
-- origin_server_ts
-title: SyncRoomEvent
-type: object
+allOf:
+- $ref: event.yaml
+- type: object
+  properties:
+    event_id:
+      description: The globally unique event identifier.
+      type: string
+      format: mx-event-id
+      pattern: "^\\$"
+    sender:
+      description: Contains the fully-qualified ID of the user who sent this event.
+      type: string
+      format: mx-user-id
+      pattern: "^@"
+    origin_server_ts:
+      description: Timestamp in milliseconds on originating homeserver
+        when this event was sent.
+      type: integer
+      format: int64
+    unsigned:
+      $ref: unsigned_prop.yaml
+  required:
+  - event_id
+  - sender
+  - origin_server_ts

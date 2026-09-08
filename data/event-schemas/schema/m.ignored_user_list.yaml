@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/event.yaml
 description: |-
@@ -10,14 +12,14 @@ properties:
     properties:
       ignored_users:
         type: object
-        title: "Ignored users"
-        description: "The map of users to ignore"
+        description: |-
+          The map of users to ignore. This is a mapping of user ID to empty
+          object.
         patternProperties:
           "^@":
             type: "object"
-            title: "Ignored User"
             description: "An empty object for future enhancement"
-            x-pattern: "$USER_ID"
+            x-pattern-format: "mx-user-id"
     required:
       - ignored_users
   type:

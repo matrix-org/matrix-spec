@@ -1,0 +1,7 @@
+{
+  "$ref": "core/event.json",
+  "type": "m.marked_unread",
+  "content": {
+    "unread": true
+  }
+}

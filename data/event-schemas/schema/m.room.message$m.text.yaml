@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/room_event.yaml
 description: This message is the most basic message and is used to represent text.
@@ -14,8 +16,8 @@ properties:
         type: string
       format:
         description: |-
-          The format used in the `formatted_body`. Currently only
-          `org.matrix.custom.html` is supported.
+          The format used in the `formatted_body`. This is required if `formatted_body`
+          is specified. Currently only `org.matrix.custom.html` is supported.
         type: string
       formatted_body:
         description: |-

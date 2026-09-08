@@ -29,7 +29,7 @@ paths:
         the target member's state by making a request to `/rooms/<room id>/state/m.room.member/<user id>`.
       operationId: kick
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -38,6 +38,8 @@ paths:
           example: "!e42d8c:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -51,6 +53,8 @@ paths:
                 user_id:
                   type: string
                   description: The fully qualified user ID of the user being kicked.
+                  format: mx-user-id
+                  pattern: "^@"
                 reason:
                   type: string
                   description: |-
@@ -103,4 +107,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

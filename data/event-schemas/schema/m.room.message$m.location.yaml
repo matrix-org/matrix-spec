@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/room_event.yaml
 description: This message represents a real-world location.
@@ -11,6 +13,8 @@ properties:
       geo_uri:
         description: A [geo URI (RFC5870)](https://datatracker.ietf.org/doc/html/rfc5870) representing this location.
         type: string
+        format: uri
+        pattern: "^geo:"
       msgtype:
         enum:
           - m.location
@@ -23,10 +27,11 @@ properties:
               The URL to a thumbnail of the location being represented.
               Only present if the thumbnail is unencrypted.
             type: string
+            format: mx-mxc-uri
+            pattern: "^mxc:\\/\\/"
           thumbnail_file:
             description: |-
-              Information on the encrypted thumbnail file, as specified in
-              [End-to-end encryption](/client-server-api/#sending-encrypted-attachments).
+              An [EncryptedFile](/client-server-api/#definition-encryptedfile) structure.
               Only present if the thumbnail is encrypted.
             title: EncryptedFile
             type: object

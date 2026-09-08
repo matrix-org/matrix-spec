@@ -1,1 +1,0 @@
-Fix response definition for `POST /_matrix/federation/v1/user/keys/claim`.

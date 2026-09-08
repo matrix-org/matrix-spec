@@ -1,0 +1,87 @@
+{{/*
+
+  Resolves the `$ref` JSON schema keyword, by recursively replacing
+  it with the object it points to, given:
+
+  * `schema`: the schema where the references should be resolved
+  * `path`: the path of the file containing the schema
+
+  This template uses [`Scratch`](https://gohugo.io/functions/scratch/)
+  rather than a normal `dict` because with `dict` you can't replace key values:
+  https://discourse.gohugo.io/t/how-can-i-add-set-and-delete-keys-in-a-dictionary/29661
+
+*/}}
+
+{{ $schema := .schema }}
+{{ $path := .path}}
+
+{{ $ret := $schema }}
+
+{{ if reflect.IsMap $schema }}
+
+    {{ $scratch := newScratch }}
+    {{ $scratch.Set "result_map" dict }}
+
+    {{ $ref_value := index $schema "$ref"}}
+    {{ if $ref_value }}
+        {{ $uri := urls.Parse $path }}
+        {{ $ref_uri := urls.Parse $ref_value }}
+        {{ $full_uri := $uri.ResolveReference $ref_uri }}
+
+        {{ $full_path := strings.TrimPrefix "/" $full_uri.Path }}
+        {{/*
+          Apparently Hugo doesn't give us a nice way to split the extension off a filename.
+        */}}
+        {{ $without_ext := replaceRE "\\.[^\\.]*$" "" $full_path }}
+        {{ $pieces := split $without_ext "/" }}
+
+        {{ $ref := index site.Data $pieces }}
+
+        {{/* If there is a fragment, follow the JSON Pointer */}}
+        {{ if $full_uri.Fragment }}
+            {{ $fragment := strings.TrimPrefix "/" $full_uri.Fragment }}
+            {{ $pieces := split $fragment "/" }}
+            {{ $ref = index $ref $pieces }}
+        {{ end }}
+
+        {{ $new_path := (path.Split $full_path).Dir}}
+        {{ $result_map := partial "json-schema/resolve-refs" (dict "schema" $ref "path" $new_path)}}
+        {{ if $result_map}}
+            {{ $scratch.Set "result_map" $result_map }}
+        {{ end }}
+    {{ end }}
+
+
+    {{ range $key, $value := $schema }}
+        {{ if ne $key "$ref" }}
+            {{ $resolved := partial "json-schema/resolve-refs" (dict "schema" $value "path" $path) }}
+            {{ $scratch.SetInMap "result_map" $key $resolved }}
+        {{ end }}
+    {{ end }}
+
+    {{ $ret = $scratch.Get "result_map" }}
+
+{{ end }}
+
+{{ if reflect.IsSlice $schema }}
+
+    {{ $result_slice := slice }}
+
+    {{ range $schema }}
+        {{ $resolved := partial "json-schema/resolve-refs" (dict "schema" . "path" $path) }}
+        {{ if reflect.IsSlice $resolved }}
+            {{/*
+                If $resolved is a slice, `append` will add the items of $resolved to
+                $result_slice, but we want to add $resolved itself to $result_slice,
+                so we wrap it into another slice.
+            */}}
+            {{ $resolved = slice $resolved }}
+        {{ end }}
+        {{ $result_slice = $result_slice | append $resolved }}
+    {{ end }}
+
+    {{ $ret = $result_slice }}
+
+{{ end }}
+
+{{ return $ret }}

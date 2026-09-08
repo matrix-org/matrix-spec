@@ -1,0 +1,28 @@
+type: array
+description: |-
+  An ordered array of textual representations in different mimetypes.
+
+  Senders SHOULD specify at least one representation and SHOULD always
+  include a plaintext representation.
+  
+  Receivers SHOULD use the first representation in the array that
+  they understand.
+title: TextContentBlock
+items:
+  type: object
+  title: TextualRepresentation
+  properties:
+    mimetype:
+      type: string
+      description: The mimetype. Defaults to `text/plain` if omitted.
+      example: "text/html"
+    body:
+      type: string
+      description: |-
+        The string content.
+
+        Clients SHOULD validate and sanitize the content as they do
+        for rich content associated with [`msgtype`](/client-server-api/#mroommessage-msgtypes)
+        of [`m.room.message`](/client-server-api/#mroommessage).
+  required:
+  - body

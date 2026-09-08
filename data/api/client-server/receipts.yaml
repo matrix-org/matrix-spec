@@ -25,7 +25,7 @@ paths:
         specified.
       operationId: postReceipt
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -34,6 +34,8 @@ paths:
           example: "!wefuh21ffskfuh345:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: receiptType
           description: |-
@@ -61,6 +63,8 @@ paths:
           example: $1924376522eioj:example.com
           schema:
             type: string
+            format: mx-event-id
+            pattern: "^\\$"
       requestBody:
         content:
           application/json:
@@ -71,7 +75,8 @@ paths:
                   type: string
                   x-addedInMatrixVersion: "1.4"
                   description: |-
-                    The root thread event's ID (or `main`) for which
+                    The [thread root](/client-server-api/#threading)'s
+                    [event ID](/appendices#event-ids) (or `main`) for which
                     thread this receipt is intended to be under. If
                     not specified, the read receipt is *unthreaded*
                     (default).
@@ -132,4 +137,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

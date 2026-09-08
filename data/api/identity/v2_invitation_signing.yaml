@@ -27,7 +27,7 @@ paths:
         to `store-invite`, and fetch the sender of the invite.
       operationId: blindlySignStuffV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -132,4 +132,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

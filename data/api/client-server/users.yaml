@@ -20,10 +20,17 @@ paths:
     post:
       summary: Searches the user directory.
       description: |-
-        Performs a search for users. The homeserver may
-        determine which subset of users are searched, however the homeserver
-        MUST at a minimum consider the users the requesting user shares a
-        room with and those who reside in public rooms (known to the homeserver).
+        Performs a search for users. The homeserver may determine which
+        subset of users are searched. However, the homeserver MUST at a
+        minimum consider users who are visible to the requester based
+        on their membership in rooms known to the homeserver. This means:
+
+        -   users that share a room with the requesting user
+        -   users who are joined to rooms known to the homeserver that have a
+            `public` [join rule](#mroomjoin_rules)
+        -   users who are joined to rooms known to the homeserver that have a
+            `world_readable` [history visibility](#room-history-visibility)
+
         The search MUST consider local users to the homeserver, and SHOULD
         query remote users as part of the search.
 
@@ -32,7 +39,7 @@ paths:
         `Accept-Language` header provided in the request, if present.
       operationId: searchUserDirectory
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -74,13 +81,16 @@ paths:
                           type: string
                           example: "@foo:bar.com"
                           description: The user's matrix user ID.
+                          format: mx-user-id
+                          pattern: "^@"
                         display_name:
                           type: string
                           example: Foo
                           description: The display name of the user, if one exists.
                         avatar_url:
                           type: string
-                          format: uri
+                          format: mx-mxc-uri
+                          pattern: "^mxc:\\/\\/"
                           example: mxc://bar.com/foo
                           description: The avatar url, as an [`mxc://`
                             URI](/client-server-api/#matrix-content-mxc-uris),
@@ -122,4 +132,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

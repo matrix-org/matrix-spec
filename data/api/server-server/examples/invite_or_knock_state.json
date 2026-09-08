@@ -1,0 +1,9 @@
+[
+  {"$ref": "./minimal_pdu.json"},
+  {
+    "type": "m.room.create",
+    "content": {
+      "see_room_version_spec": "The event format changes depending on the room version."
+    }
+  }
+]

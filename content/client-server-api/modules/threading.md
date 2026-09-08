@@ -12,11 +12,13 @@ as by providing some context to what is going on in the thread but keeping the f
 history behind a disclosure.
 
 Threads are established using a `rel_type` of `m.thread` and reference the
-*thread root* (the first event in a thread). It is not possible to create a
-thread from an event which itself is the child of an event relationship (i.e.,
-one with an `m.relates_to` property). It is therefore also not possible to nest
-threads. All events in a thread reference the thread root instead of the
-most recent message, unlike rich reply chains.
+*thread root* (the main timeline event to which the thread events refer). It is not possible to create a thread from an event which itself
+is the child of an event relationship (i.e., one with an `m.relates_to`
+property with a `rel_type` property - see [Relationship types](#relationship-types)).
+It is therefore also not possible to nest threads. 
+
+Unlike rich reply chains, all events in a thread reference the thread root
+instead of the most recent message.
 
 As a worked example, the following represents a thread and how it would be formed:
 
@@ -104,12 +106,8 @@ flag to `true`.
 }
 ```
 
-For `m.room.message` events represented this way, no [reply fallback](#fallbacks-for-rich-replies)
-is specified. This allows thread-aware clients to discard the `m.in_reply_to` object entirely
-when `is_falling_back` is `true`.
-
 {{% boxes/note %}}
-Clients which are acutely aware of threads (they do not render threads, but are otherwise
+Clients which are aware of threads (they do not render threads, but are otherwise
 aware of the feature existing in the spec) can treat rich replies to an event with a `rel_type`
 of `m.thread` as a threaded reply, for conversation continuity on the threaded client's side.
 
@@ -187,13 +185,13 @@ included under the `m.relations` property in `unsigned` for the thread root. For
 ```
 
 `latest_event` is the most recent event (topologically to the server) in the thread sent by an
-un-[ignored user](#ignoring-users).
+un-[ignored user](#ignoring-users). It should be serialized in the same form as the event itself.
 
 Note that, as in the example above, child events of the `latest_event` should
 themselves be aggregated and included under `m.relations` for that event. The
 server should be careful to avoid loops, though loops are not currently
 possible due to `m.thread` not being permitted to target an event with an
-`m.relates_to` property.
+`m.relates_to` property with a `rel_type`.
 
 `count` is simply the number of events using `m.thread` as a `rel_type` pointing to the target event.
 It does not include events sent by [ignored users](#ignoring-users).

@@ -2,15 +2,13 @@
 title: "Application Service API"
 weight: 30
 type: docs
+description: |
+  The Matrix client-server API and server-server APIs provide a consistent,
+  self-contained federated messaging fabric but leave little room for custom
+  server-side behaviour such as gateways, filters, or extensible hooks. The
+  Application Service API defines a standard way to add this extensible
+  functionality, independent of the underlying homeserver implementation.
 ---
-
-The Matrix client-server API and server-server APIs provide the means to
-implement a consistent self-contained federated messaging fabric.
-However, they provide limited means of implementing custom server-side
-behaviour in Matrix (e.g. gateways, filters, extensible hooks etc). The
-Application Service API (AS API) defines a standard API to allow such
-extensible functionality to be implemented irrespective of the
-underlying homeserver implementation.
 
 ## Application Services
 
@@ -86,7 +84,7 @@ For the `users` namespace, application services can only register interest in
 homeserver). Events affecting users on other homeservers are not sent to an application
 service, even if the user happens to match the one of the `users` namespaces (unless,
 of course, the event affects a room that the application service is interested in
-for another room - for example, because there is another user in the room that the
+for another reason - for example, because there is another user in the room that the
 application service is interested in).
 
 For the `rooms` and `aliases` namespaces, all events in a matching room will be
@@ -102,7 +100,7 @@ this.
 
 ### Homeserver -&gt; Application Service API
 
-#### Authorization
+#### Authorisation
 
 {{% changed-in v="1.4" %}}
 
@@ -178,13 +176,13 @@ The application service API provides a transaction API for sending a
 list of events. Each list of events includes a transaction ID, which
 works as follows:
 
-```
+```nohighlight
     Typical
     HS ---> AS : Homeserver sends events with transaction ID T.
        <---    : Application Service sends back 200 OK.
 ```
 
-```
+```nohighlight
     AS ACK Lost
     HS ---> AS : Homeserver sends events with transaction ID T.
        <-/-    : AS 200 OK is lost.
@@ -207,6 +205,39 @@ processed the events.
 
 {{% http-api spec="application-service" api="transactions" %}}
 
+##### Pushing ephemeral data
+
+{{% added-in v="1.13" %}}
+
+If the `receive_ephemeral` settings is enabled in the [registration](#registration)
+file, homeservers MUST send ephemeral data that is relevant to the application
+service via the transaction API, using the `ephemeral` property of the request's
+body. This property is an array that is effectively a combination of the
+`presence` and `ephemeral` sections of the client-server [`/sync`](/client-server-api/#get_matrixclientv3sync)
+API.
+
+There are currently three event types that can be delivered to an application
+service:
+
+- **[`m.presence`](/client-server-api/#mpresence)**: MUST be sent to the
+application service if the data would apply contextually. For example, a
+presence update for a user an application service shares a room with, or
+matching one of the application service's namespaces.
+- **[`m.typing`](/client-server-api/#mtyping)**: MUST be sent to the application
+service under the same rules as regular events, meaning that the application
+service must have registered interest in the room itself, or in a user that is
+in the room. The data MUST use the same format as the client-server API, with
+the addition of a `room_id` property at the top level to identify the room that
+they were sent in.
+- **[`m.receipt`](/client-server-api/#mreceipt)**: MUST be sent to the
+application service under the same rules as regular events, meaning that the
+application service must have registered interest in the room itself, or in a
+user that is in the room. The data MUST use the same format as the client-server
+API, with the addition of a `room_id` property at the top level to identify the
+room that they were sent in. [Private read receipts](/client-server-api/#private-read-receipts)
+MUST only be sent for users matching one of the application service's
+namespaces. Normal read receipts and threaded read receipts are always sent.
+
 #### Pinging
 
 {{% added-in v="1.7" %}}
@@ -225,7 +256,7 @@ have been omitted for brevity):
 
 **Typical**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
     HS <--- AS : 200 OK {}
@@ -234,7 +265,7 @@ AS <--- HS : 200 OK {"duration_ms": 123}
 
 **Incorrect `hs_token`**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS ---> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
     HS <--- AS : 403 Forbidden {"errcode": "M_FORBIDDEN"}
@@ -243,7 +274,7 @@ AS <--- HS : 502 Bad Gateway {"errcode": "M_BAD_STATUS", "status": 403, "body": 
 
 **Can't connect to appservice**
 
-```
+```nohighlight
 AS ---> HS : /_matrix/client/v1/appservice/{appserviceId}/ping {"transaction_id": "meow"}
     HS -/-> AS : /_matrix/app/v1/ping {"transaction_id": "meow"}
 AS <--- HS : 502 Bad Gateway {"errcode": "M_CONNECTION_FAILED"}
@@ -323,6 +354,7 @@ service would like to masquerade as.
 Inputs:
 -   Application service token (`as_token`)
 -   User ID in the AS namespace to act as.
+-   Device ID belonging to the User ID to act with.
 
 Notes:
 -   This applies to all aspects of the Client-Server API, except for
@@ -342,9 +374,19 @@ service's `user` namespaces. If the parameter is missing, the homeserver
 is to assume the application service intends to act as the user implied
 by the `sender_localpart` property of the registration.
 
+{{% added-in v="1.17" %}} Application services MAY similarly masquerade
+as a specific device ID belonging the user ID through use of the `device_id`
+query string parameter on the request. If the given device ID is not known
+to belong to the user, the server will return a 400 `M_UNKNOWN_DEVICE` error.
+If no `user_id` is supplied, the `device_id` MUST belong to the user implied
+by the `sender_localpart` property of the application service's registration.
+If no `device_id` is supplied, the homeserver is to assume the request is
+being made without a device ID and will fail to complete operations which
+require a device ID (such as uploading one-time keys).
+
 An example request would be:
 
-    GET /_matrix/client/v3/account/whoami?user_id=@_irc_user:example.org
+    GET /_matrix/client/v3/account/whoami?user_id=@_irc_user:example.org&device_id=ABC123
     Authorization: Bearer YourApplicationServiceTokenHere
 
 #### Timestamp massaging
@@ -384,6 +426,8 @@ imports and similar behaviour).
 
 #### Server admin style permissions
 
+{{% changed-in v="1.17" %}}
+
 The homeserver needs to give the application service *full control* over
 its namespace, both for users and for room aliases. This means that the
 AS should be able to manage any users and room alias in its namespace. No additional API
@@ -400,33 +444,59 @@ achieved by including the `as_token` on a `/register` request, along
 with a login type of `m.login.application_service` to set the desired
 user ID without a password.
 
-    POST /_matrix/client/v3/register
-    Authorization: Bearer YourApplicationServiceTokenHere
+```http
+POST /_matrix/client/v3/register
+Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-    Content:
-    {
-      type: "m.login.application_service",
-      username: "_irc_example"
-    }
+```json
+{
+  "type": "m.login.application_service",
+  "username": "_irc_example"
+}
+```
 
-Similarly, logging in as users needs API changes in order to allow the AS to
-log in without needing the user's password. This is achieved by including the
-`as_token` on a `/login` request, along with a login type of
-`m.login.application_service`:
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Servers MUST still allow application services to use the `/register` endpoint
+with a login type of `m.login.application_service` even if they don't support
+the [Legacy Authentication API](/client-server-api/#legacy-api).
+
+In that case application services MUST set the `"inhibit_login": true` parameter
+as they cannot use it to log in as users. If the `inhibit_login` parameter is
+not set to `true`, the server MUST return a 400 HTTP status code with an
+`M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+{{% /boxes/note %}}
+
+Similarly, logging in as users using the [Legacy authentication API](/client-server-api/#legacy-api)
+needs API changes in order to allow the AS to log in without needing the user's
+password. This is achieved by including the `as_token` on a `/login` request,
+along with a login type of `m.login.application_service`:
 
 {{% added-in v="1.2" %}}
 
-    POST /_matrix/client/v3/login
-    Authorization: Bearer YourApplicationServiceTokenHere
+```http
+POST /_matrix/client/v3/login
+Authorization: Bearer YourApplicationServiceTokenHere
+```
 
-    Content:
-    {
-      type: "m.login.application_service",
-      "identifier": {
-        "type": "m.id.user",
-        "user": "_irc_example"
-      }
-    }
+```json
+{
+  "type": "m.login.application_service",
+  "identifier": {
+    "type": "m.id.user",
+    "user": "_irc_example"
+  }
+}
+```
+
+{{% boxes/note %}}
+{{% added-in v="1.17" %}}
+Application services MUST NOT use the `/login` endpoint if the server doesn't
+support the Legacy authentication API. If `/login` is called with the
+`m.login.application_service` login type the server MUST return a 400 HTTP
+status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+{{% /boxes/note %}}
 
 Application services which attempt to create users or aliases *outside*
 of their defined namespaces, or log in as users outside of their defined
@@ -435,6 +505,12 @@ Similarly, normal users who attempt to create users or aliases *inside*
 an application service-defined namespace will receive the same
 `M_EXCLUSIVE` error code, but only if the application service has
 defined the namespace as `exclusive`.
+
+If `/register` or `/login` is called with the `m.login.application_service`
+login type, but without a valid `as_token`, the endpoints will return an error
+with the `M_MISSING_TOKEN` or `M_UNKNOWN_TOKEN` error code and 401 as the HTTP
+status code. This is the same behavior as invalid auth in the client-server API
+(see [Using access tokens](/client-server-api/#using-access-tokens)).
 
 #### Pinging
 
@@ -453,14 +529,46 @@ via the query string). It is expected that the application service use
 the transactions pushed to it to handle events rather than syncing with
 the user implied by `sender_localpart`.
 
-#### Application service room directories
+#### Published room directories
 
-Application services can maintain their own room directories for their
-defined third-party protocols. These room directories may be accessed by
+Application services can maintain their own published room directories for
+their defined third-party protocols. These directories may be accessed by
 clients through additional parameters on the `/publicRooms`
 client-server endpoint.
 
 {{% http-api spec="client-server" api="appservice_room_directory" %}}
+
+#### Device management
+
+{{% added-in v="1.17" %}}
+
+Application services need to be able to create and delete devices to manage the
+encryption for their users without having to rely on `/login`, which also
+generates an access token for the user, and which might not be available for
+homeservers that only support the [OAuth 2.0 API](/client-server-api/#oauth-20-api).
+
+##### Creating devices
+
+Application services can use the [`PUT /_matrix/client/v3/devices/{deviceId}`](/client-server-api/#put_matrixclientv3devicesdeviceid)
+endpoint to create new devices.
+
+##### Deleting devices
+
+The following endpoints used to delete devices MUST NOT require [User-Interactive
+Authentication](/client-server-api/#user-interactive-authentication-api) when
+used by an application service:
+
+* [`DELETE /_matrix/client/v3/devices/{deviceId}`](/client-server-api/#delete_matrixclientv3devicesdeviceid)
+* [`POST /_matrix/client/v3/delete_devices`](/client-server-api/#post_matrixclientv3delete_devices)
+
+#### Cross-signing
+
+{{% added-in v="1.17" %}}
+
+Appservices need to be able to verify themselves and replace their cross-signing
+keys, so the [`POST /_matrix/client/v3/keys/device_signing/upload`](/client-server-api/#post_matrixclientv3keysdevice_signingupload)
+endpoint MUST NOT require [User-Interactive Authentication](/client-server-api/#user-interactive-authentication-api)
+when used by an application service, even if cross-signing keys already exist.
 
 ### Referencing messages from a third-party network
 

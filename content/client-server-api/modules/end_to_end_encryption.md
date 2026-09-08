@@ -5,6 +5,91 @@ Matrix optionally supports end-to-end encryption, allowing rooms to be
 created whose conversation contents are not decryptable or interceptable
 on any of the participating homeservers.
 
+#### Recommended client behaviour
+
+{{% added-in v="1.18" %}}
+
+While clients are able to choose what encryption features they implement based
+on their threat model, this section recommends behaviours that will improve the
+overall user experience and security of encrypted conversations.
+
+While a user may be unable to [verify](#device-verification) every other user
+that they communicate with, or may be unaware of the need to verify other users,
+[cross-signing](#cross-signing) gives some measure of protection and so SHOULD
+be used where possible. In particular, clients SHOULD implement the following
+recommendations.
+
+* Clients SHOULD create new [cross-signing keys](#cross-signing) for users who
+  do not yet have cross-signing keys.
+* Clients SHOULD encourage users to set up their [Secret Storage](#storage) to
+  avoid needing to reset their cryptographic identity in case the user does not
+  have an existing device that can [share the secrets](#sharing) with the new
+  device. The user's Secret Storage SHOULD contain the user's cross-signing
+  private keys and the [key backup](#server-side-key-backups) decryption key
+  (if the user is using key backup). The user's Secret Storage SHOULD have a
+  [default key](#key-storage) (a key referred to by
+  `m.secret_storage.default_key`) that encrypts the private cross-signing keys
+  and key backup decryption key (if available).
+* Clients SHOULD encourage users to [cross-sign](#cross-signing) their devices.
+  This includes both when logging in a new device, and for existing devices.
+  Clients MAY even go so  far as to require cross-signing of devices by
+  preventing the user from using  the client until the device is cross-signed.
+  If the user cannot cross-sign their device (for example, if they have
+  forgotten their Secret Storage key), the client can allow users to reset their
+  [Secret Storage](#storage), cross-signing keys, and [key backup](#server-side-key-backups).
+* When Alice [verifies](#device-verification) Bob, the verification SHOULD
+  verify their [cross-signing keys](#cross-signing). Any flow between different
+  users that does not verify the users' cross-signing keys (it verifies only the
+  device keys) is deprecated.
+* Clients SHOULD flag when [cross-signing keys](#cross-signing) change. If
+  Alice's cross-signing keys change, Alice's own devices MUST alert her to this
+  fact, and prompt her to re-cross-sign those devices. If Bob is in an
+  encrypted room with Alice,  Bob's devices SHOULD inform him of Alice's key
+  change and SHOULD prevent him from sending an encrypted message to Alice
+  without acknowledging the change. Bob's clients may behave differently
+  depending on whether Bob had previously [verified](#device-verification)
+  Alice or not. For example, if Bob had previously verified Alice, and Alice's
+  keys change, Bob's client may require Bob to re-verify, or may display a more
+  aggressive warning.
+* Clients SHOULD NOT send encrypted [to-device](#send-to-device-messaging)
+  messages, such as [room keys](#sharing-keys-between-devices) or [secrets](#secrets)
+  (via [Secret Sharing](#sharing)), to [non-cross-signed](#cross-signing)
+  devices by default. Non-cross-signed devices don't provide any assurance that
+  the device belongs to the user, and server admins can trivially create new
+  devices for users. When sending room keys, clients can use a
+  [`m.room_key.withheld`](#mroom_keywithheld) message with a code of
+  `m.unverified` to indicate to the non-cross-signed device why it is not
+  receiving the room key.
+
+  Note that clients cannot selectively send room events only to cross-signed
+  devices. The only way to exclude non-cross-signed devices from encrypted
+  conversations is to not send the room keys so those devices won't be able to
+  decrypt the messages.
+* Similarly, messages sent from [non-cross-signed](#cross-signing) devices
+  cannot be trusted and SHOULD NOT be displayed to the user. Clients have no
+  assurance that encrypted messages sent from non-cross-signed devices were sent
+  by the user, rather than an impersonator.
+* Matrix clients MUST NOT consider non-cryptographic devices (devices which do
+  not have [device identity keys](#device-keys) uploaded to the homeserver) to
+  be equivalent to [non-cross-signed](#cross-signing) cryptographic devices for
+  purposes of enforcing E2EE policy. For example, clients SHOULD NOT warn nor
+  refuse to send messages due to the presence of non-cryptographic devices. For
+  all intents and purposes, non-cryptographic devices are a completely separate
+  concept and do not exist from the perspective of the cryptography layer since
+  they do not have identity keys, so it is impossible to send them decryption
+  keys.
+* Clients MAY make provisions for encrypted bridges. Some bridges are structured
+  in a way such that only one user controlled by the bridge (often called the
+  bridge bot) participates in encryption, and encrypted messages from other
+  bridge users are encrypted by the bridge bot. Thus encrypted messages sent by
+  one user could be encrypted by a [Megolm](#mmegolmv1aes-sha2) session sent by
+  a different user. Clients MAY accept such messages, provided the session
+  creator's device is [cross-signed](#cross-signing). However, the client MUST
+  annotate the message with a warning, unless the client has a way to check that
+  the bridge bot is permitted to encrypt messages on behalf of the user. Future
+  MSCs such as [MSC4350](https://github.com/matrix-org/matrix-spec-proposals/pull/4350)
+  may provide a secure way to allow such impersonation.
+
 #### Key Distribution
 
 Encryption and Authentication in Matrix is based around public-key
@@ -18,7 +103,7 @@ exchange fingerprints between users to build a web of trust.
 device. This may include long-term identity keys, and/or one-time
 keys.
 
-```
+```nohighlight
       +----------+  +--------------+
       | Bob's HS |  | Bob's Device |
       +----------+  +--------------+
@@ -29,7 +114,7 @@ keys.
 
 2) Alice requests Bob's public identity keys and supported algorithms.
 
-```
+```nohighlight
       +----------------+  +------------+  +----------+
       | Alice's Device |  | Alice's HS |  | Bob's HS |
       +----------------+  +------------+  +----------+
@@ -40,7 +125,7 @@ keys.
 
 3) Alice selects an algorithm and claims any one-time keys needed.
 
-```
+```nohighlight
       +----------------+  +------------+  +----------+
       | Alice's Device |  | Alice's HS |  | Bob's HS |
       +----------------+  +------------+  +----------+
@@ -77,6 +162,7 @@ algorithm is represented by an object with the following properties:
 |------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
 | key        | string     | **Required.** The unpadded Base64-encoded 32-byte Curve25519 public key.                                                                          |
 | signatures | Signatures | **Required.** Signatures of the key object. The signature is calculated using the process described at [Signing JSON](/appendices/#signing-json). |
+| fallback   | boolean    | Indicates whether this is a [fallback key](#one-time-and-fallback-keys). Defaults to `false`.                                                     |
 
 Example:
 
@@ -92,7 +178,7 @@ Example:
 ```
 
 `ed25519` and `curve25519` keys are used for [device keys](#device-keys).
-Additionally, `ed25519` keys are used for [cross-signing keys](#cross-signing).
+Additionally, `ed25519` keys are used for [cross-signing](#cross-signing).
 
 `signed_curve25519` keys are used for [one-time and fallback keys](#one-time-and-fallback-keys).
 
@@ -150,7 +236,9 @@ JSON](/appendices/#signing-json).
 
 One-time and fallback keys are also uploaded to the homeserver using the
 [`/keys/upload`](/client-server-api/#post_matrixclientv3keysupload) API. New
-one-time and fallback keys are uploaded as needed.
+one-time and fallback keys are uploaded as needed.  Fallback keys for key
+algorithms whose format is a signed JSON object should contain a property named
+`fallback` with a value of `true`.
 
 Devices must store the private part of each key they upload. They can
 discard the private part of a one-time key when they receive a message
@@ -262,11 +350,14 @@ field, and as a result should remove her from its list of tracked users.
 When encryption is enabled in a room, files should be uploaded encrypted
 on the homeserver.
 
-In order to achieve this, a client should generate a single-use 256-bit
-AES key, and encrypt the file using AES-CTR. The counter should be
-64-bit long, starting at 0 and prefixed by a random 64-bit
-Initialization Vector (IV), which together form a 128-bit unique counter
-block.
+In order to achieve this, the client generates a single-use 256-bit AES
+key, and encrypts the file using AES-CTR. The counter is 64 bits long,
+starting at 0 and prefixed by a random 64-bit Initialization Vector (IV),
+which together form a 128-bit unique counter block.
+
+Clients MUST generate both the AES key and IV using a cryptographically
+secure random source and MUST NOT use the same key or IV multiple
+times. The latter 64 bits of the 128-bit counter block MUST start at zero.
 
 {{% boxes/warning %}}
 An IV must never be used multiple times with the same key. This implies
@@ -276,13 +367,14 @@ same key and IV.
 {{% /boxes/warning %}}
 
 Then, the encrypted file can be uploaded to the homeserver. The key and
-the IV must be included in the room event along with the resulting
-`mxc://` in order to allow recipients to decrypt the file. As the event
+the IV are included in the room event along with the resulting `mxc://`
+in order to allow recipients to decrypt the file. As the event
 containing those will be Megolm encrypted, the server will never have
 access to the decrypted file.
 
-A hash of the ciphertext must also be included, in order to prevent the
-homeserver from changing the file content.
+A hash of the ciphertext MUST also be included, in order to prevent the
+homeserver from changing the file content. Clients MUST verify the hash
+before using the file contents.
 
 A client should send the data as an encrypted `m.room.message` event,
 using either `m.file` as the msgtype, or the appropriate msgtype for the
@@ -293,31 +385,11 @@ Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) format, with a
 ###### Extensions to `m.room.message` msgtypes
 
 This module adds `file` and `thumbnail_file` properties, of type
-`EncryptedFile`, to `m.room.message` msgtypes that reference files, such
-as [m.file](#mfile) and [m.image](#mimage), replacing the `url` and `thumbnail_url`
-properties.
+[`EncryptedFile`](#definition-encryptedfile), to `m.room.message` msgtypes that
+reference files, such as [m.file](#mfile) and [m.image](#mimage), replacing the
+`url` and `thumbnail_url` properties.
 
-`EncryptedFile`
-
-| Parameter | Type             | Description                                                                                    |
-|-----------|------------------|------------------------------------------------------------------------------------------------|
-| url       | string           | **Required.** The URL to the file.                                                             |
-| key       | JWK              | **Required.** A [JSON Web Key](https://tools.ietf.org/html/rfc7517#appendix-A.3) object.       |
-| iv        | string           | **Required.** The 128-bit unique counter block used by AES-CTR, encoded as unpadded base64.    |
-| hashes    | {string: string} | **Required.** A map from an algorithm name to a hash of the ciphertext, encoded as unpadded base64. Clients should support the SHA-256 hash, which uses the key `sha256`. |
-| v         | string           | **Required.** Version of the encrypted attachment's protocol. Must be `v2`.                    |
-
-`JWK`
-
-| Parameter | Type     | Description                                                                                                              |
-| --------- |----------|--------------------------------------------------------------------------------------------------------------------------|
-| kty       | string   | **Required.** Key type. Must be `oct`.                                                                                   |
-| key_ops   | [string] | **Required.** Key operations. Must at least contain `encrypt` and `decrypt`.                                             |
-| alg       | string   | **Required.** Algorithm. Must be `A256CTR`.                                                                              |
-| k         | string   | **Required.** The key, encoded as urlsafe unpadded base64.                                                               |
-| ext       | boolean  | **Required.** Extractable. Must be `true`. This is a [W3C extension](https://w3c.github.io/webcrypto/#iana-section-jwk). |
-
-Example:
+Example `m.room.message` event containing an encrypted image:
 
 ```json
 {
@@ -377,6 +449,8 @@ Example:
   }
 }
 ```
+
+{{% definition path="api/client-server/definitions/encrypted_file" %}}
 
 #### Device verification
 
@@ -488,7 +562,7 @@ this example, Bob's device sends the `m.key.verification.start`, Alice's device
 could also send that message. As well, the order of the
 `m.key.verification.done` messages could be reversed.
 
-```
+```nohighlight
     +---------------+ +---------------+                    +-------------+ +-------------+
     | AliceDevice1  | | AliceDevice2  |                    | BobDevice1  | | BobDevice2  |
     +---------------+ +---------------+                    +-------------+ +-------------+
@@ -525,7 +599,7 @@ messages, Alice only sends one request event (an event with type
 `m.room.message` with `msgtype: m.key.verification.request`, rather than an
 event with type `m.key.verification.request`), to the room. In addition, Alice
 does not send an `m.key.verification.cancel` event to tell Bob's other devices
-that the request as already been accepted; instead, when Bob's other devices
+that the request has already been accepted; instead, when Bob's other devices
 see his `m.key.verification.ready` event, they will know that the request has
 already been accepted, and that they should ignore the request.
 
@@ -545,7 +619,7 @@ request.
 
 The prompt for Bob to accept/reject Alice's request (or the unsupported method
 prompt) should be automatically dismissed 10 minutes after the `timestamp` (in
-the case of to-device messages) or `origin_ts` (in the case of in-room
+the case of to-device messages) or `origin_server_ts` (in the case of in-room
 messages) field or 2 minutes after Bob's client receives the message, whichever
 comes first, if Bob does not interact with the prompt. The prompt should
 additionally be hidden if an appropriate `m.key.verification.cancel` message is
@@ -657,10 +731,12 @@ The process between Alice and Bob verifying each other would be:
 11. Alice's device receives Bob's message and verifies the commitment
     hash from earlier matches the hash of the key Bob's device just sent
     and the content of Alice's `m.key.verification.start` message.
-12. Both Alice and Bob's devices perform an Elliptic-curve
-    Diffie-Hellman
-    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)),
-    using the result as the shared secret.
+12. Both Alice's and Bob's devices perform an Elliptic-curve Diffie-Hellman using
+    their private ephemeral key, and the other device's ephemeral public key
+    (*ECDH(K<sub>A</sub><sup>private</sup>*, *K<sub>B</sub><sup>public</sup>*)
+    for Alice's device and
+    *ECDH(K<sub>B</sub><sup>private</sup>*, *K<sub>A</sub><sup>public</sup>*)
+    for Bob's device), using the result as the shared secret.
 13. Both Alice and Bob's devices display a SAS to their users, which is
     derived from the shared key using one of the methods in this
     section. If multiple SAS methods are available, clients should allow
@@ -669,8 +745,11 @@ The process between Alice and Bob verifying each other would be:
     their devices if they match or not.
 15. Assuming they match, Alice and Bob's devices each calculate Message
     Authentication Codes (MACs) for:
-    * Each of the keys that they wish the other user to verify (usually their 
-      device ed25519 key and their master cross-signing key).
+    * {{% changed-in v="1.18" %}} Each of the keys that they wish the other user
+      to verify (usually their device ed25519 key and their master signing key,
+      see below). The master signing key SHOULD be included when two different
+      users are verifying each other. Verifying individual devices of other
+      users is deprecated.
     * The complete list of key IDs that they wish the other user to verify.
 
     The MAC calculation is defined [below](#mac-calculation).
@@ -690,7 +769,7 @@ The process between Alice and Bob verifying each other would be:
 The wire protocol looks like the following between Alice and Bob's
 devices:
 
-```
+```nohighlight
     +-------------+                    +-----------+
     | AliceDevice |                    | BobDevice |
     +-------------+                    +-----------+
@@ -833,15 +912,15 @@ is the concatenation of:
 -   The Device ID of the device which sent the
     `m.key.verification.start` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.start` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.start` message, encoded as
+    unpadded base64, followed by `|`.
 -   The Matrix ID of the user who sent the `m.key.verification.accept`
     message, followed by `|`.
 -   The Device ID of the device which sent the
     `m.key.verification.accept` message, followed by `|`.
 -   The public key from the `m.key.verification.key` message sent by
-    the device which sent the `m.key.verification.accept` message,
-    followed by `|`.
+    the device which sent the `m.key.verification.accept` message, encoded as
+    unpadded base64, followed by `|`.
 -   The `transaction_id` being used.
 
 When the `key_agreement_protocol` is the deprecated method `curve25519`,
@@ -916,7 +995,7 @@ collaborate to create a common set of translations for all languages.
 
 {{% boxes/note %}}
 Known translations for the emoji are available from
-<https://github.com/matrix-org/matrix-doc/blob/master/data-definitions/>
+<https://github.com/matrix-org/matrix-spec/tree/main/data-definitions/>
 and can be translated online:
 <https://translate.riot.im/projects/matrix-doc/sas-emoji-v1>
 {{% /boxes/note %}}
@@ -926,45 +1005,47 @@ and can be translated online:
 Rather than requiring Alice to verify each of Bob's devices with each of
 her own devices and vice versa, the cross-signing feature allows users
 to sign their device keys such that Alice and Bob only need to verify
-once. With cross-signing, each user has a set of cross-signing keys that
+once. With cross-signing, each user has a set of cross-signing key pairs that
 are used to sign their own device keys and other users' keys, and can be
 used to trust device keys that were not verified directly.
 
-Each user has three ed25519 key pairs for cross-signing:
+Each user has three ed25519 key pairs used for cross-signing (cross-signing keys):
 
--   a master key (MSK) that serves as the user's identity in
-    cross-signing and signs their other cross-signing keys;
+-   a master signing key (MSK, for historical reasons sometimes known as
+    `master_key`) that serves as the user's identity in cross-signing and signs
+    their user-signing and self-signing keys;
 -   a user-signing key (USK) -- only visible to the user that it belongs
-    to --that signs other users' master keys; and
+    to -- that signs other users' master signing keys; and
 -   a self-signing key (SSK) that signs the user's own device keys.
 
-The master key may also be used to sign other items such as the backup
-key. The master key may also be signed by the user's own device keys to
+The master signing key may also be used to sign other items such as the backup
+key. The master signing key may also be signed by the user's own device keys to
 aid in migrating from device verifications: if Alice's device had
 previously verified Bob's device and Bob's device has signed his master
-key, then Alice's device can trust Bob's master key, and she can sign it
+key, then Alice's device can trust Bob's master signing key, and she can sign it
 with her user-signing key.
 
-Users upload their cross-signing keys to the server using [POST
+Users upload the public parts of their master signing, user-signing and
+self-signing keys to the server using [POST
 /\_matrix/client/v3/keys/device\_signing/upload](/client-server-api/#post_matrixclientv3keysdevice_signingupload). When Alice uploads
-new cross-signing keys, her user ID will appear in the `changed`
+new keys, her user ID will appear in the `changed`
 property of the `device_lists` field of the `/sync` of response of all
 users who share an encrypted room with her. When Bob sees Alice's user
 ID in his `/sync`, he will call [POST /\_matrix/client/v3/keys/query](/client-server-api/#post_matrixclientv3keysquery)
-to retrieve Alice's device and cross-signing keys.
+to retrieve Alice's device keys, as well as their cross-signing keys.
 
 If Alice has a device and wishes to send an encrypted message to Bob,
 she can trust Bob's device if:
 
--   Alice's device is using a master key that has signed her
+-   Alice's device is using a master signing key that has signed her
     user-signing key,
--   Alice's user-signing key has signed Bob's master key,
--   Bob's master key has signed Bob's self-signing key, and
+-   Alice's user-signing key has signed Bob's master signing key,
+-   Bob's master signing key has signed Bob's self-signing key, and
 -   Bob's self-signing key has signed Bob's device key.
 
 The following diagram illustrates how keys are signed:
 
-```
+```nohighlight
     +------------------+                ..................   +----------------+
     | +--------------+ |   ..................            :   | +------------+ |
     | |              v v   v            :   :            v   v v            | |
@@ -995,7 +1076,7 @@ the user who created them.
 The following diagram illustrates Alice's view, hiding the keys and
 signatures that she cannot see:
 
-```
+```nohighlight
     +------------------+                +----------------+   +----------------+
     | +--------------+ |                |                |   | +------------+ |
     | |              v v                |                v   v v            | |
@@ -1019,27 +1100,28 @@ signatures that she cannot see:
 ```
 
 [Verification methods](#device-verification) can be used to verify a
-user's master key by using the master public key, encoded using unpadded
-base64, as the device ID, and treating it as a normal device. For
-example, if Alice and Bob verify each other using SAS, Alice's
+user's master signing key by treating its public key (master signing public
+key), encoded using unpadded base64, as the device ID, and treating it as a
+normal device. For example, if Alice and Bob verify each other using SAS,
+Alice's
 `m.key.verification.mac` message to Bob may include
 `"ed25519:alices+master+public+key": "alices+master+public+key"` in the
 `mac` property. Servers therefore must ensure that device IDs will not
 collide with cross-signing public keys.
 
-The cross-signing private keys can be stored on the server or shared with other
-devices using the [Secrets](#secrets) module.  When doing so, the master,
-user-signing, and self-signing keys are identified using the names
-`m.cross_signing.master`, `m.cross_signing.user_signing`, and
+Using the [Secrets](#secrets) module the private parts of the cross-signing keys can
+be stored on the server or shared with other devices.  When doing so, the
+master signing, user-signing, and self-signing keys are identified using the
+names `m.cross_signing.master`, `m.cross_signing.user_signing`, and
 `m.cross_signing.self_signing`, respectively, and the keys are base64-encoded
 before being encrypted.
 
 ###### Key and signature security
 
-A user's master key could allow an attacker to impersonate that user to
+A user's master signing key could allow an attacker to impersonate that user to
 other users, or other users to that user. Thus clients must ensure that
-the private part of the master key is treated securely. If clients do
-not have a secure means of storing the master key (such as a secret
+the private part of the master signing key is treated securely. If clients do
+not have a secure means of storing the master signing key (such as a secret
 storage system provided by the operating system), then clients must not
 store the private part.
 
@@ -1052,9 +1134,9 @@ Since device key IDs (`ed25519:DEVICE_ID`) and cross-signing key IDs
 use the correct keys when verifying.
 
 While servers MUST not allow devices to have the same IDs as cross-signing
-keys, a malicious server could construct such a situation, so clients must not
-rely on the server being well-behaved and should take the following precautions
-against this.
+keys, a malicious server could construct such a situation, so clients
+must not rely on the server being well-behaved and should take the following
+precautions against this:
 
 1. Clients MUST refer to keys by their public keys during the verification
    process, rather than only by the key ID.
@@ -1062,31 +1144,32 @@ against this.
    verification process, and ensure that they do not change in the course of
    verification.
 3. Clients SHOULD also display a warning and MUST refuse to verify a user when
-   they detect that the user has a device with the same ID as a cross-signing key.
+   they detect that the user has a device with the same ID as a cross-signing
+   key.
 
 A user's user-signing and self-signing keys are intended to be easily
 replaceable if they are compromised by re-issuing a new key signed by
-the user's master key and possibly by re-verifying devices or users.
+the user's master signing key and possibly by re-verifying devices or users.
 However, doing so relies on the user being able to notice when their
 keys have been compromised, and it involves extra work for the user, and
 so although clients do not have to treat the private parts as
-sensitively as the master key, clients should still make efforts to
+sensitively as the master signing key, clients should still make efforts to
 store the private part securely, or not store it at all. Clients will
 need to balance the security of the keys with the usability of signing
 users and devices when performing key verification.
 
 To avoid leaking of social graphs, servers will only allow users to see:
 
--   signatures made by the user's own master, self-signing or
+-   signatures made by the user's own master signing, self-signing or
     user-signing keys,
 -   signatures made by the user's own devices about their own master
     key,
 -   signatures made by other users' self-signing keys about their
     respective devices,
--   signatures made by other users' master keys about their respective
+-   signatures made by other users' master signing keys about their respective
     self-signing key, or
 -   signatures made by other users' devices about their respective
-    master keys.
+    master signing keys.
 
 Users will not be able to see signatures made by other users'
 user-signing keys.
@@ -1119,7 +1202,7 @@ The process between Alice and Bob verifying each other would be:
    framework as described above.
 3. Alice's client displays a QR code that Bob is able to scan if Bob's client
    indicated the ability to scan, an option to scan Bob's QR code if her client
-   is able to scan.  Bob's client prompts displays a QR code that Alice can
+   is able to scan. Bob's client displays a QR code that Alice can
    scan if Alice's client indicated the ability to scan, and an option to scan
    Alice's QR code if his client is able to scan. The format for the QR code
    is described below. Other options, like starting SAS Emoji verification,
@@ -1174,49 +1257,56 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned using this format will encode binary
-strings in the general form:
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
 
-- the ASCII string `MATRIX`
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
 - one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
   - `0x00` verifying another user with cross-signing
-  - `0x01` self-verifying in which the current device does trust the master key
+  - `0x01` self-verifying in which the current device does trust the master signing key
   - `0x02` self-verifying in which the current device does not yet trust the
-    master key
+    master signing key
 - the event ID or `transaction_id` of the associated verification
   request event, encoded as:
   - two bytes in network byte order (big-endian) indicating the length in
     bytes of the ID as a UTF-8 string
-  - the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string
 - the first key, as 32 bytes.  The key to use depends on the mode field:
-  - if `0x00` or `0x01`, then the current user's own master cross-signing public key
-  - if `0x02`, then the current device's device key
+  - if `0x00` or `0x01`, then the current user's own master signing public key
+  - if `0x02`, then the current device's Ed25519 signing key
 - the second key, as 32 bytes.  The key to use depends on the mode field:
   - if `0x00`, then what the device thinks the other user's master
-    cross-signing key is
-  - if `0x01`, then what the device thinks the other device's device key is
-  - if `0x02`, then what the device thinks the user's master cross-signing key
+    public key is
+  - if `0x01`, then what the device thinks the other device's Ed25519 signing
+    public key is
+  - if `0x02`, then what the device thinks the user's master signing public key
     is
-- a random shared secret, as a byte string.  It is suggested to use a secret
+- a random shared secret, as a sequence of bytes.  It is suggested to use a secret
   that is about 8 bytes long.  Note: as we do not share the length of the
   secret, and it is not a fixed size, clients will just use the remainder of
-  binary string as the shared secret.
+  binary segment as the shared secret.
 
-For example, if Alice displays a QR code encoding the following binary string:
+For example, if Alice displays a QR code encoding the following binary data:
 
-```
+```nohighlight
       "MATRIX"    |ver|mode| len   | event ID
  4D 41 54 52 49 58  02  00   00 2D   21 41 42 43 44 ...
-| user's cross-signing key    | other user's cross-signing key | shared secret
-  00 01 02 03 04 05 06 07 ...   10 11 12 13 14 15 16 17 ...      20 21 22 23 24 25 26 27
+| the first key               | the second key              | shared secret
+  00 01 02 03 04 05 06 07 ...   10 11 12 13 14 15 16 17 ...   20 21 22 23 24 25 26 27
 ```
 
-this indicates that Alice is verifying another user (say Bob), in response to
-the request from event "$ABCD...", her cross-signing key is
+Mode `0x00` indicates that Alice is verifying another user (say Bob), in
+response to the request from event "$ABCD...", her master signing key is
 `0001020304050607...` (which is "AAECAwQFBg..." in base64), she thinks that
-Bob's cross-signing key is `1011121314151617...` (which is "EBESExQVFh..." in
+Bob's master signing key is `1011121314151617...` (which is "EBESExQVFh..." in
 base64), and the shared secret is `2021222324252627` (which is "ICEiIyQlJic" in
 base64).
 
@@ -1266,10 +1356,10 @@ tries to read a message that it does not have keys for, it may request
 the key from the server and decrypt it. Backups are per-user, and users
 may replace backups with new backups.
 
-In contrast with [Key requests](#key-requests), Server-side key backups
-do not require another device to be online from which to request keys.
-However, as the session keys are stored on the server encrypted, it
-requires users to enter a decryption key to decrypt the session keys.
+In contrast with [key requests](#key-requests), server-side key backups do not
+require another device to be online from which to request keys. However, as
+the session keys are stored on the server encrypted, the client requires a
+[decryption key](#decryption-key) to decrypt the session keys.
 
 To create a backup, a client will call [POST
 /\_matrix/client/v3/room\_keys/version](#post_matrixclientv3room_keysversion) and define how the keys are to
@@ -1288,9 +1378,9 @@ one of its variants.
 Clients must only store keys in backups after they have ensured that the
 `auth_data` is trusted. This can be done either by:
 
-- checking that it is signed by the user's [master cross-signing
-  key](#cross-signing) or by a verified device belonging to the same user, or
-- by deriving the public key from a private key that it obtained from a trusted
+- checking that it is signed by the user's [master signing key](#cross-signing)
+  or by a verified device belonging to the same user, or
+- deriving the public key from a private key that it obtained from a trusted
   source. Trusted sources for the private key include the user entering the
   key, retrieving the key stored in [secret storage](#secret-storage), or
   obtaining the key via [secret sharing](#sharing) from a verified device
@@ -1307,31 +1397,24 @@ replace it with the new key based on the key metadata as follows:
 -   and finally, if `is_verified` and `first_message_index` are equal,
     then it will keep the key with a lower `forwarded_count`.
 
-###### Recovery key
+###### Decryption key
 
-If the recovery key (the private half of the backup encryption key) is
-presented to the user to save, it is presented as a string constructed
-as follows:
+Normally, the decryption key (i.e. the secret part of the encryption key) is
+stored on the server or shared with other devices using the [Secrets](#secrets)
+module. When doing so, it is identified using the name `m.megolm_backup.v1`,
+and the key is base64-encoded before being encrypted.
 
-1.  The 256-bit curve25519 private key is prepended by the bytes `0x8B`
-    and `0x01`
-2.  All the bytes in the string above, including the two header bytes,
-    are XORed together to form a parity byte. This parity byte is
-    appended to the byte string.
-3.  The byte string is encoded using base58, using the same [mapping as
-    is used for Bitcoin
-    addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart),
-    that is, using the alphabet
-    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
-4.  A space should be added after every 4th character.
+If the backup decryption key is given directly to the user, the key should be
+presented as a string using the common [cryptographic key
+representation](/appendices/#cryptographic-key-representation).
 
-When reading in a recovery key, clients must disregard whitespace, and
-perform the reverse of steps 1 through 3.
-
-The recovery key can also be stored on the server or shared with other devices
-using the [Secrets](#secrets) module. When doing so, it is identified using the
-name `m.megolm_backup.v1`, and the key is base64-encoded before being
-encrypted.
+{{% boxes/note %}}
+The backup decryption key was previously referred to as a "recovery
+key". However, this conflicted with common practice in client user
+interfaces, which often use the term "recovery key" to refer to the [secret
+storage](#storage) key. The term "recovery key" is no longer used in this
+specification.
+{{% /boxes/note %}}
 
 ###### Backup algorithm: `m.megolm_backup.v1.curve25519-aes-sha2`
 
@@ -1344,7 +1427,7 @@ the following format:
 The `session_data` field in the backups is constructed as follows:
 
 1.  Encode the session key to be backed up as a JSON object using the
-    `SessionData` format defined below.
+    `BackedUpSessionData` format defined below.
 
 2.  Generate an ephemeral curve25519 key, and perform an ECDH with the
     ephemeral key and the backup's public key to generate a shared
@@ -1361,14 +1444,59 @@ The `session_data` field in the backups is constructed as follows:
     PKCS\#7 padding. This encrypted data, encoded using unpadded base64,
     becomes the `ciphertext` property of the `session_data`.
 
-5.  Pass the raw encrypted data (prior to base64 encoding) through
-    HMAC-SHA-256 using the MAC key generated above. The first 8 bytes of
-    the resulting MAC are base64-encoded, and become the `mac` property
-    of the `session_data`.
+5.  Pass an empty string through HMAC-SHA-256 using the MAC key generated above.
+    The first 8 bytes of the resulting MAC are base64-encoded, and become the
+    `mac` property of the `session_data`.
+
+{{% boxes/warning %}}
+Step 5 was intended to pass the raw encrypted data, but due to a bug in libolm,
+all implementations have since passed an empty string instead.
+
+Future versions of the spec will fix this problem. See
+[MSC4048](https://github.com/matrix-org/matrix-spec-proposals/pull/4048) for a
+potential new key backup algorithm version that would fix this issue.
+{{% /boxes/warning %}}
 
 {{% definition path="api/client-server/definitions/key_backup_session_data" %}}
 
 {{% http-api spec="client-server" api="key_backup" %}}
+
+###### Key backup enabled preference
+
+{{% added-in v="1.19" %}}
+
+This enables clients to track a user's preference about enabling or
+disabling [server-side backups of room keys](#server-side-key-backups). The data
+is stored in the [`m.key_backup`](#mkey_backup) global
+[account data](#client-config).
+
+{{% event event="m.key_backup" %}}
+
+When a user signs in to a client which supports encryption and key backup:
+
+* If this event type exists in account data and contains the specified property
+  in the correct format, clients which support key backup MUST take account of
+  its contents in their behaviour. For example, clients may automatically turn
+  on/off key backup based on the property, or prompt the user, using the
+  property value as a default. (Because this property is server-controlled,
+  clients may wish to confirm the user's intention.)
+
+* If this event type does not exist in account data, or if it does not contain
+  the `enabled` property, or if the value of `enabled` is not a boolean value,
+  clients MUST ignore the existing value and MAY decide whether or not to
+  perform key backup, possibly based on user input.
+
+If the user turns on key backups, clients MUST set this event type in account
+data, to `"enabled": true`.
+
+If the user turns off key backups, clients MUST set this event type in account
+data, to `"enabled": false`.
+
+Clients are not required to monitor the `m.key_backup` account data actively.
+Clients MAY monitor the setting but should be aware that changing this setting
+without user interaction based on choices made in a different client (or a
+compromised homeserver) may cause unforeseen security problems or simply be
+unexpected by users.
 
 ##### Key exports
 
@@ -1414,10 +1542,147 @@ user-supplied passphrase, and is created as follows:
 
 ###### Key export format
 
-The exported sessions are formatted as a JSON array of `SessionData`
+The exported sessions are formatted as a JSON array of `ExportedSessionData`
 objects described as follows:
 
 {{% definition path="api/client-server/definitions/megolm_export_session_data" %}}
+
+#### Sharing keys between users
+
+{{% added-in v="1.19" %}}
+
+When Alice invites Bob to an encrypted room, she might want Bob to have access
+to messages that were previously sent in that room, subject to the [history
+visibility](#room-history-visibility) setting of the room.
+
+Alice does this by constructing an [encrypted key
+bundle](#construction-and-sharing-of-the-key-bundle) and sharing it with Bob
+before inviting him.
+
+##### Shareable encryption sessions
+
+Only room keys which were marked as "shareable" by the creator of the
+encryption session should be shared with new users.
+
+When a user wants to send a message in an encrypted room, their client first
+checks the [history visibility](#room-history-visibility) state of the
+room. If it is `shared` or `world_readable`, then when the client sends the Megolm
+keys to room members via [`m.room_key`](#mroom_key) messages, it SHOULD set
+`shared_history` to `true`. Otherwise, it SHOULD set `shared_history` to `false`.
+
+If the history visibility changes in a way that would affect the
+`shared_history` flag (i.e., it changes from `joined` or `invited` to `shared`
+or `world_readable`, or vice versa), then clients MUST rotate their outbound
+Megolm session before sending more messages.
+
+Clients SHOULD show an indication to users that their encrypted messages
+may be shared with future room members in this way.
+
+Recipients SHOULD keep a record of the `shared_history` flag for each
+encryption session. The state of the flag is also saved in the
+[`BackedUpSessionData`](#definition-backedupsessiondata) type in key backups,
+and the [`ExportedSessionData`](#definition-exportedsessiondata) type in key
+exports.
+
+A session is therefore considered as "shareable" if any of the following
+conditions are satisfied:
+
+ * The client created the session itself, when the `history_visibility` state
+   was set to `shared` or `world_readable`.
+ * The keys to the session were received from an [`m.room_key`](#mroom_key)
+   message with `shared_history` set to `true`.
+ * The keys to the session were loaded from key backup, and the
+   [`BackedUpSessionData`](#definition-backedupsessiondata) structure had
+   `shared_history` set to `true`.
+ * The keys to the session were loaded from a key export, and the
+   [`ExportedSessionData`](#definition-exportedsessiondata) structure had
+   `shared_history` set to `true`.
+ * The keys were received as part of a
+   [`RoomKeyBundle`](#definition-roomkeybundle).
+
+{{% boxes/note %}}
+Tracking shareable sessions in this way prevents an attack where a malicious
+homeserver can incorrectly flag history as shared, without telling the sender
+of the messages. It also ensures that a user that sends an encrypted message does
+so in the knowledge that the message may be shared with new members in the
+room.
+{{% /boxes/note %}}
+
+##### Construction and sharing of the key bundle
+
+Alice's client MAY choose not to share any room history (even messages sent when the
+history visibity setting would allow sharing) if the current history
+visibility setting does not allow sharing (i.e. if `history_visibility` is
+set to `invited` or `joined`).
+
+Otherwise, before inviting Bob to a room, Alice's client constructs and sends a key bundle as follows:
+
+1. Alice's client SHOULD ensure that it has downloaded all keys relevant to the room
+   from [server-side key backup](#server-side-key-backups), if she is using it.
+
+2. Alice's client constructs a [`RoomKeyBundle`](#definition-roomkeybundle) structure,
+   containing the sessions she is aware of in the room. Alice MUST include
+   only [shareable encryption sessions](#shareable-encryption-sessions) in the
+   `room_keys` section of the structure; other sessions SHOULD be listed in the
+   `withheld` section.
+
+3. The client serialises the `RoomKeyBundle` as JSON.
+
+4. Alice's client encrypts and uploads the serialised JSON in the same way as when
+   [sending an encrypted attachment](#sending-encrypted-attachments).
+
+5. Alice's client ensures she has an up-to-date list of Bob's devices (performing a
+   [`/keys/query`](#post_matrixclientv3keysquery) request if necessary).
+
+6. For each of Bob's devices which are correctly
+   [cross-signed](#cross-signing), Alice's client encrypts and sends an
+   [`m.room_key_bundle`](#mroom_key_bundle) message.
+
+Alice's client MUST NOT send the `m.room.key_bundle` message to devices that have not
+been correctly cross-signed by their owner, due to the risk of sharing
+significant amounts of encrypted content with an attacker-controlled device.
+
+{{% definition path="api/client-server/definitions/room_key_bundle" %}}
+
+{{% event event="m.room_key_bundle" %}}
+
+##### Receiving a key bundle event
+
+When Bob's client receives an `m.room_key_bundle` event from Alice, there are two possibilities:
+
+ * If Bob has recently accepted an invite to the room from Alice, the client
+   SHOULD immediately download and decrypt the key bundle and start processing
+   it. Note, however, that this process must be resilient to Bob's client being
+   restarted before the download/import completes.
+
+   The definition of "recently" is left up to clients. (They should consider
+   balancing the needs of (a) a user that closes their client just after
+   joining a room but before the bundle is imported, against (b) the overhead
+   of attempting to download a key bundle on every startup. 24 hours is a
+   recommended time limit.)
+
+ * Otherwise, Bob's client SHOULD store the details of the key bundle but not
+   download it immediately. If he later accepts an invite to the room from
+   Alice, his client downloads and processes the bundle at that point.
+
+   Delaying the download in this way avoids a potential DoS vector in which an
+   attacker can cause the victim to download a large quantity of useless data.
+
+Once Bob has downloaded and decrypted the key bundle, the sessions are imported
+as they would be when importing a [key export](#key-exports); however:
+
+ * Only keys for the relevant room should be imported. Keys for other rooms
+   SHOULD be ignored.
+
+ * Bob's client MUST remember who he received the keys from (Alice, in this
+   case), and MUST show that information to the user, since he has only that
+   user's word for the authenticity of those sessions.
+
+Client implementations should note that server implementations may delete or
+expire old media that appears unused. They must therefore gracefully handle
+download failures due to the key bundle having expired (typically by just
+giving up on the attempt to download the bundle, though they could also warn
+the user.)
 
 #### Messaging Algorithms
 
@@ -1444,8 +1709,8 @@ readers without adding any useful extra information.
 ##### `m.olm.v1.curve25519-aes-sha2`
 
 The name `m.olm.v1.curve25519-aes-sha2` corresponds to version 1 of the
-Olm ratchet, as defined by the [Olm
-specification](http://matrix.org/docs/spec/olm.html). This uses:
+Olm ratchet, as defined by the [Olm specification](/olm-megolm/olm).
+This uses:
 
 -   Curve25519 for the initial key agreement.
 -   HKDF-SHA-256 for ratchet key derivation.
@@ -1458,28 +1723,30 @@ Devices that support Olm must include "m.olm.v1.curve25519-aes-sha2" in
 their list of supported messaging algorithms, must list a Curve25519
 device key, and must publish Curve25519 one-time keys.
 
-An event encrypted using Olm has the following format:
+The content of an [`m.room.encrypted`](#mroomencrypted) event using Olm has the following format:
 
 ```json
 {
-  "type": "m.room.encrypted",
   "content": {
     "algorithm": "m.olm.v1.curve25519-aes-sha2",
     "sender_key": "<sender_curve25519_key>",
     "ciphertext": {
       "<device_curve25519_key>": {
         "type": 0,
-        "body": "<encrypted_payload_base_64>"
+        "body": "<base64_encoded_olm_message>"
       }
     }
   }
 }
 ```
-
-`ciphertext` is a mapping from device Curve25519 key to an encrypted
-payload for that device. `body` is a Base64-encoded Olm message body.
-`type` is an integer indicating the type of the message body: 0 for the
-initial pre-key message, 1 for ordinary messages.
+Note that when the event is received from the server, it will have a `type`
+(with a value of `m.room.encrypted`) and `sender` property alongside the
+`content` property. In `content`, `ciphertext` is a mapping from a device
+Curve25519 key to an object with a `type` and a `body`. Here, `body` is a
+Base64-encoded [Olm message](/olm-megolm/olm/#the-olm-message-format), and
+`type` is an integer indicating the type of the message:
+0 for the initial [pre-key messages](/olm-megolm/olm/#pre-key-messages),
+1 for [normal messages](/olm-megolm/olm/#normal-messages).
 
 Olm sessions will generate messages with a type of 0 until they receive
 a message. Once a session has decrypted a message it will produce
@@ -1497,39 +1764,9 @@ Messages with type 1 can only be decrypted with an existing session. If
 there is no matching session, the client must treat this as an invalid
 message.
 
-The plaintext payload is of the form:
+The plaintext corresponding to the "Cipher-Text" in an an [Olm message](/olm-megolm/olm/#normal-messages) is of the form:
 
-```json
-{
-  "type": "<type of the plaintext event>",
-  "content": "<content for the plaintext event>",
-  "sender": "<sender_user_id>",
-  "recipient": "<recipient_user_id>",
-  "recipient_keys": {
-    "ed25519": "<our_ed25519_key>"
-  },
-  "keys": {
-    "ed25519": "<sender_ed25519_key>"
-  }
-}
-```
-
-The type and content of the plaintext message event are given in the
-payload.
-
-Other properties are included in order to prevent an attacker from
-publishing someone else's curve25519 keys as their own and subsequently
-claiming to have sent messages which they didn't. `sender` must
-correspond to the user who sent the event, `recipient` to the local
-user, and `recipient_keys` to the local ed25519 key.
-
-Clients must confirm that the `sender_key` and the `ed25519` field value
-under the `keys` property match the keys returned by [`/keys/query`](/client-server-api/#post_matrixclientv3keysquery) for
-the given user, and must also verify the signature of the keys from the
-`/keys/query` response. Without this check, a client cannot be sure that
-the sender device owns the private part of the ed25519 key it claims to
-have in the Olm payload. This is crucial when the ed25519 key corresponds
-to a verified device.
+{{% definition path="api/client-server/definitions/olm_plaintext" %}}
 
 If a client has multiple sessions established with another device, it
 should use the session from which it last received and successfully
@@ -1539,6 +1776,70 @@ received a message. A client may expire old sessions by defining a
 maximum number of olm sessions that it will maintain for each device,
 and expiring sessions on a Least Recently Used basis. The maximum number
 of olm sessions maintained per device should be at least 4.
+
+###### Validation of incoming decrypted events
+
+{{% changed-in v="1.15" %}} Existing checks made more explicit, and checks for `sender_device_keys` added.
+{{% changed-in v="1.19" %}} Corrections to some errors in the description of the verification checks.
+
+After decrypting an incoming encrypted event, clients MUST apply the
+following checks:
+
+1.  The `sender` property in the decrypted content must match the
+    `sender` of the event.
+2.  The `keys.ed25519` property in the decrypted content must match
+    the Ed25519 identity key of the sending device. This key can be
+    obtained from either [`/keys/query`](#post_matrixclientv3keysquery)
+    or the `sender_device_keys` object (see below).
+3.  The `recipient` property in the decrypted content must match
+    the user ID of the local user.
+4.  The `recipient_keys.ed25519` property in the decrypted content
+    must match the client device's [Ed25519 signing key](#device-keys).
+5.  Where `sender_device_keys` is present in the decrypted content:
+    1.  `sender_device_keys.user_id` must also match the `sender`
+        of the event.
+    2.  `sender_device_keys.keys.curve25519:<device_id>` must match
+        the `sender_key` property in the cleartext `m.room.encrypted`
+        event body.
+    3.  `sender_device_keys.keys.ed25519:<device_id>` must be the same
+        as the `keys.ed25519` property in the decrypted content.
+    4.  The `sender_device_keys` structure must have a valid signature
+        from the key with ID `ed25519:<device_id>` (i.e., the sending
+        device's Ed25519 key).
+
+Any event that does not comply with these checks MUST be discarded.
+
+###### Verification of the sending user for incoming events
+
+{{% added-in v="1.15" %}}
+
+In addition, for each Olm session, clients MUST verify that the
+Curve25519 key used to establish the Olm session does indeed belong
+to the claimed `sender`. This requires a signed "device keys" structure
+for that Curve25519 key, which can be obtained in one of two ways:
+
+1.  An event encrypted using Olm may be received with a `sender_device_keys` property
+    in the decrypted content.
+2.  The keys are returned via a [`/keys/query`](#post_matrixclientv3keysquery)
+    request. Note that both the Curve25519 key **and** the Ed25519 key in
+    the returned device keys structure must match those used in an
+    Olm-encrypted event as above. (In particular, the Ed25519 key must
+    be present in the **encrypted** content of an Olm-encrypted event
+    to prevent an attacker from claiming another user's Curve25519 key
+    as their own.)
+
+Ownership of the Curve25519 key is then established in one of two ways:
+
+1.  Via [cross-signing](#cross-signing). For this to be sufficient, the
+    device keys structure must be signed by the sender's self-signing key,
+    and that self-signing key must itself have been validated (either via
+    [explicit verification](#device-verification) or a "trust on first use" (TOFU) mechanism).
+2.  Via explicit verification of the device's Ed25519 signing key, as
+    contained in the device keys structure. This is no longer recommended.
+
+A failure to complete these verifications does not necessarily mean that
+the session is bogus; however it is the case that there is no proof that
+the claimed sender is accurate, and the user should be warned accordingly.
 
 ###### Recovering from undecryptable messages
 
@@ -1583,8 +1884,8 @@ This is due to a deprecation of the fields. See
 {{% changed-in v="1.3" %}}
 
 The name `m.megolm.v1.aes-sha2` corresponds to version 1 of the Megolm
-ratchet, as defined by the [Megolm
-specification](http://matrix.org/docs/spec/megolm.html). This uses:
+ratchet, as defined by the [Megolm specification](/olm-megolm/megolm).
+This uses:
 
 -   HMAC-SHA-256 for the hash ratchet.
 -   HKDF-SHA-256, AES-256 in CBC mode, and 8 byte truncated HMAC-SHA-256
@@ -1594,23 +1895,26 @@ specification](http://matrix.org/docs/spec/megolm.html). This uses:
 Devices that support Megolm must support Olm, and include
 "m.megolm.v1.aes-sha2" in their list of supported messaging algorithms.
 
-An event encrypted using Megolm has the following format:
+The content of an [`m.room.encrypted`](#mroomencrypted) event using Megolm has the following format:
 
 ```json
 {
-  "type": "m.room.encrypted",
   "content": {
     "algorithm": "m.megolm.v1.aes-sha2",
     "sender_key": "<sender_curve25519_key>",
     "device_id": "<sender_device_id>",
     "session_id": "<outbound_group_session_id>",
-    "ciphertext": "<encrypted_payload_base_64>"
+    "ciphertext": "<base64_encoded_megolm_message>"
   }
 }
 ```
+Note that when the event is received from the server, it will have additional
+properties alongside the `content` property, including a `type` (with a value
+of `m.room.encrypted`) and a `sender` property. (See [Room event format](#room-event-format).)
 
-The encrypted payload can contain any message event. The plaintext is of
-the form:
+Within `content`, `ciphertext`
+is a Base64-encoded [Megolm message](/olm-megolm/megolm/#message-format),
+whose plaintext body is of the form:
 
 ```json
 {
@@ -1620,7 +1924,7 @@ the form:
 }
 ```
 
-We include the room ID in the payload, because otherwise the homeserver
+We include the room ID in the encrypted message, because otherwise the homeserver
 would be able to change the room a message was sent in.
 
 Clients must guard against replay attacks by keeping track of the
@@ -1640,7 +1944,7 @@ As of `v1.3`, the `sender_key` and `device_id` keys are **deprecated**. They
 SHOULD continue to be sent, however they MUST NOT be used to verify the
 message's source.
 
-Clients MUST NOT store or lookup sessions using the `sender_key` or `device_id`.
+Clients MUST NOT store or look up sessions using the `sender_key` or `device_id`.
 
 In a future version of the specification the keys can be removed completely,
 including for sending new messages.
@@ -1667,7 +1971,7 @@ In order to enable end-to-end encryption in a room, clients can send an
 When creating a Megolm session in a room, clients must share the
 corresponding session key using Olm with the intended recipients, so
 that they can decrypt future messages encrypted using this session. An
-`m.room_key` event is used to do this. Clients must also handle
+[`m.room_key`](#mroom_key) event is used to do this. Clients must also handle
 `m.room_key` events sent by other devices in order to decrypt their
 messages.
 
@@ -1681,6 +1985,36 @@ When a client is updating a Megolm session in its store, the client MUST ensure:
   `m.forwarded_room_key` event from a verified device belonging to the same
   user, or from a `m.room_key` event.
 * that the new session key has a lower message index than the existing session key.
+
+When encrypting outgoing messages in a room using Megolm, clients MUST rotate
+their outgoing Megolm session (i.e. discard the existing session, and create
+and share a new session before sending more room messages) whenever any of the
+following happens:
+
+ * The existing session has been in use for longer than the period specified in
+   `rotation_period_ms` in the [`m.room.encryption`](#mroomencryption) room
+   state event, or an appropriate default.
+
+ * The existing session has been used to encrypt as many messages as specified in
+   `rotation_period_msgs` in the [`m.room.encryption`](#mroomencryption) room
+   state event, or an appropriate default.
+
+ * A user or device that was previously participating in the room, and may have
+   received a copy of the decryption keys for the session, is seen to leave the
+   room.
+
+   {{% changed-in v="1.19" %}} Since any user that received an invite to the
+   room may have received a copy of the decryption keys for the session via
+   [history sharing](#sharing-keys-between-users), clients MUST observe changes
+   in state in the room, and whenever they see a user leaving the room, assume
+   that the departed user may have access to any existing Megolm session, and
+   rotate the session. Note that, in a `limited` [sync](#syncing), clients must
+   treat any membership event with a membership other than `join` as an
+   indication that the affected user may have joined and left the room.
+
+ * {{% added-in v="1.19" %}} The [history visibility](#room-history-visibility)
+   state of the room changes in a way that would affect the `shared_history`
+   flag: see [shareable encryption sessions](#shareable-encryption-sessions).
 
 #### Protocol definitions
 
@@ -1727,19 +2061,18 @@ property is required for inclusion, though previous versions of the
 specification did not have it. In addition to `/versions`, this can be
 a way to identify the server's support for fallback keys.
 
-
-| Parameter                        | Type               | Description                                                                                                            |
-|----------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------|
-| device_lists                     | DeviceLists        | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
-| device_one_time_keys_count       | {string: integer}  | Optional. For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device.  If an algorithm is unlisted, the count for that algorithm is assumed to be zero.  If this entire parameter is missing, the count for all algorithms is assumed to be zero.  |
-| device_unused_fallback_key_types | [string]           | **Required.** The unused fallback key algorithms.                                                                      |
+| Parameter                        | Type              | Description                                                                                                            |
+|----------------------------------|-------------------|------------------------------------------------------------------------------------------------------------------------|
+| device_lists                     | DeviceLists       | Optional. Information on e2e device updates. Note: only present on an incremental sync.                                |
+| device_one_time_keys_count       | {string: integer} | **Required if any unclaimed one-time keys exist.** For each key algorithm, the number of unclaimed one-time keys currently held on the server for this device. If the count for an algorithm is zero, servers MAY omit that algorithm. If the count for all algorithms is zero, servers MAY omit this parameter entirely. |
+| device_unused_fallback_key_types | [string]          | **Required.** The unused fallback key algorithms.                                                                      |
 
 `DeviceLists`
 
-| Parameter  | Type      | Description                                                                                                                                                      |
-|------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| changed    | [string]  | List of users who have updated their device identity or cross-signing keys, or who now share an encrypted room with the client since the previous sync response. |
-| left       | [string]  | List of users with whom we do not share any encrypted rooms anymore since the previous sync response.                                                            |
+| Parameter | Type     | Description                                                                                                                                                      |
+|-----------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| changed   | [string] | List of users who have updated their device identity or cross-signing keys, or who now share an encrypted room with the client since the previous sync response. |
+| left      | [string] | List of users with whom we do not share any encrypted rooms anymore since the previous sync response.                                                            |
 
 {{% boxes/note %}}
 For optimal performance, Alice should be added to `changed` in Bob's
@@ -1765,9 +2098,9 @@ Example response:
     ],
   },
   "device_one_time_keys_count": {
-    "curve25519": 10,
     "signed_curve25519": 20
-  }
+  },
+  "device_unused_fallback_key_types": ["signed_curve25519"]
 }
 ```
 

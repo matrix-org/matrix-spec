@@ -1,6 +1,6 @@
 ---
 title: "Spec Change Proposals"
-weight: 60
+weight: 62
 type: docs
 ---
 
@@ -185,6 +185,10 @@ is as follows:
     -   Take care in creating your proposal. Specify your intended
         changes, and give reasoning to back them up. Changes without
         justification will likely be poorly received by the community.
+    -   At the time of creating your draft you will not yet know the PR number, so you
+        should use a placeholder number to name your file and edit that
+        after PR submission. The suggested steps are described in
+        detail [in the proposals guide](https://github.com/matrix-org/matrix-spec-proposals#1-writing-the-proposal).
 -   Fork and make a PR to the
     [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals) repository.
     The ID of your PR will become the MSC ID for the lifetime of your
@@ -277,7 +281,7 @@ corresponding labels for each stage on the
 [matrix-spec-proposals](https://github.com/matrix-org/matrix-spec-proposals)
 pull request trackers.
 
-```
+```nohighlight
                            +                          +
          Proposals         |          Spec PRs        |  Additional States
          +-------+         |          +------+        |  +---------------+
@@ -380,9 +384,18 @@ As part of the proposal process the Spec Core Team will require evidence
 of the MSC working in order for it to move into FCP. This can usually be
 a branch/pull request to whichever implementation of choice that proves
 the MSC works in practice, though in some cases the MSC itself will be
-small enough to be considered proven. Where it's unclear if an MSC will
-require an implementation proof, ask in
-[\#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org).
+small enough to be considered proven. Implementations do not need to be
+merged or released, but must be of sufficient quality to show that the
+MSC works. Where it's unclear if an MSC will require an implementation
+proof, ask in [\#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org).
+Proposals may require both server-side and client-side implementations.
+
+Proposals that have not yet been implemented will have the
+`needs-implementation` label. After an implementation has been made, add a
+comment in the GitHub issue indicating so. After an implementation has been
+made, we will check it to verify that it implements the MSC. Proposals that
+have implementations that have not yet been checked will have the
+`implementation-needs-checking` label.
 
 ### Early release of an MSC/idea
 
@@ -395,41 +408,9 @@ development or testing data.
 that a particular MSC works) do not have to follow this process.
 
 1.  Have an idea for a feature.
-1.  Implement the feature using unstable endpoints, vendor prefixes, and
-    unstable feature flags as appropriate.
-    -   When using unstable endpoints, they MUST include a vendor
-        prefix. For example:
-        `/_matrix/client/unstable/com.example/login`. Vendor prefixes
-        throughout Matrix always use the Java package naming convention.
-        The MSC for the feature should identify which preferred vendor
-        prefix is to be used by early adopters.
-    -   Note that unstable namespaces do not automatically inherit
-        endpoints from stable namespaces: for example, the fact that
-        `/_matrix/client/r0/sync` exists does not imply that
-        `/_matrix/client/unstable/com.example/sync` exists.
-    -   If the client needs to be sure the server supports the feature,
-        an unstable feature flag that MUST be vendor prefixed is to be
-        used. This kind of flag shows up in the `unstable_features`
-        section of `/versions` as, for example, `com.example.new_login`.
-        The MSC for the feature should identify which preferred feature
-        flag is to be used by early adopters.
-    -   When using this approach correctly, the implementation can
-        ship/release the feature at any time, so long as the
-        implementation is able to accept the technical debt that results
-        from needing to provide adequate backwards and forwards
-        compatibility. The implementation MUST support the flag (and
-        server-side implementation) disappearing and be generally safe
-        for users. Note that implementations early in the MSC review
-        process may also be required to provide backwards compatibility
-        with earlier editions of the proposal.
-    -   If the implementation cannot support the technical debt (or if
-        it's impossible to provide forwards/backwards compatibility -
-        e.g. a user authentication change which can't be safely rolled
-        back), the implementation should not attempt to implement the
-        feature and should instead wait for a spec release.
-    -   If at any point after early release, the idea changes in a
-        backwards-incompatible way, the feature flag should also change
-        so that implementations can adapt as needed.
+1.  Implement the feature using [unstable endpoints, vendor prefixes, and
+    unstable feature flags](#unstable-endpoints-features-and-vendor-prefixes)
+    as appropriate.
 1.  In parallel, or ahead of implementation, open an MSC and solicit
     review per above.
 1.  Before FCP can be called, the Spec Core Team will require evidence
@@ -439,10 +420,7 @@ that a particular MSC works) do not have to follow this process.
     forwards/backwards compatibility concerns mentioned here.
 1.  The FCP process is completed, and assuming nothing is flagged the
     MSC lands.
-1.  Implementations can now switch to using stable prefixes
-    (for example, for an endpoint, moving from
-    `/unstable/org.matrix.mscxxxx/frobnicate`
-    to `/v1/frobnicate`), assuming that the change
+1.  Implementations can now switch to using stable prefixes, assuming that the change
     is backwards compatible with older implementations. In the rare occasion
     where backwards compatibility is not possible without a new spec release,
     implementations should continue to use unstable prefixes.
@@ -458,13 +436,6 @@ that a particular MSC works) do not have to follow this process.
     started supporting the new spec release, some noise should be raised
     in the general direction of the implementation.
 
-{{% boxes/note %}}
-MSCs MUST still describe what the stable endpoints/feature looks like
-with a note towards the bottom for what the unstable feature
-flag/prefixes are. For example, an MSC would propose `/_matrix/client/r0/new/endpoint`, not `/_matrix/client/unstable/
-com.example/new/endpoint`.
-{{% /boxes/note %}}
-
 In summary:
 
 -   Implementations MUST NOT use stable endpoints before the MSC has
@@ -476,13 +447,125 @@ In summary:
 -   Implementations SHOULD be wary of the technical debt they are
     incurring by moving faster than the spec.
 -   The vendor prefix is chosen by the developer of the feature, using
-    the Java package naming convention. The foundation's preferred
-    vendor prefix is `org.matrix`.
+    the Java package naming convention.
 -   The vendor prefixes, unstable feature flags, and unstable endpoints
     should be included in the MSC, though the MSC MUST be written in a
     way that proposes new stable endpoints. Typically this is solved by
     a small table at the bottom mapping the various values from stable
     to unstable.
+
+#### Unstable endpoints, features and vendor prefixes
+
+Unstable endpoints MUST use `/unstable` as the endpoint version and a
+vendor prefix in Java package naming format. For example:
+`/_matrix/client/unstable/com.example.mscxxxx/login`.
+
+{{% boxes/note %}}
+Proposal authors operating with a Matrix.org Foundation mandate SHOULD use
+a vendor prefix within the `org.matrix` namespace. This namespace is otherwise
+restricted. Authors who don't own a domain MAY use the `io.github` namespace
+instead.
+{{% /boxes/note %}}
+
+Note that unstable namespaces do not automatically inherit endpoints from
+stable namespaces: for example, the fact that `/_matrix/client/v3/sync`
+exists does not imply that `/_matrix/client/unstable/com.example.mscxxxx/sync`
+exists.
+
+Vendor prefixes MUST also be used for:
+
+-   New parameters on existing endpoints. For example:
+    `/_matrix/client/v3/publicRooms?com.example.mscxxxx.ordered_by=member_count`.
+-   New properties in existing JSON objects. For example:
+
+    ```json
+    {
+      "avatar_url": "mxc://matrix.org/SDGdghriugerRg",
+      "displayname": "Alice Margatroid",
+      "com.example.mscxxxx.phone": [{
+        "type": "landline",
+        "number": "+1-206-555-7000"
+      }],
+      ...
+    }
+    ```
+
+-   New values for existing parameters or properties. For example:
+
+    ```json
+    {
+      "errcode": "COM.EXAMPLE.MSCXXXX.M_INVALID_EMAIL",
+      "error": "The email address you provided is invalid."
+    }
+    ```
+
+If the client needs to be sure the server supports the feature, an
+unstable feature flag that MUST also be vendor prefixed is to be used.
+This flag shows up in the `unstable_features` section of
+[`/_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+as, for example, `com.example.mscxxxx.new_login`.
+
+{{% boxes/note %}}
+MSCs MUST still describe what the stable endpoints/feature looks like
+with a note towards the bottom for what the unstable feature
+flag/prefixes are. For example, an MSC would propose `/_matrix/client/v1/new/endpoint`,
+not `/_matrix/client/unstable/com.example.mscxxxx/new/endpoint`.
+{{% /boxes/note %}}
+
+When using this approach correctly, the implementation can release
+the feature at any time, so long as the implementation is able to
+accept the technical debt that results from needing to provide
+adequate backwards and forwards compatibility. The implementation
+MUST support the flag (and server-side implementation) disappearing
+and be generally safe for users. Note that implementations early in
+the MSC review process may also be required to provide backwards
+compatibility with earlier editions of the proposal.
+
+If the implementation cannot support the technical debt (or if it's
+impossible to provide forwards/backwards compatibility - e.g. a user
+authentication change which can't be safely rolled back), the
+implementation should not attempt to implement the feature and should
+instead wait for a spec release.
+
+If at any point after early release, the idea changes in a
+backwards-incompatible way, the feature flag should also change so
+that implementations can adapt as needed.
+
+### Placeholder MSCs
+
+Some proposals may contain security-sensitive or private context which can't be
+publicly disclosed until a later stage in the idea or solution process. Typically,
+the initial idea is validated using some amount of implementation or experimentation
+and may require an MSC number to make that implementation easier.
+
+Placeholder MSCs are used to represent proposals in a state where implementation
+is ongoing, but the MSC details can't yet be disclosed. Authors which feel as
+though their MSC could be highly sensitive MUST get in contact with the Spec Core
+Team or [Security Team](https://matrix.org/security-disclosure-policy/) prior to
+opening their MSC. If either team determines that a placeholder MSC is required,
+it may be opened as such.
+
+There are a few expectations attached to placeholder MSCs:
+
+* They have a title which marks them WIP, and are in the "draft" state.
+* They have the following labels: `[proposal-placeholder, action-required, needs-implementation]`.
+  * Notably, *not* `proposal`.
+* They are relatively short-lived (ideally less than 6-12 months in placeholder).
+* They propose solutions which are reasonably likely to be accepted. If a placeholder
+  needs to be closed because the idea won't work, isn't needed, etc, then the MSC's
+  content MUST be published ahead of that closure.
+  * Note: the MSC's publication (and therefore closure) may be delayed until an
+    appropriate point in the security disclosure cycle. For example, an alternative
+    MSC being published, or a stream of work being completed.
+* When they are updated to receive real content, the following happens:
+  1. The Spec Core Team or the author leaves a comment to cause a notification
+     that the MSC has been replaced with real content.
+  2. The `proposal` label (or its equivalent) is added to trigger chat notifications
+     in the public Matrix rooms. The `proposal-placeholder` and `action-required`
+     labels should be removed at this stage as well. Other labels are removed/applied
+     per normal process.
+* The Spec Core Team is aware of the intended MSC's title and purpose. This is
+  especially important if the Security Team approved the use of a placeholder MSC.
 
 ## Proposal Tracking
 
@@ -506,7 +589,7 @@ resolve to the desired MSC, whether it started as an issue or a PR.
 Other metadata:
 
 -   The MSC number is taken from the GitHub Pull Request ID. This is
-    carried for the lifetime of the proposal. These IDs do not necessary
+    carried for the lifetime of the proposal. These IDs do not necessarily
     represent a chronological order.
 -   The GitHub PR title will act as the MSC's title.
 -   Please link to the spec PR (if any) by adding a "PRs: \#1234" line

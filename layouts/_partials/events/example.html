@@ -1,0 +1,16 @@
+{{/*
+
+  Renders an event example. Resolves `$ref`s, serializes as JSON, and ensures
+  that it can be included in HTML.
+
+  Parameters:
+
+    * `schema`: the schema of the example
+    * `name`: the name of the example
+
+*/}}
+
+{{ $path := delimit (slice "event-schemas/examples" .name) "/" }}
+
+{{ $example_content := partial "json-schema/resolve-refs" (dict "schema" .schema "path" $path) }}
+{{ partial "render-example" (dict "example" $example_content) }}

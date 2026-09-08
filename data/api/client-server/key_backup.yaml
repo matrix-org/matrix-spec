@@ -23,7 +23,7 @@ paths:
       description: Creates a new backup.
       operationId: postRoomKeysVersion
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -80,7 +80,7 @@ paths:
       description: Get information about the latest backup version.
       operationId: getRoomKeysVersionCurrent
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The information about the backup.
@@ -155,7 +155,7 @@ paths:
       description: Get information about an existing backup.
       operationId: getRoomKeysVersion
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: version
@@ -242,7 +242,7 @@ paths:
         be modified.
       operationId: putRoomKeysVersion
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: version
@@ -344,7 +344,7 @@ paths:
         as well as all key data related to the backup will be deleted.
       operationId: deleteRoomKeysVersion
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: version
@@ -396,7 +396,7 @@ paths:
       description: Store a key in the backup.
       operationId: putRoomKeyBySessionId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -432,22 +432,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "403":
           description: |-
             The version specified does not match the current backup version.
@@ -478,7 +463,7 @@ paths:
       description: Retrieve a key from the backup.
       operationId: getRoomKeyBySessionId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -534,7 +519,7 @@ paths:
       description: Delete a key from the backup.
       operationId: deleteRoomKeyBySessionId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -563,22 +548,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "404":
           description: The backup was not found.
           content:
@@ -606,7 +576,7 @@ paths:
       description: Store several keys in the backup for a given room.
       operationId: putRoomKeysByRoomId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -635,22 +605,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "403":
           description: |-
             The version specified does not match the current backup version.
@@ -693,7 +648,7 @@ paths:
       description: Retrieve the keys from the backup for a given room.
       operationId: getRoomKeysByRoomId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -745,7 +700,7 @@ paths:
       description: Delete the keys from the backup for a given room.
       operationId: deleteRoomKeysByRoomId
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -767,22 +722,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "404":
           description: The backup was not found.
           content:
@@ -810,7 +750,7 @@ paths:
       description: Store several keys in the backup.
       operationId: putRoomKeys
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -828,9 +768,11 @@ paths:
                 rooms:
                   type: object
                   description: A map of room IDs to room key backup data.
-                  additionalProperties:
-                    allOf:
-                      - $ref: definitions/room_key_backup.yaml
+                  patternProperties:
+                    "^!":
+                      x-pattern-format: mx-room-id
+                      allOf:
+                        - $ref: definitions/room_key_backup.yaml
                   example:
                     "!room:example.org":
                       sessions:
@@ -852,22 +794,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "403":
           description: |-
             The version specified does not match the current backup version.
@@ -910,7 +837,7 @@ paths:
       description: Retrieve the keys from the backup.
       operationId: getRoomKeys
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -932,9 +859,11 @@ paths:
                   rooms:
                     type: object
                     description: A map of room IDs to room key backup data.
-                    additionalProperties:
-                      allOf:
-                        - $ref: definitions/room_key_backup.yaml
+                    patternProperties:
+                      "^!":
+                        x-pattern-format: mx-room-id
+                        allOf:
+                          - $ref: definitions/room_key_backup.yaml
                     example:
                       "!room:example.org":
                         sessions:
@@ -974,7 +903,7 @@ paths:
       description: Delete the keys from the backup.
       operationId: deleteRoomKeys
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: version
@@ -989,22 +918,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                title: RoomKeysUpdateResponse
-                properties:
-                  etag:
-                    description: |-
-                      The new etag value representing stored keys in the backup.
-                      See `GET /room_keys/version/{version}` for more details.
-                    type: string
-                    example: abcdefg
-                  count:
-                    description: The number of keys stored in the backup
-                    type: integer
-                    example: 10
-                required:
-                  - etag
-                  - count
+                $ref: "#/components/schemas/RoomKeysUpdateResponse"
         "404":
           description: The backup was not found.
           content:
@@ -1038,5 +952,26 @@ servers:
       basePath:
         default: /_matrix/client/v3
 components:
+  schemas:
+    RoomKeysUpdateResponse:
+      type: object
+      title: RoomKeysUpdateResponse
+      properties:
+        etag:
+          description: |-
+            The new etag value representing stored keys in the backup.
+            
+            See [`GET /room_keys/version/{version}`](client-server-api/#get_matrixclientv3room_keysversionversion)
+            for more details.
+          type: string
+          example: abcdefg
+        count:
+          description: The number of keys stored in the backup
+          type: integer
+          example: 10
+      required:
+        - etag
+        - count
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

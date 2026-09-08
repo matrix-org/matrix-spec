@@ -1,3 +1,5 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+
 description: "The content of all call events shares a set of common fields: those
   of room events and some additional VoIP specific fields."
 properties:

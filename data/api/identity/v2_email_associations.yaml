@@ -40,7 +40,7 @@ paths:
         deprecated.
       operationId: emailRequestTokenV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -107,7 +107,7 @@ paths:
         deprecated.
       operationId: emailSubmitTokenPostV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -151,6 +151,24 @@ paths:
                   value: {
                     "success": true
                   }
+        "400":
+          description: |
+            An error occurred. Some possible errors are:
+
+            - {{% added-in v="1.18" %}} `M_TOKEN_INCORRECT`: The token that the user entered to validate the session is
+              incorrect.
+            - {{% added-in v="1.18" %}} `M_INVALID_PARAM`: One of the supplied parameters is not valid.
+            - {{% added-in v="1.18" %}} `M_SESSION_EXPIRED`: The validation session in question has expired.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_TOKEN_INCORRECT",
+                    "error": "The token is incorrect"
+                  }
         "403":
           description: |
             The user must do something in order to use this endpoint. One example
@@ -180,7 +198,7 @@ paths:
         used by end-users, and so the response should be human-readable.
       operationId: emailSubmitTokenGetV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: sid
@@ -242,4 +260,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -13,18 +13,21 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Application Service Room Directory API
+  title: Matrix Client-Server Application Service Published Room Directory API
   version: 1.0.0
 paths:
   "/directory/list/appservice/{networkId}/{roomId}":
     put:
-      summary: Updates a room's visibility in the application service's room directory.
-      description: |-
-        Updates the visibility of a given room on the application service's room
+      summary: |-
+        Updates a room's visibility in the application service's published room
         directory.
+      description: |-
+        Updates the visibility of a given room in the application service's
+        published room directory.
 
-        This API is similar to the room directory visibility API used by clients
-        to update the homeserver's more general room directory.
+        This API is similar to the
+        [visibility API](/client-server-api#put_matrixclientv3directorylistroomroomid)
+        used by clients to update the homeserver's more general published room directory.
 
         This API requires the use of an application service access token (`as_token`)
         instead of a typical client's access_token. This API cannot be invoked by
@@ -67,8 +70,7 @@ paths:
                 - visibility
         required: true
       security:
-        # again, this is the appservice's token - not a typical client's
-        - accessToken: []
+        - appserviceAccessTokenBearer: []
       responses:
         "200":
           description: The room's directory visibility has been updated.
@@ -95,6 +97,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    # Note: this is the same access_token definition used elsewhere in the client
-    # server API, however this expects an access token for an application service.
-    $ref: definitions/security.yaml
+    appserviceAccessTokenBearer:
+      $ref: definitions/security.yaml#/appserviceAccessTokenBearer

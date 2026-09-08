@@ -1,0 +1,64 @@
+{{/*
+
+  Render the response part of a single HTTP API operation, given:
+
+  * `responses`: OpenAPI data specifying the responses
+  * `anchor_base`: a prefix to add to the HTML anchors generated for each object
+
+  This template renders:
+  * a summary of all the different responses
+  * details of the body for each response code
+  * body parameters, which may be more complex, containing nested objects
+  * response body examples
+
+*/}}
+
+{{ $responses := .responses }}
+{{ $anchor_base := .anchor_base }}
+
+<h2>Responses</h2>
+
+<table class="response-table">
+ <thead>
+  <tr>
+    <th class="col-status">Status</th>
+    <th class="col-status-description">Description</th>
+  </tr>
+ </thead>
+
+{{ range $code, $response := $responses }}
+
+ <tr>
+  <td><code>{{ $code }}</code></td>
+  <td>{{ $response.description | markdownify }}</td>
+ </tr>
+
+{{ end }}
+
+</table>
+
+{{ range $code, $response := $responses }}
+    {{ if $response.content }}
+        {{ $anchor := printf "%s_response-%s" $anchor_base $code }}
+<h3>{{$code}} response</h3>
+        {{/* Display defined headers */}}
+        {{ if $response.headers }}
+            {{/* build a dict mapping from name->schema, which render-object-table expects */}}
+            {{ $headers_dict := dict }}
+            {{ range $header_name,$header_props := $response.headers }}
+                {{/*
+                    merge the schema at the same level as the rest of the other fields because that is
+                    what `render-object-table` expects. Put the schema first so examples in it are
+                    overwritten.
+                */}}
+                {{ $header_schema := merge $header_props.schema $header_props }}
+                {{ $headers_dict = merge $headers_dict (dict $header_name $header_schema )}}
+            {{ end }}
+
+            {{/* and render the headers */}}
+            {{ partial "openapi/render-object-table" (dict "title" "Headers" "properties" $headers_dict) }}
+        {{ end }}
+
+        {{ partial "openapi/render-media-type-objects" (dict "content" $response.content "kind" "response" "anchor_base" $anchor) }}
+    {{ end }}
+{{ end }}

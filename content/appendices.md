@@ -12,7 +12,7 @@ Specifically, where RFC 4648 requires that encoded data be padded to a
 multiple of four characters using `=` characters, unpadded Base64 omits
 this padding.
 
-For reference, RFC 4648 uses the following alphabet for Base 64:
+For reference, RFC 4648 uses the following alphabet for Base64:
 
     Value Encoding  Value Encoding  Value Encoding  Value Encoding
         0 A            17 R            34 i            51 z
@@ -46,6 +46,12 @@ Examples of strings encoded using unpadded Base64:
 When decoding Base64, implementations SHOULD accept input with or
 without padding characters wherever possible, to ensure maximum
 interoperability.
+
+### URL-safe unpadded Base64
+
+URL-safe unpadded Base64 is identical to standard unpadded Base64, except that
+it uses `-` (minus) as the 62nd character in the alphabet, and `_` (underscore)
+as the 63rd. This matches [RFC4648’s definition of URL-safe base64](https://tools.ietf.org/html/rfc4648#section-5).
 
 ## Binary data
 
@@ -131,32 +137,37 @@ def canonical_json(value):
 
 #### Grammar
 
-Adapted from the grammar in <http://tools.ietf.org/html/rfc7159>
-removing insignificant whitespace, fractions, exponents and redundant
-character escapes.
+Adapted grammar from <http://tools.ietf.org/html/rfc7159> removing
+insignificant whitespace, fractions, exponents and redundant character escapes
+written in [ABNF](https://datatracker.ietf.org/doc/html/rfc5234) with
+[case sensitive strings](https://datatracker.ietf.org/doc/html/rfc7405).
 
-    value     = false / null / true / object / array / number / string
-    false     = %x66.61.6c.73.65
-    null      = %x6e.75.6c.6c
-    true      = %x74.72.75.65
-    object    = %x7B [ member *( %x2C member ) ] %7D
-    member    = string %x3A value
-    array     = %x5B [ value *( %x2C value ) ] %5B
-    number    = [ %x2D ] int
-    int       = %x30 / ( %x31-39 *digit )
-    digit     = %x30-39
-    string    = %x22 *char %x22
-    char      = unescaped / %x5C escaped
-    unescaped = %x20-21 / %x23-5B / %x5D-10FFFF
-    escaped   = %x22 ; "    quotation mark  U+0022
-              / %x5C ; \    reverse solidus U+005C
-              / %x62 ; b    backspace       U+0008
-              / %x66 ; f    form feed       U+000C
-              / %x6E ; n    line feed       U+000A
-              / %x72 ; r    carriage return U+000D
-              / %x74 ; t    tab             U+0009
-              / %x75.30.30.30 (%x30-37 / %x62 / %x65-66) ; u000X
-              / %x75.30.30.31 (%x30-39 / %x61-66)        ; u001X
+```
+value     = false / null / true / object / array / number / string
+false     = %s"false"
+null      = %s"null"
+true      = %s"true"
+object    = "{" [ member *( "," member ) ] "}"
+member    = string ":" value
+array     = "[" [ value *( "," value ) ] "]"
+number    = [ "-" ] int
+int       = %x30 / ( %x31-39 *DIGIT )   ; Integer without leading zeros
+string    = DQUOTE *char DQUOTE         ; Quoted characters
+char      = unescaped / "\" escaped
+unescaped = %x20-21 / %x23-5B / %x5D-10FFFF ; All UTF-8 codepoints except ASCII control
+                                            ; characters, " and \
+escaped   = %x62 ; b    backspace       U+0008
+          / %x74 ; t    tab             U+0009
+          / %x6E ; n    line feed       U+000A
+          / %x66 ; f    form feed       U+000C
+          / %x72 ; r    carriage return U+000D
+          / %x22 ; "    quotation mark  U+0022
+          / %x5C ; \    reverse solidus U+005C
+          / %s"u000" (%x30-37 / %x62 / %x65-66) ; All ASCII control characters which do not have
+                                                ; dedicated escape sequences (for example \n).
+                                                ; u000X, where X is [0-7, b, e, f]
+          / %s"u001" (%x30-39 / %x61-66)        ; u001X, where X is [0-9, a-f]
+```
 
 #### Examples
 
@@ -533,6 +544,11 @@ where `domain` is the [server name](#server-name) of the homeserver
 which allocated the identifier, and `localpart` is an identifier
 allocated by that homeserver.
 
+Because the domain part identifies the server on which the ID resolves,
+the canonical pronunciation of the separating `:` is "on".
+For example, `@user:matrix.org` would be pronounced as "at user on matrix dot
+org".
+
 The precise grammar defining the allowable format of an identifier
 depends on the type of identifier. For example, event IDs can sometimes
 be represented with a `domain` component under some conditions - see the
@@ -556,7 +572,7 @@ The `domain` of a user ID is the [server name](#server-name) of the
 homeserver which allocated the account.
 
 The length of a user ID, including the `@` sigil and the domain, MUST
-NOT exceed 255 characters.
+NOT exceed 255 bytes.
 
 The complete grammar for a legal user ID is:
 
@@ -611,10 +627,18 @@ characters permitted in user ID localparts. There are currently active
 users whose user IDs do not conform to the permitted character set, and
 a number of rooms whose history includes events with a `sender` which
 does not conform. In order to handle these rooms successfully, clients
-and servers MUST accept user IDs with localparts from the expanded
-character set:
+and servers MUST accept user IDs with localparts consisting of any legal
+non-surrogate Unicode code points except for `:` and `NUL` (U+0000), including other control
+characters and the empty string.
 
-    extended_user_id_char = %x21-39 / %x3B-7E  ; all ASCII printing chars except :
+User IDs with localparts containing characters outside the range U+0021 to U+007E, or with
+an empty localpart, are considered non-compliant. For current room versions, servers must
+still accept events using such user IDs over federation; however they SHOULD NOT forward
+such user IDs to clients when referenced outside the context of an event. For example,
+device list updates from non-compliant user IDs would be dropped by the receiving server.
+
+A future room version may prevent users using a historical character set
+from participating. Use of the historical character set is *deprecated*.
 
 ##### Mapping from other character sets
 
@@ -649,19 +673,48 @@ provides no way to encode ASCII punctuation).
 
 #### Room IDs
 
-A room has exactly one room ID. A room ID has the format:
+{{% changed-in v="1.16" %}} Room IDs can now appear without a domain depending on
+the room version.
+
+A room has exactly one room ID. Room IDs take the form:
+
+    !opaque_id
+
+However, the precise format depends upon the [room version specification](/rooms):
+some room versions included a `domain` component, whereas more recent room versions
+omit the domain and use a base64-encoded hash instead.
+
+Room IDs are case-sensitive and not meant to be human-readable. They are intended
+to be used as fully opaque strings by clients, even when a `domain` component is
+present.
+
+If the room version requires a `domain` component, room IDs take the following
+form:
 
     !opaque_id:domain
 
-The `domain` of a room ID is the [server name](#server-name) of the
-homeserver which created the room. The domain is used only for
-namespacing to avoid the risk of clashes of identifiers between
-different homeservers. There is no implication that the room in
-question is still available at the corresponding homeserver.
+In such a form, the `opaque_id` is a localpart. The localpart MUST only contain
+valid non-surrogate Unicode code points, including control characters, except `:`
+and `NUL` (U+0000). The localpart SHOULD only consist of alphanumeric characters
+(`A-Z`, `a-z`, `0-9`) when generating them. The `domain` is the [server name](#server-name)
+of the homeserver which created the room - it is only used to reduce namespace
+collisions. There is no implication that the room in question is still available
+at the corresponding homeserver. Combined, the localpart, domain, and `!` sigil
+MUST NOT exceed 255 bytes.
 
-Room IDs are case-sensitive. They are not meant to be
-human-readable. They are intended to be treated as fully opaque strings
-by clients.
+When a room version requires the `domain`-less format, room IDs are simply the
+[event ID](#event-ids) of the `m.room.create` event using `!` as the sigil instead
+of `$`. The grammar is otherwise inherited verbatim.
+
+{{% boxes/note %}}
+Applications which previously relied upon the `domain` in a room ID can instead
+parse the [user IDs](#user-identifiers) found in the `m.room.create` event's `sender`.
+
+Though the `m.room.create` event's `additional_creators` (in `content`) may be
+used when present, applications should take care when parsing or interpreting the
+list. The user IDs in `additional_creators` will have correct grammar, but may
+not be real users or may not belong to actual Matrix homeservers.
+{{% /boxes/note %}}
 
 #### Room Aliases
 
@@ -673,8 +726,11 @@ The `domain` of a room alias is the [server name](#server-name) of the
 homeserver which created the alias. Other servers may contact this
 homeserver to look up the alias.
 
-Room aliases MUST NOT exceed 255 bytes (including the `#` sigil and the
-domain).
+The localpart of a room alias may contain any valid non-surrogate Unicode codepoints
+except `:` and `NUL`.
+
+The length of a room alias, including the `#` sigil and the domain, MUST
+NOT exceed 255 bytes.
 
 #### Event IDs
 
@@ -686,9 +742,11 @@ However, the precise format depends upon the [room version
 specification](/rooms): early room versions included a `domain` component,
 whereas more recent versions omit the domain and use a base64-encoded hash instead.
 
+In addition to the requirements of the room version, the length of an event ID,
+including the `$` sigil and the domain where present, MUST NOT exceed 255 bytes.
+
 Event IDs are case-sensitive. They are not meant to be human-readable. They are
 intended to be treated as fully opaque strings by clients.
-
 
 ### URIs
 
@@ -707,13 +765,13 @@ history (a permalink).
 
 The Matrix URI scheme is defined as follows (`[]` enclose optional parts, `{}`
 enclose variables):
-```
+```nohighlight
 matrix:[//{authority}/]{type}/{id without sigil}[/{type}/{id without sigil}...][?{query}][#{fragment}]
 ```
 
 As a schema, this can be represented as:
 
-```
+```nohighlight
 MatrixURI = "matrix:" hier-part [ "?" query ] [ "#" fragment ]
 hier-part = [ "//" authority "/" ] path
 path = entity-descriptor ["/" entity-descriptor]
@@ -745,7 +803,7 @@ Specifically, the following mappings are used:
 * `r` for room aliases.
 * `u` for users.
 * `roomid` for room IDs (note the distinction from room aliases).
-* `e` for events, when after a room reference (`r` or `roomid`).
+* `e` for events, when after a room ID (`roomid`). Use of `e` after a room alias (`r`) is deprecated.
 
 {{% boxes/note %}}
 During development of this URI format, types of `user`, `room`, and `event`
@@ -753,6 +811,13 @@ were used: these MUST NOT be produced any further, though implementations might
 wish to consider handling them as `u`, `r`, and `e` respectively.
 
 `roomid` was otherwise unchanged.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% changed-in v="1.11" %}}
+Referencing event IDs within a room identified by room alias (`r`) rather than room ID
+(`roomid`) is now deprecated.  We are not aware of these ever having been used in
+practice, and are nonsensical given room aliases are mutable.
 {{% /boxes/note %}}
 
 The `id without sigil` is simply the identifier for the entity without the defined
@@ -799,7 +864,6 @@ Examples of common URIs are:
 <!-- Author's note: These examples should be consistent with the matrix.to counterparts. -->
 * Link to `#somewhere:example.org`: `matrix:r/somewhere:example.org`
 * Link to `!somewhere:example.org`: `matrix:roomid/somewhere:example.org?via=elsewhere.ca`
-* Link to `$event` in `#somewhere:example.org`: `matrix:r/somewhere:example.org/e/event`
 * Link to `$event` in `!somewhere:example.org`: `matrix:roomid/somewhere:example.org/e/event?via=elsewhere.ca`
 * Link to chat with `@alice:example.org`: `matrix:u/alice:example.org?action=chat`
 
@@ -809,43 +873,59 @@ A suggested client implementation algorithm is available in the
 #### matrix.to navigation
 
 {{% boxes/note %}}
-This namespacing existed prior to a `matrix:` scheme. This is **not**
-meant to be interpreted as an available web service - see below for more
-details.
+matrix.to is a Namespace URI which existed prior to a `matrix:` URI scheme.
+This is **not** meant to be interpreted as an available web service - see
+below for more details.
 {{% /boxes/note %}}
 
 A matrix.to URI has the following format, based upon the specification
 defined in [RFC 3986](https://tools.ietf.org/html/rfc3986):
 
-```
+```nohighlight
 https://matrix.to/#/<identifier>/<extra parameter>?<additional arguments>
 ```
 
 The identifier may be a room ID, room alias, or user ID. The
 extra parameter is only used in the case of permalinks where an event ID
-is referenced. The matrix.to URI, when referenced, must always start
+is referenced. The matrix.to URI, when referenced, MUST always start
 with `https://matrix.to/#/` followed by the identifier.
 
 The `<additional arguments>` and the preceding question mark are
-optional and only apply in certain circumstances, documented below.
+OPTIONAL and only apply in certain circumstances, documented below.
 
-Clients should not rely on matrix.to URIs falling back to a web server
-if accessed and instead should perform some sort of action within the
+Clients SHOULD NOT rely on matrix.to URIs falling back to a web server
+if accessed and instead SHOULD perform some sort of action within the
 client. For example, if the user were to click on a matrix.to URI for a
-room alias, the client may open a view for the user to participate in
+room alias, the client MAY open a view for the user to participate in
 the room.
 
 The components of the matrix.to URI (`<identifier>` and
-`<extra parameter>`) are to be percent-encoded as per RFC 3986.
+`<extra parameter>`) MUST be percent-encoded as per RFC 3986.
+Failure to do so will result in downstream software misinterpreting
+the links as invalid/not turning them into clickable links in UI.
 
 Examples of matrix.to URIs are:
 
 <!-- Author's note: These examples should be consistent with the matrix scheme counterparts. -->
+* Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere:example.org`
+* Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere:example.org?via=elsewhere.ca`
+* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere:example.org/$event:example.org?via=elsewhere.ca`
+* Link to `@alice:example.org`: `https://matrix.to/#/@alice:example.org`
+
+Note that encoding of characters is REQUIRED by RFC 3986 when they could otherwise be misinterpreted, and OPTIONAL for any other character.
+Hence the following encoding is also valid:
+
 * Link to `#somewhere:example.org`: `https://matrix.to/#/%23somewhere%3Aexample.org`
-* Link to `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org?via=elsewhere.ca`
-* Link to `$event` in `#somewhere:example.org`: `https://matrix.to/#/%23somewhere:example.org/%24event%3Aexample.org`
-* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/!somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
+* Link to `!somewhere:example.org`: `https://matrix.to/#/%21somewhere%3Aexample.org?via=elsewhere.ca`
+* Link to `$event` in `!somewhere:example.org`: `https://matrix.to/#/%21somewhere%3Aexample.org/%24event%3Aexample.org?via=elsewhere.ca`
 * Link to `@alice:example.org`: `https://matrix.to/#/%40alice%3Aexample.org`
+
+{{% boxes/note %}}
+{{% changed-in v="1.11" %}}
+Referencing event IDs within a room identified by room alias rather than room ID
+is now deprecated.  We are not aware of these ever having been used in
+practice, and are nonsensical given room aliases are mutable.
+{{% /boxes/note %}}
 
 {{% boxes/note %}}
 Historically, clients have not produced URIs which are fully encoded.
@@ -881,10 +961,10 @@ they need to go, however they should also be aware of [issue
 
 A room (or room permalink) which isn't using a room alias should supply
 at least one server using `via` in the URI's query string. Multiple servers
-can be specified by including multuple `via` parameters.
+can be specified by including multiple `via` parameters.
 
-The values of `via` are intended to be passed along as the `server_name`
-parameters on the [Client Server `/join/{roomIdOrAlias}` API](/client-server-api/#post_matrixclientv3joinroomidoralias).
+The values of `via` are intended to be passed along on the
+[Client Server `/join/{roomIdOrAlias}` API](/client-server-api/#post_matrixclientv3joinroomidoralias).
 
 When generating room links and permalinks, the application should pick
 servers which have a high probability of being in the room in the
@@ -920,6 +1000,50 @@ unique servers based on the following criteria:
     have enough users to supply 3 servers, the application should only
     specify the servers it can. For example, a room with only 2 users in
     it would result in maximum 2 `via` parameters.
+
+### Opaque Identifiers
+
+The specification defines some identifiers to use the *Opaque Identifier
+Grammar*. This is a common grammar intended for non-user-visible identifiers
+which do not require parsing or interpretation (other than as a unique
+identifier).
+
+The grammar is defined as:
+
+* Identifiers must be entirely composed of the characters `[0-9]`, `[A-Z]`,
+  `[a-z]`, `-`, `.`, `_`, and `~`.
+* Unless otherwise specified, identifiers must be at least one character and at
+  most 255 characters in length.
+
+{{% boxes/note %}}
+The acceptable character set matches the unreserved character set in [RFC
+3986](https://datatracker.ietf.org/doc/html/rfc3986#section-2.3).
+{{% /boxes/note %}}
+
+## Cryptographic key representation
+
+Sometimes it is necessary to present a private cryptographic key in the user
+interface.
+
+When this happens, the key SHOULD be presented as a string formatted as
+follows:
+
+1.  A byte array is created, consisting of two bytes `0x8B` and `0x01`,
+    followed by the raw key.
+2.  All the bytes in the array above, including the two header bytes,
+    are XORed together to form a parity byte. This parity byte is
+    appended to the byte array.
+3.  The byte array is encoded using base58, using the the alphabet
+    `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
+4.  A space is added after every 4th character.
+
+When reading in a key, clients should disregard whitespace, and
+perform the reverse of steps 1 through 4.
+
+{{% boxes/note %}}
+The base58 alphabet is the same as that used for [Bitcoin
+addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart).
+{{% /boxes/note %}}
 
 ## 3PID Types
 

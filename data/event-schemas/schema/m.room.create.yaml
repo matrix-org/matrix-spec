@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: This is the first event in a room and cannot be changed. It acts as the root of all other events.
@@ -10,6 +12,8 @@ properties:
           The `user_id` of the room creator. **Required** for, and only present in, room versions 1 - 10. Starting with
           room version 11 the event `sender` should be used instead.
         type: string
+        format: mx-user-id
+        pattern: "^@"
       m.federate:
         description: Whether users on other servers can join this room. Defaults to `true` if key does not exist.
         type: boolean
@@ -18,7 +22,8 @@ properties:
         type: string
       type:
         description: |-
-          Optional [room type](#types) to denote a room's intended function outside of traditional conversation.
+          Optional [room type](/client-server-api/#types) to denote a room's intended function outside of traditional
+          conversation.
 
           Unspecified room types are possible using [Namespaced Identifiers](/appendices/#common-namespaced-identifier-grammar).
         type: string
@@ -29,11 +34,45 @@ properties:
         properties:
           room_id:
             type: string
+            format: mx-room-id
+            pattern: "^!"
             description: The ID of the old room.
           event_id:
             type: string
-            description: The event ID of the last known event in the old room.
-        required: [room_id, event_id]
+            format: mx-event-id
+            pattern: "^\\$"
+            deprecated: true
+            x-changedInMatrixVersion:
+              "1.16": |-
+                This field became deprecated and may not be present in all cases. It SHOULD still
+                be populated where possible/practical. Previously, it was required.
+            description: |-
+              The event ID of the last known event in the old room, if known.
+
+              If not set, clients SHOULD search for the `m.room.tombstone` state event to navigate to
+              when directing the user to the old room (potentially after joining the room, if requested
+              by the user).
+        required: [room_id]
+      additional_creators:
+        type: array
+        items:
+          type: string
+          format: mx-user-id
+          pattern: "^@"
+          description: Additional user ID to consider a creator of the room, if supported by the room version.
+        x-addedInMatrixVersion: "1.16"
+        description: |-
+          Starting with room version 12, the other user IDs to consider as creators for the room in
+          addition to the `sender` of this event. Each string MUST be a valid [user ID](/appendices#user-identifiers)
+          for the room version.
+
+          When not present or empty, the `sender` of the event is the only creator.
+
+          In room versions 1 through 11, this field serves no purpose and is not validated. Clients
+          SHOULD NOT attempt to parse or understand this field in these room versions.
+
+          **Note**: Because `creator` was removed in room version 11, the field is not used to determine
+          which user(s) are room creators in room version 12 and beyond either.
     type: object
   state_key:
     description: A zero-length string.

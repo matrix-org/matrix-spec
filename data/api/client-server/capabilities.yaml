@@ -24,7 +24,7 @@ paths:
         and other relevant capabilities.
       operationId: getCapabilities
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The capabilities of the server.
@@ -42,19 +42,19 @@ paths:
                       The custom capabilities the server supports, using the
                       Java package naming convention.
                     additionalProperties:
-                      type: object
+                      description: |-
+                        Application-dependent keys using the
+                        [Common Namespaced Identifier Grammar](/appendices/#common-namespaced-identifier-grammar).
                     properties:
                       m.change_password:
-                        type: object
+                        $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can change their password.
-                        title: ChangePasswordCapability
-                        properties:
-                          enabled:
-                            type: boolean
-                            description: True if the user can change their password, false otherwise.
-                            example: false
-                        required:
-                          - enabled
+                      m.forget_forced_upon_leave:
+                        x-addedInMatrixVersion: "1.18"
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: |-
+                          Capability to indicate if the server automatically forgets rooms once the user
+                          leaves.
                       m.room_versions:
                         type: object
                         description: The room versions the server supports.
@@ -77,6 +77,103 @@ paths:
                         required:
                           - default
                           - available
+                      m.set_displayname:
+                        deprecated: true
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: |
+                          **Deprecated:** Capability to indicate if the user can change their display name.
+                          Refer to `m.profile_fields` for extended profile management.
+
+                          For backwards compatibility, servers that directly or indirectly include the
+                          `displayname` profile field in the `m.profile_fields` capability MUST also
+                          set this capability accordingly.
+                      m.set_avatar_url:
+                        deprecated: true
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: |
+                          **Deprecated:** Capability to indicate if the user can change their avatar.
+                          Refer to `m.profile_fields` for extended profile management.
+
+                          For backwards compatibility, servers that directly or indirectly include the
+                          `avatar_url` profile field in the `m.profile_fields` capability MUST also
+                          set this capability accordingly.
+                      m.3pid_changes:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can change 3PID associations
+                          on their account.
+                      m.get_login_token:
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: Capability to indicate if the user can generate tokens to log further
+                          clients into their account.
+                      m.profile_fields:
+                        x-addedInMatrixVersion: "1.16"
+                        type: object
+                        title: ProfileFieldsCapability
+                        description: Capability to indicate if the user can set or modify extended profile fields via
+                          [`PUT /_matrix/client/v3/profile/{userId}/{keyName}`](/client-server-api/#put_matrixclientv3profileuseridkeyname).
+                          If absent, clients SHOULD assume custom profile fields are supported, provided the
+                          homeserver advertises a specification version that includes `m.profile_fields` in the
+                          [`/versions`](/client-server-api/#get_matrixclientversions) response.
+                        properties:
+                          allowed:
+                            type: array
+                            description: |
+                              If present, a list of profile fields that clients are allowed to create, modify or delete,
+                              provided `enabled` is `true`; no other profile fields may be changed.
+
+                              If absent, clients may set all profile fields except those forbidden by the `disallowed`
+                              list, where present.
+                            items:
+                              type: string
+                            example:
+                              - "m.example_field"
+                              - "org.example.job_title"
+                          disallowed:
+                            type: array
+                            description:  |
+                              This property has no meaning if `allowed` is also specified.
+
+                              Otherwise, if present, a list of profile fields that clients are _not_ allowed to create, modify or delete.
+                              Provided `enabled` is `true`, clients MAY assume that they can set any profile field which is not
+                              included in this list.
+                            items:
+                              type: string
+                            example:
+                              - "org.example.managed_field"
+                          enabled:
+                            type: boolean
+                            description: "`true` if the user can create, update or delete any profile fields, `false` otherwise."
+                            example: true
+                        required:
+                          - enabled
+                      m.account_moderation:
+                        x-addedInMatrixVersion: "1.18"
+                        type: object
+                        title: AccountModerationCapability
+                        description: |-
+                          Capability to indicate if the user can perform account moderation actions
+                          via [server administration](/client-server-api/#server-administration)
+                          endpoints.
+
+                          This property should be omitted altogether if `suspend` and `lock` would
+                          be `false`.
+                        properties:
+                          suspend:
+                            type: boolean
+                            description: |-
+                              `true` if the user can suspend a user via [`PUT /admin/suspend/{userId}`](/client-server-api/#put_matrixclientv1adminsuspenduserid),
+                              `false` otherwise.
+
+                              Defaults to `false`.
+                            example: true
+                          lock:
+                            type: boolean
+                            description: |-
+                              `true` if the user can lock a user via [`PUT /admin/lock/{userId}`](/client-server-api/#put_matrixclientv1adminlockuserid),
+                              `false` otherwise.
+
+                              Defaults to `false`.
+                            example: true
               examples:
                 response:
                   value: {
@@ -120,4 +217,16 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  schemas:
+    booleanCapability:
+      type: object
+      title: BooleanCapability
+      properties:
+        enabled:
+          type: boolean
+          description: True if the user can perform the action, false otherwise.
+          example: false
+      required:
+        - enabled

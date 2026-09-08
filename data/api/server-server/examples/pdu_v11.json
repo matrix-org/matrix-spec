@@ -1,19 +1,6 @@
 {
-    "$ref": "unsigned_pdu_base.json",
-    "hashes": {
-        "sha256": "thishashcoversallfieldsincasethisisredacted"
-    },
-    "signatures": {
-        "example.com": {
-            "ed25519:key_version:": "these86bytesofbase64signaturecoveressentialfieldsincludinghashessocancheckredactedpdus"
-        }
-    },
-    "auth_events": [
-        "$urlsafe_base64_encoded_eventid",
-        "$a-different-event-id"
-    ],
-    "prev_events": [
-        "$urlsafe_base64_encoded_eventid",
-        "$a-different-event-id"
+    "allOf": [
+        { "$ref": "components/pdu_base.json" },
+        { "$ref": "components/auth_events_prev_events_v4.json" }
     ]
 }

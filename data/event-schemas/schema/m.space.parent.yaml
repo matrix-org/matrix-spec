@@ -1,4 +1,6 @@
 ---
+$schema: https://json-schema.org/draft/2020-12/schema
+
 allOf:
   - $ref: core-event-schema/state_event.yaml
 description: Defines the relationship of a room to a parent space-room.
@@ -20,6 +22,8 @@ properties:
 
           When multiple `canonical` parents are found, the lowest parent when ordering by room ID
           lexicographically by Unicode code-points should be used.
+    required:
+      - via
     type: object
   state_key:
     description: The parent room ID.

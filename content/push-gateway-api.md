@@ -2,11 +2,10 @@
 title: "Push Gateway API"
 weight: 50
 type: docs
+description: |
+  Clients may want to receive push notifications when events are received at the
+  homeserver. This is managed by a distinct entity called the Push Gateway.
 ---
-
-Clients may want to receive push notifications when events are received
-at the homeserver. This is managed by a distinct entity called the Push
-Gateway.
 
 ## Overview
 
@@ -14,7 +13,7 @@ A client's homeserver forwards information about received events to the
 push gateway. The gateway then submits a push notification to the push
 notification provider (e.g. APNS, GCM).
 
-```
+```nohighlight
                                    +--------------------+  +-------------------+
                   Matrix HTTP      |                    |  |                   |
              Notification Protocol |   App Developer    |  |   Device Vendor   |

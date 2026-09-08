@@ -1,13 +1,19 @@
 {{/*
 
-  A simplified version of the list.html partial in Docsy.
+  Override the `layouts/docs/list.html` template from Docsy. While this template
+  is equivalent to `single.html`, it's necessary to override both templates to
+  avoid falling back to the default Docsy templates.
+
+  https://gohugo.io/templates/types/#list
+
+  We use this list template to render the Client-Server API spec page and each
+  of its modules.
+
+  The contents of the "main" block below are inserted into the `./baseof.html`
+  base template.
 
 */}}
 
 {{ define "main" }}
-<div class="td-content">
-	<h1>{{ .Title }}</h1>
-        {{ with .Params.description }}<div class="lead">{{ . | markdownify }}</div>{{ end }}
-	{{ .Content }}
-</div>
+  {{ partial "spec-content.html" . }}
 {{ end }}

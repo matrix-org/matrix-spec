@@ -28,7 +28,7 @@ paths:
         any of the algorithms defined in this specification.
       operationId: getHashDetails
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The hash function information.
@@ -70,7 +70,7 @@ paths:
         later in this specification.
       operationId: lookupUsersV2
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -162,4 +162,5 @@ servers:
         default: /_matrix/identity/v2
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -11,8 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-accessToken:
-  type: apiKey
-  description: The access_token returned by a call to `/login` or `/register`
-  name: access_token
-  in: query
+accessTokenBearer:
+  type: http
+  description: |-
+    The `access_token` obtained during [account registration](/client-server-api/#account-registration)
+    or [login](/client-server-api/#login), using the `Authorization: Bearer` header.
+
+    It can also be the `as_token` of an application service.
+  scheme: bearer
+appserviceAccessTokenBearer:
+  type: http
+  description: |-
+    The `as_token` of an application service, using the `Authorization: Bearer`
+    header.
+  scheme: bearer

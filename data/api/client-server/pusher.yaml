@@ -23,7 +23,7 @@ paths:
       description: Gets all currently active pushers for the authenticated user.
       operationId: getPushers
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The pushers for this user.
@@ -136,7 +136,7 @@ paths:
         user is deleted.
       operationId: postPusher
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -208,27 +208,34 @@ paths:
                   type: object
                   description: |-
                     Required if `kind` is not `null`. A dictionary of information
-                    for the pusher implementation itself. If `kind` is `http`,
-                    this should contain `url` which is the URL to use to send
-                    notifications to.
+                    for the pusher implementation itself.
+
+                    If `kind` is `http`, this MUST contain `url` which is the URL
+                    to use for sending notifications. Clients MAY use this object
+                    to pass custom data to their push gateway. Servers MUST forward
+                    the entire content including `format` and any custom keys but excluding `url`
+                    when calling [`/_matrix/push/v1/notify`](/push-gateway-api/#post_matrixpushv1notify).
                   title: PusherData
                   properties:
                     url:
                       type: string
                       format: uri
                       description: |-
-                        Required if `kind` is `http`. The URL to use to send
-                        notifications to. MUST be an HTTPS URL with a path of
+                        Required if `kind` is `http`. The URL to use for sending
+                        notifications. MUST be an HTTPS URL with a path of
                         `/_matrix/push/v1/notify`.
                       example: https://push-gateway.location.here/_matrix/push/v1/notify
                     format:
                       type: string
                       description: |-
-                        The format to send notifications in to Push Gateways if the
-                        `kind` is `http`. The details about what fields the
-                        homeserver should send to the push gateway are defined in the
-                        [Push Gateway Specification](/push-gateway-api/). Currently the only format
-                        available is 'event_id_only'.
+                        The format in which to send notifications to the push gateway
+                        if the `kind` is `http`. The details about what fields the
+                        homeserver should include are defined in the
+                        [Push Gateway Specification](/push-gateway-api/). If omitted,
+                        the server is expected to populate all of the event-related fields
+                        specified in [`/_matrix/push/v1/notify`](/push-gateway-api/#post_matrixpushv1notify).
+                      enum:
+                        - "event_id_only"
                 append:
                   type: boolean
                   description: |-
@@ -288,4 +295,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

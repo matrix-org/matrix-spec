@@ -39,7 +39,7 @@ paths:
         being removed or are already present in the state event.
       operationId: setRoomStateWithKey
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -48,6 +48,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventType
           description: The type of event to send.
@@ -85,6 +87,8 @@ paths:
                 properties:
                   event_id:
                     type: string
+                    format: mx-event-id
+                    pattern: "^\\$"
                     description: A unique identifier for the event.
                 required:
                   - event_id
@@ -115,7 +119,13 @@ paths:
                     "error": "The alias '#hello:example.org' does not point to this room."
                   }
         "403":
-          description: The sender doesn't have permission to send the event into the room.
+          description: |-
+            The sender doesn't have permission to send the event into the room.
+
+            {{% added-in v="1.18"%}} If the `eventType` is `m.room.member` and
+            the `membership` is `invite`, the `M_INVITE_BLOCKED` error code is
+            used to indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:
@@ -142,4 +152,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

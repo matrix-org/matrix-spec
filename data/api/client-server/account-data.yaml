@@ -23,17 +23,17 @@ paths:
         Set some account data for the client. This config is only visible to the user
         that set the account data. The config will be available to clients through the
         top-level `account_data` field in the homeserver response to
-        [/sync](#get_matrixclientv3sync).
+        [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountData
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -82,7 +82,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to modify this user's account 
+            The access token provided is not authorised to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -117,14 +117,14 @@ paths:
         that set the account data.
       operationId: getAccountData
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -149,7 +149,7 @@ paths:
                 }
         "403":
           description: |-
-            The access token provided is not authorized to retrieve this user's account 
+            The access token provided is not authorised to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -183,17 +183,17 @@ paths:
       description: |-
         Set some account data for the client on a given room. This config is only
         visible to the user that set the account data. The config will be delivered to
-        clients in the per-room entries via [/sync](#get_matrixclientv3sync).
+        clients in the per-room entries via [/sync](/client-server-api/#get_matrixclientv3sync).
       operationId: setAccountDataPerRoom
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
           required: true
           description: |-
             The ID of the user to set account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -250,7 +250,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to modify this user's account 
+            The access token provided is not authorised to modify this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -285,14 +285,14 @@ paths:
         visible to the user that set the account data.
       operationId: getAccountDataPerRoom
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
           required: true
           description: |-
             The ID of the user to get account data for. The access token must be
-            authorized to make requests for this user ID.
+            authorised to make requests for this user ID.
           example: "@alice:example.com"
           schema:
             type: string
@@ -337,7 +337,7 @@ paths:
                   }
         "403":
           description: |-
-            The access token provided is not authorized to retrieve this user's account 
+            The access token provided is not authorised to retrieve this user's account 
             data. Errcode: `M_FORBIDDEN`.
           content:
             application/json:
@@ -379,4 +379,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

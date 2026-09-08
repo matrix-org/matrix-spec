@@ -24,7 +24,7 @@ paths:
         calls.
       operationId: getTurnServer
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       responses:
         "200":
           description: The TURN server credentials.
@@ -43,6 +43,8 @@ paths:
                     type: array
                     items:
                       type: string
+                      format: uri
+                      pattern: "^turns?:"
                     description: A list of TURN URIs
                   ttl:
                     type: integer
@@ -86,4 +88,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

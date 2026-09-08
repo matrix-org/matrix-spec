@@ -1,0 +1,9 @@
+{{- $ver := .Params.v -}}
+
+{{- with page.Params.version -}}
+  {{- if eq $ver . -}}
+    <strong>[New in this version]</strong>
+  {{- end -}}
+{{- else -}}
+  <strong>[Added in <code>v{{ $ver }}</code>]</strong>
+{{- end -}}

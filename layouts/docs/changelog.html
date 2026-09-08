@@ -1,0 +1,42 @@
+{{- /*
+
+    Template to render a page with a `changelog` layout.
+
+    This adds a table at the top of the page with information about the release:
+
+    * A link to the matrix-spec repository at the time of the release, with the
+      version taken from the `linkTitle` in the frontmatter of the page, unless
+      it is the unstable changelog.
+    * The date of the release, taken from the `date` in the frontmatter of the
+      page, unless it is the unstable changelog.
+    * A link to the markdown checklist format of the changelog. The `outputs` in
+      the frontmatter of the page must include `checklist`.
+
+*/ -}}
+
+{{ define "main" }}
+    {{ $version := lower .LinkTitle -}}
+<div class="td-content" data-pagefind-filter="type:changelog">
+    <h1>{{ .Title }}</h1>
+
+    <table class="release-info">
+        {{ $rev := $version }}
+        {{ if eq $version "unstable" -}}
+            {{- /*
+                Extract the git SHA from the frontmatter of the changelog, where
+                it was stashed by `generate-changelog.sh`.
+            */ -}}
+            {{ $rev = .Params.commit -}}
+        {{ end -}}
+        {{ $commitLink := printf "https://github.com/matrix-org/matrix-spec/tree/%s" $rev -}}
+        <tr><th>Git commit</th><td><a href="{{ $commitLink }}">{{ $commitLink }}</a></td>
+        {{ if ne $version "unstable" }}
+        <tr><th>Release date</th><td>{{ .Date | time.Format ":date_long" }}</td>
+        {{ end -}}
+        {{ $checklist := .OutputFormats.Get "checklist" -}}
+        <tr><th>Checklist</th><td><a href="{{ $checklist.RelPermalink }}">checklist.md</a></td>
+    </table>
+
+    {{ .Content }}
+</div>
+{{ end }}

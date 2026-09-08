@@ -18,12 +18,12 @@ info:
 paths:
   "/rooms/{roomId}/join":
     post:
-      summary: Start the requesting user participating in a particular room.
+      summary: Join the requesting user to a particular room.
       description: |-
         *Note that this API requires a room ID, not alias.*
         `/join/{roomIdOrAlias}` *exists if you have a room alias.*
 
-        This API starts a user participating in a particular room, if that user
+        This API starts a user's participation in a particular room, if that user
         is allowed to participate in that room. After this call, the client is
         allowed to see all current state events in the room, and all subsequent
         events associated with the room until the user leaves the room.
@@ -33,7 +33,7 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoomById
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -42,6 +42,8 @@ paths:
           example: "!d41d8cd:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -77,6 +79,8 @@ paths:
                   room_id:
                     type: string
                     description: The joined room ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
@@ -112,11 +116,11 @@ paths:
         - Room membership
   "/join/{roomIdOrAlias}":
     post:
-      summary: Start the requesting user participating in a particular room.
+      summary: Join the requesting user to a particular room.
       description: |-
         *Note that this API takes either a room ID or alias, unlike* `/rooms/{roomId}/join`.
 
-        This API starts a user participating in a particular room, if that user
+        This API starts a user's participation in a particular room, if that user
         is allowed to participate in that room. After this call, the client is
         allowed to see all current state events in the room, and all subsequent
         events associated with the room until the user leaves the room.
@@ -126,7 +130,7 @@ paths:
         and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
       operationId: joinRoom
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias
@@ -134,9 +138,16 @@ paths:
           required: true
           example: "#monkeys:matrix.org"
           schema:
-            type: string
+            oneOf:
+              - type: string
+                format: mx-room-id
+                pattern: "^!"
+              - type: string
+                format: mx-room-alias
+                pattern: "^#"
         - in: query
-          name: server_name
+          name: via
+          x-addedInMatrixVersion: "1.12"
           description: |-
             The servers to attempt to join the room through. One of the servers
             must be participating in the room.
@@ -147,6 +158,7 @@ paths:
             type: array
             items:
               type: string
+              format: mx-server-name
       requestBody:
         content:
           application/json:
@@ -182,6 +194,8 @@ paths:
                   room_id:
                     type: string
                     description: The joined room ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
@@ -229,4 +243,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

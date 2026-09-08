@@ -1,0 +1,25 @@
+# Copyright 2025 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+type: object
+description: |-
+  The depth field of PDUs for room version 6 and beyond.
+properties:
+  # v6 enforces Canonical JSON and therefore needs a depth limit change
+  depth:
+    type: integer
+    description: |-
+      The maximum depth of the `prev_events`, plus one. Must be less than the
+      maximum value for an integer (2^53 - 1). If the room's depth is already at
+      the limit, the depth must be set to the limit.
+    example: 12

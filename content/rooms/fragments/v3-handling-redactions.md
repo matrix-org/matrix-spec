@@ -1,11 +1,11 @@
 ---
 ---
-{{% added-in this=true %}} In room versions 1 and 2, redactions were
-explicitly part of the [authorization rules](/rooms/v1/#authorization-rules)
+{{% added-in v=3 %}} In room versions 1 and 2, redactions were
+explicitly part of the [authorisation rules](/rooms/v1/#authorisation-rules)
 under Rule 11. As of room version 3, these conditions no longer exist as
-represented by [this version's authorization rules](#authorization-rules).
+represented by [this version's authorisation rules](#authorisation-rules).
 
-While redactions are always accepted by the authorization rules for
+While redactions are always accepted by the authorisation rules for
 events, they should not be sent to clients until both the redaction
 event and the event the redaction affects have been received, and can
 be validated. If both events are valid and have been seen by the server,
@@ -16,6 +16,9 @@ is met:
    equal to the *redact level*.
 2. The domain of the redaction event's `sender` matches that of the
    original event's `sender`.
+
+Note that the first condition holds true even when the `sender` doesn't have a
+high enough power level to send the type of event that they're redacting.
 
 If the server would apply a redaction, the redaction event is also sent
 to clients. Otherwise, the server simply waits for a valid partner event

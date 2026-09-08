@@ -100,4 +100,5 @@ servers:
         default: /_matrix/app/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    homeserverAccessToken:
+      $ref: definitions/security.yaml#/homeserverAccessToken

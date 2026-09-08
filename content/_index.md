@@ -25,6 +25,7 @@ The specification consists of the following parts:
 * [Identity Service API](/identity-service-api)
 * [Push Gateway API](/push-gateway-api)
 * [Room Versions](/rooms)
+* [Olm & Megolm](/olm-megolm)
 * [Appendices](/appendices)
 
 Additionally, this introduction page contains the key baseline
@@ -56,9 +57,6 @@ The principles that Matrix attempts to follow are:
         the global Matrix network
     -   Fully open standard - publicly documented standard with no IP or
         patent licensing encumbrances
-    -   Fully open source reference implementation - liberally-licensed
-        example implementations with no IP or patent licensing
-        encumbrances
 -   Empowering the end-user
     -   The user should be able to choose the server and clients they
         use
@@ -98,6 +96,20 @@ synchronising arbitrary data between sets of people, devices and
 services - be that for instant messages, VoIP call setups, or any other
 objects that need to be reliably and persistently pushed from A to B in
 an interoperable and federated manner.
+
+### Requirement levels
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" across all parts of the
+specification are to be interpreted as described in
+[RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119).
+
+Some entire sections of the specification might be optional depending on the
+circumstances. For example, the
+[modules of the client-server API](/client-server-api/#modules)
+apply depending on the use case. The requirement level expressed by the above
+key words appearing in such a section is only relevant if the section itself is
+applicable.
 
 ### Spec Change Proposals
 
@@ -140,7 +152,7 @@ request.
 
 How data flows between clients:
 
-```
+```nohighlight
     { Matrix client A }                             { Matrix client B }
         ^          |                                    ^          |
         |  events  |  Client-Server API                 |  events  |
@@ -419,9 +431,16 @@ into the `m.` namespace.
 
 ### Timestamps
 
-Unless otherwise stated, timestamps are measured as milliseconds since
-the Unix epoch. Throughout the specification this may be referred to as
-POSIX, Unix, or just "time in milliseconds".
+Unless otherwise stated, timestamps are the number of milliseconds
+elapsed since the unix epoch (1970-01-01 00:00:00 UTC), but not counting
+leap seconds, so that each day is precisely 86,400,000 milliseconds.
+
+This means that timestamps can repeat during leap seconds. Most
+programming languages provide timestamps in that format natively, e.g.
+[ECMAScript](https://tc39.es/ecma262/multipage/numbers-and-dates.html#sec-time-values-and-time-range).
+Throughout the specification this may be referred to as POSIX,
+[Unix](https://en.wikipedia.org/wiki/Unix_time), or just "time in
+milliseconds".
 
 ## Specification Versions
 
@@ -486,18 +505,23 @@ For historical reference, the APIs were versioned as `rX.Y.Z` where `X`
 roughly represents a breaking change, `Y` a backwards-compatible change, and
 `Z` a patch or insignificant alteration to the API.
 
-`v1.0` of Matrix was released on June 10th, 2019 with the following API
-versions:
+The current global versioning system was introduced with `v1.1`.
+[Matrix 1.0](https://matrix.org/blog/2019/06/11/introducing-matrix-1-0-and-the-matrix-org-foundation/)
+did not correspond directly to a specification version; instead, it was based on
+the following versions for the individual APIs:
 
-| API/Specification       | Version |
-|-------------------------|---------|
-| Client-Server API       | r0.5.0  |
-| Server-Server API       | r0.1.2  |
-| Application Service API | r0.1.1  |
-| Identity Service API    | r0.1.1  |
-| Push Gateway API        | r0.1.0  |
-| Room Version            | v5      |
+| API/Specification        | Version       |
+|--------------------------|---------------|
+| Client-Server API        | r0.5.0        |
+| Server-Server API        | r0.1.2        |
+| Application Service API  | r0.1.1        |
+| Identity Service API     | r0.2.0        |
+| Push Gateway API         | r0.1.0        |
+| Room Versions            | 1, 2, 3, 4, 5 |
 
+`v1.0` should **not** be returned by servers in the
+[`GET /_matrix/client/versions`](/client-server-api/#get_matrixclientversions)
+response.
 
 ## License
 

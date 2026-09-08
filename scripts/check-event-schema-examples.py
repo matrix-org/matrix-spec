@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-#
+
+# Validates the examples under `../data/event_schemas` against their JSON
+# schemas. In the process, the JSON schemas are validated against the JSON
+# Schema 2020-12 specification.
+
 # Copyright 2016 OpenMarket Ltd
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import helpers
 import sys
 import json
 import os
@@ -38,61 +43,34 @@ except ImportError as e:
     raise
 
 try:
+    import referencing
+except ImportError as e:
+    import_error("referencing", "referencing", "referencing", e)
+    raise
+
+try:
     import yaml
 except ImportError as e:
     import_error("yaml", "PyYAML", "yaml", e)
     raise
 
 
-def load_file(path):
-    print("Loading reference: %s" % path)
-    if not path.startswith("file://"):
-        raise Exception("Bad ref: %s" % (path,))
-    path = path[len("file://"):]
-    with open(path, "r") as f:
-        if path.endswith(".json"):
-            return json.load(f)
-        else:
-            # We have to assume it's YAML because some of the YAML examples
-            # do not have file extensions.
-            return yaml.safe_load(f)
-
-
-def resolve_references(path, schema):
-    if isinstance(schema, dict):
-        # do $ref first
-        if '$ref' in schema:
-            value = schema['$ref']
-            path = os.path.abspath(os.path.join(os.path.dirname(path), value))
-            ref = load_file("file://" + path)
-            result = resolve_references(path, ref)
-            del schema['$ref']
-        else:
-            result = {}
-
-        for key, value in schema.items():
-            result[key] = resolve_references(path, value)
-        return result
-    elif isinstance(schema, list):
-        return [resolve_references(path, value) for value in schema]
-    else:
-        return schema
-
-
 def check_example_file(examplepath, schemapath):
     with open(examplepath) as f:
-        example = resolve_references(examplepath, json.load(f))
+        example = helpers.resolve_references(examplepath, json.load(f))
 
     with open(schemapath) as f:
         schema = yaml.safe_load(f)
 
+    # $id as a URI with scheme is necessary to make registry resolver work.
     fileurl = "file://" + os.path.abspath(schemapath)
-    schema["id"] = fileurl
-    resolver = jsonschema.RefResolver(fileurl, schema, handlers={"file": load_file})
+    schema["$id"] = fileurl
 
     print ("Checking schema for: %r %r" % (examplepath, schemapath))
     try:
-        jsonschema.validate(example, schema, resolver=resolver)
+        registry = referencing.Registry(retrieve=helpers.load_resource_from_uri)
+        validator = jsonschema.validators.Draft202012Validator(schema, registry=registry)
+        validator.validate(example)
     except Exception as e:
         raise ValueError("Error validating JSON schema for %r %r" % (
             examplepath, schemapath

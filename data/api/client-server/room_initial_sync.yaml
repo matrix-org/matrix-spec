@@ -9,13 +9,15 @@ paths:
       description: |-
         Get a copy of the current state and the most recent messages in a room.
 
-        This endpoint was deprecated in r0 of this specification. There is no
-        direct replacement; the relevant information is returned by the
+        This endpoint should now exclusively be used for "peeking" into viewable rooms
+        you're not a member of ([Room Previews](/client-server-api/#room-previews)).
+        Using this endpoint for something other than peeking was deprecated in r0 of this specification.
+        The relevant information for syncing is now returned by the
         [`/sync`](/client-server-api/#get_matrixclientv3sync) API. See the
         [migration guide](https://matrix.org/docs/guides/migrating-from-client-server-api-v-1#deprecated-endpoints).
       operationId: roomInitialSync
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -24,6 +26,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The current state of the room
@@ -35,6 +39,8 @@ paths:
                 properties:
                   room_id:
                     type: string
+                    format: mx-room-id
+                    pattern: "^!"
                     description: The ID of this room.
                   membership:
                     type: string
@@ -53,7 +59,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the start of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve earlier events.
 
                           If no earlier events are available, this property may be omitted from
@@ -62,7 +68,7 @@ paths:
                         type: string
                         description: |-
                           A token which correlates to the end of `chunk`. Can be passed to
-                          [`/rooms/<room_id>/messages`](#get_matrixclientv3roomsroomidmessages)
+                          [`/rooms/<room_id>/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages)
                           to retrieve later events.
                       chunk:
                         type: array
@@ -93,7 +99,7 @@ paths:
                       - public
                     description: |-
                       Whether this room is visible to the `/publicRooms` API
-                      or not."
+                      or not.
                   account_data:
                     type: array
                     description: The private data that this user has attached to this room.
@@ -160,7 +166,7 @@ paths:
             You aren't a member of the room and weren't previously a member of the room.
       tags:
         - Room participation
-      deprecated: true
+      deprecated: false
 servers:
   - url: "{protocol}://{hostname}{basePath}"
     variables:
@@ -175,4 +181,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

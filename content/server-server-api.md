@@ -2,48 +2,45 @@
 title: "Server-Server API"
 weight: 20
 type: docs
+description: |
+  Matrix homeservers use the Federation APIs (also known as server-server APIs)
+  to communicate with each other. Homeservers use these APIs to push messages in
+  real-time, retrieve historic messages, and query profile or presence
+  information about users on other servers. The APIs are implemented over HTTPS,
+  with authentication provided by public key signatures both at the TLS
+  transport layer and in HTTP `Authorization` headers.
+
+  There are three main kinds of communication that occur between
+  homeservers:
+
+  Persistent Data Units (PDUs):
+  These events are broadcast from one homeserver to any others that have
+  joined the same room (identified by Room ID). They are persisted in
+  long-term storage and record the history of messages and state for a
+  room.
+
+  Like email, it is the responsibility of the originating server of a PDU
+  to deliver that event to its recipient servers. However PDUs are signed
+  using the originating server's private key so that it is possible to
+  deliver them through third-party servers.
+
+  Ephemeral Data Units (EDUs):
+  These events are pushed between pairs of homeservers. They are not
+  persisted and are not part of the history of a room, nor does the
+  receiving homeserver have to reply to them.
+
+  Queries:
+  These are single request/response interactions between a given pair of
+  servers, initiated by one side sending an HTTPS GET request to obtain
+  some information, and responded by the other. They are not persisted and
+  contain no long-term significant history. They simply request a snapshot
+  state at the instant the query is made.
+
+  EDUs and PDUs are further wrapped in an envelope called a Transaction,
+  which is transferred from the origin to the destination homeserver using
+  an HTTPS PUT request.
+
 ---
-
-Matrix homeservers use the Federation APIs (also known as server-server
-APIs) to communicate with each other. Homeservers use these APIs to push
-messages to each other in real-time, to retrieve historic messages from
-each other, and to query profile and presence information about users on
-each other's servers.
-
-The APIs are implemented using HTTPS requests between each of the
-servers. These HTTPS requests are strongly authenticated using public
-key signatures at the TLS transport layer and using public key
-signatures in HTTP Authorization headers at the HTTP layer.
-
-There are three main kinds of communication that occur between
-homeservers:
-
-Persistent Data Units (PDUs):
-These events are broadcast from one homeserver to any others that have
-joined the same room (identified by Room ID). They are persisted in
-long-term storage and record the history of messages and state for a
-room.
-
-Like email, it is the responsibility of the originating server of a PDU
-to deliver that event to its recipient servers. However PDUs are signed
-using the originating server's private key so that it is possible to
-deliver them through third-party servers.
-
-Ephemeral Data Units (EDUs):
-These events are pushed between pairs of homeservers. They are not
-persisted and are not part of the history of a room, nor does the
-receiving homeserver have to reply to them.
-
-Queries:
-These are single request/response interactions between a given pair of
-servers, initiated by one side sending an HTTPS GET request to obtain
-some information, and responded by the other. They are not persisted and
-contain no long-term significant history. They simply request a snapshot
-state at the instant the query is made.
-
-EDUs and PDUs are further wrapped in an envelope called a Transaction,
-which is transferred from the origin to the destination homeserver using
-an HTTPS PUT request.
 
 ## API standards
 
@@ -119,7 +116,8 @@ to send. The process overall is as follows:
     server must present a valid certificate for the hostname.
 
 3.  If the hostname is not an IP literal, a regular HTTPS request is
-    made to `https://<hostname>/.well-known/matrix/server`, expecting
+    made to `https://<hostname>/.well-known/matrix/server` (according to
+    [RFC 8615](https://datatracker.ietf.org/doc/html/rfc8615)), expecting
     the schema defined later in this section. 30x redirects should be
     followed, however redirection loops should be avoided. Responses
     (successful or otherwise) to the `/.well-known` endpoint should be
@@ -148,7 +146,7 @@ to send. The process overall is as follows:
         Requests must be made with a `Host` header of
         `<delegated_hostname>:<delegated_port>`. The target server must
         present a valid certificate for `<delegated_hostname>`.
-    3.  {{< added-in v="1.8" >}} If `<delegated_hostname>` is not an IP literal and no
+    3.  {{% added-in v="1.8" %}} If `<delegated_hostname>` is not an IP literal and no
         `<delegated_port>` is present, an SRV record is looked up for
         `_matrix-fed._tcp.<delegated_hostname>`. This may result in another
         hostname (to be resolved using AAAA or A records) and port.
@@ -166,12 +164,12 @@ to send. The process overall is as follows:
         target server must present a valid certificate for
         `<delegated_hostname>`.
     5.   If no SRV record is found, an IP address is resolved using CNAME, AAAA
-        or A records. Requests are then made to the resolve IP address
+        or A records. Requests are then made to the resolved IP address
         and a port of 8448, using a `Host` header of
         `<delegated_hostname>`. The target server must present a valid
         certificate for `<delegated_hostname>`.
 
-4.  {{< added-in v="1.8" >}} If the `/.well-known` request resulted in an error response, a server is
+4.  {{% added-in v="1.8" %}} If the `/.well-known` request resulted in an error response, a server is
     found by resolving an SRV record for `_matrix-fed._tcp.<hostname>`. This may
     result in a hostname (to be resolved using AAAA or A records) and
     port. Requests are made to the resolved IP address and port, with a `Host`
@@ -186,8 +184,8 @@ to send. The process overall is as follows:
     header of `<hostname>`. The target server must present a valid certificate
     for `<hostname>`.
 
-6.  If the `/.well-known` request returned an error response, and the
-    SRV record was not found, an IP address is resolved using CNAME, AAAA and A
+6.  If the `/.well-known` request returned an error response, and
+    no SRV records were found, an IP address is resolved using CNAME, AAAA and A
     records. Requests are made to the resolved IP address using port
     8448 and a `Host` header containing the `<hostname>`. The target
     server must present a valid certificate for `<hostname>`.
@@ -279,18 +277,18 @@ queried from multiple servers to mitigate against DNS spoofing.
 
 Every HTTP request made by a homeserver is authenticated using public
 key digital signatures. The request method, target and body are signed
-by wrapping them in a JSON object and signing it using the JSON signing
-algorithm. The resulting signatures are added as an Authorization header
-with an auth scheme of `X-Matrix`. Note that the target field should
-include the full path starting with `/_matrix/...`, including the `?`
-and any query parameters if present, but should not include the leading
-`https:`, nor the destination server's hostname.
+by wrapping them in a JSON object and signing it using the [JSON signing
+algorithm](/appendices#signing-json). The resulting signatures are added
+as an `Authorization` header with an auth scheme of `X-Matrix`. Note that
+the target field should include the full path starting with `/_matrix/...`,
+including the `?` and any query parameters if present, but should not
+include the leading `https:`, nor the destination server's hostname.
 
 Step 1 sign JSON:
 
-```
+```nohighlight
 {
-    "method": "GET",
+    "method": "POST",
     "uri": "/target",
     "origin": "origin.hs.example.com",
     "destination": "destination.hs.example.com",
@@ -309,9 +307,9 @@ section](#resolving-server-names) above do not affect these - the server
 names from before delegation would take place are used. This same
 condition applies throughout the request signing process.
 
-Step 2 add Authorization header:
+Step 2 add `Authorization` header:
 
-    GET /target HTTP/1.1
+    POST /target HTTP/1.1
     Authorization: X-Matrix origin="origin.hs.example.com",destination="destination.hs.example.com",key="ed25519:key1",sig="ABCDEF..."
     Content-Type: application/json
 
@@ -348,14 +346,15 @@ def authorization_headers(origin_name, origin_signing_key,
     return ("Authorization", authorization_headers[0])
 ```
 
-The format of the Authorization header is given in
-[RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1). In
-summary, the header begins with authorization scheme `X-Matrix`, followed by
-one or more spaces, followed by a comma-separated list of parameters written as
-name=value pairs. The names are case insensitive and order does not matter. The
+The format of the `Authorization` header is given in
+[Section 11.4 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-11.4). In
+summary, the header begins with authorisation scheme `X-Matrix`, followed by one
+or more spaces, followed by a comma-separated list of parameters written as
+name=value pairs. Zero or more spaces and tabs around each comma are allowed.
+The names are case insensitive and order does not matter. The
 values must be enclosed in quotes if they contain characters that are not
 allowed in `token`s, as defined in
-[RFC 7230](https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.6); if a
+[Section 5.6.2 of RFC 9110](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2); if a
 value is a valid `token`, it may or may not be enclosed in quotes. Quoted
 values may include backslash-escaped characters. When parsing the header, the
 recipient must unescape the characters. That is, a backslash-character pair is
@@ -363,28 +362,36 @@ replaced by the character that follows the backslash.
 
 For compatibility with older servers, the sender should
 - only include one space after `X-Matrix`,
-- only use lower-case names, and
-- avoid using backslashes in parameter values.
+- only use lower-case names,
+- avoid using backslashes in parameter values, and
+- avoid including whitespace around the commas between name=value pairs.
 
 For compatibility with older servers, the recipient should allow colons to be
 included in values without requiring the value to be enclosed in quotes.
 
-The authorization parameters to include are:
+The authorisation parameters to include are:
 
 - `origin`: the server name of the sending server. This is the same as the
   `origin` field from JSON described in step 1.
-- `destination`: {{< added-in v="1.3" >}} the server name of the receiving
+- `destination`: {{% added-in v="1.3" %}} the server name of the receiving
   server. This is the same as the `destination` field from the JSON described
   in step 1. For compatibility with older servers, recipients should accept
   requests without this parameter, but MUST always send it. If this property
   is included, but the value does not match the receiving server's name, the
-  receiving server must deny the request with an HTTP status code 401
-  Unauthorized.
+  receiving server must deny the request with an HTTP status code `401
+  Unauthorized`.
 - `key`: the ID, including the algorithm name, of the sending server's key used
   to sign the request.
 - `signature`: the signature of the JSON as calculated in step 1.
 
 Unknown parameters are ignored.
+
+{{% boxes/note %}}
+{{% changed-in v="1.11" %}}
+This section used to reference [RFC 7235](https://datatracker.ietf.org/doc/html/rfc7235#section-2.1)
+and [RFC 7230](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.2), that
+were obsoleted by RFC 9110 without changes to the sections of interest here.
+{{% /boxes/note %}}
 
 ### Response Authentication
 
@@ -451,18 +458,24 @@ specification](/rooms).
 Whenever a server receives an event from a remote server, the receiving
 server must ensure that the event:
 
-1.  Is a valid event, otherwise it is dropped. For an event to be valid, it
-    must contain a `room_id`, and it must comply with the event format of
-    that [room version](/rooms).
+1.  {{% changed-in v="1.16" %}} Is a valid event, otherwise it is dropped. For
+    an event to be valid, it must comply with the event format of that [room version](/rooms).
+    For some room versions, a `room_id` may also be required on the event in order
+    to determine the room version to check the event against. See the event format
+    section of the [room version specifications](/rooms) for details on when it
+    is required.
 2.  Passes signature checks, otherwise it is dropped.
 3.  Passes hash checks, otherwise it is redacted before being processed
     further.
-4.  Passes authorization rules based on the event's auth events,
+4.  Passes authorisation rules based on the event's auth events,
     otherwise it is rejected.
-5.  Passes authorization rules based on the state before the event,
+5.  Passes authorisation rules based on the state before the event,
     otherwise it is rejected.
-6.  Passes authorization rules based on the current state of the room,
+6.  Passes authorisation rules based on the current state of the room,
     otherwise it is "soft failed".
+7. {{% added-in v="1.18" %}} Is [validated](#validating-policy-server-signatures)
+   by the Policy Server, if the room is [using a Policy Server](#determining-if-a-policy-server-is-enabled-in-a-room),
+   otherwise it is "soft failed".
 
 Further details of these checks, and how to handle failures, are
 described below.
@@ -503,9 +516,9 @@ and must never populate the default power levels in a room as string values.
 See the [room version specification](/rooms) for more information.
 {{% /boxes/warning %}}
 
-#### Authorization rules
+#### Authorisation rules
 
-The rules governing whether an event is authorized depends on a set of
+The rules governing whether an event is authorised depends on a set of
 state. A given event is checked multiple times against different sets of
 state, as specified above. Each room version can have a different
 algorithm for how the rules work, and which rules are applied. For more
@@ -519,7 +532,8 @@ the sender permission to send the event. The `auth_events` for the
 `m.room.create` event in a room is empty; for other events, it should be
 the following subset of the room state:
 
-- The `m.room.create` event.
+- {{% changed-in v="1.16" %}} Depending on the [room version](/rooms), the
+  `m.room.create` event.
 
 - The current `m.room.power_levels` event, if any.
 
@@ -528,14 +542,14 @@ the following subset of the room state:
 - If type is `m.room.member`:
 
     - The target's current `m.room.member` event, if any.
-    - If `membership` is `join` or `invite`, the current
+    - If `membership` is `join`, `invite` or `knock`, the current
       `m.room.join_rules` event, if any.
     - If membership is `invite` and `content` contains a
       `third_party_invite` property, the current
       `m.room.third_party_invite` event with `state_key` matching
       `content.third_party_invite.signed.token`, if any.
-    - If `content.join_authorised_via_users_server` is present,
-      and the [room version supports restricted rooms](/rooms/#feature-matrix),
+    - If `membership` is `join`, `content.join_authorised_via_users_server`
+      is present, and the [room version supports restricted rooms](/rooms/#feature-matrix),
       then the `m.room.member` event with `state_key` matching
       `content.join_authorised_via_users_server`.
 
@@ -678,9 +692,14 @@ then any new event `D'` will not reference `C`:
     |
     D'
 
-#### Retrieving event authorization information
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events can also be soft failed if they fail [Policy Server checks](#validating-policy-server-signatures).
+{{% /boxes/note %}}
 
-The homeserver may be missing event authorization information, or wish
+#### Retrieving event authorisation information
+
+The homeserver may be missing event authorisation information, or wish
 to check with other servers to ensure it is receiving the correct auth
 chain. These APIs give the homeserver an avenue for getting the
 information it needs.
@@ -808,7 +827,7 @@ ResidentServer->JoiningServer: send_join response
 JoiningServer->Client: join response
 -->
 
-```
+```nohighlight
 +---------+          +---------------+            +-----------------+ +-----------------+
 | Client  |          | JoiningServer |            | DirectoryServer | | ResidentServer  |
 +---------+          +---------------+            +-----------------+ +-----------------+
@@ -857,8 +876,10 @@ selecting a resident from the candidate list, and using the
 enough information for the joining server to fill in the event.
 
 The joining server is expected to add or replace the `origin`,
-`origin_server_ts`, and `event_id` on the templated event received by
-the resident server. This event is then signed by the joining server.
+`origin_server_ts`, and `event_id` on the templated event received by the
+resident server. The joining server MUST also verify that the `type`, `room_id`,
+`sender`, `state_key` and `content.membership` fields have the expected values.
+This event is then signed by the joining server.
 
 To complete the join handshake, the joining server submits this new event
 to the resident server it used for `GET /make_join`, using the `PUT /send_join`
@@ -931,6 +952,18 @@ Note that invites are used to indicate that knocks were accepted. As such,
 receiving servers should be prepared to manually link up a previous knock
 to an invite if the invite event does not directly reference the knock.
 
+{{% boxes/note %}}
+{{% added-in v="1.16" %}} `invite_room_state` MUST now have its entries formatted
+according to the room's version (see [room version specification](/rooms)). However,
+servers SHOULD consider their local ecosystems before returning the described
+`400 M_MISSING_PARAM` error code. While migrating, servers SHOULD warn about
+invites which fail the validation rather than error in room versions 1 through 11.
+All invites to other room versions which fail validation SHOULD result in an error.
+
+The specification suggests that servers finish their migration no later than
+January 2026, though servers may extend this as required to support their users.
+{{% /boxes/note %}}
+
 {{% http-api spec="server-server" api="invites-v1" %}}
 
 {{% http-api spec="server-server" api="invites-v2" %}}
@@ -961,9 +994,8 @@ the event to other servers in the room.
 ## Third-party invites
 
 {{% boxes/note %}}
-More information about third-party invites is available in the
-[Client-Server API](/client-server-api) under
-the Third-party Invites module.
+More information about third-party invites is available in the Client-Server API
+under the [Third-party invites](/client-server-api/#third-party-invites) module.
 {{% /boxes/note %}}
 
 When a user wants to invite another user in a room but doesn't know the
@@ -976,38 +1008,41 @@ API](/identity-service-api).
 
 ### Cases where an association exists for a third-party identifier
 
-If the third-party identifier is already bound to a Matrix ID, a lookup
-request on the identity server will return it. The invite is then
-processed by the inviting homeserver as a standard `m.room.member`
-invite event. This is the simplest case.
+If the third-party identifier is already bound to a Matrix ID, a [lookup
+request](/identity-service-api/#post_matrixidentityv2lookup) on the identity
+server will return it. The invite is then processed by the inviting homeserver
+as a [standard `m.room.member` invite event](#inviting-to-a-room). This is the
+simplest case.
 
 ### Cases where an association doesn't exist for a third-party identifier
 
 If the third-party identifier isn't bound to any Matrix ID, the inviting
-homeserver will request the identity server to store an invite for this
-identifier and to deliver it to whoever binds it to its Matrix ID. It
-will also send an `m.room.third_party_invite` event in the room to
-specify a display name, a token and public keys the identity server
-provided as a response to the invite storage request.
+homeserver will request the identity server to [store an invite](/identity-service-api/#invitation-storage)
+for this identifier and to deliver it to whoever binds it to its Matrix ID. It
+will also send an [`m.room.third_party_invite`](/client-server-api/#mroomthird_party_invite)
+event in the room to specify a display name, a token and public keys the
+identity server provided as a response to the invite storage request.
 
-When a third-party identifier with pending invites gets bound to a
-Matrix ID, the identity server will send a POST request to the ID's
-homeserver as described in the [Invitation
-Storage](/identity-service-api#invitation-storage)
-section of the Identity Service API.
+When a third-party identifier with pending invites gets bound to a Matrix ID,
+the identity server will send a request to the [`/3pid/onbind`](#put_matrixfederationv13pidonbind)
+endpoint of the the ID's homeserver as described in the [Invitation
+Storage](/identity-service-api#invitation-storage) section of the Identity
+Service API.
 
 The following process applies for each invite sent by the identity
 server:
 
-The invited homeserver will create an `m.room.member` invite event
-containing a special `third_party_invite` section containing the token
-and a signed object, both provided by the identity server.
+The invited homeserver will create an [`m.room.member`](/client-server-api/#mroommember)
+invite event containing a special `third_party_invite` section containing the
+token and a `signed` object, both provided by the identity server.
 
 If the invited homeserver is in the room the invite came from, it can
 auth the event and send it.
 
 However, if the invited homeserver isn't in the room the invite came
-from, it will need to request the room's homeserver to auth the event.
+from, it will need to request the inviting homeserver to auth the event
+at the [`/exchange_third_party_invite`](#put_matrixfederationv1exchange_third_party_inviteroomid)
+endpoint.
 
 {{% http-api spec="server-server" api="third_party_invite" %}}
 
@@ -1036,11 +1071,10 @@ user's Matrix ID and the token delivered when the invite was stored,
 this verification will prove that the `m.room.member` invite event comes
 from the user owning the invited third-party identifier.
 
-## Public Room Directory
+## Published Room Directory
 
-To complement the [Client-Server
-API](/client-server-api)'s room directory,
-homeservers need a way to query the public rooms for another server.
+To complement the [room directory in the Client-Server API](/client-server-api#published-room-directory),
+homeservers need a way to query the published rooms of another server.
 This can be done by making a request to the `/publicRooms` endpoint for
 the server the room directory should be retrieved for.
 
@@ -1100,9 +1134,10 @@ more specific queries that can be made.
 ## OpenID
 
 Third-party services can exchange an access token previously generated
-by the <span class="title-ref">Client-Server API</span> for information
-about a user. This can help verify that a user is who they say they are
-without granting full access to the user's account.
+by the [OpenID module of the Client-Server
+API](/client-server-api/#openid) for information about a user. This can
+help verify that a user is who they say they are without granting full
+access to the user's account.
 
 Access tokens generated by the OpenID API are only good for the OpenID
 API and nothing else.
@@ -1187,15 +1222,24 @@ using the following EDU:
 
 Attachments to events (images, files, etc) are uploaded to a homeserver
 via the Content Repository described in the [Client-Server
-API](/client-server-api). When a server wishes
+API](/client-server-api/#content-repository). When a server wishes
 to serve content originating from a remote server, it needs to ask the
 remote server for the media.
 
-Servers should use the server described in the Matrix Content URI, which
-has the format `mxc://{ServerName}/{MediaID}`. Servers should use the
-download endpoint described in the [Client-Server
-API](/client-server-api), being sure to use
-the `allow_remote` parameter (set to `false`).
+Servers MUST use the server described in the [Matrix Content URI](/client-server-api/#matrix-content-mxc-uris).
+Formatted as `mxc://{ServerName}/{MediaID}`, servers MUST download the media from
+`ServerName` using the below endpoints.
+
+{{% changed-in v="1.11" %}} Servers were previously advised to use the `/_matrix/media/*`
+endpoints described by the [Content Repository module in the Client-Server API](/client-server-api/#content-repository),
+however, those endpoints have been deprecated. New endpoints are introduced which
+require authentication. Naturally, as a server is not a user, they cannot provide
+the required access token to those endpoints. Instead, servers MUST try the endpoints
+described below before falling back to the deprecated `/_matrix/media/*` endpoints
+when they receive a `404 M_UNRECOGNIZED` error. When falling back, servers MUST
+be sure to set `allow_remote` to `false`.
+
+{{% http-api spec="server-server" api="content_repository" %}}
 
 ## Server Access Control Lists (ACLs)
 
@@ -1210,7 +1254,6 @@ of `M_FORBIDDEN`.
 
 The following endpoint prefixes MUST be protected:
 
--   `/_matrix/federation/v1/send` (on a per-PDU basis)
 -   `/_matrix/federation/v1/make_join`
 -   `/_matrix/federation/v1/make_leave`
 -   `/_matrix/federation/v1/send_join`
@@ -1226,6 +1269,187 @@ The following endpoint prefixes MUST be protected:
 -   `/_matrix/federation/v1/backfill`
 -   `/_matrix/federation/v1/event_auth`
 -   `/_matrix/federation/v1/get_missing_events`
+
+Additionally the [`/_matrix/federation/v1/send/{txnId}`](#put_matrixfederationv1sendtxnid)
+endpoint MUST be protected as follows:
+
+-   ACLs MUST be applied to all PDUs on a per-PDU basis. If the sending
+    server is denied access to the room identified by `room_id`, the PDU
+    MUST be ignored with an appropriate error included in the response
+    for the respective event ID.
+-   ACLs MUST be applied to all EDUs that are local to a specific room:
+
+    -   For [typing notifications (`m.typing`)](#typing-notifications), if
+        the sending server is denied access to the room identified by
+        `room_id`, the EDU MUST be ignored.
+    -   For [receipts (`m.receipt`)](#receipts), all receipts for a particular
+        room ID MUST be ignored if the sending server is denied access to
+        the room identified by that ID.
+
+The following endpoints MAY be protected:
+
+-   [`/_matrix/policy/v1/sign`](#post_matrixpolicyv1sign) - {{< added-in v="1.18" >}}
+    Protected if the server is tracking the DAG and chooses to enforce the ACL.
+
+
+## Policy Servers
+
+{{% added-in v="1.18" %}}
+
+Policy Servers are an available tool for rooms to add proactive protections. Rooms
+which use a Policy Server (PS) can prevent unwanted events from reaching users. Rooms
+are not required to use a Policy Server, and can disable it any time after enabling
+it.
+
+For a homeserver to be a Policy Server, it MUST implement the following functionality
+of the Server-Server API:
+
+* [Normal server name resolution](#resolving-server-names).
+* [Publishing a signing key](#publishing-keys).
+* [Request authentication](#authentication).
+* Being able to [make and send join requests](#joining-rooms).
+* Receiving and processing [`POST /_matrix/policy/v1/sign`](#post_matrixpolicyv1sign)
+  requests.
+
+All other functionality and endpoints are optional for a Policy Server.
+
+{{% boxes/note %}}
+Though a Policy Server is not required to implement the full Server-Server API
+surface, some functionality may be desirable to implement anyway:
+
+* Receiving [invites](#inviting-to-a-room) can make it easier to add the Policy
+  Server to a room.
+* Receiving [transactions](#transactions) is recommended to avoid remote servers
+  flagging the Policy Server as "offline", even if the contents are discarded.
+* Receiving [device lookups](#get_matrixfederationv1userdevicesuserid) can also
+  help reduce remote servers flagging the Policy Server as "offline".
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Policy Servers are *not* required to track the DAG for a room. Policy Servers
+might be optimized for content moderation and therefore do not need knowledge of
+the DAG.
+{{% /boxes/note %}}
+
+### Determining if a Policy Server is enabled in a room
+
+For a room to be considered as "using" a Policy Server, *all* of the following
+conditions MUST be true:
+
+* The *current state* for the room has a valid [`m.room.policy`](/client-server-api/#mroompolicy)
+  state event with empty state key. Valid means `content` contains at least:
+  * A string value for `via`.
+  * An object value for `public_keys` containing at least a string value for
+    `ed25519`.
+* The server name denoted by the `m.room.policy` state event's `via` has at least
+  one joined user in the room in *current state*. The user does not need any
+  special permissions or power levels in the room.
+
+If a room has enabled a Policy Server, *all* servers in that room MUST [ask that
+Policy Server](#asking-for-a-policy-server-signature-on-an-event) for a signature
+before sending an event. If the Policy Server refuses to sign the event being
+sent, servers SHOULD fail to send that event as per the [validation rules](#validating-policy-server-signatures).
+
+{{% boxes/note %}}
+"Current state" shares the same definition as [soft failure](#soft-failure).
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+Policy Servers MUST have at least one joined user in the room to give the Policy
+Server agency in whether it serves that role for the room. Otherwise, a room
+would be able to force a Policy Server to participate and then overwhelm it.
+{{% /boxes/note %}}
+
+### Validating Policy Server signatures
+
+Policy Servers use signatures to indicate whether an event was checked and is
+recommended for inclusion in a room. The Policy Server's recommendation does *not*
+affect the authorization rules for an event, but does affect whether homeservers
+[soft fail](#soft-failure) or refuse to actually go forward with sending an event.
+
+If a room has disabled (or never enabled) a Policy Server, events are recommended
+for inclusion and subject to normal authorization rules.
+
+{{% boxes/note %}}
+Because the Policy Server is not asked to sign [`m.room.policy`](/client-server-api/#mroompolicy)
+state events with empty string `state_key`s, those events will not have a Policy
+Server signature. Those events are by default recommended for inclusion and still
+subject to normal authorization rules.
+
+All other events SHOULD have a valid Policy Server signature when a Policy Server
+is enabled in the room, including non-state `m.room.policy` events and `m.room.policy`
+state events with non-empty `state_key`s. This also includes state events like
+membership and power level changes.
+{{% /boxes/note %}}
+
+If a room has enabled a Policy Server, the Policy Server's signature appears
+alongside the normal [event signatures](#signing-events), though uses a public
+key from the room's `m.room.policy` state event.
+
+{{% boxes/note %}}
+Currently, only Ed25519 keys are supported by homeservers. The Key ID for the
+`ed25519` key in `m.room.policy` is *always* `ed25519:policy_server`.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+By embedding the Policy Server's public key into room state, the Policy Server
+does not need to be online or have its keys cached by a notary in order to validate
+an event.
+{{% /boxes/note %}}
+
+{{% boxes/warning %}}
+The Policy Server's [published signing key](#publishing-keys) SHOULD NOT be the
+same key contained in the `m.room.policy` state event. This is to keep "can send
+federation traffic" and "can recommend events for inclusion" separate, and to
+allow rooms to revoke the Policy Server's key without cooperation of the Policy
+Server.
+
+If the Policy Server is acting as a normal homeserver and attempting to send an
+event, that event will require a signature from the server's published signing
+key alongside the Policy Server signature described in this section.
+{{% /boxes/warning %}}
+
+If the Policy Server's signature is valid, the event is recommended for inclusion
+in the room, and is still subject to normal authorization rules.
+
+If the Policy Server's signature is invalid or missing, the homeserver SHOULD
+[ask for a new signature](#asking-for-a-policy-server-signature-on-an-event). If
+the event still does not have a valid Policy Server signature, the event is *not*
+recommended for inclusion and the homeserver SHOULD:
+
+* If applicable, reject the Client-Server API request which was generating the
+  event. If the Policy Server returned an error, that error SHOULD be provided
+  to the client verbatim. The event the client was attempting to send SHOULD be
+  discarded and not processed/sent any further.
+* If the event was received over federation or the homeserver sends a local client's
+  event anyway, [soft fail](#soft-failure) the event.
+
+{{% boxes/note %}}
+For clarity, an event which lacks a valid Policy Server signature is still subject
+to normal authorization rules.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+When a Policy Server's signature is invalid, a new one is requested because the
+Policy Server's key may have rotated between the event being signed and the event
+being checked.
+
+Because the key is contained in the `m.room.policy` state event, if the Policy
+Server rotates its key without the room also updating the state event, events
+will be flagged as not recommended for inclusion. This is expected behaviour.
+{{% /boxes/note %}}
+
+### Asking for a Policy Server signature on an event
+
+Per [above](#determining-if-a-policy-server-is-enabled-in-a-room), if a room has
+a Policy Server enabled, *all* servers in the room MUST ask the Policy Server to
+sign their events before sending them to clients and servers.
+
+After asking for a signature, homeservers SHOULD [validate](#validating-policy-server-signatures)
+the returned signature before continuing to send events. If the Policy Server
+returns an error, the event SHOULD NOT be sent to clients and servers.
+
+{{% http-api spec="server-server" api="room_policy" %}}
 
 ## Signing Events
 
@@ -1250,34 +1474,52 @@ The signature is then copied back to the original event object.
 For an example of a signed event, see the [room version
 specification](/rooms).
 
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events sent in rooms with [Policy Servers](#policy-servers) MUST [ask](#asking-for-a-policy-server-signature-on-an-event)
+the Policy Server for a signature too.
+{{% /boxes/note %}}
+
 ### Validating hashes and signatures on received events
 
 When a server receives an event over federation from another server, the
 receiving server should check the hashes and signatures on that event.
 
-First the signature is checked. The event is redacted following the
-[redaction
-algorithm](/client-server-api#redactions), and
-the resultant object is checked for a signature from the originating
+First the signatures are checked. The event is redacted following the
+[redaction algorithm](/client-server-api#redactions), and
+the resultant object is checked for signatures from the originating
 server, following the algorithm described in [Checking for a
 signature](/appendices#checking-for-a-signature). Note that this
 step should succeed whether we have been sent the full event or a
 redacted copy.
 
-The signatures expected on an event are:
+For room versions 3 and later, unless the event is a 3rd party invite, only the
+signature(s) from the originating server (the server the `sender` belongs to)
+are required for verification. Room versions 1 and 2 also require that a
+signature is present from the domain in the `event_id`, if it differs from the
+originating server. If a signature is from an unknown or expired key, it is
+skipped.
 
--   The `sender`'s server, unless the invite was created as a result of
-    3rd party invite. The sender must already match the 3rd party
-    invite, and the server which actually sends the event may be a
-    different server.
--   For room versions 1 and 2, the server which created the `event_id`.
-    Other room versions do not track the `event_id` over federation and
-    therefore do not need a signature from those servers.
+If the event is a 3rd party invite, the sender must already match the 3rd party
+invite, and the server which actually sends the event may be a different
+server.
 
-If the signature is found to be valid, the expected content hash is
-calculated as described below. The content hash in the `hashes` property
-of the received event is base64-decoded, and the two are compared for
-equality.
+Only signatures from known server keys are validated here. Any unknown keys are ignored.
+In particular, the [policy server key](#validating-policy-server-signatures) is not
+expected to be published and therefore should be skipped at this stage.
+Additionally, any keys that are known to have expired prior to the event's
+`origin_server_ts` are ignored.
+
+{{% boxes/note %}}
+{{% added-in v="1.18" %}}
+Events sent in rooms with [Policy Servers](#policy-servers) have [additional](#validating-policy-server-signatures)
+signature validation requirements.
+{{% /boxes/note %}}
+
+If all signatures from known unexpired keys from the originating server(s) are
+found to be valid, the expected content hash is calculated as described below.
+The content hash in the `hashes` property of the received event is base64-decoded,
+and the two are compared for equality.
 
 If the hash check fails, then it is assumed that this is because we have
 only been given a redacted version of the event. To enforce this, the
@@ -1304,7 +1546,7 @@ calculated as follows.
 The *content hash* of an event covers the complete event including the
 *unredacted* contents. It is calculated as follows.
 
-First, any existing `unsigned`, `signature`, and `hashes` members are
+First, any existing `unsigned`, `signatures`, and `hashes` properties are
 removed. The resulting object is then encoded as [Canonical
 JSON](/appendices#canonical-json), and the JSON is hashed using
 SHA-256.

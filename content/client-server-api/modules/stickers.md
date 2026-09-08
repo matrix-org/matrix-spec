@@ -16,7 +16,7 @@ when the sticker image is clicked.
 #### Events
 
 Sticker events are received as a single `m.sticker` event in the
-`timeline` section of a room, in a `/sync`.
+`timeline` section of a room, in a [`/sync`](#get_matrixclientv3sync).
 
 {{% event event="m.sticker" %}}
 

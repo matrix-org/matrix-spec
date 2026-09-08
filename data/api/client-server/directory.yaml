@@ -21,7 +21,7 @@ paths:
       summary: Create a new mapping from room alias to room ID.
       operationId: setRoomAlias
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomAlias
@@ -32,6 +32,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       requestBody:
         content:
           application/json:
@@ -41,6 +43,8 @@ paths:
                 room_id:
                   type: string
                   description: The room ID to set.
+                  format: mx-room-id
+                  pattern: "^!"
               required:
                 - room_id
               example: {
@@ -103,6 +107,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       responses:
         "200":
           description: The room ID and other information for this alias.
@@ -114,12 +120,15 @@ paths:
                   room_id:
                     type: string
                     description: The room ID for this room alias.
+                    format: mx-room-id
+                    pattern: "^!"
                   servers:
                     type: array
                     description: A list of servers that are aware of this room alias.
                     items:
                       type: string
                       description: A server which is aware of this room alias.
+                      format: mx-server-name
               examples:
                 response:
                   value: {
@@ -172,7 +181,7 @@ paths:
         have permission to update the `m.room.canonical_alias` event.
       operationId: deleteRoomAlias
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomAlias
@@ -183,6 +192,8 @@ paths:
           example: "#monkeys:matrix.org"
           schema:
             type: string
+            format: mx-room-alias
+            pattern: "^#"
       responses:
         "200":
           description: The mapping was deleted.
@@ -229,7 +240,7 @@ paths:
         state event.
       operationId: getLocalAliases
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -238,6 +249,8 @@ paths:
           example: "!abc123:example.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
           description: The list of local aliases for the room.
@@ -251,6 +264,8 @@ paths:
                     description: The server's local aliases on the room. Can be empty.
                     items:
                       type: string
+                      format: mx-room-alias
+                      pattern: "^#"
                 required:
                   - aliases
               examples:
@@ -309,4 +324,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -9,7 +9,8 @@
         "mimetype": "image/png",
         "h": 200,
         "w": 140,
-        "size": 73602
+        "size": 73602,
+        "is_animated": true
       },
       "h": 200,
       "thumbnail_url": "mxc://matrix.org/sHhqkFCvSkFwtmvtETOtKnLP",

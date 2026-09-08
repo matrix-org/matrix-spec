@@ -26,7 +26,7 @@ paths:
         user has stopped typing.
       operationId: setTyping
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: userId
@@ -35,6 +35,8 @@ paths:
           example: "@alice:example.com"
           schema:
             type: string
+            format: mx-user-id
+            pattern: "^@"
         - in: path
           name: roomId
           description: The room in which the user is typing.
@@ -42,6 +44,8 @@ paths:
           example: "!wefh3sfukhs:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -96,4 +100,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

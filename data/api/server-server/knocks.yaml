@@ -23,6 +23,17 @@ paths:
       description: |-
         Asks the receiving server to return information that the sending
         server will need to prepare a knock event for the room.
+
+        Before signing the returned template and calling `/send_knock`,
+        the sending server MUST verify that:
+
+        * the `room_id` is equal to the `roomId` path parameter.
+        * both the `sender` and `state_key` are equal to the `userId` path parameter.
+        * the `type` of the event is `m.room.member`.
+        * the `membership` field inside `content` is `knock`.
+
+        In case any of the above checks fail, the response MUST be treated as malformed and
+        discarded. The caller MAY try to knock through another server.
       operationId: makeKnock
       security:
         - signedRequest: []
@@ -36,7 +47,7 @@ paths:
             type: string
         - in: path
           name: userId
-          description: The user ID the knock event will be for.
+          description: The user ID the knock event will be for. This MUST be a user ID on the origin server.
           required: true
           example: "@someone:example.org"
           schema:
@@ -171,8 +182,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -186,8 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -206,6 +215,15 @@ paths:
         **The request and response body here describe the common
         event fields in more detail and may be missing other required
         fields for a PDU.**
+
+        The receiving server MUST apply certain validation before accepting the event.
+        A specific error code is not mandated, but servers SHOULD return `M_INVALID_PARAM` if:
+
+        * The knock event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `knock`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not equal to the `sender`.
       operationId: sendKnock
       security:
         - signedRequest: []
@@ -272,7 +290,6 @@ paths:
                 - type
                 - content
             example: {
-              "room_id": "!somewhere:example.org",
               "type": "m.room.member",
               "state_key": "@someone:example.org",
               "origin": "example.org",
@@ -296,20 +313,55 @@ paths:
                   knock_room_state:
                     type: array
                     items:
-                      $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
+                      type: object
+                      title: PDU
+                      properties: {}
+                      description: |-
+                        Note that events have a different format depending on the room
+                        version - check the [room version specification](/rooms) for
+                        precise event formats.
+                    x-changedInMatrixVersion:
+                      "1.16": |
+                        `m.room.create` and format requirements were added.
                     description: |-
-                      A list of [stripped state events](/client-server-api/#stripped-state)
-                      to help the initiator of the knock identify the room.
+                      A list of state events to help the initiator of the knock identify
+                      the room. Translated as [stripped state events](/client-server-api/#stripped-state)
+                      over the Client-Server API.
+
+                      MUST contain the `m.room.create` event for the room. All events
+                      listed MUST additionally be formatted according to the room
+                      version specification.
+
+                      Entries which are [improperly signed](/server-server-api/#validating-hashes-and-signatures-on-received-events)
+                      or formatted SHOULD be removed by the server prior to supplying
+                      them over the Client-Server API.
+
+                      Note that events have a different format depending on the room
+                      version - check the [room version specification](/rooms) for
+                      precise event formats.
                     example:
-                      $ref: ../../event-schemas/examples/knock_room_state.json
+                      "$ref": "./examples/invite_or_knock_state.json"
                 required:
                   - knock_room_state
               examples:
                 response:
                   value: {
                     "knock_room_state": {
-                      "$ref": "../../event-schemas/examples/knock_room_state.json"
+                      "$ref": "./examples/invite_or_knock_state.json"
                     }
+                  }
+        "400":
+          description: |-
+            The request is invalid in some way.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "Not a knock event."
                   }
         "403":
           description: |-
@@ -318,8 +370,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -333,8 +384,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: ../client-server/definitions/errors/error.yaml
+                $ref: ../client-server/definitions/errors/error.yaml
               examples:
                 response:
                   value: {
@@ -355,4 +405,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

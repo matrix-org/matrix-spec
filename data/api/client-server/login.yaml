@@ -70,6 +70,21 @@ paths:
                       }
                     ]
                   }
+        "404":
+          description: |-
+            With `M_UNRECOGNIZED`: the homeserver does not support the legacy authentication API.
+            (See [Authentication API discovery](/client-server-api/#authentication-api-discovery).)
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value:
+                    {
+                      "errcode": "M_UNRECOGNIZED",
+                      "error": "OAuth 2.0 authentication is in use on this homeserver.",
+                    }
         "429":
           description: This request was rate-limited.
           content:
@@ -82,7 +97,7 @@ paths:
       summary: Authenticates the user.
       description: |-
         Authenticates the user, and issues an access token they can
-        use to authorize themself in subsequent requests.
+        use to authorise themself in subsequent requests.
 
         If the client does not supply a `device_id`, the server must
         auto-generate one.
@@ -109,23 +124,28 @@ paths:
               properties:
                 type:
                   type: string
-                  enum:
-                    - m.login.password
-                    - m.login.token
-                  description: The login type being used.
+                  description: |-
+                    The login type being used.
+
+                    This must be a type returned in one of the flows of the
+                    response of the [`GET /login`](/client-server-api/#get_matrixclientv3login)
+                    endpoint, like `m.login.password` or `m.login.token`.
                 identifier:
                   $ref: definitions/user_identifier.yaml
                 user:
                   type: string
+                  deprecated: true
                   description: The fully qualified user ID or just local part of the user ID, to
                     log in.  Deprecated in favour of `identifier`.
                 medium:
                   type: string
+                  deprecated: true
                   description: When logging in using a third-party identifier, the medium of the
                     identifier. Must be 'email'.  Deprecated in favour of
                     `identifier`.
                 address:
                   type: string
+                  deprecated: true
                   description: Third-party identifier for the user.  Deprecated in favour of
                     `identifier`.
                 password:
@@ -143,7 +163,7 @@ paths:
                     known client device, a new device will be created. The given
                     device ID must not be the same as a
                     [cross-signing](/client-server-api/#cross-signing) key ID.
-                    The server will auto-generate a device_id
+                    The server will auto-generate a `device_id`
                     if this is not specified.
                 initial_device_display_name:
                   type: string
@@ -167,12 +187,14 @@ paths:
                 properties:
                   user_id:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                     description: The fully-qualified Matrix ID for the account.
                   access_token:
                     type: string
                     description: |-
                       An access token for the account.
-                      This access token can then be used to authorize other requests.
+                      This access token can then be used to authorise other requests.
                   refresh_token:
                     type: string
                     description: |-
@@ -192,6 +214,8 @@ paths:
                     x-addedInMatrixVersion: "1.3"
                   home_server:
                     type: string
+                    format: mx-server-name
+                    deprecated: true
                     description: |-
                       The server_name of the homeserver on which the account has
                       been registered.
@@ -234,8 +258,13 @@ paths:
                     }
                   }
         "400":
-          description: Part of the request was invalid. For example, the login type may
-            not be recognised.
+          description: |-
+            Part of the request was invalid. For example, the login type may not be recognised.
+
+            Specific error codes used with this status code include:
+              * {{% added-in v="1.17" %}} `M_APPSERVICE_LOGIN_UNSUPPORTED`: an application service
+                used the `m.login.application_service` type, but the server doesn't support logging
+                in via the Legacy authentication API.
           content:
             application/json:
               schema:
@@ -253,6 +282,8 @@ paths:
                 or the requested device ID is the same as a cross-signing key
                 ID.
               * `M_USER_DEACTIVATED`: The user has been deactivated.
+                Servers MAY instead use `M_FORBIDDEN` when they can no longer authenticate
+                the deactivated user (e.g. their password has been wiped).
           content:
             application/json:
               schema:
@@ -282,6 +313,3 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v3
-components:
-  securitySchemes:
-    $ref: definitions/security.yaml

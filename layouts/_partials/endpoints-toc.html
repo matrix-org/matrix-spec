@@ -1,0 +1,61 @@
+{{/*
+  
+  Renders a list of API endpoints for the current page, given:
+
+  The outer page's Scratch must contain an "api_endpoints" key, which is either
+  a slice of maps (a list of endpoint metadata dicts) or a map of module name ->
+  slice of endpoint metadata dicts (representing the API modules and the
+  endpoints they each contain). Each endpoint dict must contain the following
+  keys:
+
+    * `anchor`: the HTML anchor for the endpoint
+    * `method`: the HTTP method
+    * `endpoint`: the endpoint path
+    * `summary`: a short summary of the endpoint
+    * `deprecated`: whether the endpoint is deprecated
+    * `module`: the CS API module name, if any, for grouping purposes. If empty,
+      the endpoint is considered "base" or "required".
+  
+*/}}
+
+{{ $raw := .Scratch.Get "api_endpoints" }}
+{{/* Normalize to a slice */}}
+{{ $endpoints := slice }}
+{{ if reflect.IsSlice $raw }}
+  {{ $endpoints = $raw }}
+{{ else if reflect.IsMap $raw }}
+  {{ range $raw }}
+    {{ $endpoints = append $endpoints . }}
+  {{ end }}
+{{ end }}
+{{ if gt (len $endpoints) 0 }}
+  <div class="endpoints-toc mb-4">
+    <details>
+      <summary>List of Endpoints</summary>
+      {{/* Sort by module to group visually */}}
+      {{ $sorted := sort $endpoints "module" }}
+      {{ $current := "" }}
+      {{ range $sorted }}
+        {{ $mod := .module }}
+        {{/* Set a title for the base endpoints */}}
+        {{ if not $mod }}{{ $mod = "Required" }}{{ end }}
+        {{ if ne $mod $current }}
+          {{ if $current }}</ul></div>{{ end }}
+          <div class="endpoint-module">
+            <div class="endpoint-module-title">{{ $mod }}</div>
+            <ul class="endpoint-list">
+          {{ $current = $mod }}
+        {{ end }}
+        {{ $key := printf "%s|%s" .method .anchor }}
+        <li>
+          <a href="#{{ .anchor }}">
+            <span class="http-api-method">{{ .method }}</span>
+            <span class="endpoint-path">{{ .endpoint }}</span>
+            {{ if .deprecated }}<span class="endpoint-deprecated">(deprecated)</span>{{ end }}
+          </a>
+        </li>
+      {{ end }}
+      {{ if $current }}</ul></div>{{ end }}
+    </details>
+  </div>
+{{ end }}

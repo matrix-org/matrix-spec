@@ -13,14 +13,15 @@
 # limitations under the License.
 openapi: 3.1.0
 info:
-  title: Matrix Client-Server Room Directory API
+  title: Matrix Client-Server Published Room Directory API
   version: 1.0.0
 paths:
   "/directory/list/room/{roomId}":
     get:
       summary: Gets the visibility of a room in the directory
-      description: Gets the visibility of a given room on the server's public room
-        directory.
+      description: |-
+        Gets the visibility of a given room in the server's
+        published room directory.
       operationId: getRoomVisibilityOnDirectory
       parameters:
         - in: path
@@ -30,9 +31,11 @@ paths:
           example: "!curbf:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       responses:
         "200":
-          description: The visibility of the room in the directory
+          description: The visibility of the room in the directory.
           content:
             application/json:
               schema:
@@ -50,7 +53,7 @@ paths:
                     "visibility": "public"
                   }
         "404":
-          description: The room is not known to the server
+          description: The room is not known to the server.
           content:
             application/json:
               schema:
@@ -64,17 +67,16 @@ paths:
       tags:
         - Room discovery
     put:
-      summary: Sets the visibility of a room in the room directory
+      summary: Sets the visibility of a room in the directory
       description: |-
-        Sets the visibility of a given room in the server's public room
-        directory.
+        Sets the visibility of a given room in the server's published room directory.
 
-        Servers may choose to implement additional access control checks
-        here, for instance that room visibility can only be changed by
-        the room creator or a server administrator.
+        Servers MAY implement additional access control checks, for instance,
+        to ensure that a room's visibility can only be changed by the room creator
+        or a server administrator.
       operationId: setRoomVisibilityOnDirectory
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -83,6 +85,8 @@ paths:
           example: "!curbf:matrix.org"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
       requestBody:
         content:
           application/json:
@@ -96,11 +100,11 @@ paths:
                     - public
                   description: |-
                     The new visibility setting for the room.
-                    Defaults to 'public'.
+                    Defaults to `public`.
               example: {
                 "visibility": "public"
               }
-        description: The new visibility for the room on the room directory.
+        description: The new visibility for the room in the published room directory.
         required: true
       responses:
         "200":
@@ -113,7 +117,7 @@ paths:
                 response:
                   value: {}
         "404":
-          description: The room is not known to the server
+          description: The room is not known to the server.
           content:
             application/json:
               schema:
@@ -128,12 +132,16 @@ paths:
         - Room discovery
   /publicRooms:
     get:
-      summary: Lists the public rooms on the server.
+      summary: Lists a server's published room directory
       description: |-
-        Lists the public rooms on the server.
+        Lists a server's published room directory.
 
-        This API returns paginated responses. The rooms are ordered by the number
-        of joined members, with the largest rooms first.
+        This API returns paginated responses.
+
+        {{% changed-in v="1.19" %}} The server determines the order of the rooms
+        returned by this endpoint. Previously, rooms were ordered with the largest
+        joined member count first. Continuing to order by largest first or another
+        stable order is recommended.
       operationId: getPublicRooms
       parameters:
         - in: query
@@ -153,13 +161,14 @@ paths:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
-            local server.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
+            format: mx-server-name
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A list of the published rooms on the server.
           content:
             application/json:
               schema:
@@ -167,23 +176,28 @@ paths:
       tags:
         - Room discovery
     post:
-      summary: Lists the public rooms on the server with optional filter.
+      summary: Lists a server's published room directory with an optional filter
       description: |-
-        Lists the public rooms on the server, with optional filter.
+        Lists a server's published room directory with an optional filter.
 
-        This API returns paginated responses. The rooms are ordered by the number
-        of joined members, with the largest rooms first.
+        This API returns paginated responses.
+
+        {{% changed-in v="1.19" %}} The server determines the order of the rooms
+        returned by this endpoint. Previously, rooms were ordered with the largest
+        joined member count first. Continuing to order by largest first or another
+        stable order is recommended.
       operationId: queryPublicRooms
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: query
           name: server
           description: |-
-            The server to fetch the public room lists from. Defaults to the
-            local server.
+            The server to fetch the published room directory from. Defaults
+            to the local server. Case sensitive.
           schema:
             type: string
+            format: mx-server-name
       requestBody:
         content:
           application/json:
@@ -224,13 +238,16 @@ paths:
                   type: boolean
                   description: |-
                     Whether or not to include all known networks/protocols from
-                    application services on the homeserver. Defaults to false.
+                    application services on the homeserver. Defaults to `false`.
                   example: false
                 third_party_instance_id:
                   type: string
                   description: |-
                     The specific third-party network/protocol to request from the
                     homeserver. Can only be used if `include_all_networks` is false.
+
+                    This is the `instance_id` of a `Protocol Instance` returned by
+                    [`GET /_matrix/client/v3/thirdparty/protocols`](/client-server-api/#get_matrixclientv3thirdpartyprotocols).
                   example: irc
               example: {
                 "limit": 10,
@@ -242,13 +259,13 @@ paths:
                   ]
                 },
                 "include_all_networks": false,
-                "third_party_instance_id": "irc"
+                "third_party_instance_id": "irc-freenode"
               }
         description: Options for which rooms to return.
         required: true
       responses:
         "200":
-          description: A list of the rooms on the server.
+          description: A filtered list of the published rooms on the server.
           content:
             application/json:
               schema:
@@ -267,3 +284,7 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v3
+components:
+  securitySchemes:
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

@@ -27,7 +27,7 @@ paths:
         [Lazy-loading room members](/client-server-api/#lazy-loading-room-members) for more information.
       operationId: getRoomEvents
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -36,6 +36,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: query
           name: from
           x-changedInMatrixVersion:
@@ -185,4 +187,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

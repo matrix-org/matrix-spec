@@ -33,9 +33,23 @@ paths:
         2. An `m.room.member` event for the creator to join the room. This is
            needed so the remaining events can be sent.
 
-        3. A default `m.room.power_levels` event, giving the room creator
-           (and not other members) permission to send state events. Overridden
-           by the `power_level_content_override` parameter.
+        3. A default `m.room.power_levels` event. Overridden by the
+           `power_level_content_override` parameter.
+
+           In [room versions](/rooms) 1 through 11, the room creator (and not
+           other members) will be given permission to send state events.
+
+           In room versions 12 and later, the room creator is given infinite
+           power level and cannot be specified in the `users` field of
+           `m.room.power_levels`, so is not listed explicitly.
+
+           **Note**: For `trusted_private_chat`, the users specified in the
+           `invite` parameter SHOULD also be appended to `additional_creators`
+           by the server, per the `creation_content` parameter.
+
+           If the room's version is 12 or higher, the power level for sending
+           `m.room.tombstone` events MUST explicitly be higher than `state_default`.
+           For example, set to 150 instead of 100.
 
         4. An `m.room.canonical_alias` event if `room_alias_name` is given.
 
@@ -61,10 +75,12 @@ paths:
 
         The server will create a `m.room.create` event in the room with the
         requesting user as the creator, alongside other keys provided in the
-        `creation_content`.
+        `creation_content` or implied by behaviour of `creation_content`.
       operationId: createRoom
+      x-changedInMatrixVersion:
+        "1.16": Added server behaviour for how the initial power levels change depending on room version.
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       requestBody:
         content:
           application/json:
@@ -86,12 +102,9 @@ paths:
                     - public
                     - private
                   description: |-
-                    A `public` visibility indicates that the room will be shown
-                    in the published room list. A `private` visibility will hide
-                    the room from the published room list. Rooms default to
-                    `private` visibility if this key is not included. NB: This
-                    should not be confused with `join_rules` which also uses the
-                    word `public`.
+                    The room's visibility in the server's
+                    [published room directory](/client-server-api#published-room-directory).
+                    Defaults to `private`.
                 room_alias_name:
                   type: string
                   description: |-
@@ -108,15 +121,17 @@ paths:
                 name:
                   type: string
                   description: |-
-                    If this is included, an `m.room.name` event will be sent
-                    into the room to indicate the name of the room. See Room
-                    Events for more information on `m.room.name`.
+                    If this is included, an [`m.room.name`](/client-server-api/#mroomname) event
+                    will be sent into the room to indicate the name for the room.
+                    This overwrites any [`m.room.name`](/client-server-api/#mroomname)
+                    event in `initial_state`.
                 topic:
                   type: string
                   description: |-
-                    If this is included, an `m.room.topic` event will be sent
-                    into the room to indicate the topic for the room. See Room
-                    Events for more information on `m.room.topic`.
+                    If this is included, an [`m.room.topic`](/client-server-api/#mroomtopic)
+                    event with a `text/plain` mimetype will be sent into the room
+                    to indicate the topic for the room. This overwrites any
+                    [`m.room.topic`](/client-server-api/#mroomtopic) event in `initial_state`.
                 invite:
                   type: array
                   description: |-
@@ -124,38 +139,15 @@ paths:
                     server to invite everyone in the list to the newly created room.
                   items:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                 invite_3pid:
                   type: array
                   description: |-
                     A list of objects representing third-party IDs to invite into
                     the room.
                   items:
-                    type: object
-                    title: Invite3pid
-                    properties:
-                      id_server:
-                        type: string
-                        description: The hostname+port of the identity server which should be used for
-                          third-party identifier lookups.
-                      id_access_token:
-                        type: string
-                        description: |-
-                          An access token previously registered with the identity server. Servers
-                          can treat this as optional to distinguish between r0.5-compatible clients
-                          and this specification version.
-                      medium:
-                        type: string
-                        description: |-
-                          The kind of address being passed in the address field, for example `email`
-                          (see [the list of recognised values](/appendices/#3pid-types)).
-                      address:
-                        type: string
-                        description: The invitee's third-party identifier.
-                    required:
-                      - id_server
-                      - id_access_token
-                      - medium
-                      - address
+                    $ref: definitions/invite_3pid.yaml
                 room_version:
                   type: string
                   description: |-
@@ -167,11 +159,20 @@ paths:
                 creation_content:
                   title: CreationContent
                   type: object
+                  x-changedInMatrixVersion:
+                    "1.16": Added server behaviour for how to handle `trusted_private_chat` and invited users.
                   description: |-
                     Extra keys, such as `m.federate`, to be added to the content
-                    of the [`m.room.create`](/client-server-api/#mroomcreate) event. The server will overwrite the following
+                    of the [`m.room.create`](/client-server-api/#mroomcreate) event.
+
+                    The server will overwrite the following
                     keys: `creator`, `room_version`. Future versions of the specification
                     may allow the server to overwrite other keys.
+
+                    When using the `trusted_private_chat` preset, the server SHOULD combine
+                    `additional_creators` specified here and the `invite` array into the
+                    eventual `m.room.create` event's `additional_creators`, deduplicating
+                    between the two parameters.
                 initial_state:
                   type: array
                   description: |-
@@ -209,7 +210,7 @@ paths:
                     based on a preset.
 
                     If unspecified, the server should use the `visibility` to determine
-                    which preset to use. A visbility of `public` equates to a preset of
+                    which preset to use. A visibility of `public` equates to a preset of
                     `public_chat` and `private` visibility equates to a preset of
                     `private_chat`.
                 is_direct:
@@ -241,6 +242,8 @@ paths:
                   room_id:
                     type: string
                     description: The created room's ID.
+                    format: mx-room-id
+                    pattern: "^!"
                 required:
                   - room_id
               examples:
@@ -250,7 +253,6 @@ paths:
                   }
         "400":
           description: |-
-            
             The request is invalid. A meaningful `errcode` and description
             error text will be returned. Example reasons for rejection include:
 
@@ -274,6 +276,17 @@ paths:
             application/json:
               schema:
                 $ref: definitions/errors/error.yaml
+        "403":
+          description: |-
+            Creating the room is not allowed.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that one of the homeservers of the invited users rejected
+            the invite due to [invite blocking](/client-server-api/#invite-permission).
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
       tags:
         - Room creation
 servers:
@@ -290,4 +303,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer

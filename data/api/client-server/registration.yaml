@@ -33,7 +33,7 @@ paths:
         - `guest` accounts. These accounts may have limited permissions and may not be supported by all servers.
 
         If registration is successful, this endpoint will issue an access token
-        the client can use to authorize itself in subsequent requests.
+        the client can use to authorise itself in subsequent requests.
 
         If the client does not supply a `device_id`, the server must
         auto-generate one.
@@ -60,6 +60,27 @@ paths:
 
         Any user ID returned by this API must conform to the grammar given in the
         [Matrix specification](/appendices/#user-identifiers).
+
+        {{% boxes/note %}}
+        {{% added-in v="1.17" %}}
+        Even if the server doesn't support the Legacy authentication API, it
+        MUST support this endpoint for application services to be able to
+        [create users](/application-service-api/#server-admin-style-permissions).
+
+        In that case application services MUST set the `"inhibit_login": true`
+        parameter as they cannot use it to log in as users. If the
+        `inhibit_login` parameter is not set to `true`, the server MUST return a
+        400 HTTP status code with an `M_APPSERVICE_LOGIN_UNSUPPORTED` error code.
+        {{% /boxes/note %}}
+
+        {{% boxes/warning %}}
+        {{% added-in v="1.18" %}} [OAuth 2.0 aware clients](/client-server-api/#oauth-20-aware-clients)
+        MUST NOT use this endpoint when the server offers the [`m.login.sso`
+        authentication flow](/client-server-api/#client-login-via-sso) with
+        `oauth_aware_preferred` set to `true`. Instead they MUST use the
+        [`/login/sso/redirect`](/client-server-api/#get_matrixclientv3loginssoredirect)
+        endpoint, adding the `action=register` parameter.
+        {{% /boxes/warning %}}
       operationId: register
       parameters:
         - in: query
@@ -105,7 +126,7 @@ paths:
                   description: |-
                     ID of the client device. If this does not correspond to a
                     known client device, a new device will be created. The server
-                    will auto-generate a device_id if this is not specified.
+                    will auto-generate a `device_id` if this is not specified.
                   example: GHTYAJCE
                 initial_device_display_name:
                   type: string
@@ -118,11 +139,11 @@ paths:
                   description: |-
                     If true, an `access_token` and `device_id` should not be
                     returned from this call, therefore preventing an automatic
-                    login. Defaults to false.
+                    login. Defaults to `false`.
                   example: false
                 refresh_token:
                   type: boolean
-                  description: If true, the client supports refresh tokens.
+                  description: If `true`, the client supports refresh tokens.
                   x-addedInMatrixVersion: "1.3"
         required: true
       responses:
@@ -135,6 +156,8 @@ paths:
                 properties:
                   user_id:
                     type: string
+                    format: mx-user-id
+                    pattern: "^@"
                     description: |-
                       The fully-qualified Matrix user ID (MXID) that has been registered.
 
@@ -144,7 +167,7 @@ paths:
                     type: string
                     description: |-
                       An access token for the account.
-                      This access token can then be used to authorize other requests.
+                      This access token can then be used to authorise other requests.
                       Required if the `inhibit_login` option is false.
                   refresh_token:
                     type: string
@@ -169,6 +192,8 @@ paths:
                     x-addedInMatrixVersion: "1.3"
                   home_server:
                     type: string
+                    format: mx-server-name
+                    deprecated: true
                     description: |-
                       The server_name of the homeserver on which the account has
                       been registered.
@@ -199,6 +224,9 @@ paths:
             * `M_INVALID_USERNAME` : The desired user ID is not a valid user name.
             * `M_EXCLUSIVE` : The desired user ID is in the exclusive namespace
               claimed by an application service.
+            * {{% added-in v="1.17" %}} `M_APPSERVICE_LOGIN_UNSUPPORTED`: an application service
+              used the `m.login.application_service` type without setting `inhibit_login` to `true`,
+              but the server doesn't support logging in via the Legacy authentication API.
 
             These errors may be returned at any stage of the registration process,
             including after authentication if the requested user ID was registered
@@ -367,291 +395,6 @@ paths:
                     "errcode": "M_THREEPID_DENIED",
                     "error": "Third-party identifier is not allowed"
                   }
-      tags:
-        - Account management
-  /account/password:
-    post:
-      summary: Changes a user's password.
-      description: |-
-        Changes the password for an account on this homeserver.
-
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api) to
-        ensure the user changing the password is actually the owner of the
-        account.
-
-        An access token should be submitted to this endpoint if the client has
-        an active session.
-
-        The homeserver may change the flows available depending on whether a
-        valid access token is provided. The homeserver SHOULD NOT revoke the
-        access token provided in the request. Whether other access tokens for
-        the user are revoked depends on the request parameters.
-      security:
-        - accessToken: []
-      operationId: changePassword
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                new_password:
-                  type: string
-                  description: The new password for the account.
-                  example: ihatebananas
-                logout_devices:
-                  type: boolean
-                  description: |-
-                    Whether the user's other access tokens, and their associated devices, should be
-                    revoked if the request succeeds. Defaults to true.
-
-                    When `false`, the server can still take advantage of the [soft logout method](/client-server-api/#soft-logout)
-                    for the user's remaining devices.
-                  example: true
-                auth:
-                  description: Additional authentication information for the user-interactive
-                    authentication API.
-                  allOf:
-                    - $ref: definitions/auth_data.yaml
-              required:
-                - new_password
-        required: true
-      responses:
-        "200":
-          description: The password has been changed.
-          content:
-            application/json:
-              schema:
-                type: object
-              examples:
-                response:
-                  value: {}
-        "401":
-          description: The homeserver requires additional authentication information.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/auth_response.yaml
-        "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
-      tags:
-        - Account management
-  /account/password/email/requestToken:
-    post:
-      summary: Requests a validation token be sent to the given email address for the
-        purpose of resetting a user's password
-      description: |-
-        The homeserver must check that the given email address **is
-        associated** with an account on this homeserver. This API should be
-        used to request validation tokens when authenticating for the
-        `/account/password` endpoint.
-
-        This API's parameters and response are identical to that of the
-        [`/register/email/requestToken`](/client-server-api/#post_matrixclientv3registeremailrequesttoken)
-        endpoint, except that
-        `M_THREEPID_NOT_FOUND` may be returned if no account matching the
-        given email address could be found. The server may instead send an
-        email to the given address prompting the user to create an account.
-        `M_THREEPID_IN_USE` may not be returned.
-
-        The homeserver should validate the email itself, either by sending a
-        validation email itself or by using a service it has control over.
-      operationId: requestTokenToResetPasswordEmail
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: definitions/request_email_validation.yaml
-        required: true
-      responses:
-        "200":
-          description: An email was sent to the given address.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/request_token_response.yaml
-        "400":
-          description: |-
-            The referenced third-party identifier is not recognised by the
-            homeserver, or the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_THREEPID_NOT_FOUND",
-                    "error": "Email not found"
-                  }
-        "403":
-          description: |-
-            The homeserver does not allow the third-party identifier as a
-            contact option.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_THREEPID_DENIED",
-                    "error": "Third-party identifier is not allowed"
-                  }
-      tags:
-        - Account management
-  /account/password/msisdn/requestToken:
-    post:
-      summary: Requests a validation token be sent to the given phone number for the
-        purpose of resetting a user's password.
-      description: |-
-        The homeserver must check that the given phone number **is
-        associated** with an account on this homeserver. This API should be
-        used to request validation tokens when authenticating for the
-        `/account/password` endpoint.
-
-        This API's parameters and response are identical to that of the
-        [`/register/msisdn/requestToken`](/client-server-api/#post_matrixclientv3registermsisdnrequesttoken)
-        endpoint, except that
-        `M_THREEPID_NOT_FOUND` may be returned if no account matching the
-        given phone number could be found. The server may instead send the SMS
-        to the given phone number prompting the user to create an account.
-        `M_THREEPID_IN_USE` may not be returned.
-
-        The homeserver should validate the phone number itself, either by sending a
-        validation message itself or by using a service it has control over.
-      operationId: requestTokenToResetPasswordMSISDN
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: definitions/request_msisdn_validation.yaml
-        required: true
-      responses:
-        "200":
-          description: An SMS message was sent to the given phone number.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/request_token_response.yaml
-        "400":
-          description: |-
-            The referenced third-party identifier is not recognised by the
-            homeserver, or the request was invalid. The error code `M_SERVER_NOT_TRUSTED`
-            can be returned if the server does not trust/support the identity server
-            provided in the request.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_THREEPID_NOT_FOUND",
-                    "error": "Phone number not found"
-                  }
-        "403":
-          description: |-
-            The homeserver does not allow the third-party identifier as a
-            contact option.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/error.yaml
-              examples:
-                response:
-                  value: {
-                    "errcode": "M_THREEPID_DENIED",
-                    "error": "Third-party identifier is not allowed"
-                  }
-      tags:
-        - Account management
-  /account/deactivate:
-    post:
-      summary: Deactivate a user's account.
-      description: |-
-        Deactivate the user's account, removing all ability for the user to
-        login again.
-
-        This API endpoint uses the [User-Interactive Authentication API](/client-server-api/#user-interactive-authentication-api).
-
-        An access token should be submitted to this endpoint if the client has
-        an active session.
-
-        The homeserver may change the flows available depending on whether a
-        valid access token is provided.
-
-        Unlike other endpoints, this endpoint does not take an `id_access_token`
-        parameter because the homeserver is expected to sign the request to the
-        identity server instead.
-      security:
-        - accessToken: []
-      operationId: deactivateAccount
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                auth:
-                  description: Additional authentication information for the user-interactive
-                    authentication API.
-                  allOf:
-                    - $ref: definitions/auth_data.yaml
-                id_server:
-                  type: string
-                  description: |-
-                    The identity server to unbind all of the user's 3PIDs from.
-                    If not provided, the homeserver MUST use the `id_server`
-                    that was originally use to bind each identifier. If the
-                    homeserver does not know which `id_server` that was,
-                    it must return an `id_server_unbind_result` of
-                    `no-support`.
-                  example: example.org
-        required: true
-      responses:
-        "200":
-          description: The account has been deactivated.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id_server_unbind_result:
-                    type: string
-                    enum:
-                      - success
-                      - no-support
-                    description: |-
-                      An indicator as to whether or not the homeserver was able to unbind
-                      the user's 3PIDs from the identity server(s). `success` indicates
-                      that all identifiers have been unbound from the identity server while
-                      `no-support` indicates that one or more identifiers failed to unbind
-                      due to the identity server refusing the request or the homeserver
-                      being unable to determine an identity server to unbind from. This
-                      must be `success` if the homeserver has no identifiers to unbind
-                      for the user.
-                    example: success
-                required:
-                  - id_server_unbind_result
-        "401":
-          description: The homeserver requires additional authentication information.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/auth_response.yaml
-        "429":
-          description: This request was rate-limited.
-          content:
-            application/json:
-              schema:
-                $ref: definitions/errors/rate_limited.yaml
       tags:
         - Account management
   /register/available:

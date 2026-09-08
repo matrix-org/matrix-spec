@@ -1,0 +1,35 @@
+{{/*
+
+  Render the parameters of a given type, given:
+
+  * `parameters`: OpenAPI data specifying the parameters
+  * `type`: the type of parameters to render: "header, ""path", "query"
+  * `caption`: caption to use for the table
+
+  This template renders a single table containing parameters of the given type.
+
+*/}}
+
+{{ $parameters := .parameters }}
+{{ $type := .type }}
+{{ $caption := .caption }}
+
+{{ $parameters_of_type := where $parameters "in" $type }}
+
+{{ with $parameters_of_type }}
+
+    {{/* build a dict mapping from name->parameter, which render-object-table expects */}}
+    {{ $param_dict := dict }}
+    {{ range $parameter := . }}
+        {{/*
+            merge the schema at the same level as the rest of the other fields because that is
+            what `render-object-table` expects. Put the schema first so examples in it are
+            overwritten.
+        */}}
+        {{ $param := merge $parameter.schema $parameter }}
+        {{ $param_dict = merge $param_dict (dict $parameter.name $param )}}
+    {{ end }}
+
+    {{/* and render the parameters */}}
+    {{ partial "openapi/render-object-table" (dict "title" $caption "properties" $param_dict) }}
+{{ end }}

@@ -20,10 +20,14 @@ properties:
   sender:
     type: string
     description: The Matrix ID of the user who issued the invite.
+    format: mx-user-id
+    pattern: "^@"
     example: "@alice:example.org"
   mxid:
     type: string
     description: The Matrix ID of the invitee.
+    format: mx-user-id
+    pattern: "^@"
     example: "@bob:example.org"
   token:
     type: string

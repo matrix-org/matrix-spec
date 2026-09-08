@@ -1,7 +1,7 @@
 
 ### Push Notifications
 
-```
+```nohighlight
                                    +--------------------+  +-------------------+
                   Matrix HTTP      |                    |  |                   |
              Notification Protocol |   App Developer    |  |   Device Vendor   |
@@ -83,7 +83,7 @@ Push Ruleset
 :   A push ruleset *scopes a set of rules according to some criteria*. For
     example, some rules may only be applied for messages from a particular
     sender, a particular room, or by default. The push ruleset contains the
-    entire set of scopes and rules.
+    entire set of rules.
 
 #### Push Rules
 
@@ -91,10 +91,8 @@ A push rule is a single rule that states under what *conditions* an
 event should be passed onto a push gateway and *how* the notification
 should be presented. There are different "kinds" of push rules and each
 rule has an associated priority. Every push rule MUST have a `kind` and
-`rule_id`. The `rule_id` is a unique string within the kind of rule and
-its' scope: `rule_ids` do not need to be unique between rules of the
-same kind on different devices. Rules may have extra keys depending on
-the value of `kind`.
+`rule_id`. The `rule_id` is a unique string within the kind of rule.
+Rules may have extra keys depending on the value of `kind`.
 
 The different `kind`s of rule, in the order that they are checked, are:
 
@@ -184,11 +182,13 @@ they are represented as a dictionary with a key equal to their name and
 other keys as their parameters, e.g.
 `{ "set_tweak": "sound", "value": "default" }`.
 
-{{% boxes/note %}}
+###### Historical Actions
+
 Older versions of the Matrix specification included the `dont_notify` and
-`coalesce` actions. These should both be considered no-ops (ignored, not
-rejected) if received from a client.
-{{% /boxes/note %}}
+`coalesce` actions. Clients and homeservers MUST ignore these actions, for
+instance, by stripping them from actions arrays they encounter. This means,
+for example, that a rule with `["dont_notify"]` actions MUST be equivalent
+to a rule with an empty actions array.
 
 ##### Conditions
 
@@ -380,6 +380,9 @@ The following `alt_aliases` values will NOT match:
 
 **`contains_display_name`**
 
+{{% changed-in v="1.17" %}}: this condition is deprecated and **should not be
+used in new push rules**.
+
 This matches messages where `content.body` contains the owner's display name in
 that room. This is a separate condition because display names may change and as such
 it would be hard to maintain a rule that matched the user's display name. This
@@ -410,6 +413,9 @@ Parameters:
     the `notifications` object in the power level event content.
 
 #### Predefined Rules
+
+{{% changed-in v="1.17" %}}: the legacy default push rules that looked for
+mentions in the `body` of the event were removed.
 
 Homeservers can specify "server-default rules". They operate at a lower
 priority than "user-defined rules", except for the `.m.rule.master` rule
@@ -454,7 +460,7 @@ Definition:
         {
             "kind": "event_match",
             "key": "content.msgtype",
-            "pattern": "m.notice",
+            "pattern": "m.notice"
         }
     ],
     "actions": []
@@ -521,9 +527,9 @@ Definition:
 }
 ```
 
-<a id="_m_rule_is_user_mention"/> **`.m.rule.is_user_mention`**
+<a id="_m_rule_is_user_mention"></a> **`.m.rule.is_user_mention`**
 
-{{< added-in v="1.7" >}}
+{{% added-in v="1.7" %}}
 
 Matches any message which contains the user's Matrix ID in the list of `user_ids`
 under the `m.mentions` property.
@@ -555,44 +561,9 @@ Definition:
 }
 ```
 
-<a id="_m_rule_contains_display_name"/> **`.m.rule.contains_display_name`**
+<a id="_m_rule_is_room_mention"></a> **`.m.rule.is_room_mention`**
 
-{{% changed-in v="1.7" %}}
-
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message whose content contains the user's current display name
-in the room in which it was sent.
-
-Definition:
-
-```json
-{
-    "rule_id": ".m.rule.contains_display_name",
-    "default": true,
-    "enabled": true,
-    "conditions": [
-        {
-            "kind": "contains_display_name"
-        }
-    ],
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "sound",
-            "value": "default"
-        },
-        {
-            "set_tweak": "highlight"
-        }
-    ]
-}
-```
-
-<a id="_m_rule_is_room_mention"/> **`.m.rule.is_room_mention`**
-
-{{< added-in v="1.7" >}}
+{{% added-in v="1.7" %}}
 
 Matches any message from a sender with the proper power level with the `room`
 property of the `m.mentions` property set to `true`.
@@ -624,45 +595,7 @@ Definition:
 }
 ```
 
-<a id="_m_rule_roomnotif"/> **`.m.rule.roomnotif`**
-
-{{% changed-in v="1.7" %}}
-
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message from a sender with the proper power level whose content
-contains the text `@room`, signifying the whole room should be notified of
-the event.
-
-Definition:
-
-```json
-{
-    "rule_id": ".m.rule.roomnotif",
-    "default": true,
-    "enabled": true,
-    "conditions": [
-        {
-            "kind": "event_match",
-            "key": "content.body",
-            "pattern": "@room"
-        },
-        {
-            "kind": "sender_notification_permission",
-            "key": "room"
-        }
-    ],
-    "actions": [
-        "notify",
-        {
-            "set_tweak": "highlight"
-        }
-    ]
-}
-```
-
-**<a name="mruletombstone"></a>`.m.rule.tombstone`**
+**<a id="mruletombstone"></a>`.m.rule.tombstone`**
 
 Matches any state event whose type is `m.room.tombstone`. This is
 intended to notify users of a room when it is upgraded, similar to what
@@ -696,7 +629,7 @@ Definition:
 }
 ```
 
-**<a name="mrulereaction"></a>`.m.rule.reaction`**
+**<a id="mrulereaction"></a>`.m.rule.reaction`**
 
 {{% added-in v="1.7" %}}
 
@@ -750,36 +683,27 @@ Definition:
 }
 ```
 
-##### Default Content Rules
+**`.m.rule.suppress_edits`**
 
-<a id="_m_rule_contains_user_name"/> **`.m.rule.contains_user_name`**
+{{% added-in v="1.9" %}}
 
-{{% changed-in v="1.7" %}}
+Suppresses notifications related to [event replacements](#event-replacements).
 
-As of `v1.7`, this rule is deprecated and **should only be enabled if the event
-does not have an [`m.mentions` property](#definition-mmentions)**.
-
-Matches any message whose content contains the local part of the user's
-Matrix ID, separated by word boundaries.
-
-Definition (as a `content` rule):
+Definition:
 
 ```json
 {
-    "rule_id": ".m.rule.contains_user_name",
+    "rule_id": ".m.rule.suppress_edits",
     "default": true,
     "enabled": true,
-    "pattern": "[the local part of the user's Matrix ID]",
-    "actions": [
-        "notify",
+    "conditions": [
         {
-            "set_tweak": "sound",
-            "value": "default"
-        },
-        {
-            "set_tweak": "highlight"
+            "kind": "event_property_is",
+            "key": "content.m\\.relates_to.rel_type",
+            "value": "m.replace"
         }
-    ]
+    ],
+    "actions": []
 }
 ```
 
@@ -1018,7 +942,7 @@ messages they have received.
 ##### Receiving notifications
 
 Servers MUST include the number of unread notifications in a client's
-`/sync` stream, and MUST update it as it changes. Notifications are
+[`/sync`](#get_matrixclientv3sync) stream, and MUST update it as it changes. Notifications are
 determined by the push rules which apply to an event.
 
 For encrypted events, the homeserver has limited access to the event content
@@ -1046,16 +970,16 @@ ahead), however if the `m.read.private` receipt were to be updated to
 event D then the user has read up to D (the `m.read` receipt is now
 behind the `m.read.private` receipt).
 
-{{< added-in v="1.4" >}} When handling threaded read receipts, the server
-is to partition the notification count to each thread (with the main timeline
-being its own thread). To determine if an event is part of a thread the
-server follows the [event relationship](#forming-relationships-between-events)
-until it finds a thread root (as specified by the [threading module](#threading)),
-however it is not recommended that the server traverse infinitely. Instead,
-implementations are encouraged to do a maximum of 3 hops to find a thread
-before deciding that the event does not belong to a thread. This is primarily
-to ensure that future events, like `m.reaction`, are correctly considered
-"part of" a given thread.
+{{% added-in v="1.4" %}} When handling threaded read receipts, the server is to
+partition the notification count to each thread (with the main timeline being
+its own thread). To determine if an event is part of a thread the server follows
+the [event relationship](#forming-relationships-between-events) until it finds a
+thread root via an `m.thread` relation (as specified by the [threading
+module](#threading)), however it is not recommended that the server traverse
+infinitely. Instead, implementations are encouraged to do a maximum of 3 hops to
+find a thread before deciding that the event does not belong to a thread. This
+is primarily to ensure that future events, like `m.reaction`, are correctly
+considered "part of" a given thread.
 
 #### Server behaviour
 
@@ -1065,7 +989,7 @@ users in the room (excluding the sender). This may result in:
 * Generating a new number of unread notifications for the user.
 * Making a request to the configured push gateway.
 
-The updated notification count from a new event MUST appear in the same `/sync`
+The updated notification count from a new event MUST appear in the same [`/sync`](#get_matrixclientv3sync)
 response as the event itself.
 
 #### Push Gateway behaviour

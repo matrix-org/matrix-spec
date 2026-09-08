@@ -1,6 +1,0 @@
-# config file for htmltest. This is used by one of the checks in Github
-# Actions.
-
-IgnoreDirectoryMissingTrailingSlash: true
-DirectoryPath: spec
-CheckExternal: false

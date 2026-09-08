@@ -13,13 +13,25 @@ deciding what content is undesirable for any particular entity and
 should instead be empowering those entities to make their own decisions.
 As such, a generic framework for communicating "moderation policy lists"
 or "moderation policy rooms" is described. Note that this module only
-describes the data structures and not how they should be interpreting:
+describes the data structures and not how they should be interpreted:
 the entity making the decisions on filtering is best positioned to
 interpret the rules how it sees fit.
 
 Moderation policy lists are stored as room state events. There are no
-restrictions on how the rooms can be configured (they could be public,
-private, encrypted, etc).
+restrictions on how the rooms can be configured in terms of
+[join rules](#mroomjoin_rules), [history visibility](#room-history-visibility),
+encryption, etc.
+
+{{% added-in v="1.20" %}}
+Dedicated moderation policy rooms SHOULD use the [`m.policy` room type](#types).
+However, use of the room type is not required. Policy events MAY be sent in any
+room.
+
+Like [spaces](#spaces), sending normal [`m.room.message`](#mroommessage) events
+within a policy room is discouraged. Policy rooms should be created with
+[`m.room.power_levels`](#mroompower_levels) which prohibit normal events by
+setting `events_default` to a suitably high number. In the default power level
+structure, this would be `100`.
 
 There are currently 3 kinds of entities which can be affected by rules:
 `user`, `server`, and `room`. All 3 are described with

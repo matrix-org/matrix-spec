@@ -24,8 +24,9 @@ allOf:
       room_id:
         description: The ID of the room associated with this event.
         type: string
+        format: mx-room-id
+        pattern: "^!"
         example: '!jEsUZKDJdhlrceRyVU:example.org'
-
       unsigned:
         properties:
             redacted_because:
@@ -43,6 +44,6 @@ allOf:
                 "unsigned": {
                   "age": 1257,
                 }
-            }
+              }
     required:
       - room_id

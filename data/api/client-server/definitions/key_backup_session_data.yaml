@@ -14,7 +14,7 @@
 
 
 type: object
-title: SessionData
+title: BackedUpSessionData
 description: |-
   The format of a backed-up session key, prior to encryption, when using the
   `m.megolm_backup.v1.curve25519-aes-sha2` algorithm.
@@ -23,37 +23,38 @@ properties:
     type: string
     description: |-
       The end-to-end message encryption algorithm that the key is for. Must be `m.megolm.v1.aes-sha2`.
+    example: "m.megolm.v1.aes-sha2"
   forwarding_curve25519_key_chain:
     type: array
     items:
       type: string
     description: |-
-      Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](#mforwarded_room_key) events.
+      Chain of Curve25519 keys through which this session was forwarded, via [m.forwarded_room_key](/client-server-api/#mforwarded_room_key)
+      events.
+    example: [ "hPQNcabIABgGnx3/ACv/jmMmiQHoeFfuLB17tzWp6Hw" ]
   sender_key:
     type: string
     description: |-
       Unpadded base64-encoded device Curve25519 key.
+    example: "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU"
   sender_claimed_keys:
     type: object
     additionalProperties:
       type: string
     description: |-
       A map from algorithm name (`ed25519`) to the Ed25519 signing key of the sending device.
+    example: { "ed25519": "aj40p+aw64yPIdsxoog8jhPu9i7l7NcFRecuOQblE3Y" }
   session_key:
     type: string
     description: |-
       Unpadded base64-encoded session key in [session-export format](https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md#session-export-format).
-example: {
-  "algorithm": "m.megolm.v1.aes-sha2",
-  "forwarding_curve25519_key_chain": [
-    "hPQNcabIABgGnx3/ACv/jmMmiQHoeFfuLB17tzWp6Hw"
-  ],
-  "sender_key": "RF3s+E7RkTQTGF2d8Deol0FkQvgII2aJDf3/Jp5mxVU",
-  "sender_claimed_keys": {
-    "ed25519": "aj40p+aw64yPIdsxoog8jhPu9i7l7NcFRecuOQblE3Y",
-  },
-  "session_key": "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
-}
+    example: "AgAAAADxKHa9uFxcXzwYoNueL5Xqi69IkD4sni8Llf..."
+  shared_history:
+    x-addedInMatrixVersion: "1.19"
+    type: boolean
+    description: |-
+      Whether the session is [shareable](/client-server-api/#shareable-encryption-sessions).
+    example: false
 required:
   - algorithm
   - forwarding_curve25519_key_chain

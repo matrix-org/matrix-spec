@@ -5,7 +5,7 @@
         "description": "Dog",
         "unicode": "U+1F436",
         "translated_descriptions": {
-            "ar": "كَلب",
+            "ar": "كلب",
             "bg": "Куче",
             "ca": "Gos",
             "cs": "Pes",
@@ -13,6 +13,7 @@
             "eo": "Hundo",
             "es": "Perro",
             "et": "Koer",
+            "fa": "سگ",
             "fi": "Koira",
             "fr": "Chien",
             "hr": "pas",
@@ -22,10 +23,11 @@
             "ja": "犬",
             "nb_NO": "Hund",
             "nl": "Hond",
+            "pt": "Cão",
             "pt_BR": "Cachorro",
             "ru": "Собака",
             "si": "බල්ලා",
-            "sk": "Hlava psa",
+            "sk": "Pes",
             "sq": "Qen",
             "sr": "пас",
             "sv": "Hund",
@@ -33,7 +35,8 @@
             "tzm": "Aydi",
             "uk": "Пес",
             "vi": "Chó",
-            "zh_Hans": "狗"
+            "zh_Hans": "狗",
+            "zh_Hant": "狗"
         }
     },
     {
@@ -50,6 +53,7 @@
             "eo": "Kato",
             "es": "Gato",
             "et": "Kass",
+            "fa": "گربه",
             "fi": "Kissa",
             "fr": "Chat",
             "hr": "mačka",
@@ -59,10 +63,11 @@
             "ja": "猫",
             "nb_NO": "Katt",
             "nl": "Kat",
+            "pt": "Gato",
             "pt_BR": "Gato",
             "ru": "Кошка",
             "si": "පූසා",
-            "sk": "Hlava mačky",
+            "sk": "Mačka",
             "sq": "Mace",
             "sr": "мачка",
             "sv": "Katt",
@@ -70,7 +75,8 @@
             "tzm": "Amuc",
             "uk": "Кіт",
             "vi": "Mèo",
-            "zh_Hans": "猫"
+            "zh_Hans": "猫",
+            "zh_Hant": "貓"
         }
     },
     {
@@ -87,6 +93,7 @@
             "eo": "Leono",
             "es": "León",
             "et": "Lõvi",
+            "fa": "شیر",
             "fi": "Leijona",
             "fr": "Lion",
             "hr": "lav",
@@ -96,10 +103,11 @@
             "ja": "ライオン",
             "nb_NO": "Løve",
             "nl": "Leeuw",
+            "pt": "Leão",
             "pt_BR": "Leão",
             "ru": "Лев",
             "si": "සිංහයා",
-            "sk": "Hlava leva",
+            "sk": "Lev",
             "sq": "Luan",
             "sr": "лав",
             "sv": "Lejon",
@@ -107,7 +115,8 @@
             "tzm": "Izem",
             "uk": "Лев",
             "vi": "Sư tử",
-            "zh_Hans": "狮子"
+            "zh_Hans": "狮子",
+            "zh_Hant": "獅子"
         }
     },
     {
@@ -124,6 +133,7 @@
             "eo": "Ĉevalo",
             "es": "Caballo",
             "et": "Hobune",
+            "fa": "اسب",
             "fi": "Hevonen",
             "fr": "Cheval",
             "hr": "konj",
@@ -133,6 +143,7 @@
             "ja": "馬",
             "nb_NO": "Hest",
             "nl": "Paard",
+            "pt": "Cavalo",
             "pt_BR": "Cavalo",
             "ru": "Лошадь",
             "si": "අශ්වයා",
@@ -144,7 +155,8 @@
             "tzm": "Ayyis",
             "uk": "Кінь",
             "vi": "Ngựa",
-            "zh_Hans": "马"
+            "zh_Hans": "马",
+            "zh_Hant": "馬"
         }
     },
     {
@@ -153,7 +165,7 @@
         "description": "Unicorn",
         "unicode": "U+1F984",
         "translated_descriptions": {
-            "ar": "حِصَانٌ بِقَرن",
+            "ar": "حصان وحيد القرن",
             "bg": "Еднорог",
             "ca": "Unicorn",
             "cs": "Jednorožec",
@@ -161,6 +173,7 @@
             "eo": "Unukorno",
             "es": "Unicornio",
             "et": "Ükssarvik",
+            "fa": "تک شاخ",
             "fi": "Yksisarvinen",
             "fr": "Licorne",
             "hr": "jednorog",
@@ -170,10 +183,11 @@
             "ja": "ユニコーン",
             "nb_NO": "Enhjørning",
             "nl": "Eenhoorn",
+            "pt": "Unicórnio",
             "pt_BR": "Unicórnio",
             "ru": "Единорог",
             "si": null,
-            "sk": "Hlava jednorožca",
+            "sk": "Jednorožec",
             "sq": "Njëbrirësh",
             "sr": "једнорог",
             "sv": "Enhörning",
@@ -181,7 +195,8 @@
             "tzm": null,
             "uk": "Єдиноріг",
             "vi": "Kỳ lân",
-            "zh_Hans": "独角兽"
+            "zh_Hans": "独角兽",
+            "zh_Hant": "獨角獸"
         }
     },
     {
@@ -198,6 +213,7 @@
             "eo": "Porko",
             "es": "Cerdo",
             "et": "Siga",
+            "fa": "خوک",
             "fi": "Sika",
             "fr": "Cochon",
             "hr": "svinja",
@@ -207,10 +223,11 @@
             "ja": "ブタ",
             "nb_NO": "Gris",
             "nl": "Varken",
+            "pt": "Porco",
             "pt_BR": "Porco",
             "ru": "Свинья",
             "si": null,
-            "sk": "Hlava prasaťa",
+            "sk": "Prasa",
             "sq": "Derr",
             "sr": "прасе",
             "sv": "Gris",
@@ -218,7 +235,8 @@
             "tzm": "Ilef",
             "uk": "Свиня",
             "vi": "Heo",
-            "zh_Hans": "猪"
+            "zh_Hans": "猪",
+            "zh_Hant": "豬"
         }
     },
     {
@@ -235,6 +253,7 @@
             "eo": "Elefanto",
             "es": "Elefante",
             "et": "Elevant",
+            "fa": "فیل",
             "fi": "Norsu",
             "fr": "Éléphant",
             "hr": "slon",
@@ -244,6 +263,7 @@
             "ja": "ゾウ",
             "nb_NO": "Elefant",
             "nl": "Olifant",
+            "pt": "Elefante",
             "pt_BR": "Elefante",
             "ru": "Слон",
             "si": null,
@@ -255,7 +275,8 @@
             "tzm": "Ilu",
             "uk": "Слон",
             "vi": "Voi",
-            "zh_Hans": "大象"
+            "zh_Hans": "大象",
+            "zh_Hant": "大象"
         }
     },
     {
@@ -272,6 +293,7 @@
             "eo": "Kuniklo",
             "es": "Conejo",
             "et": "Jänes",
+            "fa": "خرگوش",
             "fi": "Kani",
             "fr": "Lapin",
             "hr": "zec",
@@ -281,10 +303,11 @@
             "ja": "うさぎ",
             "nb_NO": "Kanin",
             "nl": "Konijn",
+            "pt": "Coelho",
             "pt_BR": "Coelho",
             "ru": "Кролик",
             "si": null,
-            "sk": "Hlava zajaca",
+            "sk": "Zajac",
             "sq": "Lepur",
             "sr": "зец",
             "sv": "Kanin",
@@ -292,7 +315,8 @@
             "tzm": "Agnin",
             "uk": "Кріль",
             "vi": "Thỏ",
-            "zh_Hans": "兔子"
+            "zh_Hans": "兔子",
+            "zh_Hant": "兔子"
         }
     },
     {
@@ -309,6 +333,7 @@
             "eo": "Pando",
             "es": "Panda",
             "et": "Panda",
+            "fa": "پاندا",
             "fi": "Panda",
             "fr": "Panda",
             "hr": "panda",
@@ -318,10 +343,11 @@
             "ja": "パンダ",
             "nb_NO": "Panda",
             "nl": "Panda",
+            "pt": "Panda",
             "pt_BR": "Panda",
             "ru": "Панда",
             "si": null,
-            "sk": "Hlava pandy",
+            "sk": "Panda",
             "sq": "Panda",
             "sr": "панда",
             "sv": "Panda",
@@ -329,7 +355,8 @@
             "tzm": null,
             "uk": "Панда",
             "vi": "Gấu trúc",
-            "zh_Hans": "熊猫"
+            "zh_Hans": "熊猫",
+            "zh_Hant": "熊貓"
         }
     },
     {
@@ -346,6 +373,7 @@
             "eo": "Virkoko",
             "es": "Gallo",
             "et": "Kukk",
+            "fa": "خروس",
             "fi": "Kukko",
             "fr": "Coq",
             "hr": "kokot",
@@ -355,6 +383,7 @@
             "ja": "ニワトリ",
             "nb_NO": "Hane",
             "nl": "Haan",
+            "pt": "Galo",
             "pt_BR": "Galo",
             "ru": "Петух",
             "si": null,
@@ -366,7 +395,8 @@
             "tzm": "Ayaẓiḍ",
             "uk": "Когут",
             "vi": "Gà trống",
-            "zh_Hans": "公鸡"
+            "zh_Hans": "公鸡",
+            "zh_Hant": "公雞"
         }
     },
     {
@@ -375,7 +405,7 @@
         "description": "Penguin",
         "unicode": "U+1F427",
         "translated_descriptions": {
-            "ar": "بِطريق",
+            "ar": "بطريق",
             "bg": "Пингвин",
             "ca": "Pingüí",
             "cs": "Tučňák",
@@ -383,6 +413,7 @@
             "eo": "Pingveno",
             "es": "Pingüino",
             "et": "Pingviin",
+            "fa": "پنگوئن",
             "fi": "Pingviini",
             "fr": "Manchot",
             "hr": "pingvin",
@@ -392,6 +423,7 @@
             "ja": "ペンギン",
             "nb_NO": "Pingvin",
             "nl": "Pinguïn",
+            "pt": "Pinguim",
             "pt_BR": "Pinguim",
             "ru": "Пингвин",
             "si": null,
@@ -403,7 +435,8 @@
             "tzm": null,
             "uk": "Пінгвін",
             "vi": "Chim cánh cụt",
-            "zh_Hans": "企鹅"
+            "zh_Hans": "企鹅",
+            "zh_Hant": "企鵝"
         }
     },
     {
@@ -420,6 +453,7 @@
             "eo": "Testudo",
             "es": "Tortuga",
             "et": "Kilpkonn",
+            "fa": "لاک‌پشت",
             "fi": "Kilpikonna",
             "fr": "Tortue",
             "hr": "kornjača",
@@ -429,6 +463,7 @@
             "ja": "亀",
             "nb_NO": "Skilpadde",
             "nl": "Schildpad",
+            "pt": "Tartaruga",
             "pt_BR": "Tartaruga",
             "ru": "Черепаха",
             "si": null,
@@ -440,7 +475,8 @@
             "tzm": "Ifker",
             "uk": "Черепаха",
             "vi": "Rùa",
-            "zh_Hans": "乌龟"
+            "zh_Hans": "乌龟",
+            "zh_Hant": "烏龜"
         }
     },
     {
@@ -449,7 +485,7 @@
         "description": "Fish",
         "unicode": "U+1F41F",
         "translated_descriptions": {
-            "ar": "سَمَكَة",
+            "ar": "سَمَكة",
             "bg": "Риба",
             "ca": "Peix",
             "cs": "Ryba",
@@ -457,6 +493,7 @@
             "eo": "Fiŝo",
             "es": "Pez",
             "et": "Kala",
+            "fa": "ماهی",
             "fi": "Kala",
             "fr": "Poisson",
             "hr": "riba",
@@ -466,6 +503,7 @@
             "ja": "魚",
             "nb_NO": "Fisk",
             "nl": "Vis",
+            "pt": "Peixe",
             "pt_BR": "Peixe",
             "ru": "Рыба",
             "si": null,
@@ -477,7 +515,8 @@
             "tzm": "Aselm",
             "uk": "Риба",
             "vi": "Cá",
-            "zh_Hans": "鱼"
+            "zh_Hans": "鱼",
+            "zh_Hant": "魚"
         }
     },
     {
@@ -494,6 +533,7 @@
             "eo": "Polpo",
             "es": "Pulpo",
             "et": "Kaheksajalg",
+            "fa": "اختاپوس",
             "fi": "Tursas",
             "fr": "Poulpe",
             "hr": "hobotnica",
@@ -503,6 +543,7 @@
             "ja": "たこ",
             "nb_NO": "Blekksprut",
             "nl": "Octopus",
+            "pt": "Polvo",
             "pt_BR": "Polvo",
             "ru": "Осьминог",
             "si": null,
@@ -514,7 +555,8 @@
             "tzm": null,
             "uk": "Восьминіг",
             "vi": "Bạch tuộc",
-            "zh_Hans": "章鱼"
+            "zh_Hans": "章鱼",
+            "zh_Hant": "章魚"
         }
     },
     {
@@ -531,6 +573,7 @@
             "eo": "Papilio",
             "es": "Mariposa",
             "et": "Liblikas",
+            "fa": "پروانه",
             "fi": "Perhonen",
             "fr": "Papillon",
             "hr": "leptir",
@@ -540,6 +583,7 @@
             "ja": "ちょうちょ",
             "nb_NO": "Sommerfugl",
             "nl": "Vlinder",
+            "pt": "Borboleta",
             "pt_BR": "Borboleta",
             "ru": "Бабочка",
             "si": null,
@@ -551,7 +595,8 @@
             "tzm": null,
             "uk": "Метелик",
             "vi": "Bướm",
-            "zh_Hans": "蝴蝶"
+            "zh_Hans": "蝴蝶",
+            "zh_Hant": "蝴蝶"
         }
     },
     {
@@ -568,6 +613,7 @@
             "eo": "Floro",
             "es": "Flor",
             "et": "Lill",
+            "fa": "گل",
             "fi": "Kukka",
             "fr": "Fleur",
             "hr": "svijet",
@@ -577,10 +623,11 @@
             "ja": "花",
             "nb_NO": "Blomst",
             "nl": "Bloem",
+            "pt": "Flor",
             "pt_BR": "Flor",
             "ru": "Цветок",
             "si": null,
-            "sk": "Tulipán",
+            "sk": "Kvet",
             "sq": "Lule",
             "sr": "цвет",
             "sv": "Blomma",
@@ -588,7 +635,8 @@
             "tzm": null,
             "uk": "Квітка",
             "vi": "Hoa",
-            "zh_Hans": "花"
+            "zh_Hans": "花",
+            "zh_Hant": "花"
         }
     },
     {
@@ -605,6 +653,7 @@
             "eo": "Arbo",
             "es": "Árbol",
             "et": "Puu",
+            "fa": "درخت",
             "fi": "Puu",
             "fr": "Arbre",
             "hr": "drvo",
@@ -614,10 +663,11 @@
             "ja": "木",
             "nb_NO": "Tre",
             "nl": "Boom",
+            "pt": "Árvore",
             "pt_BR": "Árvore",
             "ru": "Дерево",
             "si": null,
-            "sk": "Listnatý strom",
+            "sk": "Strom",
             "sq": "Pemë",
             "sr": "дрво",
             "sv": "Träd",
@@ -625,7 +675,8 @@
             "tzm": "Aseklu",
             "uk": "Дерево",
             "vi": "Cây",
-            "zh_Hans": "树"
+            "zh_Hans": "树",
+            "zh_Hant": "樹"
         }
     },
     {
@@ -642,6 +693,7 @@
             "eo": "Kakto",
             "es": "Cactus",
             "et": "Kaktus",
+            "fa": "کاکتوس",
             "fi": "Kaktus",
             "fr": "Cactus",
             "hr": "kaktus",
@@ -651,6 +703,7 @@
             "ja": "サボテン",
             "nb_NO": "Kaktus",
             "nl": "Cactus",
+            "pt": "Cato",
             "pt_BR": "Cacto",
             "ru": "Кактус",
             "si": null,
@@ -662,7 +715,8 @@
             "tzm": null,
             "uk": "Кактус",
             "vi": "Xương rồng",
-            "zh_Hans": "仙人掌"
+            "zh_Hans": "仙人掌",
+            "zh_Hant": "仙人掌"
         }
     },
     {
@@ -679,6 +733,7 @@
             "eo": "Fungo",
             "es": "Seta",
             "et": "Seen",
+            "fa": "قارچ",
             "fi": "Sieni",
             "fr": "Champignon",
             "hr": "gljiva",
@@ -688,6 +743,7 @@
             "ja": "きのこ",
             "nb_NO": "Sopp",
             "nl": "Paddenstoel",
+            "pt": "Cogumelo",
             "pt_BR": "Cogumelo",
             "ru": "Гриб",
             "si": null,
@@ -699,7 +755,8 @@
             "tzm": "Agursel",
             "uk": "Гриб",
             "vi": "Nấm",
-            "zh_Hans": "蘑菇"
+            "zh_Hans": "蘑菇",
+            "zh_Hant": "蘑菇"
         }
     },
     {
@@ -716,6 +773,7 @@
             "eo": "Globo",
             "es": "Globo",
             "et": "Maakera",
+            "fa": "زمین",
             "fi": "Maapallo",
             "fr": "Globe",
             "hr": "Globus",
@@ -725,6 +783,7 @@
             "ja": "地球",
             "nb_NO": "Globus",
             "nl": "Wereldbol",
+            "pt": "Globo",
             "pt_BR": "Globo",
             "ru": "Глобус",
             "si": null,
@@ -736,7 +795,8 @@
             "tzm": null,
             "uk": "Глобус",
             "vi": "Địa cầu",
-            "zh_Hans": "地球"
+            "zh_Hans": "地球",
+            "zh_Hant": "地球"
         }
     },
     {
@@ -753,6 +813,7 @@
             "eo": "Luno",
             "es": "Luna",
             "et": "Kuu",
+            "fa": "ماه",
             "fi": "Kuu",
             "fr": "Lune",
             "hr": "mjesec",
@@ -762,10 +823,11 @@
             "ja": "月",
             "nb_NO": "Måne",
             "nl": "Maan",
+            "pt": "Lua",
             "pt_BR": "Lua",
             "ru": "Луна",
             "si": null,
-            "sk": "Polmesiac",
+            "sk": "Mesiac",
             "sq": "Hënë",
             "sr": "месец",
             "sv": "Måne",
@@ -773,7 +835,8 @@
             "tzm": "Ayyur",
             "uk": "Місяць",
             "vi": "Mặt trăng",
-            "zh_Hans": "月亮"
+            "zh_Hans": "月亮",
+            "zh_Hant": "月亮"
         }
     },
     {
@@ -790,6 +853,7 @@
             "eo": "Nubo",
             "es": "Nube",
             "et": "Pilv",
+            "fa": "ابر",
             "fi": "Pilvi",
             "fr": "Nuage",
             "hr": "oblak",
@@ -799,6 +863,7 @@
             "ja": "雲",
             "nb_NO": "Sky",
             "nl": "Wolk",
+            "pt": "Nuvem",
             "pt_BR": "Nuvem",
             "ru": "Облако",
             "si": null,
@@ -810,7 +875,8 @@
             "tzm": null,
             "uk": "Хмара",
             "vi": "Mây",
-            "zh_Hans": "云"
+            "zh_Hans": "云",
+            "zh_Hant": "雲朵"
         }
     },
     {
@@ -827,6 +893,7 @@
             "eo": "Fajro",
             "es": "Fuego",
             "et": "Tuli",
+            "fa": "آتش",
             "fi": "Tuli",
             "fr": "Feu",
             "hr": "vatra",
@@ -836,6 +903,7 @@
             "ja": "炎",
             "nb_NO": "Flamme",
             "nl": "Vuur",
+            "pt": "Fogo",
             "pt_BR": "Fogo",
             "ru": "Огонь",
             "si": null,
@@ -847,7 +915,8 @@
             "tzm": "Timessi",
             "uk": "Вогонь",
             "vi": "Lửa",
-            "zh_Hans": "火"
+            "zh_Hans": "火",
+            "zh_Hant": "火"
         }
     },
     {
@@ -864,6 +933,7 @@
             "eo": "Banano",
             "es": "Plátano",
             "et": "Banaan",
+            "fa": "موز",
             "fi": "Banaani",
             "fr": "Banane",
             "hr": "banana",
@@ -873,6 +943,7 @@
             "ja": "バナナ",
             "nb_NO": "Banan",
             "nl": "Banaan",
+            "pt": "Banana",
             "pt_BR": "Banana",
             "ru": "Банан",
             "si": null,
@@ -884,7 +955,8 @@
             "tzm": "Tabanant",
             "uk": "Банан",
             "vi": "Chuối",
-            "zh_Hans": "香蕉"
+            "zh_Hans": "香蕉",
+            "zh_Hant": "香蕉"
         }
     },
     {
@@ -901,6 +973,7 @@
             "eo": "Pomo",
             "es": "Manzana",
             "et": "Õun",
+            "fa": "سیب",
             "fi": "Omena",
             "fr": "Pomme",
             "hr": "jabuka",
@@ -910,10 +983,11 @@
             "ja": "リンゴ",
             "nb_NO": "Eple",
             "nl": "Appel",
+            "pt": "Maçã",
             "pt_BR": "Maçã",
             "ru": "Яблоко",
             "si": null,
-            "sk": "Červené jablko",
+            "sk": "Jablko",
             "sq": "Mollë",
             "sr": "јабука",
             "sv": "Äpple",
@@ -921,7 +995,8 @@
             "tzm": "Tadeffuyt",
             "uk": "Яблуко",
             "vi": "Táo",
-            "zh_Hans": "苹果"
+            "zh_Hans": "苹果",
+            "zh_Hant": "蘋果"
         }
     },
     {
@@ -938,6 +1013,7 @@
             "eo": "Frago",
             "es": "Fresa",
             "et": "Maasikas",
+            "fa": "توت فرنگی",
             "fi": "Mansikka",
             "fr": "Fraise",
             "hr": "jagoda",
@@ -947,6 +1023,7 @@
             "ja": "いちご",
             "nb_NO": "Jordbær",
             "nl": "Aardbei",
+            "pt": "Morango",
             "pt_BR": "Morango",
             "ru": "Клубника",
             "si": null,
@@ -958,7 +1035,8 @@
             "tzm": null,
             "uk": "Полуниця",
             "vi": "Dâu tây",
-            "zh_Hans": "草莓"
+            "zh_Hans": "草莓",
+            "zh_Hant": "草莓"
         }
     },
     {
@@ -975,6 +1053,7 @@
             "eo": "Maizo",
             "es": "Maíz",
             "et": "Mais",
+            "fa": "ذرت",
             "fi": "Maissi",
             "fr": "Maïs",
             "hr": "kukuruza",
@@ -984,10 +1063,11 @@
             "ja": "とうもろこし",
             "nb_NO": "Mais",
             "nl": "Maïs",
+            "pt": "Milho",
             "pt_BR": "Milho",
             "ru": "Кукуруза",
             "si": null,
-            "sk": "Kukuričný klas",
+            "sk": "Kukurica",
             "sq": "Misër",
             "sr": "кукуруз",
             "sv": "Majs",
@@ -995,7 +1075,8 @@
             "tzm": null,
             "uk": "Кукурудза",
             "vi": "Bắp",
-            "zh_Hans": "玉米"
+            "zh_Hans": "玉米",
+            "zh_Hant": "玉米"
         }
     },
     {
@@ -1012,6 +1093,7 @@
             "eo": "Pico",
             "es": "Pizza",
             "et": "Pitsa",
+            "fa": "پیتزا",
             "fi": "Pizza",
             "fr": "Pizza",
             "hr": "pizza",
@@ -1021,6 +1103,7 @@
             "ja": "ピザ",
             "nb_NO": "Pizza",
             "nl": "Pizza",
+            "pt": "Piza",
             "pt_BR": "Pizza",
             "ru": "Пицца",
             "si": null,
@@ -1032,7 +1115,8 @@
             "tzm": null,
             "uk": "Піца",
             "vi": "Pizza",
-            "zh_Hans": "披萨"
+            "zh_Hans": "披萨",
+            "zh_Hant": "披薩"
         }
     },
     {
@@ -1049,6 +1133,7 @@
             "eo": "Torto",
             "es": "Tarta",
             "et": "Kook",
+            "fa": "کیک",
             "fi": "Kakku",
             "fr": "Gâteau",
             "hr": "torta",
@@ -1058,10 +1143,11 @@
             "ja": "ケーキ",
             "nb_NO": "Kake",
             "nl": "Taart",
+            "pt": "Bolo",
             "pt_BR": "Bolo",
             "ru": "Торт",
             "si": null,
-            "sk": "Narodeninová torta",
+            "sk": "Torta",
             "sq": "Tortë",
             "sr": "торта",
             "sv": "Tårta",
@@ -1069,7 +1155,8 @@
             "tzm": null,
             "uk": "Пиріг",
             "vi": "Bánh",
-            "zh_Hans": "蛋糕"
+            "zh_Hans": "蛋糕",
+            "zh_Hant": "蛋糕"
         }
     },
     {
@@ -1086,6 +1173,7 @@
             "eo": "Koro",
             "es": "Corazón",
             "et": "Süda",
+            "fa": "قلب",
             "fi": "Sydän",
             "fr": "Cœur",
             "hr": "srca",
@@ -1095,10 +1183,11 @@
             "ja": "ハート",
             "nb_NO": "Hjerte",
             "nl": "Hart",
+            "pt": "Coração",
             "pt_BR": "Coração",
             "ru": "Сердце",
             "si": null,
-            "sk": "červené srdce",
+            "sk": "Srdce",
             "sq": "Zemër",
             "sr": "срце",
             "sv": "Hjärta",
@@ -1106,7 +1195,8 @@
             "tzm": "Ul",
             "uk": "Серце",
             "vi": "Tim",
-            "zh_Hans": "心"
+            "zh_Hans": "心",
+            "zh_Hant": "愛心"
         }
     },
     {
@@ -1123,6 +1213,7 @@
             "eo": "Rideto",
             "es": "Emoticono",
             "et": "Smaili",
+            "fa": "خنده",
             "fi": "Hymynaama",
             "fr": "Sourire",
             "hr": "smajlića",
@@ -1132,10 +1223,11 @@
             "ja": "スマイル",
             "nb_NO": "Smilefjes",
             "nl": "Smiley",
+            "pt": "Sorriso",
             "pt_BR": "Sorriso",
             "ru": "Улыбка",
             "si": null,
-            "sk": "Škeriaca sa tvár",
+            "sk": "Smajlík",
             "sq": "Emotikon",
             "sr": "смајли",
             "sv": "Smiley",
@@ -1143,7 +1235,8 @@
             "tzm": null,
             "uk": "Посмішка",
             "vi": "Mặt cười",
-            "zh_Hans": "笑脸"
+            "zh_Hans": "笑脸",
+            "zh_Hant": "笑臉"
         }
     },
     {
@@ -1160,15 +1253,17 @@
             "eo": "Roboto",
             "es": "Robot",
             "et": "Robot",
+            "fa": "ربات",
             "fi": "Robotti",
             "fr": "Robot",
             "hr": "robot",
             "hu": "Robot",
             "id": "Robot",
             "it": "Robot",
-            "ja": "ロボと",
+            "ja": "ロボット",
             "nb_NO": "Robot",
             "nl": "Robot",
+            "pt": "Robô",
             "pt_BR": "Robô",
             "ru": "Робот",
             "si": null,
@@ -1180,7 +1275,8 @@
             "tzm": "Aṛubu",
             "uk": "Робот",
             "vi": "Rô-bô",
-            "zh_Hans": "机器人"
+            "zh_Hans": "机器人",
+            "zh_Hant": "機器人"
         }
     },
     {
@@ -1197,6 +1293,7 @@
             "eo": "Ĉapelo",
             "es": "Sombrero",
             "et": "Kübar",
+            "fa": "کلاه",
             "fi": "Hattu",
             "fr": "Chapeau",
             "hr": "kapa",
@@ -1206,18 +1303,20 @@
             "ja": "帽子",
             "nb_NO": "Hatt",
             "nl": "Hoed",
+            "pt": "Chapéu",
             "pt_BR": "Chapéu",
             "ru": "Шляпа",
             "si": null,
-            "sk": "Cilinder",
+            "sk": "Klobúk",
             "sq": "Kapë",
             "sr": "шешир",
             "sv": "Hatt",
             "szl": null,
             "tzm": "Taraza",
             "uk": "Капелюх",
-            "vi": "Nón",
-            "zh_Hans": "帽子"
+            "vi": "Mũ",
+            "zh_Hans": "帽子",
+            "zh_Hant": "帽子"
         }
     },
     {
@@ -1234,6 +1333,7 @@
             "eo": "Okulvitroj",
             "es": "Gafas",
             "et": "Prillid",
+            "fa": "عینک",
             "fi": "Silmälasit",
             "fr": "Lunettes",
             "hr": "naočale",
@@ -1243,6 +1343,7 @@
             "ja": "めがね",
             "nb_NO": "Briller",
             "nl": "Bril",
+            "pt": "Óculos",
             "pt_BR": "Óculos",
             "ru": "Очки",
             "si": null,
@@ -1253,8 +1354,9 @@
             "szl": null,
             "tzm": null,
             "uk": "Окуляри",
-            "vi": "Mắt kiếng",
-            "zh_Hans": "眼镜"
+            "vi": "Kính mắt",
+            "zh_Hans": "眼镜",
+            "zh_Hant": "眼鏡"
         }
     },
     {
@@ -1271,6 +1373,7 @@
             "eo": "Ŝraŭbŝlosilo",
             "es": "Llave inglesa",
             "et": "Mutrivõti",
+            "fa": "آچار",
             "fi": "Kiintoavain",
             "fr": "Clé à molette",
             "hr": "ključ",
@@ -1280,10 +1383,11 @@
             "ja": "スパナ",
             "nb_NO": "Fastnøkkel",
             "nl": "Moersleutel",
+            "pt": "Chave inglesa",
             "pt_BR": "Chave inglesa",
             "ru": "Ключ",
             "si": null,
-            "sk": "Francúzsky kľúč",
+            "sk": "Vidlicový kľúč",
             "sq": "Çelës",
             "sr": "кључ",
             "sv": "Skruvnyckel",
@@ -1291,7 +1395,8 @@
             "tzm": null,
             "uk": "Гайковий ключ",
             "vi": "Cờ-lê",
-            "zh_Hans": "扳手"
+            "zh_Hans": "扳手",
+            "zh_Hant": "扳手"
         }
     },
     {
@@ -1308,6 +1413,7 @@
             "eo": "Kristnaska viro",
             "es": "Papá Noel",
             "et": "Jõuluvana",
+            "fa": "بابا نوئل",
             "fi": "Joulupukki",
             "fr": "Père Noël",
             "hr": "deda Mraz",
@@ -1317,18 +1423,20 @@
             "ja": "サンタ",
             "nb_NO": "Julenisse",
             "nl": "Kerstman",
+            "pt": "Pai Natal",
             "pt_BR": "Papai-noel",
             "ru": "Санта",
             "si": null,
-            "sk": "Santa Claus",
+            "sk": "Mikuláš",
             "sq": "Babagjyshi i Vitit të Ri",
             "sr": "деда Мраз",
             "sv": "Tomte",
             "szl": null,
             "tzm": null,
             "uk": "Санта Клаус",
-            "vi": "ông già Noel",
-            "zh_Hans": "圣诞老人"
+            "vi": "ông già Nô-en",
+            "zh_Hans": "圣诞老人",
+            "zh_Hant": "聖誕老人"
         }
     },
     {
@@ -1345,6 +1453,7 @@
             "eo": "Dikfingro supren",
             "es": "Pulgar arriba",
             "et": "Pöidlad püsti",
+            "fa": "لایک",
             "fi": "Peukalo ylös",
             "fr": "Pouce en l’air",
             "hr": "palac gore",
@@ -1354,6 +1463,7 @@
             "ja": "いいね",
             "nb_NO": "Tommel Opp",
             "nl": "Duim omhoog",
+            "pt": "Polegar para cima",
             "pt_BR": "Joinha",
             "ru": "Большой палец вверх",
             "si": null,
@@ -1365,7 +1475,8 @@
             "tzm": null,
             "uk": "Великий палець вгору",
             "vi": "Thích",
-            "zh_Hans": "赞"
+            "zh_Hans": "赞",
+            "zh_Hant": "讚"
         }
     },
     {
@@ -1382,6 +1493,7 @@
             "eo": "Ombrelo",
             "es": "Paraguas",
             "et": "Vihmavari",
+            "fa": "چتر",
             "fi": "Sateenvarjo",
             "fr": "Parapluie",
             "hr": "kišobran",
@@ -1391,6 +1503,7 @@
             "ja": "傘",
             "nb_NO": "Paraply",
             "nl": "Paraplu",
+            "pt": "Guarda-chuva",
             "pt_BR": "Guarda-chuva",
             "ru": "Зонт",
             "si": null,
@@ -1401,8 +1514,9 @@
             "szl": null,
             "tzm": null,
             "uk": "Парасолька",
-            "vi": "Cây dù",
-            "zh_Hans": "伞"
+            "vi": "Cái ô",
+            "zh_Hans": "伞",
+            "zh_Hant": "雨傘"
         }
     },
     {
@@ -1419,6 +1533,7 @@
             "eo": "Sablohorloĝo",
             "es": "Reloj de arena",
             "et": "Liivakell",
+            "fa": "ساعت شنی",
             "fi": "Tiimalasi",
             "fr": "Sablier",
             "hr": "pješčani sat",
@@ -1428,6 +1543,7 @@
             "ja": "砂時計",
             "nb_NO": "Timeglass",
             "nl": "Zandloper",
+            "pt": "Ampulheta",
             "pt_BR": "Ampulheta",
             "ru": "Песочные часы",
             "si": null,
@@ -1439,7 +1555,8 @@
             "tzm": null,
             "uk": "Пісковий годинник",
             "vi": "Đồng hồ cát",
-            "zh_Hans": "沙漏"
+            "zh_Hans": "沙漏",
+            "zh_Hant": "沙漏"
         }
     },
     {
@@ -1456,6 +1573,7 @@
             "eo": "Horloĝo",
             "es": "Reloj",
             "et": "Kell",
+            "fa": "ساعت",
             "fi": "Pöytäkello",
             "fr": "Réveil",
             "hr": "sat",
@@ -1465,6 +1583,7 @@
             "ja": "時計",
             "nb_NO": "Klokke",
             "nl": "Wekker",
+            "pt": "Relógio",
             "pt_BR": "Relógio",
             "ru": "Часы",
             "si": null,
@@ -1476,7 +1595,8 @@
             "tzm": null,
             "uk": "Годинник",
             "vi": "Đồng hồ",
-            "zh_Hans": "时钟"
+            "zh_Hans": "时钟",
+            "zh_Hant": "時鐘"
         }
     },
     {
@@ -1493,6 +1613,7 @@
             "eo": "Donaco",
             "es": "Regalo",
             "et": "Kingitus",
+            "fa": "هدیه",
             "fi": "Lahja",
             "fr": "Cadeau",
             "hr": "poklon",
@@ -1502,18 +1623,20 @@
             "ja": "ギフト",
             "nb_NO": "Gave",
             "nl": "Geschenk",
+            "pt": "Presente",
             "pt_BR": "Presente",
             "ru": "Подарок",
             "si": null,
-            "sk": "Zabalený darček",
+            "sk": "Darček",
             "sq": "Dhuratë",
             "sr": "поклон",
             "sv": "Present",
             "szl": null,
             "tzm": null,
             "uk": "Подарунок",
-            "vi": "Quà",
-            "zh_Hans": "礼物"
+            "vi": "Quà tặng",
+            "zh_Hans": "礼物",
+            "zh_Hant": "禮物"
         }
     },
     {
@@ -1530,6 +1653,7 @@
             "eo": "Lampo",
             "es": "Bombilla",
             "et": "Lambipirn",
+            "fa": "لامپ",
             "fi": "Hehkulamppu",
             "fr": "Ampoule",
             "hr": "žarulja",
@@ -1539,6 +1663,7 @@
             "ja": "電球",
             "nb_NO": "Lyspære",
             "nl": "Gloeilamp",
+            "pt": "Lâmpada",
             "pt_BR": "Lâmpada",
             "ru": "Лампочка",
             "si": null,
@@ -1550,7 +1675,8 @@
             "tzm": null,
             "uk": "Лампочка",
             "vi": "Bóng đèn tròn",
-            "zh_Hans": "灯泡"
+            "zh_Hans": "灯泡",
+            "zh_Hant": "燈泡"
         }
     },
     {
@@ -1567,6 +1693,7 @@
             "eo": "Libro",
             "es": "Libro",
             "et": "Raamat",
+            "fa": "کتاب",
             "fi": "Kirja",
             "fr": "Livre",
             "hr": "knjiga",
@@ -1576,10 +1703,11 @@
             "ja": "本",
             "nb_NO": "Bok",
             "nl": "Boek",
+            "pt": "Livro",
             "pt_BR": "Livro",
             "ru": "Книга",
             "si": null,
-            "sk": "Zatvorená kniha",
+            "sk": "Kniha",
             "sq": "Libër",
             "sr": "књига",
             "sv": "Bok",
@@ -1587,7 +1715,8 @@
             "tzm": "Adlis",
             "uk": "Книга",
             "vi": "Sách",
-            "zh_Hans": "书"
+            "zh_Hans": "书",
+            "zh_Hant": "書"
         }
     },
     {
@@ -1604,6 +1733,7 @@
             "eo": "Krajono",
             "es": "Lápiz",
             "et": "Pliiats",
+            "fa": "مداد",
             "fi": "Lyijykynä",
             "fr": "Crayon",
             "hr": "olovka",
@@ -1613,6 +1743,7 @@
             "ja": "鉛筆",
             "nb_NO": "Blyant",
             "nl": "Potlood",
+            "pt": "Lápis",
             "pt_BR": "Lápis",
             "ru": "Карандаш",
             "si": null,
@@ -1624,7 +1755,8 @@
             "tzm": null,
             "uk": "Олівець",
             "vi": "Viết chì",
-            "zh_Hans": "铅笔"
+            "zh_Hans": "铅笔",
+            "zh_Hant": "鉛筆"
         }
     },
     {
@@ -1641,6 +1773,7 @@
             "eo": "Paperkuntenilo",
             "es": "Clip",
             "et": "Kirjaklamber",
+            "fa": "گیره کاغذ",
             "fi": "Paperiliitin",
             "fr": "Trombone",
             "hr": "spajalica",
@@ -1650,10 +1783,11 @@
             "ja": "クリップ",
             "nb_NO": "BInders",
             "nl": "Papierklemmetje",
+            "pt": "Clipe",
             "pt_BR": "Clipe de papel",
             "ru": "Скрепка",
             "si": null,
-            "sk": "Sponka na papier",
+            "sk": "Kancelárska sponka",
             "sq": "Kapëse",
             "sr": "спајалица",
             "sv": "Gem",
@@ -1661,7 +1795,8 @@
             "tzm": null,
             "uk": "Спиначка",
             "vi": "Kẹp giấy",
-            "zh_Hans": "回形针"
+            "zh_Hans": "回形针",
+            "zh_Hant": "迴紋針"
         }
     },
     {
@@ -1678,6 +1813,7 @@
             "eo": "Tondilo",
             "es": "Tijeras",
             "et": "Käärid",
+            "fa": "قیچی",
             "fi": "Sakset",
             "fr": "Ciseaux",
             "hr": "škare",
@@ -1687,6 +1823,7 @@
             "ja": "はさみ",
             "nb_NO": "Saks",
             "nl": "Schaar",
+            "pt": "Tesoura",
             "pt_BR": "Tesoura",
             "ru": "Ножницы",
             "si": null,
@@ -1697,8 +1834,9 @@
             "szl": null,
             "tzm": null,
             "uk": "Ножиці",
-            "vi": "Cây kéo",
-            "zh_Hans": "剪刀"
+            "vi": "Cái kéo",
+            "zh_Hans": "剪刀",
+            "zh_Hant": "剪刀"
         }
     },
     {
@@ -1715,6 +1853,7 @@
             "eo": "Seruro",
             "es": "Candado",
             "et": "Lukk",
+            "fa": "قفل",
             "fi": "Lukko",
             "fr": "Cadenas",
             "hr": "zaključati",
@@ -1724,10 +1863,11 @@
             "ja": "錠前",
             "nb_NO": "Lås",
             "nl": "Slot",
+            "pt": "Cadeado",
             "pt_BR": "Cadeado",
             "ru": "Замок",
             "si": null,
-            "sk": "Zatvorená zámka",
+            "sk": "Zámka",
             "sq": "Dry",
             "sr": "катанац",
             "sv": "Lås",
@@ -1735,7 +1875,8 @@
             "tzm": null,
             "uk": "Замок",
             "vi": "Ổ khóa",
-            "zh_Hans": "锁"
+            "zh_Hans": "锁",
+            "zh_Hant": "鎖頭"
         }
     },
     {
@@ -1747,11 +1888,12 @@
             "ar": "مِفتَاح",
             "bg": "Ключ",
             "ca": "Clau",
-            "cs": "Klíč",
+            "cs": "Klíč ke dveřím",
             "de": "Schlüssel",
             "eo": "Ŝlosilo",
             "es": "Llave",
             "et": "Võti",
+            "fa": "کلید",
             "fi": "Avain",
             "fr": "Clé",
             "hr": "ključ",
@@ -1761,6 +1903,7 @@
             "ja": "鍵",
             "nb_NO": "Nøkkel",
             "nl": "Sleutel",
+            "pt": "Chave",
             "pt_BR": "Chave",
             "ru": "Ключ",
             "si": null,
@@ -1772,7 +1915,8 @@
             "tzm": "Tasarut",
             "uk": "Ключ",
             "vi": "Chìa khóa",
-            "zh_Hans": "钥匙"
+            "zh_Hans": "钥匙",
+            "zh_Hant": "鑰匙"
         }
     },
     {
@@ -1789,6 +1933,7 @@
             "eo": "Martelo",
             "es": "Martillo",
             "et": "Haamer",
+            "fa": "چکش",
             "fi": "Vasara",
             "fr": "Marteau",
             "hr": "čekić",
@@ -1798,6 +1943,7 @@
             "ja": "金槌",
             "nb_NO": "Hammer",
             "nl": "Hamer",
+            "pt": "Martelo",
             "pt_BR": "Martelo",
             "ru": "Молоток",
             "si": null,
@@ -1809,7 +1955,8 @@
             "tzm": null,
             "uk": "Молоток",
             "vi": "Búa",
-            "zh_Hans": "锤子"
+            "zh_Hans": "锤子",
+            "zh_Hant": "鎚子"
         }
     },
     {
@@ -1824,8 +1971,9 @@
             "cs": "Telefon",
             "de": "Telefon",
             "eo": "Telefono",
-            "es": "Telefono",
+            "es": "Teléfono",
             "et": "Telefon",
+            "fa": "تلفن",
             "fi": "Puhelin",
             "fr": "Téléphone",
             "hr": "telefon",
@@ -1835,6 +1983,7 @@
             "ja": "電話機",
             "nb_NO": "Telefon",
             "nl": "Telefoon",
+            "pt": "Telefone",
             "pt_BR": "Telefone",
             "ru": "Телефон",
             "si": null,
@@ -1846,7 +1995,8 @@
             "tzm": "Atilifun",
             "uk": "Телефон",
             "vi": "Điện thoại",
-            "zh_Hans": "电话"
+            "zh_Hans": "电话",
+            "zh_Hant": "電話"
         }
     },
     {
@@ -1863,6 +2013,7 @@
             "eo": "Flago",
             "es": "Bandera",
             "et": "Lipp",
+            "fa": "پرچم",
             "fi": "Lippu",
             "fr": "Drapeau",
             "hr": "zastava",
@@ -1872,10 +2023,11 @@
             "ja": "旗",
             "nb_NO": "Flagg",
             "nl": "Vlag",
+            "pt": "Bandeira",
             "pt_BR": "Bandeira",
             "ru": "Флаг",
             "si": null,
-            "sk": "Kockovaná zástava",
+            "sk": "Zástava",
             "sq": "Flamur",
             "sr": "застава",
             "sv": "Flagga",
@@ -1883,7 +2035,8 @@
             "tzm": "Acenyal",
             "uk": "Прапор",
             "vi": "Lá cờ",
-            "zh_Hans": "旗帜"
+            "zh_Hans": "旗帜",
+            "zh_Hant": "旗幟"
         }
     },
     {
@@ -1900,6 +2053,7 @@
             "eo": "Vagonaro",
             "es": "Tren",
             "et": "Rong",
+            "fa": "قطار",
             "fi": "Juna",
             "fr": "Train",
             "hr": "vlak",
@@ -1909,10 +2063,11 @@
             "ja": "電車",
             "nb_NO": "Tog",
             "nl": "Trein",
+            "pt": "Comboio",
             "pt_BR": "Trem",
             "ru": "Поезд",
             "si": null,
-            "sk": "Rušeň",
+            "sk": "Vlak",
             "sq": "Tren",
             "sr": "воз",
             "sv": "Tåg",
@@ -1920,7 +2075,8 @@
             "tzm": null,
             "uk": "Потяг",
             "vi": "Xe lửa",
-            "zh_Hans": "火车"
+            "zh_Hans": "火车",
+            "zh_Hant": "火車"
         }
     },
     {
@@ -1937,6 +2093,7 @@
             "eo": "Biciklo",
             "es": "Bicicleta",
             "et": "Jalgratas",
+            "fa": "دوچرخه",
             "fi": "Polkupyörä",
             "fr": "Vélo",
             "hr": "bicikl",
@@ -1946,6 +2103,7 @@
             "ja": "自転車",
             "nb_NO": "Sykkel",
             "nl": "Fiets",
+            "pt": "Bicicleta",
             "pt_BR": "Bicicleta",
             "ru": "Велосипед",
             "si": null,
@@ -1957,7 +2115,8 @@
             "tzm": null,
             "uk": "Велосипед",
             "vi": "Xe đạp",
-            "zh_Hans": "自行车"
+            "zh_Hans": "自行车",
+            "zh_Hant": "腳踏車"
         }
     },
     {
@@ -1974,6 +2133,7 @@
             "eo": "Aviadilo",
             "es": "Avión",
             "et": "Lennuk",
+            "fa": "هواپیما",
             "fi": "Lentokone",
             "fr": "Avion",
             "hr": "avion",
@@ -1983,6 +2143,7 @@
             "ja": "飛行機",
             "nb_NO": "Fly",
             "nl": "Vliegtuig",
+            "pt": "Avião",
             "pt_BR": "Avião",
             "ru": "Самолет",
             "si": null,
@@ -1994,7 +2155,8 @@
             "tzm": null,
             "uk": "Літак",
             "vi": "Máy bay",
-            "zh_Hans": "飞机"
+            "zh_Hans": "飞机",
+            "zh_Hant": "飛機"
         }
     },
     {
@@ -2011,6 +2173,7 @@
             "eo": "Raketo",
             "es": "Cohete",
             "et": "Rakett",
+            "fa": "موشک",
             "fi": "Raketti",
             "fr": "Fusée",
             "hr": "raketa",
@@ -2020,6 +2183,7 @@
             "ja": "ロケット",
             "nb_NO": "Rakett",
             "nl": "Raket",
+            "pt": "Foguetão",
             "pt_BR": "Foguete",
             "ru": "Ракета",
             "si": null,
@@ -2031,7 +2195,8 @@
             "tzm": null,
             "uk": "Ракета",
             "vi": "Tên lửa",
-            "zh_Hans": "火箭"
+            "zh_Hans": "火箭",
+            "zh_Hant": "火箭"
         }
     },
     {
@@ -2048,6 +2213,7 @@
             "eo": "Trofeo",
             "es": "Trofeo",
             "et": "Auhind",
+            "fa": "جام",
             "fi": "Palkinto",
             "fr": "Trophée",
             "hr": "trofej",
@@ -2057,6 +2223,7 @@
             "ja": "トロフィー",
             "nb_NO": "Pokal",
             "nl": "Trofee",
+            "pt": "Troféu",
             "pt_BR": "Troféu",
             "ru": "Кубок",
             "si": null,
@@ -2068,7 +2235,8 @@
             "tzm": null,
             "uk": "Приз",
             "vi": "Cúp",
-            "zh_Hans": "奖杯"
+            "zh_Hans": "奖杯",
+            "zh_Hant": "獎盃"
         }
     },
     {
@@ -2085,6 +2253,7 @@
             "eo": "Pilko",
             "es": "Bola",
             "et": "Pall",
+            "fa": "توپ",
             "fi": "Pallo",
             "fr": "Ballon",
             "hr": "lopta",
@@ -2094,10 +2263,11 @@
             "ja": "ボール",
             "nb_NO": "Ball",
             "nl": "Bal",
+            "pt": "Bola",
             "pt_BR": "Bola",
             "ru": "Мяч",
             "si": null,
-            "sk": "Futbal",
+            "sk": "Lopta",
             "sq": "Top",
             "sr": "лопта",
             "sv": "Boll",
@@ -2105,7 +2275,8 @@
             "tzm": "Tcama",
             "uk": "М'яч",
             "vi": "Banh",
-            "zh_Hans": "球"
+            "zh_Hans": "球",
+            "zh_Hant": "足球"
         }
     },
     {
@@ -2122,6 +2293,7 @@
             "eo": "Gitaro",
             "es": "Guitarra",
             "et": "Kitarr",
+            "fa": "گیتار",
             "fi": "Kitara",
             "fr": "Guitare",
             "hr": "gitara",
@@ -2131,6 +2303,7 @@
             "ja": "ギター",
             "nb_NO": "Gitar",
             "nl": "Gitaar",
+            "pt": "Guitarra",
             "pt_BR": "Guitarra",
             "ru": "Гитара",
             "si": null,
@@ -2142,7 +2315,8 @@
             "tzm": "Agiṭaṛ",
             "uk": "Гітара",
             "vi": "Ghi-ta",
-            "zh_Hans": "吉他"
+            "zh_Hans": "吉他",
+            "zh_Hant": "吉他"
         }
     },
     {
@@ -2159,6 +2333,7 @@
             "eo": "Trumpeto",
             "es": "Trompeta",
             "et": "Trompet",
+            "fa": "شیپور",
             "fi": "Trumpetti",
             "fr": "Trompette",
             "hr": "truba",
@@ -2168,6 +2343,7 @@
             "ja": "トランペット",
             "nb_NO": "Trompet",
             "nl": "Trompet",
+            "pt": "Trompete",
             "pt_BR": "Trombeta",
             "ru": "Труба",
             "si": null,
@@ -2179,7 +2355,8 @@
             "tzm": null,
             "uk": "Труба",
             "vi": "Kèn",
-            "zh_Hans": "喇叭"
+            "zh_Hans": "喇叭",
+            "zh_Hant": "喇叭"
         }
     },
     {
@@ -2196,6 +2373,7 @@
             "eo": "Sonorilo",
             "es": "Campana",
             "et": "Kelluke",
+            "fa": "زنگ",
             "fi": "Soittokello",
             "fr": "Cloche",
             "hr": "zvono",
@@ -2205,10 +2383,11 @@
             "ja": "ベル",
             "nb_NO": "Bjelle",
             "nl": "Bel",
+            "pt": "Sino",
             "pt_BR": "Sino",
             "ru": "Колокол",
             "si": null,
-            "sk": "Zvon",
+            "sk": "Zvonec",
             "sq": "Kambanë",
             "sr": "звоно",
             "sv": "Bjällra",
@@ -2216,7 +2395,8 @@
             "tzm": null,
             "uk": "Дзвін",
             "vi": "Chuông",
-            "zh_Hans": "铃铛"
+            "zh_Hans": "铃铛",
+            "zh_Hant": "鈴鐺"
         }
     },
     {
@@ -2233,6 +2413,7 @@
             "eo": "Ankro",
             "es": "Ancla",
             "et": "Ankur",
+            "fa": "لنگر",
             "fi": "Ankkuri",
             "fr": "Ancre",
             "hr": "sidro",
@@ -2242,6 +2423,7 @@
             "ja": "いかり",
             "nb_NO": "Anker",
             "nl": "Anker",
+            "pt": "Âncora",
             "pt_BR": "Âncora",
             "ru": "Якорь",
             "si": null,
@@ -2253,7 +2435,8 @@
             "tzm": null,
             "uk": "Якір",
             "vi": "Mỏ neo",
-            "zh_Hans": "锚"
+            "zh_Hans": "锚",
+            "zh_Hant": "船錨"
         }
     },
     {
@@ -2270,6 +2453,7 @@
             "eo": "Kapaŭdilo",
             "es": "Cascos",
             "et": "Kõrvaklapid",
+            "fa": "هدفون",
             "fi": "Kuulokkeet",
             "fr": "Casque audio",
             "hr": "slušalice",
@@ -2279,6 +2463,7 @@
             "ja": "ヘッドホン",
             "nb_NO": "Hodetelefoner",
             "nl": "Koptelefoon",
+            "pt": "Fones",
             "pt_BR": "Fones de ouvido",
             "ru": "Наушники",
             "si": null,
@@ -2290,7 +2475,8 @@
             "tzm": null,
             "uk": "Навушники",
             "vi": "Tai nghe",
-            "zh_Hans": "耳机"
+            "zh_Hans": "耳机",
+            "zh_Hant": "耳機"
         }
     },
     {
@@ -2307,15 +2493,17 @@
             "eo": "Dosierujo",
             "es": "Carpeta",
             "et": "Kaust",
+            "fa": "پوشه",
             "fi": "Kansio",
             "fr": "Dossier",
             "hr": "mapu",
             "hu": "Mappa",
             "id": "Map",
             "it": "Cartella",
-            "ja": "フォルダ",
+            "ja": "フォルダー",
             "nb_NO": "Mappe",
             "nl": "Map",
+            "pt": "Pasta",
             "pt_BR": "Pasta",
             "ru": "Папка",
             "si": null,
@@ -2327,7 +2515,8 @@
             "tzm": "Asdaw",
             "uk": "Тека",
             "vi": "Thư mục",
-            "zh_Hans": "文件夹"
+            "zh_Hans": "文件夹",
+            "zh_Hant": "資料夾"
         }
     },
     {
@@ -2344,6 +2533,7 @@
             "eo": "Pinglo",
             "es": "Alfiler",
             "et": "Nööpnõel",
+            "fa": "سنجاق",
             "fi": "Nuppineula",
             "fr": "Punaise",
             "hr": "pribadača",
@@ -2353,6 +2543,7 @@
             "ja": "ピン",
             "nb_NO": "Tegnestift",
             "nl": "Duimspijker",
+            "pt": "Pionés",
             "pt_BR": "Alfinete",
             "ru": "Булавка",
             "si": null,
@@ -2364,7 +2555,8 @@
             "tzm": null,
             "uk": "Кнопка",
             "vi": "Ghim",
-            "zh_Hans": "图钉"
+            "zh_Hans": "图钉",
+            "zh_Hant": "圖釘"
         }
     }
 ]

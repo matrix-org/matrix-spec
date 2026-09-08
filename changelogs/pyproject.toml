@@ -56,6 +56,10 @@
     [[tool.towncrier.section]]
         name = "Room Versions"
         path = "room_versions"
+
+    [[tool.towncrier.section]]
+        name = "Olm & Megolm"
+        path = "olm_megolm"
     
     [[tool.towncrier.section]]
         name = "Appendices"

@@ -1,0 +1,16 @@
+{
+  "$ref": "core/event.json",
+  "type": "m.recent_emoji",
+  "content": {
+    "recent_emoji": [{
+      "emoji": "🤔",
+      "total": 19
+    }, {
+      "emoji": "👍",
+      "total": 7
+    }, {
+      "emoji": "😅",
+      "total": 84
+    }]
+  }
+}

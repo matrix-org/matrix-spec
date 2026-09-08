@@ -1,0 +1,21 @@
+{
+    "room_id": "!UcYsUzyxTGDxLBEvLy:example.org",
+    "sender": "@alice:example.com",
+    "origin_server_ts": 1404838188000,
+    "depth": 12,
+    "type": "m.room.message",
+    "content": {
+        "key": "value"
+    },
+    "hashes": {
+        "sha256": "thishashcoversallfieldsincasethisisredacted"
+    },
+    "signatures": {
+        "example.com": {
+            "ed25519:key_version": "these86bytesofbase64signaturecoveressentialfieldsincludinghashessocancheckredactedpdus"
+        }
+    },
+    "unsigned": {
+        "age": 4612
+    }
+}

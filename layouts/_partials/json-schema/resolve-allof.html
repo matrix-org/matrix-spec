@@ -1,0 +1,89 @@
+{{/*
+
+  Resolves the `allOf` keyword (https://spec.openapis.org/oas/v3.1.0#composition-and-inheritance-polymorphism)
+  recursively, given a JSON schema object.
+
+  `allOf` is used to support a kind of inheritance for JSON schema objects.
+
+  An object can reference a "parent" object using `allOf`, and it then inherits
+  its parent's properties. If the same property is present in the child, then
+  we use the child's version (the child overrides the parent).
+
+  Of course the parent can itself inherit from *its* parent, so we recurse to
+  handle that.
+*/}}
+
+{{ $ret := . }}
+{{ $original := . }}
+
+{{ if reflect.IsSlice $original }}
+    {{/*
+      If it's a slice, just recurse.
+    */}}
+    {{ $ret = slice }}
+
+    {{ range $original }}
+        {{ $resolved := partial "json-schema/resolve-allof" . }}
+        {{ if reflect.IsSlice $resolved }}
+          {{/*
+              If $resolved is a slice, `append` will add the items of $resolved to
+              $ret, but we want to add $resolved itself to $ret, so we always wrap
+              it into another slice.
+          */}}
+          {{ $resolved = slice $resolved }}
+        {{ end }}
+        {{ $ret = $ret | append $resolved }}
+    {{ end }}
+{{ else if reflect.IsMap $original }}
+    {{ $ret = dict }}
+
+    {{/*
+      We special-case 'required', and accumulate the values from all the 'allOf'
+      entries (rather than simply overriding them). Start the accumulation here.
+    */}}
+    {{ $required := slice }}
+    {{ with $original.required }}
+      {{ $required = . }}
+    {{ end }}
+
+    {{ with $original.allOf }}
+        {{/*
+          Merge each of the allOf entries.
+        */}}
+        {{ range . }}
+            {{/*
+              First, resolve allOf in child.  
+            */}}
+            {{ $resolved := partial "json-schema/resolve-allof" . }}
+
+            {{ with $resolved.required }}
+                {{ $required = union $required . }}
+            {{ end }}
+
+            {{/*
+              With merge, values from the second argument override those from the first argument.
+              So this order will accumulate values from allOf items, allowing later ones to override earlier
+
+              Note also that `merge` does a *deep* merge - nested maps are also
+              merged. (Slices are replaced though.)
+            */}}
+            {{ $ret = merge $ret $resolved }}
+        {{ end }}
+    {{ end }}
+
+    {{/*
+      Finally, merge in the original, allowing the original to override allOf.
+    */}}
+    {{ range $key, $value := $original }}
+        {{ if and (ne $key "allOf") (ne $key "required") }}
+            {{ $resolved := partial "json-schema/resolve-allof" $value }}
+            {{ $ret = merge $ret (dict $key $resolved) }}
+        {{ end }}
+    {{ end }}
+
+    {{ with $required }}
+      {{ $ret = merge $ret (dict "required" .) }}
+    {{ end }}
+{{ end }}
+
+{{ return $ret }}

@@ -1,0 +1,18 @@
+{{/*
+
+    This template is used to render a "room version fragment". Fragments are blocks of
+    text which describe a portion of the room version specification. They should be
+    prefixed with the room version which introduces the fragment, and be reusable for
+    two or more versions.
+
+    The `name` parameter is the file name without extension.
+
+*/}}
+
+{{ $name := .Params.name -}}
+
+{{ with .Site.GetPage "rooms/fragments" -}}
+    {{ with .Resources.GetMatch (printf "%s.md" $name) -}}
+        {{ .RenderShortcodes | safeHTML }}
+    {{ end -}}
+{{ end -}}

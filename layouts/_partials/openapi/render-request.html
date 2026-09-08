@@ -1,0 +1,42 @@
+{{/*
+
+  Render the request part of a single HTTP API operation, given:
+
+  * `parameters`: OpenAPI data specifying the parameters
+  * `request_body`: OpenAPI data specifying the request body
+  * `anchor_base`: a prefix to add to the HTML anchors generated for each object
+
+  This template renders:
+  * the "simple parameters" (header, path, query parameters)
+  * body parameters, which may be more complex, containing nested objects
+  * response body examples
+
+*/}}
+
+{{ $parameters := .parameters }}
+{{ $request_body := .request_body }}
+{{ $anchor_base := .anchor_base }}
+{{ $anchor := printf "%s_request" $anchor_base }}
+
+<h2>Request</h2>
+
+{{ if or $parameters $request_body }}
+
+    {{ if $parameters }}
+<h3>Request parameters</h3>
+
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "header" "caption" "header parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "path" "caption" "path parameters") }}
+        {{ partial "openapi/render-parameters" (dict "parameters" $parameters "type" "query" "caption" "query parameters") }}
+
+    {{ end }}
+
+    {{ if $request_body }}
+<h3>Request body</h3>
+
+        {{ partial "openapi/render-media-type-objects" (dict "content" $request_body.content "kind" "request" "anchor_base" $anchor) }}
+    {{ end }}
+
+{{ else }}
+<p>No request parameters or request body.</p>
+{{ end }}

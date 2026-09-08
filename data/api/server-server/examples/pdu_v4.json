@@ -1,12 +1,7 @@
 {
-    "$ref": "pdu_v3.json",
-    "auth_events": [
-        "$urlsafe_base64_encoded_eventid",
-        "$a-different-event-id"
-    ],
-    "prev_events": [
-        "$urlsafe_base64_encoded_eventid",
-        "$a-different-event-id"
-    ],
-    "redacts": "$some-old_event"
+    "allOf": [
+        { "$ref": "components/pdu_base.json" },
+        { "$ref": "components/auth_events_prev_events_v4.json" },
+        { "redacts": "$some-old_event" }
+    ]
 }

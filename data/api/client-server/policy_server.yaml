@@ -1,0 +1,82 @@
+# Copyright 2026 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Policy Server Discovery API
+  version: 1.0.0
+paths:
+  /matrix/policy_server:
+    get:
+      summary: Gets information about a Policy Server's configuration, if available.
+      description: |-
+        Gets public key information for a [Policy Server](/client-server-api/#policy-servers).
+
+        {{% boxes/note %}}
+        Like the [well-known discovery URI](/client-server-api/#well-known-uris),
+        this endpoint should be accessed with the hostname of the Policy Server's
+        [server name](/appendices/#server-name) by making a
+        GET request to `https://hostname/.well-known/matrix/policy_server`.
+        {{% /boxes/note %}}
+
+        Note that this endpoint is not necessarily handled by the homeserver or
+        Policy Server. It may be served by another webserver.
+      operationId: getWellknownPolicy
+      x-addedInMatrixVersion: "1.18"
+      responses:
+        "200":
+          description: |-
+            Public keys for the Policy Server. Can be supplied to the [`m.room.policy`](/client-server-api/#mroompolicy)
+            state event.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  public_keys:
+                    type: object
+                    description: |-
+                      The unpadded base64-encoded public keys for the Policy Server. MUST contain
+                      at least `ed25519`.
+                    properties:
+                      ed25519:
+                        type: string
+                        description: The unpadded base64-encoded ed25519 public key for the Policy Server.
+                    required: ['ed25519']
+                    additionalProperties:
+                      type: string
+                      description: The unpadded base64-encoded public key for the key algorithm.
+                required: ["public_keys"]
+              examples:
+                response:
+                  value:
+                    {
+                      "public_keys": {
+                        "ed25519": "6yhHGKhCiXTSEN2ksjV7kX_N6rBQZ3Xb-M7LlC6NS-s"
+                      }
+                    }
+        "404":
+          description: No policy server information available.
+      tags:
+        - Server administration
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /.well-known

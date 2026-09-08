@@ -20,7 +20,7 @@ paths:
     put:
       summary: Invites a remote user to a room
       description: |-
-        Invites a remote user to a room. Once the event has been  signed by both the inviting
+        Invites a remote user to a room. Once the event has been signed by both the inviting
         homeserver and the invited homeserver, it can be sent to all of the servers in the
         room by the inviting homeserver.
 
@@ -32,6 +32,32 @@ paths:
         [room version specification](/rooms) for precise event formats. **The request and response
         bodies here describe the common event fields in more detail and may be missing other
         required fields for a PDU.**
+
+        Also note that if the remote homeserver is already in the room, it will receive the
+        invite event twice; once through this endpoint, and again through a [federation
+        transaction](/server-server-api/#transactions).
+
+        Servers MUST apply certain validation to ensure they don't accidentally sign non-invite
+        events from a malicious server. A specific error code is not mandated, but servers SHOULD
+        return `M_INVALID_PARAM` if:
+
+        * The invite event fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * The event type is not `m.room.member`.
+        * The `membership` field inside the event content is not `invite`.
+        * The event sender is not a user ID on the origin server.
+        * The `state_key` is not a user ID on the receiving server.
+
+        The `invite_room_state` has additional validation, which servers MAY apply to room versions
+        1 through 11 and SHOULD apply to all other room versions. As with the above errors, servers
+        SHOULD return `M_INVALID_PARAM` if:
+
+        * The `m.room.create` event is missing from `invite_room_state`.
+        * One or more entries in `invite_room_state` are not formatted according
+          to the room's version.
+        * One or more events fails a [signature check](/server-server-api/#validating-hashes-and-signatures-on-received-events).
+        * One or more events does not reside in the same room as the invite.
+          Note: Some room versions may require calculating the room ID for an
+          event rather than relying on the presence of `room_id`.
       operationId: sendInviteV1
       security:
         - signedRequest: []
@@ -67,30 +93,32 @@ paths:
                       properties:
                         invite_room_state:
                           type: array
+                          x-changedInMatrixVersion:
+                            "1.16": |
+                              `m.room.create` and format requirements were added.
                           description: |-
-                            An optional list of [stripped state events](/client-server-api/#stripped-state)
-                            to help the receiver of the invite identify the room.
+                            A list of state events to help the receiver of the invite identify the room.
+                            Translated as [stripped state events](/client-server-api/#stripped-state)
+                            over the Client-Server API.
+
+                            MUST contain the `m.room.create` event for the room. All events listed
+                            MUST additionally be formatted according to the room version specification.
+
+                            Servers might need to apply validation to the `invite_room_state` depending
+                            on room version. See endpoint description for more information.
+
+                            Note that events have a different format depending on the room
+                            version - check the [room version specification](/rooms) for
+                            precise event formats.
                           items:
-                            $ref: ../../event-schemas/schema/core-event-schema/stripped_state.yaml
-                          example:
-                            $ref: ../../event-schemas/examples/invite_room_state.json
+                            type: object
+                            title: PDU
+                            properties: {}
+                            description: |-
+                              Note that events have a different format depending on the room
+                              version - check the [room version specification](/rooms) for
+                              precise event formats.
               type: object
-            example: {
-              "room_id": "!somewhere:example.org",
-              "type": "m.room.member",
-              "state_key": "@joe:elsewhere.com",
-              "origin": "example.org",
-              "origin_server_ts": 1549041175876,
-              "sender": "@someone:example.org",
-              "content": {
-                  "membership": "invite"
-              },
-              "signatures": {
-                "example.com": {
-                  "ed25519:key_version": "SomeSignatureHere"
-                },
-              }
-            }
         required: true
       responses:
         "200":
@@ -130,24 +158,7 @@ paths:
                         "origin_server_ts": 1549041175876,
                         "sender": "@someone:example.org",
                         "unsigned": {
-                          "invite_room_state": [
-                            {
-                              "type": "m.room.name",
-                              "sender": "@bob:example.org",
-                              "state_key": "",
-                              "content": {
-                                "name": "Example Room"
-                              }
-                            },
-                            {
-                              "type": "m.room.join_rules",
-                              "sender": "@bob:example.org",
-                              "state_key": "",
-                              "content": {
-                                "join_rule": "invite"
-                              }
-                            }
-                          ]
+                          "invite_room_state": {"$ref": "./examples/invite_or_knock_state.json"}
                         },
                         "content": {
                           "membership": "invite"
@@ -165,11 +176,17 @@ paths:
                   ]
         "403":
           description: |-
-            The invite is not allowed. This could be for a number of reasons, including:
+            The invite is not allowed.
+
+            The `M_FORBIDDEN` error code is used to indicate one of the following:
 
             * The sender is not allowed to send invites to the target user/homeserver.
             * The homeserver does not permit anyone to invite its users.
             * The homeserver refuses to participate in the room.
+
+            {{% added-in v="1.18"%}} The `M_INVITE_BLOCKED` error code is used to
+            indicate that the homeserver rejected the invite due to
+            [invite blocking](/client-server-api/#invite-permission).
           content:
             application/json:
               schema:
@@ -179,6 +196,19 @@ paths:
                   value: {
                     "errcode": "M_FORBIDDEN",
                     "error": "User cannot invite the target user."
+                  }
+        "400":
+          description: |-
+            The request is invalid in some way.
+          content:
+            application/json:
+              schema:
+                $ref: ../client-server/definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_INVALID_PARAM",
+                    "error": "Create event not among invite state entries."
                   }
 servers:
   - url: "{protocol}://{hostname}{basePath}"
@@ -194,4 +224,5 @@ servers:
         default: /_matrix/federation/v1
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    signedRequest:
+      $ref: definitions/security.yaml#/signedRequest

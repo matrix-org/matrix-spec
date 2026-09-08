@@ -20,6 +20,10 @@ paths:
   "/rooms/{roomId}/send/{eventType}/{txnId}":
     put:
       summary: Send a message event to the given room.
+      x-changedInMatrixVersion:
+        "1.18": |-
+          Homeservers must support sending `m.room.redaction` events with this endpoint
+          for all room versions.
       description: |-
         This endpoint is used to send a message event to a room. Message events
         allow access to historical events and pagination, making them suited
@@ -27,10 +31,15 @@ paths:
 
         The body of the request should be the content object of the event; the
         fields in this object will vary depending on the type of event. See
-        [Room Events](/client-server-api/#room-events) for the m. event specification.
+        [Room Events](/client-server-api/#room-events) for the `m.` event specification.
+
+        Homeservers MUST allow clients to send `m.room.redaction` events with this
+        endpoint for all room versions. In rooms with a version older than 11 they
+        MUST move the `redacts` property inside the `content` to the top level of
+        the event.
       operationId: sendMessage
       security:
-        - accessToken: []
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomId
@@ -39,6 +48,8 @@ paths:
           example: "!636q39766251:example.com"
           schema:
             type: string
+            format: mx-room-id
+            pattern: "^!"
         - in: path
           name: eventType
           description: The type of event to send.
@@ -76,6 +87,8 @@ paths:
                 properties:
                   event_id:
                     type: string
+                    format: mx-event-id
+                    pattern: "^\\$"
                     description: A unique identifier for the event.
                 required:
                   - event_id
@@ -110,4 +123,5 @@ servers:
         default: /_matrix/client/v3
 components:
   securitySchemes:
-    $ref: definitions/security.yaml
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
