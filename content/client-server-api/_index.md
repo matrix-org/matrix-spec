@@ -4410,6 +4410,7 @@ systems.
 {{% cs-module name="Direct Messaging" filename="dm" %}}
 {{% cs-module name="Ignoring Users" filename="ignore_users" %}}
 {{% cs-module name="Invite permission" filename="invite_permission" %}}
+{{% cs-module name="Media preview config" filename="media_preview_config" %}}
 {{% cs-module name="Sticker Messages" filename="stickers" %}}
 {{% cs-module name="Reporting Content" filename="report_content" %}}
 {{% cs-module name="Third-party Networks" filename="third_party_networks" %}}
