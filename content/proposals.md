@@ -494,7 +494,19 @@ Vendor prefixes MUST also be used for:
 
     ```json
     {
-      "errcode": "COM.EXAMPLE.MSCXXXX.M_INVALID_EMAIL",
+      "information": "...",
+      "m.relates_to": {
+        "rel_type": "com.example.mscxxxx.additional_information",
+        "event_id": "$UQ0mxjpvwJHrTQOLnSaAxq9_mZvVb1bmFdvHzzmP5NY"
+      }
+    }
+    ```
+
+-   New error codes. For example:
+
+    ```json
+    {
+      "errcode": "COM.EXAMPLE.MSCXXXX_INVALID_EMAIL",
       "error": "The email address you provided is invalid."
     }
     ```
