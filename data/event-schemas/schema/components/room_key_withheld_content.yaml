@@ -33,7 +33,9 @@ properties:
       - m.no_olm
       - m.history_not_shared
     description: |-
-      A machine-readable code for why the key was not sent. Codes beginning
+      A machine-readable code for why the key was not sent, as defined by
+      [Reporting that decryption keys are withheld](#reporting-that-decryption-keys-are-withheld).
+      Codes beginning
       with `m.` are reserved for codes defined in the Matrix
       specification. Custom codes must use the Java package naming
       convention.
