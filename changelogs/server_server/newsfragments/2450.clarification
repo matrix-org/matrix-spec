@@ -1,0 +1,1 @@
+Fix the name of the `sig` parameter in the `X-Matrix` `Authorization` header.
