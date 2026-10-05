@@ -1,0 +1,8 @@
+{
+  "$ref": "core/event.json",
+  "type": "m.media_preview_config",
+  "content": {
+    "media_previews": "private",
+    "invite_avatars": "off"
+  }
+}

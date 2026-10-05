@@ -1,0 +1,38 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+allOf:
+  - $ref: core-event-schema/event.yaml
+  - title: Media Preview Configuration
+    type: object
+    description: |-
+      The user's preferences for automatically showing media previews. This event may
+      appear in the user's global account data and in a room's account data, with the
+      room-level event taking precedence for each property it defines.
+
+      Both properties default to `on` when absent. Clients MUST treat any unrecognised
+      value as `off`.
+    properties:
+      content:
+        type: object
+        properties:
+          media_previews:
+            type: string
+            default: 'on'
+            enum:
+              - 'off'
+              - 'private'
+              - 'on'
+            description: |-
+              Controls whether media in a room is shown automatically.
+          invite_avatars:
+            type: string
+            default: 'on'
+            enum:
+              - 'off'
+              - 'on'
+            description: |-
+              Controls whether avatars are shown for rooms the user has been invited to.
+      type:
+        type: string
+        enum:
+          - m.media_preview_config
