@@ -3114,6 +3114,37 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.preview_url` capability
+
+{{% added-in v="1.20" %}}
+
+This capability has a single flag, `enabled`, which indicates whether the user can
+request URL previews using
+[`GET /_matrix/client/v1/media/preview_url`](#get_matrixclientv1mediapreview_url).
+
+Server administrators may disable URL previews, for example to comply with an
+organisation's policy or to conserve bandwidth. When `enabled` is `false`, the server
+SHOULD reject requests to the endpoint with a 403 HTTP status code and the `M_FORBIDDEN`
+error code.
+
+Clients MAY use this capability to avoid requesting URL previews that would fail, and to
+show the user that URL previews are unavailable.
+
+When the capability is not present, clients SHOULD assume that URL previews are
+available.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.preview_url": {
+      "enabled": false
+    }
+  }
+}
+```
+
 ## Filtering
 
 Filters can be created on the server and can be passed as a parameter to

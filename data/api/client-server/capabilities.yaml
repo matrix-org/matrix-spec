@@ -105,6 +105,12 @@ paths:
                         $ref: '#/components/schemas/booleanCapability'
                         description: Capability to indicate if the user can generate tokens to log further
                           clients into their account.
+                      m.preview_url:
+                        x-addedInMatrixVersion: "1.20"
+                        $ref: '#/components/schemas/booleanCapability'
+                        description: |-
+                          Capability to indicate if the user can request URL previews via
+                          [`GET /_matrix/client/v1/media/preview_url`](/client-server-api/#get_matrixclientv1mediapreview_url).
                       m.profile_fields:
                         x-addedInMatrixVersion: "1.16"
                         type: object
