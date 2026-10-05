@@ -1,6 +1,6 @@
 ### Media preview configuration
 
-{{% added-in v="1.19" %}}
+{{% added-in v="1.20" %}}
 
 This module allows users to specify their preferred media preview behaviour. This is designed for
 users who may use Matrix in a public setting, and may wish to opt-out of media previews.
@@ -22,7 +22,8 @@ rendering a media preview.
 ##### Resolving the configuration
 
 The global `m.media_preview_config` event defines the user's preference for all rooms.
-A room-level `m.media_preview_config` event overrides the global event for that room only.
+The fields of a room-level `m.media_preview_config` event overrides those in the global
+event for that room only.
 
 Clients MUST resolve each property independently: if the room account data event defines
 the property, that value is used; otherwise the value from the global account data event is
@@ -67,6 +68,12 @@ Clients MUST treat any unrecognised value for either property as `off`. This all
 values to be introduced in the future without clients that do not understand them falling
 back to unsafe behaviour.
 
+Regardless of the resolved value, users MAY choose to reveal individual media which would
+otherwise be hidden, or to hide individual media which would otherwise be shown. Clients
+SHOULD offer such controls, and MUST remember the user's choice so that it is respected
+over the configured default the next time the media is displayed. How this choice is
+recorded is an implementation detail.
+
 ##### Media previews
 
 The `media_previews` property controls whether media in a room is shown automatically.
@@ -105,11 +112,6 @@ The property takes one of the following values:
 `on`
 : Clients SHOULD automatically show media previews in the room.
 
-Regardless of the resolved value, users MAY choose to reveal individual media which would
-otherwise be hidden, or to hide individual media which would otherwise be shown. Clients
-SHOULD offer such controls, and SHOULD remember the user's choice so that it is respected
-over the configured default the next time the media is displayed. How this choice is
-recorded is an implementation detail.
 
 ##### Invite avatars
 
@@ -118,7 +120,7 @@ which the user's membership is `invite`, for example in an invite dialog or a ro
 This covers both the room's [`m.room.avatar`](#mroomavatar) and, for direct messages, the
 inviting user's `avatar_url`.
 
-Clients MUST NOT render any avatar for a room invite unless permitted by this property.
+Clients MUST NOT render any avatar for a room invite automatically unless permitted by this property.
 
 The property takes one of the following values:
 
