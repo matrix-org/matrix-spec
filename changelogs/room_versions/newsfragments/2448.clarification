@@ -1,0 +1,1 @@
+Explicitly define that PDU depth cannot be negative. Contributed by @timedoutuk.
