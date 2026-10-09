@@ -382,7 +382,7 @@ The authorisation parameters to include are:
   Unauthorized`.
 - `key`: the ID, including the algorithm name, of the sending server's key used
   to sign the request.
-- `signature`: the signature of the JSON as calculated in step 1.
+- `sig`: the signature of the JSON as calculated in step 1.
 
 Unknown parameters are ignored.
 
