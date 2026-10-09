@@ -500,7 +500,7 @@ paths:
           description: |-
             The third-party identifier is already in use on the homeserver, or
             the request was invalid. Error codes that can be returned are:
-              * `M_THREEPID_IN_USE`: The email supplied cannot be bound because is is already
+              * `M_THREEPID_IN_USE`: The email supplied cannot be bound because is already
                 associated with a different Matrix ID.
               * `M_SERVER_NOT_TRUSTED`: The server does not trust/support the identity server
                 provided in the request.

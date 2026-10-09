@@ -1033,7 +1033,7 @@ follows:
 2.  All the bytes in the array above, including the two header bytes,
     are XORed together to form a parity byte. This parity byte is
     appended to the byte array.
-3.  The byte array is encoded using base58, using the the alphabet
+3.  The byte array is encoded using base58, using the alphabet
     `123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz`.
 4.  A space is added after every 4th character.
 
