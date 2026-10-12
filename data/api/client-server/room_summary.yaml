@@ -38,7 +38,8 @@ paths:
         request more heavily if the client is unauthenticated.
       operationId: getRoomSummary
       security:
-        - signedRequest: []
+        - {}
+        - accessTokenBearer: []
       parameters:
         - in: path
           name: roomIdOrAlias
@@ -130,3 +131,7 @@ servers:
         default: localhost:8008
       basePath:
         default: /_matrix/client/v1
+components:
+  securitySchemes:
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
