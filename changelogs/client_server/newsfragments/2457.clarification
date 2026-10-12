@@ -1,0 +1,1 @@
+Remove `method` from the required properties and example of `m.key.verification.accept`, as it is not part of the event.
