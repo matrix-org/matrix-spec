@@ -5,7 +5,7 @@
   "content": {
     "via": "policy.example.org",
     "public_keys": {
-      "ed25519": "6yhHGKhCiXTSEN2ksjV7kX_N6rBQZ3Xb-M7LlC6NS-s"
+      "ed25519": "6yhHGKhCiXTSEN2ksjV7kX/N6rBQZ3Xb+M7LlC6NS+s"
     }
   }
 }
