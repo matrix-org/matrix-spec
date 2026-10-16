@@ -1,0 +1,1 @@
+Add Polish translations for SAS emoji definitions.
