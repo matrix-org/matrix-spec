@@ -1,0 +1,1 @@
+Fix the security scheme of `GET /_matrix/client/v1/room_summary/{roomIdOrAlias}` to reflect that authentication is an optional access token, not a federation signed request.
