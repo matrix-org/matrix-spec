@@ -337,6 +337,10 @@ paths:
   /media/preview_url:
     get:
       x-addedInMatrixVersion: "1.11"
+      x-changedInMatrixVersion:
+        "1.20": |-
+          Servers may disable URL previews and advertise this using the `m.preview_url`
+          capability.
       summary: Get information about a URL for a client
       description: |-
         Get information about a URL for the client. Typically this is called when a
@@ -348,6 +352,10 @@ paths:
         do not want to share with the homeserver, and this can mean that the URLs
         being shared should also not be shared with the homeserver.
         {{% /boxes/note %}}
+
+        Servers MAY disable URL previews. Servers that do so SHOULD set `enabled` to `false` in the
+        [`m.preview_url`](/client-server-api/#mpreview_url-capability) capability, and SHOULD
+        reject requests to this endpoint with a 403 `M_FORBIDDEN` error.
       operationId: getUrlPreviewAuthed
       security:
         - accessTokenBearer: []
@@ -404,6 +412,20 @@ paths:
                     "og:image:height": 48,
                     "og:image:width": 48,
                     "matrix:image:size": 102400
+                  }
+        "403":
+          x-addedInMatrixVersion: "1.20"
+          description: |-
+            URL previews are disabled. The errcode is `M_FORBIDDEN`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "URL previews are disabled on this server."
                   }
         "429":
           $ref: '#/components/responses/rateLimited'
@@ -571,7 +593,7 @@ components:
           unknown/unprovided `Content-Type`. For example, being uploaded before
           the server tracked content types or when the remote server is
           non-compliantly omitting the header entirely.
-        
+
         Actions not in the spirit of the above are not considered "reasonable".
       x-changedInMatrixVersion:
         "1.12": |
@@ -580,4 +602,3 @@ components:
       required: true
       schema:
         type: string
-
