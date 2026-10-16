@@ -3131,7 +3131,7 @@ Clients MAY use this capability to avoid requesting URL previews that would fail
 show the user that URL previews are unavailable.
 
 When the capability is not present, clients SHOULD assume that URL previews are
-available.
+available for backwards-compatibility.
 
 An example of the capability API's response for this capability is:
 
