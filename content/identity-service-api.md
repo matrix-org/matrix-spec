@@ -409,7 +409,7 @@ is associated with a Matrix user ID.
 At a later point, if the owner of that particular 3PID binds it with a
 Matrix user ID, the identity server will attempt to make an HTTP POST to
 the Matrix user's homeserver via the
-[/3pid/onbind](/server-server-api#put_matrixfederationv13pidonbind)
+[/3pid/onbind](/server-server-api#post_matrixfederationv13pidonbind)
 endpoint. The request MUST be signed with a long-term private key for
 the identity server.
 

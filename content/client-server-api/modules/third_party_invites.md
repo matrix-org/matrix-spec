@@ -105,7 +105,7 @@ to the room. This process ends up looking like this:
 ```
 
 The third-party user will then need to verify their identity, which results in a
-request to [`/_matrix/federation/v1/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind)
+request to [`/_matrix/federation/v1/3pid/onbind`](/server-server-api/#post_matrixfederationv13pidonbind)
 from the identity server to the homeserver that bound the third-party identifier
 to a user. The homeserver then exchanges the `m.room.third_party_invite` event
 in the room for a complete [`m.room.member`](#mroommember) event with
@@ -194,7 +194,7 @@ Note that when H1 sends the `m.room.member` event to H2 and H3 it does
 not have to block on either server's receipt of the event. Likewise, H1
 may complete the [`/exchange_third_party_invite`](/server-server-api/#put_matrixfederationv1exchange_third_party_inviteroomid) request at the
 same time as sending the `m.room.member` event to H2 and H3.
-Additionally, H3 may complete the [`/3pid/onbind`](/server-server-api/#put_matrixfederationv13pidonbind) request it got from IS
+Additionally, H3 may complete the [`/3pid/onbind`](/server-server-api/#post_matrixfederationv13pidonbind) request it got from IS
 at any time - the completion is not shown in the diagram.
 
 H1 MUST verify the request from H3 to ensure the `signed` property is
