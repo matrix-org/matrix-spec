@@ -1024,7 +1024,7 @@ event in the room to specify a display name, a token and public keys the
 identity server provided as a response to the invite storage request.
 
 When a third-party identifier with pending invites gets bound to a Matrix ID,
-the identity server will send a request to the [`/3pid/onbind`](#put_matrixfederationv13pidonbind)
+the identity server will send a request to the [`/3pid/onbind`](#post_matrixfederationv13pidonbind)
 endpoint of the the ID's homeserver as described in the [Invitation
 Storage](/identity-service-api#invitation-storage) section of the Identity
 Service API.

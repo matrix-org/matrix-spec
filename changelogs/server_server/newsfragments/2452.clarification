@@ -1,0 +1,1 @@
+Fix verb for /3pid/onbind endpoint (PUT -> POST)

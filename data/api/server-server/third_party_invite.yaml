@@ -157,7 +157,7 @@ paths:
                 response:
                   value: {}
   /3pid/onbind:
-    put:
+    post:
       summary: |-
         Notifies the server that a third-party identifier has been bound to one
         of its users.
