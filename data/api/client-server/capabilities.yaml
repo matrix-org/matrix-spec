@@ -111,6 +111,32 @@ paths:
                         description: |-
                           Capability to indicate if the user can request URL previews via
                           [`GET /_matrix/client/v1/media/preview_url`](/client-server-api/#get_matrixclientv1mediapreview_url).
+                      m.delayed_events:
+                        x-addedInMatrixVersion: "1.20"
+                        type: object
+                        title: DelayedEventsCapability
+                        description: |-
+                          Capability to indicate the limits that the server imposes on
+                          [delayed events](/client-server-api/#delayed-events).
+                        properties:
+                          max_delay_ms:
+                            type: integer
+                            format: int64
+                            minimum: 0
+                            description: |-
+                              The maximum delay in milliseconds that is allowed for a delayed event.
+                              MUST be non-negative. `0` if delayed events are disabled.
+                            example: 86400000
+                          max_scheduled:
+                            type: integer
+                            minimum: 0
+                            description: |-
+                              The maximum number of delayed events that a user may have scheduled
+                              at once. MUST be non-negative. `0` if delayed events are disabled.
+                            example: 10
+                        required:
+                          - max_delay_ms
+                          - max_scheduled
                       m.profile_fields:
                         x-addedInMatrixVersion: "1.16"
                         type: object
