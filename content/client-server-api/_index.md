@@ -3145,6 +3145,37 @@ An example of the capability API's response for this capability is:
 }
 ```
 
+### `m.delayed_events` capability
+
+{{% added-in v="1.20" %}}
+
+This capability advertises the limits that the homeserver imposes on
+[delayed events](#delayed-events). It has two REQUIRED properties:
+
+- `max_delay_ms`: the maximum delay in milliseconds that is allowed for a delayed
+  event.
+- `max_scheduled`: the maximum number of delayed events that a user may have
+  scheduled at once.
+
+A homeserver MAY indicate that it does not support delayed events by setting either
+property to `0`.
+
+When the capability is not listed, clients MUST treat delayed events as disabled
+on the homeserver.
+
+An example of the capability API's response for this capability is:
+
+```json
+{
+  "capabilities": {
+    "m.delayed_events": {
+      "max_delay_ms": 86400000,
+      "max_scheduled": 10
+    }
+  }
+}
+```
+
 ## Filtering
 
 Filters can be created on the server and can be passed as a parameter to
@@ -4337,6 +4368,7 @@ that profile.
 | [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
 | [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
 | [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Delayed Events](#delayed-events)                          | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
@@ -4460,3 +4492,4 @@ systems.
 {{% cs-module name="Threading" filename="threading" %}}
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
 {{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
+{{% cs-module name="Delayed Events" filename="delayed_events" %}}

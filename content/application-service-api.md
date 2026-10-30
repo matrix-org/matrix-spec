@@ -412,6 +412,7 @@ The `ts` query string argument is only valid on the following endpoints:
 
 * [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](/client-server-api/#put_matrixclientv3roomsroomidsendeventtypetxnid)
 * [`PUT /rooms/{roomId}/state/{eventType}/{stateKey}`](/client-server-api/#put_matrixclientv3roomsroomidstateeventtypestatekey)
+* {{% added-in v="1.20" %}} [`PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}`](/client-server-api/#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid)
 
 Other endpoints, such as `/kick`, do not support `ts`: instead, callers can use the
 `PUT /state` endpoint to mimic the behaviour of the other APIs.
