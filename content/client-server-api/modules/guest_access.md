@@ -59,6 +59,11 @@ for sending events:
 
 * {{% added-in v="1.2" %}} [PUT /rooms/{roomId}/state/{eventType}/{stateKey}](#put_matrixclientv3roomsroomidstateeventtypestatekey)
 * [PUT /sendToDevice/{eventType}/{txnId}](#put_matrixclientv3sendtodeviceeventtypetxnid)
+* {{% added-in v="1.20" %}} [PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}](#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid)
+* {{% added-in v="1.20" %}} [GET /delayed_events/{delayId}](#get_matrixclientv1delayed_eventsdelayid)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/send](#post_matrixclientv1delayed_eventsdelayidsend)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/cancel](#post_matrixclientv1delayed_eventsdelayidcancel)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/restart](#post_matrixclientv1delayed_eventsdelayidrestart)
 
 The following API endpoints are allowed to be accessed by guest accounts
 for their own account maintenance:

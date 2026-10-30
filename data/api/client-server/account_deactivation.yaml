@@ -43,6 +43,10 @@ paths:
         if available, and MAY use the `action=org.matrix.account_deactivate`
         parameter.
         {{% /boxes/warning %}}
+
+        {{% added-in v="1.20" %}} When an account is deactivated, the homeserver MUST cancel all of the account's
+        scheduled [delayed events](/client-server-api/#delayed-events). Homeservers MAY remove these cancelled
+        delayed events immediately.
       security:
         - {}
         - accessTokenBearer: []
