@@ -1610,18 +1610,15 @@ room.
 
 ##### Construction and sharing of the key bundle
 
-Marking keys as [shareable](#shareable-encryption-sessions) essentially serves as
-precomputation of which keys Bob needs to decrypt all messages he can see, as
-defined by the room's history visibility.
-
 History visibility mechanics prevent changing the visibility of events
 retrospectively. It is thus possible for a room timeline to have "gappy" visibility.
 For example, events sent in the past during `shared` visibility are visible to new
-members, even though events sent more recently (during `joined` visibility) are not visible.
-In such cases where the current history visibility setting does not allow sharing
+members, even though there may be events sent more recently (during `joined` visibility) which are not visible.
+
+In cases where the *current* history visibility setting does not allow sharing
 (i.e. if `history_visibility` is set to `invited` or `joined`), client implementations
-MAY choose not to share *any* room history, even messages sent when the
-history visibility setting would allow sharing.
+MAY choose not to share *any* room history, including messages sent during periods
+where the history visibility setting would have allowed sharing.
 
 In all other cases, before inviting Bob to a room, Alice's client SHOULD share all available shareable keys.
 It does this by constructing and sending a key bundle as follows:
