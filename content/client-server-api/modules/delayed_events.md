@@ -65,7 +65,7 @@ Since a delayed event is uniquely identified by its sender and `delay_id`, the r
 event SHOULD NOT include the [transaction ID](#transaction-identifiers) used to schedule
 it in its `unsigned` data.
 
-##### Retention of finalised delayed events
+##### Retention of sent/cancelled delayed events
 
 Homeservers SHOULD retain delayed events that have been sent or cancelled for up to 7 days
 or up to 1000 events per user, whichever limit is reached first. This allows clients to retrieve
