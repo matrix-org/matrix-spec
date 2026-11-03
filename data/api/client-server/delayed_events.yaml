@@ -75,7 +75,7 @@ paths:
                   minimum: 1
                   description: |-
                     The number of milliseconds that the homeserver should wait
-                    before sending the event. MUST be larger than `0`.
+                    before sending the event. MUST be greater than `0`.
                   example: 60000
                 state_key:
                   type: string
