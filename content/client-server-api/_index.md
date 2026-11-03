@@ -4355,7 +4355,6 @@ that profile.
 | Module / Profile                                           | Web       | Mobile   | Desktop  | CLI      | Embedded |
 |------------------------------------------------------------|-----------|----------|----------|----------|----------|
 | [Content Repository](#content-repository)                  | Required  | Required | Required | Optional | Optional |
-| [Delayed Events](#delayed-events)                          | Required  | Required | Required | Optional | Optional |
 | [Direct Messaging](#direct-messaging)                      | Required  | Required | Required | Required | Optional |
 | [Ignoring Users](#ignoring-users)                          | Required  | Required | Required | Optional | Optional |
 | [Instant Messaging](#instant-messaging)                    | Required  | Required | Required | Required | Optional |
@@ -4369,6 +4368,7 @@ that profile.
 | [User and Room Mentions](#user-and-room-mentions)          | Required  | Required | Required | Optional | Optional |
 | [Voice over IP](#voice-over-ip)                            | Required  | Required | Required | Optional | Optional |
 | [Client Config](#client-config)                            | Optional  | Optional | Optional | Optional | Optional |
+| [Delayed Events](#delayed-events)                          | Optional  | Optional | Optional | Optional | Optional |
 | [Device Management](#device-management)                    | Optional  | Optional | Optional | Optional | Optional |
 | [End-to-End Encryption](#end-to-end-encryption)            | Optional  | Optional | Optional | Optional | Optional |
 | [Event Annotations and reactions](#event-annotations-and-reactions) | Optional  | Optional | Optional | Optional | Optional |
