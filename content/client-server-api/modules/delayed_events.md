@@ -67,6 +67,7 @@ it in its `unsigned` data.
 
 ##### Retention of sent/cancelled delayed events
 
-Homeservers SHOULD retain delayed events that have been sent or cancelled for up to 7 days
-or up to 1000 events per user, whichever limit is reached first. This allows clients to retrieve
+Homeservers SHOULD retain delayed events that have been sent or cancelled for up to
+a set amount of time (e.g. 7 days). The number of such delayed events to retain
+SHOULD NOT exceed a set amount per user (e.g. 1000). This allows clients to retrieve
 these events via [`GET /delayed_events/{delayId}`](#get_matrixclientv1delayed_eventsdelayid).
