@@ -10,8 +10,8 @@ after a specific delay.
 Clients SHOULD consult the [`m.delayed_events`](#mdelayed_events-capability) capability before
 attempting to use delayed events as the server MAY apply usage limits, including disabling delayed
 events entirely. Depending on the server-side capability, clients MAY schedule delayed events via
-[`PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}`](#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid).
-This requires supplying a specific delay duration and, if successful, returns a unique identifier
+[`PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}`](#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid)
+with a specific requested delay duration. If successful, the endpoint responds with a unique identifier
 for the delayed event. This identifier can be used to inspect and manage the delayed event using
 one of the following endpoints:
 
