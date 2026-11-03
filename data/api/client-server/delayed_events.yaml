@@ -170,8 +170,8 @@ paths:
                 header, which indicates either the time at which, or the number of seconds after
                 which, the request MAY be retried.
               schema:
-                type: string
-                example: "1200"
+                type: ["string", "integer"]
+                example: 1200
           content:
             application/json:
               schema:
