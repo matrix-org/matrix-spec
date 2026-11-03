@@ -32,7 +32,7 @@ paths:
         [`PUT /rooms/{roomId}/send/{eventType}/{txnId}`](/client-server-api/#put_matrixclientv3roomsroomidsendeventtypetxnid)
         or [`PUT /rooms/{roomId}/state/{eventType}/{stateKey}`](/client-server-api/#put_matrixclientv3roomsroomidstateeventtypestatekey).
 
-        Homeservers do not need to re-evaluate whether the scheduled delayed events
+        Homeservers do not need to re-evaluate whether the scheduled delayed event
         is still authorised when the room's state changes later. Instead, this check
         only happens again when [sending the delayed event](/client-server-api/#sending-delayed-events).
       operationId: scheduleDelayedEvent
