@@ -129,6 +129,7 @@ paths:
                             example: 86400000
                           max_scheduled:
                             type: integer
+                            format: int64
                             minimum: 0
                             description: |-
                               The maximum number of delayed events that a user may have scheduled
