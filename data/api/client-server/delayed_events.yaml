@@ -160,9 +160,9 @@ paths:
             advertised in the [`m.delayed_events`](/client-server-api/#mdelayed_events-capability)
             capability.
 
-            In the latter case, the `errcode` MUST be `M_LIMIT_EXCEEDED` and the `Retry-After`
-            header MUST be set to the time of, or the time until, the scheduled send time of
-            the user's next delayed event to be sent, rounded up to the nearest second.
+            In the latter case, the `Retry-After` header MUST be set to the time of, or the time
+            until, the scheduled send time of the user's next delayed event to be sent, rounded
+            up to the nearest second.
           headers:
             Retry-After:
               description: |-
