@@ -363,8 +363,7 @@ paths:
       responses:
         "200":
           description: |-
-            The delayed event has been cancelled or was already cancelled
-            before.
+            The delayed event has been cancelled or was already cancelled previously.
           content:
             application/json:
               schema:
