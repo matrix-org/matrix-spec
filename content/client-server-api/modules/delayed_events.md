@@ -55,7 +55,8 @@ and store the error with it. This allows clients to retrieve the error via
 In addition to the rate limiting on the endpoints of this module, homeservers MUST also
 apply rate limiting at the time of sending delayed events. If a delayed event cannot be
 sent at its scheduled send time because of event sending rate limits, homeservers SHOULD
-NOT retry sending it and instead cancel the delayed event.
+NOT retry sending it, and instead cancel the delayed event and store the rate-limit error with it,
+to allow later retrieval via [`GET /delayed_events/{delayId}`](#get_matrixclientv1delayed_eventsdelayid).
 
 The `delay_id` of a sent delayed event MUST be included in the `unsigned` data of the
 resulting event if, and only if, the client that the event is served to is authenticated
