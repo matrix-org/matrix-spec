@@ -142,7 +142,7 @@ paths:
                   }
         "403":
           description: |-
-            Delayed events are disabled on the homeserver.
+            Delayed events are disabled on the homeserver. The `errcode` is `M_FORBIDDEN`.
           content:
             application/json:
               schema:
