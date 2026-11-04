@@ -37,6 +37,25 @@ properties:
     type: object
     description: The content of the event.
     example: {"key": "value"}
+  sticky:
+    type: object
+    title: StickyData
+    x-addedInMatrixVersion: "1.20"
+    description: |-
+      Extra information to mark the event as a [sticky event](/server-server-api/#sticky-events).
+    properties:
+      duration_ms:
+        type: integer
+        format: int64
+        description: |-
+          If this property is present and the value is positive, the event was sent as
+          a [sticky event](/server-server-api/#sticky-events). The value is the total
+          sticky duration in milliseconds requested by the sender.
+
+          Note that this property is present even if the event's stickiness has already
+          expired. Whether the event is still sticky, and for how long, is determined
+          independently by each server as described [here](/client-server-api/#determining-whether-an-event-is-sticky).
+        example: 600000
   hashes:
     $ref: "event_hash.yaml"
   signatures:

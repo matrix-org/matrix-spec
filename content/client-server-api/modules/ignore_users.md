@@ -44,3 +44,7 @@ Servers must still send state events sent by ignored users to clients.
 
 Servers must not send room invites from ignored users to clients.
 Servers may optionally decide to reject the invite, however.
+
+{{% added-in v="1.20" %}} Servers MUST omit [sticky events](#sticky-events)
+sent by ignored users from the `sticky.events` section in the response of
+[`/sync`](#get_matrixclientv3sync).
