@@ -282,6 +282,20 @@ paths:
                                   room.
                                 allOf:
                                   - $ref: definitions/timeline_batch.yaml
+                              sticky:
+                                title: Sticky
+                                type: object
+                                x-addedInMatrixVersion: "1.20"
+                                description: |-
+                                  Unexpired [sticky events](/client-server-api/#sticky-events)
+                                  in the room which occurred before the first event in the
+                                  `timeline.events` section.
+                                properties:
+                                  events:
+                                    type: array
+                                    description: List of unexpired sticky events.
+                                    items:
+                                      $ref: definitions/client_event_without_room_id.yaml
                               ephemeral:
                                 title: Ephemeral
                                 type: object
@@ -582,6 +596,27 @@ paths:
                             ],
                             "limited": true,
                             "prev_batch": "t34-23535_0_0"
+                          },
+                          "sticky": {
+                            "events": [
+                              {
+                                "content": {
+                                  "foo": "bar"
+                                },
+                                "event_id": "$143273582443QsuJk:example.org",
+                                "origin_server_ts": 1432735824653,
+                                "sender": "@example:example.org",
+                                "sticky": {
+                                  "duration_ms": 600000
+                                },
+                                "type": "org.example.event",
+                                "unsigned": {
+                                  "age": 341830,
+                                  "membership": "join",
+                                  "sticky_duration_remaining_ms": 258170
+                                }
+                              }
+                            ]
                           },
                           "ephemeral": {
                             "events": [

@@ -81,6 +81,29 @@ paths:
                   type: string
                   description: |-
                     The state key of the event to send, if it is a state event.
+
+                    MUST NOT be set when `sticky_duration_ms` is set.
+                sticky_duration_ms:
+                  type: integer
+                  format: int64
+                  minimum: 1
+                  description: |-
+                    If present, the event is scheduled as a [sticky event](/client-server-api/#sticky-events).
+                    Once the event is sent, it will remain sticky for the given number of milliseconds.
+
+                    MUST NOT be set when `state_key` is set.
+
+                    If supplied, MUST be a positive integer.
+
+                    SHOULD NOT be set to below 300000 (5 minutes) because servers with significant
+                    clock skew may cause the event to expire quicker than intended.
+
+                    SHOULD NOT be set to more than 3600000 (1 hour) because servers expire
+                    sticky events after at most 1 hour even if the supplied duration is larger.
+
+                    See [here](/client-server-api/#determining-whether-an-event-is-sticky) for details
+                    on how servers compute whether an event is still sticky.
+                  example: 600000
                 content:
                   type: object
                   description: |-
