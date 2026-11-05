@@ -697,6 +697,13 @@ then any new event `D'` will not reference `C`:
 Events can also be soft failed if they fail [Policy Server checks](#validating-policy-server-signatures).
 {{% /boxes/note %}}
 
+{{% boxes/note %}}
+{{% added-in v="1.20" %}}
+Servers MUST re-evaluate the soft failure of soft failed, unexpired
+[sticky events](#sticky-events) when the authorising state of the event
+changes, and relay the event to clients if it is no longer soft failed.
+{{% /boxes/note %}}
+
 #### Retrieving event authorisation information
 
 The homeserver may be missing event authorisation information, or wish
@@ -1117,6 +1124,70 @@ Read receipts for events that a user sent do not need to be sent. It is
 implied that by sending the event the user has read up to the event.
 
 {{% definition path="api/server-server/definitions/event-schemas/m.receipt" %}}
+
+## Sticky Events
+
+{{% added-in v="1.20" %}}
+
+[Sticky events](/client-server-api/#sticky-events) are a primitive that
+allows clients to share temporary state within a room without having to
+rely on state events. Within the federation event format of every
+[room version](/rooms), an event is marked as [sticky](/client-server-api/#sticky-events)
+by a top-level `sticky` object with a `duration_ms` property that contains
+the total sticky duration requested by the sender.
+
+```json
+{
+    "type": "org.example.event",
+    "sticky": {
+        "duration_ms": 600000
+    },
+    "sender": "@alice:example.com",
+    "room_id": "!foo:example.com",
+    "origin_server_ts": 1757920344000,
+    "content": { ... }
+}
+```
+
+Servers calculate whether a sticky event is still sticky or has expired as
+described in the [Client-Server API](/client-server-api/#determining-whether-an-event-is-sticky).
+
+Servers MUST attempt to push their own unexpired sticky events in a room to
+all joined servers, whilst respecting per-server backoff times. Large volumes
+of events to send MUST NOT cause an unexpired sticky event to be dropped from
+the send queue of the server. When a new server joins a room, servers MUST
+attempt to push all of their own unexpired sticky events in the room to the
+new server. Servers SHOULD, on a best-effort basis, push unexpired sticky
+events to other homeservers in the order they were created on the server.
+
+Servers MUST NOT apply [history visibility](/client-server-api/#room-history-visibility)
+checks to unexpired sticky events. Any joined server is authorised to see
+unexpired sticky events for as long as they remain sticky.
+
+Servers MUST apply [Policy Servers](#policy-servers) and similar
+homeserver-specific anti-spam techniques to sticky events received over
+federation. If any of these techniques classifies a sticky event as spam,
+the event MUST be treated as a regular non-sticky event.
+
+{{% boxes/warning %}}
+Receiving old sticky events may increase the number of forward extremities
+in the room on the receiving server, which may impact the performance of
+state resolution if there are many forward extremities. Servers MAY send
+dummy events to reduce the number of forward extremities. Alternatively,
+servers MAY choose not to add old sticky events to their forward
+extremities.
+{{% /boxes/warning %}}
+
+When an unexpired sticky event was sent by a user who has been erased, for
+example using the `erase` flag of
+[`POST /_matrix/client/v3/account/deactivate`](/client-server-api/#post_matrixclientv3accountdeactivate),
+servers SHOULD NOT send it to other homeservers as part of catching up.
+
+Servers MAY rate limit sticky events received over federation. For instance,
+servers MAY delay the persistence of such events, or persist the sticky events
+but delay delivering them to clients. Servers MAY also limit the number of
+unexpired sticky events of a given sender, as described in the
+[Client-Server API](/client-server-api/#sticky-events).
 
 ## Querying for information
 
