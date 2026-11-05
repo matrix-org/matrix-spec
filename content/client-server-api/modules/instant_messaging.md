@@ -75,7 +75,7 @@ the tag.
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages)), `data-mx-maths` (see [mathematical messages](#mathematical-messages)) |
 | `a`    | `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`)         |
-| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
+| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris)), `data-mx-emoticon` (see [sending custom emotes](#sending-custom-emotes)) |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
 | `div` | `data-mx-maths` (see [mathematical messages](#mathematical-messages))                                                                      |
