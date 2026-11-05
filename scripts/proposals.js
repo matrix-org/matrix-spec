@@ -94,17 +94,33 @@ async function getIssues() {
     return null;
   }
 
+  // Use a GitHub token if one was provided, to raise the rate limit for API requests.
+  const headers = {};
+  if (process.env.GITHUB_TOKEN) {
+    headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
+  }
+
   let pageLink = "https://api.github.com/repos/matrix-org/matrix-spec-proposals/issues?state=all&labels=proposal&per_page=100";
   while (pageLink) {
-    const response = await fetch(pageLink);
+    const response = await fetch(pageLink, { headers });
+    if (!response.ok) {
+      const body = await response.text();
+      throw new Error(`Failed to fetch ${pageLink}: HTTP ${response.status}: ${body}`);
+    }
     const issuesForPage = await response.json();
+    if (!Array.isArray(issuesForPage)) {
+      throw new Error(`Unexpected response from ${pageLink}: expected an array of issues`);
+    }
     issues = issues.concat(issuesForPage);
     const linkHeader = response.headers.get("link");
     pageLink = !!linkHeader ? getNextLink(linkHeader) : null;
   }
 }
 
-getIssues().then(processIssues);
+getIssues().then(processIssues).catch(error => {
+  console.error(error.message);
+  process.exit(1);
+});
 
 /**
  * Rather than just store the complete issue, we'll extract
