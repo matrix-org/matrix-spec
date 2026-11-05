@@ -189,7 +189,7 @@ paths:
         implementations. The caller is not required to be joined to any rooms
         that the reported user is joined to.
 
-        Clients may wish to [ignore](#ignoring-users) users after reporting them.
+        Clients may wish to [ignore](/client-server-api/#ignoring-users) users after reporting them.
 
         Clients could infer whether a reported user exists based on the 404 response.
         Homeservers that wish to conceal this information MAY return 200 responses

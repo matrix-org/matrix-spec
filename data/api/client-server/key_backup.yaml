@@ -961,7 +961,7 @@ components:
           description: |-
             The new etag value representing stored keys in the backup.
             
-            See [`GET /room_keys/version/{version}`](client-server-api/#get_matrixclientv3room_keysversionversion)
+            See [`GET /room_keys/version/{version}`](/client-server-api/#get_matrixclientv3room_keysversionversion)
             for more details.
           type: string
           example: abcdefg

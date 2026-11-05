@@ -27,9 +27,9 @@ paths:
 
         -   users that share a room with the requesting user
         -   users who are joined to rooms known to the homeserver that have a
-            `public` [join rule](#mroomjoin_rules)
+            `public` [join rule](/client-server-api/#mroomjoin_rules)
         -   users who are joined to rooms known to the homeserver that have a
-            `world_readable` [history visibility](#room-history-visibility)
+            `world_readable` [history visibility](/client-server-api/#room-history-visibility)
 
         The search MUST consider local users to the homeserver, and SHOULD
         query remote users as part of the search.

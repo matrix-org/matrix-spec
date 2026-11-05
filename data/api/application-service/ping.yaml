@@ -26,7 +26,7 @@ paths:
 
         Currently this is only called by the homeserver as a direct result of
         the application service calling
-        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`](#post_matrixclientv1appserviceappserviceidping).
+        [`POST /_matrix/client/v1/appservice/{appserviceId}/ping`](/application-service-api/#post_matrixclientv1appserviceappserviceidping).
       operationId: ping
       security:
         - homeserverAccessToken: []
