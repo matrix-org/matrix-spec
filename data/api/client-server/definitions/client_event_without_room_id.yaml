@@ -102,7 +102,19 @@ properties:
           The client-supplied [transaction ID](/client-server-api/#transaction-identifiers), for example, provided via
           `PUT /_matrix/client/v3/rooms/{roomId}/send/{eventType}/{txnId}`,
           if the client being given the event is the same one which sent it.
+
+          SHOULD be absent when the event resulted from sending a [delayed event](/client-server-api/#delayed-events).
+        x-changedInMatrixVersion:
+          "1.20": |
+            Events resulting from delayed events should not include this property.
         type: string
+      delay_id:
+        description: |
+          If the event resulted from sending a [delayed event](/client-server-api/#delayed-events)
+          and the client being given the event is authenticated as the event's sender,
+          the identifier of the associated delayed event. Otherwise, absent.
+        type: string
+        x-addedInMatrixVersion: "1.20"
       prev_content:
         description: |
           The `content` of the previous state event that was replaced by this event.
