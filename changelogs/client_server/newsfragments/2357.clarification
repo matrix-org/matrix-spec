@@ -1,0 +1,1 @@
+Clarify which tokens can be used in `from` or `to` in `GET /rooms/{roomId}/relations/{eventId}`.
