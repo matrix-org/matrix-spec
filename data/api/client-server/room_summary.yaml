@@ -30,9 +30,9 @@ paths:
         Servers MAY allow unauthenticated access to this API if at least one of
         the following conditions holds true:
 
-        - The room has a [join rule](#mroomjoin_rules) of `public`, `knock` or
+        - The room has a [join rule](/client-server-api/#mroomjoin_rules) of `public`, `knock` or
           `knock_restricted`.
-        - The room has a `world_readable` [history visibility](#room-history-visibility).
+        - The room has a `world_readable` [history visibility](/client-server-api/#room-history-visibility).
 
         Servers should consider rate limiting requests that require a federation
         request more heavily if the client is unauthenticated.
