@@ -84,7 +84,9 @@ not affect the spec content itself, such as changes to the build script, formatt
 etc. should be documented under ``changelogs/internal/newsfragments``.
 
 To create a changelog entry, create a file named in the format ``prNumber.type`` in
-the ``newsfragments`` directory. The ``type`` can be one of the following:
+the ``newsfragments`` directory. If a single PR needs several entries of the same
+``type`` in one directory, append a numeric counter, e.g. ``prNumber.type.1`` and
+``prNumber.type.2``. The ``type`` can be one of the following:
 
 * ``new`` - Used when adding new endpoints. Please have the file contents be the
   method and route being added, surrounded in markdown code tags. For example: \`POST
