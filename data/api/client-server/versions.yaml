@@ -23,7 +23,7 @@ paths:
         Gets the versions of the specification supported by the server.
 
         Values will take the form `vX.Y` or `rX.Y.Z` in historical cases. See
-        [the Specification Versioning](../#specification-versions) for more
+        [the Specification Versioning](/#specification-versions) for more
         information.
 
         The server may additionally advertise experimental features it supports

@@ -31,7 +31,7 @@ paths:
         non-empty string `state_key`s are processed by this endpoint.
 
         Whether a signature is required by a Policy Server further depends on whether
-        the room has [enabled a Policy Server](#determining-if-a-policy-server-is-enabled-in-a-room).
+        the room has [enabled a Policy Server](/server-server-api/#determining-if-a-policy-server-is-enabled-in-a-room).
 
         {{% boxes/note %}}
         The Policy Server MAY respond with *any* of the defined errors to indicate

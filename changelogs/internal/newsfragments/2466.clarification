@@ -1,0 +1,1 @@
+Verify that Markdown links in OpenAPI definitions are absolute in CI.
