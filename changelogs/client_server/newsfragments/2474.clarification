@@ -1,0 +1,1 @@
+Document the `404` response of `GET /_matrix/client/v3/rooms/{roomId}/context/{eventId}`.
