@@ -77,6 +77,15 @@ for end-to-end encryption:
 * [POST /keys/query](#post_matrixclientv3keysquery)
 * [POST /keys/claim](#post_matrixclientv3keysclaim)
 
+The following API endpoints are allowed to be accessed by guest accounts
+for sending and managing [delayed events](#delayed-events):
+
+* {{% added-in v="1.20" %}} [PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}](#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid)
+* {{% added-in v="1.20" %}} [GET /delayed_events/{delayId}](#get_matrixclientv1delayed_eventsdelayid)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/send](#post_matrixclientv1delayed_eventsdelayidsend)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/cancel](#post_matrixclientv1delayed_eventsdelayidcancel)
+* {{% added-in v="1.20" %}} [POST /delayed_events/{delayId}/restart](#post_matrixclientv1delayed_eventsdelayidrestart)
+
 #### Server behaviour
 
 Servers MUST only allow guest users to join rooms if the
