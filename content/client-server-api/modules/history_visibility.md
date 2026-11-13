@@ -76,6 +76,10 @@ event would allow them to see it. (For example, a user can always see
 change their membership from `join` to any other value, even if
 `history_visibility` is `joined`.)
 
+{{% added-in v="1.20" %}} For unexpired [sticky events](#sticky-events),
+the user should be allowed to see the event regardless of the room's
+history visibility if they are joined to the room.
+
 #### Security considerations
 
 The default value for `history_visibility` is `shared` for
