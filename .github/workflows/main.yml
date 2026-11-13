@@ -211,6 +211,8 @@ jobs:
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
       - name: "⚙️ npm"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm i
           npm run get-proposals
@@ -302,6 +304,8 @@ jobs:
       - name: "📥 Source checkout"
         uses: actions/checkout@v4
       - name: "⚙️ npm"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npm i
           npm run get-proposals
