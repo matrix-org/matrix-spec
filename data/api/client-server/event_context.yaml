@@ -75,18 +75,39 @@ paths:
               schema:
                 type: object
                 description: The events and state surrounding the requested event.
+                required:
+                  - start
+                  - end
+                  - events_before
+                  - event
+                  - events_after
+                  - state
                 properties:
                   start:
                     type: string
-                    description: A token that can be used to paginate backwards with using [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
+                    description: |-
+                      A token that can be used to paginate backwards with using
+                      [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
+
+                      This token is always returned. An empty `events_before` does not
+                      imply that there are no earlier events: clients find out by
+                      paginating with this token.
                   end:
                     type: string
-                    description: A token that can be used to paginate forwards with using [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
+                    description: |-
+                      A token that can be used to paginate forwards with using
+                      [`GET /messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages).
+
+                      This token is always returned. An empty `events_after` does not
+                      imply that there are no later events: clients find out by
+                      paginating with this token.
                   events_before:
                     type: array
                     description: |-
                       A list of room events that happened just before the
-                      requested event, in reverse-chronological order.
+                      requested event, in reverse-chronological order. This is an
+                      empty array if there are no such events to return, for
+                      example when `limit` is 0.
                     items:
                       $ref: definitions/client_event.yaml
                   event:
@@ -97,7 +118,9 @@ paths:
                     type: array
                     description: |-
                       A list of room events that happened just after the
-                      requested event, in chronological order.
+                      requested event, in chronological order. This is an empty
+                      array if there are no such events to return, for example
+                      when `limit` is 0.
                     items:
                       $ref: definitions/client_event.yaml
                   state:
