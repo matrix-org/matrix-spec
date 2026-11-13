@@ -24,7 +24,7 @@ paths:
         Schedules an event to be sent into a room by the homeserver after a delay.
 
         Homeservers MUST validate that the event is well-formed and SHOULD verify
-        that the event could be sent at its scheduled send time. In particular, homeservers
+        that the event could be sent were it to be sent immediately. In particular, homeservers
         SHOULD check that the sender has permission to send the event into the room. If the request is rejected
         due to either of these checks failing, the homeserver MUST respond with the
         same HTTP status code and [standard error response](/client-server-api/#standard-error-response)
@@ -33,8 +33,8 @@ paths:
         or [`PUT /rooms/{roomId}/state/{eventType}/{stateKey}`](/client-server-api/#put_matrixclientv3roomsroomidstateeventtypestatekey).
 
         Homeservers do not need to re-evaluate whether the scheduled delayed event
-        is still authorised when the room's state changes later. Instead, this check
-        only happens again when [sending the delayed event](/client-server-api/#sending-delayed-events).
+        is still authorised on every subsequent room state change. Instead, they should 
+        perform this check when [sending the delayed event](/client-server-api/#sending-delayed-events).
       operationId: scheduleDelayedEvent
       security:
         - accessTokenBearer: []
