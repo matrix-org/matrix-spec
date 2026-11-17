@@ -14,6 +14,7 @@ Image packs provide a distribution and discovery mechanism for both.
 Emoticons are distinct from the [`m.emote`](#mroommessage-msgtypes) message
 type. `m.emote` is used to describe an action (for example, "/me waves
 hello"), whereas emoticons are images expressing emotions or other concepts.
+This spec prefers the term "emoticon" in the following to avoid confusion.
 {{% /boxes/note %}}
 
 #### Shortcode grammar
@@ -36,8 +37,8 @@ case-sensitive. The length of a shortcode MUST NOT exceed 100 bytes.
 
 {{% boxes/note %}}
 The `:` character is specifically excluded because it is widely used across messaging
-platforms as a delimiter for triggering emote search (for example, typing
-`:cat` to search for an emote named `cat`). The `/` character is excluded
+platforms as a delimiter for triggering emoticon search (for example, typing
+`:cat` to search for an emoticon named `cat`). The `/` character is excluded
 because clients MAY use it to separate a shortcode from a pack name in
 completion UI (for example, `:cat/my_pack:`). Spaces are excluded to avoid
 ambiguity and common usability issues. This character set matches that used
@@ -51,7 +52,7 @@ However, homeservers MUST NOT reject or drop `m.room.image_pack` events
 received over federation for failing this grammar. Homeservers MAY locally
 soft-fail such events.
 
-Clients SHOULD render emotes and stickers that have malformed shortcodes, so
+Clients SHOULD render emoticons and stickers that have malformed shortcodes, so
 that users can identify and correct them. Clients SHOULD enforce this grammar
 when creating or editing image packs.
 
@@ -104,12 +105,12 @@ The ordering of images *within* a pack is currently up to implementations.
 
 #### Client behaviour
 
-##### Sending custom emotes
+##### Sending custom emoticons
 
-Custom emotes are sent as `<img>` elements within the `formatted_body` of an
+Custom emoticons are sent as `<img>` elements within the `formatted_body` of an
 [`m.room.message`](#mroommessage) event (with `format` set to
 `org.matrix.custom.html`). The `data-mx-emoticon` attribute identifies the
-element as a custom emote:
+element as a custom emoticon:
 
 ```html
 <img data-mx-emoticon
@@ -119,7 +120,7 @@ element as a custom emote:
      height="32" />
 ```
 
-A client MUST treat an `<img>` element as a custom emote if and only if the
+A client MUST treat an `<img>` element as a custom emoticon if and only if the
 `data-mx-emoticon` attribute is present. If the attribute has a value, that
 value MUST be ignored (some HTML serialisers MAY produce
 `data-mx-emoticon=""`).
@@ -133,19 +134,19 @@ unintended network requests.
 
 The `alt` attribute SHOULD be present and set to the `body` of the image
 object, or if absent, the image's shortcode. This attribute provides an
-accessible text description of the emote as defined by the
+accessible text description of the emoticon as defined by the
 [HTML specification](https://html.spec.whatwg.org/multipage/images.html#alt).
 
 The `title` attribute SHOULD be present and set to the shortcode of the
-emote. Clients MAY display this as a tooltip.
+emoticon. Clients MAY display this as a tooltip.
 
 The `height` attribute MUST be present for backwards compatibility with
-clients that do not support custom emotes. Clients SHOULD set this to "32".
+clients that do not support custom emoticons. Clients SHOULD set this to "32".
 Clients implementing image pack support SHOULD override this value when
 rendering based on the user's font size or other environmental factors. The
 `width` attribute SHOULD be omitted to preserve the image's aspect ratio.
 
-Clients MAY render messages that consist entirely of custom emotes and/or normal emoji
+Clients MAY render messages that consist entirely of custom emoticons and/or normal emoji
 at a larger size.
 
 ##### Sending stickers
@@ -156,9 +157,9 @@ property, or if absent, the image's shortcode. The `info` property of the
 `m.sticker` event SHOULD be set to the image object's `info` property, or if
 absent, an empty object.
 
-##### Emote picker suggestions
+##### Emoticon picker suggestions
 
-Clients MAY use the `:` character as a trigger to initiate emote search in the message composer. When
+Clients MAY use the `:` character as a trigger to initiate emoticon search in the message composer. When
 multiple packs contain images with the same shortcode, clients SHOULD provide
 disambiguation UI rather than silently resolving to one image. Clients MAY
 disambiguate by appending a slugified pack display name separated by `/`
@@ -179,7 +180,7 @@ packs depends on encrypted state events, which are not currently defined by
 the Matrix specification.
 
 In addition, a homeserver could correlate the timing of encrypted message
-events with media access requests to infer which emote was used in an
+events with media access requests to infer which emoticon was used in an
 encrypted event. This attack is analogous to URL preview correlation and is
 not unique to image packs. Client-side caching of media can reduce the
 frequency of such requests.
