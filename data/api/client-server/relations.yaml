@@ -245,7 +245,8 @@ components:
       name: from
       description: |-
         The pagination token to start returning results from. If not supplied, results
-        start at the most recent topological event known to the server.
+        start at the most recent topological event known to the server if `dir` is `b`,
+        or the oldest if `dir` is `f`.
 
         Can be a `next_batch` or `prev_batch` token from a previous call, or a returned
         `start` token from [`/messages`](/client-server-api/#get_matrixclientv3roomsroomidmessages),

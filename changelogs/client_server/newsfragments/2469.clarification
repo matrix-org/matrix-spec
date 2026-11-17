@@ -1,0 +1,1 @@
+Clarify where `/relations` starts when `from` is omitted with `dir=f`.
