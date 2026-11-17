@@ -75,7 +75,7 @@ the tag.
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | `span` | `data-mx-bg-color`, `data-mx-color`, `data-mx-spoiler` (see [spoiler messages](#spoiler-messages)), `data-mx-maths` (see [mathematical messages](#mathematical-messages)) |
 | `a`    | `target`, `href` (provided the value is not relative and has a scheme matching one of: `https`, `http`, `ftp`, `mailto`, `magnet`)         |
-| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris))                      |
+| `img`  | `width`, `height`, `alt`, `title`, `src` (provided it is a [Matrix Content (`mxc://`) URI](#matrix-content-mxc-uris)), `data-mx-emoticon` (see [sending custom emoticons](#sending-custom-emoticons)) |
 | `ol`   | `start`                                                                                                                                    |
 | `code` | `class` (only classes which start with `language-` for syntax highlighting)                                                                |
 | `div` | `data-mx-maths` (see [mathematical messages](#mathematical-messages))                                                                      |
@@ -107,6 +107,13 @@ structure.
 In previous versions of the specification, [rich replies](#rich-replies) could
 use a special tag, `mx-reply`. This is no longer the case. Clients SHOULD strip
 this tag and its content. See the "Rich replies" section for more information.
+{{% /boxes/note %}}
+
+{{% boxes/note %}}
+{{% changed-in v="1.20" %}}
+In previous versions of the specification, the `data-mx-emoticon` attribute was
+not listed as permitted on `img` tags, despite being used for
+[custom emoticons](#sending-custom-emoticons).
 {{% /boxes/note %}}
 
 {{% boxes/note %}}
