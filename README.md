@@ -68,7 +68,8 @@ place after an MSC has been accepted, not as part of a proposal itself.
    to process the SCSS.)
 2. Run `npm i` to install the dependencies. Note that this will require NodeJS to be installed.
 3. Run `npm run get-proposals` to seed proposal data. This is merely for populating the content of the "Spec Change Proposals"
-   page and is not required.
+   page and is not required. If you hit the GitHub API rate limit, set the `GITHUB_TOKEN` environment variable to a
+   personal access token.
 4. Run `hugo serve` (or `docker run --rm -it -v $(pwd):/src -p 1313:1313
    klakegg/hugo:ext serve`) to run a local webserver which builds whenever a file
    change is detected. If watching doesn't appear to be working for you, try
