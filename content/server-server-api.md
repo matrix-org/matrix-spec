@@ -702,6 +702,8 @@ Events can also be soft failed if they fail [Policy Server checks](#validating-p
 Servers MUST re-evaluate the soft failure of soft failed, unexpired
 [sticky events](#sticky-events) when the authorising state of the event
 changes, and relay the event to clients if it is no longer soft failed.
+
+Once accepted, an event cannot become soft-failed retrospectively.
 {{% /boxes/note %}}
 
 #### Retrieving event authorisation information
