@@ -53,17 +53,17 @@ They must be explicitly set during the `/upgrade` call.
 
 3.  Replicates transferable state events to the new room. The exact
     details for what is transferred is left as an implementation detail,
-    however the recommended state events to transfer are:
+    however the RECOMMENDED state events to transfer are:
 
-    -   `m.room.server_acl`
-    -   `m.room.encryption`
-    -   `m.room.name`
-    -   `m.room.avatar`
-    -   `m.room.topic`
-    -   `m.room.guest_access`
-    -   `m.room.history_visibility`
-    -   `m.room.join_rules`
-    -   `m.room.power_levels`
+    -   [`m.room.server_acl`](#mroomserver_acl)
+    -   [`m.room.encryption`](#mroomencryption)
+    -   [`m.room.name`](#mroomname)
+    -   [`m.room.avatar`](#mroomavatar)
+    -   [`m.room.topic`](#mroomtopic)
+    -   [`m.room.guest_access`](#mroomguest_access)
+    -   [`m.room.history_visibility`](#mroomhistory_visibility)
+    -   [`m.room.join_rules`](#mroomjoin_rules)
+    -   [`m.room.power_levels`](#mroompower_levels)
 
     Membership events should not be transferred to the new room due to
     technical limitations of servers not being able to impersonate
