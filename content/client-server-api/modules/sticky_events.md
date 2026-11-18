@@ -178,6 +178,8 @@ still sticky:
 3. If the end time is in the future, the event remains sticky. Otherwise it
    has expired.
 
+An event without a positive `sticky.duration_ms` is never sticky.
+
 ##### Delivery
 
 When exposing an unexpired sticky event to clients through any Client-Server
