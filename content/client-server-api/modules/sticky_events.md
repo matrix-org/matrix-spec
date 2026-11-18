@@ -35,8 +35,8 @@ various endpoints that return events. Additionally, the response of
 [`/sync`](#get_matrixclientv3sync) includes unexpired sticky events that
 fall outside the timeline limit, as described in [Extensions to /sync](#sticky-events-extensions-to-sync).
 
-Within the [event format](#room-event-format) of every room version, a message
-event is marked as sticky by a top-level `sticky` object with a `duration_ms`
+A message event is marked as sticky by a top-level `sticky` object within the 
+[event body](#room-event-format), with a `duration_ms`
 property that contains the total sticky duration requested by the sender. Unexpired
 sticky events additionally include a `sticky_duration_remaining_ms` property in
 their `unsigned` object which indicates how many milliseconds remain until the
