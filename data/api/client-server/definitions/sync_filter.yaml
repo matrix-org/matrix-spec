@@ -81,7 +81,7 @@ properties:
         - $ref: room_event_filter.yaml
         description: The message and state update events to include for rooms.
 
-          {{% added-in v="1.20" %}} This filter MUST not be applied to the `sticky.events`
+          {{% added-in v="1.20" %}} This filter MUST NOT be applied to the `sticky.events`
           section in the response of [`/sync`](/client-server-api/#get_matrixclientv3sync).
           However, since events are de-duplicated between the `timeline.events` and `sticky.events`
           sections, the filter indirectly affects the contents of the `sticky.events` section,
