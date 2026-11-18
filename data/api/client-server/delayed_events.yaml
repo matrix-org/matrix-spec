@@ -147,6 +147,8 @@ paths:
             - `M_DELAY_TOO_LARGE`: The requested `delay_ms` exceeds the maximum allowed delay
               advertised in the [`m.delayed_events`](/client-server-api/#mdelayed_events-capability)
               capability.
+            - `M_INVALID_PARAM`: A parameter that was specified has the wrong value or the mutually exclusive
+              parameters `state_key` and `sticky_duration_ms` were supplied together.
           content:
             application/json:
               schema:
