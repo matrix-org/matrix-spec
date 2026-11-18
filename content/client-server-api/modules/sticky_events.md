@@ -83,8 +83,8 @@ a room, a generic algorithm to build state-like maps of sticky events is defined
 in the following. Clients are _not_ required to implement this algorithm outside
 of features in this specification that use the algorithm.
 
-Events are only considered for the ephemeral map if they have a top-level property
-`sticky_key` of type string in their `content` object.
+Events are only considered for the ephemeral map if they have a property
+`sticky_key` of type string in the top level of their `content` object.
 
 ```json
 {
