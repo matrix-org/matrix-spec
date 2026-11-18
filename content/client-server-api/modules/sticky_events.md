@@ -6,7 +6,7 @@
 Sticky events are a primitive that allows clients to share temporary state
 within a room without having to rely on state events. A sticky event is a
 message event which is "stuck" to the room timeline (like a sticky note stuck
-to a screen) for a limited amount of ime. During this time, the event is reliably
+to a screen) for a limited amount of time. During this time, the event is reliably
 delivered to all joined users and servers regardless of gaps in syncing.
 
 #### Client behaviour
