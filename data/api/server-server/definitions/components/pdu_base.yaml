@@ -43,6 +43,8 @@ properties:
     x-addedInMatrixVersion: "1.20"
     description: |-
       Extra information to mark the event as a [sticky event](/server-server-api/#sticky-events).
+
+      SHOULD NOT be present unless the event was sent as a [sticky event](/server-server-api/#sticky-events).
     properties:
       duration_ms:
         type: integer
