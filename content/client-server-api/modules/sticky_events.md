@@ -230,9 +230,9 @@ the [`/sync`](#get_matrixclientv3sync) response:
 
 `Sticky`
 
-| Parameter | Type                                             | Description                                    |
-|-----------|--------------------------------------------------|------------------------------------------------|
-| events    | [[ClientEventWithoutRoomID](#room-event-format)] | **Required.** List of unexpired sticky events. |
+| Parameter | Type                                             | Description                      |
+|-----------|--------------------------------------------------|----------------------------------|
+| events    | [[ClientEventWithoutRoomID](#room-event-format)] | List of unexpired sticky events. |
 
 Example response:
 
