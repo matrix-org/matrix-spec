@@ -290,12 +290,8 @@ paths:
                                   Unexpired [sticky events](/client-server-api/#sticky-events)
                                   in the room which occurred before the first event in the
                                   `timeline.events` section.
-                                properties:
-                                  events:
-                                    type: array
-                                    description: List of unexpired sticky events.
-                                    items:
-                                      $ref: definitions/client_event_without_room_id.yaml
+                                allOf:
+                                  - $ref: definitions/sticky_events_batch.yaml
                               ephemeral:
                                 title: Ephemeral
                                 type: object
