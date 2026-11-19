@@ -1,0 +1,139 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/room_event.yaml
+description: |-
+  This event is used to declare [membership](/client-server-api/#matrixrtc-membership)
+  for a given [MatrixRTC slot](/client-server-api/#slots).
+
+  It is sent as a [sticky event](/client-server-api/#sticky-events).
+properties:
+  content:
+    properties:
+      slot_id:
+        type: string
+        description: |-
+          The `state_key` of the associated [`m.rtc.slot`](/client-server-api/#mrtcslot)
+          event.
+      member:
+        type: object
+        title: Member
+        description: Details about the member and their membership status.
+        properties:
+          id:
+            type: string
+            description: |-
+              Identifier to distinguish the member.
+          membership:
+            type: string
+            enum:
+              - join
+              - leave
+            description: |
+              The intended membership status.
+
+              Note that receivers resolve the actual membership status at a given time
+              as per the rules for [slot membership](/client-server-api/#matrixrtc-membership).
+        required:
+          - id
+          - membership
+      application:
+        type: object
+        title: Application
+        description: |-
+          Information about the MatrixRTC application running in the slot.
+
+          REQUIRED if `member.membership` is `join`.
+        properties:
+          type:
+            type: string
+            description: |-
+              The globally unique application identifier.
+
+              MUST follow the [Common Namespaced Identifier Grammar](/appendices#common-namespaced-identifier-grammar).
+
+              MUST align with the value of `slot_id` as per the rules for
+              [slots](/client-server-api/#slots).
+        additionalProperties:
+          description: Additional properties based on the application `type`.
+        required:
+          - type
+      transports:
+        type: object
+        title: Transports
+        description: |-
+          Details on the MatrixRTC transports used and supported by this member.
+        properties:
+          published:
+            type: array
+            description: |-
+              The transports on which the member is publishing media.
+            items:
+              type: object
+              title: Transport
+              description: |-
+                A specific transport on which the member is publishing media.
+              properties:
+                type:
+                  type: string
+                  description: |-
+                    The globally unique transport identifier.
+
+                    MUST follow the [Common Namespaced Identifier Grammar](/appendices#common-namespaced-identifier-grammar).
+              additionalProperties:
+                description: Additional properties based on the transport `type`.
+              required:
+                - type
+          can_subscribe:
+            type: array
+            description: |-
+              The transport types that the member is able to subscribe to, should
+              another member publish media on them.
+            items:
+              type: string
+      leave_reason:
+        type: object
+        title: LeaveReason
+        description: |-
+          If `member.membership` is `leave`, optionally provides context on why
+          the client left. Otherwise, absent.
+        properties:
+          code:
+            type: string
+            description: |-
+              Identifier for the specific leave reason.
+
+              MUST follow the [Common Namespaced Identifier Grammar](/appendices#common-namespaced-identifier-grammar)
+              but without the namespacing requirement.
+
+              MUST be one of the following:
+
+              * `leave`: The member left intentionally (e.g. by hanging up a call).
+              * `delayed_leave`: The member left through a scheduled delayed
+                leave event.
+              * `slot_closed`: The member left because the slot was closed
+                midway through the session.
+          reason:
+            type: string
+            description: Optional human-readable explanation of the leave reason.
+        required:
+          - code
+      sticky_key:
+        type: string
+        description: |-
+          The key to use in the
+          [ephemeral map algorithm](/client-server-api/#building-ephemeral-state-like-maps).
+
+          MUST have the same value as `member.id`.
+    required:
+      - slot_id
+      - member
+      - sticky_key
+    type: object
+  type:
+    enum:
+      - m.rtc.member
+    type: string
+title: MatrixRTC membership
+type: object

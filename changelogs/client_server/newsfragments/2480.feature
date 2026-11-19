@@ -1,0 +1,1 @@
+Add "MatrixRTC" including the `m.rtc.slot` state event, the `m.rtc.member` message event and the `m.rtc.encryption_key` to-device message, as per [MSC4143](https://github.com/matrix-org/matrix-spec-proposals/pull/4143).

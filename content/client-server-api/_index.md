@@ -4380,6 +4380,7 @@ that profile.
 | [Moderation Policy Lists](#moderation-policy-lists)        | Optional  | Optional | Optional | Optional | Optional |
 | [Policy Servers](#policy-servers)                          | Optional  | Optional | Optional | Optional | Optional |
 | [OpenID](#openid)                                          | Optional  | Optional | Optional | Optional | Optional |
+| [Real-Time Communication (MatrixRTC)](#matrixrtc)          | Optional  | Optional | Optional | Optional | Optional |
 | [Recently used emoji](#recently-used-emoji)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reference Relations](#reference-relations)                | Optional  | Optional | Optional | Optional | Optional |
 | [Reporting Content](#reporting-content)                    | Optional  | Optional | Optional | Optional | Optional |
@@ -4495,3 +4496,4 @@ systems.
 {{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
 {{% cs-module name="Delayed Events" filename="delayed_events" %}}
 {{% cs-module name="Sticky Events" filename="sticky_events" %}}
+{{% cs-module name="Real-Time Communication (MatrixRTC)" filename="matrixrtc" %}}

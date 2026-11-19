@@ -1,0 +1,14 @@
+{
+  "$ref": "core/state_event.json",
+  "type": "m.rtc.slot",
+  "state_key": "org.example.application#default",
+  "content": {
+    "status": "open",
+    "application": {
+      "type": "org.example.application"
+    },
+    "encryption": {
+      "type": "m.per_member"
+    }
+  }
+}
