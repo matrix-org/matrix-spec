@@ -207,9 +207,7 @@ load, servers MAY use normal load-shedding mechanisms, such as responding to
 
 This module adds an optional `sticky` property to the
 [Joined Room](#get_matrixclientv3sync_response-200_joined-room) section of
-the [`/sync`](#get_matrixclientv3sync) response, which is defined as follows:
-
-{{% definition path="api/client-server/definitions/sticky_events_batch" %}}
+the [`/sync`](#get_matrixclientv3sync) response.
 
 Example response:
 
