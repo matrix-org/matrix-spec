@@ -104,7 +104,7 @@ For example:
 }
 ```
 
-Clients that receive such events, SHOULD store them in a local map, keyed by the
+Clients that receive such events SHOULD store them in a local map, keyed by the
 4-tuple `(room_id, sender, type, content.sticky_key)`. 
 
 {{% boxes/note %}}
