@@ -150,20 +150,6 @@ other application-specific properties omitted. Alternatively, clients MAY
 redact the event but SHOULD send the redaction itself as a sticky event as
 described [previously](#redacting-sticky-events).
 
-Clients MAY implement access control in the map based on the room's power
-levels. If they do so, they MUST accept all writes to the map, regardless
-of whether the sender was authorised and MUST only decide whether or not to
-use a given map entry based on the current power levels at that time.
-
-{{% boxes/note %}}
-To understand why this is required, consider the case where Alice sets a key
-which requires power level 100 concurrently with being granted power level 100.
-Clients which see the write before the power levels change would otherwise
-discard it, whereas clients which see the power levels change first would
-accept it. By always updating the map, the arrival order does not affect the
-end result.
-{{% /boxes/note %}}
-
 #### Server behaviour
 
 ##### Determining whether an event is sticky
