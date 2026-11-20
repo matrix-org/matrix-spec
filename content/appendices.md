@@ -1045,6 +1045,40 @@ The base58 alphabet is the same as that used for [Bitcoin
 addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart).
 {{% /boxes/note %}}
 
+## QR codes
+
+Some features of Matrix involve one device displaying a QR code which is then
+scanned by another device, as a way of passing a small amount of data between
+two devices that are physically close to each other. These QR codes share the
+common format described here, which allows a device scanning a QR code to
+determine what the QR code is for and how to interpret the rest of its
+contents.
+
+### Common format {id="qr-code-common-format"}
+
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
+
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
+- one byte indicating the [QR code type](#qr-code-types)
+- the data for that type of QR code, the format of which is determined by the
+  QR code type
+
+### Types {id="qr-code-types"}
+
+The following QR code types are specified:
+
+| Type           | Purpose                                                                        | Format of the data that follows                                           |
+|----------------|--------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `0x00`, `0x01` | Reserved.                                                                      |                                                                           |
+| `0x02`         | Device verification.                                                           | [Client-Server API](/client-server-api/#qr-code-format)                   |
+
 ## 3PID Types
 
 Third-party Identifiers (3PIDs) represent identifiers on other
