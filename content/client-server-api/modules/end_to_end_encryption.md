@@ -1257,17 +1257,18 @@ The process between Alice and Bob verifying each other would be:
 
 ###### QR code format
 
-The QR codes to be displayed and scanned MUST be
-compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
-contain a single segment that uses the byte mode encoding.
+{{% changed-in v="1.20" %}} The parts of this format that are not specific to
+device verification are now defined in the Appendices, so that they can be
+shared with QR codes that serve other purposes. The byte that was previously
+described as the "QR code version" is now the "QR code type". The binary data
+encoded in the QR code is unchanged.
 
-The error correction level can be chosen by the device displaying the QR code.
+The QR codes to be displayed and scanned MUST use the
+[common QR code format](/appendices/#qr-code-common-format), with a
+[QR code type](/appendices/#qr-code-types) of `0x02`.
 
-The binary segment MUST be of the following form:
+The data that follows the QR code type MUST be of the following form:
 
-- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
-  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
-- one byte indicating the QR code version (must be `0x02`)
 - one byte indicating the QR code verification mode.  Should be one of the
   following values:
   - `0x00` verifying another user with cross-signing
@@ -1297,8 +1298,8 @@ The binary segment MUST be of the following form:
 For example, if Alice displays a QR code encoding the following binary data:
 
 ```nohighlight
-      "MATRIX"    |ver|mode| len   | event ID
- 4D 41 54 52 49 58  02  00   00 2D   21 41 42 43 44 ...
+      "MATRIX"    |type|mode| len   | event ID
+ 4D 41 54 52 49 58  02   00   00 2D   21 41 42 43 44 ...
 | the first key               | the second key              | shared secret
   00 01 02 03 04 05 06 07 ...   10 11 12 13 14 15 16 17 ...   20 21 22 23 24 25 26 27
 ```

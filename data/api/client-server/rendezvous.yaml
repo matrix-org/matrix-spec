@@ -1,0 +1,512 @@
+# Copyright 2026 The Matrix.org Foundation C.I.C.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.1.0
+info:
+  title: Matrix Client-Server Rendezvous API
+  version: 1.0.0
+paths:
+  /rendezvous:
+    get:
+      x-addedInMatrixVersion: "1.20"
+      summary: Discover whether the rendezvous API is available.
+      description: |-
+        Determines whether the rendezvous API is available to the requester.
+
+        Because the homeserver's policy might only allow authenticated users to
+        create rendezvous sessions, clients SHOULD make this request with their
+        access token if they have one for this homeserver. See
+        [Authentication](/client-server-api/#rendezvous-sessions-authentication)
+        for details.
+
+        A requester which is not permitted by the homeserver's policy to create
+        a rendezvous session is told so via `create_available: false`, rather
+        than by an error response.
+      operationId: getRendezvousAvailability
+      security:
+        - {}
+        - accessTokenBearer: []
+      responses:
+        "200":
+          description: The rendezvous API is supported by the homeserver.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  create_available:
+                    type: boolean
+                    description: |-
+                      `true` if the requester is able to create a rendezvous session
+                      using [`POST /_matrix/client/v1/rendezvous`](/client-server-api/#post_matrixclientv1rendezvous),
+                      otherwise `false`.
+                required:
+                  - create_available
+              examples:
+                response:
+                  value: {
+                    "create_available": true
+                  }
+        "404":
+          $ref: '#/components/responses/notEnabled'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Rendezvous sessions
+    post:
+      x-addedInMatrixVersion: "1.20"
+      summary: Create a rendezvous session and send the initial payload.
+      description: |-
+        Creates a new rendezvous session, populated with the supplied initial
+        payload.
+
+        The homeserver can choose what level of authentication is required to
+        create a rendezvous session. Suitable policies might include:
+
+        - Only allowing authenticated users to create a session. This reduces
+          the potential for abuse, as only users who are known to the homeserver
+          are able to create sessions.
+        - Allowing anyone to create a session without an access token. This
+          allows clients which are not yet logged in to use the homeserver for
+          their rendezvous sessions.
+
+        Clients SHOULD make this request with their access token if they have
+        one for this homeserver. See
+        [Authentication](/client-server-api/#rendezvous-sessions-authentication)
+        for details.
+      operationId: createRendezvousSession
+      security:
+        - {}
+        - accessTokenBearer: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: |-
+                    The initial payload of the rendezvous session. MUST NOT be
+                    larger than 4096 bytes.
+              required:
+                - data
+            examples:
+              request:
+                value: {
+                  "data": "initial data"
+                }
+        required: true
+      responses:
+        "200":
+          description: The rendezvous session was created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: |-
+                      The identifier of the rendezvous session. This MUST comply
+                      with the [opaque identifier grammar](/appendices/#opaque-identifiers).
+                  sequence_token:
+                    $ref: '#/components/schemas/sequenceToken'
+                  expires_in_ms:
+                    $ref: '#/components/schemas/expiresInMs'
+                required:
+                  - id
+                  - sequence_token
+                  - expires_in_ms
+              examples:
+                response:
+                  value: {
+                    "id": "abcdEFG12345",
+                    "sequence_token": "1",
+                    "expires_in_ms": 300000
+                  }
+        "400":
+          description: |-
+            The request is invalid. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with one of the following `errcode`s:
+
+            - `M_NOT_JSON`: The request body was not JSON.
+            - `M_BAD_JSON`: The request body was JSON, but `data` was missing or
+              was not a string.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_BAD_JSON",
+                    "error": "Missing required field: data"
+                  }
+        "403":
+          description: |-
+            The requester is not permitted to create a rendezvous session. For
+            example, because the homeserver requires authentication to create a
+            session and the request was made without an access token.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "You are not allowed to create a rendezvous session."
+                  }
+        "404":
+          $ref: '#/components/responses/notEnabled'
+        "413":
+          $ref: '#/components/responses/tooLarge'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Rendezvous sessions
+  "/rendezvous/{rendezvousId}":
+    get:
+      x-addedInMatrixVersion: "1.20"
+      summary: Receive the payload from a rendezvous session.
+      description: |-
+        Retrieves the current payload of a rendezvous session, along with the
+        `sequence_token` which identifies that revision of the payload.
+
+        Clients poll this endpoint in order to receive new payloads from the
+        other device. A change in the returned `sequence_token` indicates that
+        a new payload has been sent since the client last looked.
+
+        To help mitigate the risk of the rendezvous session being used to
+        distribute [unsafe content](/client-server-api/#rendezvous-sessions-unsafe-content),
+        homeservers SHOULD inspect the `Sec-Fetch-*`
+        [Fetch Metadata Request Headers](https://www.w3.org/TR/fetch-metadata/)
+        (or other suitable headers) of the request to identify top-level
+        navigation requests, and respond to those with a `403` HTTP status code
+        and an `errcode` of `M_FORBIDDEN` instead of the payload. The exact
+        header values to use are left as an implementation detail.
+      operationId: getRendezvousSession
+      parameters:
+        - $ref: '#/components/parameters/rendezvousId'
+      responses:
+        "200":
+          description: The current payload of the rendezvous session.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    description: |-
+                      The payload that was most recently sent to the rendezvous
+                      session, using either
+                      [`POST /_matrix/client/v1/rendezvous`](/client-server-api/#post_matrixclientv1rendezvous)
+                      or [`PUT /_matrix/client/v1/rendezvous/{rendezvousId}/{txnId}`](/client-server-api/#put_matrixclientv1rendezvousrendezvousidtxnid).
+                  sequence_token:
+                    $ref: '#/components/schemas/sequenceToken'
+                  expires_in_ms:
+                    $ref: '#/components/schemas/expiresInMs'
+                required:
+                  - data
+                  - sequence_token
+                  - expires_in_ms
+              examples:
+                response:
+                  value: {
+                    "data": "data from the previous POST/PUT",
+                    "sequence_token": "2",
+                    "expires_in_ms": 300000
+                  }
+        "403":
+          description: |-
+            The request was refused because it appears to be a top-level
+            navigation by a web browser, as described above.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_FORBIDDEN",
+                    "error": "This endpoint cannot be accessed by navigating to it."
+                  }
+        "404":
+          $ref: '#/components/responses/notFound'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Rendezvous sessions
+    delete:
+      x-addedInMatrixVersion: "1.20"
+      summary: Cancel a rendezvous session.
+      description: |-
+        Cancels a rendezvous session, discarding its payload.
+
+        Once a session has been cancelled, all further attempts to receive from,
+        send to or cancel the session MUST fail with a `404` HTTP status code
+        and an `errcode` of `M_NOT_FOUND`.
+      operationId: cancelRendezvousSession
+      parameters:
+        - $ref: '#/components/parameters/rendezvousId'
+      responses:
+        "200":
+          description: The rendezvous session was cancelled.
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: {}
+        "404":
+          $ref: '#/components/responses/notFound'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Rendezvous sessions
+  "/rendezvous/{rendezvousId}/{txnId}":
+    put:
+      x-addedInMatrixVersion: "1.20"
+      summary: Send a payload to an existing rendezvous session.
+      description: |-
+        Replaces the payload of a rendezvous session with a new one.
+
+        The homeserver MUST perform a compare-and-swap operation by checking
+        that the supplied `sequence_token` matches the current `sequence_token`
+        of the session. If it does not match, the homeserver MUST NOT accept the
+        `data` and MUST respond with a `409` HTTP status code and an `errcode`
+        of `M_CONCURRENT_WRITE`.
+
+        To support idempotent retries, the homeserver MUST record the
+        `sequence_token` returned by each successful request against the
+        `txnId` that was used, for the lifetime of the rendezvous session. If
+        the homeserver receives a request with a `txnId` that it has recorded
+        for that rendezvous session, it MUST return the recorded response,
+        including the same `sequence_token`, without modifying the payload.
+        The homeserver MUST check for a recorded `txnId` before validating the
+        request body, so the `400`, `409` and `413` responses below do not apply
+        to such a request.
+
+        Requests which are rejected need not be recorded: a stale
+        `sequence_token` never becomes valid again, so a repeat of such a
+        request would be rejected regardless.
+
+        See [Sending payloads](/client-server-api/#rendezvous-sessions-sending-payloads)
+        for more information on how clients are expected to use the
+        `sequence_token` and `txnId`.
+      operationId: sendRendezvousPayload
+      parameters:
+        - $ref: '#/components/parameters/rendezvousId'
+        - in: path
+          name: txnId
+          description: |-
+            The [transaction ID](/client-server-api/#transaction-identifiers) for this
+            request. This MUST comply with the
+            [opaque identifier grammar](/appendices/#opaque-identifiers).
+
+            Unlike elsewhere in the Client-Server API, the transaction ID is
+            scoped to the rendezvous session rather than to a device, so clients
+            MUST generate values that are unlikely to collide with those of the
+            other device.
+          required: true
+          example: "mLDVAsAqLnzUonKnmnzUyC7B"
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sequence_token:
+                  type: string
+                  description: |-
+                    The `sequence_token` of the last payload seen by the
+                    requesting device.
+                data:
+                  type: string
+                  description: |-
+                    The new payload for the rendezvous session. MUST NOT be
+                    larger than 4096 bytes.
+              required:
+                - sequence_token
+                - data
+            examples:
+              request:
+                value: {
+                  "sequence_token": "1",
+                  "data": "new data"
+                }
+        required: true
+      responses:
+        "200":
+          description: The payload was updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sequence_token:
+                    $ref: '#/components/schemas/sequenceToken'
+                required:
+                  - sequence_token
+              examples:
+                response:
+                  value: {
+                    "sequence_token": "2"
+                  }
+        "400":
+          description: |-
+            The request is invalid. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with one of the following `errcode`s:
+
+            - `M_INVALID_PARAM`: The `txnId` does not comply with the
+              [opaque identifier grammar](/appendices/#opaque-identifiers).
+            - `M_NOT_JSON`: The request body was not JSON.
+            - `M_BAD_JSON`: The request body was JSON, but a required property
+              was missing or was not a string.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_BAD_JSON",
+                    "error": "Missing required field: sequence_token"
+                  }
+        "404":
+          $ref: '#/components/responses/notFound'
+        "409":
+          description: |-
+            The supplied `sequence_token` does not match the current
+            `sequence_token` of the rendezvous session, meaning that another
+            payload has been sent to the session since the requesting device
+            last looked. A [standard error response](/client-server-api/#standard-error-response)
+            will be returned with the `errcode` `M_CONCURRENT_WRITE`.
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_CONCURRENT_WRITE",
+                    "error": "The sequence token does not match the current payload."
+                  }
+        "413":
+          $ref: '#/components/responses/tooLarge'
+        "429":
+          $ref: '#/components/responses/rateLimited'
+      tags:
+        - Rendezvous sessions
+servers:
+  - url: "{protocol}://{hostname}{basePath}"
+    variables:
+      protocol:
+        enum:
+          - http
+          - https
+        default: https
+      hostname:
+        default: localhost:8008
+      basePath:
+        default: /_matrix/client/v1
+components:
+  securitySchemes:
+    accessTokenBearer:
+      $ref: definitions/security.yaml#/accessTokenBearer
+  parameters:
+    rendezvousId:
+      in: path
+      name: rendezvousId
+      description: |-
+        The identifier of the rendezvous session, as obtained from the `id`
+        property in the response of
+        [`POST /_matrix/client/v1/rendezvous`](/client-server-api/#post_matrixclientv1rendezvous).
+      required: true
+      example: "abcdEFG12345"
+      schema:
+        type: string
+  schemas:
+    sequenceToken:
+      type: string
+      description: |-
+        An opaque token which identifies the current revision of the payload.
+        This changes every time that a payload is successfully sent to the
+        rendezvous session. It MUST comply with the
+        [opaque identifier grammar](/appendices/#opaque-identifiers).
+    expiresInMs:
+      type: integer
+      format: int64
+      description: |-
+        The number of milliseconds remaining until the rendezvous session
+        expires.
+  responses:
+    notEnabled:
+      description: |-
+        The rendezvous API is not enabled on the homeserver. A
+        [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_UNRECOGNIZED`.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_UNRECOGNIZED",
+                "error": "Unrecognized request"
+              }
+    notFound:
+      description: |-
+        A [standard error response](/client-server-api/#standard-error-response)
+        will be returned with one of the following `errcode`s:
+
+        - `M_NOT_FOUND`: No rendezvous session with the given `rendezvousId`
+          could be found. The session might have expired or been cancelled.
+        - `M_UNRECOGNIZED`: The rendezvous API is not enabled on the homeserver.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_NOT_FOUND",
+                "error": "Rendezvous session not found."
+              }
+    tooLarge:
+      description: |-
+        The supplied `data` is larger than the 4096 byte limit. A
+        [standard error response](/client-server-api/#standard-error-response)
+        will be returned with the `errcode` `M_TOO_LARGE`.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/error.yaml
+          examples:
+            response:
+              value: {
+                "errcode": "M_TOO_LARGE",
+                "error": "The payload is too large."
+              }
+    rateLimited:
+      description: This request was rate-limited.
+      content:
+        application/json:
+          schema:
+            $ref: definitions/errors/rate_limited.yaml

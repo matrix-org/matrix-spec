@@ -4400,6 +4400,7 @@ that profile.
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
 | [Mutual Rooms](#mutual-rooms)                              | Optional  | Optional | Optional | Optional | Optional |
+| [Rendezvous Sessions](#rendezvous-sessions)                | Optional  | Optional | Optional | Optional | Optional |
 
 *Please see each module for more details on what clients need to
 implement.*
@@ -4495,3 +4496,4 @@ systems.
 {{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
 {{% cs-module name="Delayed Events" filename="delayed_events" %}}
 {{% cs-module name="Sticky Events" filename="sticky_events" %}}
+{{% cs-module name="Rendezvous Sessions" filename="rendezvous" %}}

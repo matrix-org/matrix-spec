@@ -1045,6 +1045,113 @@ The base58 alphabet is the same as that used for [Bitcoin
 addresses](https://en.bitcoin.it/wiki/Base58Check_encoding#Base58_symbol_chart).
 {{% /boxes/note %}}
 
+## QR codes
+
+Some features of Matrix involve one device displaying a QR code which is then
+scanned by another device, as a way of passing a small amount of data between
+two devices that are physically close to each other. These QR codes share the
+common format described here, which allows a device scanning a QR code to
+determine what the QR code is for and how to interpret the rest of its
+contents.
+
+### Common format {id="qr-code-common-format"}
+
+The QR codes to be displayed and scanned MUST be
+compatible with [ISO/IEC 18004:2015](https://www.iso.org/standard/62021.html) and
+contain a single segment that uses the byte mode encoding.
+
+The error correction level can be chosen by the device displaying the QR code.
+
+The binary segment MUST be of the following form:
+
+- the string `MATRIX` encoded as one ASCII byte per character (i.e. `0x4D`,
+  `0x41`, `0x54`, `0x52`, `0x49`, `0x58`)
+- one byte indicating the [QR code type](#qr-code-types)
+- the data for that type of QR code, the format of which is determined by the
+  QR code type
+
+### Types {id="qr-code-types"}
+
+The following QR code types are specified:
+
+| Type           | Purpose                                                                        | Format of the data that follows                                           |
+|----------------|--------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| `0x00`, `0x01` | Reserved.                                                                      |                                                                           |
+| `0x02`         | Device verification.                                                           | [Client-Server API](/client-server-api/#qr-code-format)                   |
+| `0x03`         | {{% added-in v="1.20" %}} Logging in a new device with the help of an existing device. | [QR codes for logging in a new device](#qr-codes-for-logging-in-a-new-device) |
+
+### QR codes for logging in a new device
+
+{{% added-in v="1.20" %}}
+
+A QR code of type `0x03` is used to log in a new device with the help of an
+existing device which is already logged in to the user's account. Either of the
+two devices can display the QR code, depending on which of them is able to scan
+it. The QR code provides the scanning device with the information that it needs
+in order to locate a rendezvous session which was created by the displaying
+device, and to establish a secure channel with the displaying device over that
+rendezvous session.
+
+The data that follows the QR code type MUST be of the following form:
+
+- one byte indicating the intent of the device displaying the QR code, which is
+  one of the following values:
+  - `0x00` a new device wishing to log in and self-verify
+  - `0x01` an existing device wishing to facilitate the login of a new device
+    and self-verify that other device
+- the ephemeral Curve25519 public key of the device displaying the QR code that
+  will be used to establish the secure channel, as 32 bytes
+- the ID of the rendezvous session, encoded as:
+  - one byte indicating the length in bytes of the ID as a UTF-8 string
+  - the ID encoded as a UTF-8 string
+- the [base URL](/client-server-api/#getwell-knownmatrixclient) for
+  client-server connections of the homeserver on which the rendezvous session
+  was created, encoded as:
+  - one byte indicating the length in bytes of the base URL as a UTF-8 string
+  - the base URL encoded as a UTF-8 string
+
+The ID of a rendezvous session complies with the
+[opaque identifier grammar](#opaque-identifiers), and so is never longer than
+255 bytes. A base URL that is longer than 255 bytes cannot be encoded in this
+format, and should be rejected by the device that would otherwise display the
+QR code.
+
+As with the base URL obtained via `.well-known` discovery, the base URL encoded
+in the QR code might or might not include a trailing `/`. The scanning device
+MUST be prepared to handle both cases when constructing request URLs.
+
+For example, suppose that a new device displays a QR code encoding the
+following binary data:
+
+```nohighlight
+      "MATRIX"    |type|intent
+ 4D 41 54 52 49 58  03   00
+| ephemeral public key
+  D8 86 68 6A B2 19 7B 78 0E 30 0A 9D 4A 21 47 48
+  07 00 D7 92 9F 39 AB 31 B9 E5 14 37 02 48 ED 6B
+| len | rendezvous session ID
+  24    65 38 64 61 36 33 35 35 2D 35 35 30 62 2D 34 61 33 32
+        2D 61 31 39 33 2D 31 36 31 39 64 39 38 33 30 36 36 38
+| len | base URL
+  20    68 74 74 70 73 3A 2F 2F 6D 61 74 72 69 78 2D 63 6C
+        69 65 6E 74 2E 6D 61 74 72 69 78 2E 6F 72 67
+```
+
+Intent `0x00` indicates that the device displaying the QR code is a new device
+that wishes to log in. Its ephemeral public key is
+"2IZoarIZe3gOMAqdSiFHSAcA15KfOasxueUUNwJI7Ws" in base64, and it has created a
+rendezvous session with the ID `e8da6355-550b-4a32-a193-1619d9830668` on the
+homeserver whose base URL is `https://matrix-client.matrix.org`.
+
+If the QR code were instead displayed by an existing device which is already
+logged in, then the intent would be `0x01` and the remainder of the data would
+have the same form.
+
+{{% boxes/note %}}
+There is no version field within this format. If an incompatible revision of it
+is needed in future, a new QR code type can be allocated to distinguish the two.
+{{% /boxes/note %}}
+
 ## 3PID Types
 
 Third-party Identifiers (3PIDs) represent identifiers on other
