@@ -4395,6 +4395,7 @@ that profile.
 | [Server Side Search](#server-side-search)                  | Optional  | Optional | Optional | Optional | Optional |
 | [Spaces](#spaces)                                          | Optional  | Optional | Optional | Optional | Optional |
 | [Sticker Messages](#sticker-messages)                      | Optional  | Optional | Optional | Optional | Optional |
+| [Sticky Events](#sticky-events)                            | Optional  | Optional | Optional | Optional | Optional |
 | [Third-party Networks](#third-party-networks)              | Optional  | Optional | Optional | Optional | Optional |
 | [Threading](#threading)                                    | Optional  | Optional | Optional | Optional | Optional |
 | [Invite permission](#invite-permission)                    | Optional  | Optional | Optional | Optional | Optional |
@@ -4493,3 +4494,4 @@ systems.
 {{% cs-module name="Reference relations" filename="reference_relations" %}}
 {{% cs-module name="Mutual Rooms" filename="mutual_rooms" %}}
 {{% cs-module name="Delayed Events" filename="delayed_events" %}}
+{{% cs-module name="Sticky Events" filename="sticky_events" %}}

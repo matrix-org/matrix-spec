@@ -67,6 +67,29 @@ paths:
           example: "35"
           schema:
             type: string
+        - in: query
+          name: sticky_duration_ms
+          x-addedInMatrixVersion: "1.20"
+          description: |-
+            If present, the event is sent as a [sticky event](/client-server-api/#sticky-events)
+            which remains sticky for the given number of milliseconds.
+
+            If supplied, MUST be a positive integer.
+
+            SHOULD NOT be set to below 300000 (5 minutes) because servers with significant
+            clock skew may cause the event to expire quicker than intended.
+
+            SHOULD NOT be set to more than 3600000 (1 hour) because servers expire
+            sticky events after at most 1 hour even if the supplied duration is larger.
+
+            See [here](/client-server-api/#determining-whether-an-event-is-sticky) for details
+            on how servers compute whether an event is still sticky.
+          required: false
+          example: 600000
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
       requestBody:
         content:
           application/json:

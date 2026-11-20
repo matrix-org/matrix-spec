@@ -24,6 +24,11 @@ one of the following endpoints:
 - [`POST /delayed_events/{delayId}/restart`](#post_matrixclientv1delayed_eventsdelayidrestart)
   resets the delayed event's timer so that the delay starts anew.
 
+{{% boxes/note %}}
+Clients MAY combine delayed events with [sticky events](#sticky-events) by using the `sticky_duration_ms`
+request parameter on [`PUT /rooms/{roomId}/delayed_event/{eventType}/{txnId}`](#put_matrixclientv3roomsroomiddelayed_eventeventtypetxnid).
+{{% /boxes/note %}}
+
 {{% http-api spec="client-server" api="delayed_events" %}}
 
 #### Server behaviour
