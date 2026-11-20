@@ -1,0 +1,76 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/state_event.yaml
+description: |-
+  This event describes a [slot](/client-server-api/#slots) in which MatrixRTC
+  applications can run.
+properties:
+  content:
+    properties:
+      status:
+        type: string
+        enum:
+          - open
+          - closed
+        description: |-
+          The slot's current status.
+      application:
+        type: object
+        title: Application
+        description: |-
+          Details about the application that can run in this slot.
+          
+          REQUIRED if `status` is `open`.
+        properties:
+          type:
+            type: string
+            description: |-
+              The globally unique application identifier.
+              
+              MUST follow the [Common Namespaced Identifier Grammar](/appendices#common-namespaced-identifier-grammar).
+              
+              MUST align with the event's `state_key` as per the rules for
+              constructing [slot IDs](/client-server-api/#slot-ids).
+        additionalProperties:
+          description: Additional properties based on the application `type`.
+        required:
+          - type
+      encryption:
+        type: object
+        title: Encryption
+        description: |-
+          Information about the [encryption mechanism](/client-server-api/#matrixrtc-end-to-end-encryption)
+          to use in this slot.
+          
+          If absent, encryption is disabled.
+        properties:
+          type:
+            type: string
+            enum:
+              - m.per_member
+            description: |-
+              The globally unique identifier of the encryption mechanism.
+              
+              MUST follow the [Common Namespaced Identifier Grammar](/appendices#common-namespaced-identifier-grammar).
+        additionalProperties:
+          description: Additional properties based on the encryption mechanism `type`.
+        required:
+          - type
+    required:
+      - status
+    type: object
+  state_key:
+    description: |-
+      The slot's ID.
+      
+      MUST align with the event's `content.application.type` property as per the
+      [rules](/client-server-api/#slot-ids) for constructing slot IDs.
+    type: string
+  type:
+    enum:
+      - m.rtc.slot
+    type: string
+title: MatrixRTC slot
+type: object
