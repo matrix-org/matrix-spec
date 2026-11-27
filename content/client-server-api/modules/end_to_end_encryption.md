@@ -754,15 +754,15 @@ The process between Alice and Bob verifying each other would be:
 
     The MAC calculation is defined [below](#mac-calculation).
 16. Alice's device sends Bob's device an `m.key.verification.mac`
-    message containing the MAC of Alice's device keys and the MAC of her
-    key IDs to be verified. Bob's device does the same for Bob's device
-    keys and key IDs concurrently with Alice.
+    message containing the MACs of her keys to be verified and the MAC of the
+    list of her key IDs to be verified. Bob's device does the same for his
+    keys and the list of his key IDs concurrently with Alice.
 17. When the other device receives the `m.key.verification.mac` message,
-    the device calculates the MACs of its copies of the other device's
+    it calculates the MACs of its copies of the
     keys given in the message, as well as the MAC of the
     comma-separated, sorted, list of key IDs in the message. The device
     compares these with the MAC values given in the message, and if
-    everything matches then the device keys are verified.
+    everything matches then the keys are verified.
 18. Alice and Bob's devices send `m.key.verification.done` messages to complete
     the verification.
 
