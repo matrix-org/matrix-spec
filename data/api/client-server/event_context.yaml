@@ -138,6 +138,22 @@ paths:
                       }
                     ]
                   }
+        "404":
+          description: |-
+            The event was not found, or the server has no context for it: for example the
+            user's own membership event for a room the server is not participating in, such
+            as an invite received over federation. Such an event can still be fetched with
+            [`GET /rooms/{roomId}/event/{eventId}`](/client-server-api/#get_matrixclientv3roomsroomideventeventid).
+          content:
+            application/json:
+              schema:
+                $ref: definitions/errors/error.yaml
+              examples:
+                response:
+                  value: {
+                    "errcode": "M_NOT_FOUND",
+                    "error": "Event not found."
+                  }
       tags:
         - Room participation
 servers:
