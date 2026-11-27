@@ -142,7 +142,7 @@ For example, given a pair of events:
     "content": {
         "body": "I really like cake",
         "msgtype": "m.text",
-        "formatted_body": "I really like cake",
+        "formatted_body": "I really like cake"
     }
 }
 ```
