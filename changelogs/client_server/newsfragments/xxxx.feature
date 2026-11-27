@@ -1,0 +1,1 @@
+The QR code format used for device verification is now based on the common QR code format in the Appendices, with the "QR code version" becoming the "QR code type", as per [MSC4388](https://github.com/matrix-org/matrix-spec-proposals/pull/4388).
