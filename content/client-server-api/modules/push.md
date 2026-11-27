@@ -230,7 +230,7 @@ the following event will match:
 ```json
 {
   "content": {
-    "topic": "Lunch plans",
+    "topic": "Lunch plans"
   },
   "event_id": "$143273582443PhrSn:example.org",
   "room_id": "!636q39766251:example.com",

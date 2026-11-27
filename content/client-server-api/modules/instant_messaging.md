@@ -425,10 +425,7 @@ An example of a mathematical notation is:
   "msgtype": "m.text",
   "format": "org.matrix.custom.html",
   "body": "This is an equation: sin(x)=a/b.",
-  "formatted_body": "This is an equation:
-      <span data-mx-maths=\"\\sin(x)=\\frac{a}{b}\">
-        sin(<i>x</i>)=<sup><i>a</i></sup>/<sub><i>b</i></sub>
-      </span>"
+  "formatted_body": "This is an equation: <span data-mx-maths=\"\\sin(x)=\\frac{a}{b}\">sin(<i>x</i>)=<sup><i>a</i></sup>/<sub><i>b</i></sub></span>"
 }
 ```
 
