@@ -1,0 +1,61 @@
+---
+$schema: https://json-schema.org/draft/2020-12/schema
+
+allOf:
+  - $ref: core-event-schema/event.yaml
+description: |-
+  This event type is used as part of the `m.per_member`
+  [encryption](/client-server-api/#matrixrtc-encryption) mechanism
+  to share the generic key material used for transport-level encryption
+  with other members.
+
+  It is encrypted as an
+  [`m.room.encrypted`](/client-server-api/#mroomencrypted) [to-device
+  event](/client-server-api/#send-to-device-messaging) using
+  [Olm](/client-server-api/#molmv1curve25519-aes-sha2).
+properties:
+  content:
+    properties:
+      room_id:
+        type: string
+        format: mx-room-id
+        pattern: "^!"
+        description: |-
+          The [room ID](/appendices/#room-ids) associated with the
+          [`m.rtc.member`](/client-server-api/#mrtcmember) event.
+      member_id:
+        type: string
+        description: |-
+          The `member.id` value of the
+          [`m.rtc.member`](/client-server-api/#mrtcmember) event.
+      media_key:
+        type: object
+        title: MediaKey
+        description: Information on the key material.
+        properties:
+          key:
+            type: string
+            description: |-
+              The key material in raw bytes encoded using
+              [unpadded base64](/appendices/#unpadded-base64).
+          index:
+            type: integer
+            minimum: 0
+            maximum: 255
+            description: |-
+              The rolling index of the key to distinguish it from other keys.
+              MUST be between 0 and 255 inclusive.
+        required:
+          - key
+          - index
+    required:
+      - room_id
+      - member_id
+      - media_key
+    type: object
+  type:
+    enum:
+      - m.rtc.encryption_key
+    type: string
+title: MatrixRTC encryption key
+type: object

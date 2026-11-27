@@ -1,0 +1,30 @@
+{
+  "$ref": "core/room_event.json",
+  "type": "m.rtc.member",
+  "sticky": {
+    "duration_ms": 3600000
+  },
+  "content": {
+    "slot_id": "org.example.application#default",
+    "member": {
+      "id": "zG2hvcAFcqAxrjXBwASV",
+      "membership": "join"
+    },
+    "application": {
+      "type": "org.example.application",
+      "org.example.muted": false
+    },
+    "transports": {
+      "published": [
+        {
+          "type": "org.example.transport",
+          "org.example.websocket": "wss://call.example.org/zG2hvcAFcqAxrjXBwASV"
+        }
+      ],
+      "can_subscribe": [
+        "m.livekit"
+      ]
+    },
+    "sticky_key": "zG2hvcAFcqAxrjXBwASV"
+  }
+}

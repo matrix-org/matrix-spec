@@ -64,6 +64,7 @@ They must be explicitly set during the `/upgrade` call.
     -   `m.room.history_visibility`
     -   `m.room.join_rules`
     -   `m.room.power_levels`
+    -   {{% added-in v="1.20" %}} [`m.rtc.slot`](#mrtcslot)
 
     Membership events should not be transferred to the new room due to
     technical limitations of servers not being able to impersonate
